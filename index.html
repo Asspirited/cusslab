@@ -1120,6 +1120,20 @@
     <div id="slogan"></div>
   </div>
   <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+
+    <!-- API KEY INPUT -->
+    <div id="api-key-widget" style="display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--border);border-radius:6px;padding:6px 10px;">
+      <div style="display:flex;flex-direction:column;gap:2px;">
+        <span style="font-size:9px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;">Anthropic API Key — <a href="https://console.anthropic.com/settings/keys" target="_blank" style="color:var(--accent);text-decoration:none;">get one ↗</a></span>
+        <span id="api-key-status" style="font-size:10px;color:#f87171;">● No key — panel offline</span>
+      </div>
+      <input id="api-key-input" type="password" placeholder="sk-ant-..."
+        style="width:140px;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:4px;padding:4px 8px;font-size:12px;font-family:monospace;"
+        onkeydown="if(event.key==='Enter')API.setKey(this.value)"/>
+      <button id="api-key-btn" onclick="API.setKey(document.getElementById('api-key-input').value)"
+        style="background:var(--accent);color:#000;border:none;border-radius:4px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer;letter-spacing:1px;">Save</button>
+    </div>
+
     <div class="skin-toggle" id="skin-toggle" onclick="toggleSkin()" title="Switch mode">
       <div class="skin-toggle-inner" id="skin-toggle-inner">
         <span class="skin-label-a" id="skin-label-a">🎤 THE PANEL</span>
@@ -3002,11 +3016,60 @@ const API = (() => {
   const ENDPOINT = 'https://api.anthropic.com/v1/messages';
   const DEFAULT_MODEL = 'claude-sonnet-4-20250514';
   const DEFAULT_MAX_TOKENS = 1000;
+  const KEY_STORAGE = 'hecklers_api_key';
+
+  function getKey() {
+    return localStorage.getItem(KEY_STORAGE) || '';
+  }
+
+  function setKey(k) {
+    const trimmed = k.trim();
+    if (trimmed) localStorage.setItem(KEY_STORAGE, trimmed);
+    else localStorage.removeItem(KEY_STORAGE);
+    _updateKeyUI();
+  }
+
+  function _updateKeyUI() {
+    const k = getKey();
+    const inp = document.getElementById('api-key-input');
+    const btn = document.getElementById('api-key-btn');
+    const status = document.getElementById('api-key-status');
+    if (!inp) return;
+    inp.value = k ? '•'.repeat(20) : '';
+    inp.placeholder = k ? 'Key saved ✓' : 'sk-ant-...';
+    if (btn) btn.textContent = k ? 'Clear' : 'Save';
+    if (status) {
+      status.textContent = k ? '● Connected' : '● No key — panel offline';
+      status.style.color = k ? '#4ade80' : '#f87171';
+    }
+  }
+
+  function initKeyUI() {
+    _updateKeyUI();
+    const inp = document.getElementById('api-key-input');
+    if (inp) {
+      inp.addEventListener('focus', () => {
+        const k = getKey();
+        if (k) inp.value = k;
+      });
+      inp.addEventListener('blur', () => {
+        const k = getKey();
+        if (k) inp.value = '•'.repeat(20);
+      });
+    }
+  }
 
   async function call(systemPrompt, userMessage, maxTokens = DEFAULT_MAX_TOKENS) {
+    const key = getKey();
+    const headers = { 'Content-Type': 'application/json' };
+    if (key) {
+      headers['x-api-key'] = key;
+      headers['anthropic-version'] = '2023-06-01';
+      headers['anthropic-dangerous-direct-browser-access'] = 'true';
+    }
     const res = await fetch(ENDPOINT, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers,
       body: JSON.stringify({
         model: DEFAULT_MODEL,
         max_tokens: maxTokens,
@@ -3037,7 +3100,7 @@ const API = (() => {
     }
   }
 
-  return { call, callJSON };
+  return { call, callJSON, getKey, setKey, initKeyUI };
 })();
 
 // ============================================================
@@ -3279,7 +3342,8 @@ const App = (() => {
   let _sloganInterval = null;
 
   function init() {
-    _startSlogans('consultant'); switchTab({currentTarget:document.querySelector('[onclick*=\'bills\']')}, 'bills');
+    _startSlogans('consultant');
+    API.initKeyUI(); switchTab({currentTarget:document.querySelector('[onclick*=\'bills\']')}, 'bills');
     RoastBattle.initScenarios();
     TopCnuts.init();
     Polls.load(0);
