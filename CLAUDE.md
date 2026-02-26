@@ -1,4 +1,4 @@
-# CLAUDE.md — Cuss Lab Project Brief
+er # CLAUDE.md — Heckler and Cocks Project Brief
 
 ## What this project is
 Cuss Lab is a culturally-calibrated compound profanity impact analyser.
