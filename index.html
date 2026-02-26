@@ -1,4 +1,4 @@
-<!DOCTYPE html><!-- hecklers-build-1772135363 -->
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1634,7 +1634,7 @@
         <button onclick="
           var k = document.getElementById('settings-key-input').value.trim();
           if(k.length > 20) {
-            setKey(k);
+            API.setKey(k);
             document.getElementById('settings-save-msg').textContent = '✓ Key saved! The panel is now connected.';
             document.getElementById('settings-save-msg').style.color = '#4ade80';
             document.getElementById('settings-key-input').value = k.slice(0,12) + '...' + k.slice(-4);
@@ -1646,7 +1646,7 @@
           Save Key
         </button>
         <button onclick="
-          setKey('');
+          API.setKey('');
           document.getElementById('settings-key-input').value = '';
           document.getElementById('settings-save-msg').textContent = 'Key cleared.';
           document.getElementById('settings-save-msg').style.color = 'var(--muted)';
@@ -3400,6 +3400,7 @@ const App = (() => {
     Roulette.init();
     ExpertClash.init();
     ExpertLearning.renderEvolutionViewer('evolution-viewer');
+    ExperimentRunner.init();
     ExperimentRunner.init();
     // Activate the GENERATE nav group on load
     const genGrp = document.getElementById('ng-generate');
@@ -8783,8 +8784,6 @@ function compareExpSnapshots()       { ExperimentRunner.compareSnapshots(); }
 function runExpCompare()             { ExperimentRunner.runCompare(); }
 function exportExpResults()          { ExperimentRunner.exportResults(); }
 function applyExpToLive()            { ExperimentRunner.applyToLive(); }
-function setKey(k)                   { API.setKey(k); }
-function submitQuizScore()           { Polls.submitQuizScore(); }
 
 // =====================
 // INIT
