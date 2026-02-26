@@ -4324,7 +4324,7 @@ Style: Long unhurried sentences that carry no particular weight. Something is sa
           ? `Question: "${question}"\n\nAnswer fully in your style. 3-4 paragraphs.`
           : `Question: "${question}"\n\nInterrupt, mock (${FEROCITY[i]}), then answer. 3-4 paragraphs.`;
 
-        const resp = await API.call(system, prompt, 500, 'bills/' + cfg.id);
+        const resp = await API.call(system, prompt, 500, 'bills/' + id);
         responses.push(resp);
         _fillPlaceholder(placeholderId, cfg, resp, i);
       } catch (e) {
@@ -4356,7 +4356,11 @@ Style: Long unhurried sentences that carry no particular weight. Something is sa
     if (!el) return;
     el.style.opacity = '1';
     const body = el.querySelector('.bills-response-body');
-    if (body) { body.style.color = ''; body.style.fontStyle = ''; body.textContent = text; }
+    if (body) {
+      body.style.color = '';
+      body.style.fontStyle = '';
+      body.textContent = text || '…no response. The expert declined to answer.';
+    }
     const sub = el.querySelector('.bills-response-header div div:last-child');
     if (sub) sub.textContent = idx === 0 ? 'First to answer' : `Interrupted — ${FEROCITY[idx]}`;
   }
