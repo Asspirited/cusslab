@@ -3140,6 +3140,7 @@ const API = (() => {
   function _userMessage(status, errBody) {
     if (!getKey())          return 'No API key — go to ⚙️ Settings to add one.';
     if (status === 401)     return 'API key rejected — check your key in ⚙️ Settings.';
+    if (status === 400)     return 'Bad request — your API key may be invalid. Check ⚙️ Settings.';
     if (status === 403)     return 'API key doesn\'t have permission for this request.';
     if (status === 429)     return 'Too many requests — wait a moment and try again.';
     if (status === 529)     return 'Anthropic is overloaded — try again in a few seconds.';
@@ -6595,7 +6596,7 @@ const JokeTest = (() => {
       const prompt = `The material to critique:\n\n"${joke}"\n\nFerocity level: ${ferocityLabels[ferocity]}\nEmphasis: ${emphasiInstr}\n\nCritique in your full voice. 2-3 paragraphs. Include a demonstration of the technique — a compressed version, a reframed version, a one-up, or whatever your technique calls for.`;
 
       try {
-        const resp = await API.call(system, prompt, 450);
+        const resp = await API.call(system, prompt, 450, 'joketest/' + id);
         document.getElementById(ph).innerHTML = `
           <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.07);">
             <span style="font-size:28px;">${cfg.icon}</span>
@@ -6608,7 +6609,8 @@ const JokeTest = (() => {
         document.getElementById(ph).style.opacity = '1';
         usedTechniques.push({ expert: id, technique: tech?.id || 'general' });
       } catch(e) {
-        document.getElementById(ph).innerHTML = `<div style="color:var(--muted);font-size:13px;">[${cfg.name} is unavailable]</div>`;
+        const msg = e.userMessage || 'Request failed — check Settings';
+        document.getElementById(ph).innerHTML = `<div style="color:var(--muted);font-size:13px;">${msg}</div>`;
       }
     }
 
@@ -6879,7 +6881,12 @@ const ExpertClash = (() => {
     const container = document.getElementById('clash-topic-chips');
     if (!container) return;
     container.innerHTML = TOPIC_SUGGESTIONS.map(t =>
-      `<button class="btn-secondary" style="font-size:11px;padding:4px 10px;" onclick="document.getElementById('clash-topic').value=${JSON.stringify(t)}">${t.substring(0,45)}${t.length>45?'…':''}</button>`
+      `<button class="btn-secondary" style="font-size:11px;padding:4px 10px;" onclick="
+        const inp = document.getElementById('clash-topic');
+        if (inp) { inp.value = ${JSON.stringify(t)}; inp.style.borderColor = 'var(--accent)'; inp.focus(); }
+        document.querySelectorAll('#clash-topic-chips .btn-secondary').forEach(b => b.style.opacity='0.4');
+        this.style.opacity='1'; this.style.borderColor='var(--accent)'; this.style.color='var(--accent)';
+      ">${t.substring(0,45)}${t.length>45?'…':''}</button>`
     ).join('');
   }
 
