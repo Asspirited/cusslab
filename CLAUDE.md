@@ -27,6 +27,9 @@ in one file. This is intentional for easy iteration and free static hosting.
 - Algorithmic fallback for unknown words using phonological analysis
 
 ## Code conventions
+- Always use TDD and BDD
+- Always apply clean coding principles
+- Always apply SOLID development principles
 - Vanilla JS only — no frameworks, no npm dependencies in Phase 1
 - CSS custom properties (variables) for theming — never hard-code colours
 - Font stack: Bebas Neue (display), Space Mono (code/labels), DM Sans (body)
