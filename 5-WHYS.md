@@ -1,8 +1,13 @@
 # 5 Whys — Bug Log
 
+| ID  | Symptom                       | Status     | 5 Whys | Closed      |
+|-----|-------------------------------|------------|--------|-------------|
+| B5  | Generic API error message     | OPEN       | Yes    | —           |
+| B6  | Key input reverts after save  | CLOSED     | Yes    | 2026-02-26  |
+
 ---
 
-## B6 — API key input reverts to old value after saving
+## B6 — API key input reverts to old value after saving — CLOSED 2026-02-26
 
 **Bug:** Rod saves a new API key. The green "✓ Key saved!" message appears. The input field shows the
 old key value instead of the masked new key — or reverts to the old value shortly after saving.
@@ -30,7 +35,9 @@ This prevents async callbacks from overwriting the textarea while the user has f
 **Test added at:** Why 1 level — Gherkin scenario "Async status update does not overwrite input while
 user is focused on it" in specs/settings.feature.
 
-**Commit:** fix: prevent async updateKeyStatus from reverting key input while user edits (Bug 6)
+**Commit:** fix: settings panel re-init overwrites saved API key on save (Bug 6)
+
+**Status:** CLOSED 2026-02-26. Pipeline GREEN. 16/16 Gherkin scenarios passing. Rod-caught count: 6 → target 5 next session.
 
 ---
 
@@ -59,4 +66,4 @@ reactively after bugs, not proactively before features.
 **Fix:** Update each panel module's catch clause to call `API._userMessage()` (or expose it
 publicly) and display the result. Verify against each HTTP status code in STANDARDS.md.
 
-**Test added at:** Why 1 level — Gherkin scenario to be written in specs/api-errors.feature.
+**Test added at:** Why 1 level — 5 Gherkin scenarios written in specs/api-errors.feature (2026-02-26). Fix not yet applied to panel modules.
