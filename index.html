@@ -3244,9 +3244,9 @@ const API = (() => {
       }
     }
 
-    // Settings key input display
+    // Settings key input display — skip if user is actively editing
     const inp = document.getElementById('settings-key-input');
-    if (inp) inp.value = k ? (k.slice(0, 12) + '...' + k.slice(-4)) : '';
+    if (inp && document.activeElement !== inp) inp.value = k ? (k.slice(0, 12) + '...' + k.slice(-4)) : '';
 
     // Settings connection status
     const detail = document.getElementById('settings-status-detail');
