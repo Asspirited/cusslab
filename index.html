@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html><!-- hecklers-build-1772135363 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1120,6 +1120,10 @@
     <div id="slogan"></div>
   </div>
   <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+    <div onclick="switchTab(event,'settings')" style="cursor:pointer;display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--border);border-radius:6px;padding:6px 12px;">
+      <span id="key-status-indicator" style="font-size:11px;color:#f87171;">● No API key</span>
+      <span style="font-size:11px;color:var(--muted);">⚙️ Settings</span>
+    </div>
     <div class="skin-toggle" id="skin-toggle" onclick="toggleSkin()" title="Switch mode">
       <div class="skin-toggle-inner" id="skin-toggle-inner">
         <span class="skin-label-a" id="skin-label-a">🎤 THE PANEL</span>
@@ -1143,6 +1147,7 @@
       <span class="nav-group-count">5</span>
     </div>
     <div class="nav-items" id="ni-personas">
+      <div class="tab" onclick="switchTab(event,'settings')"><span class="tab-icon">⚙️</span>Settings & API Key</div>
       <div class="tab active" onclick="switchTab(event,'bills')"><span class="tab-icon">🎤</span>Ask The Panel</div>
       <div class="tab" onclick="switchTab(event,'joketest')"><span class="tab-icon">🧪</span>Joke Test</div>
       <div class="tab" onclick="switchTab(event,'clash')"><span class="tab-icon">⚔️</span>Expert Clash</div>
@@ -1603,6 +1608,72 @@
 
 
 <!-- ============ ASK THE BILLS ============ -->
+<div class="panel" id="panel-settings">
+  <div class="panel-title">⚙️ Settings</div>
+  <div class="panel-desc">The panel needs an Anthropic API key to work. Get one free at console.anthropic.com. Paste it below. It stays in your browser — nobody else can see it.</div>
+
+  <div style="max-width:600px;margin-top:32px;">
+
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:24px;margin-bottom:24px;">
+      <h3 style="margin:0 0 8px;font-size:16px;color:var(--accent);">Step 1 — Get a free API key</h3>
+      <p style="margin:0 0 16px;color:var(--muted);font-size:14px;">You need an Anthropic account. It's free to sign up and includes free credits.</p>
+      <a href="https://console.anthropic.com/settings/keys" target="_blank"
+         style="display:inline-block;background:var(--accent);color:#000;padding:10px 20px;border-radius:6px;font-weight:700;font-size:14px;text-decoration:none;letter-spacing:1px;">
+        Open Anthropic Console ↗
+      </a>
+      <p style="margin:12px 0 0;color:var(--muted);font-size:12px;">Click "Create Key", copy the full key (starts with sk-ant-...), come back here.</p>
+    </div>
+
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:24px;margin-bottom:24px;">
+      <h3 style="margin:0 0 8px;font-size:16px;color:var(--accent);">Step 2 — Paste your key here</h3>
+      <p style="margin:0 0 12px;color:var(--muted);font-size:14px;">Paste the full key below and click Save Key.</p>
+      <textarea id="settings-key-input"
+        placeholder="Paste your full API key here — sk-ant-api03-..."
+        style="width:100%;height:80px;background:var(--bg);color:var(--text);border:2px solid var(--border);border-radius:6px;padding:10px;font-size:13px;font-family:monospace;box-sizing:border-box;resize:none;"></textarea>
+      <div style="display:flex;gap:12px;margin-top:12px;">
+        <button onclick="
+          var k = document.getElementById('settings-key-input').value.trim();
+          if(k.length > 20) {
+            setKey(k);
+            document.getElementById('settings-save-msg').textContent = '✓ Key saved! The panel is now connected.';
+            document.getElementById('settings-save-msg').style.color = '#4ade80';
+            document.getElementById('settings-key-input').value = k.slice(0,12) + '...' + k.slice(-4);
+          } else {
+            document.getElementById('settings-save-msg').textContent = '✗ That key looks too short. Make sure you copied the whole thing.';
+            document.getElementById('settings-save-msg').style.color = '#f87171';
+          }
+        " style="background:var(--accent);color:#000;border:none;border-radius:6px;padding:10px 24px;font-size:14px;font-weight:700;cursor:pointer;letter-spacing:1px;">
+          Save Key
+        </button>
+        <button onclick="
+          setKey('');
+          document.getElementById('settings-key-input').value = '';
+          document.getElementById('settings-save-msg').textContent = 'Key cleared.';
+          document.getElementById('settings-save-msg').style.color = 'var(--muted)';
+        " style="background:transparent;color:var(--muted);border:1px solid var(--border);border-radius:6px;padding:10px 24px;font-size:14px;cursor:pointer;">
+          Clear Key
+        </button>
+      </div>
+      <p id="settings-save-msg" style="margin:12px 0 0;font-size:13px;min-height:20px;"></p>
+    </div>
+
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:24px;">
+      <h3 style="margin:0 0 8px;font-size:16px;">Current status</h3>
+      <p id="settings-status-detail" style="margin:0;font-size:14px;color:var(--muted);">Loading...</p>
+      <script>
+        setTimeout(function() {
+          var k = API.getKey();
+          var el = document.getElementById('settings-status-detail');
+          if(el) el.innerHTML = k
+            ? '<span style="color:#4ade80">● Connected</span> — key ending in ...' + k.slice(-4) + '. The panel is ready.'
+            : '<span style="color:#f87171">● No key saved.</span> Complete steps 1 and 2 above.';
+        }, 300);
+      </script>
+    </div>
+
+  </div>
+</div>
+
 <div class="panel active" id="panel-bills">
   <div class="panel-title">🎤 Ask The Panel</div>
   <div class="panel-desc">I assembled nine people who understand comedy differently. Not similarly — differently. You ask a question. They answer it. Then they respond to each other's answers. Then it escalates. Hicks won't let Keegan finish. Adams will relate the whole thing to the heat death of the universe. Cook will still be on his bench. Ask them anything.</div>
@@ -3002,11 +3073,48 @@ const API = (() => {
   const ENDPOINT = 'https://api.anthropic.com/v1/messages';
   const DEFAULT_MODEL = 'claude-sonnet-4-20250514';
   const DEFAULT_MAX_TOKENS = 1000;
+  const KEY_STORAGE = 'hecklers_api_key';
+
+  function getKey() {
+    try { return localStorage.getItem(KEY_STORAGE) || ''; }
+    catch(e) { return ''; }
+  }
+
+  function setKey(k) {
+    const trimmed = (k || '').trim();
+    try {
+      if (trimmed) localStorage.setItem(KEY_STORAGE, trimmed);
+      else localStorage.removeItem(KEY_STORAGE);
+    } catch(e) { console.error('Could not save key', e); }
+    updateKeyStatus();
+  }
+
+  function updateKeyStatus() {
+    const k = getKey();
+    const el = document.getElementById('key-status-indicator');
+    if (el) {
+      el.textContent = k ? '● Panel connected' : '● No API key — enter one in Settings';
+      el.style.color = k ? '#4ade80' : '#f87171';
+    }
+    const inp = document.getElementById('settings-key-input');
+    if (inp) inp.value = k ? (k.slice(0,12) + '...' + k.slice(-4)) : '';
+  }
+
+  function initKeyUI() {
+    updateKeyStatus();
+  }
 
   async function call(systemPrompt, userMessage, maxTokens = DEFAULT_MAX_TOKENS) {
+    const key = getKey();
+    const headers = { 'Content-Type': 'application/json' };
+    if (key) {
+      headers['x-api-key'] = key;
+      headers['anthropic-version'] = '2023-06-01';
+      headers['anthropic-dangerous-direct-browser-access'] = 'true';
+    }
     const res = await fetch(ENDPOINT, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers,
       body: JSON.stringify({
         model: DEFAULT_MODEL,
         max_tokens: maxTokens,
@@ -3037,7 +3145,7 @@ const API = (() => {
     }
   }
 
-  return { call, callJSON };
+  return { call, callJSON, getKey, setKey, initKeyUI, updateKeyStatus };
 })();
 
 // ============================================================
@@ -3258,7 +3366,7 @@ const App = (() => {
       title: 'HECKLER\'S',
       pageTitle: 'Heckler\'s — The Comedy Panel',
       slogans: CONSULTANT_SLOGANS,
-      tabs: ['bills','joketest','clash','roulette','professionals',
+      tabs: ['settings','bills','joketest','clash','roulette','professionals',
              'comscience','evolution','blend','experiment',
              'roastbattle','dinner','topcnuts','comedylab','trumps',
              'premise','charlens','bizcard','training',
@@ -3270,7 +3378,7 @@ const App = (() => {
       title: 'HECKLER\'S LAB',
       pageTitle: 'Heckler\'s Lab',
       slogans: SCIENCE_SLOGANS,
-      tabs: ['experiment','evolution','comscience','blend','bills','joketest','clash','roastbattle','training','premise','charlens','dinner','bizcard'],
+      tabs: ['settings','experiment','evolution','comscience','blend','bills','joketest','clash','roastbattle','training','premise','charlens','dinner','bizcard'],
       labTitle: '⚗️ Heckler\'s Lab',
       labDesc: 'Run the experiments. Take the snapshots. Measure what changes. The panel learns. So do you.',
     },
@@ -3279,7 +3387,8 @@ const App = (() => {
   let _sloganInterval = null;
 
   function init() {
-    _startSlogans('consultant'); switchTab({currentTarget:document.querySelector('[onclick*=\'bills\']')}, 'bills');
+    _startSlogans('consultant');
+    API.initKeyUI(); switchTab({currentTarget:document.querySelector('[onclick*=\'bills\']')}, 'bills');
     RoastBattle.initScenarios();
     TopCnuts.init();
     Polls.load(0);
@@ -3292,7 +3401,6 @@ const App = (() => {
     ExpertClash.init();
     ExpertLearning.renderEvolutionViewer('evolution-viewer');
     ExperimentRunner.init();
-    ExperimentRunner.init();
     // Activate the GENERATE nav group on load
     const genGrp = document.getElementById('ng-generate');
     if (genGrp) genGrp.classList.add('active');
@@ -3300,6 +3408,7 @@ const App = (() => {
 
   // Nav group that contains a given tab name
   const _NAV_GROUP_MAP = {
+    settings:'personas',
     // THE PANEL
     bills:'personas', joketest:'personas', clash:'personas', roulette:'personas', professionals:'personas',
     // LEARN
@@ -8674,6 +8783,8 @@ function compareExpSnapshots()       { ExperimentRunner.compareSnapshots(); }
 function runExpCompare()             { ExperimentRunner.runCompare(); }
 function exportExpResults()          { ExperimentRunner.exportResults(); }
 function applyExpToLive()            { ExperimentRunner.applyToLive(); }
+function setKey(k)                   { API.setKey(k); }
+function submitQuizScore()           { Polls.submitQuizScore(); }
 
 // =====================
 // INIT
