@@ -3199,7 +3199,7 @@ const API = (() => {
     const text = data.content?.[0]?.text || '';
     _logCall(panel, 'ok', duration);
 
-    try { localStorage.setItem(LAST_SUCCESS_KEY, Date.now().toString()); } catch(e) {}
+    try { localStorage.setItem(LAST_SUCCESS_KEY, Date.now().toString()); } catch(e) { /* localStorage unavailable — non-fatal */ }
     updateKeyStatus();
 
     return text;
