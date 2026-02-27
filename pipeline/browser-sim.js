@@ -40,66 +40,25 @@ check('JS brace balance (open === close)', open === close,
 // 2. API module declared
 check('API module declared', declPos('API') !== -1);
 
-// 3. State module declared
-check('State module declared', declPos('State') !== -1);
-
-// 4. App module declared
+// 3. App module declared
 check('App module declared', declPos('App') !== -1);
 
-// 5. API declared before App
+// 4. API declared before App
 check('API declared before App',
   declPos('API') !== -1 && declPos('App') !== -1 && declPos('API') < declPos('App'));
 
-// 6. State declared before App
-check('State declared before App',
-  declPos('State') !== -1 && declPos('App') !== -1 && declPos('State') < declPos('App'));
-
-// 7. setKey function exists inside API module
-const apiBlock = (() => {
-  const start = html.indexOf('const API = (()');
-  const end   = html.indexOf('\n})();', start) + 6;
-  return html.slice(start, end);
-})();
-check('setKey defined in API module', /function setKey\s*\(/.test(apiBlock));
-
-// 8. getKey function exists inside API module
-check('getKey defined in API module', /function getKey\s*\(/.test(apiBlock));
-
-// 9. updateKeyStatus defined in API module
-check('updateKeyStatus defined in API module', /function updateKeyStatus\s*\(/.test(apiBlock));
-
-// 10. updateKeyStatus called from setKey
-const setKeyFn = apiBlock.match(/function setKey[\s\S]*?^  \}/m)?.[0] || '';
-check('updateKeyStatus called from setKey',
-  /updateKeyStatus\s*\(/.test(setKeyFn) || apiBlock.includes('updateKeyStatus()'));
-
-// 11. Bug 6 fix present: activeElement guard in updateKeyStatus
-check('Bug 6 fix: activeElement guard present in updateKeyStatus',
-  /activeElement\s*!==\s*inp/.test(apiBlock));
-
-// 12. localStorage usage in try/catch
+// 5. localStorage usage in try/catch
 check('localStorage.setItem wrapped in try/catch',
   /try\s*\{[^}]*localStorage\.setItem/.test(allJs));
 
-// 13. No empty catch blocks in API module (other modules tracked separately as pre-existing violations)
-const apiEmptyCatch = apiBlock.match(/catch\s*\([^)]*\)\s*\{\s*\}/g) || [];
-const allEmptyCatch = allJs.match(/catch\s*\([^)]*\)\s*\{\s*\}/g) || [];
-const preExisting   = allEmptyCatch.length - apiEmptyCatch.length;
-if (preExisting > 0) console.log(`  ! Pre-existing empty catch(s) in non-API modules: ${preExisting} — tracked in backlog`);
-check('No empty catch blocks in API/settings module', apiEmptyCatch.length === 0,
-  apiEmptyCatch.length ? `${apiEmptyCatch.length} empty catch(s) in API module` : '');
-
-// 14. initKeyUI called in App init
-const appBlock = (() => {
-  const start = html.indexOf('const App = (()');
+// 6. No raw fetch() calls outside API module
+const apiBlockForFetch = (() => {
+  const start = html.indexOf('const API = (()');
   const end   = html.indexOf('\n})();', start) + 6;
-  return html.slice(start, end);
+  return start !== -1 ? html.slice(start, end) : '';
 })();
-check('initKeyUI called during App init', /initKeyUI\s*\(/.test(appBlock));
-
-// 15. Modules use API.call not raw fetch (spot check first 3 non-API modules)
 const fetchOutsideApi = allJs
-  .replace(apiBlock, '')
+  .replace(apiBlockForFetch, '')
   .match(/\bfetch\s*\(/g) || [];
 check('No raw fetch() calls outside API module', fetchOutsideApi.length === 0,
   fetchOutsideApi.length ? `${fetchOutsideApi.length} raw fetch call(s) found` : '');

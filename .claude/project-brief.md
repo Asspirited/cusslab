@@ -93,7 +93,7 @@ Five steps — all must pass. Zero tolerance.
 | 1 Browser Sim | pipeline/browser-sim.js | 15 behaviour checks |
 | 2 Unit Tests | pipeline/unit-runner.js | All unit tests |
 | 3 Gherkin/BDD | pipeline/gherkin-runner.js | All scenarios |
-| 4 Coverage | pipeline/coverage.js | Stmt ≥40%, Branch ≥30% |
+| 4 Coverage | pipeline/coverage.js | Stmt ≥70%, Branch ≥70% |
 
 GREEN = all pass = auto-commit and push = GitHub Pages deploys.
 No manual deployment steps. Ever.
@@ -140,6 +140,22 @@ Current gaps:
 - Scoring display — all 11 dimensions shown
 - Error handling — API key rejected
 - Error handling — network failure
+
+---
+
+## Working Agreements
+
+### Yak Shaving Rule
+When debugging pipeline or tooling failures, stop and ask:
+**"Is this the same problem as the original goal?"**
+
+If not — name the yak explicitly. Then decide consciously:
+- Is shaving this yak necessary to reach the goal, or just adjacent?
+- Set a time limit before shaving (default: 20 minutes)
+- If time limit hit without resolution, test in browser independently of pipeline status
+- Don't conflate "pipeline RED" with "bug still present" — they can be different problems
+
+Applies to both Rod and Claude. Either can call it.
 
 ---
 

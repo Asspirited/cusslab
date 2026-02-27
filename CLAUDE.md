@@ -73,6 +73,14 @@ Before running the pipeline on any new or modified Gherkin scenario:
 
 This gate cannot be skipped, summarised, or assumed. "Rod approved" is not valid unless Rod has seen the literal scenario text in this session. A scenario that has not been read by Rod has not been approved, regardless of previous sessions.
 
+## Shell Environment
+
+Every bash command must be prefixed with:
+export NVM_DIR="$HOME/.nvm" && \. "$NVM_DIR/nvm.sh" && cd ~/cusslab &&
+
+Or source .envrc first if direnv is installed.
+Never assume npm, node, or correct working directory are available without this.
+
 ## Roadmap (Phase 2 — not yet started)
 - Extract scoring engine to src/js/scoring.js (testable)
 - AWS Lambda for server-side AI suggestions (hides API key from frontend)

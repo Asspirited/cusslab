@@ -95,6 +95,12 @@ function makeSteps(ctx) {
     [/^the application is loaded$/,
       () => { /* nothing needed */ }],
 
+    [/^the app is loaded$/,
+      () => { /* nothing needed */ }],
+
+    [/^the app is loaded with no saved API key$/,
+      () => { delete ctx.store['hecklers_api_key']; }],
+
     [/^no API key is stored$/,
       () => { delete ctx.store['hecklers_api_key']; }],
 

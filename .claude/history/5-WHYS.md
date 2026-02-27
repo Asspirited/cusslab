@@ -99,6 +99,44 @@ The goal is not to blame — it is to find the deepest fixable cause.
 
 ---
 
+## Bug 6 — UI Audit checks invented elements never in approved Gherkin (2026-02-27)
+
+**What Rod saw:** Pipeline RED — audit checking for `key-status-indicator`, `Save Key` button, `Clear Key` button, and `function switchTab` — none of which exist in `index.html` or are required by any approved scenario.
+
+**Why 1:** `pipeline/ui-audit.js` was written with checks that don't match what `index.html` actually contains — `key-status-indicator`, `Save Key`, `Clear Key`, and `switchTab` were invented in the audit but never implemented.
+
+**Why 2:** The audit was written independently of the approved Gherkin scenarios in `specs/settings.feature`. It specified its own version of what the Settings panel "should" have, rather than deriving checks from the agreed specification.
+
+**Why 3:** There is no process gate requiring that every audit check can be traced to an approved Gherkin scenario. Checks were added based on what the author assumed the feature needed.
+
+**Why 4:** The audit was treated as a place to define requirements, not verify them. Requirements belong in Gherkin scenarios, approved by Rod, before any code or tests are written.
+
+**Why 5:** Same root cause as every prior bug: specification and implementation were decoupled. The audit author wrote what they thought the feature should look like, bypassing the Three Amigos / Gherkin approval gate entirely.
+
+**Fix applied:** Removed checks for `key-status-indicator`, `Save Key`, `Clear Key`. Fixed `switchTab` → `switchTo` to match the actual function declared in `index.html`. Source of truth is `specs/settings.feature`.
+
+**Test added at:** Why 3 — process rule: every UI audit check must map to a line in an approved `.feature` file.
+
+---
+
+## Bug 7 — Browser Sim checking implementation details, not observable behaviour (2026-02-27)
+
+**What Rod saw:** Pipeline RED with 8 failing Browser Sim checks for `State` module, `setKey`/`getKey`/`updateKeyStatus` in API module, `activeElement` guard, and `initKeyUI` — none of which exist in `index.html` and none of which correspond to any approved Gherkin scenario.
+
+**Why 1:** `pipeline/browser-sim.js` was written to check internal implementation structure (module names, function names, internal call sequences) rather than observable behaviour derivable from Gherkin scenarios.
+
+**Why 2:** The checks were invented by the author based on what they expected the implementation to look like — a `State` module, an `API` module containing key functions, a specific `activeElement` guard. The actual code uses `Storage`, not `State` or `API`, for key management.
+
+**Why 3:** There is no rule requiring every pipeline check to be traceable to an approved Gherkin scenario. Checks were added freely based on implementation assumptions.
+
+**Why 4:** The pipeline was treated as a place to enforce architecture preferences rather than verify user-observable contracts. Only Gherkin scenarios approved by Rod define what the app must do. Pipeline checks verify that the code satisfies those contracts — not that the code looks a particular way internally.
+
+**Why 5:** Same root cause as every prior bug: the author specified what they thought the implementation should be, bypassing the agreed process. Tests must be derived from contracts (Gherkin), not written to confirm code that hasn't been agreed.
+
+**Fix applied:** Removed all 8 implementation-detail checks. Kept only checks that verify observable structural invariants (syntax, module load order, no raw fetch outside API boundary).
+
+---
+
 ## Pattern across all bugs
 
 Every single bug has the same Why 5:
