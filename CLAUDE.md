@@ -1,5 +1,11 @@
 er # CLAUDE.md — Heckler and Cocks Project Brief
 
+## Project Brief (Full)
+
+Read `.claude/project-brief.md` in full before starting any session. It contains the complete
+project history, all decisions, all standards references, and the root cause taxonomy.
+It is not optional reading.
+
 ## What this project is
 Cuss Lab is a culturally-calibrated compound profanity impact analyser.
 It scores words across 10 linguistic dimensions (acoustic impact, scalar
