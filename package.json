@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "test": "node pipeline/unit-runner.js && node pipeline/gherkin-runner.js",
-    "pipeline": "node pipeline/ui-audit.js && node pipeline/browser-sim.js && npm test && node pipeline/coverage.js"
+    "pipeline": "node pipeline/run-all.js",
+    "metrics": "node pipeline/metrics-report.js"
   }
 }

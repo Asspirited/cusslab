@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Defect Record",
+  "description": "One record per bug, appended to defects.jsonl",
+  "type": "object",
+  "required": ["id","title","discoveredBy","discoveredSession","fixedSession","criticality","rootCause","processFailures","falseGreens"],
+  "properties": {
+    "id":               { "type": "string", "pattern": "^BUG-\\d{3}$" },
+    "title":            { "type": "string" },
+    "discoveredBy":     { "type": "string", "enum": ["rod","pipeline"] },
+    "discoveredSession":{ "type": "integer", "minimum": 1 },
+    "fixedSession":     { "type": ["integer","null"], "minimum": 1 },
+    "criticality":      { "type": "string", "enum": ["high","medium","low"] },
+    "rootCause": {
+      "type": "object",
+      "required": ["category","subcategory"],
+      "properties": {
+        "category":    { "type": "string" },
+        "subcategory": { "type": "string" }
+      }
+    },
+    "processFailures": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "falseGreens": { "type": "integer", "minimum": 0 }
+  }
+}

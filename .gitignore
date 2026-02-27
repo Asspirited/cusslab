@@ -1,0 +1,11 @@
+# Windows Zone.Identifier sidecar files
+*.Identifier
+
+# Metrics runtime data — stays local, not committed
+# Schema files (*.json) ARE committed — only JSONL data and session counter are excluded
+metrics/builds.jsonl
+metrics/defects.jsonl
+metrics/session-counter.txt
+
+# Node
+node_modules/

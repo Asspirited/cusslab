@@ -1,0 +1,62 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Build Record",
+  "description": "One record per pipeline run, appended to builds.jsonl",
+  "type": "object",
+  "required": ["timestamp","session","steps","totalDurationMs","overallStatus","caughtBy"],
+  "properties": {
+    "timestamp":      { "type": "string", "format": "date-time" },
+    "session":        { "type": "integer", "minimum": 1 },
+    "steps": {
+      "type": "object",
+      "properties": {
+        "uiAudit": {
+          "type": "object",
+          "properties": {
+            "durationMs": { "type": "integer" },
+            "status":     { "type": "string", "enum": ["pass","fail"] },
+            "violations": { "type": "integer" }
+          }
+        },
+        "browserSim": {
+          "type": "object",
+          "properties": {
+            "durationMs": { "type": "integer" },
+            "status":     { "type": "string", "enum": ["pass","fail"] },
+            "violations": { "type": "integer" }
+          }
+        },
+        "unitTests": {
+          "type": "object",
+          "properties": {
+            "durationMs": { "type": "integer" },
+            "status":     { "type": "string", "enum": ["pass","fail"] },
+            "passed":     { "type": "integer" },
+            "failed":     { "type": "integer" }
+          }
+        },
+        "gherkin": {
+          "type": "object",
+          "properties": {
+            "durationMs": { "type": "integer" },
+            "status":     { "type": "string", "enum": ["pass","fail"] },
+            "passed":     { "type": "integer" },
+            "failed":     { "type": "integer" }
+          }
+        },
+        "coverage": {
+          "type": "object",
+          "properties": {
+            "durationMs": { "type": "integer" },
+            "status":     { "type": "string", "enum": ["pass","fail"] },
+            "statements": { "type": "number" },
+            "branches":   { "type": "number" }
+          }
+        }
+      }
+    },
+    "totalDurationMs": { "type": "integer" },
+    "overallStatus":   { "type": "string", "enum": ["GREEN","RED"] },
+    "caughtBy":        { "type": "string", "enum": ["pipeline","rod"] }
+  }
+}

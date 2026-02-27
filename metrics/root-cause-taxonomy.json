@@ -1,0 +1,52 @@
+{
+  "version": "1.0",
+  "description": "Validated taxonomy for defect root cause entries in defects.jsonl. Claude Code must validate new bug entries against this tree and flag when a new subcategory is needed.",
+  "categories": {
+    "test-confirmed-code": {
+      "description": "Tests were written to confirm existing code rather than specify new behaviour. No user-visible breakage at time of discovery.",
+      "subcategories": {
+        "written-after-implementation": "Scenario or test written after the code existed, confirming the happy path rather than catching edge cases.",
+        "happy-path-only": "Test suite covered the success path but omitted error paths, async paths, or boundary conditions.",
+        "mock-not-dom": "Test mocked internal state rather than asserting observable DOM properties."
+      }
+    },
+    "missing-scenario": {
+      "description": "No Gherkin scenario existed for the failing behaviour before the bug was introduced.",
+      "subcategories": {
+        "dom-state-not-tested": "Observable DOM state (element.value, textContent, classList) was not asserted — test checked mock or internal variable instead.",
+        "async-path-not-tested": "Async completion path (API callback, setTimeout, Promise resolution) had no scenario.",
+        "error-path-not-tested": "HTTP error status codes or network failure paths had no scenario.",
+        "focus-state-not-tested": "Browser focus / activeElement state was not exercised in any scenario."
+      }
+    },
+    "defect-in-implementation": {
+      "description": "The implementation itself contained a logic error independent of test coverage.",
+      "subcategories": {
+        "logic-error": "Incorrect conditional, wrong operator, or bad data transformation.",
+        "missing-guard": "Missing null check, boundary guard, or defensive check that allowed an unsafe operation.",
+        "wrong-scope": "Variable or function referenced at the wrong scope level (global vs module vs closure).",
+        "race-condition": "Async operations executed in an order that the code did not handle."
+      }
+    },
+    "process": {
+      "description": "Team process or workflow failure that allowed the defect to reach production.",
+      "subcategories": {
+        "three-amigos-skipped": "No collaborative scenario review (dev + test + product) before implementation.",
+        "scenario-tested-mock-not-dom": "Gherkin scenario passed because the mock had the fix already embedded — actual DOM behaviour was never exercised.",
+        "no-pre-impl-checklist": "Pre-implementation checklist (entry points, failure modes, async paths) was not completed before coding.",
+        "gherkin-written-reactively": "Gherkin scenarios were written after the bug was found, not before the feature was built."
+      }
+    }
+  },
+  "processFailureCodes": [
+    "three-amigos-skipped",
+    "scenario-tested-mock-not-dom",
+    "no-pre-impl-checklist",
+    "gherkin-written-reactively"
+  ],
+  "validationRules": {
+    "newSubcategoryThreshold": "If a new bug's root cause does not fit any existing subcategory, flag it and add the new subcategory to this file before closing the bug.",
+    "recurrenceFlag": "Any subcategory appearing in 3 or more bugs is marked [recurring ▲] in the metrics report.",
+    "falseGreenDefinition": "A false green is a pipeline run that reported GREEN but a rod-caught bug was present and untested."
+  }
+}
