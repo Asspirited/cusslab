@@ -23,7 +23,7 @@ const USER_MESSAGES = {
 
 // ── Context factory ───────────────────────────────────────────────────────────
 
-function createContext({ clearKey = false } = {}) {
+async function createContext({ clearKey = false } = {}) {
   const html = fs.readFileSync(HTML_PATH, 'utf8');
 
   // Thin mock layer retained for api-errors scenarios
@@ -39,6 +39,13 @@ function createContext({ clearKey = false } = {}) {
   });
 
   const { window } = dom;
+
+  // Wait for DOMContentLoaded so App.init() runs and all event listeners are attached
+  await new Promise(resolve => {
+    if (window.document.readyState !== 'loading') resolve();
+    else window.document.addEventListener('DOMContentLoaded', resolve);
+  });
+
   const { document, localStorage } = window;
 
   if (clearKey) {
@@ -71,7 +78,8 @@ function el(ctx, id) {
 }
 
 function clickEl(ctx, id) {
-  el(ctx, id).click();
+  const node = el(ctx, id);
+  node.dispatchEvent(new ctx.window.MouseEvent('click', { bubbles: true }));
 }
 
 function panelId(name) {
@@ -102,7 +110,7 @@ function navTo(ctx, name) {
   const id  = panelId(name);
   const btn = ctx.document.getElementById(`nav-${id}`);
   if (!btn) throw new Error(`Nav button not found: #nav-${id}`);
-  btn.click();
+  btn.dispatchEvent(new ctx.window.MouseEvent('click', { bubbles: true }));
 }
 
 // ── Step definitions ──────────────────────────────────────────────────────────
@@ -405,7 +413,7 @@ function makeSteps(ctx) {
         const btn = ctx.document.getElementById('localiser-btn') ||
                     ctx.document.getElementById('localiser-submit');
         if (!btn) throw new Error('LOCALISE IT button not found');
-        btn.click();
+        btn.dispatchEvent(new ctx.window.MouseEvent('click', { bubbles: true }));
       }],
 
     [/^the Hippo's Law banner shows "([^"]+)"$/,
@@ -491,38 +499,42 @@ const files    = fs.readdirSync(specsDir).filter(f => f.endsWith('.feature'));
 let totalPass = 0;
 let totalFail = 0;
 
-for (const file of files) {
-  const text      = fs.readFileSync(path.join(specsDir, file), 'utf8');
-  const scenarios = parseFeature(text);
-  const bgSteps   = parseBackground(text);
-  const isClearKey = bgSteps.some(s => s === 'the app is loaded with no saved API key');
+async function run() {
+  for (const file of files) {
+    const text       = fs.readFileSync(path.join(specsDir, file), 'utf8');
+    const scenarios  = parseFeature(text);
+    const bgSteps    = parseBackground(text);
+    const isClearKey = bgSteps.some(s => s === 'the app is loaded with no saved API key');
 
-  console.log(`\n  ${file}`);
+    console.log(`\n  ${file}`);
 
-  for (const scenario of scenarios) {
-    const ctx   = createContext({ clearKey: isClearKey });
-    const steps = makeSteps(ctx);
-    let   ok    = true;
-    let   msg   = '';
+    for (const scenario of scenarios) {
+      const ctx   = await createContext({ clearKey: isClearKey });
+      const steps = makeSteps(ctx);
+      let   ok    = true;
+      let   msg   = '';
 
-    try {
-      for (const s of bgSteps)        runStep(s, steps);
-      for (const s of scenario.steps) runStep(s, steps);
-    } catch (e) {
-      ok  = false;
-      msg = e.message;
-    }
+      try {
+        for (const s of bgSteps)        runStep(s, steps);
+        for (const s of scenario.steps) runStep(s, steps);
+      } catch (e) {
+        ok  = false;
+        msg = e.message;
+      }
 
-    if (ok) {
-      totalPass++;
-      console.log(`    ✓ ${scenario.name}`);
-    } else {
-      totalFail++;
-      console.log(`    ✗ ${scenario.name}`);
-      console.log(`      ${msg}`);
+      if (ok) {
+        totalPass++;
+        console.log(`    ✓ ${scenario.name}`);
+      } else {
+        totalFail++;
+        console.log(`    ✗ ${scenario.name}`);
+        console.log(`      ${msg}`);
+      }
     }
   }
+
+  console.log(`\nGherkin: ${totalPass}/${totalPass + totalFail} scenarios passing\n`);
+  process.exit(totalFail > 0 ? 1 : 0);
 }
 
-console.log(`\nGherkin: ${totalPass}/${totalPass + totalFail} scenarios passing\n`);
-process.exit(totalFail > 0 ? 1 : 0);
+run();
