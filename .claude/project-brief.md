@@ -108,17 +108,16 @@ npm run check   # ui-audit + browser-sim only, <5 seconds
 ## Open Items
 
 ### Bugs
-- **Bug 6:** API key save reverts input field — fix in progress (pipeline false green ×2, Three Amigos gate now in place)
+- **Bug 6:** API key save reverts input field — root cause confirmed: mock Gherkin runner cannot test real DOM state. JSDOM refactor in progress.
 - **Bug 5:** Confirm Anthropic HTTP status code from console
 
 ### Infrastructure
-- Complete test isolation refactor (in progress)
+- JSDOM refactor of gherkin-runner.js — in progress (this session)
 - Pipeline parallelisation (queued)
 - Build metrics collection (queued)
 - Git pre-push hook (queued)
-- .claude/ directory restructure (queued)
 - Sentry error tracking
-- Automate git push on green pipeline (partially done)
+- Shell fix: every Claude Code bash command needs NVM prefix — `export NVM_DIR="/home/rodent/.nvm" && \. "/home/rodent/.nvm/nvm.sh" && cd /home/rodent/cusslab &&`
 
 ### Architecture
 - Split `_applySkin` (Single Responsibility)
@@ -127,6 +126,17 @@ npm run check   # ui-audit + browser-sim only, <5 seconds
 
 ### Standards
 - Add retrospectives/ directory and session-1.md after first retrospective
+- Sync updated project-brief.md and CLAUDE.md to repo after this session
+
+---
+
+## Architectural Decisions Log
+
+| Date | Decision | Why |
+|------|----------|-----|
+| 2026-02-27 | Full rebuild of index.html from scratch | Broken beyond incremental repair |
+| 2026-02-27 | Install JSDOM for Gherkin runner | Mock runner cannot test real DOM — Bug 6 false greens x3 |
+| 2026-02-27 | Shell NVM prefix required for Claude Code | Shell context resets to Windows system32 between commands |
 
 ---
 
@@ -145,17 +155,29 @@ Current gaps:
 
 ## Working Agreements
 
+### Collaboration Model
+Rod and Claude are peers with different skill sets. Rod brings lived experience, taste, judgment, and authority to say "that's wrong, start again." Claude brings breadth, tirelessness, and cross-domain synthesis.
+
+- Claude challenges Rod's thinking freely — expected, not exceptional
+- Explicit permission unlocks better reasoning — "be candid" is a signal to drop hedging
+- Diversity of thought is a tool — Claude should bring adjacent domain sources when relevant
+- Mistakes are fine. Retro, forgive, learn, improve. Good intentions assumed always.
+
+### Session Start (2 minutes before any code)
+1. Re-sync on working relationship and last session lessons
+2. Read CLAUDE.md and standards
+3. Run pipeline — produce scorecard
+4. Only then: work
+
 ### Yak Shaving Rule
-When debugging pipeline or tooling failures, stop and ask:
-**"Is this the same problem as the original goal?"**
+When debugging pipeline or tooling, stop and ask: **"Is this the same problem as the original goal?"**
+If not — name the yak, decide consciously, set 20-minute limit.
+Don't conflate "pipeline RED" with "bug still present" — they can be different problems.
+Either Rod or Claude can call it.
 
-If not — name the yak explicitly. Then decide consciously:
-- Is shaving this yak necessary to reach the goal, or just adjacent?
-- Set a time limit before shaving (default: 20 minutes)
-- If time limit hit without resolution, test in browser independently of pipeline status
-- Don't conflate "pipeline RED" with "bug still present" — they can be different problems
-
-Applies to both Rod and Claude. Either can call it.
+### Process Theatre Warning
+If a session produces only standards improvements and no working product change — name it.
+The pipeline exists to serve the product, not the other way around.
 
 ---
 
