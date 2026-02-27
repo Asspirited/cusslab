@@ -66,17 +66,17 @@ check('settings-key-input element exists',
 check('settings-save-msg element exists',
   html.includes('id="settings-save-msg"'));
 
-// 6. Save button exists in settings panel (id="settings-save-btn")
-check('Save button exists in settings panel',
+// 6. Save Key button exists in settings panel
+check('Save Key button exists in settings panel',
   html.includes('id="settings-save-btn"'));
 
 // 7. API module declared
 check('API module is declared (const API)',
   /const API\s*=\s*\(\s*\(\s*\)\s*=>/.test(html));
 
-// 8. switchTo global function exists
-check('switchTo global function exists',
-  /function switchTo\s*\(/.test(html));
+// 8. switchTab global function exists
+check('switchTab global function exists',
+  /function switchTab\s*\(/.test(html));
 
 // ── Summary ───────────────────────────────────────────────────────────────────
 
