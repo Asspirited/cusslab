@@ -125,6 +125,15 @@ If you cannot write the test first, you do not understand the requirement. Stop.
 
 ## 2. BDD — Non-Negotiable
 
+Rod must read and approve every Gherkin scenario before pipeline runs — structural gate, not courtesy.
+
+This gate is enforced in three places:
+- CLAUDE.md: Claude Code outputs literal scenario text, prints "WAITING FOR ROD'S APPROVAL — do not proceed until Rod confirms", and stops every session automatically
+- Handoff template: every Claude.ai instruction includes the explicit stop-and-wait instruction
+- This standard: if either of the above is missing, Rod should not accept the output
+
+Bug 6 produced two false greens because this gate did not exist. Scenario tested mock state not browser behaviour. Pipeline passed. Bug persisted. Rod caught it. Happened twice on the same bug. A scenario Rod has not read in this session has not been approved, regardless of previous sessions.
+
 Gherkin scenario committed and failing before any implementation begins.
 Gherkin is the FIRST artefact of any feature — not the last.
 
