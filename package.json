@@ -5,5 +5,8 @@
     "test": "node pipeline/unit-runner.js && node pipeline/gherkin-runner.js",
     "pipeline": "node pipeline/run-all.js",
     "metrics": "node pipeline/metrics-report.js"
+  },
+  "devDependencies": {
+    "jsdom": "^28.1.0"
   }
 }

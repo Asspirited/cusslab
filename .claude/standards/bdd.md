@@ -36,17 +36,16 @@ These standards represent his views, applied to this project.
 
 **Before running the pipeline on any new or modified scenario:**
 
-1. Output COMPLETE literal text of every new/modified scenario
-2. Print: "WAITING FOR ROD'S APPROVAL — do not proceed until Rod confirms"
-3. STOP. Do not run pipeline. Do not fix code. Do not commit.
-4. Wait for Rod to explicitly type "approved" or give feedback
-5. Only proceed after explicit written approval in this session
+1. Output COMPLETE literal text of NEW and MODIFIED scenarios only
+2. Do NOT show unchanged existing scenarios — state how many skipped
+3. Format: "NEW/MODIFIED SCENARIOS FOR APPROVAL — [N] total, [N] unchanged and skipped:"
+4. Print: "WAITING FOR ROD'S APPROVAL — do not proceed until Rod confirms"
+5. STOP. Do not run pipeline. Do not fix code. Do not commit.
+6. Wait for Rod to explicitly type "approved" or give feedback
+7. Only proceed after explicit written approval in this session
 
-**Why this gate exists:**
-Bug 6 produced two false greens. The scenario tested mock state, not observable
-browser behaviour. Pipeline passed. Bug persisted. Rod caught it. Twice.
-A scenario Rod has not read in this session has not been approved.
-Previous session approval does not count.
+Unchanged scenarios from previous sessions do not need re-approval.
+If ALL scenarios are unchanged, state this and proceed without stopping.
 
 ---
 
