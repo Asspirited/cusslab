@@ -108,11 +108,11 @@ npm run check   # ui-audit + browser-sim only, <5 seconds
 ## Open Items
 
 ### Bugs
-- **Bug 6:** API key save reverts input field — root cause confirmed: mock Gherkin runner cannot test real DOM state. JSDOM refactor in progress.
+- **Bug 6:** API key save reverts input field — root cause confirmed: mock Gherkin runner cannot test real DOM state. JSDOM refactor attempted and reverted (DOMContentLoaded async issues). Real browser symptom under investigation: UI may show old key after save due to textarea paste UX or silent localStorage failure.
 - **Bug 5:** Confirm Anthropic HTTP status code from console
 
 ### Infrastructure
-- JSDOM refactor of gherkin-runner.js — in progress (this session)
+- JSDOM refactor of gherkin-runner.js — reverted (DOMContentLoaded fires async, runScripts:'dangerously' insufficient for inline handlers), queued for clean restart
 - Pipeline parallelisation (queued)
 - Build metrics collection (queued)
 - Git pre-push hook (queued)
@@ -137,6 +137,7 @@ npm run check   # ui-audit + browser-sim only, <5 seconds
 | 2026-02-27 | Full rebuild of index.html from scratch | Broken beyond incremental repair |
 | 2026-02-27 | Install JSDOM for Gherkin runner | Mock runner cannot test real DOM — Bug 6 false greens x3 |
 | 2026-02-27 | Shell NVM prefix required for Claude Code | Shell context resets to Windows system32 between commands |
+| 2026-02-27 | Reverted JSDOM refactor (commits 9116b12, 99c05f1) | DOMContentLoaded fires async — 19/54 scenarios passing, broken state |
 
 ---
 
