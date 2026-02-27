@@ -1,69 +1,107 @@
-# 5 Whys — Bug Log
+# 5 Whys — Root Cause Analysis Log
 
-| ID  | Symptom                       | Status     | 5 Whys | Closed      |
-|-----|-------------------------------|------------|--------|-------------|
-| B5  | Generic API error message     | OPEN       | Yes    | —           |
-| B6  | Key input reverts after save  | CLOSED     | Yes    | 2026-02-26  |
+Every bug found by Rod gets a 5 Whys entry here before the fix is applied.
+The goal is not to blame — it is to find the deepest fixable cause.
 
 ---
 
-## B6 — API key input reverts to old value after saving — CLOSED 2026-02-26
+## Bug 1 — Settings tab did nothing when clicked (2026-02-26)
 
-**Bug:** Rod saves a new API key. The green "✓ Key saved!" message appears. The input field shows the
-old key value instead of the masked new key — or reverts to the old value shortly after saving.
+**What Rod saw:** Clicking Settings & API Key in sidebar had no effect.
 
-**Why 1:** `updateKeyStatus()` unconditionally sets `settings-key-input.value` every time it is called,
-including from async contexts (`_logError`, post-API-call success handler).
+**Why 1:** The `settings` tab was missing from the `SKIN_CONFIGS.consultant.tabs` array, so `switchTab()` rejected it silently.
 
-**Why 2:** `updateKeyStatus()` was designed as a general-purpose UI refresh function and was wired into
-every state-change path without considering that it would fire while the user is actively editing the input.
+**Why 2:** The panel and nav item were added to the HTML but the registration step was skipped.
 
-**Why 3:** No pre-implementation checklist was produced for the settings save flow. The entry points
-(page load, button click, async API completion, error logging) were never enumerated, so the async
-overwrite path was never identified as a risk.
+**Why 3:** There was no test that verified every nav tab was registered before shipping.
 
-**Why 4:** TDD was not applied. No failing test existed for "async updateKeyStatus does not overwrite
-a focused input". The behaviour was considered implicitly correct because it worked in the happy path
-(no concurrent API calls).
+**Why 4:** TDD was not applied — implementation was written without a failing test first. A failing test would have required thinking through all the places a panel needs to be registered.
 
-**Why 5:** Code was written before the requirement was understood. The discipline of writing the test
-first — which forces enumeration of all entry points and failure modes — was skipped.
+**Why 5:** The discipline of writing the test first was abandoned in favour of appearing to make fast progress.
 
-**Fix:** In `updateKeyStatus()`, guard the `inp.value` assignment with `document.activeElement !== inp`.
-This prevents async callbacks from overwriting the textarea while the user has focus on it.
-
-**Test added at:** Why 1 level — Gherkin scenario "Async status update does not overwrite input while
-user is focused on it" in specs/settings.feature.
-
-**Commit:** fix: settings panel re-init overwrites saved API key on save (Bug 6)
-
-**Status:** CLOSED 2026-02-26. Pipeline GREEN. 16/16 Gherkin scenarios passing. Rod-caught count: 6 → target 5 next session.
+**Test added at:** Why 3 — UI Audit check 3: "All panel IDs registered in SKIN_CONFIGS consultant"
 
 ---
 
-## B5 — Generic API error message shown to user
+## Bug 2 — Duplicate ExperimentRunner module causing SyntaxError (2026-02-26)
 
-**Bug:** When an API call fails, the user sees a generic or unhelpful error message ("unavailable")
-instead of a specific, actionable one.
+**What Rod saw:** All sidebar buttons did nothing. Console showed `Uncaught SyntaxError`.
 
-**Status:** OPEN — 5 Whys documented, fix pending.
+**Why 1:** `const ExperimentRunner` was declared twice in the same script block, which is a JS syntax error.
 
-**Why 1:** Error handling in panel modules falls through to a generic catch clause that does not
-use `_userMessage()`.
+**Why 2:** A second ExperimentRunner module was added during API key work and inserted without checking for an existing declaration.
 
-**Why 2:** `_userMessage()` was added to the API module but panel modules that were written before
-it existed were not updated to use it.
+**Why 3:** There was no test that checked for duplicate `const` declarations in the script.
 
-**Why 3:** No Gherkin scenario existed for error states. The happy path was tested implicitly
-(by Rod using the app); error paths were never enumerated.
+**Why 4:** Code was written and shipped without running a syntax check or reading the file as a whole to understand what already existed.
 
-**Why 4:** BDD was not applied. If an error-path scenario had existed before the panel modules
-were written, the test would have forced each module to handle errors consistently.
+**Why 5:** Same root cause as Bug 1 — optimising for speed of output over correctness of process. Also: Single Responsibility was violated — the API key feature touched unrelated parts of the file.
 
-**Why 5:** Same root as B6 — code written before behaviour was specified. Gherkin written
-reactively after bugs, not proactively before features.
+**Test added at:** Why 3 — Browser Sim check 1: "JavaScript has no syntax errors (node --check)"
 
-**Fix:** Update each panel module's catch clause to call `API._userMessage()` (or expose it
-publicly) and display the result. Verify against each HTTP status code in STANDARDS.md.
+---
 
-**Test added at:** Why 1 level — 5 Gherkin scenarios written in specs/api-errors.feature (2026-02-26). Fix not yet applied to panel modules.
+## Bug 3 — Inline `<script>` in Settings panel crashing app on load (2026-02-26)
+
+**What Rod saw:** All sidebar buttons did nothing. Console showed `Uncaught ReferenceError: API is not defined at line 1665`.
+
+**Why 1:** A `<script>` tag inside the Settings panel HTML called `API.getKey()` at parse time, before the API module was declared.
+
+**Why 2:** An inline script was placed inside panel markup without considering when browsers execute inline scripts (immediately, as the HTML is parsed).
+
+**Why 3:** There was no test checking for inline scripts in the body that reference app modules before declaration.
+
+**Why 4:** The pre-implementation checklist was not used. Question 2 ("what must exist before this runs?") and Question 4 ("silent failure modes — loading order") would have caught this immediately.
+
+**Why 5:** The pre-implementation checklist did not exist as a mandatory step. Even when it was later written, the discipline of applying it before every change was not enforced.
+
+**Test added at:** Why 3 — Browser Sim check 2: "No inline `<script>` tags in body reference app modules before declaration"
+
+---
+
+## Bug 4 — [This expert is unavailable.] shown instead of actionable error (2026-02-26)
+
+**What Rod saw:** After getting the app to load, clicking Ask The Panel showed `[This expert is unavailable.]` for every expert.
+
+**Why 1:** The `catch` block in `Bills.ask()` showed a generic hardcoded string instead of the actual error.
+
+**Why 2:** Error handling was written to hide failures rather than surface them. The API call was failing but the user had no way to know why.
+
+**Why 3:** No test existed that verified the error message was actionable for specific failure cases (no key, bad key, rate limit, network failure).
+
+**Why 4:** BDD was not applied — no Gherkin scenario existed for "what does the user see when the API call fails." If it had, the scenario would have specified the expected message and the generic string would have failed it.
+
+**Why 5:** Same root cause running through all bugs: implementation was written before behaviour was specified. The test defines the contract. Without the test, the contract doesn't exist, and any implementation passes.
+
+**Test added at:** Why 3 — Unit tests for `_userMessage()` covering all HTTP status codes; Gherkin scenarios in specs/logging.feature
+
+---
+
+## Bug 5 — "Request failed — if this persists, check status.anthropic.com" (2026-02-26)
+
+**What Rod saw:** After saving API key and clicking Ask The Panel, a generic fallback error message appeared.
+
+**Why 1:** The HTTP status code returned by Anthropic was not in the explicit list in `_userMessage()`, so it fell through to the generic fallback.
+
+**Why 2:** The status code mapping was written based on assumed status codes, not verified against what Anthropic actually returns in each scenario.
+
+**Why 3:** No integration test existed that simulated actual Anthropic error responses and verified the message shown.
+
+**Why 4:** Tests for `_userMessage()` were written after the implementation, testing the codes that were already handled — confirming the code rather than specifying the contract.
+
+**Why 5:** TDD was not applied. The unit tests for `_userMessage()` should have been written first, covering every possible Anthropic status code. Writing them first would have forced the question: "what does Anthropic actually return, and have I handled all of it?"
+
+**Root cause common to all 5 bugs:** Implementation is written before behaviour is specified. Tests are written to confirm code rather than to define contracts. The fix is not more tests — it is applying TDD and BDD as the only acceptable sequence.
+
+**Test added at:** Why 3 — unit tests for `_userMessage()` with all status codes. Still needs: actual Anthropic error response verified in console by Rod before this can be fully closed.
+
+**Status: OPEN** — waiting for Rod to confirm actual status code from console.
+
+---
+
+## Pattern across all bugs
+
+Every single bug has the same Why 5:
+> Implementation was written before behaviour was specified. Tests confirmed code rather than defined contracts.
+
+The fix is behavioural, not technical. Write the test first. Always.
