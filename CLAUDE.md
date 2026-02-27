@@ -54,6 +54,19 @@ Examples: "feat: add Welsh culture modifier"
           "fix: mobile layout overflow on small screens"
           "chore: expand word database with 20 new entries"
 
+## Non-Negotiable Gates
+
+### Gherkin Scenario Review Gate
+
+Before running the pipeline on any new or modified Gherkin scenario:
+1. Output the COMPLETE literal text of every new or modified scenario to the terminal
+2. Print "WAITING FOR ROD'S APPROVAL — do not proceed until Rod confirms"
+3. Stop. Do not run the pipeline. Do not fix code. Do not commit.
+4. Wait for Rod to explicitly type "approved" or provide feedback
+5. Only proceed after explicit approval
+
+This gate cannot be skipped, summarised, or assumed. "Rod approved" is not valid unless Rod has seen the literal scenario text in this session. A scenario that has not been read by Rod has not been approved, regardless of previous sessions.
+
 ## Roadmap (Phase 2 — not yet started)
 - Extract scoring engine to src/js/scoring.js (testable)
 - AWS Lambda for server-side AI suggestions (hides API key from frontend)
