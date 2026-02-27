@@ -27,17 +27,16 @@ npm run pipeline
 
 Before running the pipeline on any new or modified Gherkin scenario:
 
-1. Output the COMPLETE literal text of NEW and MODIFIED scenarios only
-2. Do NOT show unchanged existing scenarios — state how many were skipped
-3. Format: "NEW/MODIFIED SCENARIOS FOR APPROVAL — [N] total, [N] unchanged and skipped:"
-4. Print: "WAITING FOR ROD'S APPROVAL — do not proceed until Rod confirms"
-5. **STOP. Do not run the pipeline. Do not fix code. Do not commit.**
-6. Wait for Rod to explicitly type "approved" or provide feedback
-7. Only proceed after explicit written approval in this session
+1. Output the COMPLETE literal text of every new or modified scenario
+2. Print: "WAITING FOR ROD'S APPROVAL — do not proceed until Rod confirms"
+3. **STOP. Do not run the pipeline. Do not fix code. Do not commit.**
+4. Wait for Rod to explicitly type "approved" or provide feedback
+5. Only proceed after explicit written approval in this session
 
-Unchanged scenarios from previous sessions do not need re-approval.
-A new or modified scenario Rod has not read in this session has not been approved.
-If ALL scenarios are unchanged, state this and proceed without stopping.
+A scenario Rod has not read in this session has not been approved.
+Previous session approval does not count.
+This gate cannot be skipped, summarised, or assumed.
+Bug 6 produced two false greens because this gate did not exist.
 
 ---
 
