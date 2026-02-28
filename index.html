@@ -3527,7 +3527,7 @@ const App = (() => {
       title: 'HECKLER\'S',
       pageTitle: 'Heckler\'s — The Comedy Panel',
       slogans: CONSULTANT_SLOGANS,
-      tabs: ['settings','bills','joketest','clash','roulette','professionals',
+      tabs: ['bills','joketest','clash','roulette','professionals',
              'comscience','evolution','blend','experiment',
              'roastbattle','dinner','topcnuts','comedylab','trumps',
              'premise','charlens','bizcard','training',
@@ -3539,7 +3539,7 @@ const App = (() => {
       title: 'HECKLER\'S LAB',
       pageTitle: 'Heckler\'s Lab',
       slogans: SCIENCE_SLOGANS,
-      tabs: ['settings','experiment','evolution','comscience','blend','bills','joketest','clash','roastbattle','training','premise','charlens','dinner','bizcard'],
+      tabs: ['experiment','evolution','comscience','blend','bills','joketest','clash','roastbattle','training','premise','charlens','dinner','bizcard'],
       labTitle: '⚗️ Heckler\'s Lab',
       labDesc: 'Run the experiments. Take the snapshots. Measure what changes. The panel learns. So do you.',
     },
@@ -8224,7 +8224,12 @@ App.init();
 
 // Settings panel accessible via URL hash — e.g. asspirited.cusslab.io/#settings
 function _checkSettingsHash() {
-  if (window.location.hash === '#settings') switchTab(null, 'settings');
+  if (window.location.hash === '#settings') {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    const panel = document.getElementById('panel-settings');
+    if (panel) panel.classList.add('active');
+  }
 }
 window.addEventListener('hashchange', _checkSettingsHash);
 _checkSettingsHash();
