@@ -49,6 +49,83 @@ Full index.html, clean state, full initialisation.
 Reserve for: interactions between panels, end-to-end journeys.
 Slowest — use sparingly.
 
+**Level 4 — Conversation round isolation** (unit-runner.js, character state tests)
+Stateful, multi-round. Tests state transitions across rounds of interaction.
+Use for: intensity accumulation/decay, event log correctness, summariseFromState() determinism.
+See full pattern below.
+
+---
+
+## Fourth Isolation Level: Conversation Round Testing
+
+Character state management introduces a new isolation level not covered by
+unit, component, or integration testing. Conversation round testing asserts
+that state changes correctly across multiple rounds of interaction.
+
+### What It Tests
+- Intensity accumulates correctly when triggers fire
+- Intensity decays correctly when rounds pass without triggers
+- Intensity spikes above previous peak on repeat triggers
+- Baseline intensity is never breached (20% of peak)
+- Event log entries are correct and complete
+- `summariseFromState()` is deterministic — same state, same output
+- Inter-panel conflicts open and escalate correctly
+- Position shifts are logged when concessions occur
+- State resets cleanly on new session
+- Debate mode and roast mode produce different event patterns
+
+### Test Structure Pattern
+
+```js
+// State factory — always start from known state
+const makeHecklerState = (overrides = {}) => ({
+  panel: 'heckler',
+  current_intensity: 0,
+  peak_intensity: 0,
+  baseline_intensity: 0,
+  rounds_since_trigger: 0,
+  decay_rate: 1,
+  triggers: [],
+  open_conflicts: [],
+  concessions: [],
+  position_shifts: [],
+  ...overrides
+});
+
+// Round helper — advances state by one round
+const advanceRound = (state, trigger = null) => {
+  return applyRound(state, trigger);
+};
+
+// Example: test intensity spike on repeat trigger
+test('repeat trigger spikes above previous peak', () => {
+  let state = makeHecklerState();
+  state = advanceRound(state, { ref: 'synergy', delta: 3 });
+  expect(state.current_intensity).toBe(3);
+  expect(state.peak_intensity).toBe(3);
+
+  state = advanceRound(state); // round passes, no trigger
+  expect(state.current_intensity).toBe(2); // decayed by 1
+
+  state = advanceRound(state, { ref: 'synergy', delta: 3 }); // repeat trigger
+  expect(state.current_intensity).toBeGreaterThan(3); // spikes above previous peak
+  expect(state.triggers[0].trigger_count).toBe(2);
+});
+```
+
+### Critical Rules
+- Never use setTimeout in round tests — advance state programmatically
+- Always use state factories — never mutate shared state between tests
+- Assert observable state object properties — not mock calls
+- `summariseFromState()` must have 100% branch coverage — it is load-bearing
+- Test decay floor explicitly — `current_intensity` must never go below `baseline_intensity`
+- Test session reset explicitly — no state leaks between sessions
+
+### Gherkin Mapping
+All 10 character state Gherkin scenarios (approved 2026-02-28) must have
+corresponding conversation round tests before any character state code ships.
+Pending scenario count must not increase during character state implementation.
+
 ---
 
 ## Background Setup
