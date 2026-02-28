@@ -23,6 +23,23 @@ npm run pipeline
 
 ---
 
+## ⛔ GHERKIN BEFORE CODE — FIRES WHEN ROD DESCRIBES A FEATURE
+
+The moment Rod describes a new feature or a change to existing behaviour:
+
+1. **STOP. Do not read implementation files. Do not look for insertion points.**
+2. Write Gherkin scenarios in Rod's language — observable behaviour only
+3. Output the COMPLETE literal text of every scenario
+4. Print: "WAITING FOR ROD'S APPROVAL — do not proceed until Rod confirms"
+5. **STOP. Wait for explicit "approved" or feedback.**
+6. Only after approval: read code, plan implementation, write code
+
+This gate fires on feature discussions, not just before pipeline runs.
+The implementation phase does not begin until scenarios exist and are approved.
+"I'll write the scenarios after" is not BDD. It is confirmation bias dressed as process.
+
+---
+
 ## ⛔ GHERKIN REVIEW GATE — NON-NEGOTIABLE
 
 Before running the pipeline on any new or modified Gherkin scenario:
