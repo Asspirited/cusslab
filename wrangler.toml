@@ -1,0 +1,6 @@
+name = "cusslab-api"
+main = "worker.js"
+compatibility_date = "2025-01-01"
+
+# After deploying, set your API key as a secret (never commit it):
+#   wrangler secret put ANTHROPIC_API_KEY

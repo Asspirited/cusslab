@@ -1610,13 +1610,13 @@
 <!-- ============ ASK THE BILLS ============ -->
 <div class="panel" id="panel-settings">
   <div class="panel-title">⚙️ Settings</div>
-  <div class="panel-desc">The panel needs an Anthropic API key to work. Get one free at console.anthropic.com. Paste it below. It stays in your browser — nobody else can see it.</div>
+  <div class="panel-desc">The panel works straight away — no key needed. Add your own Anthropic API key below if you want to use your own credits instead of the shared connection.</div>
 
   <div style="max-width:600px;margin-top:32px;">
 
     <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:24px;margin-bottom:24px;">
-      <h3 style="margin:0 0 8px;font-size:16px;color:var(--accent);">Step 1 — Get a free API key</h3>
-      <p style="margin:0 0 16px;color:var(--muted);font-size:14px;">You need an Anthropic account. It's free to sign up and includes free credits.</p>
+      <h3 style="margin:0 0 8px;font-size:16px;color:var(--accent);">Optional — use your own API key</h3>
+      <p style="margin:0 0 16px;color:var(--muted);font-size:14px;">Get a free key at console.anthropic.com if you want to use your own Anthropic credits.</p>
       <a href="https://console.anthropic.com/settings/keys" target="_blank"
          style="display:inline-block;background:var(--accent);color:#000;padding:10px 20px;border-radius:6px;font-weight:700;font-size:14px;text-decoration:none;letter-spacing:1px;">
         Open Anthropic Console ↗
@@ -1625,8 +1625,8 @@
     </div>
 
     <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:24px;margin-bottom:24px;">
-      <h3 style="margin:0 0 8px;font-size:16px;color:var(--accent);">Step 2 — Paste your key here</h3>
-      <p style="margin:0 0 12px;color:var(--muted);font-size:14px;">Paste the full key below and click Save Key.</p>
+      <h3 style="margin:0 0 8px;font-size:16px;color:var(--accent);">Paste your key here</h3>
+      <p style="margin:0 0 12px;color:var(--muted);font-size:14px;">Paste the full key below and click Save Key. Leave blank to use the shared connection.</p>
       <textarea id="settings-key-input"
         placeholder="Paste your full API key here — sk-ant-api03-..."
         onfocus="if(this.value.includes('...')) this.value=''"
@@ -3073,8 +3073,8 @@ const UI = (() => {
 // OCP: extend by changing system prompts, not modifying callClaude
 // ============================================================
 const API = (() => {
-  const ENDPOINT    = 'https://api.anthropic.com/v1/messages';
-  const DEFAULT_MODEL      = 'claude-sonnet-4-20250514';
+  const ENDPOINT    = 'https://cusslab-api.YOURSUBDOMAIN.workers.dev'; // TODO: update after wrangler deploy
+  const DEFAULT_MODEL      = 'claude-sonnet-4-6';
   const DEFAULT_MAX_TOKENS = 1000;
   const KEY_STORAGE        = 'hecklers_api_key';
   const ERROR_LOG_KEY      = 'hecklers_error_log';
@@ -3158,22 +3158,17 @@ const API = (() => {
     const key   = getKey();
     const start = Date.now();
 
-    if (!key) {
-      const msg = _userMessage(null, null);
-      _logError(panel, 'No API key configured', null);
-      throw Object.assign(new Error(msg), { userMessage: msg });
-    }
+    const headers = {
+      'Content-Type': 'application/json',
+      'anthropic-version': '2023-06-01',
+    };
+    if (key) headers['x-api-key'] = key;
 
     let res, errBody;
     try {
       res = await fetch(ENDPOINT, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': key,
-          'anthropic-version': '2023-06-01',
-          'anthropic-dangerous-direct-browser-access': 'true',
-        },
+        headers,
         body: JSON.stringify({
           model: DEFAULT_MODEL,
           max_tokens: maxTokens,

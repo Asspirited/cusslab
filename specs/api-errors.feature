@@ -24,8 +24,14 @@ Feature: API error messages — user sees specific, actionable feedback
     When an API call returns status 500
     Then I should see "Anthropic server error — try again shortly"
 
-  Scenario: No API key shows setup prompt
+  Scenario: App responds without a saved API key using shared connection
     Given no API key is stored
     And I am on the Ask The Panel tab
     When I attempt to use the panel
-    Then I should see "No API key — go to ⚙️ Settings to add one"
+    Then I should not see "No API key"
+
+  Scenario: User with own key uses it instead of shared connection
+    Given a valid API key is stored
+    And I am on the Ask The Panel tab
+    When an API call returns status 401
+    Then I should see "API key rejected — check your key in ⚙️ Settings"

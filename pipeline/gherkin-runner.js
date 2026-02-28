@@ -66,15 +66,11 @@ function createContext() {
   }
 
   function simulateApiCall(status) {
-    if (!getKey()) {
-      lastApiMessage = USER_MESSAGES['no-key'];
-    } else {
-      lastApiMessage = USER_MESSAGES[status] || `HTTP ${status} error`;
-    }
+    lastApiMessage = USER_MESSAGES[status] || `HTTP ${status} error`;
   }
 
   function attemptPanelWithNoKey() {
-    lastApiMessage = USER_MESSAGES['no-key'];
+    lastApiMessage = ''; // Worker handles keyless users — no error
   }
 
   function openSettingsTab() { updateKeyStatus(); }
@@ -203,6 +199,12 @@ function makeSteps(ctx) {
       (expected) => {
         const actual = ctx.getLastApiMessage();
         if (actual !== expected) throw new Error(`message: expected "${expected}" got "${actual}"`);
+      }],
+
+    [/^I should not see "([^"]+)"$/,
+      (notExpected) => {
+        const actual = ctx.getLastApiMessage();
+        if (actual.includes(notExpected)) throw new Error(`message: expected NOT to see "${notExpected}" but got "${actual}"`);
       }],
   ];
 }
