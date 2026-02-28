@@ -147,7 +147,7 @@ Target: pipeline catches everything before Rod sees it.
 - Every session (mandatory)
 - After any Rod-caught bug (mandatory)
 - Any metric trending wrong 2+ sessions (triggered)
-Output to: retrospectives/session-N.md (N = session number from pipeline output)
+Output to: retrospectives/session-retro-YYYY-MM-DD.md
 
 ---
 
@@ -156,7 +156,7 @@ Output to: retrospectives/session-N.md (N = session number from pipeline output)
 Every session, before closing:
 
 1. Write a retrospective in the format defined in `.claude/standards/retrospectives.md`
-2. Save it to `retrospectives/session-N.md` where N = current session number (from pipeline output)
+2. Save it to `retrospectives/session-retro-YYYY-MM-DD.md`
 3. Include the date in the file header
 4. Commit and push
 5. Add the file path to the Documentation Registry in MEMORY.md
@@ -180,4 +180,4 @@ When you create any new doc, diagram, schema, or guide — add it to the Documen
 2. **Irony Authenticity** (11 scenarios) — 12th scoring dimension + Isn't It Ironic tab
 3. **Panel Character State** (10 scenarios) — event log, intensity, decay, spike
 
-Full scenario text in retrospectives/session-22.md and session history.
+Full scenario text in retrospectives/session-retro-2026-02-28.md and session history.

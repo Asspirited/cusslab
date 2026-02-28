@@ -102,7 +102,7 @@ TRY:    [one experiment for next period]
 
 ## Output
 
-Committed to `retrospectives/session-N.md` in the repo.
+Committed to `retrospectives/session-retro-YYYY-MM-DD.md` in the repo.
 Version-controlled alongside the code.
 Not a conversation — a document.
 Referenced in the next session's Pipeline Report under "Last retrospective findings".
