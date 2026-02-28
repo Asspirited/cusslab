@@ -1120,7 +1120,7 @@
     <div id="slogan"></div>
   </div>
   <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
-    <div onclick="switchTab(event,'settings')" style="cursor:pointer;display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--border);border-radius:6px;padding:6px 12px;">
+    <div onclick="switchTab(event,'settings')" style="cursor:pointer;display:none;align-items:center;gap:8px;background:var(--card);border:1px solid var(--border);border-radius:6px;padding:6px 12px;">
       <span id="key-status-indicator" style="font-size:11px;color:#f87171;">● No API key</span>
       <span style="font-size:11px;color:var(--muted);">⚙️ Settings</span>
     </div>
@@ -1147,7 +1147,7 @@
       <span class="nav-group-count">5</span>
     </div>
     <div class="nav-items" id="ni-personas">
-      <div class="tab" onclick="switchTab(event,'settings')"><span class="tab-icon">⚙️</span>Settings & API Key</div>
+      <div class="tab" onclick="switchTab(event,'settings')" style="display:none;"><span class="tab-icon">⚙️</span>Settings & API Key</div>
       <div class="tab active" onclick="switchTab(event,'bills')"><span class="tab-icon">🎤</span>Ask The Panel</div>
       <div class="tab" onclick="switchTab(event,'joketest')"><span class="tab-icon">🧪</span>Joke Test</div>
       <div class="tab" onclick="switchTab(event,'clash')"><span class="tab-icon">⚔️</span>Expert Clash</div>
@@ -8221,6 +8221,13 @@ function submitQuizScore()           { Polls.submitQuizScore(); }
 // INIT
 // =====================
 App.init();
+
+// Settings panel accessible via URL hash — e.g. asspirited.cusslab.io/#settings
+function _checkSettingsHash() {
+  if (window.location.hash === '#settings') switchTab(null, 'settings');
+}
+window.addEventListener('hashchange', _checkSettingsHash);
+_checkSettingsHash();
 
 </script>
 </body>
