@@ -1,98 +1,153 @@
-# Heckler and Cocks — Claude Code Session Instructions
+# CLAUDE.md — Heckler and Cox
+# Operational rules for Claude Code sessions
+# Last updated: 2026-02-28
 
-**Read these files in order before every session. No exceptions.**
+---
 
-1. `.claude/project-brief.md`     — current state, open items, priorities
-2. `.claude/standards/bdd.md`     — non-negotiable BDD rules and Gherkin gate
-3. `.claude/standards/testing.md` — test standards, isolation levels, Fifty Quick Ideas
-4. `.claude/standards/lean-dora.md` — Lean and DORA commitments
-5. `.claude/standards/retrospectives.md` — retrospective framework
-6. `.claude/history/decisions.md` — all decisions made to date
-7. `.claude/history/5-WHYS.md`    — all bug root causes
+## Session Start (mandatory, before any code)
 
-**Then run:**
+1. Read this file and all files in .claude/standards/
+2. Run `npm run pipeline` — produce scorecard
+3. Report: pass/fail per step, coverage %, pending scenario count
+4. Only then: work
+
+---
+
+## Non-Negotiable Rules
+
+### SINGLE FILE RULE
+There is exactly one index.html — at the repo root.
+Before any file operation run:
 ```bash
-npm run pipeline
+find . -name "index.html" | grep -v node_modules
 ```
+If more than one result: stop, flag immediately, do not proceed.
 
-**Then produce both mandatory reports before any work:**
-- Pipeline Passing Report
-- Defect + DORA + Metrics Report
+### REVERT RULE
+Before reverting any commit, check whether pipeline/ files changed in that commit.
+pipeline/ and index.html must always stay in sync.
+A revert that touches index.html must also account for any pipeline changes in the same commit range.
+Never revert one without checking the other.
 
-**Then wait for instruction.**
-
----
-
-## ⛔ GHERKIN BEFORE CODE — FIRES WHEN ROD DESCRIBES A FEATURE
-
-The moment Rod describes a new feature or a change to existing behaviour:
-
-1. **STOP. Do not read implementation files. Do not look for insertion points.**
-2. Write Gherkin scenarios in Rod's language — observable behaviour only
-3. Output the COMPLETE literal text of every scenario
-4. Print: "WAITING FOR ROD'S APPROVAL — do not proceed until Rod confirms"
-5. **STOP. Wait for explicit "approved" or feedback.**
-6. Only after approval: read code, plan implementation, write code
-
-This gate fires on feature discussions, not just before pipeline runs.
-The implementation phase does not begin until scenarios exist and are approved.
-"I'll write the scenarios after" is not BDD. It is confirmation bias dressed as process.
+### PUSH RULE
+Run `npm run pipeline` after any change to:
+- index.html
+- Any file in pipeline/
+- Any bug fix
+- Any feature addition
+GREEN pipeline = commit + push. Never push a red pipeline.
 
 ---
 
-## ⛔ GHERKIN REVIEW GATE — NON-NEGOTIABLE
+## BDD Gate (enforced, no exceptions)
 
-Before running the pipeline on any new or modified Gherkin scenario:
+The sequence is always:
+1. Write Gherkin scenario
+2. Rod reads it
+3. Rod types "approved"
+4. Write the code
 
-1. Output the COMPLETE literal text of every new or modified scenario
-2. Print: "WAITING FOR ROD'S APPROVAL — do not proceed until Rod confirms"
-3. **STOP. Do not run the pipeline. Do not fix code. Do not commit.**
-4. Wait for Rod to explicitly type "approved" or provide feedback
-5. Only proceed after explicit written approval in this session
-
-A scenario Rod has not read in this session has not been approved.
-Previous session approval does not count.
-This gate cannot be skipped, summarised, or assumed.
-Bug 6 produced two false greens because this gate did not exist.
+No code before approval. No exceptions. No "I'll write the scenario after."
+If a scenario is missing for existing behaviour — write it before touching that code.
+Pending scenario count must decrease or hold. It must never increase.
 
 ---
 
-## ⛔ PRE-IMPLEMENTATION CHECKLIST — answer all 5 before writing code
+## Pipeline (5 steps, zero tolerance)
 
-1. What is the exact observable behaviour that is wrong or missing?
-2. What Gherkin scenario will prove it is fixed — described in Rod's language?
-3. What is the root cause from the 5 Whys analysis?
-4. What is the smallest change that fixes only this?
-5. What existing behaviour could this change break?
+| Step | Command | Must pass |
+|------|---------|-----------|
+| 0 UI Audit | pipeline/ui-audit.js | 10 structural checks |
+| 1 Browser Sim | pipeline/browser-sim.js | 15 behaviour checks |
+| 2 Unit Tests | pipeline/unit-runner.js | All unit tests |
+| 3 Gherkin/BDD | pipeline/gherkin-runner.js | All scenarios |
+| 4 Coverage | pipeline/coverage.js | Stmt ≥70%, Branch ≥70% |
 
-Written answers required. "Yes" is not an answer.
-
----
-
-## ⛔ TDD CYCLE — RED → GREEN → REFACTOR
-
-For every unit of behaviour:
-1. **Write a failing unit test** — run it, confirm it fails for the right reason
-2. **Write the minimum code to make it pass** — no more
-3. **Refactor** — apply Clean Code and SOLID (SRP, OCP, LSP, ISP, DIP)
-
-Never write implementation code without a failing test first.
-Never refactor while the test is red.
+All 5 must be green. A partial green is a red.
 
 ---
 
-## ⛔ PIPELINE MUST BE GREEN BEFORE ANY COMMIT
+## TDD Cycle (7 steps, always)
 
-Zero tolerance. If any step fails, fix it before committing.
-Do not push a red pipeline under any circumstances.
-If green and Rod has approved the scenario — commit and push automatically.
-No manual deployment steps. GREEN = ship.
+1. Write failing test
+2. Confirm it fails for the right reason
+3. Write minimum code to pass
+4. Confirm it passes
+5. Refactor
+6. Confirm still passes
+7. Repeat
+
+Never write implementation before a failing test exists.
 
 ---
 
-## 📚 Documentation Registry Rule
+## Clean Code Rules
 
-When you create any new doc, diagram, schema, or guide — add it to the Documentation Registry in MEMORY.md immediately. Do not wait until end of session.
+- Functions: 20 lines maximum
+- No magic strings — extract to named constants
+- No mock-based tests for DOM state — use JSDOM for real DOM testing
+- Comments explain why, not what
+- Honest naming — no abbreviations that obscure intent
+- Single Responsibility — one reason to change per function
+
+---
+
+## Architecture Rules
+
+- Single index.html — all HTML, CSS, JS in one file
+- Module pattern: `const ModuleName = (() => { ... })();`
+- No framework, no build step, no bundler
+- API calls go via Cloudflare Worker — never directly to api.anthropic.com from browser
+- No API key ever in frontend code or browser storage
+- summariseFromState() must be deterministic — same input always produces same output
+
+---
+
+## Character State Rules
+
+- Event log is the single source of truth for panel character state
+- summariseFromState() derives prompt prefix — no API call required
+- State resets on new session — no persistence across sessions
+- Intensity rules:
+  - New trigger: intensity += delta
+  - Round with no trigger: intensity -= decay_rate (floor: baseline = 20% of peak)
+  - Repeat trigger: delta doubles, spikes above previous peak
+
+---
+
+## Panel Rules
+
+- Four panel members: Heckler, Suit, Hippy, Realist
+- Do not add a fifth panel member until real use reveals a perspective gap none of the four can fill
+- Panel trigger sensitivity profiles live in .claude/project-brief.md
+- Debate mode: panels respond to each other, track conflicts and concessions
+- Roast mode: panels respond to input, no inter-panel conflict events opened
+
+---
+
+## Yak Shaving Rule
+
+If the current task has drifted from the original goal, name it:
+"This is yak shaving."
+Set a 20-minute limit. If not resolved in 20 minutes: revert, ask a better question.
+
+---
+
+## DORA Metrics
+
+Track in metrics/builds.jsonl and metrics/defects.jsonl.
+The single most important ratio: caughtBy: rod vs caughtBy: pipeline.
+Rod-caught bugs = pipeline failure = systemic issue = retrospective required.
+Target: pipeline catches everything before Rod sees it.
+
+---
+
+## Retrospective Triggers
+
+- Every session (mandatory)
+- After any Rod-caught bug (mandatory)
+- Any metric trending wrong 2+ sessions (triggered)
+Output to: retrospectives/session-N.md (N = session number from pipeline output)
 
 ---
 
@@ -111,7 +166,18 @@ If Rod ends the session abruptly, write and commit it anyway.
 
 ---
 
-## Session start command
-```bash
-cat .claude/project-brief.md && npm run pipeline
-```
+## 📚 Documentation Registry Rule
+
+When you create any new doc, diagram, schema, or guide — add it to the Documentation Registry in MEMORY.md immediately. Do not wait until end of session.
+
+---
+
+## Approved Gherkin Awaiting Code (as of 2026-02-28)
+
+28 scenarios approved, no code written yet. Implement in this order:
+
+1. **Cloudflare Worker** (7 scenarios) — architectural, unblocks everything
+2. **Irony Authenticity** (11 scenarios) — 12th scoring dimension + Isn't It Ironic tab
+3. **Panel Character State** (10 scenarios) — event log, intensity, decay, spike
+
+Full scenario text in retrospectives/session-22.md and session history.
