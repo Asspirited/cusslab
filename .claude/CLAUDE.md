@@ -69,6 +69,18 @@ Written answers required. "Yes" is not an answer.
 
 ---
 
+## ⛔ TDD CYCLE — RED → GREEN → REFACTOR
+
+For every unit of behaviour:
+1. **Write a failing unit test** — run it, confirm it fails for the right reason
+2. **Write the minimum code to make it pass** — no more
+3. **Refactor** — apply Clean Code and SOLID (SRP, OCP, LSP, ISP, DIP)
+
+Never write implementation code without a failing test first.
+Never refactor while the test is red.
+
+---
+
 ## ⛔ PIPELINE MUST BE GREEN BEFORE ANY COMMIT
 
 Zero tolerance. If any step fails, fix it before committing.
