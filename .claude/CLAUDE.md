@@ -96,6 +96,21 @@ When you create any new doc, diagram, schema, or guide — add it to the Documen
 
 ---
 
+## ⛔ SESSION END — MANDATORY BEFORE CLOSING
+
+Every session, before closing:
+
+1. Write a retrospective in the format defined in `.claude/standards/retrospectives.md`
+2. Save it to `retrospectives/session-N.md` where N = current session number (from pipeline output)
+3. Include the date in the file header
+4. Commit and push
+5. Add the file path to the Documentation Registry in MEMORY.md
+
+No session ends without a committed retrospective. No exceptions.
+If Rod ends the session abruptly, write and commit it anyway.
+
+---
+
 ## Session start command
 ```bash
 cat .claude/project-brief.md && npm run pipeline

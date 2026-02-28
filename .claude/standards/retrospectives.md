@@ -18,9 +18,9 @@ The format is just a prompt.
 
 ## Trigger
 
-- Every 5th session (mandatory)
-- Immediately after any Rod-caught bug (mandatory)
-- When any metric trends in the wrong direction for 2+ sessions (triggered)
+- **Every session** (mandatory) — no exceptions
+- Depth scales with what happened: quiet session = short retro, incident session = full retro
+- Immediately after any Rod-caught bug: include 5 Whys in that session's retro
 
 ---
 
