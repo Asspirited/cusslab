@@ -2,7 +2,7 @@
 
 **asspirited.cusslab.io** | Phase 1: Single File | Owner: Rod Roden
 
-Last updated: 2026-02-27
+Last updated: 2026-02-28
 
 ---
 
@@ -28,15 +28,19 @@ teams drowning in jargon.
 - Cultural calibration across 6 regions
 - Profanity optimisation modes (Boardroom / Water Cooler / Unhinged)
 - Single HTML file deployment via GitHub Pages
-- Anthropic API key saved locally in browser
+- Cloudflare Worker proxy — users need no API key (shared connection)
+- Anthropic API key optionally saved locally in browser (overrides shared)
+- "Isn't It Ironic?" — panel classifies ironic vs non-ironic statements
 
 ---
 
 ## Tech Stack
 
 - **Frontend:** Single HTML file — vanilla JS, no framework, no build step
-- **AI:** Anthropic Claude API (claude-sonnet-4-5 or equivalent)
-- **Hosting:** GitHub Pages — https://asspirited.github.io/cusslab (custom domain asspirited.cusslab.io not yet configured)
+- **AI:** Anthropic Claude API (`claude-sonnet-4-6`)
+- **API proxy:** Cloudflare Worker — `https://cusslab-api.leanspirited.workers.dev`
+- **Hosting:** GitHub Pages — `https://asspirited.github.io/cusslab`
+  - Custom domain `asspirited.cusslab.io` NOT configured — never direct Rod there
 - **Repo:** github.com/Asspirited/cusslab
 - **Pipeline:** Node.js scripts in /pipeline
 - **Tests:** Jest unit tests + custom Gherkin runner + coverage
@@ -45,7 +49,7 @@ teams drowning in jargon.
 
 ## Architecture — Phase 1 (Current)
 
-Single `index.html` — all HTML, CSS, and JS in one file.
+Single `index.html` — all HTML, CSS, and JS in one file (~8,500 lines).
 Constraint is intentional — defers backend complexity until needed.
 
 ### Module Pattern (within single file)
@@ -61,10 +65,20 @@ const ModuleName = (() => {
 - `cultureScore(text, region)` — regional calibration
 - `_applySkin(panel, culture)` — applies panel personality
 
+### Cloudflare Worker (worker.js)
+Proxies requests to Anthropic API. Uses `ANTHROPIC_API_KEY` secret (set via wrangler).
+If caller supplies `x-api-key` header, that key is used instead (user's own key takes priority).
+Deployed at: `https://cusslab-api.leanspirited.workers.dev`
+
+### Settings Panel
+Hidden from nav. Accessible at `/#settings` hash URL only.
+`_applySkin()` override prevented by removing 'settings' from both skin tab arrays.
+Hash listener added after `App.init()` — bypasses `switchTab()` to avoid null evt errors.
+
 ### Known Architectural Issues (active)
 - `_applySkin` violates Single Responsibility — needs splitting
 - Prompt strings are magic literals — need extracting to constants
-- 7000+ lines — approaching single-file limit
+- ~8,500 lines — approaching single-file limit
 
 ---
 
@@ -89,11 +103,11 @@ Five steps — all must pass. Zero tolerance.
 
 | Step | Command | Checks |
 |------|---------|--------|
-| 0 UI Audit | pipeline/ui-audit.js | 10 structural checks |
-| 1 Browser Sim | pipeline/browser-sim.js | 15 behaviour checks |
-| 2 Unit Tests | pipeline/unit-runner.js | All unit tests |
-| 3 Gherkin/BDD | pipeline/gherkin-runner.js | All scenarios |
-| 4 Coverage | pipeline/coverage.js | Stmt ≥70%, Branch ≥70% |
+| 0 UI Audit | pipeline/ui-audit.js | 8 structural checks |
+| 1 Browser Sim | pipeline/browser-sim.js | 6 behaviour checks |
+| 2 Unit Tests | pipeline/unit-runner.js | 17 unit tests |
+| 3 Gherkin/BDD | pipeline/gherkin-runner.js | 25 scenarios |
+| 4 Coverage | pipeline/coverage.js | Stmt ≥40%, Branch ≥30% |
 
 GREEN = all pass = auto-commit and push = GitHub Pages deploys.
 No manual deployment steps. Ever.
@@ -108,25 +122,26 @@ npm run check   # ui-audit + browser-sim only, <5 seconds
 ## Open Items
 
 ### Bugs
-- **Bug 6:** API key save reverts input field — root cause confirmed: mock Gherkin runner cannot test real DOM state. JSDOM refactor attempted and reverted (DOMContentLoaded async issues). Real browser symptom under investigation: UI may show old key after save due to textarea paste UX or silent localStorage failure.
-- **Bug 5:** Confirm Anthropic HTTP status code from console
+- **Bug 5:** Confirm Anthropic HTTP status code from console (open — blocked by zero credits)
+
+### Blocked
+- **Anthropic credits:** Zero balance. Billing page throwing Stripe `setupintent` error.
+  Anthropic support rejects Gmail addresses. Rod to retry billing in fresh incognito window
+  or contact Anthropic support via non-Gmail address.
+  App code is correct — blocker is external.
 
 ### Infrastructure
-- JSDOM refactor of gherkin-runner.js — reverted (DOMContentLoaded fires async, runScripts:'dangerously' insufficient for inline handlers), queued for clean restart
+- JSDOM refactor of gherkin-runner.js — reverted, queued for clean restart
 - Pipeline parallelisation (queued)
-- Build metrics collection (queued)
 - Git pre-push hook (queued)
-- Sentry error tracking
-- Shell fix: every Claude Code bash command needs NVM prefix — `export NVM_DIR="/home/rodent/.nvm" && \. "/home/rodent/.nvm/nvm.sh" && cd /home/rodent/cusslab &&`
+- Sentry error tracking (queued)
+- Shell fix: every Claude Code bash command needs NVM prefix —
+  `export NVM_DIR="/home/rodent/.nvm" && \. "/home/rodent/.nvm/nvm.sh" && cd /home/rodent/cusslab &&`
 
 ### Architecture
 - Split `_applySkin` (Single Responsibility)
 - Extract prompt strings to constants
 - AWS Budget alert £20/month
-
-### Standards
-- Add retrospectives/ directory and session-1.md after first retrospective
-- Sync updated project-brief.md and CLAUDE.md to repo after this session
 
 ---
 
@@ -138,6 +153,12 @@ npm run check   # ui-audit + browser-sim only, <5 seconds
 | 2026-02-27 | Install JSDOM for Gherkin runner | Mock runner cannot test real DOM — Bug 6 false greens x3 |
 | 2026-02-27 | Shell NVM prefix required for Claude Code | Shell context resets to Windows system32 between commands |
 | 2026-02-27 | Reverted JSDOM refactor (commits 9116b12, 99c05f1) | DOMContentLoaded fires async — 19/54 scenarios passing, broken state |
+| 2026-02-28 | Cloudflare Worker proxy deployed | Users need no API key — shared connection via worker secret |
+| 2026-02-28 | Settings panel hidden from nav, hash-only access | Users don't need settings; advanced users can reach via /#settings |
+| 2026-02-28 | Model ID updated to claude-sonnet-4-6 | Previous ID (claude-sonnet-4-20250514) returning 400 errors |
+| 2026-02-28 | Credit balance error path added to _userMessage() | Anthropic returns 400 for zero credits — needs distinct message from invalid key |
+| 2026-02-28 | GHERKIN BEFORE CODE gate added to CLAUDE.md | Repeated failure: implementation started before scenarios written or approved |
+| 2026-02-28 | TDD red-green-refactor cycle added to CLAUDE.md | Explicit rule: failing test before implementation, always |
 
 ---
 
@@ -149,15 +170,22 @@ Current gaps:
 - Ask The Panel happy path (all panels respond)
 - Cultural calibration — region changes output
 - Scoring display — all 11 dimensions shown
-- Error handling — API key rejected
 - Error handling — network failure
+
+Closed this session:
+- ~~Error handling — API key rejected~~ ✓ (api-errors.feature)
+- ~~Error handling — credit balance~~ ✓ (api-errors.feature)
+- ~~Bug 6 — key paste UX~~ ✓ (settings.feature)
+- ~~Isn't It Ironic feature~~ ✓ (ironic.feature)
 
 ---
 
 ## Working Agreements
 
 ### Collaboration Model
-Rod and Claude are peers with different skill sets. Rod brings lived experience, taste, judgment, and authority to say "that's wrong, start again." Claude brings breadth, tirelessness, and cross-domain synthesis.
+Rod and Claude are peers with different skill sets. Rod brings lived experience, taste, judgment,
+and authority to say "that's wrong, start again." Claude brings breadth, tirelessness, and
+cross-domain synthesis.
 
 - Claude challenges Rod's thinking freely — expected, not exceptional
 - Explicit permission unlocks better reasoning — "be candid" is a signal to drop hedging
