@@ -143,10 +143,14 @@ See practices/ci-cd.md for full procedure.
 
 ## Approved Gherkin Awaiting Code (as of 2026-02-28)
 
-28 scenarios approved. Implement in this order:
-1. Cloudflare Worker (7 scenarios) — unblocks everything
+31 scenarios approved. Implement in this order:
+1. Cloudflare Worker (9 scenarios) — includes brand error messages and Magnus loading state
 2. Irony Authenticity (11 scenarios) — 12th dimension + Isn't It Ironic tab
 3. Panel Character State (10 scenarios) — event log, intensity, decay, spike
+4. Six panel member profiles (1 scenario) — Harold, Sebastian, Roy, Hicks, Partridge, Mystic
+
+NOTE: Panel character state scenarios written for 4 panels. Need new scenarios for Hicks,
+Partridge, and Mystic before implementation. Three Amigos required next session.
 
 Full scenario text: retrospectives/session-retro-2026-02-28.md
 
