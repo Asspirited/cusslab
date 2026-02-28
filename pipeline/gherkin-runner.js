@@ -78,7 +78,13 @@ function createContext() {
   }
 
   function openSettingsTab() { updateKeyStatus(); }
-  function focusInput()      { active = 'settings-key-input'; }
+  function focusInput() {
+    active = 'settings-key-input';
+    // Mirror onfocus handler in HTML: clear masked display so paste replaces cleanly
+    if (dom['settings-key-input'] && (dom['settings-key-input'].value || '').includes('...')) {
+      dom['settings-key-input'].value = '';
+    }
+  }
   function blurInput()       { active = null; }
 
   return { store, dom, getKey, setKey, clickSaveKey, clickClearKey,
@@ -109,6 +115,9 @@ function makeSteps(ctx) {
 
     [/^I am on the Settings tab$/,
       () => { ctx.openSettingsTab(); }],
+
+    [/^I focus the key input$/,
+      () => { ctx.focusInput(); }],
 
     [/^I am on the Settings tab with the key input focused$/,
       () => { ctx.openSettingsTab(); ctx.focusInput(); }],

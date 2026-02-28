@@ -25,6 +25,21 @@ Feature: Settings panel — API key management
     When I navigate to the Settings tab
     Then the key input shows "sk-ant-api03...8901"
 
+  Scenario: Focusing the key input clears the masked display ready for a new key
+    Given API key "sk-ant-api03-OLDKEYABCDEFGHIJKLMNO12345" is stored
+    And I am on the Settings tab
+    When I focus the key input
+    Then the key input shows ""
+
+  Scenario: Replacing a saved key pastes cleanly and stores the new key
+    Given API key "sk-ant-api03-OLDKEYABCDEFGHIJKLMNO12345" is stored
+    And I am on the Settings tab
+    When I focus the key input
+    And I paste "sk-ant-api03-NEWKEYABCDEFGHIJKLMNO12345" into the key input
+    And I click "Save Key"
+    Then the stored key is "sk-ant-api03-NEWKEYABCDEFGHIJKLMNO12345"
+    And the key input shows "sk-ant-api03...2345"
+
   Scenario: Async status update does not overwrite input while user is focused on it
     Given API key "sk-ant-api03-OLDKEYABCDEFGHIJKLMNO0000" is stored
     And I am on the Settings tab with the key input focused
