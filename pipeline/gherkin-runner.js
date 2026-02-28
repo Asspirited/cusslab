@@ -69,6 +69,14 @@ function createContext() {
     lastApiMessage = USER_MESSAGES[status] || `HTTP ${status} error`;
   }
 
+  function simulateApiCallWithBody(status, message) {
+    if (status === 400 && message.includes('credit balance')) {
+      lastApiMessage = 'Out of API credits — add billing at console.anthropic.com.';
+    } else {
+      lastApiMessage = USER_MESSAGES[status] || `HTTP ${status} error`;
+    }
+  }
+
   function attemptPanelWithNoKey() {
     lastApiMessage = ''; // Worker handles keyless users — no error
   }
@@ -85,7 +93,7 @@ function createContext() {
 
   return { store, dom, getKey, setKey, clickSaveKey, clickClearKey,
            openSettingsTab, focusInput, blurInput, updateKeyStatus,
-           simulateApiCall, attemptPanelWithNoKey,
+           simulateApiCall, simulateApiCallWithBody, attemptPanelWithNoKey,
            getLastApiMessage: () => lastApiMessage,
            getHeaderState:    () => headerState };
 }
@@ -191,6 +199,9 @@ function makeSteps(ctx) {
 
     [/^an API call returns status (\d+)$/,
       (status) => { ctx.simulateApiCall(parseInt(status, 10)); }],
+
+    [/^an API call returns status (\d+) with message "([^"]+)"$/,
+      (status, message) => { ctx.simulateApiCallWithBody(parseInt(status, 10), message); }],
 
     [/^I attempt to use the panel$/,
       () => { ctx.attemptPanelWithNoKey(); }],

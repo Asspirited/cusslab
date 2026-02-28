@@ -14,6 +14,12 @@ Feature: API error messages — user sees specific, actionable feedback
     When an API call returns status 400
     Then I should see "Bad request — your API key may be invalid. Check ⚙️ Settings"
 
+  Scenario: Out of API credits shows billing message not key error
+    Given no API key is stored
+    And I am on the Ask The Panel tab
+    When an API call returns status 400 with message "credit balance is too low"
+    Then I should see "Out of API credits — add billing at console.anthropic.com."
+
   Scenario: 429 Too Many Requests shows rate-limit message
     Given I am on the Ask The Panel tab
     When an API call returns status 429
