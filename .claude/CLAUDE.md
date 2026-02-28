@@ -23,18 +23,79 @@
 
 ---
 
-## Non-Negotiable Gates
+## The Integrated Delivery Cycle
+Every feature. Every bug fix. Every session. No exceptions.
 
-### BDD Gate
-Sequence is always: Gherkin written → Rod reads it → Rod types "approved" → code written.
-No code before approval. No exceptions.
-Previous session approval does not count — Rod must approve in this session.
-See .claude/standards/bdd.md for full gate procedure.
+### Step 1 — Three Amigos (BDD)
+Rod and Claude agree the behaviour in plain language before anything is written.
+What does the user see? What is the observable outcome?
 
-### Pipeline Gate
-All 5 steps must be green before any commit or push.
-A partial green is a red.
-See .claude/project-brief.md for step definitions.
+### Step 2 — Gherkin (BDD Gate — enforced)
+Write scenario in Given-When-Then.
+Then:
+1. Output COMPLETE literal text of every new or modified scenario
+2. Print: "WAITING FOR ROD'S APPROVAL — do not proceed until Rod confirms"
+3. STOP. Do not run pipeline. Do not fix code. Do not commit.
+4. Wait for Rod to explicitly type "approved" or give feedback
+5. Only proceed after explicit written approval in this session
+
+Previous session approval does not count.
+A scenario Rod has not read in this session has not been approved.
+
+### Step 3 — Outside-In Design (SOLID)
+Before writing any code or test — design the public interface.
+Ask:
+- SRP: does this module/function have exactly one reason to change?
+- OCP: does this extend existing behaviour, or does it require modifying core?
+- LSP: are panel objects interchangeable with the same interface?
+- ISP: is the interface minimal — no methods the caller doesn't need?
+- DIP: does this depend on abstractions, not concretions?
+If any answer is wrong — redesign before proceeding.
+
+### Step 4 — Failing Test (TDD Gate — enforced)
+Write the unit test against the interface designed in Step 3.
+Run it. Confirm two things:
+1. It fails
+2. It fails for the RIGHT reason — not an import error, not a typo, the actual missing behaviour
+Do not proceed until both are confirmed.
+
+### Step 5 — Minimum Implementation (TDD)
+Write the least code required to make the test pass.
+No gold plating. No "while I'm here". No future-proofing.
+If it's not required by a failing test, it doesn't get written.
+
+### Step 6 — Refactor (TDD + SOLID)
+Run tests — confirm green.
+Then ask:
+- Does any function exceed 20 lines? Split it.
+- Does anything have more than one responsibility? Split it.
+- Are there magic strings? Extract to named constants.
+- Are there empty catch blocks (except localStorage)? Fix them.
+- Do comments explain what instead of why? Rewrite them.
+Run tests again — confirm still green.
+
+### Step 7 — Pipeline (BDD living documentation)
+```bash
+npm run pipeline
+```
+All 5 steps must pass. A partial green is a red.
+The Gherkin scenario now proves the behaviour is live.
+Coverage must be ≥70% statements, ≥70% branches.
+
+### Step 8 — Push
+GREEN pipeline = commit + push = auto-deploy to GitHub Pages.
+Rod verifies in browser.
+Never push a red pipeline.
+
+### Step 9 — Retro Trigger Check
+- Rod caught something in the browser? → 5 Whys + retro this session
+- False green detected? → retro this session
+- Pending scenario count increased? → explain why, get approval
+- All good? → log metrics, continue
+
+---
+
+## Non-Negotiable Rules
 
 ### PUSH Rule
 Run `npm run pipeline` after any change to index.html, pipeline/, bug fix, or feature.
@@ -50,13 +111,7 @@ More than one result = stop, flag, do not proceed.
 ### REVERT Rule
 Before reverting any commit: check whether pipeline/ files changed in that commit.
 pipeline/ and index.html must stay in sync.
-Never revert one without checking one another.
-
----
-
-## Development Flow
-BDD → TDD → Implementation → Pipeline → Auto-push → Rod verifies
-Any step out of order = process violation. Log it. Fix it. Don't repeat it.
+Never revert one without checking the other.
 
 ---
 
