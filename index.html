@@ -3140,7 +3140,11 @@ const API = (() => {
 
   function _userMessage(status, errBody) {
     if (status === 401)     return 'API key rejected — check your key in ⚙️ Settings.';
-    if (status === 400)     return 'Bad request — your API key may be invalid. Check ⚙️ Settings.';
+    if (status === 400) {
+      const msg = errBody?.error?.message || '';
+      if (msg.includes('credit balance')) return 'Out of API credits — add billing at console.anthropic.com.';
+      return 'Bad request — your API key may be invalid. Check ⚙️ Settings.';
+    }
     if (status === 403)     return 'API key doesn\'t have permission for this request.';
     if (status === 429)     return 'Too many requests — wait a moment and try again.';
     if (status === 529)     return 'Anthropic is overloaded — try again in a few seconds.';
