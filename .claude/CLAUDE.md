@@ -149,8 +149,6 @@ Target: pipeline catches everything before Rod sees it.
 - Any metric trending wrong 2+ sessions (triggered)
 Output to: retrospectives/session-retro-YYYY-MM-DD.md
 
----
-
 ## ⛔ SESSION END — MANDATORY BEFORE CLOSING
 
 Every session, before closing:
@@ -162,7 +160,6 @@ Every session, before closing:
 5. Add the file path to the Documentation Registry in MEMORY.md
 
 No session ends without a committed retrospective. No exceptions.
-If Rod ends the session abruptly, write and commit it anyway.
 
 ---
 
