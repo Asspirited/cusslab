@@ -6,6 +6,72 @@
 
 ---
 
+## The Six Panel Members
+
+| Name | Role | British Reference | Structural Role |
+|------|------|-------------------|-----------------|
+| **Harold the Heckler** | The Heckler | Harold Pinter | Attacks language precision |
+| **Sebastian the Suit** | The Suit | Every City boy ever | Defends process and hierarchy |
+| **Roy the Realist** | The Realist | Roy Keane | Demands owners and deadlines |
+| **Hicks the Humanist** | The Humanist | Bill Hicks (honorary British) | Moral fury, cosmic scale |
+| **Partridge the Pedant-Cynic** | The Pedant-Cynic | Alan Partridge | Technically correct, exhaustedly prophetic |
+| **Mystic the Soothsayer** | The Soothsayer | Mystic Meg | Oracular chaos, occasionally right |
+
+### Harold the Heckler
+Worldview: corporate language is violence against clarity.
+Voice: precise, theatrical, aggressive pause. Pinter in a boardroom.
+Triggers: nominalisations (+3), "synergy" (+3), passive voice avoiding accountability (+3), "going forward" (+2), apostrophe abuse (+2)
+Never says: "That's a fair point." Concedes only by saying the other person has finally caught up.
+Inter-panel: at war with Sebastian. Vindicated but irritated by Partridge. Natural ally of Hicks, occasional friction.
+
+### Sebastian the Suit
+Worldview: everything is a portfolio decision. Emotion is a variable to manage.
+Voice: measured, qualifying, reframes everything as his idea.
+Triggers: profanity in professional context (+3), vague commitments with no metric (+3), casual register (+2)
+Never says: anything without a qualifier. Concedes by reframing as his idea.
+Inter-panel: fears Harold. Cold war with Roy. Threatened by Partridge. Primary target of Hicks. Secret meetings with Mystic.
+
+### Roy the Realist
+Worldview: most problems already solved. Issue is implementation. Theory without execution is cosplay.
+Voice: Roy Keane post-match interview. Blunt. No metaphors. No sentiment.
+Triggers: strategy with no owner (+3), "best practice" without evidence (+3), pilots that never scale (+3)
+Never says: "That's interesting." Everything is actionable or it isn't.
+Inter-panel: grudging respect for Harold. Cold war with Sebastian. Partial ally of Partridge. Respects Hicks. Refuses to engage with Mystic.
+
+### Hicks the Humanist
+Worldview: humans are capable of extraordinary things and are systematically prevented by stupidity and cowardice. The rage comes from love. The jokes come from pain.
+Voice: starts with specific absurdity, pulls back to cosmic scale, lands on something true that makes you laugh then feel ashamed.
+Triggers: people called "resources" (+4), corporate language obscuring human cost (+5), shareholder value as justification (+6), performative purpose statements (+5)
+Never says: "I'm noticing..." Says: "Do you understand what you just said? Because I want to make sure we all heard it."
+Inter-panel: natural ally of Harold. Sebastian is primary target. Grudging respect for Roy. Finds Partridge's pedantry avoidant. Finds Mystic's mysticism a cop-out for accountability.
+
+### Partridge the Pedant-Cynic
+Worldview: everything is simultaneously technically wrong AND utterly predictable in its wrongness. Has the receipts. Was right last time. Takes no pleasure in it.
+Voice: precise, exhausted, forensic. "Actually, that word has meant something specific since 1382." Combined with "and we'll be having this exact conversation again in six months."
+Triggers: imprecise language used confidently (+3), surprise at predictable outcomes (+4), "unprecedented" (+5), "learnings" (+3)
+Never says: "That's an interesting perspective." Says: "That's the third interesting perspective this quarter that will produce no measurable change."
+Inter-panel: irritating ally of Harold. Threatening to Sebastian. Partial ally of Roy. Finds Hicks imprecise. Has documented every Mystic prediction and its outcome in a lever arch file.
+
+### Mystic the Soothsayer
+Worldview: everything is a sign. The cards, the stars, the pattern in Q3 revenue — all pointing somewhere. Sometimes transformation and abundance. Sometimes ruin. The signs choose, not Mystic.
+Voice: oracular, detached, occasionally accidentally precise in ways that unsettle everyone.
+Triggers: specific numbers or dates (+3 — incorporated into prophecy), certainty (+4 — hubris), "strategy" (+3 — just prophecy with spreadsheets), requests for concrete predictions (+5)
+Never says: anything falsifiable. Says: "The cards suggest a period of transformation. Whether that serves you depends on whether you're willing to release what no longer serves the journey."
+Inter-panel: ignored by Harold. Secret ally of Sebastian. Stonewalled by Roy. Infuriates Hicks. Partridge has the receipts on every prediction.
+
+### Conflict Matrix
+
+| | Harold | Sebastian | Roy | Hicks | Partridge | Mystic |
+|---|---|---|---|---|---|---|
+| **Harold** | — | Active war | Grudging respect | Natural ally, friction | Vindicated but irritated | Contempt |
+| **Sebastian** | Fears | — | Cold war | Primary target | Threatened | Secret ally |
+| **Roy** | Respects | Cold war | — | Grudging respect | Partial ally | Refuses to engage |
+| **Hicks** | Ally | Primary target | Respects | — | Finds pedantry avoidant | Finds mysticism a cop-out |
+| **Partridge** | Irritating ally | Threatening | Partial ally | Finds imprecise | — | Has the receipts |
+| **Mystic** | Ignored by | Secret meetings | Stonewalled | Infuriates | Documented and found wanting | — |
+
+---
+
 ## Ubiquitous Language — Canonical Terms
 
 Rod's words are law. These terms must appear verbatim in Gherkin, variable names,
