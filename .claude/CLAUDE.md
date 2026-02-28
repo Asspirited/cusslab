@@ -5,21 +5,45 @@
 
 ## Session Start (mandatory, before any code)
 
-1. Read ALL files in .claude/standards/ before touching anything
-2. Run `npm run pipeline` — report scorecard: pass/fail per step, coverage %, pending scenario count
-3. Report last retrospective findings
-4. Only then: work
+1. Read ALL files in .claude/principles/ and .claude/practices/
+2. Run `npm run pipeline` — report pipeline scorecard (see format in practices/ci-cd.md)
+3. Report DORA status (see format in practices/dora.md)
+4. Report last retrospective findings
+5. Only then: work
 
 ---
 
-## Standards Files (read all, every session)
+## Principles Files (read to think about problems correctly)
 
-- .claude/standards/bdd.md — BDD principles, Gherkin gate, done conditions
-- .claude/standards/testing.md — TDD cycle, isolation levels, coverage minimums
-- .claude/standards/lean-dora.md — DORA metrics, lean principles, SOLID, clean code, dev flow
-- .claude/standards/retrospectives.md — triggers, format, output
-- .claude/standards/metrics.md — build metrics, defect metrics, root cause taxonomy
-- .claude/project-brief.md — architecture, panel profiles, character state, open items
+These files govern HOW to think before designing or implementing anything.
+
+- .claude/principles/ddd.md — bounded contexts, ubiquitous language, domain events, aggregates
+- .claude/principles/xp.md — simplicity, feedback, courage, four rules of simple design
+- .claude/principles/lean.md — eliminate waste, optimise the whole, defer commitment
+- .claude/principles/systems-thinking.md — feedback loops, emergence, unintended consequences
+- .claude/principles/ux.md — jobs to be done, Norman's principles, Krug's law
+
+---
+
+## Practices Files (read to implement correctly)
+
+These files govern HOW to do the work at each step of the cycle.
+
+- .claude/practices/bdd.md — Gherkin gate, Given-When-Then, done conditions
+- .claude/practices/tdd.md — 7-step cycle, four isolation levels, state factories
+- .claude/practices/solid.md — SOLID applied to our codebase, clean code rules, refactoring triggers
+- .claude/practices/5-whys.md — root cause analysis procedure, our bug log
+- .claude/practices/ci-cd.md — pipeline steps, push rule, recovery playbook, scorecard format
+- .claude/practices/dora.md — four metrics, how to measure, metrics file formats
+- .claude/practices/retrospectives.md — triggers, format, lenses, anti-patterns
+- .claude/practices/domain-model.md — our domain model, bounded contexts, ubiquitous language
+- .claude/practices/ux-decisions.md — design decisions log, personas, UX review checklist
+
+---
+
+## Standards Files
+
+- .claude/standards/references.md — all authoritative sources
 
 ---
 
@@ -27,12 +51,13 @@
 Every feature. Every bug fix. Every session. No exceptions.
 
 ### Step 1 — Three Amigos (BDD)
-Rod and Claude agree the behaviour in plain language before anything is written.
-What does the user see? What is the observable outcome?
+Read: principles/ddd.md, principles/ux.md
+Rod and Claude agree the behaviour in plain language.
+What does the user see? What job does this serve? What domain concept does this touch?
 
 ### Step 2 — Gherkin (BDD Gate — enforced)
-Write scenario in Given-When-Then.
-Then:
+Read: practices/bdd.md
+Write scenario in Given-When-Then. Then:
 1. Output COMPLETE literal text of every new or modified scenario
 2. Print: "WAITING FOR ROD'S APPROVAL — do not proceed until Rod confirms"
 3. STOP. Do not run pipeline. Do not fix code. Do not commit.
@@ -40,57 +65,47 @@ Then:
 5. Only proceed after explicit written approval in this session
 
 Previous session approval does not count.
-A scenario Rod has not read in this session has not been approved.
 
 ### Step 3 — Outside-In Design (SOLID)
-Before writing any code or test — design the public interface.
-Ask:
-- SRP: does this module/function have exactly one reason to change?
-- OCP: does this extend existing behaviour, or does it require modifying core?
-- LSP: are panel objects interchangeable with the same interface?
-- ISP: is the interface minimal — no methods the caller doesn't need?
-- DIP: does this depend on abstractions, not concretions?
-If any answer is wrong — redesign before proceeding.
+Read: principles/ddd.md, practices/solid.md, principles/systems-thinking.md
+Design the public interface before writing any code or test.
+- SRP: one reason to change?
+- OCP: extends or modifies?
+- LSP: interchangeable?
+- ISP: minimal interface?
+- DIP: depends on abstraction?
+- Second-order effects: what does this make impossible?
 
 ### Step 4 — Failing Test (TDD Gate — enforced)
-Write the unit test against the interface designed in Step 3.
-Run it. Confirm two things:
-1. It fails
-2. It fails for the RIGHT reason — not an import error, not a typo, the actual missing behaviour
-Do not proceed until both are confirmed.
+Read: practices/tdd.md
+Write the unit test against the interface from Step 3.
+Run it. Confirm: (1) it fails, (2) it fails for the RIGHT reason.
+Do not proceed until both confirmed.
 
 ### Step 5 — Minimum Implementation (TDD)
-Write the least code required to make the test pass.
-No gold plating. No "while I'm here". No future-proofing.
-If it's not required by a failing test, it doesn't get written.
+Read: practices/solid.md (clean code rules)
+Write least code required to pass the test.
+No gold plating. No future-proofing. No "while I'm here".
 
 ### Step 6 — Refactor (TDD + SOLID)
-Run tests — confirm green.
-Then ask:
-- Does any function exceed 20 lines? Split it.
-- Does anything have more than one responsibility? Split it.
-- Are there magic strings? Extract to named constants.
-- Are there empty catch blocks (except localStorage)? Fix them.
-- Do comments explain what instead of why? Rewrite them.
-Run tests again — confirm still green.
+Read: practices/solid.md (refactoring triggers), principles/xp.md (four rules)
+Run tests — confirm green. Then apply refactoring checklist.
+Run tests again — must still be green.
 
 ### Step 7 — Pipeline (BDD living documentation)
-```bash
-npm run pipeline
-```
-All 5 steps must pass. A partial green is a red.
-The Gherkin scenario now proves the behaviour is live.
-Coverage must be ≥70% statements, ≥70% branches.
+Read: practices/ci-cd.md
+Run npm run pipeline. All 5 steps must pass. A partial green is a red.
+Coverage ≥70% statements, ≥70% branches.
 
 ### Step 8 — Push
-GREEN pipeline = commit + push = auto-deploy to GitHub Pages.
-Rod verifies in browser.
-Never push a red pipeline.
+Read: practices/ci-cd.md (push rule)
+GREEN = commit + push = auto-deploy. Rod verifies in browser.
 
 ### Step 9 — Retro Trigger Check
-- Rod caught something in the browser? → 5 Whys + retro this session
-- False green detected? → retro this session
-- Pending scenario count increased? → explain why, get approval
+Read: practices/retrospectives.md, practices/5-whys.md, practices/dora.md
+- Rod caught something? → 5 Whys + retro this session
+- False green? → retro this session
+- Pending count increased? → explain, get approval
 - All good? → log metrics, continue
 
 ---
@@ -98,7 +113,7 @@ Never push a red pipeline.
 ## Non-Negotiable Rules
 
 ### PUSH Rule
-Run `npm run pipeline` after any change to index.html, pipeline/, bug fix, or feature.
+npm run pipeline after any change to index.html, pipeline/, bug fix, or feature.
 GREEN = commit + push. Never push red.
 
 ### SINGLE FILE Rule
@@ -109,9 +124,9 @@ find . -name "index.html" | grep -v node_modules
 More than one result = stop, flag, do not proceed.
 
 ### REVERT Rule
-Before reverting any commit: check whether pipeline/ files changed in that commit.
+Before reverting: check if pipeline/ changed in the commit.
 pipeline/ and index.html must stay in sync.
-Never revert one without checking the other.
+See practices/ci-cd.md for full procedure.
 
 ---
 
@@ -120,43 +135,23 @@ Never revert one without checking the other.
 - Single index.html — all HTML, CSS, JS in one file
 - Module pattern: `const ModuleName = (() => { ... })();`
 - No framework, no build step, no bundler
-- API calls go via Cloudflare Worker — never directly to api.anthropic.com from browser
+- API calls via Cloudflare Worker only — never directly to api.anthropic.com
 - No API key ever in frontend code or browser storage
-- summariseFromState() must be deterministic — same input always produces same output
+- summariseFromState() must be deterministic — same input, same output, always
 
 ---
 
 ## Approved Gherkin Awaiting Code (as of 2026-02-28)
 
-28 scenarios approved, no code written yet. Implement in this order:
+28 scenarios approved. Implement in this order:
+1. Cloudflare Worker (7 scenarios) — unblocks everything
+2. Irony Authenticity (11 scenarios) — 12th dimension + Isn't It Ironic tab
+3. Panel Character State (10 scenarios) — event log, intensity, decay, spike
 
-1. **Cloudflare Worker** (7 scenarios) — architectural, unblocks everything
-2. **Irony Authenticity** (11 scenarios) — 12th scoring dimension + Isn't It Ironic tab
-3. **Panel Character State** (10 scenarios) — event log, intensity, decay, spike
-
-Full scenario text in retrospectives/session-retro-2026-02-28.md.
+Full scenario text: retrospectives/session-retro-2026-02-28.md
 
 ---
 
 ## Yak Shaving Rule
-If current task has drifted from original goal: name it, set 20-minute limit.
-If not resolved in 20 minutes: revert, ask a better question.
-
----
-
-## ⛔ SESSION END — MANDATORY BEFORE CLOSING
-
-Every session, before closing:
-
-1. Write a retrospective per .claude/standards/retrospectives.md
-2. Save to retrospectives/session-retro-YYYY-MM-DD.md
-3. Commit and push
-4. Add file path to Documentation Registry in MEMORY.md
-
-No session ends without a committed retrospective. No exceptions.
-
----
-
-## 📚 Documentation Registry Rule
-
-When you create any new doc, diagram, schema, or guide — add it to the Documentation Registry in MEMORY.md immediately. Do not wait until end of session.
+Current task drifted from original goal? Name it. 20-minute limit.
+Not resolved in 20 minutes: revert, ask a better question.
