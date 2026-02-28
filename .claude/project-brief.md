@@ -36,7 +36,7 @@ teams drowning in jargon.
 
 - **Frontend:** Single HTML file — vanilla JS, no framework, no build step
 - **AI:** Anthropic Claude API (claude-sonnet-4-5 or equivalent)
-- **Hosting:** GitHub Pages — asspirited.cusslab.io
+- **Hosting:** GitHub Pages — https://asspirited.github.io/cusslab (custom domain asspirited.cusslab.io not yet configured)
 - **Repo:** github.com/Asspirited/cusslab
 - **Pipeline:** Node.js scripts in /pipeline
 - **Tests:** Jest unit tests + custom Gherkin runner + coverage
