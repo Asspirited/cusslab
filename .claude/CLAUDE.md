@@ -90,6 +90,12 @@ No manual deployment steps. GREEN = ship.
 
 ---
 
+## 📚 Documentation Registry Rule
+
+When you create any new doc, diagram, schema, or guide — add it to the Documentation Registry in MEMORY.md immediately. Do not wait until end of session.
+
+---
+
 ## Session start command
 ```bash
 cat .claude/project-brief.md && npm run pipeline
