@@ -39,13 +39,13 @@ const moduleCount = (allJs.match(/const \w+ = \(\(\) =>/g) || []).length;
 // ── Coverage estimates ─────────────────────────────────────────────────────────
 // Each Gherkin scenario exercises one user-observable code path.
 // Calibration: 1 scenario ≈ 3% statement coverage, 2% branch coverage.
-// Target: 40% stmt (14 scenarios), 30% branch (15 scenarios).
+// Target: 70% stmt (24 scenarios), 70% branch (35 scenarios).
 const panelCount  = (html.match(/class="panel"/g) || []).length;
 const stmtCov     = Math.min(100, totalScenarios * 3);
 const branchCov   = Math.min(100, totalScenarios * 2);
 
-const STMT_MIN    = 40;
-const BRANCH_MIN  = 30;
+const STMT_MIN    = 70;
+const BRANCH_MIN  = 70;
 
 const stmtPass   = stmtCov   >= STMT_MIN;
 const branchPass = branchCov >= BRANCH_MIN;

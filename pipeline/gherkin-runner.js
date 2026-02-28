@@ -21,6 +21,9 @@ const NAV_GROUPS = {
   personas: ['Ask The Panel','Joke Test','Expert Clash','The Wheel','Professionals',"Isn't It Ironic?"],
 };
 
+// Nav tabs hidden from navigation — mirrors index.html style="display:none"
+const HIDDEN_NAV_TABS = ['settings'];
+
 function createContext() {
   const store  = {};   // mock localStorage
   const dom    = {};   // mock element values by id
@@ -33,6 +36,10 @@ function createContext() {
   let   ironicApiCalled = false;
   let   ironicVerdict   = null; // { verdict, verdict_label, irony_score, panel: [] }
   let   ironicWarning   = false;
+
+  // Worker / routing mock state
+  let   activePanel        = null;
+  let   lastRequestHadKey  = false;
 
   function getKey()  { return store['hecklers_api_key'] || ''; }
   function setKey(k) {
@@ -89,7 +96,12 @@ function createContext() {
   }
 
   function attemptPanelWithNoKey() {
-    lastApiMessage = ''; // Worker handles keyless users — no error
+    lastApiMessage    = ''; // Worker handles keyless users — no error
+    lastRequestHadKey = !!getKey();
+  }
+
+  function navigateTo(hash) {
+    if (hash === '#settings') activePanel = 'settings';
   }
 
   function openSettingsTab() { updateKeyStatus(); }
@@ -143,11 +155,14 @@ function createContext() {
            openSettingsTab, focusInput, blurInput, updateKeyStatus,
            simulateApiCall, simulateApiCallWithBody, attemptPanelWithNoKey,
            submitIronicEmpty, submitIronic, setIronicVerdict,
+           navigateTo,
            getLastApiMessage:    () => lastApiMessage,
            getHeaderState:       () => headerState,
            getIronicApiCalled:   () => ironicApiCalled,
            getIronicWarning:     () => ironicWarning,
-           getIronicVerdict:     () => ironicVerdict };
+           getIronicVerdict:     () => ironicVerdict,
+           getActivePanel:       () => activePanel,
+           getLastRequestHadKey: () => lastRequestHadKey };
 }
 
 // ── Step definitions ─────────────────────────────────────────────────────────
@@ -268,6 +283,34 @@ function makeSteps(ctx) {
       (notExpected) => {
         const actual = ctx.getLastApiMessage();
         if (actual.includes(notExpected)) throw new Error(`message: expected NOT to see "${notExpected}" but got "${actual}"`);
+      }],
+
+    // worker / routing steps
+    [/^the Settings nav tab should be hidden$/,
+      () => {
+        if (!HIDDEN_NAV_TABS.includes('settings'))
+          throw new Error('expected Settings nav tab to be hidden');
+      }],
+
+    [/^I navigate to "([^"]+)"$/,
+      (hash) => { ctx.navigateTo(hash); }],
+
+    [/^the Settings panel should be active$/,
+      () => {
+        if (ctx.getActivePanel() !== 'settings')
+          throw new Error(`expected Settings panel active, got "${ctx.getActivePanel()}"`);
+      }],
+
+    [/^the request should include the stored key$/,
+      () => {
+        if (!ctx.getLastRequestHadKey())
+          throw new Error('expected request to include stored key but it did not');
+      }],
+
+    [/^the request should not include a user key$/,
+      () => {
+        if (ctx.getLastRequestHadKey())
+          throw new Error('expected request to not include a user key but it did');
       }],
 
     // ironic panel steps
