@@ -3139,7 +3139,6 @@ const API = (() => {
   // ── User-facing error messages — specific and actionable ────────────────────
 
   function _userMessage(status, errBody) {
-    if (!getKey())          return 'No API key — go to ⚙️ Settings to add one.';
     if (status === 401)     return 'API key rejected — check your key in ⚙️ Settings.';
     if (status === 400)     return 'Bad request — your API key may be invalid. Check ⚙️ Settings.';
     if (status === 403)     return 'API key doesn\'t have permission for this request.';
