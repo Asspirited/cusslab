@@ -30,7 +30,7 @@ Gherkin scenario exists before code. Always.
 
 5 Whys log is the learning mechanism. All 6 bugs share the same root cause —
 tests confirmed code rather than defined contracts. Correct diagnosis.
-Retrospective every 5th session reviews whether the diagnosis is changing.
+Retrospective every session reviews whether the diagnosis is changing.
 
 ### 4. Defer Commitment
 
@@ -146,7 +146,7 @@ Log it. Fix it. Don't repeat it.
 
 ## Retrospective Cadence
 
-Every 5th session: review DORA trend.
+Every session: write and commit retrospective.
 If metrics are not improving, state why. Do not hide it.
 Each retrospective produces at most 3 specific changes to standards files.
-Output committed to `retrospectives/session-N.md`.
+Output committed to `retrospectives/session-retro-YYYY-MM-DD.md`.
