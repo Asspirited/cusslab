@@ -16,12 +16,23 @@ const USER_MESSAGES = {
   'no-key':  'No API key — go to ⚙️ Settings to add one',
 };
 
+// Nav tabs present in each nav group — mirrors index.html structure
+const NAV_GROUPS = {
+  personas: ['Ask The Panel','Joke Test','Expert Clash','The Wheel','Professionals',"Isn't It Ironic?"],
+};
+
 function createContext() {
   const store  = {};   // mock localStorage
   const dom    = {};   // mock element values by id
   let   active = null; // mock document.activeElement
   let   lastApiMessage = '';
   let   headerState    = 'no-key'; // 'no-key' | 'key-present' | 'errors'
+
+  // Ironic panel mock state
+  let   ironicInput     = '';
+  let   ironicApiCalled = false;
+  let   ironicVerdict   = null; // { verdict, verdict_label, irony_score, panel: [] }
+  let   ironicWarning   = false;
 
   function getKey()  { return store['hecklers_api_key'] || ''; }
   function setKey(k) {
@@ -91,11 +102,52 @@ function createContext() {
   }
   function blurInput()       { active = null; }
 
+  function submitIronicEmpty() {
+    ironicInput     = '';
+    ironicApiCalled = false;
+    ironicWarning   = true;
+  }
+
+  function submitIronic(text) {
+    ironicInput     = text;
+    ironicApiCalled = true;
+    ironicWarning   = false;
+    // Default mock verdict returned by the panel
+    ironicVerdict   = {
+      verdict:       'coincidence',
+      verdict_label: 'Coincidence',
+      irony_score:   25,
+      panel:         [{ expert: 'hicks', name: 'Bill Hicks', icon: '🎙️', response: 'Mock response.' }],
+    };
+  }
+
+  function setIronicVerdict(verdict, irony_score) {
+    const LABELS = {
+      actually_ironic:      'Actually Ironic',
+      coincidence:          'Coincidence',
+      expected_outcome:     'Completely Expected',
+      bad_luck:             'Just Bad Luck',
+      vacuous_amplifier:    'Vacuous Amplifier',
+      random_juxtaposition: 'Random Juxtaposition',
+    };
+    ironicApiCalled = true;
+    ironicVerdict   = {
+      verdict,
+      verdict_label: LABELS[verdict] || verdict,
+      irony_score,
+      panel: [{ expert: 'hicks', name: 'Bill Hicks', icon: '🎙️', response: 'Mock.' }],
+    };
+  }
+
   return { store, dom, getKey, setKey, clickSaveKey, clickClearKey,
            openSettingsTab, focusInput, blurInput, updateKeyStatus,
            simulateApiCall, simulateApiCallWithBody, attemptPanelWithNoKey,
-           getLastApiMessage: () => lastApiMessage,
-           getHeaderState:    () => headerState };
+           submitIronicEmpty, submitIronic, setIronicVerdict,
+           getLastApiMessage:    () => lastApiMessage,
+           getHeaderState:       () => headerState,
+           getIronicApiCalled:   () => ironicApiCalled,
+           getIronicWarning:     () => ironicWarning,
+           getIronicVerdict:     () => ironicVerdict };
 }
 
 // ── Step definitions ─────────────────────────────────────────────────────────
@@ -216,6 +268,65 @@ function makeSteps(ctx) {
       (notExpected) => {
         const actual = ctx.getLastApiMessage();
         if (actual.includes(notExpected)) throw new Error(`message: expected NOT to see "${notExpected}" but got "${actual}"`);
+      }],
+
+    // ironic panel steps
+    [/^I am on the Isn't It Ironic tab$/,
+      () => { /* navigate — no DOM change needed in mock */ }],
+
+    [/^I should see "([^"]+)" in THE PANEL nav group$/,
+      (label) => {
+        const group = NAV_GROUPS['personas'] || [];
+        if (!group.includes(label)) throw new Error(`nav: expected "${label}" in personas group, got [${group.join(', ')}]`);
+      }],
+
+    [/^I click "IS IT IRONIC\?" with no input$/,
+      () => { ctx.submitIronicEmpty(); }],
+
+    [/^I should see a warning message$/,
+      () => {
+        if (!ctx.getIronicWarning()) throw new Error('expected a warning message but none was set');
+      }],
+
+    [/^no API call should be made$/,
+      () => {
+        if (ctx.getIronicApiCalled()) throw new Error('expected no API call but one was made');
+      }],
+
+    [/^I submit "([^"]+)"$/,
+      (text) => { ctx.submitIronic(text); }],
+
+    [/^I should see a verdict card$/,
+      () => {
+        const v = ctx.getIronicVerdict();
+        if (!v || !v.verdict_label) throw new Error('expected a verdict card but got none');
+      }],
+
+    [/^I should see responses from at least one panel expert$/,
+      () => {
+        const v = ctx.getIronicVerdict();
+        if (!v || !Array.isArray(v.panel) || v.panel.length === 0) throw new Error('expected panel expert responses but got none');
+      }],
+
+    [/^the irony checker returns verdict "([^"]+)" with irony score (\d+)$/,
+      (verdict, score) => { ctx.setIronicVerdict(verdict, parseInt(score, 10)); }],
+
+    [/^the verdict card shows "([^"]+)"$/,
+      (expected) => {
+        const v = ctx.getIronicVerdict();
+        if (!v || v.verdict_label !== expected) throw new Error(`verdict label: expected "${expected}" got "${v && v.verdict_label}"`);
+      }],
+
+    [/^the irony score bar reflects a low score$/,
+      () => {
+        const v = ctx.getIronicVerdict();
+        if (!v || v.irony_score >= 30) throw new Error(`expected low irony score (<30) but got ${v && v.irony_score}`);
+      }],
+
+    [/^the irony score bar reflects a high score$/,
+      () => {
+        const v = ctx.getIronicVerdict();
+        if (!v || v.irony_score < 70) throw new Error(`expected high irony score (>=70) but got ${v && v.irony_score}`);
       }],
   ];
 }

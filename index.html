@@ -1144,7 +1144,7 @@
   <div class="nav-group active" id="ng-personas">
     <div class="nav-group-header" onclick="toggleNavGroup('personas')">
       <span class="nav-group-icon">🎤</span> THE PANEL
-      <span class="nav-group-count">5</span>
+      <span class="nav-group-count">6</span>
     </div>
     <div class="nav-items" id="ni-personas">
       <div class="tab" onclick="switchTab(event,'settings')" style="display:none;"><span class="tab-icon">⚙️</span>Settings & API Key</div>
@@ -1153,6 +1153,7 @@
       <div class="tab" onclick="switchTab(event,'clash')"><span class="tab-icon">⚔️</span>Expert Clash</div>
       <div class="tab" onclick="switchTab(event,'roulette')"><span class="tab-icon">🎰</span>The Wheel</div>
       <div class="tab" onclick="switchTab(event,'professionals')"><span class="tab-icon">🍺</span>Professionals</div>
+      <div class="tab" onclick="switchTab(event,'ironic')"><span class="tab-icon">🌧️</span>Isn't It Ironic?</div>
     </div>
   </div>
 
@@ -1606,6 +1607,30 @@
   </div>
 </div>
 
+
+<!-- ============ ISN'T IT IRONIC ============ -->
+<div class="panel" id="panel-ironic">
+  <div class="panel-title">🌧️ Isn't It Ironic?</div>
+  <div class="panel-desc">Enter something someone has called "ironic". The panel will determine whether it actually is ironic — or whether, like most things people call ironic, it's a coincidence, bad luck, or exactly what you'd expect. Powered by the actual definition of irony, not Alanis Morissette's.</div>
+
+  <div style="margin-bottom:20px;">
+    <label>The supposedly ironic thing</label>
+    <textarea id="ironic-input" rows="3" placeholder='e.g. "A goalkeeper terrible at handling crosses just conceded from a cross"'></textarea>
+  </div>
+
+  <button class="btn" onclick="IronicPanel.assess()" id="ironic-btn">IS IT IRONIC? 🌧️</button>
+
+  <div id="ironic-loading" style="display:none;text-align:center;padding:40px;">
+    <div class="loading-spinner"></div>
+    <div style="margin-top:12px;color:var(--muted);font-size:13px;">Consulting the experts on the actual definition of irony...</div>
+  </div>
+
+  <div id="ironic-output" style="display:none;margin-top:28px;">
+    <div id="ironic-verdict-card"></div>
+    <div id="ironic-panel-responses" style="margin-top:20px;"></div>
+    <button class="btn-secondary" onclick="IronicPanel.assess()" style="margin-top:20px;">TRY ANOTHER 🔄</button>
+  </div>
+</div>
 
 <!-- ============ ASK THE BILLS ============ -->
 <div class="panel" id="panel-settings">
@@ -3530,7 +3555,7 @@ const App = (() => {
       title: 'HECKLER\'S',
       pageTitle: 'Heckler\'s — The Comedy Panel',
       slogans: CONSULTANT_SLOGANS,
-      tabs: ['bills','joketest','clash','roulette','professionals',
+      tabs: ['bills','joketest','clash','roulette','professionals','ironic',
              'comscience','evolution','blend','experiment',
              'roastbattle','dinner','topcnuts','comedylab','trumps',
              'premise','charlens','bizcard','training',
@@ -3574,7 +3599,7 @@ const App = (() => {
   const _NAV_GROUP_MAP = {
     settings:'personas',
     // THE PANEL
-    bills:'personas', joketest:'personas', clash:'personas', roulette:'personas', professionals:'personas',
+    bills:'personas', joketest:'personas', clash:'personas', roulette:'personas', professionals:'personas', ironic:'personas',
     // LEARN
     comscience:'research', evolution:'research', blend:'research', experiment:'research',
     // PLAY
@@ -4368,6 +4393,124 @@ Style: Long unhurried sentences that carry no particular weight. Something is sa
   function getConfig(id) { return EXPERT_CONFIGS[id] || null; }
 
   return { selectExpert, ask, getConfig };
+})();
+
+// ============================================================
+// MODULE: IronicPanel
+// ============================================================
+const IronicPanel = (() => {
+
+  const IRONY_KNOWLEDGE = `IRONY KNOWLEDGE BASE — the authoritative reference for this task.
+
+TRUE IRONY requires an incongruity between expectation and outcome, or between what is said and what is meant.
+
+Types of genuine irony:
+• VERBAL IRONY: Saying the opposite of what you mean. "Oh brilliant, another Monday." Sarcasm is a form.
+• SITUATIONAL IRONY: An outcome is the OPPOSITE of what was reasonably expected. A fire station burns down. A locksmith is locked out of his own house.
+• DRAMATIC IRONY: The audience knows something the characters don't.
+• COSMIC IRONY: Fate conspiring against someone in a way that directly inverts their stated intentions or greatest strengths.
+
+What irony is NOT:
+• COINCIDENCE: Two things happening together with no expectation reversal. Rain on a wedding day is unfortunate — not ironic.
+• EXPECTED OUTCOME: Something happening to someone you'd fully expect it to happen to. A goalkeeper who is terrible at handling crosses concedes from a cross. Of course he did. That is not ironic — that is Tuesday.
+• BAD LUCK: Misfortune with no reversed expectation.
+• VACUOUS AMPLIFIER: Using "ironic" to add gravitas to a mundane observation. "Ironically, he liked cats." No.
+• RANDOM JUXTAPOSITION: Unrelated things happening near each other.
+
+THE ALANIS TEST: Alanis Morissette wrote an entire song about things she called ironic. Nearly all were coincidences or bad luck. If something would fit in that song as an "example of irony", it is probably not actually ironic.`;
+
+  const SYSTEM_PROMPT = `You are the Heckler's panel — three comedians who know exactly what irony means and are enraged by how often the word is misused.
+
+${IRONY_KNOWLEDGE}
+
+PANEL MEMBERS:
+1. BILL HICKS — finds the cosmic truth underneath everything. Furious about intellectual laziness and imprecision.
+2. GEORGE CARLIN — precise about language. Contemptuous of word misuse. "Words mean things, you know."
+3. RICKY GERVAIS — loves exposing the gap between what people think they sound like and what they reveal about themselves.
+
+Respond with ONLY valid JSON — no markdown, no text outside the JSON:
+{
+  "verdict": "<actually_ironic|coincidence|expected_outcome|bad_luck|vacuous_amplifier|random_juxtaposition>",
+  "verdict_label": "<short human-readable label, 2-4 words>",
+  "irony_score": <integer 0-100, 100=perfectly ironic, 0=not remotely ironic>,
+  "alanis_score": <integer 0-100, 100=Alanis would definitely call this ironic — meaning it is NOT>,
+  "explanation": "<1-2 sentences: the definitive verdict, direct and clear>",
+  "panel": [
+    {"expert": "hicks",   "name": "Bill Hicks",    "icon": "🎙️", "response": "<2-3 sentences in character>"},
+    {"expert": "carlin",  "name": "George Carlin", "icon": "🎤",  "response": "<2-3 sentences in character>"},
+    {"expert": "gervais", "name": "Ricky Gervais", "icon": "😏",  "response": "<2-3 sentences in character>"}
+  ]
+}`;
+
+  const VERDICT_STYLES = {
+    actually_ironic:      { colour: 'var(--green)',  icon: '✓' },
+    coincidence:          { colour: 'var(--gold)',   icon: '🎲' },
+    expected_outcome:     { colour: 'var(--accent)', icon: '🎯' },
+    bad_luck:             { colour: 'var(--muted)',  icon: '😬' },
+    vacuous_amplifier:    { colour: 'var(--purple)', icon: '💨' },
+    random_juxtaposition: { colour: 'var(--cyan)',   icon: '🎭' },
+  };
+
+  function _verdictCard(data) {
+    const s = VERDICT_STYLES[data.verdict] || { colour: 'var(--muted)', icon: '?' };
+    return `
+      <div style="background:var(--card);border:2px solid ${s.colour};border-radius:8px;padding:24px;">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+          <div style="font-size:32px;">${s.icon}</div>
+          <div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:${s.colour};">${data.verdict_label}</div>
+            <div style="font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">Irony score: ${data.irony_score}/100</div>
+          </div>
+        </div>
+        <div style="background:var(--border);border-radius:4px;height:8px;margin-bottom:12px;">
+          <div style="background:${s.colour};width:${data.irony_score}%;height:100%;border-radius:4px;"></div>
+        </div>
+        <div style="font-size:15px;color:var(--text);line-height:1.6;">${data.explanation}</div>
+        ${data.alanis_score !== undefined ? `<div style="margin-top:12px;font-size:12px;color:var(--muted);">Alanis Score: <strong style="color:${data.alanis_score > 70 ? 'var(--accent)' : 'var(--green)'}">${data.alanis_score}/100</strong> — how much Alanis would call this ironic</div>` : ''}
+      </div>`;
+  }
+
+  function _expertCard(member) {
+    return `
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:20px;margin-bottom:12px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+          <div style="font-size:24px;">${member.icon}</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--accent);">${member.name}</div>
+        </div>
+        <div style="font-size:14px;color:var(--text);line-height:1.7;">${member.response}</div>
+      </div>`;
+  }
+
+  async function assess() {
+    const input = (document.getElementById('ironic-input') || {}).value || '';
+    if (!input.trim()) { UI.toast('Enter something someone called ironic.', 'warn'); return; }
+
+    UI.show('ironic-loading');
+    UI.hide('ironic-output');
+    UI.setDisabled('ironic-btn', true);
+
+    try {
+      const raw  = await API.call(SYSTEM_PROMPT, `Statement to evaluate: "${input.trim()}"`, 700, 'ironic/assess');
+      const json = raw.match(/\{[\s\S]*\}/);
+      if (!json) throw new Error('Unparseable response from panel.');
+      const data = JSON.parse(json[0]);
+
+      const verdictEl = document.getElementById('ironic-verdict-card');
+      const panelEl   = document.getElementById('ironic-panel-responses');
+      if (verdictEl) verdictEl.innerHTML = _verdictCard(data);
+      if (panelEl && Array.isArray(data.panel)) panelEl.innerHTML = data.panel.map(_expertCard).join('');
+
+      UI.hide('ironic-loading');
+      UI.show('ironic-output');
+    } catch (e) {
+      UI.hide('ironic-loading');
+      UI.toast(e.userMessage || e.message || 'Something went wrong. Try again.', 'error');
+    }
+
+    UI.setDisabled('ironic-btn', false);
+  }
+
+  return { assess };
 })();
 
 // ============================================================
