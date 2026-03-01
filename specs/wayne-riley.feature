@@ -12,6 +12,7 @@
 # Every round increases intensity regardless of what the user submits.
 # Wayne is the only panel member with this mechanic.
 
+@claude
 Feature: Wayne "Radar" Riley — golf panel member
 
   Background:
