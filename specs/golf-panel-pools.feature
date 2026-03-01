@@ -4,6 +4,7 @@
 # escalates through pool as rounds progress
 # See: .claude/practices/domain-model.md — Golf Panel character definitions
 
+@claude
 Feature: Golf panel character pool escalation
 
   # ─────────────────────────────────────────────
