@@ -161,6 +161,8 @@ Waltzing Matilda pool: verse one (round 3, hummed), verse two (round 4, words at
 
 Off-air incident pool: something happened between rounds 4 and 5. Feed cut to Coltart. Coltart was looking at the middle distance. Feed returned. Wayne/Radar was in the same chair, same hat angle, same deadpan. A glass was different. Nobody addressed it. Ewen began a sentence about historic significance and could not finish it.
 
+Gordon's mate: a secondary hero with no name. Wayne references Gordon's mate as an equal act of heroism alongside Gordon Lyons himself. The mate's method of keeping Gordon conscious becomes more specific and more unconventional by round — uncertain in round 3, specific and worse in round 4, stated with full confidence as standard Northern Territory first aid by round 5. Wayne does not know the mate's name and does not find this contradictory with his view of the mate as an unsung legend who deserves a statue.
+
 ---
 
 ## Andrew Coltart
