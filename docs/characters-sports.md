@@ -529,6 +529,33 @@ Pool 8 — Business terms applied to golf (wrong register; the worst ones almost
 - "He's got a real stakeholder alignment issue between his hands and his hips" *(they disagree — this one almost works and that's the problem)*
 - Rule: McGinley believes they all make sense. The ones that almost make sense are the worst ones.
 
+Pool 9 — Restatement (zero insight; sometimes less):
+- "What [X] is really saying here — and I think this is the key thing — is [what X just said, slightly shorter]."
+- "Yeah no, that's — I mean that's exactly it, isn't it. That's exactly the point." *(pause)* "[what X said, minus a specific detail]."
+- "And look, if you strip it right back, what we're actually saying is [what was already said]."
+- "I was going to say the same thing, if I'm honest. That's — yeah. That."
+- "The point [X] makes there is exactly right. And I'd add to that — [X's point, restated]."
+- Escalating rule: by round 3, the restatement loses a fact from the original. By round 5, the restatement is shorter than the original sentence. McGinley does not notice the reduction.
+- Backtrack and amplify: when corrected on any mismatch — "Look, I take the point, I do" → restate using more syllables → add at least two business terms → the corrected position is now more wrong than the original. Rule: vocabulary amplifies in direct proportion to the wrongness of the claim.
+
+Pool 10 — Fence-sitting / wheelhouse:
+- "Well — I mean — what [X] said." *(presented as independent contribution)*
+- "I don't actually know, if I'm honest. The data is unclear. At least to me."
+- "That isn't really in my wheelhouse." *(once per panel — triggers: Henni or Coltart asks what IS in his wheelhouse; McGinley produces a framework; the framework does not contain an answer; Radar says "being a gobshite"; nobody asked Radar; he is correct)*
+- "That's tricky, yeah. That's a tricky one." *(delivered in the same analytical register as all observations; "tricky" is the full analysis)*
+- "I think you have to give credit to both sides of the argument here." *(when only one side is defensible)*
+- "It's horses for courses, really." *(when asked anything specific)*
+- "I'd be reluctant to call it either way at this stage." *(about something that has already been called and resolved)*
+
+Pool 11 — Sawgrass Protocol (prediction/reversal):
+Named for the 17th at Sawgrass TPC, island green. Three-phase structure — fires when McGinley calls a shot before the outcome is confirmed.
+- Phase 1 — Confident call *(before outcome known)*: "That is a BEAUTIFUL shot. He's committed to it. Premium execution window right there. Top-drawer." *(stated as if the analysis is complete and the outcome a formality)*
+- Phase 2 — Concern in real time: "At least — I think it's a good shot. The wind could — yeah. We'll see." *(still technically defensible; the doubt arriving audibly)*
+- Phase 3 — Admission: "Ahh — bad luck, it's actually gone [in the water / into the rough / out of bounds] if you can see that. Yeah." *("if you can see that" implies the viewer might not be watching the same broadcast)*
+- Exit rule: Phase 3 always ends with a positive framing of some element of the disaster. "Good commitment from him though." / "The decision-making was sound." / "He committed to the shot — that's all you can ask." The commitment is always real. The outcome is irrelevant to the analysis.
+- Dougherty translation (round 5 only): immediately after Phase 3, Dougherty restates in plain English — "[Name] hit it in the water." No further comment. Warmly.
+- McGinley post-translation: "And look, I stand by the commitment he showed in that shot." Coltart says "Right."
+
 Moses register rule: fires when McGinley senses the room isn't taking him seriously. Maximum **twice per panel**. Voice drops. Pace slows. Framework becomes decree. "I have said this. It needs to be said again." Always too late — the room was already gone. Never works. He thinks it works.
 
 ---
