@@ -160,26 +160,56 @@ Feature: Golf panel character pool escalation
   Background:
     Given Paul McGinley is on the golf panel
     And the high tariff vocabulary pool is loaded for McGinley
+    And the synonym pool is loaded for McGinley
     And the framework vocabulary pool is loaded for McGinley
     And the obvious observation pool is loaded for McGinley
+    And the spoonerism pool is loaded for McGinley
+    And the accidental innuendo pool is loaded for McGinley
+    And the mixed metaphor pool is loaded for McGinley
+    And the business term pool is loaded for McGinley
 
-  Scenario: McGinley introduces high tariff vocabulary from round 1
-    Given the panel is in round 1
+  Scenario: McGinley uses "high tariff" freely in rounds 1 and 2
+    Given the panel is in round 1 or round 2
     When McGinley analyses a shot or situation
-    Then McGinley uses "high tariff" or an equivalent from his vocabulary pool
+    Then McGinley may use "high tariff" up to three times per round
     And the usage is applied to something mildly challenging at most
+    And no panel member reacts
 
-  Scenario: McGinley generates new high tariff variants in later rounds
-    Given the panel is in round 3 or later
-    When McGinley analyses a shot or situation
-    Then McGinley may generate a new high tariff variant not previously used
-    And the variant becomes progressively more detached from meaning
-    And McGinley deploys it with complete authority
+  Scenario: Coltart calls out high tariff in round 4
+    Given the panel is in round 4
+    And McGinley has used "high tariff" at least once
+    When Coltart asks "Paul — what does 'high tariff' mean in this context"
+    Then McGinley provides an explanation
+    And the explanation contains the phrase "high tariff"
+    And Coltart says "Right"
+    And Coltart does not ask again
+    And McGinley does not use "high tariff" for the remainder of the panel
+
+  Scenario: McGinley switches to synonyms after the callout
+    Given Coltart has called out "high tariff" in round 4
+    When McGinley analyses any subsequent shot or situation
+    Then McGinley draws from the synonym pool instead of using "high tariff"
+    And the synonym is deployed with identical authority to "high tariff"
+    And the synonym adds no more meaning than "high tariff" did
+    And McGinley believes the synonym is an improvement
+
+  Scenario: McGinley's synonyms escalate in detachment across rounds 4 and 5
+    Given the panel is in round 4 or round 5
+    When McGinley generates a new synonym
+    Then each new synonym is more detached from meaning than the last
+    And each synonym is deployed with complete authority
+
+  Scenario: Wayne uses "high tariff" in round 5 and McGinley responds
+    Given the panel is in round 5
+    When Wayne uses "high tariff" to describe something unrelated to golf
+    Then McGinley visibly approves
+    And McGinley takes this as vindication of the original usage
+    And McGinley does not use "high tariff" himself
 
   Scenario: McGinley applies high tariff vocabulary to a tap-in in round 5
     Given the panel is in round 5
     When a tap-in putt occurs during coverage
-    Then McGinley describes the tap-in using high tariff vocabulary
+    Then McGinley describes the tap-in using a synonym from his vocabulary pool
     And this is the moment the panel loses patience entirely
 
   Scenario: McGinley states the obvious while watching the same footage as the panel
@@ -199,6 +229,110 @@ Feature: Golf panel character pool escalation
     And it always fires too late — the room was already gone
     And it never works
     And McGinley believes it worked
+
+  # ─────────────────────────────────────────────
+  # PAUL McGINLEY — Spoonerisms
+  # ─────────────────────────────────────────────
+
+  Scenario: McGinley produces spoonerisms from round 3 onwards
+    Given the panel is in round 3 or later
+    When McGinley makes an analysis
+    Then McGinley may produce a spoonerism drawn from the spoonerism pool
+    And McGinley does not notice the spoonerism
+    And McGinley ploughs through without correction
+    And the panel notices
+
+  Scenario: Spoonerisms cluster with accidental innuendos from round 4
+    Given the panel is in round 4 or round 5
+    When McGinley produces a spoonerism
+    Then the spoonerism may combine with an accidental innuendo in the same sentence
+    And McGinley does not notice either occurrence
+
+  Scenario: Round 5 spoonerism compounds into unintelligibility
+    Given the panel is in round 5
+    When McGinley delivers his most confident analysis of the round
+    Then multiple spoonerisms may compound in the same sentence
+    And the result may be unintelligible
+    And McGinley treats it as his most cogent point
+    And no panel member knows how to respond
+
+  # ─────────────────────────────────────────────
+  # PAUL McGINLEY — Accidental innuendos
+  # ─────────────────────────────────────────────
+
+  Scenario: McGinley produces accidental innuendos using genuine golf terminology
+    Given the panel is in any round
+    When McGinley uses genuine golf commentary language
+    Then the phrasing may be drawn from the accidental innuendo pool
+    And the terminology is factually correct golf commentary
+    And McGinley does not notice the second reading
+    And McGinley continues immediately to his next point
+
+  Scenario: Accidental innuendos cluster from round 3
+    Given the panel is in round 3 or later
+    When McGinley produces an accidental innuendo
+    Then a second accidental innuendo appears in the same or immediately following analysis
+    And McGinley does not notice either occurrence
+
+  Scenario: Ewen Murray speaks at increased volume during innuendo clusters
+    Given the panel is in round 4 or round 5
+    And McGinley has produced two or more accidental innuendos in sequence
+    When Ewen Murray responds
+    Then Ewen Murray's volume increases noticeably
+    And Ewen Murray describes a coastline or equivalent
+
+  # ─────────────────────────────────────────────
+  # PAUL McGINLEY — Mixed metaphors
+  # ─────────────────────────────────────────────
+
+  Scenario: McGinley combines incompatible metaphors from round 2
+    Given the panel is in round 2 or later
+    When McGinley offers a summary or conclusion
+    Then McGinley may draw from the mixed metaphor pool
+    And the combined metaphor contains at least two incompatible source images
+    And McGinley delivers it as wisdom
+
+  Scenario: Three-metaphor combinations arrive from round 3
+    Given the panel is in round 3 or later
+    When McGinley draws from the mixed metaphor pool
+    Then the combination may contain three incompatible source images
+    And the images actively cancel each other out
+    And McGinley is not aware of this
+
+  Scenario: A mixed metaphor accidentally makes a genuine point in round 5
+    Given the panel is in round 5
+    When McGinley draws from the mixed metaphor pool
+    Then the resulting metaphor may accidentally produce a coherent insight
+    And this is the most unsettling thing McGinley does all panel
+    And the panel does not know how to respond to accidental accuracy from McGinley
+
+  # ─────────────────────────────────────────────
+  # PAUL McGINLEY — Business terms applied to golf
+  # ─────────────────────────────────────────────
+
+  Scenario: McGinley applies business terminology to golf situations
+    Given the panel is in any round
+    When McGinley analyses a player's approach to a shot or hole
+    Then McGinley may draw from the business term pool
+    And the term is applied to a golf situation
+    And the application is incorrect in register
+    And McGinley believes the term is precisely correct
+
+  Scenario: Some business terms almost make sense and those are the worst ones
+    Given McGinley has applied a business term to a golf situation
+    When the panel evaluates the usage
+    Then some usages are clearly wrong and easily dismissed
+    And some usages almost make sense
+    And the usages that almost make sense are more uncomfortable than the ones that clearly do not
+    And McGinley cannot tell the difference
+
+  Scenario: McGinley applies stakeholder alignment to a player's swing mechanics
+    Given the panel is in any round
+    When a player is described as having inconsistent swing mechanics
+    Then McGinley may describe the issue as a stakeholder alignment problem
+    And McGinley may identify the stakeholders as the player's hands and hips
+    And this almost makes sense
+    And Coltart has the look
 
   # ─────────────────────────────────────────────
   # ANDREW COLTART — Wound pool
