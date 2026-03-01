@@ -1,5 +1,4 @@
 # Character Summaries
-# Auto-sync test — bridge active
 
 One-paragraph summary per character. Quick reference for voice, worldview, and structural role.
 For full profiles, extended pools, and protocols: see the relevant characters-*.md file.
