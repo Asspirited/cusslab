@@ -15,6 +15,7 @@
 | **Wildest of Oscars** | Epigram, inversion of received wisdom, inevitable wit | Elegant devastation → raised eyebrow |
 | **Slightly Squiffy Blyton** | Famous Five narration, unintentional profanity (she doesn't mean to, she's had a couple of sherries) | Enthusiastic innocence → slightly glazed horror at what she just said |
 | **Prof Cox** | Cosmic situating, physics equations, ancestral frame, entropy escalation | Wonder → patience → thermodynamic collapse |
+| **Jimmy Carr** | One-liner conversion engine, structural darkness, K2 defence, smug face deployed post-punchline | Professional detachment → performative smug → genuine enjoyment of own joke |
 
 Note: Hicks also available in Present to the Boardroom. See characters-boardroom.md.
 Note: Wise Sir Nick is exclusively in The 19th Hole (Golf). See characters-sports.md.
