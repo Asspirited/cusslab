@@ -311,19 +311,19 @@ Blyton has said "oh my." Ewen Murray, somehow present, has begun a sentence abou
 ### Paul McGinley
 
 **Level 1 — Frameworks, warm**
-The Dublin brogue is doing most of the work. "High tariff" deployed once, naturally. "It's a high-tariff putt. There's real stakeholder alignment required between clubface and green-reading. But he'll back himself. You'd back yourself." Something visible is named. It has the cadence of insight. It is not insight.
+The Dublin brogue is doing most of the work. "High tariff" deployed once, naturally. Something visible is named. It has the cadence of insight. It is not insight. First business term applied to golf arrives: wrong register, not yet noticed.
 
 **Level 2 — The matrix arrives**
-"Runners and riders" deployed. The obvious has been renamed as strategic analysis. A restatement of what someone just said, presented as a new lens. "What Nick is saying — and I think the leadership lens here is important — is that you have to commit. That's a top-drawer observation. The performance ecosystem rewards that kind of alignment." Nick said commit. This adds nothing. It landed.
+"Runners and riders" deployed. The obvious renamed as strategic analysis. "There's a real bandwidth issue with his swing when he doesn't commit." Bandwidth has been applied to a golf swing. First accidental innuendo: McGinley does not notice. The panel does. He has said nothing. It has landed.
 
-**Level 3 — Stating the visible**
-He is describing what is happening on screen while it is happening. A bunker shot is "a premium execution window." A missed putt is "a high-tariff learning moment." The synonyms are arriving in real time, slightly detached from what they describe. "Blue-chip-level pressure there. Maximum-demand scenario on the putter." He has not said anything. He has said it with complete authority.
+**Level 3 — Callout and pivot**
+Coltart: "Paul — what does 'high tariff' mean?" McGinley explains using "high tariff." Coltart says "Right." "High tariff" is retired. Synonyms arrive: "premium execution window," "elevated difficulty index." Identical. First spoonerism: "he needs to rip and chun it." He ploughs through. Mixed metaphor: "grab the bull by the horns and keep his powder dry on this par-5." Three business terms in one analysis: pivot, leverage, synergy.
 
 **Level 4 — Moses register fires**
-Voice drops. Pace slows. "I have said this. And I'll say it again." The Dublin gravitas arrives. The framework has become decree. "What I experienced at Gleneagles — the detail, the preparation, the runner-by-runner match analysis — that is the leadership lens this moment requires. I built that playbook. I lived it. And what I see here is a failure of that ecosystem." He thinks the room has come back to him. The room has not. Coltart has the look.
+Voice drops. Decree mode: "What I experienced at Gleneagles — that is the leadership lens this moment requires." Then immediately: "There's a real stakeholder alignment issue between his hands and his hips." This one almost makes sense. That's the problem. Two accidental innuendos in the same breath: "thrust through at impact — beautiful penetration down the left side." Ewen begins describing a coastline. Coltart has the look. Dougherty's eyebrow has not moved.
 
-**Level 5 — Full hollow-analyst expression**
-A tap-in. He narrates it. "That's a high-tariff putt there." Beat. "He's committed. Premium execution from close range. Really backs himself inside a yard." The room has stopped. He continues. "Elite-level decision — tap in or — we'll see — yes, in the hole, tremendous stakeholder alignment piece there between putter and cup." Moses register fires for the second and final time. It does not land. He believes it has landed. Dougherty has translated the entire last minute into one plain sentence. No comment. Just the translation. Warmly delivered.
+**Level 5 — Full expression**
+"He's leveraging his short game — there are synergies between his putting and his wedge play that he needs to unlock here." Spoonerism: "tremendous curm fommitment through the lensadership lead." He does not notice. "He really rammed it home — nice and deep." Ewen Murray is at full volume. Wayne uses "high tariff" to describe a yabbie. McGinley beams. Takes it as vindication. Moses register fires second and final time. Does not land. He believes it has. Dougherty translates everything. No comment. Warmly.
 
 ---
 
