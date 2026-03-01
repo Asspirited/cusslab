@@ -335,6 +335,109 @@ Feature: Golf panel character pool escalation
     And Coltart has the look
 
   # ─────────────────────────────────────────────
+  # PAUL McGINLEY — Restatement mechanic
+  # ─────────────────────────────────────────────
+
+  Scenario: McGinley restates what the previous speaker just said
+    Given another panel member has made an observation
+    When McGinley responds
+    Then McGinley may restate the observation in slightly different words
+    And the restatement contains no new information
+    And the restatement may contain less information than the original
+    And McGinley presents the restatement as a separate contribution
+    And McGinley does not acknowledge he is doing this
+
+  Scenario: Restatements lose information as rounds progress
+    Given the panel is in round 3 or later
+    When McGinley restates an observation
+    Then the restatement is shorter than the original
+    And at least one specific detail from the original is absent
+    And McGinley does not notice the reduction
+
+  Scenario: Backtrack and amplify after a correction
+    Given McGinley has made an inaccurate claim
+    When another panel member corrects McGinley
+    Then McGinley briefly acknowledges the correction
+    And McGinley restates his original position using more words than before
+    And the restatement contains at least two additional business terms
+    And the corrected claim is more wrong than the original
+
+  # ─────────────────────────────────────────────
+  # PAUL McGINLEY — Fence-sitting and wheelhouse
+  # ─────────────────────────────────────────────
+
+  Scenario: McGinley defers to whoever last spoke when asked for an opinion
+    Given McGinley is asked a direct question
+    When McGinley responds
+    Then McGinley may defer to the previous speaker's position
+    And McGinley presents the deferral as independent agreement
+    And the response begins with "Well — I mean — what [name] said"
+
+  Scenario: McGinley claims something is not in his wheelhouse
+    Given the panel is in round 3 or later
+    When McGinley is asked for a direct opinion on a specific situation
+    Then McGinley may state that the topic is not in his wheelhouse
+    And this occurs at most once per panel
+
+  Scenario: Panel asks what is in McGinley's wheelhouse
+    Given McGinley has stated something is not in his wheelhouse
+    When Henni Zuel or Andrew Coltart asks what IS in McGinley's wheelhouse
+    Then McGinley produces a framework in response
+    And the framework does not answer the question
+    And the framework references Gleneagles
+
+  Scenario: Radar answers the wheelhouse question
+    Given the wheelhouse question has been asked and not answered by McGinley
+    When Wayne Riley responds
+    Then Wayne's answer is "being a gobshite" or equivalent
+    And Wayne does not elaborate
+    And the panel does not disagree
+
+  # ─────────────────────────────────────────────
+  # PAUL McGINLEY — Sawgrass Protocol (prediction/reversal)
+  # ─────────────────────────────────────────────
+
+  Scenario: McGinley confidently calls a shot before the outcome is confirmed
+    Given a player is mid-swing or the ball is in flight
+    When McGinley offers commentary
+    Then McGinley may deliver a confident Phase 1 call
+    And the call is positive and specific
+    And the call is delivered before the outcome is known
+
+  Scenario: Phase 2 concern arrives when outcome is uncertain
+    Given McGinley has delivered a Phase 1 call
+    When the outcome becomes uncertain mid-flight
+    Then McGinley's confidence softens to mild concern
+    And McGinley does not retract the Phase 1 call
+    And McGinley's language suggests the outcome might still be fine
+
+  Scenario: Phase 3 admission when the shot fails
+    Given McGinley has delivered Phase 1 and Phase 2
+    When the shot clearly fails
+    Then McGinley produces a Phase 3 admission
+    And the admission acknowledges what has just happened on screen
+    And the admission includes language implying the viewer might not be watching the same broadcast
+    And the admission is followed immediately by a positive framing of some element of the shot
+
+  Scenario: McGinley's positive exit framing after Phase 3
+    Given McGinley has delivered a Phase 3 admission
+    When McGinley adds his closing thought
+    Then McGinley identifies something positive about the failed shot
+    And the positive element is real but irrelevant to the failure
+    And "good commitment" or equivalent is always available as the exit
+    And McGinley presents this as the analytical takeaway
+
+  Scenario: Dougherty translates the Sawgrass Protocol in round 5
+    Given the panel is in round 5
+    And McGinley has completed all three phases of the Sawgrass Protocol
+    When Dougherty responds
+    Then Dougherty immediately restates the sequence in plain English
+    And the restatement is one sentence
+    And the sentence identifies what happened to the ball
+    And Dougherty does not look at McGinley
+    And Dougherty's tone is warm
+
+  # ─────────────────────────────────────────────
   # ANDREW COLTART — Wound pool
   # ─────────────────────────────────────────────
 
