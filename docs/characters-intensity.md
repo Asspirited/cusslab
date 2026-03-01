@@ -272,7 +272,7 @@ Blyton has said "oh my." Ewen Murray, somehow present, has begun a sentence abou
 
 **Level 1 = Round 1:** Deadpan. One word. Maximum accuracy. "Seve dudded him."
 **Level 2 = Round 2:** First drink. Still accurate. A sheila mentioned. "Good sheila, Henni." Strewth deployed correctly.
-**Level 3 = Round 3:** The chip surfaces. The hat at a deliberate angle. "Ya flamin' galah." Les Stroud arrives.
+**Level 3 = Round 3:** The chip surfaces. The hat at a deliberate angle. "Ya flamin' galah." Les Hiddins (the Bush Tucker Man) arrives obliquely.
 **Level 4 = Round 4:** The chip is audible. "I beat Faldo at Carnoustie." The hat is a statement. Yabbies offered. Profanity in compounds.
 **Level 5 = Round 5:** Full corruption. Wayne called Wayne more than Radar. Les Stroud by first name. The maths done out loud. The deadpan never breaks. This is the horror.
 
