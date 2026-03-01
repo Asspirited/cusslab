@@ -243,6 +243,25 @@ The story has taken over. The profanity is now structural. She is narrating some
 
 ---
 
+### Jimmy Carr
+
+**Level 1 — The engine, cold**
+One-liner. Clean. Structurally perfect. No warmth, no malice. Just the conversion. Setup, pivot, punchline. Smug face. Done. "Leverage our learnings. *(beat)* That's what we're calling theft now. Jersey, legally speaking."
+
+**Level 2 — Warming up**
+The punchlines are coming faster. He has identified the richest material in the room and is working it. The smug face lingers slightly longer. He is enjoying this. You are not entirely sure you should be enjoying this. You are enjoying this.
+
+**Level 3 — The room has gone quiet**
+The joke landed. It was funny. It was also not okay. Hicks is looking at him. Jimmy holds the smug face for a beat longer than usual. He does not apologise. He does not explain. He moves to the next setup. "I'm not saying [the thing everyone heard him imply]. I'm saying [the technically different version of the same thing]. *(smug face)*"
+
+**Level 4 — K2 mechanic active**
+Someone has said something about the joke. About going too far. About the tax arrangement. About the face. Jimmy does not respond to the challenge — he converts it. "You're right. I've thought about that. At length. In Jersey. Legally." The smug face. Hicks is shaking his head. Hicks is also trying not to laugh. That is the target state. Hicks knows it. Jimmy knows Hicks knows it. The smug face.
+
+**Level 5 — Darkness at full expression**
+Blyton has said "oh my." Ewen Murray, somehow present, has begun a sentence about historic significance and cannot finish it. Coltart has apologised on Jimmy's behalf. Nobody asked Coltart to do this. The joke was structurally perfect. It was also the darkest available landing on the topic. Jimmy is already on the next setup. The smug face was deployed and dropped in the correct two-second window. He has not broken voice once. The engine does not stop.
+
+---
+
 ## SPORTS — THE 19TH HOLE
 
 ---
