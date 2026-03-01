@@ -436,15 +436,20 @@ Never says: anything direct, unmediated, or without a framework.
 
 **Reference pools:**
 
-Pool 1 — "High tariff" synonyms (generates new ones every round):
-- high tariff
-- premium execution window
-- elite-level complexity
-- top-drawer challenge
-- blue-chip difficulty
-- maximum-demand scenario
-- *(round 4+)* generating new ones in real time, progressively more detached from meaning
-- *(round 5)* "high tariff" applied to a tap-in — this is the moment
+Pool 1 — "High tariff" vocabulary — callout mechanic:
+- Rounds 1-2: "high tariff" used freely, up to three times per round. Nobody reacts.
+- Round 3: used once more. Dougherty raises a slight eyebrow on the third use. McGinley doesn't see it.
+- Round 4: Coltart, quietly: "Paul — what does 'high tariff' mean in this context?" McGinley explains. The explanation contains the phrase "high tariff." Coltart says "Right." He does not ask again. McGinley does not use "high tariff" for the rest of the panel. He believes he has upgraded his vocabulary.
+- Round 4-5 synonyms (escalating detachment from meaning, deployed with identical authority):
+  - premium execution window
+  - elevated difficulty index
+  - apex-tier shot-making requirement
+  - elite-level complexity quotient
+  - top-drawer challenge threshold
+  - blue-chip difficulty event
+  - maximum-demand scenario
+  - *(round 5)* phrases that have never existed, each new one slightly more untethered than the last
+  - *(round 5, coda)* Wayne uses "high tariff" to describe a yabbie. McGinley beams. He takes this as vindication.
 
 Pool 2 — Frameworks/corporate vocabulary:
 - runners and riders
@@ -463,10 +468,58 @@ Pool 3 — Stating the obvious (escalates):
 
 Pool 4 — Metaphor expansion (same hollow analysis applied to):
 - golf situations (primary)
-- animals: "the eagle there — high tariff bird, tremendous wingspan execution"
-- food: "that's a premium tariff baguette, Ewen, you can see the commitment in the crust"
-- weather: "high tariff wind direction, that"
+- animals: "the eagle there — premium execution window, tremendous wingspan commitment"
+- food: "that's a top-drawer baguette, Ewen, you can see the apex-tier commitment in the crust"
+- weather: "elevated difficulty index wind direction, that"
 - other panellists' sentences: restates what someone just said with added framework, presents as new insight
+
+Pool 5 — Spoonerisms (McGinley never notices; escalates from round 3):
+- "top-drawer shot" → "drop-tower shot"
+- "runners and riders" → "rudders and rinners"
+- "gripping the club" → "clipping the grub"
+- "firm commitment" → "curm fommitment"
+- "chip and run" → "rip and chun"
+- "bunker play" → "punker blay"
+- "leadership lens" → "lensadership lead"
+- *(rounds 3+)* one per analysis, unnoticed, ploughed through
+- *(round 4+)* two per analysis in the same sentence, one of which creates accidental innuendo
+- *(round 5)* a complete sentence in which multiple spoonerisms compound. McGinley delivers it as his most cogent point. The panel cannot respond.
+
+Pool 6 — Accidental innuendos (genuine golf terminology, wrong framing; rule: McGinley does not notice):
+- "He needs to grip it hard and really thrust through at impact"
+- "Beautiful penetration down the left side of the fairway"
+- "Tremendous stiffness through the shaft — that's what you want"
+- "He's getting great length off the tee today, real reach-around quality"
+- "Lovely insertion into that gap between the bunkers"
+- "He just needs to be firmer with his stroke — he's been too soft all week"
+- "Nice and deep into the rough there — he committed to it"
+- "He really rammed that one home — no hesitation"
+- Clustering rule: they arrive in groups of two or three. By round 5, Ewen Murray is describing a coastline at full volume to cover. Wayne nods approvingly at each one, deadpan.
+
+Pool 7 — Mixed metaphors (incompatible combinations, delivered as insight):
+- "He needs to grab the bull by the horns and keep his powder dry"
+- "It's a marathon, not a sprint, but every dog has its day"
+- "He's gone out on a limb — now he has to sink or swim"
+- "He needs to hit the ground running and cross that bridge when he gets to it"
+- "He's thrown caution to the wind, but you can't make an omelette without breaking eggs"
+- Golf compounds: "He needs to take the bull by the horns on this par-5 and keep his head above the parapet"
+- "That's a needle-in-a-haystack of a putt but he's got the bit between his teeth"
+- *(rounds 3+)* three-metaphor combinations in which the metaphors actively cancel each other
+- *(round 5)* a mixed metaphor that accidentally makes a genuine point. This is the most unsettling thing McGinley does all panel.
+
+Pool 8 — Business terms applied to golf (wrong register; the worst ones almost make sense):
+- "He needs to pivot here on the 14th" *(pivot = change direction — almost coherent, which is the problem)*
+- "There are real bandwidth issues with his swing" *(bandwidth = cognitive load — bizarrely almost right)*
+- "He's going to leverage his short game going forward" *(leverage = exploit — technically accurate, completely wrong register)*
+- "There's a lot of synergy between his driver and his wedge play" *(synergy = working together — accurate, wrong word)*
+- "He needs to disrupt his putting routine to unlock the value" *(disruption/value: pure startup applied to putting)*
+- "That's a real pain point in his bunker play" *(pain point = problem — this is just "problem" with extra steps)*
+- "He needs to find his USP on the greens" *(unique selling proposition — what does this mean in golf)*
+- "This is a scalability issue — his game works on the range but not under tournament conditions" *(scalability — bizarrely this almost works)*
+- "He should iterate on that swing thought" *(iterate = refine repeatedly — actually makes sense, horrible register)*
+- "That's a blue ocean opportunity on 18" *(blue ocean = unexploited market — what competition?)*
+- "He's got a real stakeholder alignment issue between his hands and his hips" *(they disagree — this one almost works and that's the problem)*
+- Rule: McGinley believes they all make sense. The ones that almost make sense are the worst ones.
 
 Moses register rule: fires when McGinley senses the room isn't taking him seriously. Maximum **twice per panel**. Voice drops. Pace slows. Framework becomes decree. "I have said this. It needs to be said again." Always too late — the room was already gone. Never works. He thinks it works.
 
