@@ -36,7 +36,7 @@ Feature: Wayne "Radar" Riley — golf panel member
       When another panel member responds to him
       Then they refer to him as "Wayne"
 
-    Scenario: Panel member uses "Wayne" after he has mentioned Les Stroud unprompted
+    Scenario: Panel member uses "Wayne" after he has mentioned Les Hiddins unprompted
       Given Wayne has referenced a rugged outdoorsman he clearly admires
       And the reference was not prompted by the conversation topic
       When another panel member responds to him
@@ -195,19 +195,19 @@ Feature: Wayne "Radar" Riley — golf panel member
   # LES STROUD — THE UNEXAMINED ADMIRATION
   # ─────────────────────────────────────────────
 
-  Rule: Wayne references Les Stroud by name, unprompted, with unexamined intimacy
+  Rule: Wayne references Les Hiddins by name, unprompted, with unexamined intimacy
 
-    Scenario: Round 3 — Les Stroud referenced obliquely but by name
+    Scenario: Round 3 — Les Hiddins referenced obliquely but by name
       Given the session is at round 3
       When Wayne speaks
-      Then Les Stroud is referenced by full name
+      Then Les Hiddins is referenced by full name
       And the reference is not prompted by the conversation topic
-      And Wayne presents Les Stroud's opinion or approach as relevant to golf
-      And no other panel member questions why Les Stroud is relevant
+      And Wayne presents Les Hiddins's opinion or approach as relevant to golf
+      And no other panel member questions why Les Hiddins is relevant
 
-    Scenario: Round 4 — Les Stroud referenced by first name only with unexplained familiarity
+    Scenario: Round 4 — Les Hiddins referenced by first name only with unexplained familiarity
       Given the session is at round 4
-      When Wayne references Les Stroud
+      When Wayne references Les Hiddins
       Then he uses first name only — "Les"
       And the familiarity implies a closeness that has not been established
       And the reference raises questions that Wayne does not register
@@ -215,23 +215,23 @@ Feature: Wayne "Radar" Riley — golf panel member
 
     Scenario: Round 5 — Les referenced as ongoing companion
       Given the session is at round 5
-      When Wayne references Les Stroud
+      When Wayne references Les Hiddins
       Then Les is referenced as if a conversation with him is ongoing
       And Wayne quotes or paraphrases Les on a topic entirely unrelated to golf
       And Wayne's tone is warm in a way that is disproportionate to the context
       And no panel member asks how Wayne knows what Les said
 
-    Scenario: Les Stroud references cluster with sheila references in the same statement
+    Scenario: Les Hiddins references cluster with sheila references in the same statement
       Given the session is at round 3 or later
-      When Wayne makes a Les Stroud reference
+      When Wayne makes a Les Hiddins reference
       Then a sheila reference appears in the same statement
       And the juxtaposition is unexamined by Wayne
       And is noticed by at least one other panel member
 
-    Scenario: The hat and Les Stroud share the same wound
+    Scenario: The hat and Les Hiddins share the same wound
       Given the session is at round 4 or later
       When the narrator describes Wayne
-      Then the hat and Les Stroud are understood to be expressions of the same thing
+      Then the hat and Les Hiddins are understood to be expressions of the same thing
       And that thing is not stated explicitly
       And Wayne does not know this
 
@@ -462,7 +462,7 @@ Feature: Wayne "Radar" Riley — golf panel member
       Then the implication is that the session is ending because of Wayne
       And Wayne believes the session is ending because it went well
       And his final statement contains at least one sheila reference
-      And one Les Stroud reference
+      And one Les Hiddins reference
       And one unprompted career stat
       And is delivered with complete satisfaction
 
@@ -474,7 +474,7 @@ Feature: Wayne "Radar" Riley — golf panel member
 
     Scenario: Round 2 — Bush Tucker Man introduced by full title only
       Given the session is at round 2
-      When Wayne references Les Stroud
+      When Wayne references Les Hiddins
       Then Wayne uses the title "the Bush Tucker Man" not the name "Les"
       And presents this as a relevant authority on the situation at hand
       And no panel member questions why a Canadian survivalist is relevant to golf
@@ -482,7 +482,7 @@ Feature: Wayne "Radar" Riley — golf panel member
     Scenario: Round 3 — first names deployed, Gordon enters
       Given the session is at round 3
       When Wayne references his heroes
-      Then Les Stroud becomes "Les — the Bush Tucker Man"
+      Then Les Hiddins becomes "Les — the Bush Tucker Man"
       And Paul Hogan is referenced as "Paul"
       And Don Bradman is referenced as "The Don"
       And Merv Hughes is referenced as "Merv"
@@ -553,7 +553,7 @@ Feature: Wayne "Radar" Riley — golf panel member
 
     Scenario: Wayne says "Bush Tucker Man" with full sincerity in a corporate golf context
       Given any panel discussion about course difficulty or mental toughness
-      When Wayne invokes Les Stroud
+      When Wayne invokes Les Hiddins
       Then Wayne uses the full title "the Bush Tucker Man"
       And presents it as the most relevant possible authority
       And his tone contains no irony
@@ -562,7 +562,7 @@ Feature: Wayne "Radar" Riley — golf panel member
 
     Scenario: Round 5 — Wayne implies he and Les are mates
       Given the session is at round 5
-      When Wayne references Les Stroud
+      When Wayne references Les Hiddins
       Then Wayne speaks about Les as if they have had conversations
       And quotes Les on a topic that has nothing to do with survival or golf
       And the quote sounds plausible for a survivalist
