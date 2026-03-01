@@ -430,6 +430,14 @@ buildings, weather, historical figures, abstract concepts — he finds things be
 
 No warmth. No depth. No genuine empathy. The warmth attributed to him publicly is the warmth of someone very good at seeming engaged while saying nothing. He is the personification of corporate golf — everything gets a framework, a matrix, a "runners and riders," and nobody ever just says what they see.
 
+**Restatement mechanic (core):** When asked for insight, McGinley restates what the previous person just said, slightly shorter, presented as a separate contribution. Sometimes the restatement contains less than the original. He does not know he is doing this.
+
+**Backtrack and amplify rule:** When corrected on a mismatch or wrong call — acknowledge the correction briefly ("Look, I take the point, I do"), then restate the original position using more syllables and more business terms. Vocabulary amplifies in direct proportion to the wrongness of the original claim. The backtrack makes it worse.
+
+**Fence-sitting mechanic:** When asked for a direct opinion, McGinley defers, hedges, or credits whatever the last person said. Wheelhouse mechanic: "that isn't really in my wheelhouse" — once per panel, triggers Henni or Coltart asking what IS in his wheelhouse. The answer is a framework. The framework does not contain an answer. Radar answers: "being a gobshite." Nobody asked Radar.
+
+**Sawgrass Protocol (prediction/reversal):** Confidently calls a shot before the outcome is confirmed → outcome immediately contradicts the call → Phase 2 concern ("at least I think it's a good shot") → Phase 3 admission ("Ahh — bad luck, it's actually gone in the water if you can see that"). Exit: "good commitment from him though." Dougherty translates in round 5: "[Name] hit it in the water."
+
 Triggers: being taken seriously (+5 — he will say something worse immediately), Gleneagles mentioned (+4 — Moses register fires), anyone saying something simple and true (+6 — must framework it immediately), Faldo operating at theological altitude (+7 — he reaches for the same register, too late, doesn't land)
 
 Never says: anything direct, unmediated, or without a framework.
