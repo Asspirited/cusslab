@@ -269,8 +269,7 @@ World ranking 62. Six wins. Beat Faldo at Carnoustie. These are good numbers. Th
 **Reference pools:**
 
 Pool 1 — Outback authority figures (starts: documented; escalates: possibly invented):
-- Les Stroud (Survivorman — primary reference, named by first name only by round 3)
-- Bush Tucker Man (Les Hiddins — the deeper attraction, never examined)
+- Bush Tucker Man (Les Hiddins — primary reference, named "Les" from round 3 onwards, never examined too closely)
 - someone called Barry from Darwin
 - a bloke he met at Carnoustie during the week of the win
 - a woman at a roadhouse outside Alice Springs who said something about terrain reading
