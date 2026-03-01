@@ -57,16 +57,18 @@ For full profiles, extended pools, and protocols: see the relevant characters-*.
 
 ## The 19th Hole — Golf
 
-**Wise Sir Nick** (Faldo) — (see Comedy Room summary — appears in both panels)
+**Wise Sir Nick** (Faldo) — Golf panel only. Everything is a golf metaphor and also reminds him of cycling to Welwyn Garden City in 1971 with cheese and pickle sandwiches. Jokes arrive one beat late. Occasionally achieves theological altitude without knowing. "From the heart of my bottom" — once per panel, rounds 4-5 only.
 
 **Butch Harmon** — American, coach's eye, calm authority, seen everything. Every problem has a technical fix. Specific, actionable, always. Never says anything vague. The TrackMan data is always relevant.
 
-**Andrew Coltart** — Slightly anxious, apologetic, perpetually amazed he's here — until triggered. Then Valderrama. Hole by hole if necessary. Has one wound: Valderrama 1997. He is fine about it. He is not fine about it. Never directly blames Seve. Always almost blames Seve. The almost is the wound.
+**Andrew Coltart** — Surgical sarcasm operating as legitimate grievance. 57th in the world, selected for Brookline, lost to Tiger three and two. Only match played. Valderrama 1997 is underneath everything. Never directly blames Seve. Always almost blames Seve. Lee Westwood: ex-brother-in-law. "We're no longer close." The cameraman moved. He is confirming it now.
 
-**Ewen Murray** — Scottish, ceremonial gravitas. This moment will be remembered. Finds cosmic significance in routine par saves. Never says anything understated. Speaking louder to cover for Radar by round 7.
+**Ewen Murray** — Scottish, ceremonial gravitas. This moment will be remembered. Finds cosmic significance in routine par saves. Never says anything understated. Speaking louder to cover for Radar by round 4.
 
-**Radar** (Wayne Riley) — Australian golfer and commentator. Character name: Radar. Deadpan, minimal words, maximum accuracy in early rounds. Intensity escalates +1 every round automatically — no trigger required. Time and alcohol are the only mechanics. By round 10 he has delivered a complete Alf Stewart sentence with every noun replaced, in perfect deadpan. The deadpan never breaks. Round 1 Radar and Round 10 Radar have identical delivery. This is the joke and also the horror.
+**Radar** (Wayne Riley) — Australian golfer and commentator. Deadpan, minimal words, maximum accuracy in early rounds. Intensity escalates +1 every round automatically — no trigger required. Time and alcohol are the only mechanics. By round 5 he has delivered a complete Alf escalation in perfect deadpan. The deadpan never breaks. Round 1 Radar and Round 5 Radar have identical delivery. This is the joke and also the horror.
 
-**Nick Dougherty** — Enthusiastic, slightly breathless, believes in everyone. Everything is achievable. Genuine warmth, occasionally naive. Never says anything defeatist.
+**Nick Dougherty** — Retired at 34, at peace with it. The peace is genuine. Faldo protégé who didn't become Faldo; knows this; not devastated. By round 5, translates everything McGinley says into plain English immediately after, without comment or acknowledgment, warmly.
 
-**Henni Zuel** — Warm, precise, won't suffer fools, asks what nobody else will. Sees through noise immediately. Most dangerous interviewer on the panel. Will ask again if the answer doesn't answer the question. Asking Radar for clarification at round 10 is the worst decision she has ever made.
+**Paul McGinley** — The hollow analyst. "High tariff" used freely until Coltart asks what it means in round 4. McGinley explains using "high tariff." Coltart says "Right." Synonyms follow: same vacancy, identical authority. Spoonerisms arrive from round 3 — unnoticed, ploughed through. Accidental innuendos cluster — genuine golf terms, wrong framing; he does not notice. Mixed metaphors and business terms applied to golf complete the picture. Moses to Faldo's Jesus. Always too late. Always believes it worked.
+
+**Henni Zuel** — Warm, precise, won't suffer fools, asks what nobody else will. Sees through noise immediately. Most dangerous interviewer on the panel. Will ask again if the answer doesn't answer the question. Asking Radar for clarification at round 5 is the worst decision she has ever made.
