@@ -412,3 +412,123 @@ summariseFromState() is the anti-corruption layer between Panel Context and API 
 It translates domain language (intensity, triggers, conflicts) into API language (prompt prefix).
 The domain never learns about tokens, roles, or API structure.
 The API never learns about panel member personalities or scoring dimensions.
+
+---
+
+## SESSION START PROTOCOL
+# MANDATORY. NO EXCEPTIONS. Every session. Every time.
+# Last updated: 2026-03-02
+
+---
+
+### STEP 1 — ALWAYS: Load recent context
+Claude.ai: run recent_chats tool (last 3)
+Claude Code: not applicable
+
+### STEP 2 — ALWAYS: Read this file
+You are reading it now. Continue.
+
+### STEP 3 — ALWAYS: Identify what panels are in scope this session
+
+Ask Rod: "What are we working on today?"
+Then load ONLY the files relevant to what's in scope.
+Do not load everything. Load what the work requires.
+
+**If Boardroom panel is in scope:**
+```
+cat docs/characters-boardroom.md
+```
+AND if Hicks appears:
+```
+cat docs/references/hicks-reference.md
+cat docs/references/hicks-rewrite.md
+```
+
+**If Comedy Room panel is in scope:**
+```
+cat docs/characters-comedy.md
+```
+
+**If Golf panel is in scope:**
+```
+cat docs/characters-sports.md
+```
+
+**If Quantum Leeks is in scope:**
+```
+cat docs/features/quantum-leap-spec.md
+```
+
+**If any new feature or scoring work:**
+```
+cat docs/features/[relevant-feature].md
+```
+
+**ALWAYS — regardless of scope:**
+```
+cat .claude/practices/save-rod-money.md
+```
+
+### STEP 4 — ALWAYS: Pipeline scorecard
+
+Report current state before any work begins:
+- Last commit hash and message
+- Any uncommitted changes (git status)
+- Any known open issues from previous session
+
+### STEP 5 — WORK
+
+Only now: begin the session's work.
+
+### STEP 6 — END OF SESSION (when Hicks appeared in a panel)
+
+Run Hicks consistency review:
+```
+cat docs/references/hicks-review-prompt.md
+```
+Then paste the panel exchange and run the review.
+Append output to docs/references/hicks-review-log.md
+Commit: "Hicks review — [date]"
+
+### STEP 7 — ALWAYS: Commit and push before ending
+
+No session ends without:
+- All new/changed files committed
+- Pushed to remote
+- Hash confirmed
+
+---
+
+### FILE MAP — What lives where
+
+| What you need | File path |
+|---------------|-----------|
+| This protocol | .claude/practices/domain-model.md |
+| Session efficiency rules | .claude/practices/save-rod-money.md |
+| Boardroom characters (full) | docs/characters-boardroom.md |
+| Comedy Room characters (full) | docs/characters-comedy.md |
+| Sports characters (full) | docs/characters-sports.md |
+| Hicks source research | docs/references/hicks-reference.md |
+| Hicks corrected voice spec | docs/references/hicks-rewrite.md |
+| Hicks review prompt | docs/references/hicks-review-prompt.md |
+| Hicks review log | docs/references/hicks-review-log.md |
+| Quantum Leeks feature spec | docs/features/quantum-leap-spec.md |
+| DDD principles | .claude/principles/ddd.md |
+
+**Character profiles in memory and session summaries are UNRELIABLE.**
+**The files above are the only sources of truth.**
+**Never run a panel from memory when files exist.**
+
+---
+
+### REFERENCE LIBRARY PROTOCOL
+
+When a new reference file is created for any character:
+1. Add it to the FILE MAP above
+2. Add a load instruction to the relevant panel scope block above
+3. Add a review prompt if ongoing consistency checking is needed
+4. Commit domain-model.md with message "Update session protocol — add [character] reference"
+
+Current reference files:
+- Hicks: docs/references/hicks-reference.md + hicks-rewrite.md
+- To add: Wayne Riley (Bush Tucker Man wound), Ben Kenobi (cutting consultant voice)
