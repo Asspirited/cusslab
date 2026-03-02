@@ -427,12 +427,22 @@ function parseBackground(text) {
 const specsDir = path.join(__dirname, '..', 'specs');
 const files    = fs.readdirSync(specsDir).filter(f => f.endsWith('.feature'));
 
-let totalPass = 0;
-let totalFail = 0;
+let totalPass  = 0;
+let totalFail  = 0;
+let totalSkip  = 0;
 const allFailures = [];
 
 for (const file of files) {
   const text      = fs.readFileSync(path.join(specsDir, file), 'utf8');
+
+  // Skip @claude-tagged features — AI behavioural specs, not app tests
+  if (/^@claude\s*$/m.test(text)) {
+    const scenarios = parseFeature(text);
+    totalSkip += scenarios.length;
+    console.log(`\n  ${file}  (@claude — ${scenarios.length} scenarios, manual verification)`);
+    continue;
+  }
+
   const scenarios = parseFeature(text);
   const bgSteps   = parseBackground(text);
 
@@ -464,5 +474,5 @@ for (const file of files) {
   }
 }
 
-console.log(`\nGherkin: ${totalPass}/${totalPass + totalFail} scenarios passing\n`);
+console.log(`\nGherkin: ${totalPass}/${totalPass + totalFail} scenarios passing  (${totalSkip} @claude skipped)\n`);
 process.exit(totalFail > 0 ? 1 : 0);
