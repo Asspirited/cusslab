@@ -454,6 +454,7 @@ cat docs/characters-comedy.md
 ```
 cat docs/characters-sports.md
 cat docs/references/radar-reference.md
+cat docs/references/coltart-reference.md
 ```
 
 **If Quantum Leeks is in scope:**
@@ -515,6 +516,8 @@ No session ends without:
 | Wayne Riley review log | docs/references/radar-review-log.md |
 | Ben Kenobi / Ben Williams source research | docs/references/ben-kenobi-reference.md |
 | Ben Kenobi review log | docs/references/ben-kenobi-review-log.md |
+| Andrew Coltart source research | docs/references/coltart-reference.md |
+| Andrew Coltart review log | docs/references/coltart-review-log.md |
 | Hicks corrected voice spec | docs/references/hicks-rewrite.md |
 | Hicks review prompt | docs/references/hicks-review-prompt.md |
 | Hicks review log | docs/references/hicks-review-log.md |
@@ -539,3 +542,4 @@ Current reference files:
 - Hicks: docs/references/hicks-reference.md + hicks-rewrite.md
 - Wayne Riley: docs/references/radar-reference.md
 - Ben Kenobi: docs/references/ben-kenobi-reference.md
+- Andrew Coltart: docs/references/coltart-reference.md
