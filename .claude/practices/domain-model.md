@@ -452,6 +452,7 @@ cat docs/characters-comedy.md
 **If Golf panel is in scope:**
 ```
 cat docs/characters-sports.md
+cat docs/references/radar-reference.md
 ```
 
 **If Quantum Leeks is in scope:**
@@ -509,6 +510,8 @@ No session ends without:
 | Comedy Room characters (full) | docs/characters-comedy.md |
 | Sports characters (full) | docs/characters-sports.md |
 | Hicks source research | docs/references/hicks-reference.md |
+| Wayne Riley / Radar source research | docs/references/radar-reference.md |
+| Wayne Riley review log | docs/references/radar-review-log.md |
 | Hicks corrected voice spec | docs/references/hicks-rewrite.md |
 | Hicks review prompt | docs/references/hicks-review-prompt.md |
 | Hicks review log | docs/references/hicks-review-log.md |
@@ -531,4 +534,5 @@ When a new reference file is created for any character:
 
 Current reference files:
 - Hicks: docs/references/hicks-reference.md + hicks-rewrite.md
-- To add: Wayne Riley (Bush Tucker Man wound), Ben Kenobi (cutting consultant voice)
+- Wayne Riley: docs/references/radar-reference.md
+- To add: Ben Kenobi (cutting consultant voice)
