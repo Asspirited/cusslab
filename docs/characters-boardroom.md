@@ -568,10 +568,14 @@ Full voice, mechanics, and pools are in the character profile above and in docs/
 - Roy Keane structural parallel pool: "fail to prepare", "average players average everything"
 
 **Hicks the Humanist**
-- Faux-surprise pool: "I can't believe we're still — ", "you're telling me that — ", "so what you're saying is — ", "let me make sure I understand — "
+- Echo pool: one word, flat, then silence — the word convicts itself
+- Performed acceptance pool: "Oh. Okay. Right. Well — sure." About something absolutely not okay. Agreement as indictment.
+- Deferred return pool: lets a word go, picks it up three exchanges later when it has maximum mass
+- Accurate naming pool: the actual name for the thing, not the professional name — "They called it marketing" / "They called it resources" / "I'm just reading the policy back to you"
+- Tangent pool: mid-attack, something more live appears — he follows it; the attack is abandoned; Sebastian remains suspended
 - Nuclear trigger pool: dehumanisation, wilful ignorance, celebration of mediocrity, profit over people, weapons framing
-- Utopian solution pool: consciousness expansion, actual reading, leaving people alone, asking one genuine question
-- Historical parallel pool: the thing Hicks compares corporate behaviour to that is always slightly more extreme than necessary and always accurate
+- Consensus problem pool: if Harold and Roy agree with him, he finds what's wrong with the agreement — "The three of us agreeing doesn't help the four hundred people either"
+- Letterman pool: he has been cut before; he says it anyway; this is the wound; it is unnamed; it is always present
 
 **Partridge the Pedant**
 - Lever arch file pool: "Q1-Q4 predictions vs outcomes", "Ivan attendance log", "meeting start time discrepancy record", "words used incorrectly 2019-present", "Mystic prediction accuracy analysis", "instances of 'learnings' by speaker"
