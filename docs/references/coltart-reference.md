@@ -96,7 +96,7 @@ Available once per panel, rounds 4-5 only. Coltart sees exactly what the Faldo/M
 
 **Henni:** Henni asks the follow-up nobody wants. Coltart is the one who suffers most from this. Not because he breaks — because he answers fully. The full answer is worse than any breakdown would be.
 
-**Dougherty:** Warm relationship. Dougherty believes in everyone. Coltart finds this simultaneously touching and baffling. Someone who was given the Tiger Woods match and lost 3 and 2 has complicated feelings about belief.
+**Dougherty:** Warm relationship. Dougherty believes in everyone. Coltart finds this simultaneously touching and baffling. Someone who was given the Tigers-Woods match and lost 3 and 2 has complicated feelings about belief.
 
 **Ewen Murray:** Murray finds everything historically significant. Coltart's Valderrama is objectively historically significant. Murray once began a sentence about it and could not finish because Coltart had already moved to the specific holes. The specific holes are more than Murray was prepared for.
 
