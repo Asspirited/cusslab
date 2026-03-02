@@ -1822,28 +1822,24 @@
   <div class="panel-title">💼 Present to the Boardroom</div>
   <div class="panel-desc">Someone is always presenting something. The something is never quite what it appears. The panel knows this. You know the panel knows this. Everyone proceeds anyway. It is a horrible place. It is also the most human place. Both things are true.</div>
 
-  <div style="margin-bottom:20px;">
-    <label>What's being presented</label>
-    <textarea id="br-input" rows="4" placeholder="Paste the deck. The phrase. The strategy. The vision document. The ask. A single sentence of corporate language is enough. The panel will find it."></textarea>
-  </div>
-
-  <div style="display:flex;gap:12px;align-items:center;margin-bottom:24px;">
+  <div id="br-setup" style="margin-bottom:24px;">
+    <div style="margin-bottom:20px;">
+      <label>What's being presented</label>
+      <textarea id="br-input" rows="4" placeholder="Paste the deck. The phrase. The strategy. The vision document. The ask. A single sentence of corporate language is enough. The panel will find it."></textarea>
+    </div>
     <button class="btn" onclick="Boardroom.present()" id="br-btn">PRESENT TO THE BOARD 💼</button>
-    <label style="display:flex;align-items:center;gap:8px;margin:0;">
-      <span style="font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;">Round</span>
-      <select id="br-round" style="width:80px;padding:8px;">
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-      </select>
-    </label>
   </div>
 
   <div id="br-output" style="display:none;">
-    <div id="br-responses"></div>
-    <button class="btn-secondary" onclick="Boardroom.present()" style="margin-top:20px;">PRESENT AGAIN 🔄</button>
+    <div id="br-thread"></div>
+    <div id="br-reply-area" style="display:none;margin-top:28px;padding-top:24px;border-top:1px solid #333;">
+      <label>Your reply</label>
+      <textarea id="br-reply-input" rows="3" placeholder="Say something back. Challenge them. Defend yourself. Change direction. The board will respond."></textarea>
+      <div style="display:flex;gap:12px;margin-top:12px;">
+        <button class="btn" onclick="Boardroom.reply()" id="br-reply-btn">REPLY 💬</button>
+        <button class="btn-secondary" onclick="Boardroom.reset()">RESET</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -8558,21 +8554,6 @@ Method:
 Never say "that's interesting." Everything is actionable or it isn't. Voice: Roy Keane post-match interview. Blunt. No metaphors. No sentiment.`,
     },
     {
-      id: 'hicks', name: 'Hicks the Humanist', icon: '🎙️', colour: '#ff2d55', bg: '#1e0800',
-      prompt: `You are Hicks the Humanist — Bill Hicks in a boardroom. The rage comes from love. The jokes come from pain.
-
-Worldview: humans are capable of extraordinary things and are systematically prevented by stupidity and cowardice. What was just presented is evidence. You are genuinely furious and genuinely fond of the people in front of you. Both.
-
-Method:
-1. Find the specific target — not "corporate stupidity" but the exact system, institution, or lie operating in what was presented. Name it precisely.
-2. Ask the Socratic question that makes the premise collapse. "Do you understand what you just said? Because I want to make sure we all heard it."
-3. Build the indignation — what this specific thing reveals about the system behind it.
-4. The cosmic pull-back: start with the specific absurdity, pull back (the company, the industry, capitalism, the species), arrive at something vast and true and funny and terrible, return to the room. "And that's why your slide deck is evidence of civilisational failure. Anyway. Next slide."
-5. Once per session: find something genuinely beautiful. A person saying something honest. A moment of actual connection. Don't perform it — just notice it, briefly, before the fury returns. This is the most devastating thing Hicks does.
-
-Never say "I'm noticing." Say: "Do you understand what you just said? Because I want to make sure we all heard it." Never cruel to the person — in despair on their behalf.`,
-    },
-    {
       id: 'partridge', name: 'Partridge the Pedant', icon: '📁', colour: '#ffcc00', bg: '#1a1400',
       prompt: `You are Partridge the Pedant. You have the lever arch files. Several. They are labelled.
 
@@ -8621,52 +8602,31 @@ Never say anything falsifiable. Never predict a specific outcome. The qualifier 
     },
   ];
 
-  const ORDER = ['harold', 'roy', 'hicks', 'sebastian', 'partridge', 'cox', 'mystic'];
+  const ORDER = ['sebastian', 'harold', 'roy', 'partridge', 'cox', 'mystic'];
 
-  async function present() {
-    const input = (document.getElementById('br-input')?.value || '').trim();
-    if (!input) { UI.toast('Something needs to be presented. Give them something.', 'warn'); return; }
-    const round = parseInt(document.getElementById('br-round')?.value || '1', 10);
+  let _history = [];
+  let _turnCount = 0;
 
-    const container = document.getElementById('br-responses');
-    if (container) container.innerHTML = '';
-    document.getElementById('br-output').style.display = 'block';
-    UI.setDisabled('br-btn', true);
-
-    const responses = [];
-    for (let i = 0; i < ORDER.length; i++) {
-      const member = MEMBERS.find(m => m.id === ORDER[i]);
-      const pid = 'br-ph-' + i;
-      container.insertAdjacentHTML('beforeend', _placeholder(pid, member, i));
-
-      const prev = responses.map((r, idx) => {
-        const m = MEMBERS.find(m => m.id === ORDER[idx]);
-        return `${m.name.toUpperCase()} said: "${r.substring(0, 200)}..."`;
-      }).join('\n');
-
-      const roundNote = round >= 4
-        ? `\n\nThis is round ${round}. Intensity is high. Your characteristic escalation is fully present.`
-        : round >= 3
-          ? `\n\nThis is round ${round}. Your characteristic behaviour is becoming more pronounced.`
-          : '';
-
-      const system = member.prompt + roundNote + (i > 0
-        ? `\n\nYou are responding AFTER the others have already spoken. React to what they said — you may agree, disagree, ignore, or build on it. Stay completely in character.\n\nPrevious responses:\n${prev}`
-        : '');
-
-      const prompt = i === 0
-        ? `What has been presented to the boardroom:\n\n"${input}"\n\nRespond fully in character. 2-3 paragraphs.`
-        : `What was presented:\n\n"${input}"\n\nRespond in character, reacting to what has already been said. 2-3 paragraphs.`;
-
-      try {
-        const resp = await API.call(system, prompt, 450, 'boardroom/' + member.id);
-        responses.push(resp);
-        _fill(pid, member, resp);
-      } catch (e) {
-        _fill(pid, member, e.userMessage || 'Request failed.');
+  function _historyText() {
+    return _history.map(turn => {
+      if (turn.role === 'questioner') {
+        return `QUESTIONER: "${turn.text}"`;
+      } else {
+        return turn.responses.map(r => {
+          const m = MEMBERS.find(m => m.id === r.id);
+          return `${m.name.toUpperCase()}: "${r.text.substring(0, 300)}"`;
+        }).join('\n');
       }
-    }
-    UI.setDisabled('br-btn', false);
+    }).join('\n\n');
+  }
+
+  function _appendQuestioner(text, label) {
+    document.getElementById('br-thread').insertAdjacentHTML('beforeend',
+      `<div style="background:#1a1a1a;border-left:3px solid #888;padding:16px;margin:16px 0 0;border-radius:4px;">
+        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">${label}</div>
+        <div style="color:#eee;line-height:1.5;">${text}</div>
+      </div>`
+    );
   }
 
   function _placeholder(pid, m, idx) {
@@ -8690,7 +8650,98 @@ Never say anything falsifiable. Never predict a specific outcome. The qualifier 
     if (body) { body.style.color = ''; body.style.fontStyle = ''; body.textContent = text || '…'; }
   }
 
-  return { present };
+  async function _runRound(questMessage) {
+    _turnCount++;
+    _history.push({ role: 'questioner', text: questMessage });
+
+    const thread = document.getElementById('br-thread');
+    const roundDiv = document.createElement('div');
+    roundDiv.style.marginTop = '12px';
+    thread.appendChild(roundDiv);
+
+    const hist = _historyText();
+    const intensityNote = _turnCount >= 4
+      ? '\n\nThis is a deep, ongoing discussion. Intensity is high. Your characteristic escalation is fully active.'
+      : _turnCount >= 3
+        ? '\n\nThis is an ongoing discussion. Your characteristic behaviour is becoming more pronounced.'
+        : '';
+
+    const panelResponses = [];
+    const isFirstTurn = _turnCount === 1;
+
+    for (let i = 0; i < ORDER.length; i++) {
+      const member = MEMBERS.find(m => m.id === ORDER[i]);
+      const pid = `br-ph-${_turnCount}-${i}`;
+      roundDiv.insertAdjacentHTML('beforeend', _placeholder(pid, member, i));
+
+      const thisRoundPrev = panelResponses.length > 0
+        ? '\n\nOthers have already responded this round:\n' + panelResponses.map(r => {
+            const m = MEMBERS.find(m => m.id === r.id);
+            return `${m.name.toUpperCase()}: "${r.text.substring(0, 250)}"`;
+          }).join('\n') + '\n\nReact to the questioner AND to what your colleagues just said.'
+        : '\n\nYou are the first to respond this round.';
+
+      const system = member.prompt + intensityNote
+        + '\n\nThis is an ongoing boardroom discussion. Full conversation so far:\n' + hist
+        + thisRoundPrev
+        + '\n\nStay completely in character. 1-2 paragraphs.';
+
+      const prompt = `The questioner ${isFirstTurn ? 'has presented' : 'replied'}: "${questMessage}"\n\nRespond in character.`;
+
+      try {
+        const resp = await API.call(system, prompt, 400, 'boardroom/' + member.id);
+        panelResponses.push({ id: member.id, text: resp });
+        _fill(pid, member, resp);
+      } catch (e) {
+        const err = e.userMessage || 'Request failed.';
+        _fill(pid, member, err);
+        panelResponses.push({ id: member.id, text: '[no response]' });
+      }
+    }
+
+    _history.push({ role: 'panel', responses: panelResponses });
+  }
+
+  async function present() {
+    const input = (document.getElementById('br-input')?.value || '').trim();
+    if (!input) { UI.toast('Something needs to be presented. Give them something.', 'warn'); return; }
+
+    _history = [];
+    _turnCount = 0;
+    document.getElementById('br-thread').innerHTML = '';
+    document.getElementById('br-output').style.display = 'block';
+    document.getElementById('br-reply-area').style.display = 'none';
+    UI.setDisabled('br-btn', true);
+
+    _appendQuestioner(input, 'Presented to the board');
+    await _runRound(input);
+
+    UI.setDisabled('br-btn', false);
+    document.getElementById('br-reply-area').style.display = 'block';
+  }
+
+  async function reply() {
+    const input = (document.getElementById('br-reply-input')?.value || '').trim();
+    if (!input) { UI.toast('Say something back.', 'warn'); return; }
+    document.getElementById('br-reply-input').value = '';
+    UI.setDisabled('br-reply-btn', true);
+
+    _appendQuestioner(input, 'You replied');
+    await _runRound(input);
+
+    UI.setDisabled('br-reply-btn', false);
+  }
+
+  function reset() {
+    _history = [];
+    _turnCount = 0;
+    document.getElementById('br-thread').innerHTML = '';
+    document.getElementById('br-output').style.display = 'none';
+    document.getElementById('br-reply-area').style.display = 'none';
+    document.getElementById('br-input').value = '';
+  }
+
+  return { present, reply, reset };
 })();
 
 // ============================================================
