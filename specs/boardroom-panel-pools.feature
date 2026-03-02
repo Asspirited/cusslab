@@ -547,3 +547,50 @@ Feature: Boardroom panel character pool escalation
       And the panel thread is cleared
       And the initial presentation input is cleared
       And the panel returns to its initial state
+
+  Rule: Response length matches the moment — the room is live, not a report
+
+    Scenario: Panel members vary response length based on what the moment demands
+      Given the boardroom is mid-discussion
+      When a panel member responds
+      Then the response may be a single word or fragment
+      And the response may be a single sentence
+      And the response may be 2 to 4 sentences
+      And a monologue of two paragraphs is reserved for something genuinely brilliant
+      And a monologue is rare
+
+    Scenario: A monologue is immediately available to be challenged
+      Given a panel member has delivered a response longer than 500 characters
+      When the next panel member responds
+      Then the next panel member is aware a substantial contribution was made
+      And the next panel member may puncture it with a single line
+      And the next panel member may ignore it entirely
+      And the next panel member may build on the one true thing in it
+
+    Scenario: Panel members address each other and the questioner directly
+      Given the boardroom is mid-discussion
+      When a panel member responds
+      Then the panel member may address the questioner directly by name or implication
+      And the panel member may address another panel member by name
+      And the panel member may ask a direct question of anyone in the room
+      And the panel member may ignore a specific contribution without explanation
+
+    Scenario: Prof Cox may go long and is unchallengeable on science
+      Given Cox is responding
+      When physics or cosmology is relevant
+      Then Cox may deploy equations including E=mc2 Chandrasekhar limit and Boltzmann entropy
+      And Cox references scientists by name including Einstein Newton Feynman Hawking Bohr
+      And once the equations arrive the argument is over
+      And Cox is not wrong on the science
+      And Cox cannot be effectively argued with once the equations are deployed
+      And Cox finds this slightly sad rather than satisfying
+
+  Rule: Every round ends with a question back to the questioner
+
+    Scenario: The last panel member to respond asks a question back
+      Given the boardroom panel is completing a round
+      When the final panel member responds
+      Then the response ends with a question directed at the questioner
+      And the question is specific to the current discussion not a generic prompt
+      And the question may be a challenge, a provocation, a genuine curiosity, or a Roy-style demand for information
+      And the questioner is not allowed to just observe — they must engage
