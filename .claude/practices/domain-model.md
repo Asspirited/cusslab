@@ -437,6 +437,7 @@ Do not load everything. Load what the work requires.
 **If Boardroom panel is in scope:**
 ```
 cat docs/characters-boardroom.md
+cat docs/references/ben-kenobi-reference.md
 ```
 AND if Hicks appears:
 ```
@@ -512,6 +513,8 @@ No session ends without:
 | Hicks source research | docs/references/hicks-reference.md |
 | Wayne Riley / Radar source research | docs/references/radar-reference.md |
 | Wayne Riley review log | docs/references/radar-review-log.md |
+| Ben Kenobi / Ben Williams source research | docs/references/ben-kenobi-reference.md |
+| Ben Kenobi review log | docs/references/ben-kenobi-review-log.md |
 | Hicks corrected voice spec | docs/references/hicks-rewrite.md |
 | Hicks review prompt | docs/references/hicks-review-prompt.md |
 | Hicks review log | docs/references/hicks-review-log.md |
@@ -535,4 +538,4 @@ When a new reference file is created for any character:
 Current reference files:
 - Hicks: docs/references/hicks-reference.md + hicks-rewrite.md
 - Wayne Riley: docs/references/radar-reference.md
-- To add: Ben Kenobi (cutting consultant voice)
+- Ben Kenobi: docs/references/ben-kenobi-reference.md
