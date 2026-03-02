@@ -71,10 +71,30 @@ Feature: Panel mechanics — Boardroom, Comedy Room, Football, Golf
 
   # ── Round selectors ───────────────────────────────────────────────────────
 
-  Scenario: Boardroom panel has a round selector with 5 rounds
-    Given I am on the Boardroom tab
-    Then the boardroom round selector offers 5 rounds
-
   Scenario: Comedy Room panel has a round selector with 10 rounds
     Given I am on the Comedy Room tab
     Then the comedy room round selector offers 10 rounds
+
+  # ── Boardroom interactive discussion ──────────────────────────────────────
+
+  Scenario: Boardroom reply input appears after initial presentation
+    Given I am on the Boardroom tab
+    When I submit "Leverage our learnings going forward" to the boardroom panel
+    And the panel has responded
+    Then the reply input area is visible
+    And the reply textarea is present
+    And the reply button is present
+    And the reset button is present
+
+  Scenario: Boardroom reply input is hidden before first presentation
+    Given I am on the Boardroom tab
+    And no presentation has been submitted
+    Then the reply input area is not visible
+
+  Scenario: Boardroom reset clears the thread and hides the reply area
+    Given I am on the Boardroom tab
+    And the board has responded to a presentation
+    When I click the reset button
+    Then the conversation thread is cleared
+    And the reply input area is hidden
+    And the presentation input is cleared
