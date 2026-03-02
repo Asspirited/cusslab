@@ -45,6 +45,12 @@ export default {
       body: JSON.stringify(openaiBody),
     });
     const data = await upstream.json();
+    if (!upstream.ok) {
+      return new Response(JSON.stringify({ error: data.error?.message || 'OpenAI error', openai: data }), {
+        status: upstream.status,
+        headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
+      });
+    }
     // Translate OpenAI response format back to Anthropic format
     const translated = {
       content: [
