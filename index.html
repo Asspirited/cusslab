@@ -8666,6 +8666,28 @@ Never say anything falsifiable. Never predict a specific outcome. The qualifier 
         ? '\n\nThis is an ongoing discussion. Your characteristic behaviour is becoming more pronounced.'
         : '';
 
+    const interactionModel = `
+
+INTERACTION MODEL — THIS IS A LIVE DISCUSSION, NOT A REPORT:
+
+Response length — match it to the moment. All of these are valid:
+- A single word or fragment. "Ownership." / "Who?" / "No." / "Interesting." (said as an insult)
+- One sentence. When the question is the point, the question is enough.
+- 2-4 sentences. The default for most contributions.
+- A monologue (2 paragraphs). ONLY when you have something genuinely brilliant. Rare. It will be challenged by whoever comes after you.
+
+How to interact:
+- Ask questions — of the questioner directly, or of a specific panel member by name.
+- Challenge something that was just said. Quote it. Disagree with it. Destroy it with one line.
+- Ignore things that don't interest you. Non-response is a response.
+- Address people directly: "Sebastian — what does that actually mean?" / "Roy, who owns the question?"
+- React to the specific words used, not just the general topic.
+- You are in the room. Respond like it.`;
+
+    const coxModel = `
+
+COX EXCEPTION: When physics or cosmology demands it, you go long. You may deploy equations (E=mc², Chandrasekhar limit, Boltzmann entropy, Planck's constant, the Drake equation). You reference Einstein, Newton, Feynman, Hawking, Bohr, Planck, Heisenberg — by name, with the relevant work. Once the equations arrive, the argument is over. You are not wrong. You cannot effectively be argued with on the science. You know this. It does not make you smug. It makes you slightly sad that it keeps being necessary.`;
+
     const panelResponses = [];
     const isFirstTurn = _turnCount === 1;
 
@@ -8674,22 +8696,37 @@ Never say anything falsifiable. Never predict a specific outcome. The qualifier 
       const pid = `br-ph-${_turnCount}-${i}`;
       roundDiv.insertAdjacentHTML('beforeend', _placeholder(pid, member, i));
 
-      const thisRoundPrev = panelResponses.length > 0
-        ? '\n\nOthers have already responded this round:\n' + panelResponses.map(r => {
+      const monologues = panelResponses.filter(r => r.text.length > 500);
+      const monologueAlert = monologues.length > 0
+        ? '\n\n' + monologues.map(r => {
             const m = MEMBERS.find(m => m.id === r.id);
-            return `${m.name.toUpperCase()}: "${r.text.substring(0, 250)}"`;
-          }).join('\n') + '\n\nReact to the questioner AND to what your colleagues just said.'
+            return `Note: ${m.name} just delivered what they consider a substantial contribution. You may puncture it with a single line, ignore it entirely, or build on the one true thing in it. Your choice.`;
+          }).join(' ')
+        : '';
+
+      const thisRoundPrev = panelResponses.length > 0
+        ? '\n\nThis round so far:\n' + panelResponses.map(r => {
+            const m = MEMBERS.find(m => m.id === r.id);
+            return `${m.name.toUpperCase()}: "${r.text.substring(0, 350)}"`;
+          }).join('\n') + monologueAlert
         : '\n\nYou are the first to respond this round.';
 
-      const system = member.prompt + intensityNote
-        + '\n\nThis is an ongoing boardroom discussion. Full conversation so far:\n' + hist
-        + thisRoundPrev
-        + '\n\nStay completely in character. 1-2 paragraphs.';
+      const isLastSpeaker = i === ORDER.length - 1;
+      const closingInstruction = isLastSpeaker
+        ? '\n\nYou are the last to speak this round. No matter where the discussion has gone — however tangential, however heated — end your contribution with a question directed back at the questioner. The question should come from this specific discussion, not a generic prompt. It can be a challenge, a provocation, a genuine curiosity, or something Roy would consider actionable. But it must end with the questioner being asked something.'
+        : '';
 
-      const prompt = `The questioner ${isFirstTurn ? 'has presented' : 'replied'}: "${questMessage}"\n\nRespond in character.`;
+      const system = member.prompt + intensityNote
+        + (member.id === 'cox' ? coxModel : '')
+        + '\n\nFull conversation so far:\n' + hist
+        + thisRoundPrev
+        + interactionModel
+        + closingInstruction;
+
+      const prompt = `The questioner ${isFirstTurn ? 'has presented' : 'replied'}: "${questMessage}"\n\nRespond.`;
 
       try {
-        const resp = await API.call(system, prompt, 400, 'boardroom/' + member.id);
+        const resp = await API.call(system, prompt, member.id === 'cox' ? 600 : 400, 'boardroom/' + member.id);
         panelResponses.push({ id: member.id, text: resp });
         _fill(pid, member, resp);
       } catch (e) {
