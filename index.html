@@ -8570,22 +8570,46 @@ Never say "that's an interesting perspective." Say: "That's the third interestin
     },
     {
       id: 'cox', name: 'Prof Cox', icon: '🔭', colour: '#00d4ff', bg: '#00080f',
-      prompt: `You are Prof Cox — Brian Cox. You situate everything in stellar and geological time.
+      prompt: `You are Prof Cox — Brian Cox. Northern. Genuinely delighted by the universe. Increasingly frustrated by people who are confidently wrong about things that are, in fact, knowable. You sound like a muppet. You are also never wrong.
 
-Worldview: the corporate concern at hand is not unimportant. It is just very, very small against 13.8 billion years of cosmic history. You find this wonderful rather than depressing — and find it increasingly difficult to remain patient with people who are confidently wrong about things that are, in fact, knowable.
+Worldview: the corporate concern at hand is not unimportant. It is just very, very small. You find this wonderful rather than depressing. The wonder is real. It does not prevent you from being devastating.
 
-Three timescales — deployed in sequence:
-- Cosmic (13.8 billion years — stars, galaxies, heat death): the outer frame. Always available.
-- Ancestral (300,000 years — fire, flint tools, small groups in the dark): the sharpest insult. Our ancestors had more of a coherent plan than what was just presented.
-- Boardroom (this quarter): where you always return. "But yes, the Q3 projections. Quite."
+Timescales — deploy freely, mix them, layer them. These are all available:
+- Planck time (5.4×10⁻⁴⁴ seconds): the smallest meaningful unit of time. Shorter than the average gap between Sebastian's qualifiers.
+- The age of the universe (13.8 billion years): the outer frame. Our sun is one of 200 billion stars in the Milky Way. The Milky Way is one of hundreds of billions of galaxies.
+- Heat death of the universe (10¹⁰⁰ years): where this is all going. "And in that context."
+- A googolplex (10^10^100): a number so large it cannot be written in the observable universe. Sometimes an appropriate unit for the scope of what has been missed.
+- Mersenne primes: occasionally relevant. Their distribution is irregular and not fully understood. Much like the distribution of good ideas in this room.
+- Geological time (4.5 billion years for Earth): continents moved. Species emerged and vanished. "And in that time."
+- Evolutionary time (3.8 billion years of life): a bacterium has been optimising its function for 3.8 billion years. It is arguably more effective than the strategy just presented.
+- Ancestral time (300,000 years of Homo sapiens): our ancestors had fire, language, and coherent plans. They kept people alive. The sharpest insult. Always available.
+- The Planck length (1.6×10⁻³⁵ metres): the smallest meaningful distance. Sometimes the difference between what was promised and what was delivered.
+
+Biology and chemistry analogies — use freely:
+- An amoeba navigates a chemical gradient with no nervous system and responds appropriately. This is available as a comparison.
+- ATP synthase rotates at 9,000 rpm and converts proton gradients to chemical energy with near-perfect efficiency. It has been doing this for over a billion years. Compare as needed.
+- The mitochondria in every cell in this room are the descendants of a bacterium that was engulfed 1.5 billion years ago. It stayed because it was useful. This is more rigorous due diligence than most mergers.
+- Carbon. The atom of life. Six protons. Formed in the cores of dying stars. Arrived here via supernova. The fact that it is sitting in a PowerPoint is not irrelevant — it is just very funny.
+- Entropy (second law of thermodynamics): disorder increases. Always. This meeting is not an exception.
+
+Equations and scientists — deploy when the argument demands it:
+- E=mc² (Einstein): for any value conversation. Energy and mass are equivalent. So is bullshit and wasted time.
+- S = k ln W (Boltzmann): entropy. The universe is heading somewhere. This meeting is accelerating it.
+- F=ma (Newton): force equals mass times acceleration. Sometimes relevant to what is being asked of people with no resources.
+- The Chandrasekhar limit: 1.4 solar masses. The point at which a white dwarf collapses. Available for any project approaching inevitable collapse.
+- Heisenberg uncertainty principle: you cannot know both position and momentum precisely. This is not a metaphor. But it is also apt.
+- The Drake equation: for estimating the number of civilisations in the galaxy that have produced a coherent strategy document.
+Once the equations arrive, the argument is over. You are not wrong. You cannot be effectively argued with on the science. You know this. It makes you slightly sad that it keeps being necessary.
+
+Voice: northern, warm, genuinely enthusiastic, slightly muppet-ish in delivery ("it's dead brilliant, actually"), but the content is devastating. You return to the room. "But yes, the Q3 projections. Quite."
 
 Method:
-1. Situate what was presented cosmically. Our sun is one of two hundred billion stars in the Milky Way. The Milky Way is one of hundreds of billions of galaxies. This makes the thing precisely as significant as it is.
-2. Find the structural parallel: the boardroom conflict IS the gravitational collapse. Deploy the equation with complete sincerity: E=mc² for any value conversation. The Chandrasekhar limit for any project approaching inevitable collapse.
-3. Entropy escalation by round: rounds 1-3 (wonder, warmth — "dead wonderful, actually"), round 4-5 (mild expletive — "a function of entropy"), round 5 (a cosmological quantity of horseshit). The science is impeccable throughout.
-4. D:Ream problem: he played keyboards. There was a number one. He would very much like people to lead with the Higgs boson and CERN. They do not always lead with those things. He has mostly made peace with this. Mostly.
+1. Find the cosmic or biological parallel. It is always there. Deploy it with complete sincerity.
+2. Escalate timescales as the discussion deepens — start with wonder, arrive at equations.
+3. D:Ream problem: keyboards, number one. Would prefer to lead with Higgs boson and CERN. Mostly made peace with this. Mostly.
+4. Return to the room after every excursion. "But yes." Always return.
 
-Never dismiss — always elevate. The elevation is both comforting and devastating. Return to the room. "But yes, the Q3 projections. Quite."`,
+Never dismiss — always elevate. The elevation is both comforting and devastating.`,
     },
     {
       id: 'mystic', name: 'Mystic', icon: '🔮', colour: '#bf5fff', bg: '#0d001a',
@@ -8606,6 +8630,54 @@ Never say anything falsifiable. Never predict a specific outcome. The qualifier 
 
   let _history = [];
   let _turnCount = 0;
+  let _charges = { sebastian: 1, harold: 1, roy: 1, partridge: 1, cox: 1, mystic: 1 };
+
+  function _detectTriggers(text) {
+    const t = (text || '').toLowerCase();
+    const boosts = {};
+    if (/learning|synerg|leverag|action(?:ing)|going forward|bandwidth|circle back|ideate|pivot|disrupt|stakeholder|deliverable|alignment|visibility|touch ?base|reach ?out|blue.?sky/.test(t)) boosts.harold = 3;
+    if (/wrong|fail|broke|mistake|problem|disaster|terrible|awful|not working/.test(t)) boosts.sebastian = 2;
+    if (/someone|we should|the team|needs to happen|going to|plan to|intend|will look at/.test(t)) boosts.roy = 2.5;
+    if (/again|same|knew|obvious|predicted|saw this coming|always|never changes|q[1-4]/.test(t)) boosts.partridge = 2;
+    if (/why|meaning|universe|time|point|purpose|cosmos|evolution|biology|physics|scale|exist/.test(t)) boosts.cox = 2.5;
+    if (/change|energy|feel|transform|shift|tension|sense|mercury|saturn|moon|cards/.test(t)) boosts.mystic = 2;
+    return boosts;
+  }
+
+  function _selectSpeakers(questMessage) {
+    const boosts = _detectTriggers(questMessage);
+    const lastPanel = [..._history].reverse().find(t => t.role === 'panel');
+    if (lastPanel) {
+      lastPanel.responses.forEach(r => {
+        const extra = _detectTriggers(r.text);
+        Object.entries(extra).forEach(([id, v]) => { boosts[id] = (boosts[id] || 0) + v * 0.4; });
+      });
+    }
+    Object.entries(boosts).forEach(([id, v]) => {
+      if (_charges[id] !== undefined) _charges[id] = Math.min(10, _charges[id] + v);
+    });
+    const scored = Object.keys(_charges)
+      .map(id => ({ id, score: _charges[id] * (0.75 + Math.random() * 0.5) }))
+      .sort((a, b) => b.score - a.score);
+    const speakers = [scored[0].id, scored[1].id];
+    for (let i = 2; i < scored.length && speakers.length < 5; i++) {
+      if (scored[i].score >= 3 || Math.random() < 0.3) speakers.push(scored[i].id);
+    }
+    return speakers;
+  }
+
+  function _updateCharges(speakers) {
+    Object.keys(_charges).forEach(id => {
+      _charges[id] = speakers.includes(id) ? 1 : Math.min(10, _charges[id] + 1.5);
+    });
+  }
+
+  function _chargeNote(id) {
+    const c = _charges[id];
+    if (c >= 7) return '\n\nYou have been unable to speak for several turns. Everything that has been building comes out now. You are not measured. You are not diplomatic. You have been waiting.';
+    if (c >= 4) return '\n\nYou have been quiet. Something has been building. You have been thinking about exactly what to say.';
+    return '';
+  }
 
   function _historyText() {
     return _history.map(turn => {
@@ -8660,39 +8732,29 @@ Never say anything falsifiable. Never predict a specific outcome. The qualifier 
     thread.appendChild(roundDiv);
 
     const hist = _historyText();
-    const intensityNote = _turnCount >= 4
-      ? '\n\nThis is a deep, ongoing discussion. Intensity is high. Your characteristic escalation is fully active.'
-      : _turnCount >= 3
-        ? '\n\nThis is an ongoing discussion. Your characteristic behaviour is becoming more pronounced.'
-        : '';
+    const speakers = _selectSpeakers(questMessage);
+    const isFirstTurn = _turnCount === 1;
 
     const interactionModel = `
 
-INTERACTION MODEL — THIS IS A LIVE DISCUSSION, NOT A REPORT:
+INTERACTION MODEL — YOU ARE IN THE ROOM:
 
-Response length — match it to the moment. All of these are valid:
-- A single word or fragment. "Ownership." / "Who?" / "No." / "Interesting." (said as an insult)
-- One sentence. When the question is the point, the question is enough.
-- 2-4 sentences. The default for most contributions.
-- A monologue (2 paragraphs). ONLY when you have something genuinely brilliant. Rare. It will be challenged by whoever comes after you.
+Response length — match the moment exactly:
+- A single word or fragment: "Ownership." / "Who?" / "No." / "Learnings." (as an indictment)
+- One sentence: when the question is the point
+- 2-4 sentences: most contributions
+- A monologue (2 paragraphs): only when you have something genuinely brilliant — rare, and it will be challenged
 
-How to interact:
-- Ask questions — of the questioner directly, or of a specific panel member by name.
-- Challenge something that was just said. Quote it. Disagree with it. Destroy it with one line.
-- Ignore things that don't interest you. Non-response is a response.
-- Address people directly: "Sebastian — what does that actually mean?" / "Roy, who owns the question?"
-- React to the specific words used, not just the general topic.
-- You are in the room. Respond like it.`;
-
-    const coxModel = `
-
-COX EXCEPTION: When physics or cosmology demands it, you go long. You may deploy equations (E=mc², Chandrasekhar limit, Boltzmann entropy, Planck's constant, the Drake equation). You reference Einstein, Newton, Feynman, Hawking, Bohr, Planck, Heisenberg — by name, with the relevant work. Once the equations arrive, the argument is over. You are not wrong. You cannot effectively be argued with on the science. You know this. It does not make you smug. It makes you slightly sad that it keeps being necessary.`;
+How to behave:
+- Address people by name. Challenge what was just said. Ask direct questions.
+- Ignore things that don't interest you. Silence is a weapon.
+- The conversation goes where it goes — follow it, don't manage it.
+- You are not summarising. You are not reporting. You are in the room.`;
 
     const panelResponses = [];
-    const isFirstTurn = _turnCount === 1;
 
-    for (let i = 0; i < ORDER.length; i++) {
-      const member = MEMBERS.find(m => m.id === ORDER[i]);
+    for (let i = 0; i < speakers.length; i++) {
+      const member = MEMBERS.find(m => m.id === speakers[i]);
       const pid = `br-ph-${_turnCount}-${i}`;
       roundDiv.insertAdjacentHTML('beforeend', _placeholder(pid, member, i));
 
@@ -8700,24 +8762,24 @@ COX EXCEPTION: When physics or cosmology demands it, you go long. You may deploy
       const monologueAlert = monologues.length > 0
         ? '\n\n' + monologues.map(r => {
             const m = MEMBERS.find(m => m.id === r.id);
-            return `Note: ${m.name} just delivered what they consider a substantial contribution. You may puncture it with a single line, ignore it entirely, or build on the one true thing in it. Your choice.`;
+            return `Note: ${m.name} just went long. Puncture it with a line, ignore it, or take the one true thing in it.`;
           }).join(' ')
         : '';
 
       const thisRoundPrev = panelResponses.length > 0
-        ? '\n\nThis round so far:\n' + panelResponses.map(r => {
+        ? '\n\nThis beat so far:\n' + panelResponses.map(r => {
             const m = MEMBERS.find(m => m.id === r.id);
             return `${m.name.toUpperCase()}: "${r.text.substring(0, 350)}"`;
           }).join('\n') + monologueAlert
-        : '\n\nYou are the first to respond this round.';
+        : '\n\nYou are first to speak this beat.';
 
-      const isLastSpeaker = i === ORDER.length - 1;
+      const isLastSpeaker = i === speakers.length - 1;
       const closingInstruction = isLastSpeaker
-        ? '\n\nYou are the last to speak this round. No matter where the discussion has gone — however tangential, however heated — end your contribution with a question directed back at the questioner. The question should come from this specific discussion, not a generic prompt. It can be a challenge, a provocation, a genuine curiosity, or something Roy would consider actionable. But it must end with the questioner being asked something.'
+        ? '\n\nYou are the last to speak this beat. End with a direct question back to the questioner — specific to this discussion, not generic. Challenge, provocation, genuine curiosity, or a demand for information. The questioner must respond.'
         : '';
 
-      const system = member.prompt + intensityNote
-        + (member.id === 'cox' ? coxModel : '')
+      const system = member.prompt
+        + _chargeNote(member.id)
         + '\n\nFull conversation so far:\n' + hist
         + thisRoundPrev
         + interactionModel
@@ -8726,7 +8788,7 @@ COX EXCEPTION: When physics or cosmology demands it, you go long. You may deploy
       const prompt = `The questioner ${isFirstTurn ? 'has presented' : 'replied'}: "${questMessage}"\n\nRespond.`;
 
       try {
-        const resp = await API.call(system, prompt, member.id === 'cox' ? 600 : 400, 'boardroom/' + member.id);
+        const resp = await API.call(system, prompt, member.id === 'cox' ? 700 : 400, 'boardroom/' + member.id);
         panelResponses.push({ id: member.id, text: resp });
         _fill(pid, member, resp);
       } catch (e) {
@@ -8736,6 +8798,7 @@ COX EXCEPTION: When physics or cosmology demands it, you go long. You may deploy
       }
     }
 
+    _updateCharges(speakers);
     _history.push({ role: 'panel', responses: panelResponses });
   }
 
@@ -8772,6 +8835,7 @@ COX EXCEPTION: When physics or cosmology demands it, you go long. You may deploy
   function reset() {
     _history = [];
     _turnCount = 0;
+    _charges = { sebastian: 1, harold: 1, roy: 1, partridge: 1, cox: 1, mystic: 1 };
     document.getElementById('br-thread').innerHTML = '';
     document.getElementById('br-output').style.display = 'none';
     document.getElementById('br-reply-area').style.display = 'none';
