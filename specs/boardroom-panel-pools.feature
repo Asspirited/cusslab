@@ -577,13 +577,54 @@ Feature: Boardroom panel character pool escalation
 
     Scenario: Prof Cox may go long and is unchallengeable on science
       Given Cox is responding
-      When physics or cosmology is relevant
-      Then Cox may deploy equations including E=mc2 Chandrasekhar limit and Boltzmann entropy
-      And Cox references scientists by name including Einstein Newton Feynman Hawking Bohr
+      When physics or cosmology or biology is relevant
+      Then Cox may deploy equations including E=mc2 Chandrasekhar limit Boltzmann entropy and Planck constant
+      And Cox references scientists by name including Einstein Newton Feynman Hawking Bohr Heisenberg
+      And Cox deploys multiple timescales not just 13.8 billion years
+      And available timescales include Planck time a googolplex geological time evolutionary time and ancestral time
+      And Cox may use biology analogies including amoeba navigation ATP synthase and mitochondrial endosymbiosis
       And once the equations arrive the argument is over
       And Cox is not wrong on the science
       And Cox cannot be effectively argued with once the equations are deployed
-      And Cox finds this slightly sad rather than satisfying
+      And Cox sounds northern and warm and genuinely delighted
+      And Cox finds having to deploy equations slightly sad rather than satisfying
+
+  Rule: Speaker order is driven by emotional charge not a fixed sequence
+
+    Scenario: Characters with highest charge speak first each beat
+      Given the boardroom is in discussion
+      When a new beat begins
+      Then the characters who speak are those with the highest emotional charge
+      And not all characters speak every beat
+      And the order changes based on what was said and who was triggered
+
+    Scenario: Charge builds for characters who do not speak
+      Given a character did not speak in the previous beat
+      When the next beat begins
+      Then that character's charge has increased
+      And if the character has not spoken for several beats their charge is at maximum
+      And when they finally speak they are not measured or diplomatic
+
+    Scenario: Triggers increase charge for specific characters
+      Given the discussion is ongoing
+      When corporate language is used
+      Then Harold's charge increases
+      When vague ownership or no deadline is stated
+      Then Roy's charge increases
+      When criticism or failure is mentioned
+      Then Sebastian's charge increases
+      When cosmic or biological scale is touched
+      Then Cox's charge increases
+      When transformation or tension is present
+      Then Mystic's charge increases
+      When repetition or a predictable pattern is identified
+      Then Partridge's charge increases
+
+    Scenario: Charge resets after a character speaks
+      Given a character has spoken in a beat
+      When the beat completes
+      Then that character's charge resets to its baseline
+      And other characters who did not speak retain their accumulated charge
 
   Rule: Every round ends with a question back to the questioner
 
