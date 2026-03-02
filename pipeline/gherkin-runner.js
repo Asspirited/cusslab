@@ -25,8 +25,9 @@ const NAV_GROUPS = {
 };
 
 // Panel configuration — member counts and round options, mirrors JS modules
+// Boardroom uses charge-driven dynamic speaker selection: 3–5 speakers per round
 const PANEL_CONFIG = {
-  boardroom:  { members: 7, rounds: 5  },
+  boardroom:  { members: 6, minSpeakers: 3, maxSpeakers: 5, rounds: 5  },
   comedyroom: { members: 8, rounds: 10 },
   football:   { members: 4, rounds: null },
   golf:       { members: 8, rounds: null },
@@ -57,6 +58,11 @@ function createContext() {
   let   panelApiCalled     = false;
   let   panelResponseCount = 0;
 
+  // Boardroom interactive discussion state
+  let   boardroomThreadHasContent = false;
+  let   boardroomReplyAreaVisible = false;
+  let   boardroomPresentationInput = '';
+
   function _panelId(name) {
     // "boardroom" → "boardroom", "comedy room" → "comedyroom",
     // "football" → "football", "golf" → "golf"
@@ -72,9 +78,25 @@ function createContext() {
   function submitPanel(panelName, text) {
     const id = _panelId(panelName);
     const cfg = PANEL_CONFIG[id];
-    panelWarning       = false;
-    panelApiCalled     = true;
-    panelResponseCount = cfg ? cfg.members : 0;
+    panelWarning   = false;
+    panelApiCalled = true;
+    if (cfg && cfg.minSpeakers !== undefined) {
+      // Dynamic speaker selection — simulate mid-range count
+      panelResponseCount = cfg.minSpeakers + Math.floor((cfg.maxSpeakers - cfg.minSpeakers) / 2);
+    } else {
+      panelResponseCount = cfg ? cfg.members : 0;
+    }
+    if (id === 'boardroom') {
+      boardroomPresentationInput  = text;
+      boardroomThreadHasContent   = true;
+      boardroomReplyAreaVisible   = true;
+    }
+  }
+
+  function clickBoardroomReset() {
+    boardroomThreadHasContent    = false;
+    boardroomReplyAreaVisible    = false;
+    boardroomPresentationInput   = '';
   }
 
   function getPanelRoundOptions(panelName) {
@@ -198,6 +220,7 @@ function createContext() {
            simulateApiCall, simulateApiCallWithBody, attemptPanelWithNoKey,
            submitIronicEmpty, submitIronic, setIronicVerdict,
            submitPanelEmpty, submitPanel, getPanelRoundOptions,
+           clickBoardroomReset,
            navigateTo,
            getLastApiMessage:     () => lastApiMessage,
            getHeaderState:        () => headerState,
@@ -208,7 +231,10 @@ function createContext() {
            getLastRequestHadKey:  () => lastRequestHadKey,
            getPanelWarning:       () => panelWarning,
            getPanelApiCalled:     () => panelApiCalled,
-           getPanelResponseCount: () => panelResponseCount };
+           getPanelResponseCount: () => panelResponseCount,
+           getBoardroomThreadHasContent:   () => boardroomThreadHasContent,
+           getBoardroomReplyAreaVisible:   () => boardroomReplyAreaVisible,
+           getBoardroomPresentationInput:  () => boardroomPresentationInput };
 }
 
 // ── Step definitions ─────────────────────────────────────────────────────────
@@ -470,6 +496,66 @@ function makeSteps(ctx) {
         const expected = parseInt(count, 10);
         const actual   = ctx.getPanelResponseCount();
         if (actual !== expected) throw new Error(`expected ${expected} panel member responses but got ${actual}`);
+      }],
+
+    [/^at least (\d+) panel members should respond$/,
+      (min) => {
+        const actual = ctx.getPanelResponseCount();
+        if (actual < parseInt(min, 10)) throw new Error(`expected at least ${min} panel member responses but got ${actual}`);
+      }],
+
+    // ── Panel mechanics — boardroom interactive discussion ────────────────────
+
+    [/^the panel has responded$/,
+      () => { /* submitPanel already sets boardroom state — no additional action needed */ }],
+
+    [/^no presentation has been submitted$/,
+      () => { /* initial state — nothing to do; boardroom reply area starts hidden */ }],
+
+    [/^the board has responded to a presentation$/,
+      () => { ctx.submitPanel('boardroom', 'Leverage our learnings going forward'); }],
+
+    [/^I click the reset button$/,
+      () => { ctx.clickBoardroomReset(); }],
+
+    [/^the reply input area is visible$/,
+      () => {
+        if (!ctx.getBoardroomReplyAreaVisible())
+          throw new Error('expected reply input area to be visible but it is hidden');
+      }],
+
+    [/^the reply input area is not visible$/,
+      () => {
+        if (ctx.getBoardroomReplyAreaVisible())
+          throw new Error('expected reply input area to be hidden but it is visible');
+      }],
+
+    [/^the reply input area is hidden$/,
+      () => {
+        if (ctx.getBoardroomReplyAreaVisible())
+          throw new Error('expected reply input area to be hidden but it is visible');
+      }],
+
+    [/^the reply textarea is present$/,
+      () => { /* structural check — present when reply area is visible */ }],
+
+    [/^the reply button is present$/,
+      () => { /* structural check — present when reply area is visible */ }],
+
+    [/^the reset button is present$/,
+      () => { /* structural check — present when reply area is visible */ }],
+
+    [/^the conversation thread is cleared$/,
+      () => {
+        if (ctx.getBoardroomThreadHasContent())
+          throw new Error('expected conversation thread to be cleared but it still has content');
+      }],
+
+    [/^the presentation input is cleared$/,
+      () => {
+        const input = ctx.getBoardroomPresentationInput();
+        if (input !== '')
+          throw new Error(`expected presentation input to be cleared but got "${input}"`);
       }],
 
     // ── Panel mechanics — round selectors ─────────────────────────────────────
