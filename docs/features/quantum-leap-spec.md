@@ -757,3 +757,137 @@ They're going to fix this.
 They always fix it.
 
 That's Sam.
+
+---
+
+## QUANTUM LEEKS — Feature Rename + Leek Mechanic
+
+**The feature is now called Quantum Leeks.**
+The spelling is intentional. It is funnier. It stays.
+
+---
+
+### THE LEEK MECHANIC
+
+**In every normal leap**, at some point in the dialogue, either:
+- Someone uses the word "leak" (a pipe, a document, a secret, anything)
+- Someone mentions leeks the vegetable — casually, in passing, as a throwaway
+  ("...picked up some leeks on the way home..." / "...like a leek in a colander...")
+  Never directly. Never as the point. Always incidental.
+
+**The user must spot it and call it out.**
+That's the leap trigger. Not the system. The user.
+Miss it: you stay in the leap. The wrong goes unfixed. Sam withers slightly.
+Spot it and call it: blue light, tingle, gone.
+
+Al does not flag it. Ziggy does not flag it. They know. They wait.
+If the user misses it, Al and Ziggy exchange a look that the user cannot see.
+The handlink beeps once, quietly. Al silences it.
+
+---
+
+### THE LEEK LEAP — Sam IS a Leek
+
+Rare. Completely random. Triggered by the unknown force for reasons nobody understands.
+No mission. No wrong to right. Sam has leapt into a leek.
+
+**Al arrives anyway.** Checks the handlink. Looks at the leek Sam is.
+
+*"Ziggy says there's a... huh."*
+*(pause)*
+*"You're just a leek, Sam."*
+
+Sam: "How long?"
+
+Al: "Ziggy says... could be a while."
+*(checks handlink)*
+"There's a woman coming who might — no, she's going for the onions."
+
+*(silence)*
+
+*(the leek withers slightly)*
+
+Al: *(quietly, to himself)* "Way to go, Sam."
+
+---
+
+**Leek states — what Sam might be:**
+
+- **On a table, unexamined** — waiting. Just waiting. Al sits nearby. Neither speaks.
+  Ziggy provides periodic updates nobody asked for.
+
+- **Being inspected** — someone picks Sam up, considers him, puts him down.
+  Found wanting. Or found acceptable. Both equally undignified.
+  Al watches. "That's — yeah. That happens, Sam."
+
+- **In the ground, growing** — this takes time. Nothing happens.
+  Al visits occasionally. Reports on conditions. Leaves.
+  "Ziggy says you're at approximately week three of an eight-week growing cycle.
+  She seems... weirdly invested."
+
+- **Being sliced** — Al watches. Says nothing for a long moment.
+  Then: "Ziggy says this is technically putting right what once went wrong.
+  She won't say what. I've stopped asking."
+
+- **In a pot, in soup** — Sam is contributing anonymously to something larger.
+  Al: "You know, Sam, there's something almost — no, never mind."
+  The soup is good. Nobody knows why. They never know why.
+
+- **In blue cheese dip at a party** — people are enjoying the dip.
+  Nobody mentions the leek. Everyone benefits from the leek.
+  The leek is unacknowledged. This is fine. This is enough.
+  Al: "My second wife made a blue cheese dip once. Nobody mentioned the leek then either."
+
+- **Being eaten by someone who doesn't deserve it** — Sam cannot do anything about this.
+  Al: "Sam, I know. I know."
+
+- **Being eaten by someone who really needed it** — the quiet one.
+  No comedy. Just: someone needed this and it helped.
+  Al watches. Doesn't say anything. The cigar is still.
+  Ziggy says nothing. The handlink doesn't beep.
+  The blue light comes anyway.
+
+- **Withering uneaten, unnoticed, into dust** — the existential leek.
+  Al stays the whole time. Doesn't leave. Doesn't explain why.
+  "Ziggy says... there's no probability for this one, Sam."
+  *(silence)*
+  *(the leek becomes dust)*
+  *(Al closes the handlink)*
+  *"Oh well."*
+
+---
+
+**Ziggy on leek leaps:**
+Ziggy has data on leeks. Extensive, specific, deeply prepared data.
+She has been waiting for this.
+
+- "Ziggy says leeks have been cultivated for over four thousand years.
+   She seems very pleased to finally have context for this information."
+- "Ziggy says the probability of being chosen for the soup is 34.7%.
+   She says this with what I can only describe as genuine concern."
+- "Ziggy says the blue cheese dip is actually quite good.
+   She has no way of knowing this. She is 97.3% confident."
+- "Ziggy says the Romans valued leeks highly. Emperor Nero ate them daily
+   for his singing voice. She wants Sam to know this. I don't know why.
+   Sam is a leek. He can't sing."
+- "Ziggy is tracking the Bourbon." *(the Bourbon is on the same table)*
+   "Ziggy says neither of you will be chosen today. She says this gently."
+
+---
+
+### THE BOURBON-LEEK CONNECTION
+
+In every normal leap: the Bourbon biscuit is present. Unnoticed. Uneaten.
+In the leek leap: the Bourbon is also on the table.
+
+They are both waiting. Neither will be chosen.
+They wither together, slightly, in companionable silence.
+
+Ziggy monitors both. Al reads neither update out.
+Some things you just sit with.
+
+At the end of the leek leap, Sam leaps.
+The Bourbon remains.
+The Bourbon always remains.
+Ziggy notes this. As always. With 99.6% confidence.
+As always.
