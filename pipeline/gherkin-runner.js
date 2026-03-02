@@ -18,7 +18,18 @@ const USER_MESSAGES = {
 
 // Nav tabs present in each nav group — mirrors index.html structure
 const NAV_GROUPS = {
-  personas: ['Ask The Panel','Joke Test','Expert Clash','The Wheel','Professionals',"Isn't It Ironic?"],
+  personas:  ['Ask The Panel','Joke Test','Expert Clash','The Wheel','Professionals',"Isn't It Ironic?"],
+  boardroom: ['Present to the Boardroom'],
+  comedy:    ['The Comedy Room'],
+  sports:    ['The Pub After The Match', 'The 19th Hole'],
+};
+
+// Panel configuration — member counts and round options, mirrors JS modules
+const PANEL_CONFIG = {
+  boardroom:  { members: 7, rounds: 5  },
+  comedyroom: { members: 8, rounds: 10 },
+  football:   { members: 4, rounds: null },
+  golf:       { members: 8, rounds: null },
 };
 
 // Nav tabs hidden from navigation — mirrors index.html style="display:none"
@@ -40,6 +51,37 @@ function createContext() {
   // Worker / routing mock state
   let   activePanel        = null;
   let   lastRequestHadKey  = false;
+
+  // Four-panel mock state
+  let   panelWarning       = false;
+  let   panelApiCalled     = false;
+  let   panelResponseCount = 0;
+
+  function _panelId(name) {
+    // "boardroom" → "boardroom", "comedy room" → "comedyroom",
+    // "football" → "football", "golf" → "golf"
+    return name.toLowerCase().replace(/\s+/g, '');
+  }
+
+  function submitPanelEmpty(panelName) {
+    panelWarning       = true;
+    panelApiCalled     = false;
+    panelResponseCount = 0;
+  }
+
+  function submitPanel(panelName, text) {
+    const id = _panelId(panelName);
+    const cfg = PANEL_CONFIG[id];
+    panelWarning       = false;
+    panelApiCalled     = true;
+    panelResponseCount = cfg ? cfg.members : 0;
+  }
+
+  function getPanelRoundOptions(panelName) {
+    const id = _panelId(panelName);
+    const cfg = PANEL_CONFIG[id];
+    return cfg ? cfg.rounds : null;
+  }
 
   function getKey()  { return store['hecklers_api_key'] || ''; }
   function setKey(k) {
@@ -155,14 +197,18 @@ function createContext() {
            openSettingsTab, focusInput, blurInput, updateKeyStatus,
            simulateApiCall, simulateApiCallWithBody, attemptPanelWithNoKey,
            submitIronicEmpty, submitIronic, setIronicVerdict,
+           submitPanelEmpty, submitPanel, getPanelRoundOptions,
            navigateTo,
-           getLastApiMessage:    () => lastApiMessage,
-           getHeaderState:       () => headerState,
-           getIronicApiCalled:   () => ironicApiCalled,
-           getIronicWarning:     () => ironicWarning,
-           getIronicVerdict:     () => ironicVerdict,
-           getActivePanel:       () => activePanel,
-           getLastRequestHadKey: () => lastRequestHadKey };
+           getLastApiMessage:     () => lastApiMessage,
+           getHeaderState:        () => headerState,
+           getIronicApiCalled:    () => ironicApiCalled,
+           getIronicWarning:      () => ironicWarning,
+           getIronicVerdict:      () => ironicVerdict,
+           getActivePanel:        () => activePanel,
+           getLastRequestHadKey:  () => lastRequestHadKey,
+           getPanelWarning:       () => panelWarning,
+           getPanelApiCalled:     () => panelApiCalled,
+           getPanelResponseCount: () => panelResponseCount };
 }
 
 // ── Step definitions ─────────────────────────────────────────────────────────
@@ -370,6 +416,69 @@ function makeSteps(ctx) {
       () => {
         const v = ctx.getIronicVerdict();
         if (!v || v.irony_score < 70) throw new Error(`expected high irony score (>=70) but got ${v && v.irony_score}`);
+      }],
+
+    // ── Panel mechanics — nav registration ──────────────────────────────────
+
+    [/^"([^"]+)" should be in the BOARDROOM nav group$/,
+      (label) => {
+        const group = NAV_GROUPS['boardroom'] || [];
+        if (!group.includes(label)) throw new Error(`nav: expected "${label}" in boardroom group, got [${group.join(', ')}]`);
+      }],
+
+    [/^"([^"]+)" should be in the COMEDY ROOM nav group$/,
+      (label) => {
+        const group = NAV_GROUPS['comedy'] || [];
+        if (!group.includes(label)) throw new Error(`nav: expected "${label}" in comedy group, got [${group.join(', ')}]`);
+      }],
+
+    [/^"([^"]+)" should be in the 19TH HOLE nav group$/,
+      (label) => {
+        const group = NAV_GROUPS['sports'] || [];
+        if (!group.includes(label)) throw new Error(`nav: expected "${label}" in sports group, got [${group.join(', ')}]`);
+      }],
+
+    // ── Panel mechanics — navigation ─────────────────────────────────────────
+
+    [/^I am on the Boardroom tab$/,    () => { /* navigate */ }],
+    [/^I am on the Comedy Room tab$/,  () => { /* navigate */ }],
+    [/^I am on the Football tab$/,     () => { /* navigate */ }],
+    [/^I am on the Golf tab$/,         () => { /* navigate */ }],
+
+    // ── Panel mechanics — empty input guards ─────────────────────────────────
+
+    [/^I submit empty input to the (.+) panel$/,
+      (panelName) => { ctx.submitPanelEmpty(panelName); }],
+
+    [/^a warning should be shown$/,
+      () => {
+        if (!ctx.getPanelWarning()) throw new Error('expected a warning but none was shown');
+      }],
+
+    // ── Panel mechanics — valid input ─────────────────────────────────────────
+
+    [/^I submit "([^"]+)" to the (.+) panel$/,
+      (text, panelName) => { ctx.submitPanel(panelName, text); }],
+
+    [/^API calls should be made$/,
+      () => {
+        if (!ctx.getPanelApiCalled()) throw new Error('expected API calls but none were made');
+      }],
+
+    [/^(\d+) panel members should respond$/,
+      (count) => {
+        const expected = parseInt(count, 10);
+        const actual   = ctx.getPanelResponseCount();
+        if (actual !== expected) throw new Error(`expected ${expected} panel member responses but got ${actual}`);
+      }],
+
+    // ── Panel mechanics — round selectors ─────────────────────────────────────
+
+    [/^the (\w+(?:\s+\w+)*) round selector offers (\d+) rounds$/,
+      (panelName, count) => {
+        const expected = parseInt(count, 10);
+        const actual   = ctx.getPanelRoundOptions(panelName);
+        if (actual !== expected) throw new Error(`expected ${expected} round options for "${panelName}" but got ${actual}`);
       }],
   ];
 }
