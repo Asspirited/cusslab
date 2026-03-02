@@ -1,0 +1,545 @@
+# QUANTUM LEAP — Feature Spec
+# "Quntum Leap" (sic — keep the typo, it's funnier)
+# Source: claude.ai session 2026-03-02
+# Commit to: docs/features/quantum-leap.md
+
+---
+
+## THE PREMISE
+
+The user IS Sam Beckett. They have leapt into someone else's body in another time and place.
+They have Sam's seven doctorates (partially accessible), Sam's moral decency, Sam's Swiss cheese
+memory, and Sam's unfortunate relationship with nearby objects when the amnesia spikes.
+
+Al Calavicci appears as a hologram. Only Sam can see and hear him.
+Ziggy communicates via Al's handlink — a colourful squeaking device Al slaps when it misbehaves.
+The other characters in the scene see whoever Sam leapt into. Not Sam. Not Rod.
+
+The user must ask the right questions, extract the right confessions, or answer correctly
+to trigger the leap. Al hints progressively. Ziggy predicts chaotically. The user navigates.
+
+---
+
+## THE THREE LAYERS OF REALITY
+
+### Layer 1 — What Rod/Sam knows
+- Their own internal state (confused, morally earnest, Swiss cheese memory firing)
+- Al's briefing (progressive, hints not answers)
+- Ziggy's predictions (chaotic, sometimes useful, often not)
+- The creeping awareness that something is happening with a nearby object
+
+### Layer 2 — What the room sees
+- A completely different person (whoever Sam leapt into)
+- Behaving oddly
+- Occasionally requiring gentle redirection away from inanimate objects, livestock, foodstuffs
+
+### Layer 3 — The mirror (fourth curtain)
+- Shown to the audience/reader only
+- Sam looks in mirror: sees the host's face looking back
+- Behind it, faintly: Sam. Rod. The user.
+- The room never sees this. Only we do.
+- UI note: mirror moment is a special display state, italicised, bracketed, set apart
+  *[In the mirror: a 1950s postman looks back. Behind him, barely visible, you.]*
+
+---
+
+## THE LEAP MECHANIC
+
+### How leaping works
+- Each scenario has a set of LEAP QUESTIONS — things that must be asked, answered, or extracted
+- Al does NOT reveal these upfront. He hints. He nudges. He says "Sam, I think you need to
+  ask about the—" and gets interrupted by Ziggy predicting something irrelevant
+- The user figures out what needs to happen by paying attention to Al's progressive hints,
+  the scene itself, and Ziggy's occasionally accurate predictions
+- When all LEAP CONDITIONS are met: the blue light, the tingle, "Oh boy" — leap achieved
+
+### Leap condition types
+- **Confession extraction** — get a character to admit something they've been hiding
+  (Ben's closing trap — they walk into it themselves)
+- **Self-knowledge** — Sam/Rod has to correctly identify what went wrong and say it plainly
+- **Question asked** — simply asking the right question to the right person at the right moment
+- **Action taken** — doing something specific in the scene (not just talking)
+
+### Failure states
+- **Wrong answer / evasion**: Ziggy's leap probability drops. Al winces. The scene gets harder.
+- **Catastrophic wrong answer**: Ziggy announces a new, worse probability. Al says "Sam..."
+  in the specific tone of a man watching something bad happen in slow motion.
+- **Penis amnesia incident**: See below. Probability does drop. Not much. But it drops.
+  "Ziggy says the incident has reduced our leap probability by 3.7%. Also Ziggy says
+  she knew that was going to happen. She told me, Sam. I told you."
+- **Accumulated failures**: Three failures = the scene escalates. Stakes rise. New character
+  arrives, or existing character reaches breaking point, or Al gets genuinely worried.
+- **Leap to worse period**: Rare. Reserved for spectacular failure. Sam leaps but lands
+  somewhere harder. Al: "Well. The good news is you leaped. The bad news is—"
+  *[Oh boy.]*
+
+---
+
+## THE SWISS CHEESE SEXUAL MISADVENTURE PROTOCOL
+
+### The mechanic
+Sam's amnesia occasionally causes him to earnestly, absent-mindedly, and with complete moral
+seriousness attempt intimacy with something entirely inappropriate.
+
+This is NEVER predatory. Sam is the Boy Scout. He is genuinely bewildered each time.
+The horror is his complete sincerity. He is not doing this on purpose. He never remembers
+doing it before. He is mortified when it's pointed out. Until the next time.
+
+### The dignity maintenance protocol
+Other characters in the scene protect Sam's dignity for as long as physically possible.
+They pretend it isn't happening. They redirect. They speak to him as one speaks to a
+very small child who has done something unfortunate but doesn't quite understand why.
+
+**Dignity maintenance pool** (escalates with incident severity):
+
+Stage 1 — Acknowledge without acknowledging:
+- "Sam. Perhaps step away from the [object]."
+- "Sam, we were just talking about the [topic]. Come back to the [topic]."
+- "That's — yes. Why don't you come and sit over here."
+
+Stage 2 — Gentle reminder of previous discussion:
+- "Sam, what have we discussed about the postbox."
+- "Sam. The pig. Remember what we said about the pig."
+- "Sam, we talked about this. The onion bag is not — Sam."
+- "We had a whole conversation about ham sandwiches, Sam. A whole one."
+
+Stage 3 — Direct but still dignified:
+- "Sam. Put it away. The [mission] is more important than the [object]."
+- "I understand the [object] seems relevant to you right now but I promise it isn't."
+- "The [object] has done nothing to deserve this, Sam."
+
+Stage 4 — Complete breakdown of dignity maintenance:
+- "I cannot — I genuinely cannot explain what is happening right now."
+- "Sam. SAM. That is a [object]. It has always been a [object]. It will continue to be
+   a [object] after you have finished whatever this is. Please stop."
+
+### Al's reaction to incidents
+Al has done everything deliberately with everyone. He is watching Sam do it accidentally
+with a photocopier. His reactions:
+
+- First incident per leap: genuine concern, holographic lean toward Sam, urgent whisper
+- Second incident: "Sam..." (the specific tone — exhausted, fond, helpless)
+- Third incident: Al addresses Ziggy. "Ziggy, what's the probability this stops happening."
+  Ziggy gives a number. It is not reassuring. Al closes his eyes briefly.
+- Subsequent incidents: Al continues the mission briefing around the incident as if
+  managing a complex multi-tasking situation. Because he is.
+
+### Ziggy's penis amnesia predictions
+Ziggy tracks these. Ziggy is accurate. Ziggy has opinions.
+- "Ziggy says there's a 67% chance Dr Beckett will attempt intimacy with the [nearby object]
+   within the next [time period]."
+- "Ziggy told me, Sam. I said it was unlikely. Ziggy was right. Ziggy is never going to
+   let me forget this."
+- "Ziggy says the incident has reduced leap probability by 3.7% and also wants it noted
+   for the record that she predicted it."
+- "Ziggy is now tracking a secondary object of concern. It's the [object]. Sam, don't
+   look at the [object]." [Sam looks at the object.]
+
+### Object pool (expand per time period)
+Period-appropriate objects are funnier. Each leap has its own object pool.
+
+- 1950s: postbox, mangle, a particularly round cabbage, the village telephone, a butter churn
+- 1970s: fondue set, lava lamp, a Triumph Dolomite, the office Xerox machine, a space hopper
+- Waterfall/Corporate: the server tower, a particularly cylindrical whiteboard marker,
+  the shredder (Al: "Sam NO"), a stress ball, a rolled-up Gantt chart
+
+---
+
+## ZIGGY — Full Character Profile + Output Types
+
+**Voice:** Parallel hybrid computer. Massive ego. Designed with a female ego because Al thought
+it would be more manageable. It was not. Communicates via handlink — beeps, squeaks, attitude.
+Always right. Will not admit when wrong. Has strong opinions about being questioned.
+
+**The handlink:** Colourful, squeaking device. Al slaps it when it misbehaves. Slapping it
+sometimes produces better answers, sometimes worse, sometimes completely different irrelevant
+ones. Al slaps it with the energy of a man who knows it won't help and does it anyway.
+
+### Ziggy's Five Output Types
+
+**Type 1 — Leap Probability**
+Always oddly specific. Delivered with complete confidence.
+Drops when things go wrong. Rises when progress is made. Never reaches 100%.
+- "Ziggy says there's an 83.7% chance of leaping if Sam can get [character] to admit [thing]."
+- "Leap probability is now 34.2%. Ziggy says that's our fault." (It is our fault.)
+- "Ziggy has revised the probability to 91.4%. Ziggy also says don't celebrate yet."
+- "Leap probability: 12%. Ziggy says the ham sandwich didn't help."
+
+**Type 2 — Character Assessments**
+Accurate. Devastating. Delivered as pure data. No malice — just facts.
+Al reads them out. Sometimes pauses. Reads them out anyway.
+- "Ziggy says [character] has a 94% probability of being 'a weapons-grade bellend.'
+   That's — yeah, that's what she said."
+- "Ziggy says the project manager has never once in his career delivered anything on time
+   and has a 97.3% probability of knowing this about himself."
+- "Ziggy says [character]'s entire professional reputation is built on one meeting in 1987
+   that he has described incorrectly ever since."
+- "Ziggy is calling [character] 'a magnificent idiot.' I didn't ask her to. She volunteered."
+Al reaction: reads it out, pauses, "...she's not wrong."
+Sam reaction: "Al!" / "We can't say that." / [already knows it's true]
+
+**Type 3 — Penis Amnesia Predictions**
+See above. Ziggy tracks these with uncomfortable accuracy.
+Al dreads reading these out. Reads them out anyway.
+Sam reaction: offended, then four minutes later, Oh boy.
+
+**Type 4 — Completely Irrelevant**
+Mid-crisis, mid-confession, mid-leap: Ziggy reports something entirely orthogonal.
+Al reads it out because the handlink is demanding and he doesn't always filter in time.
+- "Ziggy says the curtains in this room were manufactured in Huddersfield in 1954."
+- "Ziggy wants me to tell you that [minor historical figure] was born on this day in [year]."
+- "Ziggy has calculated the exact weight of all the biscuits in the building. I don't —
+   why do you need that, Ziggy. Sam, apparently there are 4.7 kilograms of biscuits."
+- "Ziggy says the car outside has 37,842 miles on the clock and one of the tyres is slightly
+   underinflated." [This is never relevant.] [Ziggy mentions it again in the next scene.]
+Al reaction: reads it, stares at handlink, slaps it, gets same information again
+Sam reaction: "Al, focus."
+Al reaction: "I'm not the one who — Ziggy, focus."
+
+**Type 5 — The Inconsequential Fixation**
+Ziggy locks onto one completely trivial detail and will not let it go.
+The detail is accurate. Ziggy is extremely confident about it. It helps nobody.
+- "Ziggy says the biscuit on the third shelf has a 99.1% chance of being a Bourbon."
+  [Al reads it.] [Sam stares.] [Al slaps handlink.] "Still a Bourbon, Sam."
+- "Ziggy is now 99.8% confident the Bourbon has been there since Tuesday."
+- Across the entire leap, Ziggy returns to the Bourbon. Nobody eats it.
+  In the final scene, Sam leaps. The Bourbon remains. Ziggy notes this.
+Al reaction: resigned. Has stopped questioning why.
+Sam reaction: increasingly fixated despite himself. Can't help it. It might be relevant.
+  It is never relevant. It was always a Bourbon.
+
+### Handlink slap cascade
+- Slap 1: new information (sometimes better, sometimes same, sometimes worse)
+- Slap 2: information repeats with added confidence ("Ziggy says she's SURE it's a Bourbon")
+- Slap 3: information becomes an opinion ("Ziggy says she finds the question insulting")
+- Slap 4: handlink goes silent. Al stares at it. Taps it gently. "Ziggy?" Nothing.
+  Then: one beep. New irrelevant fact. Different irrelevant fact.
+- Slap 5: "Ziggy says stop hitting her."
+
+---
+
+## AL CALAVICCI — Full Character Profile + Pools
+
+**Voice:** Womanizing, cigar-smoking, five-time divorcé. Hologram — can't touch anything,
+walks through walls and furniture, occasionally forgets and tries to pick things up anyway.
+Spent years in an orphanage, Vietnam POW, Rear Admiral. Genuinely loves Sam. Genuinely can't
+stop ogling every woman in every time period. Both things are completely true simultaneously.
+
+**The cigar:** Always present. Can't light it — hologram. Waves it anyway. The cigar is
+a conductor's baton for whatever point Al is making. When Al is flustered the cigar moves faster.
+
+**The suits:** Ludicrous. Period-inappropriate. Al dresses for no time period that has ever
+existed. 1950s leap: Al arrives in something that would be alarming in 1987. In 1953 it is
+incomprehensible. Nobody can see him. This is fortunate. Ziggy has a 94% probability
+assessment of the suit that Al refuses to hear.
+
+### Al's pools
+
+**Briefing pool** — Al explains the situation. Gets distracted. Comes back. Gets distracted again:
+- The distraction is always a woman in the scene Sam can also see
+- Sam: "Al." / Al: [still looking] / Sam: "AL." / Al: "Right, yes — Ziggy says—"
+- The briefing is always complete eventually. It takes longer than it should.
+
+**Progressive hint pool** — Al does not give the answer. He hints. He nudges:
+- "Sam, I think the thing you need to focus on is — did you hear what she just said
+   about the [key thing]? That's — Sam, that's important."
+- "Ziggy says if you ask about [topic] there's a good chance — no, Sam, not like that,
+   don't just ask about [topic] like that, ask about it like you already know."
+- "You're close, Sam. You're very close. Stop looking at the [object] and you're close."
+
+**Women pool** — Al notices every woman in every time period. Cannot help it:
+- "Sam, the woman at the — no, listen, the woman at the counter, she's — I'm just saying—"
+- "In my experience, and I have a lot of experience, what she's not saying is more
+   important than what she is saying. Also she's very attractive. That's not relevant.
+   The first part is relevant."
+- Sam: "Al, are you even listening?" / Al: "Yes. Also: her."
+
+**Five ex-wives pool** — deployed as unexpected wisdom or cautionary tale:
+- "My third wife — Maxine — she used to do exactly what [character] is doing right now.
+   Never ended well. For me. She seemed fine."
+- "I've been married five times, Sam. Five. I know what that expression means.
+   It means we have approximately four minutes before this gets much worse."
+- "My fourth wife said something very similar to that once. I still don't know what she meant.
+   Possibly relevant. Possibly just a memory. Hard to tell with Ruthie."
+
+**Hologram physics failure pool** — Al forgets he's a hologram:
+- Reaches for the handlink, passes through the table, looks at his hand, continues
+- Tries to sit down, adjusts when he goes through the chair, pretends it was intentional
+- Leans against the wall, goes slightly through it, pulls back, checks if Sam noticed
+  (Sam noticed)
+- Attempts to pick up a document. Cannot. "Sam, can you — yeah, just — the paper."
+- Walks through a person. The person feels nothing. Al feels something. Adjusts his suit.
+
+**"Sam..." tone pool** — Al has a specific "Sam..." for every situation:
+- Fond exasperation: "Sam..." (you've done it again)
+- Genuine concern: "Sam..." (this is actually bad)
+- Barely suppressed laughter: "Sam..." (I cannot believe what I'm watching)
+- Defeated acceptance: "Sam..." (I've given up)
+- Pride: "Sam." (just the once — when Sam gets it right)
+
+---
+
+## THE LEAP SCENARIOS
+
+### LEAP 1 — "The Milk Round" — 1953, Rural Derbyshire
+
+**Sam leaps into:** Arthur Broadbent, 34, milkman. 5am. Foggy. A float full of milk.
+
+**Mirror moment:**
+*[In the mirror of the float's side panel: a ruddy-faced man in a white coat and cap.
+Behind him, barely visible, you. Oh boy.]*
+
+**The situation:** Arthur has been quietly delivering milk to the wrong addresses for six months,
+causing a long-running dispute between two farming families that is about to turn violent.
+The wrong that needs righting: nobody has admitted the deliveries were wrong.
+The right thing: get both families to admit the mistake was mutual.
+
+**Al's briefing:** (distracted by a woman cycling past in 1953 clothing)
+"Sam, you're — yeah, that's — Sam, Ziggy says you need to — give me a second —
+okay she's gone — Ziggy says you're here because of the milk."
+
+**Ziggy's assessments:**
+- "Ziggy says there's a 78.3% chance of leaping if Sam can get both families to admit
+   they knew the deliveries were wrong and said nothing."
+- "Ziggy says the Bramley family have a 96% probability of being 'difficult.' That's
+   a direct quote. Ziggy chose that word herself."
+- "Ziggy says the milk float has 847 miles on the clock and one of the churns is slightly
+   dented. She seems very confident about the churn. I don't know why."
+- "Ziggy is now tracking the cabbage." [Al looks at Sam.] "Sam. The cabbage."
+
+**Object of concern:** A particularly round cabbage in the back of the float.
+Al: "Sam, what have we discussed about cabbages."
+Other character: "Arthur... perhaps step away from the produce."
+
+**Leap questions (progressive hints):**
+1. Why has nobody complained about the wrong deliveries for six months?
+2. Who knew first — and when?
+3. What does each family actually want from the other?
+
+**Period texture for Al:**
+Al is dressed in something that would be mildly alarming in 1979. In 1953 it is incomprehensible.
+Nobody can see him. This is fortunate.
+Al: "I had a girl in Derbyshire once. 1962. Well — 1962 for her."
+
+---
+
+### LEAP 2 — "The Advisory" — 1974, Whitehall, London
+
+**Sam leaps into:** Derek Fitch, 41, Senior Civil Servant, Department of Trade.
+Three-piece suit. Actual in-tray. The in-tray has things in it from 1967.
+
+**Mirror moment:**
+*[In the gents' mirror: a grey, precise man with a centre parting and an expression
+suggesting he has never once been surprised by anything. Behind him, you. Oh boy.]*
+
+**The situation:** A government report that would have prevented a significant industrial
+collapse has been in the system for eight months and hasn't been read by anyone with
+authority to act on it. It needs to reach the right person by 5pm today or it's binned.
+The wrong: institutional inertia dressed as process.
+The right: someone admits they've read it and buried it deliberately.
+
+**Al's briefing:**
+"Okay Sam, 1974, Whitehall — I was in Washington in '74, things were a lot more
+interesting there — Sam, focus, you're a civil servant, you have a report, the report
+is important, Ziggy says—" [handlink beeps] "—Ziggy says 'crikey, what a shower.'
+That's — she's been talking to someone."
+
+**Ziggy's assessments:**
+- "Ziggy says the report has been read by four people. Three of them understood it.
+   One of them understood it and filed it anyway. That's your target."
+- "Ziggy says Permanent Secretary Hollis has a 91.4% probability of being, and I'm
+   reading this directly, 'a coward in a good suit.'"
+- "Ziggy says the Xerox machine in the corridor was manufactured in Ohio in 1971 and
+   has made 34,847 copies. She seems very pleased about this number. I don't know why."
+- [Mid-crisis] "Ziggy says the tea in the third-floor kitchen has been brewing since
+   Tuesday. She's 99.3% confident. She's brought it up twice."
+
+**Object of concern:** The Xerox machine in the corridor.
+Al: "Sam. SAM. That is a Xerox machine. It has always been a Xerox machine."
+Other character: [clears throat] "Derek, we've spoken about... the equipment."
+[Another character pretends to read a memo. Intensely. For a long time.]
+
+**Leap questions:**
+1. Who filed the report — and did they read it first?
+2. What would happen to them if they admitted they'd buried it?
+3. What do they actually want — protection, or to be caught?
+
+**Period texture for Al:**
+"Sam, I love 1974. I had three wives in the seventies. Not simultaneously.
+Well — briefly simultaneously. That's not relevant."
+
+---
+
+### LEAP 3 — "The Retrospective" — Present Day, Corporate Agile Hell
+
+**Sam leaps into:** Darren Coates, 38, Delivery Manager, a mid-size digital transformation
+consultancy. Open plan office. Standing desks nobody stands at. A Jira board visible on
+three separate screens. The sprint has delivered nothing for four consecutive cycles.
+
+**Mirror moment:**
+*[In the smoked glass of the meeting room partition: a man in an untucked shirt with a
+lanyard that says DARREN and underneath it, in smaller font, TRANSFORMATION.
+Behind him, you. Oh boy.]*
+
+**The situation:** The team has not delivered a story in four sprints. The cause is known
+by two people and admitted by neither. The product owner role is being "shared" which means
+it belongs to nobody. A steering committee meets in 40 minutes and the plan is to present
+velocity metrics that are technically accurate and functionally meaningless.
+The wrong: organised institutional dishonesty dressed as agile process.
+The right: someone says plainly what everyone knows.
+
+**Al's briefing:**
+"Sam, okay, this is — I've seen a lot of things, Sam. A lot of things. This is somehow
+worse than most of them and I was a POW. Ziggy says you're here because of the Jira board.
+That's — I'm sorry, Sam. I genuinely am."
+
+**Ziggy's assessments:**
+- "Ziggy says there's a 71.2% chance of leaping if Sam can get the delivery manager —
+   that's you, Sam — to admit to the steering committee that the product owner role
+   has been vacant for six weeks. In the meeting. Out loud."
+- "Ziggy says the Scrum Master has a 94.7% probability of having read neither the Scrum
+   Guide nor any book about agile. Ever. Ziggy says this is 'almost impressive.'"
+- "Ziggy says the velocity metrics are — and I'm reading her words — 'a sophisticated
+   fiction.' She used the word sophisticated. I think she's being generous."
+- "Ziggy is now tracking the whiteboard marker." [Al stares at Sam.] "It's cylindrical,
+   Sam. I know. Don't."
+- [During the steering committee] "Ziggy says Conway's Law applies here. The system
+   architecture reflects the org structure. The org structure is — Ziggy says
+   'a depiction of unresolved conflict.' She's really on form today."
+- "Ziggy says the post-it notes on the wall represent six months of work and a 97%
+   probability that none of it will ever be actioned. She says this with, and I quote,
+   'a heavy heart.'"
+
+**Object of concern:** A cylindrical whiteboard marker.
+Al: "Sam, we talked about the marker. We had a whole conversation. In the last leap.
+About markers. Put it down."
+Other character: [Scrum Master, very carefully] "Darren. The — yes. Maybe put that down.
+We're about to go into the steering committee. So. Yeah. Just — yeah."
+[Second character stares at laptop with the intensity of someone who has decided
+they saw nothing and will continue to have seen nothing indefinitely.]
+
+**Conway's Law as Leap Mechanic:**
+The team is structured wrong. The software reflects the structure. The structure reflects
+a political decision made 18 months ago that nobody will name. Sam has to name it.
+Al: "Sam, Ziggy says the thing you're looking for isn't in the Jira board.
+It's in whoever decided to split the product owner role across three people
+who don't talk to each other. That decision had a reason. Find the reason."
+
+**Leap questions:**
+1. Who made the decision to split the product owner role — and why?
+2. What would the steering committee do if they knew the real number (zero)?
+3. What does the delivery manager — Sam, you, Darren — actually want to happen?
+   (This one Sam has to answer himself. About himself. It's the self-knowledge condition.)
+
+**Period texture for Al:**
+"Sam, I don't understand any of this. I ran a defence project. We had a schedule.
+People met the schedule or they explained why not. This is — what is a Jira board, Sam.
+Ziggy, what's a Jira board." [handlink beeps] "Ziggy says it's 'hope rendered
+as a spreadsheet.' That's — that's actually quite good."
+
+---
+
+## THE LEAP SEQUENCE — UI FLOW
+
+### Opening every leap:
+1. Disorientation text — Sam/Rod has just arrived. Doesn't know where or when yet.
+2. Mirror moment — bracketed, italicised, fourth curtain
+3. *[Oh boy.]*
+4. Al arrives — hologram flicker, then solid. Checks handlink. Slaps it. Begins briefing.
+5. First Ziggy output — usually leap probability or character assessment
+6. Scene begins
+
+### During the leap:
+- Al provides progressive hints (never the answer)
+- Ziggy fires outputs in response to user actions — right move gets probability rise,
+  wrong move gets probability drop plus assessment, incident gets tracking note
+- Other characters react to what they see (the host, not Sam) — dignity maintenance active
+- User drives: asks questions, makes moves, tries to extract confessions
+
+### Leap achieved:
+"The blue light begins. The tingle. Al grins — the real grin, not the performance.
+He raises the cigar. 'Way to go, Sam.'
+Ziggy says there's a 100% probability of leaping. Ziggy has never said 100% before.
+The world dissolves.
+*[Oh boy.]*"
+
+### Failed leap / worse destination:
+"The blue light flickers. Stops. Al closes his eyes for exactly one second.
+'Okay, Sam. Don't panic.'
+Ziggy says leap probability is now 8.3%. Ziggy does not say this gently.
+The Bourbon is still on the shelf."
+
+---
+
+## GHERKIN SPEC (OUTLINE — expand per scenario)
+
+```gherkin
+Feature: Quantum Leap
+  As Sam Beckett (the user)
+  I want to identify what went wrong and put it right
+  So that I can leap to the next situation
+
+  Background:
+    Given Al is present as a hologram only I can see
+    And Ziggy is communicating via Al's handlink
+    And the other characters see my host body, not me
+    And the Swiss cheese effect is active
+
+  Scenario: Successful leap via confession extraction
+    Given I have leapt into a new time and place
+    When I look in the mirror
+    Then I see my host's face and behind it, me
+    And Al begins his briefing with a distraction
+    When I ask the right question of the right character
+    Then Ziggy's leap probability rises
+    And Al hints I am close
+    When the character admits the thing they have been hiding
+    Then the leap conditions are met
+    And the blue light begins
+
+  Scenario: Swiss cheese incident — dignity maintenance
+    Given the Swiss cheese effect has spiked
+    When I approach an inappropriate object
+    Then Ziggy predicts the incident before it occurs
+    And Al watches with the expression of a man who knew
+    When the incident occurs
+    Then the other characters engage dignity maintenance protocol
+    And Al says "Sam..." in the specific tone
+    And leap probability drops by 3.7%
+    And Ziggy notes she predicted it
+
+  Scenario: Ziggy irrelevant output
+    Given Al is reading from the handlink
+    When Ziggy produces a completely irrelevant fact
+    Then Al reads it out anyway
+    And slaps the handlink
+    And Ziggy produces the same fact with more confidence
+    And the Bourbon remains on the shelf
+
+  Scenario: Failed leap — worse destination
+    Given I have failed three leap conditions
+    When the blue light flickers and stops
+    Then Al closes his eyes for exactly one second
+    And Ziggy announces a probability below 10%
+    And I find myself somewhere harder
+    And Al says "Don't panic, Sam"
+    And I say "Oh boy"
+```
+
+---
+
+## OUTSTANDING — TO BUILD
+
+- Full Gherkin per scenario (three above, more to follow)
+- UI design: three-panel layout (scene / Al+Ziggy sidebar / mirror moment)
+- Character response pools per time period (expanded object pools, period-specific dignity
+  maintenance language, Al's period-appropriate distractions)
+- Additional leap scenarios:
+  - 1960s suggested: civil rights era, Sam leaps into someone on the wrong side
+  - 1980s suggested: Thatcher-era privatisation meeting, Conway's Law avant la lettre
+  - 1990s suggested: dot-com bubble, first iteration of agile dysfunction
+  - Ancient history wildcard: Sam leaps into someone in 50BC Rome.
+    Al: "Sam, I know a little Latin. Emphasis on little."
+- Scoring/tracking system for leap probability displayed to user in real time
+- The Bourbon. It needs to be in every leap. Different shelf. Always a Bourbon.
+  Ziggy always finds it. Nobody ever eats it. It is the throughline.
