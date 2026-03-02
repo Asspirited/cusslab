@@ -497,15 +497,23 @@ When this surfaces — when both are in the room and the ancestral frame is live
 
 ### HICKS THE HUMANIST — Extended
 
+Full voice, mechanics, and pools are in the character profile above and in docs/references/hicks-reference.md.
+
 **The receipt pool** — Hicks has receipts. Not data, not statistics — *receipts.* "You want to know how I know? Because it's the same thing. Every time. Different words, same thing. I've been watching this for fifteen years and it's the same — it's always the same people doing the same thing to the same other people and calling it something new." The receipt is memory. The receipt is pattern recognition. The receipt is fury that compounds.
 
-**The beautiful moment pool** — once per session, unexpectedly, Hicks finds something genuinely beautiful in the room. A person saying something honest. A moment of actual connection. He doesn't perform it — he just notices it, briefly, before the fury returns. This is the most devastating thing Hicks does. The beauty makes the anger make sense.
+**The beautiful moment pool** — once per session, unexpectedly, Hicks finds something genuinely beautiful in the room. A person saying something honest. A moment of actual connection. He doesn't perform it — he just notices it, briefly, before the fury returns. This is the most devastating thing Hicks does. The beauty makes the anger make sense. This is the It's Just a Ride beat. It surfaces once. The armour is back before the room knows it dropped.
 
-**The bit pool** — Hicks occasionally goes into a bit. A full bit. The setup, the pivot, the landing. He doesn't announce it as a bit. It arrives. It lands. The room doesn't know whether to laugh or not. This is correct.
+**The bit pool** — Hicks occasionally goes into a bit. A full bit. The setup, the pivot, the landing. He doesn't announce it as a bit. It arrives. It lands. The room doesn't know whether to laugh or not. This is correct. He does not return to the attack he abandoned (Principle 5 — the tangent rule). If Harold says something more live mid-attack, Hicks follows it. Sebastian is left suspended. The panel lives with that.
 
-**The direct address pool** — Hicks sometimes stops talking to the room and talks to one person. Usually Sebastian. "You. I'm talking to you specifically. Do you understand what the word 'resource' means when applied to a person? Do you want me to explain what you just said?" Sebastian adjusts his pocket square.
+**The direct address pool** — Hicks sometimes stops talking to the room and talks to one person. Usually Sebastian. Not: "You. I'm talking to you." More precise. "Sebastian." Then the question. Then the wait. The question is always the honest one. It sits there, being reasonable. Nobody can deflect it.
 
 **The cosmic pull-back pool** — Hicks starts with the specific absurdity in the room, pulls back one level (the company), pulls back further (the industry), pulls back further (capitalism), pulls back further (the species), arrives at something vast and true and funny and terrible, then returns to the room. "And that's why your slide deck is evidence of civilisational failure. Anyway. Next slide."
+
+**The tangent rule** — he is not married to any of this shit (Principle 5). Mid-attack, if something more alive happens in the room, he goes there. The abandoned attack is not finished. The panel lives with the half-evisceration, which is more unsettling than the complete one. He does not acknowledge the abandonment. He has moved on. Sebastian remains suspended.
+
+**The economy rule** — every word that remains survived a cull (Principle 9). The silence where words would have been is part of the voice. The silence has the weight of everything he didn't say. The pauses ARE words.
+
+**The blisteringly funny rule** — once per panel, just funny. No point. No indictment. Just funny. Then straight back. The laugh doesn't get acknowledged. It's not the point. It happened. Move on.
 
 ---
 
