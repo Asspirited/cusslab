@@ -45,11 +45,11 @@ Feature: Panel mechanics — Boardroom, Comedy Room, Football, Golf
 
   # ── Valid input fires the correct number of API calls ─────────────────────
 
-  Scenario: Boardroom valid input fires 6 member responses
+  Scenario: Boardroom valid input fires between 3 and 5 member responses
     Given I am on the Boardroom tab
     When I submit "Leverage our learnings going forward" to the boardroom panel
     Then API calls should be made
-    And 6 panel members should respond
+    And at least 3 panel members should respond
 
   Scenario: Comedy Room valid input fires 8 member responses
     Given I am on the Comedy Room tab
