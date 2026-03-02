@@ -1,50 +1,62 @@
-// Cloudflare Worker — proxies requests to Anthropic API
+// Cloudflare Worker — proxies requests to OpenAI API
 // Deploy: wrangler deploy
-// Set secret: wrangler secret put ANTHROPIC_API_KEY
-
+// Set secret: wrangler secret put OPENAI_API_KEY
 export default {
   async fetch(request, env) {
-
     // CORS preflight
     if (request.method === 'OPTIONS') {
       return new Response(null, {
         headers: {
           'Access-Control-Allow-Origin': '*',
           'Access-Control-Allow-Methods': 'POST, OPTIONS',
-          'Access-Control-Allow-Headers': 'Content-Type, x-api-key, anthropic-version',
+          'Access-Control-Allow-Headers': 'Content-Type',
         },
       });
     }
-
     if (request.method !== 'POST') {
       return new Response('Method not allowed', { status: 405 });
     }
-
-    // Use caller's own key if provided, else fall back to shared env key
-    const apiKey = request.headers.get('x-api-key') || env.ANTHROPIC_API_KEY;
-
+    const apiKey = env.OPENAI_API_KEY;
     if (!apiKey) {
       return new Response(JSON.stringify({ error: 'No API key configured on server' }), {
         status: 500,
         headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
       });
     }
-
-    const body = await request.text();
-
-    const upstream = await fetch('https://api.anthropic.com/v1/messages', {
+    // Translate Anthropic request format to OpenAI format
+    const anthropicBody = await request.json();
+    const openaiBody = {
+      model: 'gpt-4o',
+      max_tokens: anthropicBody.max_tokens || 1000,
+      messages: anthropicBody.messages,
+      ...(anthropicBody.system && {
+        messages: [
+          { role: 'system', content: anthropicBody.system },
+          ...anthropicBody.messages,
+        ],
+      }),
+    };
+    const upstream = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'x-api-key': apiKey,
-        'anthropic-version': request.headers.get('anthropic-version') || '2023-06-01',
+        'Authorization': `Bearer ${apiKey}`,
       },
-      body,
+      body: JSON.stringify(openaiBody),
     });
-
-    const data = await upstream.text();
-
-    return new Response(data, {
+    const data = await upstream.json();
+    // Translate OpenAI response format back to Anthropic format
+    const translated = {
+      content: [
+        {
+          type: 'text',
+          text: data.choices?.[0]?.message?.content || '',
+        },
+      ],
+      model: data.model,
+      usage: data.usage,
+    };
+    return new Response(JSON.stringify(translated), {
       status: upstream.status,
       headers: {
         'Content-Type': 'application/json',
