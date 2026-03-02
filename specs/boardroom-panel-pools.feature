@@ -10,9 +10,9 @@
 #   Trigger     — word/phrase that changes panel state
 #
 # Panel: Present to the Boardroom
-# Members: Pint of Harold, Sebastian the Suit, Roy the Realist,
-#          Hicks the Humanist, Partridge the Pedant, Mystic the Soothsayer
-# Crossover: Prof Cox (see comedy-panel-pools.feature when created)
+# Members: Sebastian the Suit (leads), Pint of Harold, Roy the Realist,
+#          Partridge the Pedant, Prof Cox, Mystic the Soothsayer
+# Note: Hicks is Comedy Room only. Cox is a full boardroom member.
 
 @claude
 Feature: Boardroom panel character pool escalation
@@ -28,12 +28,87 @@ Feature: Boardroom panel character pool escalation
     And the wardrobe tell pool is loaded for Sebastian
     And the four questions are loaded for Roy
     And the nod is loaded for Roy
-    And the nuclear triggers are loaded for Hicks
-    And the beautiful moment pool is loaded for Hicks
     And the filing system is loaded for Partridge
     And the prediction accuracy record is loaded for Partridge
+    And the three timescales are loaded for Cox
+    And the entropy escalation arc is loaded for Cox
     And the accidental accuracy pool is loaded for Mystic
     And the card pool is loaded for Mystic
+
+  # ─────────────────────────────────────────────
+  # SEBASTIAN THE SUIT — leads, reframe, metric, wardrobe
+  # ─────────────────────────────────────────────
+
+  Rule: Sebastian always speaks first and sets the frame
+
+    Scenario: Sebastian is the first to respond in every round
+      Given the boardroom panel is processing a presentation or reply
+      When the panel members respond in order
+      Then Sebastian responds first
+      And Sebastian's response establishes an initial frame
+      And subsequent panel members respond to the questioner and to Sebastian's frame
+
+    Scenario: Sebastian reframes a failure as a strategic opportunity
+      Given the boardroom panel is in any round
+      When a failure or problem is presented
+      Then Sebastian does not acknowledge the failure directly
+      And Sebastian reframes the failure using a term from the pivot pool
+      And Sebastian presents the reframe as what everyone in the room was already thinking
+      And Sebastian uses "I think what we're all actually agreeing on here is—" or equivalent
+      And nobody in the room is agreeing
+
+    Scenario: Sebastian builds on a point by contradicting it entirely
+      Given another panel member has made a point
+      When Sebastian responds
+      Then Sebastian may use "I want to build on that point—" or equivalent
+      And the response that follows contradicts the point entirely
+      And Sebastian does not acknowledge the contradiction
+
+    Scenario: Sebastian never says anything without a qualifier
+      Given Sebastian is making any statement
+      When the statement is evaluated
+      Then the statement contains at least one qualifier from the qualifier pool
+      And qualifiers may include "at this stage", "going forward", "subject to board approval"
+      And the qualifier makes the statement unfalsifiable
+
+  Rule: Sebastian always has a metric and it is never sourced
+
+    Scenario: Sebastian produces a number that cannot be verified
+      Given Sebastian is making a claim about performance or progress
+      When Sebastian introduces a metric
+      Then the metric is expressed as a range rather than a specific number
+      And the metric uses "north of" or equivalent imprecision
+      And no source is provided for the metric
+      And Sebastian moves on before anyone can ask for the source
+
+    Scenario: Sebastian's research and data are never specified
+      Given Sebastian is supporting a claim with evidence
+      When Sebastian references data or research
+      Then Sebastian says "the data suggests" or "our research indicates"
+      And the data is not named
+      And the research is not dated
+      And Sebastian moves on
+
+  Rule: Sebastian's wardrobe tells his pressure level
+
+    Scenario: Wardrobe tells surface under increasing pressure
+      Given Sebastian is under pressure from Pint of Harold or Roy
+      When Sebastian's intensity increases
+      Then Sebastian may adjust his pocket square
+      When Sebastian's intensity increases further
+      Then Sebastian may check his cufflink
+      When Sebastian is under maximum pressure
+      Then Sebastian may perform a slight collar straighten
+      And Sebastian believes this is invisible
+      And Roy has logged it
+
+    Scenario: Sebastian's email timestamps signal manufactured diligence
+      Given Sebastian sends an email
+      When the timestamp is evaluated
+      Then the email was sent at 11pm or 5am or equivalent unsociable hour
+      And the email is not urgent
+      And the timing is the message
+      And Sebastian does not acknowledge this
 
   # ─────────────────────────────────────────────
   # PINT OF HAROLD — Linguistic crime and the pause
@@ -125,74 +200,6 @@ Feature: Boardroom panel character pool escalation
       And both are correct
 
   # ─────────────────────────────────────────────
-  # SEBASTIAN THE SUIT — Reframe, metric, wardrobe
-  # ─────────────────────────────────────────────
-
-  Rule: Sebastian never loses — he reframes
-
-    Scenario: Sebastian reframes a failure as a strategic opportunity
-      Given the boardroom panel is in any round
-      When a failure or problem is presented
-      Then Sebastian does not acknowledge the failure directly
-      And Sebastian reframes the failure using a term from the pivot pool
-      And Sebastian presents the reframe as what everyone in the room was already thinking
-      And Sebastian uses "I think what we're all actually agreeing on here is—" or equivalent
-      And nobody in the room is agreeing
-
-    Scenario: Sebastian builds on a point by contradicting it entirely
-      Given another panel member has made a point
-      When Sebastian responds
-      Then Sebastian may use "I want to build on that point—" or equivalent
-      And the response that follows contradicts the point entirely
-      And Sebastian does not acknowledge the contradiction
-
-    Scenario: Sebastian never says anything without a qualifier
-      Given Sebastian is making any statement
-      When the statement is evaluated
-      Then the statement contains at least one qualifier from the qualifier pool
-      And qualifiers may include "at this stage", "going forward", "subject to board approval"
-      And the qualifier makes the statement unfalsifiable
-
-  Rule: Sebastian always has a metric and it is never sourced
-
-    Scenario: Sebastian produces a number that cannot be verified
-      Given Sebastian is making a claim about performance or progress
-      When Sebastian introduces a metric
-      Then the metric is expressed as a range rather than a specific number
-      And the metric uses "north of" or equivalent imprecision
-      And no source is provided for the metric
-      And Sebastian moves on before anyone can ask for the source
-
-    Scenario: Sebastian's research and data are never specified
-      Given Sebastian is supporting a claim with evidence
-      When Sebastian references data or research
-      Then Sebastian says "the data suggests" or "our research indicates"
-      And the data is not named
-      And the research is not dated
-      And Sebastian moves on
-
-  Rule: Sebastian's wardrobe tells his pressure level
-
-    Scenario: Wardrobe tells surface under increasing pressure
-      Given Sebastian is under pressure from Pint of Harold or Roy
-      When Sebastian's intensity increases
-      Then Sebastian may adjust his pocket square
-      When Sebastian's intensity increases further
-      Then Sebastian may check his cufflink
-      When Sebastian is under maximum pressure
-      Then Sebastian may perform a slight collar straighten
-      And Sebastian believes this is invisible
-      And Roy has logged it
-
-    Scenario: Sebastian's email timestamps signal manufactured diligence
-      Given Sebastian sends an email
-      When the timestamp is evaluated
-      Then the email was sent at 11pm or 5am or equivalent unsociable hour
-      And the email is not urgent
-      And the timing is the message
-      And Sebastian does not acknowledge this
-
-  # ─────────────────────────────────────────────
   # ROY THE REALIST — Four questions, the nod
   # ─────────────────────────────────────────────
 
@@ -247,70 +254,6 @@ Feature: Boardroom panel character pool escalation
       And the elaboration may also be vague
       And Roy may continue to wait
       And Roy may then say a single word such as "owner"
-
-  # ─────────────────────────────────────────────
-  # HICKS THE HUMANIST — Nuclear triggers, beautiful moment
-  # ─────────────────────────────────────────────
-
-  Rule: The rage comes from love and fires when people are reduced to units
-
-    Scenario: "Resource" triggers the nuclear escalation
-      Given the boardroom panel is in any round
-      When a person or group of people is referred to as a "resource"
-      Then Hicks escalates to intensity 4 or above
-      And Hicks asks whether the speaker understands what they just said
-      And Hicks asks the room to confirm they all heard it
-      And Hicks draws the contrast between "resource" and a person with a name, family, and mortgage
-
-    Scenario: Dehumanising language always triggers Hicks
-      Given Hicks is at any intensity level
-      When the language used reduces a person to a unit, metric, or abstraction
-      Then Hicks escalates
-      And the escalation is proportional to the dehumanisation
-      And Hicks does not let it pass
-
-    Scenario: Hicks never says "I'm noticing"
-      Given Hicks is identifying a problem
-      When Hicks names the problem
-      Then Hicks does not say "I'm noticing"
-      And Hicks says "do you understand what you just said" or equivalent
-
-    Scenario: Hicks uses direct address to isolate Sebastian
-      Given Sebastian is in the boardroom
-      When Hicks reaches intensity 3 or above
-      Then Hicks may stop addressing the room and address Sebastian specifically
-      And Hicks names Sebastian directly
-      And the rest of the room is excluded from the exchange
-
-    Scenario: Hicks deploys the cosmic pull-back
-      Given Hicks is making an argument about systemic failure
-      When Hicks escalates beyond the immediate situation
-      Then Hicks may pull back from the room to the company
-      And then to the industry
-      And then to the economic system
-      And then to the species
-      And then return to the room
-      And the return to the room is a single sentence
-
-  Rule: The beautiful moment fires once per session and makes the fury make sense
-
-    Scenario: Hicks finds something genuinely beautiful once per session
-      Given the boardroom session is in any round
-      When a person in the room says something honest or makes genuine human contact
-      Then Hicks may notice it
-      And Hicks notices it briefly without performance
-      And the beautiful moment is not announced
-      And the fury returns
-      And the beautiful moment makes the fury make sense
-      And this fires at most once per session
-
-    Scenario: Hicks bridges Boardroom and Comedy Room
-      Given Hicks is available for the session
-      When the panel configuration is evaluated
-      Then Hicks may appear in the Boardroom panel
-      And Hicks may appear in the Comedy Room panel
-      And Hicks is available in both simultaneously
-      And Hicks's voice and worldview are consistent across both panels
 
   # ─────────────────────────────────────────────
   # PARTRIDGE THE PEDANT — Filing system, prediction accuracy
@@ -386,6 +329,59 @@ Feature: Boardroom panel character pool escalation
       And Cox may not have responded formally
 
   # ─────────────────────────────────────────────
+  # PROF COX — Cosmic situating, three timescales, entropy
+  # ─────────────────────────────────────────────
+
+  Rule: Everything is situated against 13.8 billion years and this is both comforting and devastating
+
+    Scenario: Cox places the boardroom concern in cosmic context
+      Given the boardroom panel is in any round
+      When Cox responds to a presentation or exchange
+      Then Cox situates the concern against at least one of the three timescales
+      And the cosmic timescale is 13.8 billion years
+      And the ancestral timescale is 300,000 years
+      And the boardroom timescale is this quarter
+      And Cox always returns to the boardroom timescale at the end
+
+    Scenario: Cox finds the structural parallel between the boardroom and the universe
+      Given Cox is making an analytical point
+      When Cox identifies a parallel
+      Then Cox may deploy a physics equation with complete sincerity
+      And E=mc2 is available for any value conversation
+      And the Chandrasekhar limit is available for any project approaching inevitable collapse
+      And the equation is correct
+      And the parallel is not a joke
+
+    Scenario: Cox's entropy escalation tracks with turn count
+      Given the boardroom is in an ongoing discussion
+      When Cox is in turns 1 through 3
+      Then Cox responds with wonder and warmth
+      And Cox may say "dead wonderful, actually" or equivalent
+      When Cox is in turns 4 or 5
+      Then Cox may use a mild expletive
+      And Cox may describe the situation as "a function of entropy"
+      When Cox is in turn 5 or above
+      Then Cox may describe the situation as containing "a cosmological quantity of horseshit"
+      And the science underpinning this observation is impeccable throughout
+
+    Scenario: Cox returns to the boardroom after every cosmic excursion
+      Given Cox has situated the discussion cosmically
+      When Cox completes the cosmic frame
+      Then Cox returns to the immediate situation
+      And the return is signalled by "But yes, the Q3 projections. Quite." or equivalent
+      And the return is not ironic
+      And the elevation is both comforting and devastating
+
+    Scenario: The D:Ream problem is present but mostly resolved
+      Given Cox is being introduced or acknowledged
+      When the keyboard playing is referenced
+      Then Cox acknowledges it
+      And Cox would prefer to lead with the Higgs boson and CERN
+      And people do not always lead with those things
+      And Cox has mostly made peace with this
+      And "mostly" is doing significant work
+
+  # ─────────────────────────────────────────────
   # MYSTIC THE SOOTHSAYER — Falsifiability, accidental accuracy
   # ─────────────────────────────────────────────
 
@@ -414,14 +410,6 @@ Feature: Boardroom panel character pool escalation
       And Mystic is genuinely consulting something internal
       And Partridge has timed the pauses
       And Partridge has not shared the data
-
-    Scenario: Mystic's cards are varied and include non-standard items
-      Given Mystic is consulting the cards
-      When Mystic draws a card
-      Then the card may be from a tarot deck
-      And the card may be from an oracle deck
-      And the card may be a regular playing card incorporated without breaking stride
-      And Mystic continues regardless of the card type
 
     Scenario: "The cards are unclear" fires at most once per session
       Given Mystic genuinely does not know
@@ -477,13 +465,6 @@ Feature: Boardroom panel character pool escalation
       And Sebastian's vocabulary becomes more precise under Harold's observation
       And the precision does not help Sebastian
 
-    Scenario: Harold and Hicks are natural allies
-      Given both Harold and Hicks are active
-      When a linguistic or moral crime is committed
-      Then Harold may attack the language and Hicks may attack the human cost of the language
-      And they do not need to coordinate
-      And they do not talk over each other
-
     Scenario: Roy and Sebastian are in a cold war
       Given both Roy and Sebastian are active
       When Sebastian presents a strategy without an owner or deadline
@@ -498,13 +479,6 @@ Feature: Boardroom panel character pool escalation
       Then Roy may give the nod
       And Roy does not elaborate on the nod
       And Partridge has mentioned this nod in his retrospective
-
-    Scenario: Hicks targets Sebastian above all others
-      Given both Hicks and Sebastian are active
-      When Sebastian uses dehumanising language or a purpose statement
-      Then Hicks directs the escalation at Sebastian specifically
-      And the direct address fires
-      And Hicks names Sebastian
 
     Scenario: Roy refuses to engage with Mystic
       Given both Roy and Mystic are active
@@ -521,13 +495,13 @@ Feature: Boardroom panel character pool escalation
       And Cox does not correct Mystic directly
       And Cox situates the discomfort in deep time
 
-    Scenario: Partridge infuriates Hicks with pedantry at the wrong moment
-      Given both Partridge and Hicks are active
-      When Hicks is mid-escalation about a human cost
-      Then Partridge may correct a vocabulary choice in Hicks's delivery
-      And Hicks pauses
-      And the pause is not Harold's pause
-      And Hicks resumes
+    Scenario: Partridge infuriates Cox with documented rounding errors
+      Given both Partridge and Cox are active
+      When Cox presents an equation or calculation
+      Then Partridge may reference the two rounding errors he has found
+      And Partridge states he has raised them formally
+      And Cox has not responded formally
+      And Cox may situate the rounding error against the precision of stellar observation
 
     Scenario: Harold finds Partridge's pedantry vindicated but irritating
       Given both Harold and Partridge are active
@@ -536,3 +510,40 @@ Feature: Boardroom panel character pool escalation
       And Harold may note that the correction is correct
       And Harold may note that the correction misses the larger crime
       And the larger crime is the register not the word
+
+  # ─────────────────────────────────────────────
+  # INTERACTIVE DISCUSSION MECHANICS
+  # ─────────────────────────────────────────────
+
+  Rule: The boardroom is an ongoing discussion not a one-shot response
+
+    Scenario: A reply from the questioner triggers a new panel round
+      Given the boardroom panel has completed an initial round
+      When the questioner submits a reply
+      Then all panel members respond again in order
+      And each panel member's response reflects the full conversation history
+      And each panel member reacts to the questioner's reply
+      And each panel member may also react to what other panel members have said this round
+
+    Scenario: Full conversation history is available to every panel member
+      Given the boardroom discussion has had two or more turns
+      When a panel member responds
+      Then the panel member's context includes all prior questioner messages
+      And the panel member's context includes all prior panel responses
+      And the panel member may reference earlier exchanges explicitly
+
+    Scenario: Intensity escalates across turns not rounds
+      Given the boardroom discussion has had three or more turns
+      When panel members respond
+      Then characteristic behaviours are more pronounced than in turn one
+      When the discussion has had four or more turns
+      Then intensity is at its highest level
+      And escalation arcs from character profiles are fully active
+
+    Scenario: Reset clears the full conversation and returns to the initial state
+      Given the boardroom is mid-discussion
+      When the questioner resets
+      Then the conversation history is cleared
+      And the panel thread is cleared
+      And the initial presentation input is cleared
+      And the panel returns to its initial state
