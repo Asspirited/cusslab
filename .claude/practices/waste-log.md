@@ -263,6 +263,32 @@
 
 ---
 
+### WL-019
+**Item:** Faldo chuckle spec incorrectly described as scheduled trigger
+**Symptom:** Chuckle mechanic written as firing on any panel banter — should only fire on genuine surprise, specific topics (food), or reliable named triggers (Guinness World Record entry)
+**Suspected cause:** Over-specification in claude.ai session, not validated against character truth before writing
+**Session:** 2026-03-03
+**Time lost:** 1 exchange
+**Cost impact:** Low — caught before implementation
+**Delay:** None — corrected in same session
+**Tags:** `#character-loss` `#false-progress`
+**Status:** closed — corrected in COMMIT 6 spec
+
+---
+
+### WL-020
+**Item:** Roe/Radar wound 3 contained invented detail ("blank him tomorrow")
+**Symptom:** Character wound included exaggerated user paraphrase as if it were documented fact
+**Suspected cause:** Claude did not flag uncertainty about source material, accepted user framing uncritically
+**Session:** 2026-03-03
+**Time lost:** 1 exchange
+**Cost impact:** Low — caught before implementation
+**Delay:** None — corrected same session
+**Tags:** `#character-loss` `#confabulation`
+**Status:** closed — corrected before COMMIT 4 paste
+
+---
+
 ## Session-End Commit Rule
 
 Claude Code MUST add a waste-log entry before every session closes, including on disconnect, covering:
