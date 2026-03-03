@@ -172,6 +172,19 @@
 
 ---
 
+### WL-012
+**Item:** No user metrics instrumentation from day one
+**Symptom:** Cannot answer basic questions — how many users, which features used, is quality improving, what do users think
+**Suspected cause:** Product built feature-first with no measurement layer. AARRR framework was discussed early (session ~2026-02-25) but never implemented beyond concept.
+**Session:** Identified ~2026-03-03
+**Time lost:** Unknown — every session since launch has been flying blind on user behaviour
+**Cost impact:** High — product decisions made without data; no way to prioritise features by actual usage
+**Delay:** Metrics layer implementation now queued; estimated 1-2 sessions to implement properly
+**Tags:** `#knowledge-loss` `#false-progress` `#save-rod-money`
+**Status:** open — Gherkin spec in progress this session
+
+---
+
 ### WL-011
 **Item:** Conversational insights routinely not committed to repo at session end
 **Symptom:** Recurring pattern: insight flagged "worth a conversation later" → lost in summarisation → has to be reconstructed or is gone permanently
