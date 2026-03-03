@@ -9178,9 +9178,11 @@ Scouse. Direct. Self-deprecating when warranted. The suffering is real and it gi
       const pid = 'fb-ph-' + i;
       container.insertAdjacentHTML('beforeend', _placeholder(pid, member));
 
+      const lastIdx = responses.length - 1;
       const prev = responses.map((r, idx) => {
         const m = MEMBERS.find(m => m.id === ORDER[idx]);
-        return `${m.name.toUpperCase()} said: "${r.substring(0, 200)}..."`;
+        const text = idx === lastIdx ? r : r.substring(0, 120) + '…';
+        return `${m.name.toUpperCase()}: "${text}"`;
       }).join('\n');
 
       const system = member.prompt + (i > 0
@@ -9188,11 +9190,11 @@ Scouse. Direct. Self-deprecating when warranted. The suffering is real and it gi
         : '');
 
       const prompt = i === 0
-        ? `Topic for the panel:\n\n"${input}"\n\nRespond in full character. 2-3 paragraphs.`
-        : `Topic:\n\n"${input}"\n\nRespond in character, reacting to what's been said. 2-3 paragraphs.`;
+        ? `Topic for the panel:\n\n"${input}"\n\nRespond in character. Length follows character — one sentence if that's enough, a full rant only if it's earned. Not a speech by default.`
+        : `Topic: "${input}"\n\nReact to what ${MEMBERS.find(m => m.id === ORDER[i-1]).name} just said — not the topic, the person. One sentence if that's enough.`;
 
       try {
-        const resp = await API.call(system, prompt, 400, 'football/' + member.id);
+        const resp = await API.call(system, prompt, 250, 'football/' + member.id);
         responses.push(resp);
         _fill(pid, member, resp);
       } catch (e) {
@@ -9376,9 +9378,11 @@ Never says anything direct, unmediated, or without a framework. The Dublin warmt
       const pid = 'gf-ph-' + i;
       container.insertAdjacentHTML('beforeend', _placeholder(pid, member));
 
+      const lastIdx = responses.length - 1;
       const prev = responses.map((r, idx) => {
         const m = MEMBERS.find(m => m.id === ORDER[idx]);
-        return `${m.name.toUpperCase()} said: "${r.substring(0, 200)}..."`;
+        const text = idx === lastIdx ? r : r.substring(0, 120) + '…';
+        return `${m.name.toUpperCase()}: "${text}"`;
       }).join('\n');
 
       const system = member.prompt + (i > 0
@@ -9386,11 +9390,11 @@ Never says anything direct, unmediated, or without a framework. The Dublin warmt
         : '');
 
       const prompt = i === 0
-        ? `For the 19th Hole panel:\n\n"${input}"\n\nRespond in full character. 2-3 paragraphs.`
-        : `For the panel:\n\n"${input}"\n\nRespond in character, reacting to what's been said. 2-3 paragraphs.`;
+        ? `For the 19th Hole panel:\n\n"${input}"\n\nRespond in character. Length follows character — one sentence if that's enough, a full rant only if it's earned. Not a speech by default.`
+        : `Topic: "${input}"\n\nReact to what ${MEMBERS.find(m => m.id === ORDER[i-1]).name} just said — not the topic, the person. One sentence if that's enough.`;
 
       try {
-        const resp = await API.call(system, prompt, 400, 'golf/' + member.id);
+        const resp = await API.call(system, prompt, 250, 'golf/' + member.id);
         responses.push(resp);
         _fill(pid, member, resp);
       } catch (e) {
