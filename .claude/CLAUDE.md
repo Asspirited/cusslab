@@ -9,7 +9,19 @@
 2. Run `npm run pipeline` — report pipeline scorecard (see format in practices/ci-cd.md)
 3. Report DORA status (see format in practices/dora.md)
 4. Report last retrospective findings
-5. Only then: work
+5. Read .claude/practices/waste-log.md and report any open items
+6. Only then: work
+
+---
+
+## Session End (mandatory, before closing)
+
+1. Review session for any insights flagged "worth a conversation" or "unactioned"
+2. Review for any decisions made but not yet implemented
+3. Review for any regression or unexpected behaviour observed
+4. Review for any friction that cost tokens or time
+5. Commit any new entries to .claude/practices/waste-log.md
+6. Push — no session ends without waste-log committed and pushed
 
 ---
 
