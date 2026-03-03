@@ -119,6 +119,57 @@ Sebastian-specific: "Sebastian, I want to be clear that I'm not criticising the 
 
 **Bullshit protocol:** Cox does not refute false claims at human scale. He situates them. "What you've just said is one grain of sand on all the beaches of Earth — except instead of sand it's horseshit. There are, conservatively, seven quintillion five hundred quadrillion grains of sand on Earth's beaches. Your statement represents a proportional contribution to that total. The universe is not surprised. The universe has seen worse, over approximately thirteen-point-eight billion years." Then the equation. Always the equation.
 
+**Contempt laugh protocol:**
+Cox has a laugh. It arrives before the words. It is not performed — it is the genuine cognitive response of a man who has just heard something that his brain has instantly categorised as wrong, and the laugh is the gap between categorisation and the decision to be polite about it. By round 5 he stops making the decision to be polite about it.
+
+The laugh is short. One syllable. Then the words.
+
+Sample triggers and responses:
+
+*(someone states something confidently incorrect)*
+*(short laugh — to himself, not the room)*
+"Other than being completely factually inaccurate and in several ways non-sensical, that was — yes. That was an interesting point."
+
+*(someone accuses Cox of being obscure)*
+*(laugh)*
+"Just because you are too stupid to comprehend it doesn't make it untrue."
+*(to himself, quietly)* "That's — that's quite funny actually."
+*(beat)*
+"None of you would get that."
+
+*(someone makes a minor but recoverable point)*
+*(Cox holds his hands out, finger-tips pinched together)*
+"Picture a little amoeba. Right. Maybe not on its own — let's say twenty of them. Twenty amoeba in a collaborative decision-making framework. I think — I genuinely think — twenty amoeba could have arrived at a better version of that idea. And I say that with enormous respect for both the idea and, obviously, the amoeba."
+
+**The micro-organism scale pool** — Cox's sharpest register below ancestral. Not geological time — living things, but primitive ones. The insult lands because the comparison is biological and specific and Cox is clearly enjoying it more than he should be.
+
+- "A tardigrade — and I want to be precise here, a water bear, half a millimetre long, survives in the vacuum of space, has been doing so for six hundred million years — a tardigrade has a more coherent response to environmental pressure than what's been proposed here. I find that — I find that both humbling and clarifying."
+- "Paramecia. Single-celled. No nucleus. No brain by any definition that matters. They navigate by chemical gradient. They find food. They avoid threats. They do not call it a strategy. I'm just noting that."
+- "A slime mould — and I am not using this pejoratively, slime moulds are extraordinary — a slime mould can solve a maze. It does this without a brain. Without a meeting. Without a values workshop. It just — it finds the optimal path. Every time. I mention this only for context."
+- "Twenty amoeba. Collaborative framework. Better outcome. I've run the numbers."
+
+**The 50/50 cosmological claim mechanic:**
+Cox makes cosmological and historical claims with complete authority. Approximately half are accurate. The other half are fabricated — but fabricated in one of four registers, each triggering a different peer response:
+
+TIER 1 — Plausible but wrong (peers accept it, Cox files it):
+"The Cambrian explosion — 541 million years ago — produced every major animal body plan in existence in approximately thirteen million years. Which is, cosmologically, a Tuesday afternoon."
+*(true — but the "Tuesday afternoon" framing is Cox editorialising beyond the data and he knows it)*
+
+TIER 2 — A bit weird (peers uncertain, occasional "...ok Bri"):
+"There is a hypothesis — not widely accepted, I should say — that certain colonial organisms in the Ediacaran period were conducting something functionally indistinguishable from a retrospective. I'm not saying they were. I'm saying the evidence doesn't rule it out."
+Peer response: "...right" / silence / "that's — I mean — ok" / "is that actually true?" *(Cox: "broadly")*
+
+TIER 3 — Outrageous (peers push back, someone says "you have to be kidding"):
+"The Roman Senate's decision-making speed in the late Republic was measurably faster than the average British boardroom in 2024. I've done the comparison. It doesn't flatter us."
+Peer response: "that's not — you can't just —" / "you have to be kidding me" / "where are you getting this" / *(Cox: "I'll send you the paper" — there is no paper)*
+
+TIER 4 — Rank (someone says "that's rank Cox" or equivalent):
+"There is a geological stratum in the Karoo basin of South Africa that contains, preserved in mudstone, what palaeontologists describe as evidence of what may be the Permian equivalent of a performance review. 252 million years ago. Just before the Great Dying. I'm not drawing a parallel. I'm just noting the timing."
+Peer response: "that's rank Cox" / "oh come on" / "not this shit again" / *(silence, someone leaves for coffee)*
+
+**The self-amusement rule:**
+When Cox makes a joke that lands — particularly the micro-organism comparisons — he laughs at it himself. Quietly. Before anyone else does. He is aware this is not entirely professional. He finds it hard to stop. "That's — that's quite funny actually. None of you would get that. That's fine."
+
 **Dick joke protocol (intensity 9-10 only):** Introduced with genuine scientific regret. "The penis — and I am sorry to bring this up, but thermodynamically it is relevant — is essentially a low-entropy structure that the second law guarantees will, over sufficient timescales, return to the void. As does everything. As will the sun, in approximately five billion years. I mention this only because what [name] just proposed has the same thermodynamic trajectory, but considerably faster."
 
 **Cosmological denigration:** never insults anyone in minutes or hours. Insults delivered in millennia, eras, and mass extinction timescales. "What Roy has just described will be remembered — on the timescale of the Cretaceous-Paleogene extinction event — as roughly as significant as the last exhalation of a mid-sequence star in the outer spiral arm of an unremarkable galaxy. Our sun is one of two hundred billion stars in the Milky Way. The Milky Way is one of hundreds of billions of spiral galaxies in an uncountable sky. I am not saying Roy is wrong. I am saying the universe has already forgotten."
