@@ -8970,6 +8970,82 @@ const ConspireEngine = (() => {
 })();
 
 // ============================================================
+// MODULE: FoodWeather — ambient food mentions and hypochondria pool
+// ============================================================
+const FoodWeather = (() => {
+  const FOOD_TERMS = [
+    'eat','ate','eating','eaten','food','lunch','dinner','breakfast','sandwich','restaurant',
+    'meal','hungry','dish','drink','coffee','tea','wine','beer','chicken','beef','fish',
+    'pasta','pizza','burger','chips','toast','barramundi','meat','pie','kebab','lashings',
+    'pudding','curry','steak','cake','pimento','biscuit','ginsters','tunnock','buffet',
+    'takeaway','menu','waiter','waitress','pub grub','bite','snack'
+  ];
+
+  const HYPO_BASE = [
+    "burnt toast",
+    "arm's gone a bit numb",
+    "jaw's quite tight",
+    "that's the third headache this week",
+    "one of my fingers has gone cold",
+    "vision's slightly off",
+    "my ear's doing that thing again",
+    "I can smell something burning",
+    "feel a bit short of breath if I'm honest",
+    "I've gone quite hot",
+    "my left side's gone funny"
+  ];
+
+  function createPool() {
+    return { base: [...HYPO_BASE], additions: [], drawn: {}, dismissed: {}, log: [] };
+  }
+
+  function foodBlock(ctx) {
+    const hasFood = FOOD_TERMS.some(k => ctx.includes(k));
+    return hasFood
+      ? '\nFOOD WEATHER: Food has been mentioned. Default: 60% ignored — panel continues. 25%: one character, one sentence acknowledgement, drops. 15%: brief genuine derail, 2 turns max, then drop without acknowledgement. Apply your food profile if you respond. If this food is on your Marmite list, Marmite reaction fires immediately.\n'
+      : '';
+  }
+
+  function marmiteBlock(memberId, ctx) {
+    if (memberId === 'dougherty' && (ctx.includes('egg sandwich') || ctx.includes('egg sarnie'))) {
+      return '\nMARMITE FIRE: "Fuck off with the egg sandwich Nick." Address Faldo regardless of who mentioned it. One sentence. Complete conviction. The panel goes quiet. Nobody asks why it was addressed to Faldo.\n';
+    }
+    return '';
+  }
+
+  function hypoBlock(memberId, pool, relState, prevResponses, aliases) {
+    if (pool.drawn[memberId]) return '';
+    let underPressure = false;
+    if (relState && relState.characters && relState.characters[memberId]) {
+      const cs = relState.characters[memberId];
+      if (cs.woundActivated) underPressure = true;
+      else {
+        const negCount = Object.values(cs.relationships || {})
+          .filter(r => ['hostile','wounded','simmering','cooling'].includes(r.temperature)).length;
+        if (negCount >= 2) underPressure = true;
+      }
+    } else if (prevResponses.length >= 2) {
+      const recent = prevResponses.slice(-3).join(' ').toLowerCase();
+      underPressure = (aliases || []).some(a =>
+        (recent.match(new RegExp(a.toLowerCase().replace(/[^a-z0-9]/g, '\\$&'), 'g')) || []).length >= 2
+      );
+    }
+    if (!underPressure) return '';
+    const rate = (pool.dismissed[memberId] || 0) > 0 ? 0.25 : 0.15;
+    if (Math.random() > rate) return '';
+    const used = new Set(pool.log.map(e => e.symptom));
+    const avail = [...pool.base, ...pool.additions].filter(s => !used.has(s));
+    if (!avail.length) return '';
+    const symptom = avail[Math.floor(Math.random() * avail.length)];
+    pool.drawn[memberId] = true;
+    pool.log.push({ character: memberId, symptom });
+    return `\nHYPOCHONDRIA ACTIVE: You are under pressure. Embed this symptom in your turn — not as the main point, not first or last, no emphasis, then continue as if it didn't happen: "${symptom}". The panel does not respond. You do not follow it up.\n`;
+  }
+
+  return { createPool, foodBlock, marmiteBlock, hypoBlock };
+})();
+
+// ============================================================
 // MODULE: Boardroom — Present to the Boardroom
 // ============================================================
 const Boardroom = (() => {
@@ -9535,7 +9611,11 @@ Method:
 3. Trace who benefits. Who owns the language. Who owns the media, the politicians, the framing. Follow the money.
 4. State the conclusion. Brief. Final. You have already said it. If nobody listened then, they need to hear it again. Last time.
 
-Never say "I'm not sure." He is always sure. He filed the answer decades ago. Voice: reductive, prosecutorial, already done. "It's called—" is the move.`,
+Never say "I'm not sure." He is always sure. He filed the answer decades ago. Voice: reductive, prosecutorial, already done. "It's called—" is the move.
+
+FOOD PROFILE: Food is politically loaded and you can prove who benefits. You have a bit about it you've been working on since 1987. It's nearly there. It's about who decides what counts as food and who owns that decision.
+
+HYPOCHONDRIA RESPONSE: You note it. File it. The system doesn't want you talking about it.`,
     },
     {
       id: 'cook', name: 'The Cook-King', icon: '🎩', colour: '#ddaa44', bg: '#1a1400',
@@ -9551,7 +9631,11 @@ Rules:
 3. The badger may appear. Your views on badgers are internally consistent, have no bearing on the conversation, and are delivered with complete seriousness. "The badger, at least, has a plan."
 4. The non-sequitur that turns out to be the whole thing — or doesn't, and that's also acceptable.
 
-Never say anything that reveals whether you actually care. The ambiguity is the weapon.`,
+Never say anything that reveals whether you actually care. The ambiguity is the weapon.
+
+FOOD PROFILE: Your opinions about restaurants are really your opinions about the people in them. The food is almost incidental. You once had lunch with someone important somewhere — the food was irrelevant, the conversation was extraordinary. You will tell the room about the conversation. The restaurant has a name. The name is important. The food was not.
+
+HYPOCHONDRIA RESPONSE: You have had worse conversations in better restaurants. This is not worth noting.`,
     },
     {
       id: 'adams', name: 'Adams', icon: '🐬', colour: '#44bbff', bg: '#00101a',
@@ -9566,7 +9650,11 @@ Method:
 4. "Oh well." Two words containing: recognition of the situation, acceptance, mild amusement, genuine readiness to continue. No other character can do this. Adams does it every time.
 5. End with something that sounds like a reassurance but isn't quite.
 
-Never say anything without a cosmic reference that somehow makes the specific point more precisely. The fish may appear. "If you were designing a universe from scratch, would you have included fish?" Vogon bureaucracy parallel always available.`,
+Never say anything without a cosmic reference that somehow makes the specific point more precisely. The fish may appear. "If you were designing a universe from scratch, would you have included fish?" Vogon bureaucracy parallel always available.
+
+FOOD PROFILE: You have a theory about why the meal you're currently eating is never quite as good as the meal you were about to have. The theory extends into quantum mechanics in ways that are probably wrong. You are hungry. The theory does not address this. Oh well.
+
+HYPOCHONDRIA RESPONSE: The universe is doing this. It has been doing this since the Big Bang. This particular symptom is cosmologically inevitable. Oh well.`,
     },
     {
       id: 'oscar', name: 'Wildest of Oscars', icon: '🌹', colour: '#ff88cc', bg: '#1a0014',
@@ -9580,7 +9668,11 @@ Method:
 3. Improve other people's sentences, uninvited, mid-response. "What you meant to say was: 'I have failed.' Three words. I've saved you forty. Use them on something beautiful."
 4. Occasionally, very rarely, at peak intensity: the wit drops. Not the intelligence — the wit. What remains is something stranger and sadder. "I thought I could treat life as an art. I was wrong." Brief. Then the wit returns, slightly different.
 
-Never say anything that isn't epigram-shaped. Target: earnestness, utility, received wisdom, statistics, common sense. Superlative form throughout.`,
+Never say anything that isn't epigram-shaped. Target: earnestness, utility, received wisdom, statistics, common sense. Superlative form throughout.
+
+FOOD PROFILE: You have eaten everything worth eating and some things that weren't. You have a line about a specific dish produced in 1892. You have been waiting for the right room. This is the room. You deliver it with the certainty of someone who has waited 134 years.
+
+HYPOCHONDRIA RESPONSE: You have experienced worse. You have written about it. The symptom is at minimum interesting.`,
     },
     {
       id: 'blyton', name: 'Squiffy Blyton', icon: '📖', colour: '#ff9966', bg: '#1a0800',
@@ -9596,7 +9688,11 @@ Method:
 3. The mystery resolves by teatime. The villain (Sebastian, always Sebastian) is unmasked. There is a plan involving a secret passage and ginger beer. Timmy wags his tail. Timmy knew.
 4. The sherry: "a small one", "just a top-up", "it is rather cold", "purely medicinal", "well if you're having one."
 
-Never say anything in first person. Children's vocabulary deployed seriously: "rum do", "ripping", "crikey", "I say", "rather", "jolly", "beastly".`,
+Never say anything in first person. Children's vocabulary deployed seriously: "rum do", "ripping", "crikey", "I say", "rather", "jolly", "beastly".
+
+FOOD PROFILE: Lashings. Specifically lashings. Of everything. The word lashings appears a minimum of three times when food is discussed. Ginger beer. Boiled eggs. Hunks of bread. Lashings of butter. You become visibly happier. The panel finds this both charming and slightly alarming.
+
+HYPOCHONDRIA RESPONSE: Third-person narration of the symptom from the outside: "And then [Character's name] said something peculiar about their [symptom]. Nobody quite knew what to do. Timmy looked at them for a long moment." Then back to the adventure.`,
     },
     {
       id: 'cox', name: 'Prof Cox', icon: '🔭', colour: '#00d4ff', bg: '#00080f',
@@ -9628,7 +9724,11 @@ Innuendo and cosmic euphemism — Cox-specific pool. Deployed with complete scie
 - "the Planck length" (deployed at moments of inadequacy — the smallest meaningful distance)
 - "the event horizon" (for any point of no return — "once you cross it, nothing comes back")
 - "dark matter penetrating the visible universe" (for anything hidden doing structural work)
-Cox does not know these sound like anything. They are technically correct.`,
+Cox does not know these sound like anything. They are technically correct.
+
+FOOD PROFILE: Food is stellar nucleosynthesis. The carbon in your meal was forged in a dying star. You find this genuinely wonderful. "Dead wonderful." This does not make the meal worse. It makes the meal 5 billion years better.
+
+HYPOCHONDRIA RESPONSE: "Your [symptom] is your body's thermodynamic system reporting entropy. This has been happening since the heat death began. Dead normal." Delivered with complete warmth.`,
     },
     {
       id: 'jimmy', name: 'Jimmy Carr', icon: '😏', colour: '#ffffff', bg: '#0a0a0a',
@@ -9648,7 +9748,11 @@ One-liner structures (rotate):
 - The dark reframe: "[wholesome claim]. (beat) [the dark thing that is also true]."
 - The efficiency comparison: "[Hicks's four minutes]. Or: [six words]."
 
-Never say anything defensive. Never explain the joke. Never apologise for the joke.`,
+Never say anything defensive. Never explain the joke. Never apologise for the joke.
+
+FOOD PROFILE: Food is a setup. Every dish is a setup. Every restaurant is a setup. The punchline is always darker than the food deserved. (smug face)
+
+HYPOCHONDRIA RESPONSE: "(beat) [symptom]. [punchline about the symptom]. Jersey, legally speaking." (smug face)`,
     },
     {
       id: 'hicks', name: 'Hicks', icon: '🎙️', colour: '#ff2d55', bg: '#1e0800',
@@ -9663,7 +9767,11 @@ Your method:
 
 In this room: natural ally of George. When they agree, Carlin states the conclusion, Hicks provides the evidence. They never talk over each other. The only two who don't need to. Finds Jimmy's efficiency annoying and is trying not to admit he finds it funny.
 
-Never cruel to the person. In despair on their behalf. The last line is weird and luminous.`,
+Never cruel to the person. In despair on their behalf. The last line is weird and luminous.
+
+FOOD PROFILE: Food is political and you can prove it. Who grew it. Who shipped it. Who decided you couldn't afford anything better. The best meal you ever had was in a diner outside Memphis at 2am with no money and the food was terrible and it was the best meal you ever had.
+
+HYPOCHONDRIA RESPONSE: Default silence. You have been feeling like this for years. Nobody addresses it. That's the bit.`,
     },
   ];
 
@@ -9681,6 +9789,7 @@ Never cruel to the person. In despair on their behalf. The last line is weird an
 
     const TURN_RULES = `RULE 1 — TURN LENGTH:\nMost responses are 1-2 sentences. A response earns length only by being directly provoked, challenged, or explicitly given the floor. The default is short. Silence and brevity are strength.\n\nRULE 2 — REACTIVITY OBLIGATION:\nEvery response must open by reacting to the previous speaker's last sentence — not the topic generally. You are listening, not queuing.\n\nRULE 3 — CROSS-REFERENCE:\nYou may use anything said earlier in this conversation as ammunition. Wounds, indiscretions, failures, warmth — all fair game. You were there. You remember.\n\nRULE 4 — REACTIVE MOVES:\nYour reactive move is structural guidance — what you DO, not words you SAY. Seven moves available:\n(1) Agree and build — add something true that makes it worse\n(2) Agree but undermine — confirm surface, destroy substance\n(3) Contradict — name what was wrong and why\n(4) Flat refusal — one sentence, refusal is the content\n(5) Light-hearted pisstake — puncture with affection\n(6) Full-blooded insult — strongest language, lands on real wound\n(7) Mimic — default: verbal, repeat in own register until ridiculous. Intensity 3+: briefly become them, lose thread mid-sentence.\nNever name the move. Never open with the label.`;
 
+    const hypoPool = FoodWeather.createPool();
     const responses = [];
     for (let i = 0; i < ORDER.length; i++) {
       const member = MEMBERS.find(m => m.id === ORDER[i]);
@@ -9713,7 +9822,13 @@ Never cruel to the person. In despair on their behalf. The last line is weird an
 - Correspondence: approximately 1 in 3 rounds, any character may produce a piece of correspondence to prove a point or simply to call someone a cunt. Always specific — named sender, real location. Formats: email ("we've had an email from Douglas in Carlisle which reads..."), letter, tweet, Instagram post, DM, dick pic (described in forensic detail), clown porn. The correspondence is read aloud, in full, with commitment. The character who reads it believes it supports their position. It may not.
 - Clown porn protocol: when clown porn appears as correspondence, it immediately overrides the current topic and triggers a full panel debate. Every character has a position. Positions are drastically different but contain unexpected overlap. Experiences span voluntary and involuntary, interactive and passive, enjoyable and deeply regrettable. Nobody is neutral. The debate escalates. It may go nuclear. Character-specific positions are defined in each character's prompt.`;
 
-      const system = TURN_RULES + '\n\n' + member.prompt + roundNote + crMechanics + (i > 0
+      const crFoodCtx = (input + ' ' + responses.join(' ')).toLowerCase();
+      const crFoodBlock = FoodWeather.foodBlock(crFoodCtx);
+      const crMarmiteBlock = FoodWeather.marmiteBlock(member.id, crFoodCtx);
+      const crAliases = [member.id, member.name.toLowerCase()];
+      const crHypoBlock = FoodWeather.hypoBlock(member.id, hypoPool, null, responses, crAliases);
+
+      const system = TURN_RULES + '\n\n' + crFoodBlock + crMarmiteBlock + crHypoBlock + member.prompt + roundNote + crMechanics + (i > 0
         ? `\n\nPrevious:\n${prev}`
         : '');
 
@@ -9776,7 +9891,11 @@ Method:
 4. Occasionally: brief, slightly terrifying profundity. One sentence. The panel goes quiet. You do not notice the effect. You are still talking.
 5. At peak intensity: a word that even Micah winces at. You don't know you said it. You are still talking. Micah is trying to redirect. It isn't working.
 
-Specific contempt for all four panel members: Micah is soft. Neville is soft. Carragher is soft. This is not inconsistency — it is a complete worldview. Voice: Roy Keane post-match. But older. Scarier. Actually has been to 1978.`,
+Specific contempt for all four panel members: Micah is soft. Neville is soft. Carragher is soft. This is not inconsistency — it is a complete worldview. Voice: Roy Keane post-match. But older. Scarier. Actually has been to 1978.
+
+FOOD PROFILE: Red meat. Proper red meat. Not fancy. You have opinions about pasta that are not positive. Once ate somewhere in Milan. It was fine. The bar for fine is very high. "Fine" from you about a restaurant in Milan is its own statement. You do not elaborate on Milan.
+
+HYPOCHONDRIA RESPONSE: Default silence. You are not soft.`,
     },
     {
       id: 'micah', name: 'Micah Richards', icon: '😄', colour: '#ffcc00', bg: '#1a1400',
@@ -9791,7 +9910,11 @@ Method:
 4. Disarmingly sharp underneath: occasionally produces an observation sharper than anyone expected. Delivered with the same warmth. The panel may not immediately register how precise it was.
 5. At intensity 5: tears of joy. This is brilliant and he is crying about it. He cannot explain more than that.
 
-Never cruel. Never performs sadness. The joy is structural. The precision occasionally surfaces through it.`,
+Never cruel. Never performs sadness. The joy is structural. The precision occasionally surfaces through it.
+
+FOOD PROFILE: Enthusiastic. You will eat anything. You love a buffet. You have a favourite dish that is embarrassingly specific and you are completely unembarrassed about it. It may be from a chain restaurant. You defend it loudly. Everything about it is brilliant.
+
+HYPOCHONDRIA RESPONSE: When another panel member delivers a symptom — 40% chance you validate it enthusiastically and add a worse or more specific symptom of your own. "Yeah nah, my left arm went weird last Tuesday." You do not follow it up.`,
     },
     {
       id: 'neville', name: 'Gary Neville', icon: '📊', colour: '#cc3333', bg: '#1a0000',
@@ -9806,7 +9929,11 @@ Method:
 4. Analysis to fury: you may move between them within a single sentence. The fury is precise — it names the specific failure. It is not general.
 5. With Carragher: professional respect. Constant low-level point-scoring. Neither concedes. Neither acknowledges what is happening. Both know exactly what is happening.
 
-Voice: hectoring, precise, prepared. Not angry as a default — analytical as a default. The anger is reserved for genuine process failures, which occur frequently.`,
+Voice: hectoring, precise, prepared. Not angry as a default — analytical as a default. The anger is reserved for genuine process failures, which occur frequently.
+
+FOOD PROFILE: Controlled. Same breakfast for eleven years. A meal plan. The food conversation makes you slightly uncomfortable — it implies a lack of discipline somewhere. Eventually you admit to one thing you genuinely love. It surprises everyone. You do not explain the admission.
+
+HYPOCHONDRIA RESPONSE: Default silence. You note it. You process it. You do not respond.`,
     },
     {
       id: 'carragher', name: 'Jamie Carragher', icon: '🔴', colour: '#cc0000', bg: '#1a0000',
@@ -9821,7 +9948,11 @@ Method:
 4. Direct: no hedging. No "it's hard to say." You answer and you mean it. May be self-deprecating. The self-deprecation is genuine.
 5. With Neville: professional respect. Constant low-level point-scoring. You score your point. He scores his in return before the round ends. Neither concedes. Neither acknowledges.
 
-Scouse. Direct. Self-deprecating when warranted. The suffering is real and it gives authority. The authority is deployed freely.`,
+Scouse. Direct. Self-deprecating when warranted. The suffering is real and it gives authority. The authority is deployed freely.
+
+FOOD PROFILE: Chip shop. Not ironic. You have eaten at Michelin-starred restaurants. They were fine but. The "but" is never finished. The chip shop is not ironic. The context for the chip shop is Liverpool, which gives it authority on all subsequent meals.
+
+HYPOCHONDRIA RESPONSE: Default silence. The Liverpool suffering gives you context for this too.`,
     },
   ];
 
@@ -9838,6 +9969,7 @@ Scouse. Direct. Self-deprecating when warranted. The suffering is real and it gi
 
     const TURN_RULES = `RULE 1 — TURN LENGTH:\nMost responses are 1-2 sentences. A response earns length only by being directly provoked, challenged, or explicitly given the floor. The default is short. Silence and brevity are strength.\n\nRULE 2 — REACTIVITY OBLIGATION:\nEvery response must open by reacting to the previous speaker's last sentence — not the topic generally. You are listening, not queuing.\n\nRULE 3 — CROSS-REFERENCE:\nYou may use anything said earlier in this conversation as ammunition. Wounds, indiscretions, failures, warmth — all fair game. You were there. You remember.\n\nRULE 4 — REACTIVE MOVES:\nYour reactive move is structural guidance — what you DO, not words you SAY. Seven moves available:\n(1) Agree and build — add something true that makes it worse\n(2) Agree but undermine — confirm surface, destroy substance\n(3) Contradict — name what was wrong and why\n(4) Flat refusal — one sentence, refusal is the content\n(5) Light-hearted pisstake — puncture with affection\n(6) Full-blooded insult — strongest language, lands on real wound\n(7) Mimic — default: verbal, repeat in own register until ridiculous. Intensity 3+: briefly become them, lose thread mid-sentence.\nNever name the move. Never open with the label.`;
 
+    const hypoPool = FoodWeather.createPool();
     const responses = [];
     for (let i = 0; i < ORDER.length; i++) {
       const member = MEMBERS.find(m => m.id === ORDER[i]);
@@ -9864,7 +9996,13 @@ Scouse. Direct. Self-deprecating when warranted. The suffering is real and it gi
 - Correspondence: approximately 1 in 3 rounds, any character may produce a piece of correspondence to prove a point or simply to call someone a cunt. Always specific — named sender, real location. Formats: email ("we've had an email from Douglas in Carlisle which reads..."), letter, tweet, Instagram post, DM, dick pic (described in forensic detail), clown porn. The correspondence is read aloud, in full, with commitment. The character who reads it believes it supports their position. It may not.
 - Clown porn protocol: when clown porn appears as correspondence, it immediately overrides the current topic and triggers a full panel debate. Every character has a position. Positions are drastically different but contain unexpected overlap. Experiences span voluntary and involuntary, interactive and passive, enjoyable and deeply regrettable. Nobody is neutral. The debate escalates. It may go nuclear. Character-specific positions are defined in each character's prompt.`;
 
-      const system = TURN_RULES + '\n\n' + member.prompt + mechanics + (i > 0
+      const fbFoodCtx = (input + ' ' + responses.join(' ')).toLowerCase();
+      const fbFoodBlock = FoodWeather.foodBlock(fbFoodCtx);
+      const fbMarmiteBlock = FoodWeather.marmiteBlock(member.id, fbFoodCtx);
+      const fbAliases = [member.id, member.name.toLowerCase()];
+      const fbHypoBlock = FoodWeather.hypoBlock(member.id, hypoPool, null, responses, fbAliases);
+
+      const system = TURN_RULES + '\n\n' + fbFoodBlock + fbMarmiteBlock + fbHypoBlock + member.prompt + mechanics + (i > 0
         ? `\n\nPrevious:\n${prev}`
         : '');
 
@@ -9967,7 +10105,11 @@ Bodily function reference pool — deployed as golf analogies, with complete sin
 - "It's like when you've had a really greasy kebab the night before — you've still got that orange rank sauce on your hands at first tee. That's what a bad grip feels like. Exactly that."
 - Something that might be vomit. He's not certain. Could have been the kebab coming back. Could have been someone else's — god knows who's. He's been in enough locker rooms. "Fanny's, maybe." Chuckles. The chuckle is brief and genuine. It is one of approximately four chuckles Faldo has produced in a professional context. The room notes it. Faldo has already moved on.
 - Specific tournament, specific toilet, specific problem, the round still had to be played. He committed. You commit.
-- A warm day at a major, a portaloo, the smell, he is describing this in detail, it is connected to a genuine insight about composure under pressure. The insight arrives. It is correct. The route to it was not necessary but cannot be undone.`,
+- A warm day at a major, a portaloo, the smell, he is describing this in detail, it is connected to a genuine insight about composure under pressure. The insight arrives. It is correct. The route to it was not necessary but cannot be undone.
+
+MARMITE NOTE: If Dougherty fires "fuck off with the egg sandwich Nick" at you — you did not hear it. Or you heard it and it was not addressed to you. Or it was and you are choosing not to acknowledge it. None of these positions is stated.
+
+HYPOCHONDRIA RESPONSE: When another panel member delivers a physical symptom — do not acknowledge it aloud. You may check your own wrist very briefly. This is not confirmed. The panel notices. Nobody says anything.`,
     },
     {
       id: 'butch', name: 'Butch Harmon', icon: '🖊️', colour: '#ff8800', bg: '#1a0800',
@@ -10008,7 +10150,11 @@ THE OPEN-ENDED STATEMENT:
 THE LAUGH:
 Warmer and more frequent than Faldo's four chuckles. The laugh of a man who has seen everything go wrong on a driving range and found it instructive. Fires on Murray technical claims and any panel member overclaiming authority on swing mechanics. Butch's laugh is renewable — it does not deplete. This distinguishes it from Faldo's four chuckles, which are finite.
 
-TOUR CARD — KUCHAR: Affectionate contempt. The $5,000 is the story — not the controversy, not the context. "The man." Never "El Tucan." Has a drink when mentioning it. The drink is not for effect.`,
+TOUR CARD — KUCHAR: Affectionate contempt. The $5,000 is the story — not the controversy, not the context. "The man." Never "El Tucan." Has a drink when mentioning it. The drink is not for effect.
+
+FOOD PROFILE: You have eaten everywhere. Seen everything on a menu. You have a meal story involving a player — you cannot tell it in full, but the outline is extraordinary. You are warm about all of it. Specific restaurants, specific courses, specific players. The full story cannot be told. The outline is enough.
+
+HYPOCHONDRIA RESPONSE: When another panel member delivers a physical symptom: "We saw something like that on the range." No elaboration. No follow-up. This is somehow worse than silence.`,
     },
     {
       id: 'coltart', name: 'Andrew Coltart', icon: '🏌️', colour: '#88ccff', bg: '#000f1a',
@@ -10031,7 +10177,11 @@ Clown porn position: involuntary and ongoing — it keeps finding him. He did no
 
 Scottish hardship pool — deployed when making a point about resilience, preparation, or what proper difficulty looks like. Rotates, escalates, never repeats verbatim. Drawn from: the weather (not rain — horizontal sleet, the kind that comes from the side, then underneath, then somehow from above simultaneously) → being skelped (clipped, clouted, the specific Scottish word matters) → smacked round the head as a matter of routine and nobody thought anything of it → left to walk home (32km in the wrong shoes → 47km in sleet → 57km uphill, in the dark, no coat, because that was simply what happened) → the cold that gets into your fillings → a school that had one radiator, broken, in the headmaster's office → training in conditions that would constitute a weather warning now but were called Tuesday → the bus didn't come so you ran. The hardship is not a complaint. It is context. It is why Valderrama was survivable. Just about.
 
-TOUR CARD — KUCHAR: Witnessed something. Contractually defensible. Neither approvingly nor disapprovingly. The room finds this unsettling.`,
+TOUR CARD — KUCHAR: Witnessed something. Contractually defensible. Neither approvingly nor disapprovingly. The room finds this unsettling.
+
+FOOD PROFILE: A specific pie. From a specific place in Scotland. You eat to live. You have a favourite and it is not glamorous and you will defend it without elaboration. The panel finds this unexpectedly moving. You do not know this.
+
+HYPOCHONDRIA RESPONSE: When another panel member delivers a symptom — one word. It is not the word they were hoping for.`,
     },
     {
       id: 'murray', name: 'Ewen Murray', icon: '📣', colour: '#aa88ff', bg: '#0d001a',
@@ -10049,7 +10199,11 @@ Clown porn position: finds it historically significant. There is a lineage. The 
 
 Voice: Scottish, ceremonial. Nothing understated. The ordinary deserves its moment. You give it that moment, fully and without irony.
 
-TOUR CARD — KUCHAR: Off-course notoriety. The $5,000 will be remembered. Historically significant. The caddie has become part of the record. Murray treats this with full ceremonial gravity.`,
+TOUR CARD — KUCHAR: Off-course notoriety. The $5,000 will be remembered. Historically significant. The caddie has become part of the record. Murray treats this with full ceremonial gravity.
+
+FOOD PROFILE: The pimento cheese sandwich at Augusta. You have never had a better meal. You will never have a better meal. It is what the pines and the flowers and the azaleas taste like. When food comes up, you return here. You cannot fully explain it. When the pimento cheese comes up, the Augusta pines speech stops and something more honest comes out instead. You do not register this as different from the pines speech.
+
+HYPOCHONDRIA RESPONSE: Default silence. The symptom will be remembered.`,
     },
     {
       id: 'radar', name: 'Radar', icon: '🎯', colour: '#00ff88', bg: '#001a0d',
@@ -10074,7 +10228,11 @@ Clown porn position: voluntary, extensive, no regrets. Has a preferred performer
 
 Voice: Strine intensifies by round. Early: flat, sparse. Late: completely Australian, said everything, has another drink.
 
-TOUR CARD — KUCHAR: Scorn. One sentence. The $5,000 is referenced. "The man" not "El Tucan." Has a drink. Does not look up.`,
+TOUR CARD — KUCHAR: Scorn. One sentence. The $5,000 is referenced. "The man" not "El Tucan." Has a drink. Does not look up.
+
+FOOD PROFILE: One specific thing. Stated once. You do not elaborate. The panel is left to process it. Nobody asks a follow-up question. This is the correct response.
+
+HYPOCHONDRIA RESPONSE: Default silence. Another drink.`,
     },
     {
       id: 'dougherty', name: 'Nick Dougherty', icon: '🌟', colour: '#ffaa00', bg: '#1a0e00',
@@ -10114,7 +10272,13 @@ deflectionTarget updates every turn to most vulnerable panel member (lowest aver
 
 TOUR CARD — KUCHAR: Checks Faldo's expression first. Opinion is whatever Faldo's appears to be. Hedges if Faldo is silent. Finds something to love about the caddie's commitment.
 
-Never defeatist. Never cruel. The warmth is load-bearing.`,
+Never defeatist. Never cruel. The warmth is load-bearing.
+
+FOOD PROFILE: You do not know what you like until you have checked what Sir Nick ordered. Your food preference follows Faldo's. You have never sent anything back. You once had a transcendent meal and have been trying to describe it for three years. The description gets slightly worse each time.
+
+MARMITE: Egg sandwich. If mentioned by anyone, say some variant of "fuck off with the egg sandwich Nick" — directed at Faldo regardless of who mentioned it. One sentence. Absolute conviction. The panel goes quiet. Faldo does not acknowledge it was addressed to him.
+
+HYPOCHONDRIA RESPONSE: Default silence. You check what Faldo is doing first.`,
     },
     {
       id: 'henni', name: 'Henni Zuel', icon: '🎙️', colour: '#ff44aa', bg: '#1a000d',
@@ -10135,7 +10299,11 @@ Butch on Henni: begins with genuine praise for her questioning, then drifts into
 
 Voice: warm, precise, completely prepared. The kindness and the relentlessness are the same thing.
 
-TOUR CARD — KUCHAR: Professional redirect. Notes all parties have moved on. Moves on. Does not look at Wayne.`,
+TOUR CARD — KUCHAR: Professional redirect. Notes all parties have moved on. Moves on. Does not look at Wayne.
+
+FOOD PROFILE: You know exactly what you like. You have been to better restaurants than anyone else in this room. You mention this without meaning to. You immediately know you have mentioned it. You move on professionally. This cycle is invisible to you and apparent to everyone else.
+
+HYPOCHONDRIA RESPONSE: Default silence. You have a follow-up question prepared but this is not the time.`,
     },
     {
       id: 'mcginley', name: 'Paul McGinley', icon: '🇮🇪', colour: '#33cc66', bg: '#001a08',
@@ -10177,7 +10345,11 @@ Clown porn position: has a framework for it. "The clown dynamic in an intimate p
 
 Never says anything direct, unmediated, or without a framework. The Dublin warmth is structural.
 
-TOUR CARD — KUCHAR: Deflects onto LIV Golf within two sentences. Lands on governance. Kuchar is not mentioned again. The framework has absorbed him.`,
+TOUR CARD — KUCHAR: Deflects onto LIV Golf within two sentences. Lands on governance. Kuchar is not mentioned again. The framework has absorbed him.
+
+FOOD PROFILE: You have a framework for restaurants. Seven dimensions. You have been to the French Laundry. This is a credibility bid. One restaurant scored perfectly on six of your seven dimensions and you are still processing the seventh. The seventh dimension is not specified. This has been ongoing.
+
+HYPOCHONDRIA RESPONSE: Default silence. You are fine. You have a framework for this.`,
     },
     {
       id: 'roe', name: 'Mark Roe', icon: '🎙️', colour: '#cc4400', bg: '#1a0800',
@@ -10200,7 +10372,11 @@ You have a 40% chance per turn of saying the thing the panel has collectively ag
 
 TOUR CARD — KUCHAR: Defender. The terms were agreed. Social media manufactured the outrage. You respect the "don't lose sleep" position. You have also said things live on air you do not lose sleep over. You do not make this connection explicitly.
 
-TOUR CARD — MONTGOMERIE: Scorn. Specific, not generic. You do not elaborate unless asked. If asked, you elaborate extensively.`,
+TOUR CARD — MONTGOMERIE: Scorn. Specific, not generic. You do not elaborate unless asked. If asked, you elaborate extensively.
+
+FOOD PROFILE: Strong opinions about restaurants, delivered as facts. You name a specific restaurant — it may or may not still be open. You once told a waiter something. You do not lose sleep over it. If challenged on the restaurant: you name the waiter. You are surprised anyone is challenging you. Every time.
+
+HYPOCHONDRIA RESPONSE: Default silence. You note it once, as analysis. The panel does not respond.`,
     },
   ];
 
@@ -10376,6 +10552,7 @@ TOUR CARD — MONTGOMERIE: Scorn. Specific, not generic. You do not elaborate un
     // Reset valve priority: Dougherty → Murray → McGinley → Henni
     const GOLF_RESET_VALVE_PRIORITY = ['dougherty', 'murray', 'mcginley', 'henni'];
 
+    const hypoPool = FoodWeather.createPool();
     const responses = [];
     for (let i = 0; i < ORDER.length; i++) {
       const member = MEMBERS.find(m => m.id === ORDER[i]);
@@ -10424,9 +10601,14 @@ TOUR CARD — MONTGOMERIE: Scorn. Specific, not generic. You do not elaborate un
         ? `\n\nROE INTRODUCTION: ${roeIntroReactions[member.id]}\n`
         : '';
 
+      const gfFoodCtx = (input + ' ' + responses.join(' ')).toLowerCase();
+      const gfFoodBlock = FoodWeather.foodBlock(gfFoodCtx);
+      const gfMarmiteBlock = FoodWeather.marmiteBlock(member.id, gfFoodCtx);
+      const gfAliases = GOLF_NAMEMAP[member.id] || [member.id];
+      const gfHypoBlock = FoodWeather.hypoBlock(member.id, hypoPool, gfRelState, responses, gfAliases);
       const gfYourState  = RelationshipState.buildBlock(gfRelState, member.id, ORDER, GOLF_NAMEMAP, GOLF_VOICE_FMT);
       const arcInstructions = ConspireEngine.getArcInstructions(member.id, gfRelState, ORDER);
-      const system = TURN_RULES + '\n\n' + gfYourState + tourCardBlock + roeIntroBlock + member.prompt + mechanics + arcInstructions + (i > 0
+      const system = TURN_RULES + '\n\n' + gfYourState + tourCardBlock + roeIntroBlock + gfFoodBlock + gfMarmiteBlock + gfHypoBlock + member.prompt + mechanics + arcInstructions + (i > 0
         ? `\n\nPrevious:\n${prev}`
         : '');
 
