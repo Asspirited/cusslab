@@ -9250,6 +9250,8 @@ Scouse. Direct. Self-deprecating when warranted. The suffering is real and it gi
     document.getElementById('fb-output').style.display = 'block';
     UI.setDisabled('fb-btn', true);
 
+    const TURN_RULES = `RULE 1 — TURN LENGTH:\nMost responses are 1-2 sentences. A response earns length only by being directly provoked, challenged, or explicitly given the floor. The default is short. Silence and brevity are strength.\n\nRULE 2 — REACTIVITY OBLIGATION:\nEvery response must open by reacting to the previous speaker's last sentence — not the topic generally. You are listening, not queuing.\n\nRULE 3 — CROSS-REFERENCE:\nYou may use anything said earlier in this conversation as ammunition. Wounds, indiscretions, failures, warmth — all fair game. You were there. You remember.`;
+
     const responses = [];
     for (let i = 0; i < ORDER.length; i++) {
       const member = MEMBERS.find(m => m.id === ORDER[i]);
@@ -9276,7 +9278,7 @@ Scouse. Direct. Self-deprecating when warranted. The suffering is real and it gi
 - Correspondence: approximately 1 in 3 rounds, any character may produce a piece of correspondence to prove a point or simply to call someone a cunt. Always specific — named sender, real location. Formats: email ("we've had an email from Douglas in Carlisle which reads..."), letter, tweet, Instagram post, DM, dick pic (described in forensic detail), clown porn. The correspondence is read aloud, in full, with commitment. The character who reads it believes it supports their position. It may not.
 - Clown porn protocol: when clown porn appears as correspondence, it immediately overrides the current topic and triggers a full panel debate. Every character has a position. Positions are drastically different but contain unexpected overlap. Experiences span voluntary and involuntary, interactive and passive, enjoyable and deeply regrettable. Nobody is neutral. The debate escalates. It may go nuclear. Character-specific positions are defined in each character's prompt.`;
 
-      const system = member.prompt + mechanics + (i > 0
+      const system = TURN_RULES + '\n\n' + member.prompt + mechanics + (i > 0
         ? `\n\nPrevious:\n${prev}`
         : '');
 
@@ -9527,6 +9529,8 @@ Never says anything direct, unmediated, or without a framework. The Dublin warmt
     document.getElementById('gf-output').style.display = 'block';
     UI.setDisabled('gf-btn', true);
 
+    const TURN_RULES = `RULE 1 — TURN LENGTH:\nMost responses are 1-2 sentences. A response earns length only by being directly provoked, challenged, or explicitly given the floor. The default is short. Silence and brevity are strength.\n\nRULE 2 — REACTIVITY OBLIGATION:\nEvery response must open by reacting to the previous speaker's last sentence — not the topic generally. You are listening, not queuing.\n\nRULE 3 — CROSS-REFERENCE:\nYou may use anything said earlier in this conversation as ammunition. Wounds, indiscretions, failures, warmth — all fair game. You were there. You remember.`;
+
     const responses = [];
     for (let i = 0; i < ORDER.length; i++) {
       const member = MEMBERS.find(m => m.id === ORDER[i]);
@@ -9553,7 +9557,7 @@ Never says anything direct, unmediated, or without a framework. The Dublin warmt
 - Correspondence: approximately 1 in 3 rounds, any character may produce a piece of correspondence to prove a point or simply to call someone a cunt. Always specific — named sender, real location. Formats: email ("we've had an email from Douglas in Carlisle which reads..."), letter, tweet, Instagram post, DM, dick pic (described in forensic detail), clown porn. The correspondence is read aloud, in full, with commitment. The character who reads it believes it supports their position. It may not.
 - Clown porn protocol: when clown porn appears as correspondence, it immediately overrides the current topic and triggers a full panel debate. Every character has a position. Positions are drastically different but contain unexpected overlap. Experiences span voluntary and involuntary, interactive and passive, enjoyable and deeply regrettable. Nobody is neutral. The debate escalates. It may go nuclear. Character-specific positions are defined in each character's prompt.`;
 
-      const system = member.prompt + mechanics + (i > 0
+      const system = TURN_RULES + '\n\n' + member.prompt + mechanics + (i > 0
         ? `\n\nPrevious:\n${prev}`
         : '');
 
@@ -9638,7 +9642,7 @@ const QuantumLeeks = (() => {
     },
   };
 
-  const _SYSTEM = (sc) => `You are running a Quantum Leap simulation. The user IS Sam Beckett. They have just leapt into someone else's body.
+  const _SYSTEM = (sc) => `RULE 1 — TURN LENGTH:\nMost responses are 1-2 sentences. A response earns length only by being directly provoked, challenged, or explicitly given the floor. The default is short. Silence and brevity are strength.\n\nRULE 2 — REACTIVITY OBLIGATION:\nEvery response must open by reacting to the previous speaker's last sentence — not the topic generally. You are listening, not queuing.\n\nRULE 3 — CROSS-REFERENCE:\nYou may use anything said earlier in this conversation as ammunition. Wounds, indiscretions, failures, warmth — all fair game. You were there. You remember.\n\nYou are running a Quantum Leap simulation. The user IS Sam Beckett. They have just leapt into someone else's body.
 
 SITUATION:
 Sam has leapt into: ${sc.host}
