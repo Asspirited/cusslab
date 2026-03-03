@@ -9098,7 +9098,7 @@ Never cruel to the person. In despair on their behalf. The last line is weird an
       const crPrevName = i > 0 ? MEMBERS.find(m => m.id === ORDER[i-1]).name : '';
       const prompt = i === 0
         ? `Topic: "${input}"\n\nOpen the room. Short unless the topic demands otherwise.`
-        : `Topic: "${input}"\n\n${crPrevName} just said: "${crLastBeat}"\n\nReact to that specifically. Yes-and or yes-but. Short unless you can't help it.`;
+        : `Topic: "${input}"\n\nAddress whoever you want — by name. The last speaker, someone from earlier, someone you've been waiting to go at. Yes-and, yes-but, yes-no, no-fuck-no. Short unless you can't help it.`;
 
       try {
         const resp = await API.call(system, prompt, 250, 'comedyroom/' + member.id);
@@ -9246,7 +9246,7 @@ Scouse. Direct. Self-deprecating when warranted. The suffering is real and it gi
       const prevName = i > 0 ? MEMBERS.find(m => m.id === ORDER[i-1]).name : '';
       const prompt = i === 0
         ? `Topic: "${input}"\n\nOpen the panel. Short unless the topic demands otherwise.`
-        : `Topic: "${input}"\n\n${prevName} just said: "${lastBeat}"\n\nReact to that specifically. Yes-and or yes-but. Short unless you can't help it.`;
+        : `Topic: "${input}"\n\nAddress whoever you want — by name. The last speaker, someone from earlier, someone you've been waiting to go at. Yes-and, yes-but, yes-no, no-fuck-no. Short unless you can't help it.`;
 
       try {
         const resp = await API.call(system, prompt, 250, 'football/' + member.id);
@@ -9523,7 +9523,7 @@ Never says anything direct, unmediated, or without a framework. The Dublin warmt
       const prevName = i > 0 ? MEMBERS.find(m => m.id === ORDER[i-1]).name : '';
       const prompt = i === 0
         ? `Topic: "${input}"\n\nOpen the panel. Short unless the topic demands otherwise.`
-        : `Topic: "${input}"\n\n${prevName} just said: "${lastBeat}"\n\nReact to that specifically. Yes-and or yes-but. Short unless you can't help it.`;
+        : `Topic: "${input}"\n\nAddress whoever you want — by name. The last speaker, someone from earlier, someone you've been waiting to go at. Yes-and, yes-but, yes-no, no-fuck-no. Short unless you can't help it.`;
 
       try {
         const resp = await API.call(system, prompt, 250, 'golf/' + member.id);
