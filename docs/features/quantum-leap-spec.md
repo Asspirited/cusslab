@@ -891,3 +891,35 @@ The Bourbon remains.
 The Bourbon always remains.
 Ziggy notes this. As always. With 99.6% confidence.
 As always.
+
+---
+
+## SCENARIO REGISTRY — BUILT AND LIVE (as of 2026-03-03)
+
+14 scenarios in the selector. Slugs are the keys used in SCENARIOS const in index.html.
+Do not add these again. If proposing new scenarios, check this list first.
+
+| Slug | Name | Host | Swiss cheese object |
+|---|---|---|---|
+| milk | The Milk Round | Arthur Broadbent, 34, milkman | a particularly round cabbage |
+| advisory | The Advisory | Derek Fitch, 41, Senior Civil Servant | the Xerox machine in the corridor |
+| retro | The Retrospective | Darren Coates, 38, Delivery Manager | a cylindrical whiteboard marker |
+| bletchley | Bletchley Park 1943 | Dr Edmund Crowe, 34, cryptanalyst, Hut 6 | the Bombe machine printout |
+| dunkirk | Dunkirk 1940 | Major Peter Hallows, 41, logistics coordinator | the clipboard |
+| zulu | Rorke's Drift 1879 | Lieutenant Archie Watts, 26, Royal Engineers | the biscuit tin fortification plan |
+| fawkes | Guy Fawkes' Cellar 1605 | Thomas Wintour, 33, co-conspirator | the warning letter |
+| glastonbury | Glastonbury 1971 | Michael Eavis, 31, dairy farmer / organiser | the running order |
+| stalag | Stalag Luft III 1943 | Squadron Leader Douglas Brent, 29, RAF | the master forgery ledger |
+| jerusalem | Jerusalem 30AD | Matthias, 31, minor apostle, catering | the seating plan |
+| pyramid | Pyramid Project 2560BC | Amenhotep, 38, senior scribe | the master papyrus |
+| ottoman | Ottoman Court 1453 | Selim, 44, Chief Eunuch | the household register |
+| kkk | KKK Rally, Alabama 1923 | Grand Wizard Earl Maddox, 48 — Sam is Black | list of targets in Maddox's robe pocket |
+| alcatraz | Alcatraz 1962 | Associate Warden Chester Beaumont, 52 | the night duty log |
+
+### Notes on specific scenarios
+
+**kkk** — serious moral scenario. Al does not make jokes. Opening briefing is direct: family in danger, here is the name, here is the road, this is what Sam is here to stop. Sam's task is to prevent violence, not to perform villainy. The horror is acknowledged explicitly.
+
+**alcatraz** — unknown leap condition. Ziggy cannot determine why Sam is here. Al admits this upfront. The escape (Morris / Anglin brothers) is not the task — it was never solved, they were never found. Something else is wrong that night. Sam must find it before 6am.
+
+**jerusalem** — Jesus is a scene character. Serenely unhelpful on logistics. Ziggy declines to give a probability assessment for this one.
