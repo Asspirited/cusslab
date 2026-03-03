@@ -98,3 +98,25 @@ Feature: Panel mechanics — Boardroom, Comedy Room, Football, Golf
     Then the conversation thread is cleared
     And the reply input area is hidden
     And the presentation input is cleared
+
+# ── Natural conversation flow — 19th Hole ────────────────────────────────────
+
+@claude
+Feature: Natural conversation flow — 19th Hole
+
+  Scenario: Short reactive exchange is the default
+    Given the panel is in debate mode
+    When a panel member has not been directly provoked or given the floor
+    Then their response is 1-2 sentences maximum
+    And their opening clause references the previous speaker's last sentence directly
+
+  Scenario: Monologue is earned not default
+    Given a panel member has been directly challenged or explicitly given the floor
+    Then their response may extend to 4-5 sentences
+    And it must contain at least one callback to a known wound or shared history item
+
+  Scenario: Characters build on each other within a round
+    Given panel member A has spoken
+    When panel member B responds
+    Then B's response contains a direct reference to A's exact words or a known wound of A
+    And B does not address the original prompt independently as if A had not spoken
