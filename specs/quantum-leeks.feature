@@ -15,7 +15,7 @@ Feature: Quntum Leeks
     Then I can see the qleeks scenario selector
     And I can see the qleeks leap button
 
-  Scenario: Three leap scenarios are offered
+  Scenario: Original leap scenarios are present in the selector
     Given the Quntum Leeks panel is loaded
     Then the qleeks selector includes "The Milk Round — 1953, Rural Derbyshire"
     And the qleeks selector includes "The Advisory — 1974, Whitehall, London"
