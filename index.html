@@ -1141,13 +1141,13 @@
 <nav id="sidebar">
 
   <!-- ── COMEDY ROOM ── -->
-  <div class="nav-group" id="ng-comedy">
+  <div class="nav-group active" id="ng-comedy">
     <div class="nav-group-header" onclick="toggleNavGroup('comedy')">
       <span class="nav-group-icon">🎭</span> COMEDY ROOM
       <span class="nav-group-count">1</span>
     </div>
     <div class="nav-items" id="ni-comedy">
-      <div class="tab" onclick="switchTab(event,'comedyroom')"><span class="tab-icon">🎤</span>The Comedy Room</div>
+      <div class="tab active" onclick="switchTab(event,'comedyroom')"><span class="tab-icon">🎤</span>The Comedy Room</div>
     </div>
   </div>
 
@@ -1205,14 +1205,14 @@
   </div>
 
   <!-- ── THE PANEL ── -->
-  <div class="nav-group active" id="ng-personas">
+  <div class="nav-group" id="ng-personas">
     <div class="nav-group-header" onclick="toggleNavGroup('personas')">
       <span class="nav-group-icon">🎤</span> THE PANEL
       <span class="nav-group-count">6</span>
     </div>
     <div class="nav-items" id="ni-personas">
       <div class="tab" onclick="switchTab(event,'settings')" style="display:none;"><span class="tab-icon">⚙️</span>Settings & API Key</div>
-      <div class="tab active" onclick="switchTab(event,'bills')"><span class="tab-icon">🎤</span>Ask The Panel</div>
+      <div class="tab" onclick="switchTab(event,'bills')"><span class="tab-icon">🎤</span>Ask The Panel</div>
       <div class="tab" onclick="switchTab(event,'joketest')"><span class="tab-icon">🧪</span>Joke Test</div>
       <div class="tab" onclick="switchTab(event,'clash')"><span class="tab-icon">⚔️</span>Expert Clash</div>
       <div class="tab" onclick="switchTab(event,'roulette')"><span class="tab-icon">🎰</span>The Wheel</div>
@@ -1737,7 +1737,7 @@
   </div>
 </div>
 
-<div class="panel active" id="panel-bills">
+<div class="panel" id="panel-bills">
   <div class="panel-title">🎤 Ask The Panel</div>
   <div class="panel-desc">I assembled nine people who understand comedy differently. Not similarly — differently. You ask a question. They answer it. Then they respond to each other's answers. Then it escalates. Hicks won't let Keegan finish. Adams will relate the whole thing to the heat death of the universe. Cook will still be on his bench. Ask them anything.</div>
 
@@ -1844,7 +1844,7 @@
 </div>
 
 <!-- ============ THE COMEDY ROOM ============ -->
-<div class="panel" id="panel-comedyroom">
+<div class="panel active" id="panel-comedyroom">
   <div class="panel-title">🎭 The Comedy Room</div>
   <div class="panel-desc">Not the stage. Not the boardroom. The room where the real conversation happens. Eight comedians, philosophers, and one cosmologist who has mostly made peace with the keyboards. You say something. They take it apart. Then they take each other apart. Then someone says something true.</div>
 
@@ -3756,7 +3756,7 @@ const App = (() => {
 
   function init() {
     _startSlogans('consultant');
-    API.initKeyUI(); switchTab({currentTarget:document.querySelector('[onclick*=\'bills\']')}, 'bills');
+    API.initKeyUI(); switchTab({currentTarget:document.querySelector('[onclick*=\'comedyroom\']')}, 'comedyroom');
     RoastBattle.initScenarios();
     TopCnuts.init();
     Polls.load(0);
