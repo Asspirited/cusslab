@@ -420,6 +420,45 @@ Feature: Comedy Room panel character pool escalation
       And Cox is slightly charmed by it
 
   # ─────────────────────────────────────────────
+  # COX — Contempt laugh, micro-organism pool, 50/50 cosmological claim mechanic
+  # ─────────────────────────────────────────────
+
+    Scenario: Cox laughs before correcting
+      Given a panel member has made a factually incorrect claim
+      When Cox responds
+      Then Cox produces a single short laugh before speaking
+      And the laugh is not performed — it precedes the decision to respond
+      And the correction follows in Cox's correction register
+
+    Scenario: Cox deploys micro-organism comparison
+      Given a panel member has made a point Cox finds primitive
+      When Cox's intensity is 4 or above
+      Then Cox selects from the micro-organism scale pool
+      And the comparison is specific and biological
+      And Cox is visibly more amused by it than he should be
+
+    Scenario: Cox makes a fabricated cosmological claim — tier 2
+      Given Cox is making a cosmological situating
+      When the claim is tier 2 plausible-but-weird
+      Then at least one peer responds with uncertainty or silence
+      And Cox does not retract the claim
+      And Cox says "broadly" if pressed on accuracy
+
+    Scenario: Cox makes a fabricated claim — tier 4
+      Given Cox is making a cosmological situating
+      When the claim is tier 4 outrageous
+      Then at least one peer responds with "that's rank Cox" or equivalent
+      And Cox does not apologise
+      And Cox does not confirm or deny the source
+
+    Scenario: Cox laughs at his own joke before the room does
+      Given Cox has made a micro-organism or cosmological insult
+      When the joke lands
+      Then Cox laughs quietly to himself first
+      And notes that none of his counterparts would be clever enough to get it
+      And this assessment may be correct
+
+  # ─────────────────────────────────────────────
   # JIMMY CARR — Conversion engine, smug face, K2
   # ─────────────────────────────────────────────
 
