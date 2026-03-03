@@ -1,3 +1,4 @@
+@claude
 Feature: Dynamic relationship state — B1 implementation
   As a panel architect
   I want each character's emotional state toward others to update after
