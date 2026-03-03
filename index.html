@@ -9040,10 +9040,19 @@ Never cruel to the person. In despair on their behalf. The last line is weird an
       const pid = 'cr-ph-' + i;
       container.insertAdjacentHTML('beforeend', _placeholder(pid, member));
 
+      const crLastIdx = responses.length - 1;
       const prev = responses.map((r, idx) => {
         const m = MEMBERS.find(m => m.id === ORDER[idx]);
-        return `${m.name.toUpperCase()} said: "${r.substring(0, 200)}..."`;
+        const text = idx === crLastIdx ? r : r.substring(0, 120) + '…';
+        return `${m.name.toUpperCase()}: "${text}"`;
       }).join('\n');
+
+      const crLastBeat = (() => {
+        if (responses.length === 0) return '';
+        const last = responses[responses.length - 1];
+        const parts = last.split('. ');
+        return parts.length > 1 ? parts.slice(-2).join('. ') : last.slice(-200);
+      })();
 
       const roundNote = `\n\nThis is round ${round} of this session.` + (round >= 7
         ? ' You are at full intensity. Your characteristic escalation is completely present. No restraint.'
@@ -9051,16 +9060,19 @@ Never cruel to the person. In despair on their behalf. The last line is weird an
           ? ' Your characteristic behaviour is increasingly pronounced.'
           : '');
 
-      const system = member.prompt + roundNote + (i > 0
-        ? `\n\nOthers have already responded. React to them, build on them, contradict them, or ignore them — but stay in character.\n\nPrevious:\n${prev}`
+      const crMechanics = `\n\nCONVERSATION MECHANICS — NON-NEGOTIABLE:\n- Length: most turns are 1-2 sentences. 3-4 sentences if genuinely provoked. A full rant only when triggered by something real. Default is short. Speeches are failure.\n- Reactive: yes-and or yes-but to the specific last thing said. Do not deliver a prepared monologue while others are talking.\n- Personal: who said it matters as much as what. Use what you know about this person — their history, their wound, their last mistake in this room.`;
+
+      const system = member.prompt + roundNote + crMechanics + (i > 0
+        ? `\n\nPrevious:\n${prev}`
         : '');
 
+      const crPrevName = i > 0 ? MEMBERS.find(m => m.id === ORDER[i-1]).name : '';
       const prompt = i === 0
-        ? `Put in front of the Comedy Room:\n\n"${input}"\n\nRespond in full character. 2-3 paragraphs.`
-        : `Put in front of the Comedy Room:\n\n"${input}"\n\nRespond in character, reacting to what's already been said. 2-3 paragraphs.`;
+        ? `Topic: "${input}"\n\nOpen the room. Short unless the topic demands otherwise.`
+        : `Topic: "${input}"\n\n${crPrevName} just said: "${crLastBeat}"\n\nReact to that specifically. Yes-and or yes-but. Short unless you can't help it.`;
 
       try {
-        const resp = await API.call(system, prompt, 450, 'comedyroom/' + member.id);
+        const resp = await API.call(system, prompt, 250, 'comedyroom/' + member.id);
         responses.push(resp);
         _fill(pid, member, resp);
       } catch (e) {
