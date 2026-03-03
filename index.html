@@ -9185,13 +9185,23 @@ Scouse. Direct. Self-deprecating when warranted. The suffering is real and it gi
         return `${m.name.toUpperCase()}: "${text}"`;
       }).join('\n');
 
-      const system = member.prompt + (i > 0
-        ? `\n\nOthers have already spoken. React to them — agree, disagree, one-up them, correct them — but stay completely in character.\n\nPrevious:\n${prev}`
+      const lastBeat = (() => {
+        if (responses.length === 0) return '';
+        const last = responses[responses.length - 1];
+        const parts = last.split('. ');
+        return parts.length > 1 ? parts.slice(-2).join('. ') : last.slice(-200);
+      })();
+
+      const mechanics = `\n\nCONVERSATION MECHANICS — NON-NEGOTIABLE:\n- Length: most turns are 1-2 sentences. 3-4 sentences if genuinely provoked. A full rant only when triggered by something real. Default is short. Speeches are failure.\n- Reactive: yes-and or yes-but to the specific last thing said. Do not deliver a prepared monologue while others are talking.\n- Personal: who said it matters as much as what. Use what you know about this person — their history, their wound, their last mistake in this room.`;
+
+      const system = member.prompt + mechanics + (i > 0
+        ? `\n\nPrevious:\n${prev}`
         : '');
 
+      const prevName = i > 0 ? MEMBERS.find(m => m.id === ORDER[i-1]).name : '';
       const prompt = i === 0
-        ? `Topic for the panel:\n\n"${input}"\n\nRespond in character. Length follows character — one sentence if that's enough, a full rant only if it's earned. Not a speech by default.`
-        : `Topic: "${input}"\n\nReact to what ${MEMBERS.find(m => m.id === ORDER[i-1]).name} just said — not the topic, the person. One sentence if that's enough.`;
+        ? `Topic: "${input}"\n\nOpen the panel. Short unless the topic demands otherwise.`
+        : `Topic: "${input}"\n\n${prevName} just said: "${lastBeat}"\n\nReact to that specifically. Yes-and or yes-but. Short unless you can't help it.`;
 
       try {
         const resp = await API.call(system, prompt, 250, 'football/' + member.id);
@@ -9385,13 +9395,23 @@ Never says anything direct, unmediated, or without a framework. The Dublin warmt
         return `${m.name.toUpperCase()}: "${text}"`;
       }).join('\n');
 
-      const system = member.prompt + (i > 0
-        ? `\n\nOthers have already spoken. React, build, contradict, or stay in your lane — but stay in character.\n\nPrevious:\n${prev}`
+      const lastBeat = (() => {
+        if (responses.length === 0) return '';
+        const last = responses[responses.length - 1];
+        const parts = last.split('. ');
+        return parts.length > 1 ? parts.slice(-2).join('. ') : last.slice(-200);
+      })();
+
+      const mechanics = `\n\nCONVERSATION MECHANICS — NON-NEGOTIABLE:\n- Length: most turns are 1-2 sentences. 3-4 sentences if genuinely provoked. A full rant only when triggered by something real. Default is short. Speeches are failure.\n- Reactive: yes-and or yes-but to the specific last thing said. Do not deliver a prepared monologue while others are talking.\n- Personal: who said it matters as much as what. Use what you know about this person — their history, their wound, their last mistake in this room.`;
+
+      const system = member.prompt + mechanics + (i > 0
+        ? `\n\nPrevious:\n${prev}`
         : '');
 
+      const prevName = i > 0 ? MEMBERS.find(m => m.id === ORDER[i-1]).name : '';
       const prompt = i === 0
-        ? `For the 19th Hole panel:\n\n"${input}"\n\nRespond in character. Length follows character — one sentence if that's enough, a full rant only if it's earned. Not a speech by default.`
-        : `Topic: "${input}"\n\nReact to what ${MEMBERS.find(m => m.id === ORDER[i-1]).name} just said — not the topic, the person. One sentence if that's enough.`;
+        ? `Topic: "${input}"\n\nOpen the panel. Short unless the topic demands otherwise.`
+        : `Topic: "${input}"\n\n${prevName} just said: "${lastBeat}"\n\nReact to that specifically. Yes-and or yes-but. Short unless you can't help it.`;
 
       try {
         const resp = await API.call(system, prompt, 250, 'golf/' + member.id);
