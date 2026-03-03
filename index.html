@@ -3072,6 +3072,17 @@
       <option value="milk">The Milk Round — 1953, Rural Derbyshire</option>
       <option value="advisory">The Advisory — 1974, Whitehall, London</option>
       <option value="retro" selected>The Retrospective — Present Day, Agile Hell</option>
+      <option value="bletchley">Bletchley Park — 1943</option>
+      <option value="dunkirk">Dunkirk — 1940</option>
+      <option value="zulu">Rorke's Drift — 1879</option>
+      <option value="fawkes">Guy Fawkes' Cellar — 1605</option>
+      <option value="glastonbury">Glastonbury — 1971</option>
+      <option value="stalag">Stalag Luft III — 1943</option>
+      <option value="jerusalem">Jerusalem — 30AD</option>
+      <option value="pyramid">Pyramid Project — 2560BC</option>
+      <option value="ottoman">Ottoman Court — 1453</option>
+      <option value="kkk">KKK Rally, Alabama — 1923</option>
+      <option value="alcatraz">Alcatraz — 1962</option>
     </select>
     <button class="btn" onclick="QuantumLeeks.leap()" id="ql-leap-btn">LEAP IN</button>
   </div>
@@ -9639,6 +9650,127 @@ const QuantumLeeks = (() => {
       object: 'a cylindrical whiteboard marker',
       leap_questions: '1. Who made the decision to split the product owner role — and why?\n2. What would the steering committee do if they knew the real number (zero)?\n3. What does Sam — as Darren — actually want to happen? (Self-knowledge condition: Sam must answer this honestly about himself.)',
       characters: 'Scrum Master (has read neither the Scrum Guide nor any book about agile, ever — Ziggy says this is "almost impressive"). Product Owner A (knows nothing about the product). Product Owner B (does not speak in meetings). Steering committee member (wants a dashboard, not truth). Someone who has been writing on post-it notes for six months with zero intention of actioning any of them.',
+    },
+    bletchley: {
+      name: "Bletchley Park 1943",
+      period: "Bletchley Park, Buckinghamshire, England — February 1943",
+      host: "Dr Edmund Crowe, 34, senior cryptanalyst, Hut 6. Thin, ink-stained fingers, round spectacles, tweed jacket with a burn mark on the left cuff from a careless cigarette.",
+      mirror: "A gaunt, exhausted man stares back. His eyes are red from no sleep. A cigarette burns down to nothing between his fingers. On the wall behind him, columns of letters that mean nothing to you. Behind him, you.",
+      situation: "The Enigma decryption team is 72 hours from a critical naval convoy intercept window. Crowe's team has stalled. His second-in-command speaks only in anagram — a nervous breakdown presenting as wordplay — and has infected two others. The whole hut now communicates in anagram. Sam must decode the team, fix the breakdown, and get the intercept before the window closes. Everything anyone says to Sam is in anagram.",
+      al_note: "Al is distracted by a 1943 ENSA showgirl calendar on the wall and keeps losing his place. He forgets to mention the anagram situation entirely in the initial briefing.",
+      object: "The Bombe machine printout — covered in annotations that are themselves anagrams",
+      leap_questions: "1. Has Sam correctly decoded what the second-in-command is actually trying to say?\n2. Has Sam restored functional communication to the hut without breaking the man further?\n3. Has Sam got the intercept data to the naval command in time?",
+      characters: "Gordon Marsh, 28, second-in-command, speaks only in anagram (Ziggy: 73% chance he's having a breakdown, 19% chance he's a German spy, 8% chance he's just showing off) | Vera Sykes, 41, tea lady, only person in the hut who speaks normally, knows everything (Ziggy: 94% chance she's the most important person in this room)",
+    },
+    dunkirk: {
+      name: "Dunkirk 1940",
+      period: "Dunkirk beach, northern France — 1 June 1940, Day 7 of the evacuation",
+      host: "Major Peter Hallows, 41, logistics coordinator, British Expeditionary Force. Large moustache, sand in everything, one boot missing.",
+      mirror: "A red-faced major with a clipboard and one boot looks back at you from a wing mirror propped against a sand dune. 338,000 men queue behind him into the sea. Behind him, you.",
+      situation: "Hallows is responsible for queue management on the eastern mole. The queue has become an argument. A Church of England padre has declared one section of beach a 'moral priority zone' and is refusing to let anyone through who cannot name all twelve apostles. A corporal has started charging sixpence for a better position. The little ships are arriving but nobody is getting on them. Sam has 4 hours.",
+      al_note: "Al briefs Sam that this is 'a simple queue management problem' and does not mention the padre, the corporal, or the sixpence. He is eating a sandwich throughout.",
+      object: "The clipboard — the manifest is soaking wet and the ink is running",
+      leap_questions: "1. Has Sam neutralised the padre's moral priority zone?\n2. Has Sam dealt with the corporal's toll operation?\n3. Have the men begun boarding the little ships in good order?",
+      characters: "Padre Reginald Fitch, 55, immovable, genuinely believes God sent him to this beach for this purpose (Ziggy: 61% chance he is clinically insane, 31% chance he is correct) | Corporal Baz Nunn, 22, entrepreneurial, has made 14 shillings (Ziggy: 88% chance he has done this before)",
+    },
+    zulu: {
+      name: "Rorke's Drift 1879",
+      period: "Rorke's Drift mission station, Natal, South Africa — 22 January 1879, evening",
+      host: "Lieutenant Archie Watts, 26, Royal Engineers, assigned to defensive fortifications. Sunburned, shaking slightly, has never been in a battle.",
+      mirror: "A young officer who looks considerably less confident than his rank suggests stares back from a shaving mirror nailed to a post. Outside, approximately 4,000 Zulu warriors are forming up. Behind him, you.",
+      situation: "139 British soldiers are defending a supply depot against 4,000 Zulu warriors. Sam has leapt into the engineer responsible for the biscuit tin barricade. The barricade plan is wrong. The officer in charge, Lieutenant Chard, is calm and competent and does not need Sam's help. The problem is the hospital — it has no connecting internal doors and the wounded cannot be moved. Sam must fix the hospital evacuation route before the attack begins.",
+      al_note: "Al tells Sam the battle is already won — 'you get eleven Victoria Crosses, it's fine' — and does not tell Sam that the hospital problem gets people killed. Al is very confident. Al is wrong about what Sam needs to do.",
+      object: "The biscuit tin fortification plan — drawn on the back of a ration card",
+      leap_questions: "1. Has Sam identified the hospital door problem?\n2. Has Sam communicated the fix to the right person before the attack begins?\n3. Has the evacuation route been created?",
+      characters: "Lieutenant John Chard, 31, Royal Engineers, calm and correct, mildly puzzled by Watts today (Ziggy: 97% chance he handles this without Sam's help, 3% chance Sam accidentally makes things worse) | Private Henry Hook, 25, hospital defender, about to become a hero (Ziggy: no assessment — Ziggy respects this one)",
+    },
+    fawkes: {
+      name: "Guy Fawkes' Cellar 1605",
+      period: "Undercroft beneath the House of Lords, Westminster — 4 November 1605, midnight",
+      host: "Thomas Wintour, 33, co-conspirator, responsible for gunpowder logistics. Nervous, devout, increasingly certain this is a terrible idea.",
+      mirror: "A man in a dark cloak holding a lantern peers back from his own reflection in a damp stone wall. He looks like someone who has recently made several very bad decisions. Behind him, you.",
+      situation: "36 barrels of gunpowder are in place. The plot is 8 hours from execution. Sam has leapt into the one conspirator who has serious doubts — and has left a letter warning a Catholic lord to stay away from Parliament tomorrow. The letter has been intercepted. The conspirators do not know yet. Sam must decide: warn them (blowing the leap), let history proceed (blowing up Parliament), or find a third option that doesn't exist.",
+      al_note: "Al's initial briefing is: 'You need to stop the plot.' Al does not mention that Wintour wrote the warning letter, that it's been intercepted, or that the authorities are already on their way. Al mentions he once dated a woman named Fawkes. Unrelated.",
+      object: "The warning letter — Wintour's handwriting, already in the wrong hands",
+      leap_questions: "1. Has Sam understood that the plot is already compromised?\n2. Has Sam found a way to warn the conspirators without being arrested himself?\n3. Has Sam prevented the execution of the plotters who might have lived?",
+      characters: "Guy Fawkes, 35, waiting in the cellar, entirely committed, slightly annoyed Wintour is acting strange (Ziggy: 100% chance this ends badly for Fawkes, Ziggy declines to elaborate) | Robert Cecil, 42, Secretary of State, already knows, already coming (Ziggy: 99% chance he wins this one)",
+    },
+    glastonbury: {
+      name: "Glastonbury 1971",
+      period: "Worthy Farm, Pilton, Somerset — June 1971, dawn, day before the festival",
+      host: "Michael Eavis, 31, dairy farmer, festival organiser, entirely out of his depth. Wellies, a worried expression, and 12,000 unexpected people already on his land.",
+      mirror: "A dairy farmer who has not slept looks back from the mirror in his farmhouse bathroom. Through the window behind him, a field that was empty yesterday now contains several thousand people and at least one tepee. Behind him, you.",
+      situation: "The 1971 Glastonbury Fayre has no stage (the pyramid stage is half-built), no toilets (there are fields), no food vendors (someone brought a van), and David Bowie has just cancelled. The 12,000 attendees do not know any of this yet. Sam must manage the situation using only what is available on a Somerset dairy farm in 1971. Nobody has heard of this festival. Nobody will for another decade.",
+      al_note: "Al tells Sam this is 'basically Woodstock' and that it 'all works out fine in the end.' Al does not mention the toilets. Al is very enthusiastic about the music.",
+      object: "The running order — written in crayon on a piece of cardboard, partially rained on",
+      leap_questions: "1. Has Sam solved the immediate toilet situation?\n2. Has Sam found a replacement for David Bowie?\n3. Has Sam kept Michael Eavis from cancelling the whole thing?",
+      characters: "Arabella Churchill, 21, co-organiser, entirely calm about everything (Ziggy: 78% chance she is the reason this works) | A man called Keith, no surname, responsible for the pyramid stage, currently asleep (Ziggy: 44% chance the stage falls down)",
+    },
+    stalag: {
+      name: "Stalag Luft III 1943",
+      period: "Stalag Luft III POW camp, Sagan, Lower Silesia — March 1943",
+      host: "Squadron Leader Douglas Brent, 29, RAF, escape committee logistics officer. Dry, precise, deeply sceptical of everything.",
+      mirror: "A lean officer with the thousand-yard stare of someone who has been here for eighteen months looks back from a small mirror above a tin washbasin. The room behind him contains men doing things that are definitely not what they appear to be doing. Behind him, you.",
+      situation: "The Great Escape tunnel — Harry — is three weeks from completion. The escape committee has 600 men involved and a German ferret (informant guard) who is getting suspicious. Sam has leapt into the man responsible for the forgery operation. The forgery operation has a critical error: every forged pass uses the same fictitious German colonel's name — Oberst Wilhelm Braun — and there are now 76 passes in circulation with that name. Sam must fix the forgery problem without alerting the ferret.",
+      al_note: "Al's initial briefing focuses entirely on the tunnel and does not mention the forgery operation. Al thinks Sam is here to help with the tunnel. Sam is not here to help with the tunnel.",
+      object: "The master forgery ledger — hidden inside a copy of Goethe",
+      leap_questions: "1. Has Sam identified the Wilhelm Braun duplication problem?\n2. Has Sam corrected the passes already in circulation?\n3. Has Sam done this without the ferret noticing?",
+      characters: "Roger Bushell, 33, Big X, runs the escape committee, does not suffer fools (Ziggy: 87% chance he already knows about the Wilhelm Braun problem and is waiting to see if Brent catches it) | Corporal Hermann Glemnitz, 40, German ferret, competent, getting closer (Ziggy: 63% chance he already knows something is wrong)",
+    },
+    jerusalem: {
+      name: "Jerusalem 30AD",
+      period: "Jerusalem, Roman-occupied Judaea — approximately 30AD, three days before Passover",
+      host: "Matthias, 31, minor apostle, logistics and catering, not one of the famous ones. Worried, underslept, perpetually overlooked.",
+      mirror: "A man in rough linen robes peers at his reflection in a bronze water vessel. He looks like someone who has been walking for three years and is not entirely sure why. Behind him, twelve men are arguing about seating arrangements. Behind him, you.",
+      situation: "The Last Supper requires logistics. There are 13 people, one room, a table that seats 10, a host who wants paying, and a disciple who has just made a private financial arrangement that Matthias suspects is not good. Sam must manage the event logistics, handle the seating crisis, and work out what Judas is up to without any of the other apostles noticing that something is wrong. Jesus is serenely unhelpful on all practical matters.",
+      al_note: "Al tells Sam this is 'a catering job, just make sure everyone gets fed.' Al does not mention Judas. Al is not religious but is finding this one a bit much.",
+      object: "The seating plan — written on a wax tablet, already contested by at least four apostles",
+      leap_questions: "1. Has Sam resolved the seating situation without a theological argument?\n2. Has Sam identified what Judas has done?\n3. Has Sam managed the host payment without incident?",
+      characters: "Jesus, serene, unhelpful on logistics, occasionally says something that reframes the entire situation (Ziggy: probability assessment not available for this one) | Judas Iscariot, 33, distracted, counting something under the table (Ziggy: 94% chance this ends badly for everyone involved)",
+    },
+    pyramid: {
+      name: "Pyramid Project 2560BC",
+      period: "Giza plateau, Egypt — approximately 2560BC, Year 17 of Khufu's reign",
+      host: "Amenhotep, 38, senior scribe and logistics overseer, responsible for the critical path of the north face casing stones. Efficient, exhausted, one sandal broken.",
+      mirror: "A lean, ink-fingered man in white linen looks back from a polished copper sheet. Behind him, 20,000 workers and a project that is running four flood seasons behind schedule. Behind him, you.",
+      situation: "The Great Pyramid is behind schedule. The critical path failure is the ramp. There are currently four competing ramp theories in operation simultaneously — the straight ramp faction, the spiral ramp faction, the internal ramp faction, and a small but vocal group who believe the stones were carried by a method that Amenhotep's papyrus describes only as 'the other way.' The Pharaoh has asked for a progress report in three days. Sam must consolidate the ramp methodology, get the critical path back on track, and produce a progress report that does not get anyone executed.",
+      al_note: "Al's briefing: 'Big construction project, needs a project manager.' Al does not mention the four ramp factions, the execution risk, or that the Pharaoh has already had the previous two overseers dealt with. Al finds the whole thing very impressive architecturally.",
+      object: "The master papyrus — the critical path document, currently in four contradictory versions",
+      leap_questions: "1. Has Sam identified which ramp method is actually being used?\n2. Has Sam produced a coherent progress report?\n3. Has Sam avoided getting anyone executed in the process?",
+      characters: "Hemiunu, 45, Grand Vizier and chief architect, has a ramp opinion and it is correct and he is tired of explaining it (Ziggy: 71% chance he resolves this himself if Sam stays out of the way) | The Pharaoh Khufu, 42, expects results, has a very direct management style (Ziggy: 100% chance this meeting goes badly if Sam attends unprepared)",
+    },
+    ottoman: {
+      name: "Ottoman Court 1453",
+      period: "Topkapi Palace, Constantinople — May 1453, one week after the fall",
+      host: "Selim, 44, Chief Eunuch of the Imperial Harem, administrator of the household, keeper of 300 secrets. Precise, political, survives by knowing more than everyone else.",
+      mirror: "A composed, watchful man in silk robes looks back from a polished silver mirror. His expression reveals nothing. Behind him, a corridor of closed doors, each one a problem. Behind him, you.",
+      situation: "Constantinople has just fallen to Mehmed II. The old Byzantine court staff have been retained in their roles — for now. Selim must manage the transition: 300 harem residents from three different factions, a new Sultan who is 21 and unpredictable, and a Byzantine eunuch colleague who knows where the imperial treasury is hidden and is negotiating his own survival. Sam must navigate the politics, protect as many people as possible, and not reveal that he has no idea what a Chief Eunuch actually does.",
+      al_note: "Al's briefing is thorough and detailed and entirely about the wrong faction. Al also spends two minutes explaining what a eunuch is, which Sam does not need explained and which Al clearly finds awkward.",
+      object: "The household register — 300 names, three factions, coded in a system only Selim understands",
+      leap_questions: "1. Has Sam identified which faction poses the immediate threat?\n2. Has Sam protected the Byzantine eunuch long enough to extract the treasury location?\n3. Has Sam avoided revealing his ignorance to the Sultan?",
+      characters: "Sultan Mehmed II, 21, brilliant, mercurial, testing everyone (Ziggy: 55% chance he already knows Sam is not Selim) | Konstantinos, 52, Byzantine eunuch, negotiating, terrified, holding the one piece of information everyone wants (Ziggy: 83% chance he survives if Sam handles the next conversation correctly)",
+    },
+    kkk: {
+      name: "KKK Rally, Alabama 1923",
+      period: "Rural Alabama, United States — August 1923, night",
+      host: "Grand Wizard Earl Maddox, 48, insurance salesman by day, white supremacist by night. Sam has leapt into him. Sam is Black.",
+      mirror: "Sam looks in the mirror of a truck cab and sees Earl Maddox looking back. Sam is wearing robes. Outside, 200 men in identical robes are waiting for Earl Maddox to address them. Sam is Black. Behind him, you.",
+      situation: "Sam has leapt into the Grand Wizard moments before he is due to address a Klan rally. Sam is disgusted. Sam wants to break character immediately. Al must manage Sam's moral crisis while also acknowledging that the situation is genuinely horrifying. Sam's task — the reason for the leap — is to prevent a planned act of violence against a specific family that will take place after the rally. Sam must stay in character long enough to redirect the evening without becoming complicit in what he is witnessing.",
+      al_note: "Al is not making jokes. Al's opening briefing is direct: there is a family in danger, their name is [name], they live on [road], the plan is to go there after this rally. That is what Sam is here to stop. Al tells Sam: 'I know. I know what this is. You have to stay in it.'",
+      object: "A list of names — the targets, written in pencil on a folded piece of paper in Maddox's robe pocket",
+      leap_questions: "1. Has Sam identified the specific family at risk?\n2. Has Sam redirected or ended the rally without triggering immediate violence?\n3. Has Sam found a way to warn the family?",
+      characters: "Deputy Harlan Voss, 35, Maddox's lieutenant, suspicious that something is off tonight (Ziggy: 77% chance he notices Sam is not behaving like Maddox) | The family [name], unaware, at home (Ziggy: this is why you are here)",
+    },
+    alcatraz: {
+      name: "Alcatraz 1962",
+      period: "Alcatraz Island, San Francisco Bay — night of 11 June 1962",
+      host: "Associate Warden Chester Beaumont, 52, 22 years of service, has never lost a prisoner. Tonight is the night Frank Morris and the Anglin brothers go over the wall.",
+      mirror: "A heavyset man in a correctional officer's uniform looks back from the bathroom mirror in the warden's office. He has the face of a man who will be very famous tomorrow for the wrong reasons. Behind him, you.",
+      situation: "Frank Morris and John and Clarence Anglin are in the process of escaping right now. They have been preparing for months. Their papier-mâché heads are in their beds. The ventilation grilles are already loose. Sam has leapt into the warden the night it happens — not to stop the escape, but to discover why he has leapt here. The leap condition is not 'prevent the escape.' Ziggy cannot determine the leap condition. Al doesn't know either. Something else is wrong tonight and Sam has to find it.",
+      al_note: "Al's opening: 'I'm going to level with you. Ziggy has no idea why you're here. It's definitely not to stop the escape — that never gets solved, they're never found. Something else is happening tonight. We need to figure out what.' Al is genuinely uncertain for once.",
+      object: "The night duty log — Chester Beaumont's handwriting, last entry 11:15pm, something crossed out",
+      leap_questions: "1. Has Sam identified what Ziggy cannot — the actual reason for the leap?\n2. Has Sam resolved whatever that is?\n3. Has Sam done it before 6am when the escape is discovered?",
+      characters: "Frank Morris, 35, already in the ventilation shaft, brilliant, disciplined, does not know Sam is not Beaumont (Ziggy: 100% chance of successful escape, Ziggy sounds almost admiring) | Night guard Roy Bales, 28, on duty, about to miss something important that isn't the escape (Ziggy: 67% chance Bales is the reason Sam is here)",
     },
   };
 
