@@ -6,22 +6,22 @@
 ## Session Start (mandatory, before any code)
 
 1. Read ALL files in .claude/principles/ and .claude/practices/
-2. Run `npm run pipeline` — report pipeline scorecard (see format in practices/ci-cd.md)
-3. Report DORA status (see format in practices/dora.md)
-4. Report last retrospective findings
-5. Read .claude/practices/waste-log.md and report any open items
-6. Only then: work
+2. Run `cd /home/rodent/cusslab && node pipeline/metrics-report.js && npm test` — report DORA stats and coverage numbers before doing anything else
+3. Report last retrospective findings
+4. Read .claude/practices/waste-log.md and report any open items
+5. Only then: work
 
 ---
 
 ## Session End (mandatory, before closing)
 
 1. Review session for any insights flagged "worth a conversation" or "unactioned"
-2. Review for any decisions made but not yet implemented
-3. Review for any regression or unexpected behaviour observed
-4. Review for any friction that cost tokens or time
-5. Commit any new entries to .claude/practices/waste-log.md
-6. Push — no session ends without waste-log committed and pushed
+2. Run `cd /home/rodent/cusslab && node pipeline/metrics-report.js && npm test` — report final DORA stats and coverage. Flag any regression from session-start numbers.
+3. Review for any decisions made but not yet implemented
+4. Review for any regression or unexpected behaviour observed
+5. Review for any friction that cost tokens or time
+6. Commit any new entries to .claude/practices/waste-log.md
+7. Push — no session ends without waste-log committed and pushed
 
 ---
 
