@@ -198,6 +198,45 @@
 
 ---
 
+### WL-013
+**Item:** docs/ character files drift from index.html inline prompts
+**Symptom:** docs/ files describe character prompts correctly; index.html member.prompt strings are independent hardcoded copies. A docs/ change does NOT propagate to the live app without a separate explicit wiring commit.
+**Suspected cause:** Single-file architecture (index.html) means there's no import mechanism. docs/ was built as a design reference, not a runtime source. No process enforces sync.
+**Session:** 2026-03-03
+**Time lost:** Unknown — any docs/ edit made in confidence it was "live" was silently ineffective
+**Cost impact:** Medium — character voice improvements made to docs/ are invisible until separately wired
+**Delay:** Any docs/ edit needs a companion index.html edit to ship
+**Tags:** `#knowledge-loss` `#false-progress` `#save-rod-money`
+**Status:** open — no automatic sync; manual wiring required per character update
+
+---
+
+### WL-014
+**Item:** Cross-character wound awareness deeply asymmetric across panels
+**Suspected cause:** Characters built at different times with different levels of cross-referencing. Golf characters built later (Dougherty, McGinley) have rich named cross-references; earlier characters (Roy, Radar) have none. Boardroom Roy has zero named character references in his inline prompt.
+**Symptom:** Roy responds to wound-bait with generic precision rather than named counter-attacks. Radar similarly thin. Layer 2 (character knowing the other characters' wounds) not implemented for early-built characters.
+**Session:** 2026-03-03
+**Time lost:** Unknown — quality ceiling on these panels until fixed
+**Cost impact:** Medium — requires careful prompt editing per character, high risk of voice regression
+**Delay:** Deferred — B1 relationship state implemented first as Layer 1 foundation
+**Tags:** `#character-loss` `#false-progress` `#save-rod-money`
+**Status:** open — Layer 2 cross-character wound awareness not yet implemented for Roy, Radar, early Boardroom members
+
+---
+
+### WL-015
+**Item:** B1 implementation session — context-loss mid-implementation (summary triggered during pipeline fix)
+**Symptom:** Summary triggered while diagnosing @claude tag pipeline failure. Correct root cause (zero-indent @claude required at file level) identified in transcript but not acted on before context reset.
+**Suspected cause:** Long session with large index.html edits consumed context window. Transcript preserved correct analysis so recovery was fast (one read of gherkin-runner.js to confirm fix).
+**Session:** 2026-03-03
+**Time lost:** ~10 min recovery at session resumption
+**Cost impact:** Low — transcript preserved; fix was straightforward
+**Delay:** None — B1 shipped in same session
+**Tags:** `#summarisation-loss` `#context-recovery` `#save-rod-money`
+**Status:** closed — pipeline green; B1 committed (6985455)
+
+---
+
 ## Session-End Commit Rule
 
 Claude Code MUST add a waste-log entry before every session closes, including on disconnect, covering:
