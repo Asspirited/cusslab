@@ -168,7 +168,7 @@
 **Cost impact:** Medium — fix requires Gherkin + reimplementation across all character voice pools
 **Delay:** Fix not yet started; 1 session minimum to implement properly
 **Tags:** `#false-progress` `#character-loss` `#save-rod-money`
-**Status:** open — fix designed this session, Gherkin not yet written
+**Status:** closed — labels removed; behavioural definitions added to all panels (COMMIT 1, 924c40c)
 
 ---
 
@@ -181,7 +181,7 @@
 **Cost impact:** High — product decisions made without data; no way to prioritise features by actual usage
 **Delay:** Metrics layer implementation now queued; estimated 1-2 sessions to implement properly
 **Tags:** `#knowledge-loss` `#false-progress` `#save-rod-money`
-**Status:** open — Gherkin spec in progress this session
+**Status:** closed — HCSession module, turd buttons, Plausible, AARRR snapshot implemented (COMMIT 9, 2745f87)
 
 ---
 
@@ -234,6 +234,32 @@
 **Delay:** None — B1 shipped in same session
 **Tags:** `#summarisation-loss` `#context-recovery` `#save-rod-money`
 **Status:** closed — pipeline green; B1 committed (6985455)
+
+---
+
+### WL-016
+**Item:** ConspireEngine absent at launch — six-panel sessions ran with no conspiracy detection
+**Symptom:** Roe/Coltart pair, Radar/Faldo asymmetry, Montgomerie pre-loads all existed as design intent but no arc ever triggered. Panels behaved as if relationships were flat.
+**Suspected cause:** Character mechanics designed before infrastructure. ConspireEngine was queued as "next sprint" but the queue had no enforcement mechanism.
+**Session:** 2026-03-03
+**Time lost:** Unknown — all sessions prior to this one ran without conspiracy arcs
+**Cost impact:** Medium — character tension mechanics were present in prompts but structurally inert
+**Delay:** Conspiracy arc shipped this session (COMMIT 7a, 8898c92)
+**Tags:** `#false-progress` `#character-loss` `#save-rod-money`
+**Status:** closed — ConspireEngine implemented and wired to Golf discuss() (8898c92); Roe/Coltart pair profile added (2915213)
+
+---
+
+### WL-017
+**Item:** Butch Harmon absent from Golf panel at launch — coaching eye, schooling, wind-up mechanics never ran
+**Symptom:** Golf panel was described as having Butch from early sessions; he appeared in docs/characters-sports.md with full profile. His member.prompt in index.html was a stub with no mechanic definitions.
+**Suspected cause:** Character profile in docs/ never wired to index.html inline prompt (see WL-013 — docs/index drift). Butch was "present" in docs but mechanically absent in the live panel.
+**Session:** 2026-03-03
+**Time lost:** Unknown — all Golf sessions ran without coaching eye, Murray schooling, or Faldo wind-up
+**Cost impact:** Medium — significant character depth missing from every Golf run
+**Delay:** Full Butch mechanics shipped this session (COMMIT 8, 4453488)
+**Tags:** `#character-loss` `#false-progress` `#knowledge-loss` `#save-rod-money`
+**Status:** closed — pre-loaded diagnoses, Murray schooling, Faldo wind-up, renewable laugh all implemented (4453488)
 
 ---
 
