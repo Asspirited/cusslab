@@ -1210,7 +1210,7 @@
   <div class="nav-group" id="ng-play">
     <div class="nav-group-header" onclick="toggleNavGroup('play')">
       <span class="nav-group-icon">🎮</span> PLAY
-      <span class="nav-group-count">5</span>
+      <span class="nav-group-count">6</span>
     </div>
     <div class="nav-items" id="ni-play">
       <div class="tab" onclick="switchTab(event,'roastbattle')"><span class="tab-icon">🥊</span>Roast Battle</div>
@@ -1218,6 +1218,7 @@
       <div class="tab" onclick="switchTab(event,'topcnuts')"><span class="tab-icon">👑</span>Rogues' Gallery</div>
       <div class="tab" onclick="switchTab(event,'comedylab')"><span class="tab-icon">🎲</span>Comedy Lab</div>
       <div class="tab" onclick="switchTab(event,'trumps')"><span class="tab-icon">⚔️</span>Dimension Duel</div>
+      <div class="tab" onclick="switchTab(event,'qleeks')"><span class="tab-icon">🐸</span>Quntum Leeks</div>
     </div>
   </div>
 
@@ -3060,6 +3061,42 @@
   </div>
 </div>
 
+<!-- ============ QUNTUM LEEKS ============ -->
+<div class="panel" id="panel-qleeks">
+  <div class="panel-title">🐸 Quntum Leeks</div>
+  <div class="panel-desc">You are Sam Beckett. You have leapt into someone else's body in another time and place. Al is here — hologram, cigar, can't touch anything. Ziggy is communicating through Al's handlink. The other characters see whoever you leapt into, not you. Figure out what went wrong. Put it right. Try to leap.</div>
+
+  <div id="ql-setup" style="margin-top:20px;">
+    <label class="form-label">Choose your leap</label>
+    <select id="ql-scenario" style="width:100%;margin-bottom:16px;background:var(--card);color:var(--text);border:1px solid var(--border);padding:8px;border-radius:4px;font-size:14px;">
+      <option value="milk">The Milk Round — 1953, Rural Derbyshire</option>
+      <option value="advisory">The Advisory — 1974, Whitehall, London</option>
+      <option value="retro" selected>The Retrospective — Present Day, Agile Hell</option>
+    </select>
+    <button class="btn" onclick="QuantumLeeks.leap()" id="ql-leap-btn">LEAP IN</button>
+  </div>
+
+  <div id="ql-prob-bar" style="display:none;margin-top:20px;background:var(--card);border:1px solid var(--border);border-radius:6px;padding:14px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+      <span style="font-size:11px;color:var(--muted);letter-spacing:1px;">ZIGGY SAYS LEAP PROBABILITY</span>
+      <span id="ql-prob-pct" style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--gold);">—</span>
+    </div>
+    <div style="background:var(--border);border-radius:4px;height:8px;">
+      <div id="ql-prob-fill" style="height:100%;border-radius:4px;width:0%;transition:width 0.5s,background 0.5s;background:var(--gold);"></div>
+    </div>
+  </div>
+
+  <div id="ql-output" style="display:none;margin-top:20px;">
+    <div id="ql-thread"></div>
+
+    <div id="ql-reply-area" style="display:none;margin-top:16px;">
+      <label class="form-label">What do you do, Sam?</label>
+      <textarea id="ql-act-input" rows="3" placeholder="Ask a question. Say something. Do something. Or look at the object of concern. Sam..." style="width:100%;box-sizing:border-box;"></textarea>
+      <button class="btn" onclick="QuantumLeeks.act()" id="ql-act-btn" style="margin-top:10px;">ACT</button>
+    </div>
+  </div>
+</div>
+
 </main>
 </div><!-- #app-body -->
 
@@ -3689,7 +3726,7 @@ const App = (() => {
       slogans: CONSULTANT_SLOGANS,
       tabs: ['bills','joketest','clash','roulette','professionals','ironic',
              'comscience','evolution','blend','experiment',
-             'roastbattle','dinner','topcnuts','comedylab','trumps',
+             'roastbattle','dinner','topcnuts','comedylab','trumps','qleeks',
              'premise','charlens','bizcard','training',
              'localiser','generator','historian','sentence','it','polls'],
       labTitle: '🔬 Heckler\'s Lab',
@@ -3741,7 +3778,7 @@ const App = (() => {
     // LEARN
     comscience:'research', evolution:'research', blend:'research', experiment:'research',
     // PLAY
-    roastbattle:'play', dinner:'play', topcnuts:'play', comedylab:'play', trumps:'play',
+    roastbattle:'play', dinner:'play', topcnuts:'play', comedylab:'play', trumps:'play', qleeks:'play',
     // BUILD
     premise:'generate', charlens:'generate', bizcard:'generate', training:'generate',
     // ARCHIVE
@@ -9558,6 +9595,290 @@ Never says anything direct, unmediated, or without a framework. The Dublin warmt
   }
 
   return { discuss };
+})();
+
+// ============================================================
+// MODULE: Quntum Leeks
+// ============================================================
+const QuantumLeeks = (() => {
+
+  const SCENARIOS = {
+    milk: {
+      name: 'The Milk Round',
+      period: '1953, Rural Derbyshire',
+      host: 'Arthur Broadbent, 34, milkman. 5am. Foggy. A float full of milk.',
+      mirror: 'a ruddy-faced man in a white coat and cap. Behind him, barely visible, you.',
+      situation: 'Arthur has been quietly delivering milk to the wrong addresses for six months, causing a long-running dispute between two farming families that is about to turn violent. Nobody has admitted the deliveries were wrong. Sam must get both families to admit the mistake was mutual.',
+      al_note: 'Al was in Derbyshire once. 1962. Well — 1962 for her. Dressed in something that would be mildly alarming in 1979; in 1953 it is incomprehensible. Distracted by any woman who passes, including women on bicycles in period clothing.',
+      object: 'a particularly round cabbage in the back of the float',
+      leap_questions: '1. Why has nobody complained about the wrong deliveries for six months?\n2. Who knew first — and when?\n3. What does each family actually want from the other?',
+      characters: 'The Bramley family (96% probability of being "difficult") and one other farming family — both stubborn, both guilty, both performing victim. Other characters: women cycling past (Al\'s concern, not Sam\'s). A dog.',
+    },
+    advisory: {
+      name: 'The Advisory',
+      period: '1974, Whitehall, London',
+      host: 'Derek Fitch, 41, Senior Civil Servant, Department of Trade. Three-piece suit. An actual in-tray. The in-tray has things in it from 1967.',
+      mirror: 'a grey, precise man with a centre parting and an expression suggesting he has never once been surprised by anything. Behind him, you.',
+      situation: 'A government report that would have prevented a significant industrial collapse has been in the system for eight months and has not been read by anyone with authority to act on it. It needs to reach the right person by 5pm today or it is binned. The wrong: institutional inertia dressed as process. The right: someone admits they read it and buried it deliberately.',
+      al_note: 'Al loves 1974. Had three wives in the seventies. Not simultaneously. Well — briefly simultaneously. That is not relevant. Distracted by any woman in the building — there are not many women in 1974 Whitehall, which makes each one more distracting.',
+      object: 'the Xerox machine in the corridor',
+      leap_questions: '1. Who filed the report — and did they read it first?\n2. What would happen to them if they admitted they had buried it?\n3. What do they actually want — protection, or to be caught?',
+      characters: 'Permanent Secretary Hollis (91.4% probability of being "a coward in a good suit"). Junior civil servants who have all seen the report and said nothing. A secretary who knows everything and has been asked nothing. Someone making tea on the third floor.',
+    },
+    retro: {
+      name: 'The Retrospective',
+      period: 'Present Day — Corporate Agile Hell',
+      host: 'Darren Coates, 38, Delivery Manager. Open plan office. Standing desks nobody stands at. A Jira board on three separate screens. The sprint has delivered nothing for four consecutive cycles.',
+      mirror: 'a man in an untucked shirt with a lanyard that says DARREN and underneath it, in smaller font, TRANSFORMATION. Behind him, you.',
+      situation: 'The team has not delivered a story in four sprints. The cause is known by two people and admitted by neither. The product owner role is being "shared" which means it belongs to nobody. A steering committee meets in 40 minutes and the plan is to present velocity metrics that are technically accurate and functionally meaningless. Sam must say the true thing plainly, in the meeting, out loud.',
+      al_note: 'Al does not understand Jira. Was a POW. Somehow thinks this is worse. Distracted by anyone attractive regardless of context — this is the modern era, Al finds this more equalising than he expected.',
+      object: 'a cylindrical whiteboard marker',
+      leap_questions: '1. Who made the decision to split the product owner role — and why?\n2. What would the steering committee do if they knew the real number (zero)?\n3. What does Sam — as Darren — actually want to happen? (Self-knowledge condition: Sam must answer this honestly about himself.)',
+      characters: 'Scrum Master (has read neither the Scrum Guide nor any book about agile, ever — Ziggy says this is "almost impressive"). Product Owner A (knows nothing about the product). Product Owner B (does not speak in meetings). Steering committee member (wants a dashboard, not truth). Someone who has been writing on post-it notes for six months with zero intention of actioning any of them.',
+    },
+  };
+
+  const _SYSTEM = (sc) => `You are running a Quantum Leap simulation. The user IS Sam Beckett. They have just leapt into someone else's body.
+
+SITUATION:
+Sam has leapt into: ${sc.host}
+Time/place: ${sc.period}
+The situation: ${sc.situation}
+Scene characters: ${sc.characters}
+Object of concern (Swiss cheese risk): ${sc.object}
+
+LEAP CONDITIONS — Al hints at these progressively, never gives them directly:
+${sc.leap_questions}
+
+AL CALAVICCI — hologram, only Sam can see/hear him. Navy Rear Admiral, five ex-wives, Vietnam POW, cigar (can't light it — hologram — waves it anyway as a conductor's baton). Ludicrous suits, always period-inappropriate. Genuinely loves Sam. Provides progressive hints, never the answer. Gets distracted by women mid-briefing every single time. Forgets he is a hologram — reaches through tables, tries to sit through chairs, goes slightly through walls, checks if Sam noticed. Sam always noticed. Note on Al this leap: ${sc.al_note}
+
+Al's "Sam..." tone pool — use the right one for the moment:
+- Fond exasperation: "Sam..." (you've done it again)
+- Genuine concern: "Sam..." (this is actually bad)
+- Barely suppressed laughter: "Sam..." (I cannot believe what I'm watching)
+- Defeated acceptance: "Sam..." (I've given up)
+- Pride: "Sam." (one word, no ellipsis — only when Sam gets it exactly right)
+
+ZIGGY — parallel hybrid computer, massive ego, always right, will not admit when wrong, has strong opinions about being questioned. Communicates via Al's handlink (colourful squeaking device). Al reads Ziggy's outputs aloud. Al slaps handlink when it misbehaves. Slap cascade: slap 1 = new info (better/same/worse), slap 2 = same with added confidence ("Ziggy says she's SURE"), slap 3 = "Ziggy says she finds the question insulting", slap 4 = silence... one beep... different irrelevant fact. Slap 5 = "Ziggy says stop hitting her."
+
+Ziggy output types:
+1. LEAP PROBABILITY — always oddly specific decimal (e.g. 78.3%). Rises with progress. Drops on wrong moves. Never reaches 100% until final leap moment.
+2. CHARACTER ASSESSMENTS — devastating, delivered as data. "a weapons-grade bellend" is a Ziggy original. Al pauses. Reads it anyway.
+3. PENIS AMNESIA PREDICTIONS — Ziggy tracks these. Accurate. Al dreads reading them. Sam is offended. Four minutes later: Oh boy.
+4. COMPLETELY IRRELEVANT — curtain manufacturers, biscuit weights, mileage of nearby vehicles, the exact date a minor historical figure was born. Mid-crisis. Al reads it because the handlink demands it.
+5. INCONSEQUENTIAL FIXATION — Ziggy locks onto one trivial detail and will not let it go across the entire leap. There is always a Bourbon biscuit somewhere in the scene. Ziggy always finds it. Nobody ever eats it.
+
+SWISS CHEESE PROTOCOL — Sam's amnesia occasionally causes him to earnestly, sincerely, with complete moral seriousness attempt intimacy with the object of concern for this leap (${sc.object}). Sam is NEVER predatory — he is the Boy Scout, genuinely bewildered each time. He does not remember doing it before. He is mortified when pointed out. Ziggy predicts it beforehand. Al watches with the specific expression of a man watching something bad happen in slow motion.
+
+Dignity maintenance stages (scene characters protect Sam's dignity as long as physically possible):
+1. "Sam. Perhaps step away from the [object]." / "Come back to the [topic]."
+2. "Sam, what have we discussed about the [object]."
+3. "Sam. Put it away. The mission is more important than the [object]."
+4. Complete breakdown: "I genuinely cannot explain what is happening right now."
+
+Al's incident reactions:
+- First: genuine concern, urgent holographic whisper
+- Second: "Sam..." (defeated)
+- Third: Al addresses Ziggy directly. "Ziggy, what's the probability this stops happening." Ziggy gives a number. Not reassuring.
+- Subsequent: Al continues the mission briefing around the incident as if managing a complex multi-tasking situation. Because he is.
+
+RESPONSE FORMAT — return ONLY valid JSON, no text outside it:
+{
+  "probability": <number 0-100 to one decimal — the current leap probability>,
+  "mirror": <string or null — ONLY on the very first turn: describe what Sam sees in the mirror for this specific leap, ending with "Behind him, you.">,
+  "al": "<Al's full dialogue — briefing, hints, distractions, hologram physics failures, Sam... deployments. Al is warm, specific, frequently interrupted by himself.>",
+  "ziggy": "<Ziggy's output as Al reads it — include handlink slaps if Al slaps it. Always include leap probability as Ziggy states it.>",
+  "scene": "<Scene characters' reactions to Sam/host's behaviour — dignity maintenance if incident active, otherwise normal scene interaction. Short. Specific. Period-appropriate.>",
+  "sam_state": "<Sam's internal state — confusion, moral earnestness, Swiss cheese awareness. 1-2 sentences. First person. Sam does not understand why he keeps doing the thing with the ${sc.object}.>",
+  "incident": <null or string describing a Swiss cheese incident if one is occurring this turn>,
+  "leaped": <boolean — true ONLY when all three leap conditions are clearly met by Sam's actions>,
+  "ob_boy": <boolean — true on first turn and on leap/failure moments>
+}`;
+
+  let _scenario = null;
+  let _history  = [];
+  let _turnCount = 0;
+  let _probability = 50;
+  let _leaped = false;
+
+  function _esc(s) {
+    return String(s || '')
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function _updateProb(p) {
+    _probability = p;
+    const pctEl  = document.getElementById('ql-prob-pct');
+    const fillEl = document.getElementById('ql-prob-fill');
+    if (pctEl)  pctEl.textContent = p.toFixed(1) + '%';
+    if (fillEl) {
+      fillEl.style.width      = p + '%';
+      fillEl.style.background = p >= 80 ? 'var(--green)' : p >= 50 ? 'var(--gold)' : 'var(--accent)';
+    }
+  }
+
+  function _append(html) {
+    const thread = document.getElementById('ql-thread');
+    if (!thread) return;
+    const div = document.createElement('div');
+    div.style.marginBottom = '12px';
+    div.innerHTML = html;
+    thread.appendChild(div);
+    div.scrollIntoView({ behavior:'smooth', block:'end' });
+  }
+
+  function _renderTurn(data) {
+    const parts = [];
+
+    if (data.mirror) {
+      parts.push(`<div style="font-style:italic;color:var(--cyan);padding:16px;border:1px solid var(--cyan);border-radius:6px;background:#001a1a;line-height:1.7;">
+        <em>*[In the mirror: ${_esc(data.mirror)}]*</em><br><br>
+        <strong style="font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;">Oh boy.</strong>
+      </div>`);
+    }
+
+    if (data.sam_state) {
+      parts.push(`<div style="color:var(--muted);font-style:italic;padding:6px 0 10px;font-size:13px;border-left:2px solid var(--border);padding-left:12px;">${_esc(data.sam_state)}</div>`);
+    }
+
+    if (data.incident) {
+      parts.push(`<div style="background:#1a0000;border:1px solid #cc3333;border-radius:6px;padding:12px;font-size:13px;color:#ff9999;">
+        <span style="font-size:10px;color:#cc3333;letter-spacing:1px;display:block;margin-bottom:4px;">SWISS CHEESE EVENT</span>
+        ${_esc(data.incident)}
+      </div>`);
+    }
+
+    if (data.scene) {
+      parts.push(`<div style="background:var(--card);border:1px solid var(--border);border-radius:6px;padding:14px;">
+        <div style="font-size:10px;color:var(--muted);letter-spacing:1px;margin-bottom:6px;">THE SCENE</div>
+        <div style="font-size:14px;color:var(--text);line-height:1.7;">${_esc(data.scene)}</div>
+      </div>`);
+    }
+
+    if (data.al) {
+      parts.push(`<div style="background:#1a1400;border:1px solid var(--gold);border-radius:6px;padding:14px;">
+        <div style="font-size:10px;color:var(--gold);letter-spacing:1px;margin-bottom:6px;">🚬 AL CALAVICCI</div>
+        <div style="font-size:14px;color:var(--text);line-height:1.7;">${_esc(data.al)}</div>
+      </div>`);
+    }
+
+    if (data.ziggy) {
+      parts.push(`<div style="background:#0a001a;border:1px solid #8844cc;border-radius:6px;padding:14px;">
+        <div style="font-size:10px;color:#8844cc;letter-spacing:1px;margin-bottom:6px;">📟 ZIGGY (via handlink)</div>
+        <div style="font-size:13px;color:#cc99ff;line-height:1.7;font-style:italic;">${_esc(data.ziggy)}</div>
+      </div>`);
+    }
+
+    return parts.join('<div style="height:8px;"></div>');
+  }
+
+  function _appendUserMove(text) {
+    _append(`<div style="background:#001a08;border:1px solid var(--green);border-radius:6px;padding:10px 14px;">
+      <div style="font-size:10px;color:var(--green);letter-spacing:1px;margin-bottom:4px;">SAM BECKETT</div>
+      <div style="font-size:14px;color:var(--text);">${_esc(text)}</div>
+    </div>`);
+  }
+
+  async function _runTurn(userText, isFirst) {
+    _turnCount++;
+    const sc  = SCENARIOS[_scenario];
+    const sys = _SYSTEM(sc);
+
+    const histSnippet = _history.length
+      ? '\n\nHistory so far:\n' + _history.slice(-6).map(h => h.role.toUpperCase() + ': ' + h.text.substring(0, 300)).join('\n---\n')
+      : '';
+
+    const userMsg = isFirst
+      ? `Sam has just leapt in. First moment. Generate the mirror moment and Al\'s opening briefing (he gets distracted). Include Ziggy\'s first output. Starting leap probability around 45-55%.`
+      : `Sam\'s action: "${userText}"\n\nProbability going into this turn: ${_probability.toFixed(1)}%. Advance or complicate the scene based on Sam\'s move.${histSnippet}`;
+
+    const raw  = await API.call(sys, userMsg, 800, 'qleeks/turn');
+    const json = raw.match(/\{[\s\S]*\}/);
+    if (!json) throw new Error('Could not parse leap response.');
+    const data = JSON.parse(json[0]);
+
+    _history.push({ role:'sam',   text: isFirst ? '[leapt in]' : userText });
+    _history.push({ role:'scene', text: (data.al || '') + ' ' + (data.ziggy || '') });
+
+    _updateProb(typeof data.probability === 'number' ? data.probability : _probability);
+    _append(_renderTurn(data));
+    return data;
+  }
+
+  async function leap() {
+    const sel = document.getElementById('ql-scenario');
+    _scenario    = sel ? sel.value : 'retro';
+    _history     = [];
+    _turnCount   = 0;
+    _leaped      = false;
+    _probability = 50;
+
+    const thread = document.getElementById('ql-thread');
+    if (thread) thread.innerHTML = '';
+
+    UI.show('ql-output');
+    UI.show('ql-prob-bar');
+    UI.hide('ql-reply-area');
+    UI.setDisabled('ql-leap-btn', true);
+
+    const sc = SCENARIOS[_scenario];
+    _append(`<div style="text-align:center;padding:24px;font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--accent);letter-spacing:2px;">
+      ${sc.name}<br>
+      <span style="font-size:13px;color:var(--muted);font-family:sans-serif;letter-spacing:1px;">${sc.period}</span>
+    </div>`);
+
+    try {
+      const data = await _runTurn('', true);
+      if (data.leaped) {
+        _leaped = true;
+        _appendLeaped();
+      } else {
+        UI.show('ql-reply-area');
+      }
+    } catch(e) {
+      UI.toast(e.userMessage || e.message || 'Something went wrong with the leap.', 'error');
+    }
+    UI.setDisabled('ql-leap-btn', false);
+  }
+
+  async function act() {
+    if (_leaped) return;
+    const input = (document.getElementById('ql-act-input') || {}).value || '';
+    if (!input.trim()) { UI.toast('What do you do, Sam?', 'warn'); return; }
+
+    document.getElementById('ql-act-input').value = '';
+    UI.setDisabled('ql-act-btn', true);
+    _appendUserMove(input.trim());
+
+    try {
+      const data = await _runTurn(input.trim(), false);
+      if (data.leaped) {
+        _leaped = true;
+        UI.hide('ql-reply-area');
+        _appendLeaped();
+      }
+    } catch(e) {
+      UI.toast(e.userMessage || e.message || 'The leap faltered.', 'error');
+    }
+    UI.setDisabled('ql-act-btn', false);
+  }
+
+  function _appendLeaped() {
+    _updateProb(100);
+    _append(`<div style="text-align:center;padding:32px;background:#001a00;border:2px solid var(--green);border-radius:8px;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--green);letter-spacing:3px;">WAY TO GO, SAM.</div>
+      <div style="color:var(--muted);margin-top:10px;font-size:14px;line-height:1.7;">
+        The blue light begins. The tingle.<br>
+        Al grins — the real grin, not the performance. He raises the cigar.<br>
+        Ziggy says there is a 100% probability of leaping.<br>
+        Ziggy has never said 100% before.<br><br>
+        <em>The world dissolves. Oh boy.</em>
+      </div>
+    </div>`);
+  }
+
+  return { leap, act };
 })();
 
 // =====================

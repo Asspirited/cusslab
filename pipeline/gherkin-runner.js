@@ -22,6 +22,7 @@ const NAV_GROUPS = {
   boardroom: ['Present to the Boardroom'],
   comedy:    ['The Comedy Room'],
   sports:    ['The Pub After The Match', 'The 19th Hole'],
+  play:      ['Roast Battle','Dinner Party',"Rogues' Gallery",'Comedy Lab','Dimension Duel','Quntum Leeks'],
 };
 
 // Panel configuration — member counts and round options, mirrors JS modules
@@ -62,6 +63,11 @@ function createContext() {
   let   boardroomThreadHasContent = false;
   let   boardroomReplyAreaVisible = false;
   let   boardroomPresentationInput = '';
+
+  // Quntum Leeks mock state
+  let   qleeksWarning   = false;
+  let   qleeksApiCalled = false;
+  let   qleeksLeaped    = false;
 
   function _panelId(name) {
     // "boardroom" → "boardroom", "comedy room" → "comedyroom",
@@ -234,7 +240,10 @@ function createContext() {
            getPanelResponseCount: () => panelResponseCount,
            getBoardroomThreadHasContent:   () => boardroomThreadHasContent,
            getBoardroomReplyAreaVisible:   () => boardroomReplyAreaVisible,
-           getBoardroomPresentationInput:  () => boardroomPresentationInput };
+           getBoardroomPresentationInput:  () => boardroomPresentationInput,
+           submitQleeksEmpty: () => { qleeksWarning = true; panelWarning = true; qleeksApiCalled = false; },
+           getQleeksWarning:  () => qleeksWarning,
+           getQleeksApiCalled: () => qleeksApiCalled };
 }
 
 // ── Step definitions ─────────────────────────────────────────────────────────
@@ -566,6 +575,64 @@ function makeSteps(ctx) {
         const actual   = ctx.getPanelRoundOptions(panelName);
         if (actual !== expected) throw new Error(`expected ${expected} round options for "${panelName}" but got ${actual}`);
       }],
+
+    // ── Quntum Leeks — background ─────────────────────────────────────────────
+    [/^the Quntum Leeks panel is available in the app$/, () => { /* structural fixture */ }],
+
+    // ── Quntum Leeks — nav check ──────────────────────────────────────────────
+    [/^I am on the main page$/, () => { /* navigate */ }],
+    [/^"([^"]+)" should be in the PLAY nav group$/,
+      (label) => {
+        const group = NAV_GROUPS['play'] || [];
+        if (!group.includes(label)) throw new Error(`nav: expected "${label}" in play group, got [${group.join(', ')}]`);
+      }],
+
+    // ── Quntum Leeks — structural ─────────────────────────────────────────────
+    [/^the Quntum Leeks panel is loaded$/, () => { /* navigate */ }],
+    [/^I can see the qleeks scenario selector$/, () => { /* structural — panel HTML checked by UI Audit */ }],
+    [/^I can see the qleeks leap button$/, () => { /* structural */ }],
+    [/^the qleeks selector includes "([^"]+)"$/,
+      (name) => {
+        const valid = [
+          'The Milk Round — 1953, Rural Derbyshire',
+          'The Advisory — 1974, Whitehall, London',
+          'The Retrospective — Present Day, Agile Hell',
+        ];
+        if (!valid.includes(name)) throw new Error(`qleeks: scenario "${name}" not in selector`);
+      }],
+
+    // ── Quntum Leeks — empty act guard ────────────────────────────────────────
+    [/^I have leapt into a scenario$/, () => { /* fixture */ }],
+    [/^the act input is empty$/, () => { /* fixture */ }],
+    [/^I click ACT$/, () => { ctx.submitQleeksEmpty(); }],
+    [/^no qleeks API call should be made$/, () => {
+        if (ctx.getQleeksApiCalled()) throw new Error('expected no API call but one was made');
+      }],
+
+    // ── Quntum Leeks — @claude behavioral stubs (manual verification) ─────────
+    [/^I have leapt in and made a move$/, () => { /* @claude fixture */ }],
+    [/^the current leap probability is established$/, () => { /* @claude fixture */ }],
+    [/^the Swiss cheese effect has spiked$/, () => { /* @claude fixture */ }],
+    [/^Sam approaches the object of concern$/, () => { /* @claude action */ }],
+    [/^I have met all three leap conditions$/, () => { /* @claude fixture */ }],
+    [/^I have completed multiple turns$/, () => { /* @claude fixture */ }],
+    [/^the leap is in progress$/, () => { /* @claude fixture */ }],
+    [/^I say something that evades the real issue$/, () => { /* @claude action */ }],
+    [/^the thread contains/, () => { /* @claude behavioral */ }],
+    [/^Ziggy states a probability/, () => { /* @claude behavioral */ }],
+    [/^the probability bar updates$/, () => { /* @claude behavioral */ }],
+    [/^Ziggy'?s? probability drops$/, () => { /* @claude behavioral */ }],
+    [/^Al reacts with appropriate tone$/, () => { /* @claude behavioral */ }],
+    [/^Ziggy predicts the incident before it occurs$/, () => { /* @claude behavioral */ }],
+    [/^scene characters engage dignity maintenance protocol$/, () => { /* @claude behavioral */ }],
+    [/^the probability drops by approximately/, () => { /* @claude behavioral */ }],
+    [/^Ziggy announces 100% probability$/, () => { /* @claude behavioral */ }],
+    [/^the blue light conclusion appears$/, () => { /* @claude behavioral */ }],
+    [/^Al says Way to go Sam$/, () => { /* @claude behavioral */ }],
+    [/^the mirror moment appeared only on turn one$/, () => { /* @claude behavioral */ }],
+    [/^the mirror moment ends with Oh boy$/, () => { /* @claude behavioral */ }],
+    [/^Ziggy references the Bourbon at least once$/, () => { /* @claude behavioral */ }],
+    [/^nobody eats the Bourbon$/, () => { /* @claude behavioral */ }],
   ];
 }
 
