@@ -220,7 +220,7 @@
 **Cost impact:** Medium — requires careful prompt editing per character, high risk of voice regression
 **Delay:** Deferred — B1 relationship state implemented first as Layer 1 foundation
 **Tags:** `#character-loss` `#false-progress` `#save-rod-money`
-**Status:** open — Layer 2 cross-character wound awareness not yet implemented for Roy, Radar, early Boardroom members
+**Status:** closed — CROSS-WOUND AWARENESS blocks implemented for all 7 characters: Radar, Coltart, Murray, Henni (Golf) + Harold, Sebastian, Roy (Boardroom)
 
 ---
 
