@@ -8663,6 +8663,142 @@ const RelationshipState = (() => {
 })();
 
 // ============================================================
+// MODULE: ConspireEngine — Five-stage conspiracy arcs + Fight/Flight/Stasis
+// ============================================================
+const ConspireEngine = (() => {
+  const SCALE = ['hostile','wounded','simmering','cooling','neutral','warm','reverent'];
+  const STAGE_ORDER = ['RECOGNITION','VALIDATION_SPIRAL','BREAK','ESCALATION','COLLAPSE'];
+
+  // Pair profiles: keyed by sorted character ids joined with '/'
+  // Loaded by panel modules via addPairProfile()
+  const PAIR_PROFILES = {};
+
+  let _activeArc  = null;
+  let _queuedArc  = null;
+
+  function _pairKey(a, b) { return [a, b].sort().join('/'); }
+
+  function addPairProfile(a, b, profile) {
+    PAIR_PROFILES[_pairKey(a, b)] = profile;
+  }
+
+  function _getProfile(a, b) {
+    return PAIR_PROFILES[_pairKey(a, b)] || {
+      breakType: 'contempt',
+      validationSpiralLength: 2,
+      escalationTone: 'escalating hostility, both talking',
+      defaultResetValve: null
+    };
+  }
+
+  // After every RelationshipState.update() — check for new conspiracy triggers.
+  function check(state, allIds) {
+    const simmeringIdx = SCALE.indexOf('simmering'); // index 2 — lower = hotter
+    for (const targetId of allIds) {
+      const hot = allIds.filter(id => {
+        if (id === targetId) return false;
+        const idx = SCALE.indexOf(state.characters[id]?.toward[targetId]?.temperature || 'neutral');
+        return idx !== -1 && idx <= simmeringIdx;
+      });
+      if (hot.length < 2) continue;
+      for (let i = 0; i < hot.length; i++) {
+        for (let j = i + 1; j < hot.length; j++) {
+          const a = hot[i], b = hot[j];
+          const inActive = _activeArc && (
+            _activeArc.instigator === a || _activeArc.instigator === b ||
+            _activeArc.coConspirator === a || _activeArc.coConspirator === b
+          );
+          if (inActive) continue;
+          const arc = {
+            instigator: a, coConspirator: b, target: targetId,
+            stage: 'RECOGNITION', turnCount: 0,
+            pairProfile: _getProfile(a, b)
+          };
+          if (!_activeArc)      _activeArc = arc;
+          else if (!_queuedArc) _queuedArc = arc;
+          return;
+        }
+      }
+    }
+  }
+
+  // Returns arc instructions to inject into a character's system prompt.
+  function getArcInstructions(characterId, relState, allIds) {
+    if (!_activeArc) return '';
+    const arc = _activeArc;
+    const isA   = characterId === arc.instigator;
+    const isB   = characterId === arc.coConspirator;
+    const isTgt = characterId === arc.target;
+    if (!isA && !isB && !isTgt) return '';
+
+    if (isTgt && arc.stage === 'ESCALATION') return _targetResponse(characterId, arc, relState);
+    if (!isA && !isB) return '';
+
+    const other = isA ? arc.coConspirator : arc.instigator;
+    switch (arc.stage) {
+      case 'RECOGNITION':
+        return `\n\nCONSPIRACY ARC — RECOGNITION:\nYou and ${other} are finding unusual agreement about ${arc.target}. Let the agreement show without announcing it. Do not name the conspiracy.`;
+      case 'VALIDATION_SPIRAL':
+        return `\n\nCONSPIRACY ARC — VALIDATION SPIRAL:\nConfirm ${other}'s last observation about ${arc.target} and add one thing slightly worse. Tone stays analytical — controlled, not yet hostile.`;
+      case 'BREAK':
+        return arc.pairProfile.breakType === 'laughter'
+          ? `\n\nCONSPIRACY ARC — BREAK:\nSomething specific about ${arc.target} has tipped you into genuine laughter you cannot entirely control. The laughter is real. The room notices.`
+          : `\n\nCONSPIRACY ARC — BREAK:\nThe controlled tone breaks. Something about ${arc.target} has pushed you past analysis into open contempt.`;
+      case 'ESCALATION':
+        return `\n\nCONSPIRACY ARC — ESCALATION:\nFull attack. Both you and ${other} are talking. Full-blooded insults toward ${arc.target}. ${arc.pairProfile.escalationTone}. Do not hold back.`;
+      default: return '';
+    }
+  }
+
+  // Determine FIGHT / FLIGHT / STASIS for the target during ESCALATION.
+  function _targetResponse(targetId, arc, relState) {
+    const cs = relState.characters[targetId];
+    if (!cs) return '';
+    const idxs = [arc.instigator, arc.coConspirator]
+      .map(id => SCALE.indexOf(cs.toward[id]?.temperature || 'neutral'));
+    const avg = idxs.reduce((a, b) => a + b, 0) / idxs.length;
+    const neutralIdx = SCALE.indexOf('neutral'); // 4
+    if (avg < neutralIdx) // hotter than neutral — FIGHT
+      return `\n\nCONSPIRACY ARC — YOU ARE THE TARGET (FIGHT):\nYour temperature toward the conspirators is running hot. Interrupt. Address ${arc.instigator} and ${arc.coConspirator} directly. The arc ends faster when you fight back.`;
+    if (avg > neutralIdx) // cooler than neutral — FLIGHT
+      return `\n\nCONSPIRACY ARC — YOU ARE THE TARGET (FLIGHT):\nYou are being attacked but your temperature toward the conspirators is below neutral. Withdraw. Find someone else to address. Character-specific exit: Wayne invokes Bush Tucker Man, Dougherty makes an excuse, Roy nods, McGinley fires a credibility bid, Coltart goes silent.`;
+    // exactly neutral — STASIS
+    return `\n\nCONSPIRACY ARC — YOU ARE THE TARGET (STASIS):\nYou are under coordinated attack. You neither fight nor flee. Stay present. Do not respond to the attack directly. The stillness is more unsettling than any comeback.`;
+  }
+
+  // Call after each turn to advance stage. Returns { collapsed, resetValve } or null.
+  function advanceStage(resetValvePriority) {
+    if (!_activeArc) return null;
+    const arc = _activeArc;
+    arc.turnCount++;
+    if      (arc.stage === 'RECOGNITION'       && arc.turnCount >= 1) { arc.stage = 'VALIDATION_SPIRAL'; arc.turnCount = 0; }
+    else if (arc.stage === 'VALIDATION_SPIRAL' && arc.turnCount >= (arc.pairProfile.validationSpiralLength || 2)) { arc.stage = 'BREAK'; arc.turnCount = 0; }
+    else if (arc.stage === 'BREAK')                                   { arc.stage = 'ESCALATION'; arc.turnCount = 0; }
+    else if (arc.stage === 'ESCALATION'        && arc.turnCount >= 2) { arc.stage = 'COLLAPSE'; }
+
+    if (arc.stage === 'COLLAPSE') {
+      const completed = _activeArc;
+      _activeArc  = _queuedArc || null;
+      _queuedArc  = null;
+      const rv = _selectResetValve(resetValvePriority, completed);
+      return { collapsed: true, resetValve: rv, arc: completed };
+    }
+    return { collapsed: false };
+  }
+
+  function _selectResetValve(priority, arc) {
+    if (!priority) return null;
+    const excl = new Set([arc.instigator, arc.coConspirator, arc.target]);
+    return priority.find(id => !excl.has(id)) || null;
+  }
+
+  function reset() { _activeArc = null; _queuedArc = null; }
+  function getActiveArc() { return _activeArc; }
+
+  return { check, addPairProfile, getArcInstructions, advanceStage, reset, getActiveArc };
+})();
+
+// ============================================================
 // MODULE: Boardroom — Present to the Boardroom
 // ============================================================
 const Boardroom = (() => {
@@ -9982,6 +10118,10 @@ TOUR CARD — KUCHAR: Deflects onto LIV Golf within two sentences. Lands on gove
     const TURN_RULES = `RULE 1 — TURN LENGTH:\nMost responses are 1-2 sentences. A response earns length only by being directly provoked, challenged, or explicitly given the floor. The default is short. Silence and brevity are strength.\n\nRULE 2 — REACTIVITY OBLIGATION:\nEvery response must open by reacting to the previous speaker's last sentence — not the topic generally. You are listening, not queuing.\n\nRULE 3 — CROSS-REFERENCE:\nYou may use anything said earlier in this conversation as ammunition. Wounds, indiscretions, failures, warmth — all fair game. You were there. You remember.\n\nRULE 4 — REACTIVE MOVES:\nYour reactive move is structural guidance — what you DO, not words you SAY. Seven moves available:\n(1) Agree and build — add something true that makes it worse\n(2) Agree but undermine — confirm surface, destroy substance\n(3) Contradict — name what was wrong and why\n(4) Flat refusal — one sentence, refusal is the content\n(5) Light-hearted pisstake — puncture with affection\n(6) Full-blooded insult — strongest language, lands on real wound\n(7) Mimic — default: verbal, repeat in own register until ridiculous. Intensity 3+: briefly become them, lose thread mid-sentence.\nNever name the move. Never open with the label.\n\nRULE 5 — LUKE DONALD:\nLuke Donald's name is always pronounced in the manner of Matt Damon in Team America. Every time. No acknowledgement. It never stops.`;
 
     const gfRelState = RelationshipState.init(ORDER, GOLF_PRE_EXISTING, GOLF_EXTRA_STATE);
+    ConspireEngine.reset();
+
+    // Reset valve priority: Dougherty → Murray → McGinley → Henni
+    const GOLF_RESET_VALVE_PRIORITY = ['dougherty', 'murray', 'mcginley', 'henni'];
 
     const responses = [];
     for (let i = 0; i < ORDER.length; i++) {
@@ -10018,8 +10158,9 @@ TOUR CARD — KUCHAR: Deflects onto LIV Golf within two sentences. Lands on gove
         ? `\nTOUR CARD ACTIVE: ${activeTourCards.join(', ')}. Apply your defined stance for this player.\n`
         : '';
 
-      const gfYourState = RelationshipState.buildBlock(gfRelState, member.id, ORDER, GOLF_NAMEMAP, GOLF_VOICE_FMT);
-      const system = TURN_RULES + '\n\n' + gfYourState + tourCardBlock + member.prompt + mechanics + (i > 0
+      const gfYourState  = RelationshipState.buildBlock(gfRelState, member.id, ORDER, GOLF_NAMEMAP, GOLF_VOICE_FMT);
+      const arcInstructions = ConspireEngine.getArcInstructions(member.id, gfRelState, ORDER);
+      const system = TURN_RULES + '\n\n' + gfYourState + tourCardBlock + member.prompt + mechanics + arcInstructions + (i > 0
         ? `\n\nPrevious:\n${prev}`
         : '');
 
@@ -10032,6 +10173,8 @@ TOUR CARD — KUCHAR: Deflects onto LIV Golf within two sentences. Lands on gove
         const resp = await API.call(system, prompt, 250, 'golf/' + member.id);
         responses.push(resp);
         RelationshipState.update(gfRelState, member.id, resp, ORDER, GOLF_WOUNDS, GOLF_NAMEMAP);
+        ConspireEngine.check(gfRelState, ORDER);
+        ConspireEngine.advanceStage(GOLF_RESET_VALVE_PRIORITY);
         _fill(pid, member, resp);
       } catch (e) {
         _fill(pid, member, e.userMessage || 'Request failed.');
