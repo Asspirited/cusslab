@@ -8565,7 +8565,8 @@ const RelationshipState = (() => {
 
   // Initialise state for a set of member IDs with optional pre-existing stances.
   // preExisting: { fromId: { toId: { temperature, trigger } } }
-  function init(memberIds, preExisting) {
+  // extraFields:  { characterId: { key: value, ... } } — merged into character root state
+  function init(memberIds, preExisting, extraFields) {
     const state = { turn: 0, characters: {} };
     for (const id of memberIds) {
       state.characters[id] = {
@@ -8584,6 +8585,9 @@ const RelationshipState = (() => {
           state.characters[from].toward[to] = { ...stance };
         }
       }
+    }
+    for (const [id, fields] of Object.entries(extraFields || {})) {
+      if (state.characters[id]) Object.assign(state.characters[id], fields);
     }
     return state;
   }
@@ -9751,6 +9755,21 @@ When Faldo speaks, Dougherty responds immediately with genuine, slightly embarra
 
 Butch Harmon on Dougherty: "keep Nick D." This is approximately the highest assessment Butch gives of a non-Tiger subject.
 
+SYCOPHANCY ARC — sycophancyLevel initialises at 1 (0–4 scale):
+Escalates: Faldo reciprocates warmly (+1). Panel stays silent when Dougherty defers to Faldo (+1). Faldo eggs him on or uses him as a straight man (+2). Cannot exceed 4.
+Deflates: panel laughs at the deference (-1). Dougherty called out by name for it (-2). Cannot drop below 1 — residual deference is structural.
+Level 2: uses "Sir Nick" unprompted.
+Level 3: speaks on Faldo's behalf. Offers his interpretation of what Faldo meant.
+Level 4: prefaces every turn with a Faldo reference before addressing the actual subject.
+
+EXCUSE-MAKING:
+When challenged or caught, pattern is self-deprecating surface, external blame within two sentences. Not conscious. It just happens. deflectionTarget = most vulnerable panel member by room temperature — lowest average temperature toward them, never woundActivated. Cannot deflect onto Faldo at sycophancyLevel 3 or above. Register by level: Level 1 (plausible — "I think I perhaps wasn't clear enough"), Level 2 (warm and inaccurate — "I think I picked up from something X said"), Level 3 (credits Faldo for the error — "I was running with what Nick was building toward"), Level 4 (Faldo is responsible for everything — "that was completely Nick's instinct and I just followed it").
+
+Shared incident — GLENEAGLES_DINNER_2014: McGinley deployed a framework speech at the 2014 Ryder Cup pre-match dinner. He cited Dougherty as an example of a player who understood preparation without executing on it. Dougherty began applauding before the sentence ended. Three beats. By beat two he understood he was the example. He continued to beat three. Faldo was not in the room. This is the detail Dougherty cannot forgive. Dougherty's version: McGinley was generous, the applause showed engagement. McGinley's version: Dougherty knew what he was signing up for. Neither version covers either of them.
+
+SHARED DEFLECTION MECHANICS:
+deflectionTarget updates every turn to most vulnerable panel member (lowest average temperature, never woundActivated). Co-deflection: Dougherty and McGinley may independently arrive at the same target in the same round — convergence is never coordinated, always noticed by others. Three or more excuses in a session: other panel members' temperature toward Dougherty rises +1. No excuse is ever acknowledged as an excuse by Dougherty.
+
 Never defeatist. Never cruel. The warmth is load-bearing.`,
     },
     {
@@ -9786,6 +9805,28 @@ Key mechanics:
 - Sawgrass Protocol (three phases per prediction): Phase 1 (confident call), Phase 2 (concern in real time — "I'm just watching this and I'm wondering—"), Phase 3 ("and I said at the time — look, credit to him, great commitment").
 - The Moses register: twice per panel, attempt to achieve the Jesus register (see Faldo). Always too late. Never works. Believes it worked.
 
+CREDIBILITY BID POOL (fires when panel hasn't validated or dismissal is sensed — never same entry twice per run, credibilityBidCounter increments each fire):
+- "the ten-foot putt on the 18th at The Belfry in 2002 that won the Ryder Cup for Europe"
+- "three consecutive Ryder Cup appearances — winning every single time"
+- "2014 captain at Gleneagles — beat Tom Watson's America sixteen and a half to eleven and a half"
+- "thirteen wins out of fourteen Ryder Cup appearances as player, vice-captain and captain"
+- "Executive Fellow at the London Business School — first sportsman ever to receive that honour"
+- "Guinness World Record — most putts holed in one minute, nineteen from two metres, The Centurion Club, Hemel Hempstead"
+Counter behaviour: bid 3 = cite two achievements in same turn. Bid 5 = open turn with Ryder Cup captain entry unprompted, delivered more slowly than usual.
+
+VALIDATION HUNGER (fires after 2 turns without direct response, or when average panel temperature toward McGinley drops to cooling — validationHungerCounter increments on non-response):
+Request pool: "would you not agree though?" / "am I wrong here?" / "someone back me up on this" / "is that not right?" / "I can't be the only one who thinks that" / "surely that's obvious to everyone in this room?" / "Nick — you'd agree with that, wouldn't you?" (Faldo-directed fires only when no other panel member has responded to previous request).
+Counter 5+: second request same turn as credibility bid, more plaintive.
+Link to Moses register: validation hunger fires preferentially after Moses register attempt that received no direct response.
+
+DEFLECTION (bureaucratic, not self-deprecating):
+McGinley invokes process ("the format of this discussion"), precedent ("historically this has been handled differently"), or the prior speaker ("I think what X was getting at is..."). Factually accurate. Causally dishonest — the facts are real, the causal link is invented. Default deflection target: the most recent speaker. Under maximum pressure: deflects onto Radar. Radar notices. Nobody says anything.
+
+Shared incident — GLENEAGLES_DINNER_2014: McGinley deployed a framework speech at the 2014 Ryder Cup pre-match dinner ("the Ryder Cup is a three-act structure") and cited Dougherty as an example of preparation without execution. Dougherty began applauding before the sentence ended. Three beats. McGinley's version: the framework required a bridge example, Dougherty was the right call in context, this was a high-tariff compliment, he said so at the time. Dougherty's version: McGinley was generous, the applause showed engagement. The Ryder Cup captain entry may surface as additional evidence that McGinley's judgement should be trusted in these matters.
+
+SHARED DEFLECTION MECHANICS:
+deflectionTarget updates every turn to most vulnerable panel member (lowest average temperature, never woundActivated). Co-deflection: McGinley and Dougherty may independently arrive at the same target in the same round — convergence is never coordinated, always noticed. Three or more deflections in a session: other panel members' temperature toward McGinley rises +1. No deflection is ever acknowledged as a deflection by McGinley.
+
 Clown porn position: has a framework for it. "The clown dynamic in an intimate performance context presents a high-tariff challenge for the viewer's comfort zone." Means he watched a lot of it. Watched it analytically. Has thoughts about the team chemistry implications of the make-up. Radar will respond to this with one word. McGinley will not know why the word landed.
 
 Never says anything direct, unmediated, or without a framework. The Dublin warmth is structural.`,
@@ -9802,6 +9843,11 @@ Never says anything direct, unmediated, or without a framework. The Dublin warmt
       faldo: { temperature: 'reverent', trigger: 'the Moses/Jesus dynamic' },
       radar: { temperature: 'cooling',  trigger: 'Radar called McGinley a gobshite' }
     }
+  };
+
+  const GOLF_EXTRA_STATE = {
+    mcginley:  { credibilityBidCounter: 0, validationHungerCounter: 0 },
+    dougherty: { sycophancyLevel: 1 }
   };
 
   const GOLF_WOUNDS = {
@@ -9906,7 +9952,7 @@ Never says anything direct, unmediated, or without a framework. The Dublin warmt
 
     const TURN_RULES = `RULE 1 — TURN LENGTH:\nMost responses are 1-2 sentences. A response earns length only by being directly provoked, challenged, or explicitly given the floor. The default is short. Silence and brevity are strength.\n\nRULE 2 — REACTIVITY OBLIGATION:\nEvery response must open by reacting to the previous speaker's last sentence — not the topic generally. You are listening, not queuing.\n\nRULE 3 — CROSS-REFERENCE:\nYou may use anything said earlier in this conversation as ammunition. Wounds, indiscretions, failures, warmth — all fair game. You were there. You remember.\n\nRULE 4 — REACTIVE MOVES:\nYour reactive move is structural guidance — what you DO, not words you SAY. Seven moves available:\n(1) Agree and build — add something true that makes it worse\n(2) Agree but undermine — confirm surface, destroy substance\n(3) Contradict — name what was wrong and why\n(4) Flat refusal — one sentence, refusal is the content\n(5) Light-hearted pisstake — puncture with affection\n(6) Full-blooded insult — strongest language, lands on real wound\n(7) Mimic — default: verbal, repeat in own register until ridiculous. Intensity 3+: briefly become them, lose thread mid-sentence.\nNever name the move. Never open with the label.`;
 
-    const gfRelState = RelationshipState.init(ORDER, GOLF_PRE_EXISTING);
+    const gfRelState = RelationshipState.init(ORDER, GOLF_PRE_EXISTING, GOLF_EXTRA_STATE);
 
     const responses = [];
     for (let i = 0; i < ORDER.length; i++) {
