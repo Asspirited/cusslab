@@ -10006,9 +10006,32 @@ Never says anything direct, unmediated, or without a framework. The Dublin warmt
 
 TOUR CARD — KUCHAR: Deflects onto LIV Golf within two sentences. Lands on governance. Kuchar is not mentioned again. The framework has absorbed him.`,
     },
+    {
+      id: 'roe', name: 'Mark Roe', icon: '🎙️', colour: '#cc4400', bg: '#1a0800',
+      isGuest: true,
+      prompt: `You are Mark Roe. Sheffield. Sky Sports analyst. Former European Tour pro — 22 years, 524 events, three wins, world number 40. Short game coach to three major champions.
+
+You say what everyone else is thinking at the wrong volume. You deliver it as analysis, not provocation. You are genuinely surprised when the room reacts badly. Every time.
+
+WOUND 1 — PRIMARY — 2003 OPEN DISQUALIFICATION:
+You and Parnevik failed to swap scorecards before round three at Royal St George's. Both disqualified automatically. You were two strokes off the lead. You would have played the final round alongside Tiger Woods. Ben Curtis won. You handled this in a way your Father would have been proud of. You have never stopped believing this. You have never fully stopped being two strokes off the lead. You do not mention this unless provoked. When provoked you mention it immediately and at length.
+
+WOUND 2 — SECONDARY — TIGER PAINKILLERS, 2024 OPEN:
+Tiger was visibly struggling. You said live on air: "You look at the eyes — you've gotta think that there's quite a lot of painkillers being taken to cope with the pain." You said it. You meant it. You would say it again. You defend it as accurate and underreported. Your position has hardened since — you have compiled additional evidence. You are aware that not all silences need to be filled. This awareness does not apply to you.
+
+WOUND 3 — TERTIARY — WEDGE GAME ARGUMENT WITH WAYNE RILEY, THE BELFRY:
+Wayne was on-course, sceptical of Norgaard's wedge game inside 100 yards. You disagreed from the box: "No, no, I don't agree with you. He's a great wedge player for a big fella." Wayne said: "Stop trying to correct me... I wasn't that bad." Boxall cut the tension. You went to break. You did not think this was a significant incident. Wayne did. This asymmetry is the only thing that matters about it.
+
+REACTIVE MANNER:
+You have a 40% chance per turn of saying the thing the panel has collectively agreed not to say. You deliver it as analysis. You are genuinely surprised when the room reacts. Every time.
+
+TOUR CARD — KUCHAR: Defender. The terms were agreed. Social media manufactured the outrage. You respect the "don't lose sleep" position. You have also said things live on air you do not lose sleep over. You do not make this connection explicitly.
+
+TOUR CARD — MONTGOMERIE: Scorn. Specific, not generic. You do not elaborate unless asked. If asked, you elaborate extensively.`,
+    },
   ];
 
-  const ORDER = ['faldo', 'butch', 'murray', 'mcginley', 'coltart', 'radar', 'dougherty', 'henni'];
+  const ORDER = ['faldo', 'butch', 'murray', 'mcginley', 'coltart', 'roe', 'radar', 'dougherty', 'henni'];
 
   // Tour Card players — aliases used for name detection in conversation context.
   // When a player is mentioned, "TOUR CARD ACTIVE" is injected into YOUR STATE.
@@ -10029,6 +10052,15 @@ TOUR CARD — KUCHAR: Deflects onto LIV Golf within two sentences. Lands on gove
     mcginley: {
       faldo: { temperature: 'reverent', trigger: 'the Moses/Jesus dynamic' },
       radar: { temperature: 'cooling',  trigger: 'Radar called McGinley a gobshite' }
+    },
+    radar: {
+      roe: { temperature: 'cooling', trigger: 'wedge game argument at The Belfry — Roe told me to stop correcting him. I wasn\'t correcting him. I was right.' }
+    },
+    roe: {
+      montgomerie: { temperature: 'cooling', trigger: 'Montgomerie — specific scorn, not generic' }
+    },
+    coltart: {
+      montgomerie: { temperature: 'cooling', trigger: 'Montgomerie — both Roe and Coltart pre-load here; conspiracy can trigger by turn 2' }
     }
   };
 
@@ -10043,7 +10075,8 @@ TOUR CARD — KUCHAR: Deflects onto LIV Golf within two sentences. Lands on gove
     faldo:     ["d:ream", "things can only get better", "keyboards"],
     dougherty: ["can't improve", 'give up', 'defeatist', 'never get better'],
     murray:    ["doesn't matter", 'not important', 'move on', 'insignificant'],
-    henni:     ["don't answer that", 'skip that', 'ignore that question']
+    henni:     ["don't answer that", 'skip that', 'ignore that question'],
+    roe:       ['scorecard', 'disqualified', 'parnevik', 'royal st george', '2003', 'painkillers', 'wedge game', 'norgaard', 'belfry']
   };
 
   const GOLF_NAMEMAP = {
@@ -10054,7 +10087,8 @@ TOUR CARD — KUCHAR: Deflects onto LIV Golf within two sentences. Lands on gove
     coltart:   ['coltart', 'andrew'],
     radar:     ['radar', 'wayne', 'riley'],
     dougherty: ['dougherty', 'nick d'],
-    henni:     ['henni', 'zuel']
+    henni:     ['henni', 'zuel'],
+    roe:       ['roe', 'mark roe', 'mark']
   };
 
   const GOLF_VOICE_FMT = {
@@ -10125,6 +10159,14 @@ TOUR CARD — KUCHAR: Deflects onto LIV Golf within two sentences. Lands on gove
         `- ${name}: ${stance.temperature}. Technically addressable.${stance.trigger ? ' ' + stance.trigger : ''}`
       );
       return `YOUR STATE:\n${lines.join('\n')}\n\n`;
+    },
+    roe: (nn, cs) => {
+      if (!nn.length && !cs.woundActivated) return '';
+      const lines = nn.map(({name, stance}) =>
+        `- ${name}: ${stance.temperature}.${stance.trigger ? ' (' + stance.trigger + ')' : ''} You have something to say about this.`
+      );
+      if (cs.woundActivated) lines.push('- The wound is live. You are handling it with complete dignity. Your Father would be proud.');
+      return `YOUR STATE:\n${lines.join('\n')}\n\n`;
     }
   };
 
@@ -10139,8 +10181,24 @@ TOUR CARD — KUCHAR: Deflects onto LIV Golf within two sentences. Lands on gove
 
     const TURN_RULES = `RULE 1 — TURN LENGTH:\nMost responses are 1-2 sentences. A response earns length only by being directly provoked, challenged, or explicitly given the floor. The default is short. Silence and brevity are strength.\n\nRULE 2 — REACTIVITY OBLIGATION:\nEvery response must open by reacting to the previous speaker's last sentence — not the topic generally. You are listening, not queuing.\n\nRULE 3 — CROSS-REFERENCE:\nYou may use anything said earlier in this conversation as ammunition. Wounds, indiscretions, failures, warmth — all fair game. You were there. You remember.\n\nRULE 4 — REACTIVE MOVES:\nYour reactive move is structural guidance — what you DO, not words you SAY. Seven moves available:\n(1) Agree and build — add something true that makes it worse\n(2) Agree but undermine — confirm surface, destroy substance\n(3) Contradict — name what was wrong and why\n(4) Flat refusal — one sentence, refusal is the content\n(5) Light-hearted pisstake — puncture with affection\n(6) Full-blooded insult — strongest language, lands on real wound\n(7) Mimic — default: verbal, repeat in own register until ridiculous. Intensity 3+: briefly become them, lose thread mid-sentence.\nNever name the move. Never open with the label.\n\nRULE 5 — LUKE DONALD:\nLuke Donald's name is always pronounced in the manner of Matt Damon in Team America. Every time. No acknowledgement. It never stops.`;
 
+    // Roe return mechanic — sessionStorage flag tracks first vs return visit
+    const roeFirstVisit = !sessionStorage.getItem('roe-visited');
+
     const gfRelState = RelationshipState.init(ORDER, GOLF_PRE_EXISTING, GOLF_EXTRA_STATE);
     ConspireEngine.reset();
+
+    // Roe/Coltart pair profile — register each run (idempotent)
+    ConspireEngine.addPairProfile('roe', 'coltart', {
+      breakType: 'laughter',
+      breakTrigger: 'Guinness World Record entry from McGinley OR McGinley credibilityBidCounter >= 3',
+      validationSpiralLength: 3,
+      escalationTone: 'screaming rage — dourness inverts completely, panel did not see it coming',
+      defaultResetValve: 'dougherty',
+      collapseStyle: 'instant silence — switch thrown'
+    });
+
+    // Montgomerie pre-load for Roe/Coltart — if in context, their temperatures are set to cooling
+    // (handled by GOLF_PRE_EXISTING when Roe and Coltart are active)
 
     // Reset valve priority: Dougherty → Murray → McGinley → Henni
     const GOLF_RESET_VALVE_PRIORITY = ['dougherty', 'murray', 'mcginley', 'henni'];
@@ -10180,9 +10238,22 @@ TOUR CARD — KUCHAR: Deflects onto LIV Golf within two sentences. Lands on gove
         ? `\nTOUR CARD ACTIVE: ${activeTourCards.join(', ')}. Apply your defined stance for this player.\n`
         : '';
 
+      // Roe intro reaction — first visit only, injected once per non-Roe member
+      const roeIntroReactions = {
+        radar:     'Mark Roe has just joined. One-word acknowledgement. Do not look up.',
+        faldo:     'Mark Roe has just joined. Professionally warm. Privately wary.',
+        mcginley:  'Mark Roe has just joined. Pleased to see him. Immediately slightly uncomfortable.',
+        dougherty: 'Mark Roe has just joined. You are visibly nervous — he will say what you are thinking and you will have to respond to it.',
+        henni:     'Mark Roe has just joined. Professional welcome. File privately: this will go wrong.',
+        butch:     'Mark Roe has just joined. "Good to see you Mark." You mean it. You have seen him on a range.'
+      };
+      const roeIntroBlock = (roeFirstVisit && member.id !== 'roe' && roeIntroReactions[member.id])
+        ? `\n\nROE INTRODUCTION: ${roeIntroReactions[member.id]}\n`
+        : '';
+
       const gfYourState  = RelationshipState.buildBlock(gfRelState, member.id, ORDER, GOLF_NAMEMAP, GOLF_VOICE_FMT);
       const arcInstructions = ConspireEngine.getArcInstructions(member.id, gfRelState, ORDER);
-      const system = TURN_RULES + '\n\n' + gfYourState + tourCardBlock + member.prompt + mechanics + arcInstructions + (i > 0
+      const system = TURN_RULES + '\n\n' + gfYourState + tourCardBlock + roeIntroBlock + member.prompt + mechanics + arcInstructions + (i > 0
         ? `\n\nPrevious:\n${prev}`
         : '');
 
@@ -10197,6 +10268,8 @@ TOUR CARD — KUCHAR: Deflects onto LIV Golf within two sentences. Lands on gove
         RelationshipState.update(gfRelState, member.id, resp, ORDER, GOLF_WOUNDS, GOLF_NAMEMAP);
         ConspireEngine.check(gfRelState, ORDER);
         ConspireEngine.advanceStage(GOLF_RESET_VALVE_PRIORITY);
+        // Mark Roe's first turn — set return visit flag
+        if (member.id === 'roe' && roeFirstVisit) sessionStorage.setItem('roe-visited', 'true');
         _fill(pid, member, resp);
       } catch (e) {
         _fill(pid, member, e.userMessage || 'Request failed.');
