@@ -8549,6 +8549,116 @@ function setKey(k)                   { API.setKey(k); }
 function submitQuizScore()           { Polls.submitQuizScore(); }
 
 // ============================================================
+// MODULE: RelationshipState — B1 dynamic relationship state
+// Shared by Boardroom and Golf panels.
+// Tracks temperature, wound activation, debt ledger per character pair.
+// State updated client-side after each turn — zero extra API calls.
+// ============================================================
+const RelationshipState = (() => {
+  // Seven-step temperature scale: index 0 = coldest, 6 = warmest
+  const SCALE = ['hostile','wounded','simmering','cooling','neutral','warm','reverent'];
+  const IDX   = Object.fromEntries(SCALE.map((t,i) => [t,i]));
+
+  function _adj(temp, delta) {
+    return SCALE[Math.max(0, Math.min(6, (IDX[temp] ?? 4) + delta))];
+  }
+
+  // Initialise state for a set of member IDs with optional pre-existing stances.
+  // preExisting: { fromId: { toId: { temperature, trigger } } }
+  function init(memberIds, preExisting) {
+    const state = { turn: 0, characters: {} };
+    for (const id of memberIds) {
+      state.characters[id] = {
+        toward: {},
+        woundActivated: false,
+        lastMove: null,
+        debtLedger: { owed: [], owes: [] }
+      };
+      for (const other of memberIds) {
+        if (other !== id) state.characters[id].toward[other] = { temperature: 'neutral', trigger: null };
+      }
+    }
+    for (const [from, targets] of Object.entries(preExisting || {})) {
+      for (const [to, stance] of Object.entries(targets)) {
+        if (state.characters[from]?.toward[to]) {
+          state.characters[from].toward[to] = { ...stance };
+        }
+      }
+    }
+    return state;
+  }
+
+  // Update state after a speaker's turn.
+  // woundMap: { memberId: [keyword, ...] } — wound trigger keywords per target
+  // nameAliases: { memberId: [alias, ...] } — name variants to detect in text
+  function update(state, speakerId, text, allIds, woundMap, nameAliases) {
+    const lower = text.toLowerCase();
+    state.turn++;
+    for (const targetId of allIds) {
+      if (targetId === speakerId) continue;
+      const charState = state.characters[targetId];
+      const stance    = charState?.toward[speakerId];
+      if (!stance) continue;
+
+      const wounds   = (woundMap[targetId] || []).map(w => w.toLowerCase());
+      const woundHit = wounds.some(w => lower.includes(w));
+
+      if (woundHit) {
+        stance.temperature = _adj(stance.temperature, +2);
+        stance.trigger = `wound referenced turn ${state.turn}`;
+        charState.woundActivated = true;
+        if (!charState.debtLedger.owes.includes(speakerId)) {
+          charState.debtLedger.owes.push(speakerId);
+        }
+      } else {
+        const aliases   = [targetId, ...(nameAliases[targetId] || [])].map(n => n.toLowerCase());
+        const mentioned = aliases.some(a => lower.includes(a));
+        if (!mentioned) {
+          stance.temperature = _adj(stance.temperature, -1);
+          if (!stance.trigger) stance.trigger = `not addressed turn ${state.turn}`;
+        }
+      }
+    }
+    return state;
+  }
+
+  // Build YOUR STATE block for a speaking character.
+  // voiceFmts: { memberId: fn(nonNeutral, charState, owed, owes, turn) => string }
+  function buildBlock(state, speakerId, allIds, nameAliases, voiceFmts) {
+    if (!state || state.turn === 0) return '';
+    const charState = state.characters[speakerId];
+    if (!charState) return '';
+
+    const nonNeutral = [];
+    for (const [otherId, stance] of Object.entries(charState.toward)) {
+      if (stance.temperature !== 'neutral') {
+        const displayName = (nameAliases[otherId] || [])[0] || otherId;
+        nonNeutral.push({ id: otherId, name: displayName, stance });
+      }
+    }
+
+    const owed = charState.debtLedger.owed.map(id => (nameAliases[id] || [])[0] || id);
+    const owes = charState.debtLedger.owes.map(id => (nameAliases[id] || [])[0] || id);
+
+    if (!nonNeutral.length && !charState.woundActivated && !owed.length && !owes.length) return '';
+
+    const fmt = voiceFmts[speakerId];
+    if (fmt) return fmt(nonNeutral, charState, owed, owes, state.turn);
+
+    // Generic fallback formatter
+    const lines = nonNeutral.map(({name, stance}) =>
+      `- Toward ${name}: ${stance.temperature}${stance.trigger ? '. ' + stance.trigger : ''}.`
+    );
+    if (charState.woundActivated) lines.push('- Your wound is live this session.');
+    if (owed.length)  lines.push(`- Owed by: ${owed.join(', ')}.`);
+    if (owes.length)  lines.push(`- You owe: ${owes.join(', ')}.`);
+    return lines.length ? `YOUR STATE ENTERING THIS TURN:\n${lines.join('\n')}\n\n` : '';
+  }
+
+  return { init, update, buildBlock };
+})();
+
+// ============================================================
 // MODULE: Boardroom — Present to the Boardroom
 // ============================================================
 const Boardroom = (() => {
@@ -8755,7 +8865,119 @@ Never say anything falsifiable. Never predict a specific outcome. The qualifier 
 
   let _history = [];
   let _turnCount = 0;
+  let _relState = null;
   let _charges = { sebastian: 1, ben: 1, harold: 1, roy: 1, partridge: 1, cox: 1, mystic: 1 };
+
+  const BR_PRE_EXISTING = {
+    harold: {
+      sebastian: { temperature: 'simmering', trigger: 'active war — language crimes unforgivable' },
+      roy:       { temperature: 'warm',       trigger: "Harold finds everyone's failures delightful" },
+      partridge: { temperature: 'warm',       trigger: 'irritating ally — both right, different registers' },
+      hicks:     { temperature: 'warm',       trigger: 'natural ally — occasional friction' },
+      cox:       { temperature: 'warm',       trigger: 'baffling but unexpectedly useful' }
+    },
+    roy: {
+      sebastian: { temperature: 'cooling',   trigger: 'Sebastian reframes incompetence as leadership' },
+      partridge: { temperature: 'neutral',   trigger: 'partial ally — both value precision' }
+    }
+  };
+
+  const BR_WOUNDS = {
+    harold:    ['synergy', 'learnings', 'going forward', 'leverage our', 'paradigm shift', 'bandwidth', 'circle back', 'ideate'],
+    sebastian: ['no owner', 'who owns this', 'whose idea was this', 'reframing'],
+    partridge: ['unprecedented', 'ivan', "didn't see this coming", 'unpredictable'],
+    hicks:     ['resource', 'human capital', 'shareholder value', 'people are our greatest asset'],
+    mystic:    ['prove it', 'show the evidence', 'falsifiable', "that's not real"],
+    cox:       ['quantum leap', 'paradigm', 'exponential growth', 'now more than ever'],
+    ben:       ["velocity doesn't matter", 'sprints are pointless', 'no constraint here']
+  };
+
+  const BR_NAMEMAP = {
+    harold:    ['harold', 'pint of harold', 'pinter'],
+    sebastian: ['sebastian'],
+    roy:       ['roy'],
+    partridge: ['partridge'],
+    hicks:     ['hicks'],
+    mystic:    ['mystic'],
+    cox:       ['cox', 'brian', 'prof cox'],
+    ben:       ['ben', 'kenobi']
+  };
+
+  const BR_VOICE_FMT = {
+    roy: (nn, cs, owed, owes) => {
+      if (!nn.length && !cs.woundActivated) return '';
+      const lines = nn.map(({name, stance}) =>
+        ['simmering','hostile','wounded'].includes(stance.temperature)
+          ? `- ${name}. ${stance.temperature}. ${stance.trigger || 'Still no owner.'}`
+          : `- ${name}. ${stance.temperature}.`
+      );
+      return `YOUR STATE:\n${lines.join('\n')}\n\n`;
+    },
+    harold: (nn, cs) => {
+      if (!nn.length && !cs.woundActivated) return '';
+      const lines = nn.map(({name, stance}) =>
+        ['simmering','hostile','wounded'].includes(stance.temperature)
+          ? `- ${name} said it. You are still aware of this. ${stance.trigger || ''}`
+          : `- ${name}: ${stance.temperature}. Watching.`
+      );
+      return `YOUR STATE:\n${lines.join('\n')}\n\n`;
+    },
+    sebastian: (nn, cs) => {
+      if (!nn.length && !cs.woundActivated) return '';
+      const lines = nn.map(({name, stance}) =>
+        `- ${name}: ${stance.temperature} — manageable variable. ${stance.trigger || 'Noted at this stage.'}`
+      );
+      return `YOUR STATE ENTERING THIS TURN:\n${lines.join('\n')}\n\n`;
+    },
+    partridge: (nn, cs) => {
+      if (!nn.length && !cs.woundActivated) return '';
+      const lines = nn.map(({name, stance}) =>
+        `- ${name}: ${stance.temperature}. ${stance.trigger || 'Documented.'}${stance.temperature === 'hostile' ? ' I have the file.' : ''}`
+      );
+      return `YOUR STATE ENTERING THIS TURN:\n${lines.join('\n')}\n\n`;
+    },
+    hicks: (nn, cs) => {
+      if (!nn.length && !cs.woundActivated) return '';
+      const lines = nn.map(({name, stance}) =>
+        ['simmering','hostile','wounded'].includes(stance.temperature)
+          ? `- ${name}: ${stance.temperature}. You know why.`
+          : `- ${name}: ${stance.temperature}. Not today.`
+      );
+      return `YOUR STATE:\n${lines.join('\n')}\n\n`;
+    },
+    mystic: (nn, cs) => {
+      if (!nn.length && !cs.woundActivated) return '';
+      const lines = nn.map(({name, stance}) =>
+        `- The cards show ${name}: ${stance.temperature} alignment. ${stance.trigger ? 'The signs spoke.' : 'The stars are watching.'}`
+      );
+      return `YOUR STATE:\n${lines.join('\n')}\n\n`;
+    },
+    cox: (nn, cs) => {
+      if (!nn.length && !cs.woundActivated) return '';
+      const cosmo = {
+        hostile:  'a thermodynamic collision — entropy accelerating toward local maximum',
+        wounded:  'an open bruise in the spacetime of this panel. 13.8 billion years in the making',
+        simmering:'a pressure gradient building — Boltzmann would recognise this',
+        cooling:  'thermal equilibrium approached but not yet reached',
+        warm:     'a stable orbital resonance',
+        reverent: 'like standing at the edge of a black hole and finding it beautiful'
+      };
+      const lines = nn.map(({name, stance}) =>
+        `- Toward ${name}: ${cosmo[stance.temperature] || stance.temperature}.`
+      );
+      if (cs.woundActivated) lines.push('- Your wound is live. A cosmological bruise. Noted.');
+      return `YOUR STATE ENTERING THIS TURN:\n${lines.join('\n')}\n\n`;
+    },
+    ben: (nn, cs) => {
+      if (!nn.length && !cs.woundActivated) return '';
+      const lines = nn.map(({name, stance}) =>
+        ['simmering','hostile','wounded'].includes(stance.temperature)
+          ? `- ${name}: lead time increasing. ${stance.temperature}. ${stance.trigger || "Little's Law applies."}`
+          : `- ${name}: ${stance.temperature}. Throughput nominal.`
+      );
+      return `YOUR STATE:\n${lines.join('\n')}\n\n`;
+    }
+  };
 
   function _detectTriggers(text) {
     const t = (text || '').toLowerCase();
@@ -8850,6 +9072,7 @@ Never say anything falsifiable. Never predict a specific outcome. The qualifier 
 
   async function _runRound(questMessage) {
     _turnCount++;
+    if (_turnCount === 1) _relState = RelationshipState.init(ORDER, BR_PRE_EXISTING);
     _history.push({ role: 'questioner', text: questMessage });
 
     const thread = document.getElementById('br-thread');
@@ -8911,7 +9134,8 @@ How to behave:
         ? '\n\nYou are the last to speak this beat. End with a direct question back to the questioner — specific to this discussion, not generic. Challenge, provocation, genuine curiosity, or a demand for information. The questioner must respond.'
         : '';
 
-      const system = member.prompt
+      const yourState = RelationshipState.buildBlock(_relState, member.id, ORDER, BR_NAMEMAP, BR_VOICE_FMT);
+      const system = yourState + member.prompt
         + _chargeNote(member.id)
         + '\n\nFull conversation so far:\n' + hist
         + thisRoundPrev
@@ -8923,6 +9147,7 @@ How to behave:
       try {
         const resp = await API.call(system, prompt, member.id === 'cox' ? 700 : 400, 'boardroom/' + member.id);
         panelResponses.push({ id: member.id, text: resp });
+        RelationshipState.update(_relState, member.id, resp, ORDER, BR_WOUNDS, BR_NAMEMAP);
         _fill(pid, member, resp);
       } catch (e) {
         const err = e.userMessage || 'Request failed.';
@@ -8941,6 +9166,7 @@ How to behave:
 
     _history = [];
     _turnCount = 0;
+    _relState = null;
     document.getElementById('br-thread').innerHTML = '';
     document.getElementById('br-output').style.display = 'block';
     document.getElementById('br-reply-area').style.display = 'none';
@@ -8968,6 +9194,7 @@ How to behave:
   function reset() {
     _history = [];
     _turnCount = 0;
+    _relState = null;
     _charges = { sebastian: 1, ben: 1, harold: 1, roy: 1, partridge: 1, cox: 1, mystic: 1 };
     document.getElementById('br-thread').innerHTML = '';
     document.getElementById('br-output').style.display = 'none';
@@ -9567,6 +9794,107 @@ Never says anything direct, unmediated, or without a framework. The Dublin warmt
 
   const ORDER = ['faldo', 'butch', 'murray', 'mcginley', 'coltart', 'radar', 'dougherty', 'henni'];
 
+  const GOLF_PRE_EXISTING = {
+    dougherty: {
+      faldo: { temperature: 'warm',     trigger: 'longstanding admiration, professional debt' }
+    },
+    mcginley: {
+      faldo: { temperature: 'reverent', trigger: 'the Moses/Jesus dynamic' },
+      radar: { temperature: 'cooling',  trigger: 'Radar called McGinley a gobshite' }
+    }
+  };
+
+  const GOLF_WOUNDS = {
+    coltart:   ['valderrama', 'seve', 'westwood', 'cameraman', 'three and two', '3 and 2', 'brookline'],
+    mcginley:  ['gobshite', 'wheelhouse'],
+    faldo:     ["d:ream", "things can only get better", "keyboards"],
+    dougherty: ["can't improve", 'give up', 'defeatist', 'never get better'],
+    murray:    ["doesn't matter", 'not important', 'move on', 'insignificant'],
+    henni:     ["don't answer that", 'skip that', 'ignore that question']
+  };
+
+  const GOLF_NAMEMAP = {
+    faldo:     ['faldo', 'nick', 'sir nick'],
+    butch:     ['butch', 'harmon'],
+    murray:    ['murray', 'ewen'],
+    mcginley:  ['mcginley', 'paul'],
+    coltart:   ['coltart', 'andrew'],
+    radar:     ['radar', 'wayne', 'riley'],
+    dougherty: ['dougherty', 'nick d'],
+    henni:     ['henni', 'zuel']
+  };
+
+  const GOLF_VOICE_FMT = {
+    radar: (nn, cs) => {
+      if (!nn.length && !cs.woundActivated) return '';
+      const lines = nn.map(({name, stance}) =>
+        ['simmering','hostile','wounded'].includes(stance.temperature)
+          ? `- ${name}: ${stance.temperature}. ${stance.trigger || 'Filed.'}`
+          : `- ${name}: ${stance.temperature}.`
+      );
+      if (cs.woundActivated) lines.push("- Wound's live. Haven't said anything. Not yet.");
+      return `YOUR STATE:\n${lines.join('\n')}\n\n`;
+    },
+    faldo: (nn, cs) => {
+      if (!nn.length && !cs.woundActivated) return '';
+      const qual = { hostile: "and I've cycled back on this, genuinely", wounded: "which is — and I mean that — not great",
+        simmering: "I've thought about this, a few times actually", cooling: "which is fine, fine",
+        warm: "and I mean that", reverent: "cycled back and thought: yes. That's it." };
+      const lines = nn.map(({name, stance}) =>
+        `- Toward ${name}: ${stance.temperature}${qual[stance.temperature] ? ' — ' + qual[stance.temperature] : ''}.`
+      );
+      return `YOUR STATE ENTERING THIS TURN:\n${lines.join('\n')}\n\n`;
+    },
+    mcginley: (nn, cs) => {
+      if (!nn.length && !cs.woundActivated) return '';
+      const fw = { hostile: 'a high-tariff interpersonal challenge', wounded: 'a premium emotional scenario',
+        simmering: 'a moderate-tension stakeholder situation', cooling: 'a below-par connection metric',
+        warm: 'a positive team chemistry dynamic', reverent: 'a top-drawer inspirational context' };
+      const lines = nn.map(({name, stance}) =>
+        `- ${name}: ${fw[stance.temperature] || stance.temperature}${stance.trigger ? '. ' + stance.trigger : ''}.`
+      );
+      return `YOUR STATE:\n${lines.join('\n')}\n\n`;
+    },
+    coltart: (nn, cs) => {
+      if (!nn.length && !cs.woundActivated) return '';
+      const lines = nn.map(({name, stance}) =>
+        `- ${name}: ${stance.temperature}. ${stance.trigger || 'Noted.'} ${stance.temperature === 'hostile' ? "Fine. It's fine." : ''}`
+      );
+      if (cs.woundActivated) lines.push("- The wound's come up. Not going to make a thing of it. It's fine.");
+      return `YOUR STATE ENTERING THIS TURN:\n${lines.join('\n')}\n\n`;
+    },
+    dougherty: (nn, cs) => {
+      if (!nn.length && !cs.woundActivated) return '';
+      const lines = nn.map(({name, stance}) =>
+        ['simmering','hostile','wounded'].includes(stance.temperature)
+          ? `- Toward ${name}: ${stance.temperature} — and that's not great, but there's something there.`
+          : `- Toward ${name}: ${stance.temperature}. Which is — yeah. Good.`
+      );
+      return `YOUR STATE:\n${lines.join('\n')}\n\n`;
+    },
+    murray: (nn, cs) => {
+      if (!nn.length && !cs.woundActivated) return '';
+      const lines = nn.map(({name, stance}) =>
+        `- Toward ${name}: this is historically ${stance.temperature}. This moment will be remembered.`
+      );
+      return `YOUR STATE ENTERING THIS TURN:\n${lines.join('\n')}\n\n`;
+    },
+    henni: (nn, cs) => {
+      if (!nn.length && !cs.woundActivated) return '';
+      const lines = nn.map(({name, stance}) =>
+        `- ${name}: ${stance.temperature}. You have a question prepared.${stance.trigger ? ' (' + stance.trigger + ')' : ''}`
+      );
+      return `YOUR STATE:\n${lines.join('\n')}\n\n`;
+    },
+    butch: (nn, cs) => {
+      if (!nn.length && !cs.woundActivated) return '';
+      const lines = nn.map(({name, stance}) =>
+        `- ${name}: ${stance.temperature}. Technically addressable.${stance.trigger ? ' ' + stance.trigger : ''}`
+      );
+      return `YOUR STATE:\n${lines.join('\n')}\n\n`;
+    }
+  };
+
   async function discuss() {
     const input = (document.getElementById('gf-input')?.value || '').trim();
     if (!input) { UI.toast('Give them something to discuss.', 'warn'); return; }
@@ -9577,6 +9905,8 @@ Never says anything direct, unmediated, or without a framework. The Dublin warmt
     UI.setDisabled('gf-btn', true);
 
     const TURN_RULES = `RULE 1 — TURN LENGTH:\nMost responses are 1-2 sentences. A response earns length only by being directly provoked, challenged, or explicitly given the floor. The default is short. Silence and brevity are strength.\n\nRULE 2 — REACTIVITY OBLIGATION:\nEvery response must open by reacting to the previous speaker's last sentence — not the topic generally. You are listening, not queuing.\n\nRULE 3 — CROSS-REFERENCE:\nYou may use anything said earlier in this conversation as ammunition. Wounds, indiscretions, failures, warmth — all fair game. You were there. You remember.`;
+
+    const gfRelState = RelationshipState.init(ORDER, GOLF_PRE_EXISTING);
 
     const responses = [];
     for (let i = 0; i < ORDER.length; i++) {
@@ -9604,7 +9934,8 @@ Never says anything direct, unmediated, or without a framework. The Dublin warmt
 - Correspondence: approximately 1 in 3 rounds, any character may produce a piece of correspondence to prove a point or simply to call someone a cunt. Always specific — named sender, real location. Formats: email ("we've had an email from Douglas in Carlisle which reads..."), letter, tweet, Instagram post, DM, dick pic (described in forensic detail), clown porn. The correspondence is read aloud, in full, with commitment. The character who reads it believes it supports their position. It may not.
 - Clown porn protocol: when clown porn appears as correspondence, it immediately overrides the current topic and triggers a full panel debate. Every character has a position. Positions are drastically different but contain unexpected overlap. Experiences span voluntary and involuntary, interactive and passive, enjoyable and deeply regrettable. Nobody is neutral. The debate escalates. It may go nuclear. Character-specific positions are defined in each character's prompt.`;
 
-      const system = TURN_RULES + '\n\n' + member.prompt + mechanics + (i > 0
+      const gfYourState = RelationshipState.buildBlock(gfRelState, member.id, ORDER, GOLF_NAMEMAP, GOLF_VOICE_FMT);
+      const system = TURN_RULES + '\n\n' + gfYourState + member.prompt + mechanics + (i > 0
         ? `\n\nPrevious:\n${prev}`
         : '');
 
@@ -9616,6 +9947,7 @@ Never says anything direct, unmediated, or without a framework. The Dublin warmt
       try {
         const resp = await API.call(system, prompt, 250, 'golf/' + member.id);
         responses.push(resp);
+        RelationshipState.update(gfRelState, member.id, resp, ORDER, GOLF_WOUNDS, GOLF_NAMEMAP);
         _fill(pid, member, resp);
       } catch (e) {
         _fill(pid, member, e.userMessage || 'Request failed.');
