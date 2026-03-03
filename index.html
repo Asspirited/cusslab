@@ -1111,6 +1111,8 @@
     min-width: 4px;
   }
 </style>
+<!-- Plausible — privacy-friendly analytics, no cookies -->
+<script defer data-domain="asspirited.cusslab.io" src="https://plausible.io/js/script.js"></script>
 </head>
 <body>
 
@@ -1874,7 +1876,14 @@
 
   <div id="cr-output" style="display:none;">
     <div id="cr-responses"></div>
-    <button class="btn-secondary" onclick="ComedyRoom.present()" style="margin-top:20px;">ROUND AGAIN 🔄</button>
+    <div style="display:flex;gap:8px;margin-top:16px;align-items:center;">
+      <button class="feedback-btn" onclick="panelRating(event,'comedy','💩')" title="Didn't land">💩</button>
+      <button class="feedback-btn" onclick="panelRating(event,'comedy','😐')" title="Fine">😐</button>
+      <button class="feedback-btn" onclick="panelRating(event,'comedy','😂')" title="Good">😂</button>
+      <button class="feedback-btn" onclick="panelRating(event,'comedy','🤣')" title="Brilliant">🤣</button>
+      <button class="btn-secondary" onclick="showAskUs('comedy')" style="margin-left:8px;font-size:12px;padding:6px 12px;">Ask us</button>
+    </div>
+    <button class="btn-secondary" onclick="ComedyRoom.present()" style="margin-top:12px;">ROUND AGAIN 🔄</button>
   </div>
 </div>
 
@@ -1892,7 +1901,14 @@
 
   <div id="fb-output" style="display:none;margin-top:24px;">
     <div id="fb-responses"></div>
-    <button class="btn-secondary" onclick="Football.discuss()" style="margin-top:20px;">NEXT ROUND 🔄</button>
+    <div style="display:flex;gap:8px;margin-top:16px;align-items:center;">
+      <button class="feedback-btn" onclick="panelRating(event,'football','💩')" title="Didn't land">💩</button>
+      <button class="feedback-btn" onclick="panelRating(event,'football','😐')" title="Fine">😐</button>
+      <button class="feedback-btn" onclick="panelRating(event,'football','😂')" title="Good">😂</button>
+      <button class="feedback-btn" onclick="panelRating(event,'football','🤣')" title="Brilliant">🤣</button>
+      <button class="btn-secondary" onclick="showAskUs('football')" style="margin-left:8px;font-size:12px;padding:6px 12px;">Ask us</button>
+    </div>
+    <button class="btn-secondary" onclick="Football.discuss()" style="margin-top:12px;">NEXT ROUND 🔄</button>
   </div>
 </div>
 
@@ -1910,7 +1926,14 @@
 
   <div id="gf-output" style="display:none;margin-top:24px;">
     <div id="gf-responses"></div>
-    <button class="btn-secondary" onclick="Golf.discuss()" style="margin-top:20px;">NEXT ROUND 🔄</button>
+    <div style="display:flex;gap:8px;margin-top:16px;align-items:center;">
+      <button class="feedback-btn" onclick="panelRating(event,'golf','💩')" title="Didn't land">💩</button>
+      <button class="feedback-btn" onclick="panelRating(event,'golf','😐')" title="Fine">😐</button>
+      <button class="feedback-btn" onclick="panelRating(event,'golf','😂')" title="Good">😂</button>
+      <button class="feedback-btn" onclick="panelRating(event,'golf','🤣')" title="Brilliant">🤣</button>
+      <button class="btn-secondary" onclick="showAskUs('golf')" style="margin-left:8px;font-size:12px;padding:6px 12px;">Ask us</button>
+    </div>
+    <button class="btn-secondary" onclick="Golf.discuss()" style="margin-top:12px;">NEXT ROUND 🔄</button>
   </div>
 </div>
 
@@ -3517,6 +3540,124 @@ const API = (() => {
 })();
 
 // ============================================================
+// ============================================================
+// MODULE: HCSession — AARRR metrics instrumentation
+// ============================================================
+const HCSession = (() => {
+  const HC_FIRST_VISIT = 'hc-first-visit';
+  const HC_VISIT_COUNT = 'hc-visit-count';
+  const HC_SESSION_KEY = (id) => 'session:' + id;
+  const HC_FEEDBACK_KEY = (ts) => 'feedback:' + ts;
+
+  function _uuid() { return Math.random().toString(36).slice(2) + Date.now().toString(36); }
+  function _now()  { return Date.now(); }
+  function _days(a, b) { return Math.round(Math.abs(b - a) / 86400000); }
+  function _avg(arr) { return arr.length ? arr.reduce((s, r) => s + (r.rating || 0), 0) / arr.length : 0; }
+
+  const sessionId   = _uuid();
+  const startTime   = _now();
+  const firstVisit  = localStorage.getItem(HC_FIRST_VISIT) || String(_now());
+  const visitCount  = (parseInt(localStorage.getItem(HC_VISIT_COUNT) || '0', 10) + 1);
+
+  try { if (!localStorage.getItem(HC_FIRST_VISIT)) localStorage.setItem(HC_FIRST_VISIT, firstVisit); } catch(e) {}
+  try { localStorage.setItem(HC_VISIT_COUNT, String(visitCount)); } catch(e) {}
+
+  const session = {
+    sessionId,
+    startTime,
+    referrer: document.referrer || '',
+    isReturn: visitCount > 1,
+    firstVisitDate: parseInt(firstVisit, 10),
+    visitCount,
+    panelRuns: [],
+    featuresTouched: [],
+    turdRatings: [],
+    feedback: [],
+    sessionDepth: 0
+  };
+
+  function logPanelRun(panelType, charactersActive, turnCount) {
+    const ts = _now();
+    session.panelRuns.push({ panelType, charactersActive, turnCount, timestamp: ts });
+    session.sessionDepth++;
+    _plausible('panel_run', { panelType });
+    _save();
+  }
+
+  function logFeatureTouch(feature) {
+    if (session.featuresTouched.find(f => f.feature === feature)) return;
+    session.featuresTouched.push({ feature, timestamp: _now() });
+    _plausible('feature_touch', { feature });
+    _save();
+  }
+
+  function logTurdRating(rating, panelType, turnContext) {
+    session.turdRatings.push({ rating, panelType, turnContext: turnContext || '', timestamp: _now() });
+    _plausible('turd_rating', { rating: String(rating) });
+    _save();
+  }
+
+  function logFeedback(message, panelType) {
+    const entry = { timestamp: _now(), message, panelType: panelType || '', sessionId };
+    session.feedback.push(entry);
+    try { localStorage.setItem(HC_FEEDBACK_KEY(entry.timestamp), JSON.stringify(entry)); } catch(e) {}
+    _save();
+  }
+
+  function getAARRRSnapshot() {
+    const now = _now();
+    const firstRunTime = session.panelRuns[0]?.timestamp;
+    return {
+      acquisition: { referrer: session.referrer, isNewSession: !session.isReturn },
+      activation: {
+        ranPanel: session.panelRuns.length > 0,
+        firstFeature: session.featuresTouched[0]?.feature || null,
+        timeToFirstRun: firstRunTime ? Math.round((firstRunTime - startTime) / 1000) : null
+      },
+      retention: {
+        isReturn: session.isReturn,
+        visitCount: session.visitCount,
+        daysSinceFirst: _days(session.firstVisitDate, now)
+      },
+      revenue: {
+        isPowerUser: session.panelRuns.length >= 3,
+        sessionDepth: session.sessionDepth
+      },
+      feedback: {
+        turdCount: session.turdRatings.length,
+        avgRating: parseFloat(_avg(session.turdRatings).toFixed(1)),
+        feedbackCount: session.feedback.length
+      }
+    };
+  }
+
+  function exportSession() {
+    const data = JSON.stringify({ ...session, aarrr: getAARRRSnapshot() }, null, 2);
+    const blob = new Blob([data], { type: 'application/json' });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href     = url;
+    a.download = `hc-session-${sessionId}-${new Date().toISOString().slice(0,10)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function _save() {
+    try { localStorage.setItem(HC_SESSION_KEY(sessionId), JSON.stringify(session)); } catch(e) {}
+  }
+
+  function _plausible(event, props) {
+    try {
+      if (typeof window.plausible === 'function') window.plausible(event, { props });
+    } catch(e) {}
+  }
+
+  // Save on page unload
+  window.addEventListener('beforeunload', () => _save());
+
+  return { logPanelRun, logFeatureTouch, logTurdRating, logFeedback, getAARRRSnapshot, exportSession };
+})();
+
 // MODULE: State — single source of truth for all feature state
 // SRP: state management only
 // Eliminates 13 scattered global variables
@@ -8518,6 +8659,36 @@ function feedback(evt, featureId, emoji) {
   Training.logFeedback(featureId, evt, emoji, scoreMap[emoji] || 2);
 }
 
+function panelRating(evt, panelType, emoji) {
+  const scoreMap = { '💩': 1, '😐': 2, '😂': 3, '🤣': 4 };
+  const rating = scoreMap[emoji] || 2;
+  HCSession.logTurdRating(rating, panelType, '');
+  // Brief thank-you flash on button
+  const btn = evt.target;
+  const orig = btn.style.transform;
+  btn.style.transform = 'scale(1.4)';
+  btn.style.transition = 'transform 0.15s';
+  setTimeout(() => { btn.style.transform = orig; }, 300);
+  const flash = document.createElement('span');
+  flash.textContent = '✓';
+  flash.style.cssText = 'position:absolute;color:var(--accent);font-size:12px;pointer-events:none;animation:fadeOut 0.5s forwards;';
+  btn.style.position = 'relative';
+  btn.appendChild(flash);
+  setTimeout(() => flash.remove(), 500);
+}
+
+function showAskUs(panelType) {
+  const msg = prompt('What\'s on your mind? (We read these)');
+  if (msg && msg.trim()) {
+    HCSession.logFeedback(msg.trim(), panelType);
+    UI.toast('Got it — thank you.', 'info');
+  }
+}
+
+function exportSessionData() {
+  HCSession.exportSession();
+}
+
 // Joke Test
 function runJokeTest()               { JokeTest.run(); }
 function saveJokeToLib()             { JokeTest.saveToLib(); }
@@ -9560,6 +9731,7 @@ Never cruel to the person. In despair on their behalf. The last line is weird an
       }
     }
     UI.setDisabled('cr-btn', false);
+    HCSession.logPanelRun('comedy', ORDER, responses.length);
   }
 
   function _placeholder(pid, m) {
@@ -9710,6 +9882,7 @@ Scouse. Direct. Self-deprecating when warranted. The suffering is real and it gi
       }
     }
     UI.setDisabled('fb-btn', false);
+    HCSession.logPanelRun('football', ORDER, responses.length);
   }
 
   function _placeholder(pid, m) {
@@ -10276,6 +10449,7 @@ TOUR CARD — MONTGOMERIE: Scorn. Specific, not generic. You do not elaborate un
       }
     }
     UI.setDisabled('gf-btn', false);
+    HCSession.logPanelRun('golf', ORDER, responses.length);
   }
 
   function _placeholder(pid, m) {
@@ -10801,5 +10975,8 @@ window.addEventListener('hashchange', _checkSettingsHash);
 _checkSettingsHash();
 
 </script>
+<div style="text-align:center;padding:12px;opacity:0.4;font-size:11px;">
+  <button onclick="exportSessionData()" style="background:none;border:none;color:inherit;font-size:11px;cursor:pointer;text-decoration:underline;">Export session data</button>
+</div>
 </body>
 </html>
