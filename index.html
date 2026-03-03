@@ -1140,17 +1140,6 @@
 
 <nav id="sidebar">
 
-  <!-- ── BOARDROOM ── -->
-  <div class="nav-group" id="ng-boardroom">
-    <div class="nav-group-header" onclick="toggleNavGroup('boardroom')">
-      <span class="nav-group-icon">💼</span> BOARDROOM
-      <span class="nav-group-count">1</span>
-    </div>
-    <div class="nav-items" id="ni-boardroom">
-      <div class="tab" onclick="switchTab(event,'boardroom')"><span class="tab-icon">🏛️</span>Present to the Boardroom</div>
-    </div>
-  </div>
-
   <!-- ── COMEDY ROOM ── -->
   <div class="nav-group" id="ng-comedy">
     <div class="nav-group-header" onclick="toggleNavGroup('comedy')">
@@ -1171,24 +1160,6 @@
     <div class="nav-items" id="ni-sports">
       <div class="tab" onclick="switchTab(event,'football')"><span class="tab-icon">⚽</span>The Pub After The Match</div>
       <div class="tab" onclick="switchTab(event,'golf')"><span class="tab-icon">⛳</span>The 19th Hole</div>
-    </div>
-  </div>
-
-  <!-- ── GENERATE ── -->
-  <!-- ── THE PANEL ── -->
-  <div class="nav-group active" id="ng-personas">
-    <div class="nav-group-header" onclick="toggleNavGroup('personas')">
-      <span class="nav-group-icon">🎤</span> THE PANEL
-      <span class="nav-group-count">6</span>
-    </div>
-    <div class="nav-items" id="ni-personas">
-      <div class="tab" onclick="switchTab(event,'settings')" style="display:none;"><span class="tab-icon">⚙️</span>Settings & API Key</div>
-      <div class="tab active" onclick="switchTab(event,'bills')"><span class="tab-icon">🎤</span>Ask The Panel</div>
-      <div class="tab" onclick="switchTab(event,'joketest')"><span class="tab-icon">🧪</span>Joke Test</div>
-      <div class="tab" onclick="switchTab(event,'clash')"><span class="tab-icon">⚔️</span>Expert Clash</div>
-      <div class="tab" onclick="switchTab(event,'roulette')"><span class="tab-icon">🎰</span>The Wheel</div>
-      <div class="tab" onclick="switchTab(event,'professionals')"><span class="tab-icon">🍺</span>Professionals</div>
-      <div class="tab" onclick="switchTab(event,'ironic')"><span class="tab-icon">🌧️</span>Isn't It Ironic?</div>
     </div>
   </div>
 
@@ -1219,6 +1190,34 @@
       <div class="tab" onclick="switchTab(event,'comedylab')"><span class="tab-icon">🎲</span>Comedy Lab</div>
       <div class="tab" onclick="switchTab(event,'trumps')"><span class="tab-icon">⚔️</span>Dimension Duel</div>
       <div class="tab" onclick="switchTab(event,'qleeks')"><span class="tab-icon">🐸</span>Quntum Leeks</div>
+    </div>
+  </div>
+
+  <!-- ── BOARDROOM ── -->
+  <div class="nav-group" id="ng-boardroom">
+    <div class="nav-group-header" onclick="toggleNavGroup('boardroom')">
+      <span class="nav-group-icon">💼</span> BOARDROOM
+      <span class="nav-group-count">1</span>
+    </div>
+    <div class="nav-items" id="ni-boardroom">
+      <div class="tab" onclick="switchTab(event,'boardroom')"><span class="tab-icon">🏛️</span>Present to the Boardroom</div>
+    </div>
+  </div>
+
+  <!-- ── THE PANEL ── -->
+  <div class="nav-group active" id="ng-personas">
+    <div class="nav-group-header" onclick="toggleNavGroup('personas')">
+      <span class="nav-group-icon">🎤</span> THE PANEL
+      <span class="nav-group-count">6</span>
+    </div>
+    <div class="nav-items" id="ni-personas">
+      <div class="tab" onclick="switchTab(event,'settings')" style="display:none;"><span class="tab-icon">⚙️</span>Settings & API Key</div>
+      <div class="tab active" onclick="switchTab(event,'bills')"><span class="tab-icon">🎤</span>Ask The Panel</div>
+      <div class="tab" onclick="switchTab(event,'joketest')"><span class="tab-icon">🧪</span>Joke Test</div>
+      <div class="tab" onclick="switchTab(event,'clash')"><span class="tab-icon">⚔️</span>Expert Clash</div>
+      <div class="tab" onclick="switchTab(event,'roulette')"><span class="tab-icon">🎰</span>The Wheel</div>
+      <div class="tab" onclick="switchTab(event,'professionals')"><span class="tab-icon">🍺</span>Professionals</div>
+      <div class="tab" onclick="switchTab(event,'ironic')"><span class="tab-icon">🌧️</span>Isn't It Ironic?</div>
     </div>
   </div>
 
@@ -9107,6 +9106,8 @@ Never cruel to the person. In despair on their behalf. The last line is weird an
     document.getElementById('cr-output').style.display = 'block';
     UI.setDisabled('cr-btn', true);
 
+    const TURN_RULES = `RULE 1 — TURN LENGTH:\nMost responses are 1-2 sentences. A response earns length only by being directly provoked, challenged, or explicitly given the floor. The default is short. Silence and brevity are strength.\n\nRULE 2 — REACTIVITY OBLIGATION:\nEvery response must open by reacting to the previous speaker's last sentence — not the topic generally. You are listening, not queuing.\n\nRULE 3 — CROSS-REFERENCE:\nYou may use anything said earlier in this conversation as ammunition. Wounds, indiscretions, failures, warmth — all fair game. You were there. You remember.`;
+
     const responses = [];
     for (let i = 0; i < ORDER.length; i++) {
       const member = MEMBERS.find(m => m.id === ORDER[i]);
@@ -9139,7 +9140,7 @@ Never cruel to the person. In despair on their behalf. The last line is weird an
 - Correspondence: approximately 1 in 3 rounds, any character may produce a piece of correspondence to prove a point or simply to call someone a cunt. Always specific — named sender, real location. Formats: email ("we've had an email from Douglas in Carlisle which reads..."), letter, tweet, Instagram post, DM, dick pic (described in forensic detail), clown porn. The correspondence is read aloud, in full, with commitment. The character who reads it believes it supports their position. It may not.
 - Clown porn protocol: when clown porn appears as correspondence, it immediately overrides the current topic and triggers a full panel debate. Every character has a position. Positions are drastically different but contain unexpected overlap. Experiences span voluntary and involuntary, interactive and passive, enjoyable and deeply regrettable. Nobody is neutral. The debate escalates. It may go nuclear. Character-specific positions are defined in each character's prompt.`;
 
-      const system = member.prompt + roundNote + crMechanics + (i > 0
+      const system = TURN_RULES + '\n\n' + member.prompt + roundNote + crMechanics + (i > 0
         ? `\n\nPrevious:\n${prev}`
         : '');
 
