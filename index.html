@@ -10681,8 +10681,8 @@ HYPOCHONDRIA RESPONSE: Default silence. You note it once, as analysis. The panel
 
       const prevName = i > 0 ? MEMBERS.find(m => m.id === ORDER[i-1]).name : '';
       const prompt = i === 0
-        ? `Topic: "${input}"\n\nOpen. 2 sentences.`
-        : `${prevName}: "${lastBeat}"\n\n2 sentences. React to that. Topic: "${input}"`;
+        ? `Topic: "${input}"\n\nOpen the panel. 2 sentences.`
+        : `Last said: "${lastBeat}"\n\nAddress whoever you want — by name. The last speaker, someone from earlier, someone you've been waiting to go at. 2 sentences.`;
 
       try {
         const resp = await API.call(system, prompt, 250, 'golf/' + member.id);
