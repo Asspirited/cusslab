@@ -10436,7 +10436,6 @@ HYPOCHONDRIA RESPONSE: Default silence. You note it once, as analysis. The panel
     },
   ];
 
-  const ORDER = ['faldo', 'butch', 'murray', 'mcginley', 'coltart', 'roe', 'radar', 'dougherty', 'henni'];
 
   // Tour Card players — aliases used for name detection in conversation context.
   // When a player is mentioned, "TOUR CARD ACTIVE" is injected into YOUR STATE.
@@ -10586,6 +10585,22 @@ HYPOCHONDRIA RESPONSE: Default silence. You note it once, as analysis. The panel
 
     const TURN_RULES = `RULE 1 — TURN LENGTH:\nMost responses are 1-2 sentences. A response earns length only by being directly provoked, challenged, or explicitly given the floor. The default is short. Silence and brevity are strength.\n\nRULE 2 — REACTIVITY OBLIGATION:\nEvery response must open by reacting to the previous speaker's last sentence — not the topic generally. You are listening, not queuing.\n\nRULE 3 — CROSS-REFERENCE:\nYou may use anything said earlier in this conversation as ammunition. Wounds, indiscretions, failures, warmth — all fair game. You were there. You remember.\n\nRULE 4 — REACTIVE MOVES:\nYour reactive move is structural guidance — what you DO, not words you SAY. Seven moves available:\n(1) Agree and build — add something true that makes it worse\n(2) Agree but undermine — confirm surface, destroy substance\n(3) Contradict — name what was wrong and why\n(4) Flat refusal — one sentence, refusal is the content\n(5) Light-hearted pisstake — puncture with affection\n(6) Full-blooded insult — strongest language, lands on real wound\n(7) Mimic — default: verbal, repeat in own register until ridiculous. Intensity 3+: briefly become them, lose thread mid-sentence.\nNever name the move. Never open with the label.\n\nRULE 5 — LUKE DONALD:\nLuke Donald's name is always pronounced in the manner of Matt Damon in Team America. Every time. No acknowledgement. It never stops.`;
 
+    // Opening/closing alternates between Murray and Dougherty each run
+    const gfFlip = sessionStorage.getItem('golf-order-flip') === '1';
+    sessionStorage.setItem('golf-order-flip', gfFlip ? '0' : '1');
+    const ORDER = gfFlip
+      ? ['dougherty', 'faldo', 'butch', 'mcginley', 'coltart', 'roe', 'radar', 'henni', 'murray']
+      : ['murray', 'faldo', 'butch', 'mcginley', 'coltart', 'roe', 'radar', 'henni', 'dougherty'];
+
+    // Round escalation — increments each discuss() call this session
+    const gfRound = parseInt(sessionStorage.getItem('golf-round') || '0') + 1;
+    sessionStorage.setItem('golf-round', gfRound.toString());
+    const roundNote = `\n\nThis is round ${gfRound} of this session.` + (gfRound >= 7
+      ? ' You are at full intensity. Your characteristic escalation is completely present. No restraint.'
+      : gfRound >= 4
+        ? ' Your characteristic behaviour is increasingly pronounced.'
+        : '');
+
     // Roe return mechanic — sessionStorage flag tracks first vs return visit
     const roeFirstVisit = !sessionStorage.getItem('roe-visited');
 
@@ -10618,7 +10633,7 @@ HYPOCHONDRIA RESPONSE: Default silence. You note it once, as analysis. The panel
       const lastIdx = responses.length - 1;
       const prev = responses.map((r, idx) => {
         const m = MEMBERS.find(m => m.id === ORDER[idx]);
-        const text = idx === lastIdx ? r : r.substring(0, 120) + '…';
+        const text = idx === lastIdx ? r : r.substring(0, 200) + '…';
         return `${m.name.toUpperCase()}: "${text}"`;
       }).join('\n');
 
@@ -10664,14 +10679,14 @@ HYPOCHONDRIA RESPONSE: Default silence. You note it once, as analysis. The panel
       const gfHypoBlock = FoodWeather.hypoBlock(member.id, hypoPool, gfRelState, responses, gfAliases);
       const gfYourState  = RelationshipState.buildBlock(gfRelState, member.id, ORDER, GOLF_NAMEMAP, GOLF_VOICE_FMT);
       const arcInstructions = ConspireEngine.getArcInstructions(member.id, gfRelState, ORDER);
-      const system = TURN_RULES + '\n\n' + gfYourState + tourCardBlock + roeIntroBlock + gfFoodBlock + gfMarmiteBlock + gfHypoBlock + member.prompt + mechanics + arcInstructions + (i > 0
+      const system = TURN_RULES + '\n\n' + gfYourState + tourCardBlock + roeIntroBlock + gfFoodBlock + gfMarmiteBlock + gfHypoBlock + member.prompt + roundNote + mechanics + arcInstructions + (i > 0
         ? `\n\nPrevious:\n${prev}`
         : '');
 
       const prevName = i > 0 ? MEMBERS.find(m => m.id === ORDER[i-1]).name : '';
       const prompt = i === 0
         ? `Topic: "${input}"\n\nOpen the panel. Short unless the topic demands otherwise.`
-        : `Topic: "${input}"\n\nAddress whoever you want — by name. The last speaker, someone from earlier, someone you've been waiting to go at. Agree and build, agree but undermine, contradict, refuse, take the piss, insult them properly, or mimic them until it falls apart. Short unless you can't help it.`;
+        : `Topic: "${input}"\n\nLast said: "${lastBeat}"\n\nAddress whoever you want — by name. The last speaker, someone from earlier, someone you've been waiting to go at. Agree and build, agree but undermine, contradict, refuse, take the piss, insult them properly, or mimic them until it falls apart. Short unless you can't help it.`;
 
       try {
         const resp = await API.call(system, prompt, 250, 'golf/' + member.id);
