@@ -10680,9 +10680,19 @@ HYPOCHONDRIA RESPONSE: Default silence. You note it once, as analysis. The panel
         : '');
 
       const prevName = i > 0 ? MEMBERS.find(m => m.id === ORDER[i-1]).name : '';
+      const prevId   = i > 0 ? ORDER[i - 1] : null;
+
+      // Interrupt probability — driven by relationship temperature toward previous speaker
+      const _tempToPrev = prevId ? (gfRelState.characters[member.id]?.toward[prevId]?.temperature || 'neutral') : 'neutral';
+      const _woundLive  = prevId ? (gfRelState.characters[member.id]?.woundActivated || false) : false;
+      const _interruptRate = { hostile: 0.45, wounded: 0.30, simmering: 0.20, cooling: 0.08, neutral: 0.04, warm: 0.02, reverent: 0.01 };
+      const interruptFired = i > 0 && Math.random() < (_interruptRate[_tempToPrev] || 0.04) + (_woundLive ? 0.15 : 0);
+
       const prompt = i === 0
         ? `Topic: "${input}"\n\nOpen the panel. 2 sentences.`
-        : `Last said: "${lastBeat}"\n\nAddress whoever you want — by name. The last speaker, someone from earlier, someone you've been waiting to go at. A word, a line, two sentences — no more.`;
+        : interruptFired
+          ? `${prevName} is still talking: "…${lastBeat}"\n\nCut them off. Don't let them finish. One line — sharp, in character.`
+          : `Last said: "${lastBeat}"\n\nAddress whoever you want — by name. The last speaker, someone from earlier, someone you've been waiting to go at. A word, a line, two sentences — no more.`;
 
       try {
         const resp = await API.call(system, prompt, 250, 'golf/' + member.id);
