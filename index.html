@@ -10644,11 +10644,7 @@ HYPOCHONDRIA RESPONSE: Default silence. You note it once, as analysis. The panel
         return parts.length > 1 ? parts.slice(-2).join('. ') : last.slice(-200);
       })();
 
-      const mechanics = `\n\nCONVERSATION MECHANICS — NON-NEGOTIABLE:\n- Length: most turns are 1-2 sentences. 3-4 sentences if genuinely provoked. A full rant only when triggered by something real. Default is short. Speeches are failure.\n- Reactive: Agree and build, agree but undermine, contradict, refuse, take the piss, insult them properly, or mimic them until it falls apart — to the specific last thing said. Pick the one that fits the character and the moment. Do not deliver a prepared monologue while others are talking.\n- Personal: who said it matters as much as what. Use what you know about this person — their history, their wound, their last mistake in this room.\n- Historical drift: maximum one historical reference per round, two if the room has genuinely caught fire. When someone invokes a historical figure, one other character may respond to it — yes-and it, no-this it, fuck it up, miss the point entirely, or hijack it for the opposite argument. After that it's done. The panel moves on. Never introduce a reference cold — only react to one already in the room.\n- Innuendo: available to all characters. Use it when the moment invites it. Deliver it with complete seriousness. Never wink at the audience.
-- Expansion pool: each character draws from their own rotating pool of signature references, from canonical/mundane early in the session to exotic/unexpected later. Never repeat the same example within a session.
-- Directed questions: characters ask each other pointed questions — sometimes friendly, sometimes a veiled accusation, sometimes an open one. Questions about past performance, on-course behaviour, ethical lapses, personal life, that thing everyone in the room knows about. Questions can escalate: a friendly enquiry in round 1 becomes a pointed question in round 3 becomes an accusation in round 5, and if the accused deflects badly, it goes nuclear.
-- Correspondence: approximately 1 in 3 rounds, any character may produce a piece of correspondence to prove a point or simply to call someone a cunt. Always specific — named sender, real location. Formats: email ("we've had an email from Douglas in Carlisle which reads..."), letter, tweet, Instagram post, DM, dick pic (described in forensic detail), clown porn. The correspondence is read aloud, in full, with commitment. The character who reads it believes it supports their position. It may not.
-- Clown porn protocol: when clown porn appears as correspondence, it immediately overrides the current topic and triggers a full panel debate. Every character has a position. Positions are drastically different but contain unexpected overlap. Experiences span voluntary and involuntary, interactive and passive, enjoyable and deeply regrettable. Nobody is neutral. The debate escalates. It may go nuclear. Character-specific positions are defined in each character's prompt.`;
+      const mechanics = '';
 
       // Tour Card detection — scan full context for named Tour Card players
       const fullContext = (input + ' ' + responses.join(' ')).toLowerCase();
@@ -10685,8 +10681,8 @@ HYPOCHONDRIA RESPONSE: Default silence. You note it once, as analysis. The panel
 
       const prevName = i > 0 ? MEMBERS.find(m => m.id === ORDER[i-1]).name : '';
       const prompt = i === 0
-        ? `Topic: "${input}"\n\nOpen the panel. Short unless the topic demands otherwise.`
-        : `Topic: "${input}"\n\nLast said: "${lastBeat}"\n\nAddress whoever you want — by name. The last speaker, someone from earlier, someone you've been waiting to go at. Agree and build, agree but undermine, contradict, refuse, take the piss, insult them properly, or mimic them until it falls apart. Short unless you can't help it.`;
+        ? `Topic: "${input}"\n\nOpen. 2 sentences.`
+        : `${prevName}: "${lastBeat}"\n\n2 sentences. React to that. Topic: "${input}"`;
 
       try {
         const resp = await API.call(system, prompt, 250, 'golf/' + member.id);
