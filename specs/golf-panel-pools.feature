@@ -541,3 +541,26 @@ Feature: Golf panel character pool escalation
     Then the closing is delivered with complete conviction
     And the closing implies everything that just happened was profound
     And Ewen means every word
+
+  # ─────────────────────────────────────────────
+  # PANEL ORDER — Opening and closing alternation
+  # ─────────────────────────────────────────────
+
+  Scenario: Murray opens and Dougherty closes on odd-numbered runs
+    Given the panel is on an odd-numbered run in this session
+    Then Ewen Murray speaks first
+    And Nick Dougherty speaks last
+    And the middle order is Faldo, Butch, McGinley, Coltart, Roe, Radar, Henni
+
+  Scenario: Dougherty opens and Murray closes on even-numbered runs
+    Given the panel is on an even-numbered run in this session
+    Then Nick Dougherty speaks first
+    And Ewen Murray speaks last
+    And the middle order is Faldo, Butch, McGinley, Coltart, Roe, Radar, Henni
+
+  Scenario: First speaker gets the opener prompt, all others get the reactive prompt
+    Given the panel is in any run
+    When the first speaker is called
+    Then they receive "Open the panel" with no previous context
+    When any subsequent speaker is called
+    Then they receive the last sentence spoken and a directive to address someone by name
