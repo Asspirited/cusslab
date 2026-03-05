@@ -353,3 +353,14 @@ Entry format: copy schema above. Minimum viable entry is Item + Symptom + Tags +
 - **Delay:** None
 - **Tags:** process-failure, claude-behaviour
 - **Status:** Rule reinforced in memory. Must not recur.
+
+## WL-025
+- **Item:** Claude Code committed twice without pushing — changes sat local only
+- **Symptom:** App appeared unchanged on live site after two commits. git log showed origin/main 2 commits behind HEAD.
+- **Suspected cause:** Claude Code violated the PUSH rule — pipeline GREEN = commit + push. Committed 130a777 and 4b68f5b without pushing either.
+- **Session:** 176
+- **Time lost:** ~10 mins debugging apparent non-fix
+- **Cost impact:** Direct — wasted diagnosis time, unnecessary web search
+- **Delay:** Quantum Leeks fix not live until manual push from WSL
+- **Tags:** process-failure, push-rule, claude-code
+- **Status:** Pushed manually. Rule already in CLAUDE.md — Claude Code not applying it.
