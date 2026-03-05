@@ -1103,6 +1103,9 @@ function makeSteps(ctx) {
     [/^GolfWoundDetector\.check\(\) is called with character "([^"]+)" and text "([^"]+)"$/,
       (characterId, text) => { ctx._woundResult = GolfWoundDetector.check(characterId, text); }],
 
+    [/^BoardroomWoundDetector\.check\(\) is called with character "([^"]+)" and text "([^"]+)"$/,
+      (characterId, text) => { ctx._woundResult = BoardroomWoundDetector.check(characterId, text); }],
+
     [/^the result has triggered false$/,
       () => {
         if (ctx._woundResult.triggered !== false)

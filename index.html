@@ -9318,6 +9318,11 @@ Never say anything falsifiable. Never predict a specific outcome. The qualifier 
 
   const ORDER = ['sebastian', 'ben', 'harold', 'roy', 'partridge', 'cox', 'mystic'];
 
+  const BOARDROOM_WOUNDS = {
+    cox: ['d:ream', 'things can only get better', 'keyboards'],
+  };
+  const BoardroomWoundDetector = makeWoundDetector(BOARDROOM_WOUNDS);
+
   let _history = [];
   let _turnCount = 0;
   let _relState = null;
@@ -10519,7 +10524,7 @@ HYPOCHONDRIA RESPONSE: Default silence. You note it once, as analysis. The panel
   const GOLF_WOUNDS = {
     coltart:   ['valderrama', 'seve', 'westwood', 'cameraman', 'three and two', '3 and 2', 'brookline'],
     mcginley:  ['gobshite', 'wheelhouse'],
-    faldo:     ["d:ream", "things can only get better", "keyboards"],
+    faldo:     ['fanny', 'sunesson', 'leadbetter', 'swing change', 'remodel', 'tiger', 'norman'],
     dougherty: ["can't improve", 'give up', 'defeatist', 'never get better'],
     murray:    ["doesn't matter", 'not important', 'move on', 'insignificant'],
     henni:     ["don't answer that", 'skip that', 'ignore that question'],

@@ -76,7 +76,7 @@ function makeWoundDetector(woundData) {
 const GOLF_WOUNDS_DATA = {
   coltart:   ['valderrama', 'seve', 'westwood', 'cameraman', 'three and two', '3 and 2', 'brookline'],
   mcginley:  ['gobshite', 'wheelhouse'],
-  faldo:     ['d:ream', 'things can only get better', 'keyboards'],
+  faldo:     ['fanny', 'sunesson', 'leadbetter', 'swing change', 'remodel', 'tiger', 'norman'],
   dougherty: ["can't improve", 'give up', 'defeatist', 'never get better'],
   murray:    ["doesn't matter", 'not important', 'move on', 'insignificant'],
   henni:     ["don't answer that", 'skip that', 'ignore that question'],
@@ -84,7 +84,7 @@ const GOLF_WOUNDS_DATA = {
 };
 
 const BOARDROOM_WOUNDS_DATA = {
-  // Populated when Boardroom wounds are defined — interface is ready
+  cox: ['d:ream', 'things can only get better', 'keyboards'],
 };
 
 const GolfWoundDetector     = makeWoundDetector(GOLF_WOUNDS_DATA);

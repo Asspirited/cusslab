@@ -134,7 +134,7 @@ assert('Temperature.isValid: empty → false',   Temperature.isValid(''),       
 // ── GolfWoundDetector.check() ─────────────────────────────────────────────────
 
 assert('GolfWoundDetector: triggered true for known wound word - faldo',
-  GolfWoundDetector.check('faldo', 'he played keyboards for d:ream').triggered, true);
+  GolfWoundDetector.check('faldo', 'he mentioned fanny sunesson').triggered, true);
 
 assert('GolfWoundDetector: triggered false for non-wound text - faldo',
   GolfWoundDetector.check('faldo', 'great round today').triggered, false);
@@ -149,10 +149,10 @@ assert('GolfWoundDetector: word is returned when triggered',
   typeof GolfWoundDetector.check('faldo', 'Masters').word, 'string');
 
 assert('GolfWoundDetector: case-insensitive match - uppercase',
-  GolfWoundDetector.check('faldo', 'D:REAM').triggered, true);
+  GolfWoundDetector.check('faldo', 'FANNY').triggered, true);
 
 assert('GolfWoundDetector: case-insensitive match - mixed case',
-  GolfWoundDetector.check('faldo', 'Things Can Only Get Better').triggered, true);
+  GolfWoundDetector.check('faldo', 'Swing Change at Augusta').triggered, true);
 
 assert('GolfWoundDetector: empty text returns triggered false',
   GolfWoundDetector.check('faldo', '').triggered, false);
@@ -170,6 +170,15 @@ assert('BoardroomWoundDetector: triggered false for unknown character',
 
 assert('BoardroomWoundDetector: triggered false for non-wound text',
   BoardroomWoundDetector.check('cox', 'hello world').triggered, false);
+
+assert('BoardroomWoundDetector: cox triggered by d:ream',
+  BoardroomWoundDetector.check('cox', 'you were in d:ream').triggered, true);
+
+assert('BoardroomWoundDetector: cox triggered by keyboards',
+  BoardroomWoundDetector.check('cox', 'he played the keyboards').triggered, true);
+
+assert('BoardroomWoundDetector: cox triggered case-insensitively by things can only get better',
+  BoardroomWoundDetector.check('cox', 'Things Can Only Get Better').triggered, true);
 
 assert('BoardroomWoundDetector: returns boolean triggered',
   typeof BoardroomWoundDetector.check('cox', 'test').triggered, 'boolean');
