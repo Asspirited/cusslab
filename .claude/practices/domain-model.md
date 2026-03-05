@@ -1245,3 +1245,28 @@ source except ROOM_CONDEMNATION (always targets room).
 
 Post-eruption: pressure resets to 3. Character does not immediately re-erupt.
 ROOM_CONDEMNATION fires room_ripple pressure increment to all characters.
+
+---
+### Performance Axis Behaviour Table (Golf Panel)
+
+Each axis per character has a defined behaviour: DECAY, ESCALATE, or DRIFT.
+Loaded at panel initialisation. Applied every turn and at round boundary.
+
+DECAY: halves per turn (floor), extra halving at round boundary.
+ESCALATE: grows by increment per turn. Holds at round boundary (arrives hot).
+  At +5 clamp: feeds pressure fuse +1 per turn held at maximum.
+  Sustained escalation can trigger gasket blown with no new trigger token.
+DRIFT: ±1 random walk per turn. One random step at round boundary.
+  Range reassessed at live testing — currently ±1.
+
+| Character | Axis        | Behaviour | Increment | Note                                     |
+|-----------|-------------|-----------|-----------|------------------------------------------|
+| faldo     | contempt    | DECAY     | —         | too controlled to sustain it openly      |
+| faldo     | humiliation | ESCALATE  | +1        | picks at it quietly                      |
+| mcginley  | humiliation | ESCALATE  | +1        | cannot stop, feeds his fuse              |
+| mcginley  | shame       | ESCALATE  | +1        | performed warmth slowly collapsing       |
+| mcginley  | joy         | DECAY     | —         | good moods don't last                    |
+| cox       | contempt    | DECAY     | —         | indifference reasserts quickly           |
+| cox       | anxiety     | ESCALATE  | +1        | cosmic dread accumulates                 |
+| wayne     | eroticism   | DRIFT     | ±1        | has its own weather system               |
+| wayne     | anger       | DECAY     | —         | blows fast, gone fast                    |
