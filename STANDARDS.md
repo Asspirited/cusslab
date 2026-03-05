@@ -369,3 +369,37 @@ DORA improvement path:
   2026-02-26  Automated push on green pipeline — no manual steps  Rod
   2026-02-26  Retrospective every 5th session mandatory           Rod
   2026-02-26  Always give specific instructions standard          Rod
+
+## 12. Usability Design Principles
+
+Before designing or implementing any UI or feature, both claude.ai and Claude Code must explicitly apply:
+
+### System Usability Scale (SUS)
+- Target score: above 68 (industry average)
+- Ask before every feature: would a first-time user find this learnable and efficient?
+- The two axes most relevant to Heckler and Cox / Quntum Leeks: learnability (can they figure it out without instruction?) and efficiency (once learned, can they move fast?)
+- If a feature would drop SUS score, name why and redesign before implementing
+
+### Nielsen's 10 Usability Heuristics
+Apply all 10 as design constraints. The most critical for this product:
+
+1. Visibility of system status — user always knows what's happening (Ziggy probability bar, spinner, turn count)
+2. User control and freedom — easy to undo, restart, change scenario without losing state
+3. Consistency and standards — UI language, button placement, and tone consistent across all panels
+4. Error prevention — warn before destructive actions (leap restart, key deletion)
+5. Recognition over recall — choices visible on screen, user never has to remember previous state
+6. Flexibility and efficiency — power users (Al advice options) and casual users (Ziggy suggestions) both served
+7. Aesthetic and minimalist design — no information that doesn't serve the current turn
+8. Help users recognise and recover from errors — Ziggy error output is informative not just alarming
+
+### Process
+For every feature:
+1. Name the relevant Nielsen heuristics before writing Gherkin
+2. State the SUS risk if any
+3. Gherkin first, implementation second
+4. Claude Code must reference this section before writing any UI code
+
+### Approved Changes History
+| Date | Change | Author |
+|------|--------|--------|
+| 2026-03-05 | Added SUS and Nielsen usability principles | Rod |
