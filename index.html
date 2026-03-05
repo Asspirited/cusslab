@@ -9380,6 +9380,7 @@ Never say anything falsifiable. Never predict a specific outcome. The qualifier 
   let _turnCount = 0;
   let _relState = null;
   let _charges = { sebastian: 1, ben: 1, harold: 1, roy: 1, partridge: 1, cox: 1, mystic: 1 };
+  let _charStates = {};
 
   const BR_PRE_EXISTING = {
     harold: {
@@ -9648,7 +9649,16 @@ How to behave:
         : '';
 
       const yourState = RelationshipState.buildBlock(_relState, member.id, ORDER, BR_NAMEMAP, BR_VOICE_FMT);
-      const system = yourState + member.prompt
+      // CharacterState — trigger if wound active, else decay
+      if (_charStates[member.id]) {
+        const woundLive = _relState.characters[member.id]?.woundActivated || false;
+        if (woundLive) CharacterState.trigger(_charStates[member.id]);
+        else           CharacterState.decay(_charStates[member.id]);
+      }
+      const brIntensityBlock = _charStates[member.id]
+        ? `YOUR STATE:\n${CharacterState.buildBlock(_charStates[member.id])}\n\n`
+        : '';
+      const system = brIntensityBlock + yourState + member.prompt
         + _chargeNote(member.id)
         + '\n\nFull conversation so far:\n' + hist
         + thisRoundPrev
@@ -9680,6 +9690,8 @@ How to behave:
     _history = [];
     _turnCount = 0;
     _relState = null;
+    _charStates = {};
+    for (const id of ORDER) _charStates[id] = CharacterState.create(5);
     document.getElementById('br-thread').innerHTML = '';
     document.getElementById('br-output').style.display = 'block';
     document.getElementById('br-reply-area').style.display = 'none';
@@ -9709,6 +9721,7 @@ How to behave:
     _turnCount = 0;
     _relState = null;
     _charges = { sebastian: 1, ben: 1, harold: 1, roy: 1, partridge: 1, cox: 1, mystic: 1 };
+    _charStates = {};
     document.getElementById('br-thread').innerHTML = '';
     document.getElementById('br-output').style.display = 'none';
     document.getElementById('br-reply-area').style.display = 'none';
@@ -10736,6 +10749,8 @@ HYPOCHONDRIA RESPONSE: Default silence. You note it once, as analysis. The panel
     const GOLF_RESET_VALVE_PRIORITY = ['dougherty', 'murray', 'mcginley', 'henni'];
 
     const hypoPool = FoodWeather.createPool();
+    const gfCharStates = {};
+    for (const id of ORDER) gfCharStates[id] = CharacterState.create(5);
     const responses = [];
     for (let i = 0; i < ORDER.length; i++) {
       const member = MEMBERS.find(m => m.id === ORDER[i]);
@@ -10787,7 +10802,16 @@ HYPOCHONDRIA RESPONSE: Default silence. You note it once, as analysis. The panel
       const gfHypoBlock = FoodWeather.hypoBlock(member.id, hypoPool, gfRelState, responses, gfAliases);
       const gfYourState  = RelationshipState.buildBlock(gfRelState, member.id, ORDER, GOLF_NAMEMAP, GOLF_VOICE_FMT);
       const arcInstructions = ConspireEngine.getArcInstructions(member.id, gfRelState, ORDER);
-      const system = TURN_RULES + '\n\n' + gfYourState + tourCardBlock + roeIntroBlock + gfFoodBlock + gfMarmiteBlock + gfHypoBlock + member.prompt + roundNote + mechanics + arcInstructions + (i > 0
+
+      // CharacterState — trigger if wound was activated by previous speakers, else decay
+      if (i > 0) {
+        const woundLive = gfRelState.characters[member.id]?.woundActivated || false;
+        if (woundLive) CharacterState.trigger(gfCharStates[member.id]);
+        else           CharacterState.decay(gfCharStates[member.id]);
+      }
+      const gfIntensityBlock = i > 0 ? `YOUR STATE:\n${CharacterState.buildBlock(gfCharStates[member.id])}\n\n` : '';
+
+      const system = TURN_RULES + '\n\n' + gfIntensityBlock + gfYourState + tourCardBlock + roeIntroBlock + gfFoodBlock + gfMarmiteBlock + gfHypoBlock + member.prompt + roundNote + mechanics + arcInstructions + (i > 0
         ? `\n\nPrevious:\n${prev}`
         : '');
 
