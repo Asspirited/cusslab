@@ -397,3 +397,14 @@ Entry format: copy schema above. Minimum viable entry is Item + Symptom + Tags +
 - **Delay:** Yes
 - **Tags:** context-loss, memory, session-start-protocol
 - **Status:** Mitigated by mandatory session-start protocol — ensure recent_chats is always run first
+
+## WL-029
+- **Item:** Claude lost project context and repeated canonical spelling error
+- **Symptom:** Claude called project "Quantum Leaps" and "Quantum Leeks" multiple times in session despite explicit corrections; had to re-establish project context from scratch; Claude Code also missed renaming specs/quantum-leeks.feature when renaming all other files
+- **Suspected cause:** Memory system recency bias failing to surface recent_updates; Claude defaulting to training data pattern ("Quantum Leap" TV show) overriding explicit memory entries; Claude Code rename sweep incomplete
+- **Session:** 2026-03-05
+- **Time lost:** ~1.5 hours cumulative (1hr spelling, 0.5hr context re-establishment)
+- **Cost impact:** High — repeated re-explanation, wasted tokens, incomplete file rename requiring manual fix
+- **Delay:** Yes
+- **Tags:** naming, memory-failure, repeat-error, canonical-spelling, context-loss, session-start-protocol, file-rename
+- **Status:** Open — canonical spelling logged as CRITICAL FAILURE in memory; session-start protocol must include recent_chats before any work
