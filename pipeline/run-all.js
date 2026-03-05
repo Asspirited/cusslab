@@ -16,6 +16,10 @@ const COUNTER_FILE = path.join(METRICS_DIR, 'session-counter.txt');
 
 if (!fs.existsSync(METRICS_DIR)) fs.mkdirSync(METRICS_DIR, { recursive: true });
 
+// ── Sync docs to Windows (Claude.ai upload target) ───────────────────────────
+
+require('./sync-to-windows');
+
 // ── Session counter (auto-increment, local only) ──────────────────────────────
 
 let session = 1;
