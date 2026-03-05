@@ -760,7 +760,7 @@ cat docs/references/cox-reference.md
 
 **If Quantum Leeks is in scope:**
 ```
-cat docs/features/quantum-leeks-spec.md
+cat docs/features/quntum-leeks-spec.md
 ```
 
 **If any new feature or scoring work:**
@@ -833,9 +833,9 @@ No session ends without:
 | Hicks corrected voice spec | docs/references/hicks-rewrite.md |
 | Hicks review prompt | docs/references/hicks-review-prompt.md |
 | Hicks review log | docs/references/hicks-review-log.md |
-| Quantum Leeks feature spec | docs/features/quantum-leeks-spec.md |
-| Quantum Leap spec | docs/features/quantum-leap-spec.md |
-| Quantum Leap alt spec | docs/features/quantum-leap.md |
+| Quntum Leeks feature spec | docs/features/quntum-leeks-spec.md |
+| Quntum Leap spec | docs/features/quntum-leap-spec.md |
+| Quntum Leap alt spec | docs/features/quntum-leap.md |
 | Reactive moves spec | docs/features/reactive-moves.feature |
 | Tour Card mechanic spec | docs/features/tour-card.feature |
 | Mark Roe guest character spec | docs/features/mark-roe-guest.feature |

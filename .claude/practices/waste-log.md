@@ -375,3 +375,25 @@ Entry format: copy schema above. Minimum viable entry is Item + Symptom + Tags +
 - **Delay:** Fix not live until manual push
 - **Tags:** process-failure, push-rule, claude-code, recurring
 - **Status:** Pushed manually. Recurring — needs escalating to Claude Code instruction set
+
+## WL-027
+- **Item:** Round state not injected into golf panel prompts
+- **Symptom:** Characters had no knowledge of which round they were in; 5-round arcs were dead code
+- **Suspected cause:** Round tracking built for roast battle never extended to golf panel
+- **Session:** golf-round-tracker
+- **Time lost:** ~20 mins investigation
+- **Cost impact:** Low — discovery was systematic not accidental
+- **Delay:** Round-based escalation non-functional since golf panel built
+- **Tags:** golf, round-state, prompt-injection, dead-code
+- **Status:** Fixed — af6cde3
+
+## WL-028
+- **Item:** Claude lost project context mid-session
+- **Symptom:** Rod had to re-explain Heckler and Cox project state, characters, and recent work at session start
+- **Suspected cause:** Memory system has recency bias and may not have captured last session's outputs; recent_chats not run or failed to surface relevant context
+- **Session:** 2026-03-05
+- **Time lost:** ~5 mins
+- **Cost impact:** Wasted API calls re-establishing context
+- **Delay:** Yes
+- **Tags:** context-loss, memory, session-start-protocol
+- **Status:** Mitigated by mandatory session-start protocol — ensure recent_chats is always run first
