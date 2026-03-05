@@ -53,4 +53,40 @@ const Temperature = {
   },
 };
 
-module.exports = { maskKey, isValidKey, shouldUpdateInput, Temperature };
+// ── WoundDetector — shared interface (R2) ────────────────────────────────────
+// WoundDetector.check(characterId, text) → { triggered: bool, word: string }
+// Each panel provides its own wound data. Orchestrator never touches it directly.
+// Mirror of WoundDetector in index.html — keep in sync.
+
+function makeWoundDetector(woundData) {
+  return {
+    check(characterId, text) {
+      const triggers = woundData[characterId];
+      if (!triggers) return { triggered: false, word: '' };
+      const lower = text.toLowerCase();
+      for (const word of triggers) {
+        if (lower.includes(word.toLowerCase())) return { triggered: true, word };
+      }
+      return { triggered: false, word: '' };
+    },
+  };
+}
+
+const GOLF_WOUNDS_DATA = {
+  coltart:   ['valderrama', 'seve', 'westwood', 'cameraman', 'three and two', '3 and 2', 'brookline'],
+  mcginley:  ['gobshite', 'wheelhouse'],
+  faldo:     ['d:ream', 'things can only get better', 'keyboards'],
+  dougherty: ["can't improve", 'give up', 'defeatist', 'never get better'],
+  murray:    ["doesn't matter", 'not important', 'move on', 'insignificant'],
+  henni:     ["don't answer that", 'skip that', 'ignore that question'],
+  roe:       ['scorecard', 'disqualified', 'parnevik', 'royal st george', '2003', 'painkillers', 'wedge game', 'norgaard', 'belfry'],
+};
+
+const BOARDROOM_WOUNDS_DATA = {
+  // Populated when Boardroom wounds are defined — interface is ready
+};
+
+const GolfWoundDetector     = makeWoundDetector(GOLF_WOUNDS_DATA);
+const BoardroomWoundDetector = makeWoundDetector(BOARDROOM_WOUNDS_DATA);
+
+module.exports = { maskKey, isValidKey, shouldUpdateInput, Temperature, makeWoundDetector, GolfWoundDetector, BoardroomWoundDetector };

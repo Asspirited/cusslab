@@ -8743,6 +8743,23 @@ const Temperature = (() => {
   };
 })();
 
+// ── WoundDetector — shared interface (R2) ────────────────────────────────────
+// WoundDetector.check(characterId, text) → { triggered: bool, word: string }
+// Each panel provides its own wound data. Orchestrator never touches it directly.
+function makeWoundDetector(woundData) {
+  return {
+    check(characterId, text) {
+      const triggers = woundData[characterId];
+      if (!triggers) return { triggered: false, word: '' };
+      const lower = text.toLowerCase();
+      for (const word of triggers) {
+        if (lower.includes(word.toLowerCase())) return { triggered: true, word };
+      }
+      return { triggered: false, word: '' };
+    },
+  };
+}
+
 // Shared by Boardroom and Golf panels.
 // Tracks temperature, wound activation, debt ledger per character pair.
 // State updated client-side after each turn — zero extra API calls.
@@ -10500,6 +10517,8 @@ HYPOCHONDRIA RESPONSE: Default silence. You note it once, as analysis. The panel
     henni:     ["don't answer that", 'skip that', 'ignore that question'],
     roe:       ['scorecard', 'disqualified', 'parnevik', 'royal st george', '2003', 'painkillers', 'wedge game', 'norgaard', 'belfry']
   };
+
+  const GolfWoundDetector = makeWoundDetector(GOLF_WOUNDS);
 
   const GOLF_NAMEMAP = {
     faldo:     ['faldo', 'nick', 'sir nick'],

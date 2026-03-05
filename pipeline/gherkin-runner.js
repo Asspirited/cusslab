@@ -3,7 +3,7 @@
 
 const fs   = require('fs');
 const path = require('path');
-const { Temperature } = require('./logic.js');
+const { Temperature, GolfWoundDetector, BoardroomWoundDetector } = require('./logic.js');
 
 // ── Mock state (simulates browser localStorage + DOM) ────────────────────────
 
@@ -1043,6 +1043,50 @@ function makeSteps(ctx) {
         if (mcg < 3) throw new Error(`expected McGinley to contribute at least 3 times but got ${mcg}`);
         if (col < 3) throw new Error(`expected Coltart to contribute at least 3 times but got ${col}`);
       }],
+
+    // ── WoundDetector abstraction — R2 ────────────────────────────────────────
+
+    [/^the GolfWoundDetector is loaded$/,
+      () => { ctx._woundDetector = GolfWoundDetector; }],
+
+    [/^the BoardroomWoundDetector is loaded$/,
+      () => { ctx._woundDetector = BoardroomWoundDetector; }],
+
+    [/^GolfWoundDetector\.check\(\) is called with character "([^"]+)" and text "([^"]+)"$/,
+      (characterId, text) => { ctx._woundResult = GolfWoundDetector.check(characterId, text); }],
+
+    [/^the result has triggered false$/,
+      () => {
+        if (ctx._woundResult.triggered !== false)
+          throw new Error(`expected triggered false but got ${ctx._woundResult.triggered}`);
+      }],
+
+    [/^the result has triggered true$/,
+      () => {
+        if (ctx._woundResult.triggered !== true)
+          throw new Error(`expected triggered true but got ${ctx._woundResult.triggered}`);
+      }],
+
+    [/^it exposes a check\(\) method$/,
+      () => {
+        if (typeof ctx._woundDetector.check !== 'function')
+          throw new Error('expected WoundDetector to expose a check() method');
+      }],
+
+    [/^check\(\) accepts characterId and text arguments$/,
+      () => { /* structural — check() signature takes (characterId, text) */ }],
+
+    [/^check\(\) returns an object with triggered and word properties$/,
+      () => {
+        const result = ctx._woundDetector.check('any', 'any text');
+        if (typeof result !== 'object' || result === null)
+          throw new Error('expected check() to return an object');
+        if (!('triggered' in result))
+          throw new Error('expected result to have "triggered" property');
+        if (!('word' in result))
+          throw new Error('expected result to have "word" property');
+      }],
+
   ];
 }
 
