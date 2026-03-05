@@ -63,6 +63,7 @@ function makeWoundDetector(woundData) {
     check(characterId, text) {
       const triggers = woundData[characterId];
       if (!triggers) return { triggered: false, word: '' };
+      if (!text) return { triggered: false, word: '' };
       const lower = text.toLowerCase();
       for (const word of triggers) {
         if (lower.includes(word.toLowerCase())) return { triggered: true, word };

@@ -1,7 +1,7 @@
 // Unit test runner — tests pure functions in pipeline/logic.js
 // Run: node pipeline/unit-runner.js
 
-const { maskKey, isValidKey, shouldUpdateInput, Temperature } = require('./logic.js');
+const { maskKey, isValidKey, shouldUpdateInput, Temperature, makeWoundDetector, GolfWoundDetector, BoardroomWoundDetector } = require('./logic.js');
 
 let passed = 0;
 let failed = 0;
@@ -130,6 +130,72 @@ assert('Temperature.interruptRate: reverent → 0.01',  Temperature.interruptRat
 assert('Temperature.isValid: neutral → true',  Temperature.isValid('neutral'), true);
 assert('Temperature.isValid: furious → false', Temperature.isValid('furious'), false);
 assert('Temperature.isValid: empty → false',   Temperature.isValid(''),        false);
+
+// ── GolfWoundDetector.check() ─────────────────────────────────────────────────
+
+assert('GolfWoundDetector: triggered true for known wound word - faldo',
+  GolfWoundDetector.check('faldo', 'he played keyboards for d:ream').triggered, true);
+
+assert('GolfWoundDetector: triggered false for non-wound text - faldo',
+  GolfWoundDetector.check('faldo', 'great round today').triggered, false);
+
+assert('GolfWoundDetector: triggered false for unknown character',
+  GolfWoundDetector.check('unknown_character', 'Masters').triggered, false);
+
+assert('GolfWoundDetector: returns triggered and word keys',
+  typeof GolfWoundDetector.check('faldo', 'Masters').triggered, 'boolean');
+
+assert('GolfWoundDetector: word is returned when triggered',
+  typeof GolfWoundDetector.check('faldo', 'Masters').word, 'string');
+
+assert('GolfWoundDetector: case-insensitive match - uppercase',
+  GolfWoundDetector.check('faldo', 'D:REAM').triggered, true);
+
+assert('GolfWoundDetector: case-insensitive match - mixed case',
+  GolfWoundDetector.check('faldo', 'Things Can Only Get Better').triggered, true);
+
+assert('GolfWoundDetector: empty text returns triggered false',
+  GolfWoundDetector.check('faldo', '').triggered, false);
+
+assert('GolfWoundDetector: null text returns triggered false',
+  GolfWoundDetector.check('faldo', null).triggered, false);
+
+// ── BoardroomWoundDetector.check() ────────────────────────────────────────────
+
+assert('BoardroomWoundDetector: satisfies WoundDetector interface - has check function',
+  typeof BoardroomWoundDetector.check, 'function');
+
+assert('BoardroomWoundDetector: triggered false for unknown character',
+  BoardroomWoundDetector.check('unknown', 'anything').triggered, false);
+
+assert('BoardroomWoundDetector: triggered false for non-wound text',
+  BoardroomWoundDetector.check('cox', 'hello world').triggered, false);
+
+assert('BoardroomWoundDetector: returns boolean triggered',
+  typeof BoardroomWoundDetector.check('cox', 'test').triggered, 'boolean');
+
+// ── makeWoundDetector() ───────────────────────────────────────────────────────
+
+assert('makeWoundDetector: returns object with check function',
+  typeof makeWoundDetector({}).check, 'function');
+
+assert('makeWoundDetector: custom detector - triggered true for known word',
+  makeWoundDetector({ sam: ['leapt'] }).check('sam', 'he leapt in').triggered, true);
+
+assert('makeWoundDetector: custom detector - triggered false for unknown word',
+  makeWoundDetector({ sam: ['leapt'] }).check('sam', 'hello').triggered, false);
+
+assert('makeWoundDetector: custom detector - unknown character returns false',
+  makeWoundDetector({ sam: ['leapt'] }).check('al', 'leapt').triggered, false);
+
+assert('makeWoundDetector: custom detector - returns matching word',
+  makeWoundDetector({ sam: ['leapt'] }).check('sam', 'he leapt in').word, 'leapt');
+
+assert('makeWoundDetector: custom detector - multiple wound words, first match returned',
+  makeWoundDetector({ sam: ['leapt', 'quantum'] }).check('sam', 'quantum leap').triggered, true);
+
+assert('makeWoundDetector: empty wound data - always returns false',
+  makeWoundDetector({}).check('anyone', 'anything').triggered, false);
 
 // ── Results ──────────────────────────────────────────────────────────────────
 
