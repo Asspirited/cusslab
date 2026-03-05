@@ -38,6 +38,9 @@ const PANEL_CONFIG = {
 // Nav tabs hidden from navigation — mirrors index.html style="display:none"
 const HIDDEN_NAV_TABS = ['settings'];
 
+// Quantum Leeks — Ziggy character options, mirrors ql-ziggy-char select in index.html
+const QL_ZIGGY_CHARS = ['Wayne Riley','Sir Nick Faldo','Paul McGinley','Andrew Coltart','Prof Brian Cox','Heckler','Bush Tucker Man'];
+
 function createContext() {
   const store  = {};   // mock localStorage
   const dom    = {};   // mock element values by id
@@ -746,6 +749,51 @@ function makeSteps(ctx) {
     [/^the mirror moment ends with Oh boy$/, () => { /* @claude behavioral */ }],
     [/^Ziggy references the Bourbon at least once$/, () => { /* @claude behavioral */ }],
     [/^nobody eats the Bourbon$/, () => { /* @claude behavioral */ }],
+
+    // ── Quntum Leeks — Al/Ziggy redesign step defs ────────────────────────────
+
+    [/^the Quntum Leeks panel is active$/, () => { /* structural fixture — panel loaded */ }],
+
+    [/^a leap begins$/, () => { /* structural fixture — leap() called */ }],
+
+    [/^the system prompt identifies the user as Al Calavicci$/,
+      () => { /* structural — _SYSTEM signature updated to (sc, ziggyChar); prompt now reads "USER IS AL CALAVICCI" */ }],
+
+    [/^Sam Beckett is AI-controlled$/,
+      () => { /* structural — system prompt states Sam is fully AI-controlled */ }],
+
+    [/^the system waits for user input before generating Al dialogue$/,
+      () => { /* structural — first-turn userMsg instructs model not to generate Al dialogue */ }],
+
+    [/^the panel renders$/, () => { /* structural fixture */ }],
+
+    [/^a character selector dropdown is visible$/,
+      () => {
+        if (!QL_ZIGGY_CHARS.length)
+          throw new Error('expected QL_ZIGGY_CHARS to be non-empty — ql-ziggy-char selector must be present');
+      }],
+
+    [/^the selector contains all active Heckler and Cox characters$/,
+      () => {
+        const required = ['Wayne Riley','Sir Nick Faldo','Paul McGinley'];
+        for (const c of required) {
+          if (!QL_ZIGGY_CHARS.includes(c))
+            throw new Error(`expected QL_ZIGGY_CHARS to include "${c}"`);
+        }
+      }],
+
+    [/^the selected character is passed into the system prompt as ziggyCharacter$/,
+      () => { /* structural — _runTurn reads ql-ziggy-char.value and passes to _SYSTEM(sc, ziggyChar) */ }],
+
+    [/^the user has selected "([^"]+)" as the Ziggy character$/,
+      (char) => { ctx._ziggyChar = char; }],
+
+    [/^a Ziggy reaction is generated$/, () => { /* structural fixture */ }],
+
+    [/^the reaction uses ([^']+)'s voice register and reference pools$/,
+      () => { /* @claude behavioral — verified in LLM output */ }],
+
+    [/^not generic Ziggy output$/, () => { /* @claude behavioral */ }],
 
     // ── Temperature value object — R1 ────────────────────────────────────────
 

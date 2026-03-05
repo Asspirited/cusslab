@@ -3110,6 +3110,16 @@
       <option value="kkk">KKK Rally, Alabama — 1923</option>
       <option value="alcatraz">Alcatraz — 1962</option>
     </select>
+    <div style="font-size:11px;color:var(--muted);margin-bottom:6px;margin-top:4px;letter-spacing:1px;">ZIGGY VOICED BY</div>
+    <select id="ql-ziggy-char" style="width:100%;margin-bottom:16px;background:var(--card);color:var(--text);border:1px solid var(--border);padding:8px;border-radius:4px;font-size:14px;">
+      <option value="Wayne Riley">Wayne Riley</option>
+      <option value="Sir Nick Faldo">Sir Nick Faldo</option>
+      <option value="Paul McGinley">Paul McGinley</option>
+      <option value="Andrew Coltart">Andrew Coltart</option>
+      <option value="Prof Brian Cox">Prof Brian Cox</option>
+      <option value="Heckler">Heckler</option>
+      <option value="Bush Tucker Man">Bush Tucker Man</option>
+    </select>
     <button class="btn" onclick="QuantumLeeks.leap()" id="ql-leap-btn">LEAP IN</button>
   </div>
 
@@ -10934,7 +10944,7 @@ const QuantumLeeks = (() => {
     },
   };
 
-  const _SYSTEM = (sc) => `RULE 1 — TURN LENGTH:\nA turn can be one word, a fragment, one sentence, or two sentences. One word is a complete turn. Two sentences is the maximum — never more. Length is earned only by being directly challenged, provoked, or explicitly given the floor. The default is the shortest response that lands. A single word lands. Silence lands. Two sentences is already long.\n\nRULE 2 — REACTIVITY OBLIGATION:\nEvery response must open by reacting to the previous speaker's last sentence — not the topic generally. You are listening, not queuing.\n\nRULE 3 — CROSS-REFERENCE:\nYou may use anything said earlier in this conversation as ammunition. Wounds, indiscretions, failures, warmth — all fair game. You were there. You remember.\n\nYou are running a Quantum Leap simulation. The user IS Sam Beckett. They have just leapt into someone else's body.
+  const _SYSTEM = (sc, ziggyChar) => `You are running a Quantum Leap simulation. The USER IS AL CALAVICCI — the hologram. The user decides what Al says, reveals, withholds, and lies about. Sam Beckett is fully AI-controlled. The system waits for the user's Al input before advancing the scene. Ziggy's reactions are voiced through: ${ziggyChar || 'Wayne Riley'}.
 
 SITUATION:
 Sam has leapt into: ${sc.host}
@@ -11126,9 +11136,7 @@ RESPONSE FORMAT — return ONLY valid JSON, no text outside it:
       </div>`);
     }
 
-    if (data.sam_state) {
-      parts.push(`<div style="color:var(--muted);font-style:italic;padding:6px 0 10px;font-size:13px;border-left:2px solid var(--border);padding-left:12px;">${_esc(data.sam_state)}</div>`);
-    }
+    // sam_state not rendered — user is Al, not Sam
 
     if (data.incident) {
       parts.push(`<div style="background:#1a0000;border:1px solid #cc3333;border-radius:6px;padding:12px;font-size:13px;color:#ff9999;">
@@ -11163,7 +11171,7 @@ RESPONSE FORMAT — return ONLY valid JSON, no text outside it:
 
   function _appendUserMove(text) {
     _append(`<div style="background:#001a08;border:1px solid var(--green);border-radius:6px;padding:10px 14px;">
-      <div style="font-size:10px;color:var(--green);letter-spacing:1px;margin-bottom:4px;">SAM BECKETT</div>
+      <div style="font-size:10px;color:var(--green);letter-spacing:1px;margin-bottom:4px;">🚬 AL CALAVICCI</div>
       <div style="font-size:14px;color:var(--text);">${_esc(text)}</div>
     </div>`);
   }
@@ -11171,15 +11179,17 @@ RESPONSE FORMAT — return ONLY valid JSON, no text outside it:
   async function _runTurn(userText, isFirst) {
     _turnCount++;
     const sc  = SCENARIOS[_scenario];
-    const sys = _SYSTEM(sc);
+    const ziggyCharEl = document.getElementById('ql-ziggy-char');
+    const ziggyChar = ziggyCharEl ? ziggyCharEl.value : 'Wayne Riley';
+    const sys = _SYSTEM(sc, ziggyChar);
 
     const histSnippet = _history.length
       ? '\n\nHistory so far:\n' + _history.slice(-6).map(h => h.role.toUpperCase() + ': ' + h.text.substring(0, 300)).join('\n---\n')
       : '';
 
     const userMsg = isFirst
-      ? `Sam has just leapt in. First moment. Generate the mirror moment and Al\'s opening briefing (he gets distracted). Include Ziggy\'s first output. Starting leap probability around 45-55%.`
-      : `Sam\'s action: "${userText}"\n\nProbability going into this turn: ${_probability.toFixed(1)}%. Advance or complicate the scene based on Sam\'s move.${histSnippet}`;
+      ? `Sam has just leapt in. First moment. Generate ONLY: the mirror moment, the opening scene, Sam's initial state, and Ziggy's first probability output. Do NOT generate Al's dialogue — the user plays Al. Wait for Al's first move. Starting leap probability around 45-55%.`
+      : `Al\'s move: "${userText}"\n\nProbability going into this turn: ${_probability.toFixed(1)}%. Sam and the scene react to what Al just told Sam — or withheld, or lied about. Generate Sam\'s response, scene reaction, and Ziggy\'s commentary on Al\'s moral choice.${histSnippet}`;
 
     const raw  = await API.call(sys, userMsg, 800, 'qleeks/turn');
     const json = raw.match(/\{[\s\S]*\}/);
