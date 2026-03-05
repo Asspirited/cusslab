@@ -364,3 +364,14 @@ Entry format: copy schema above. Minimum viable entry is Item + Symptom + Tags +
 - **Delay:** Quantum Leeks fix not live until manual push from WSL
 - **Tags:** process-failure, push-rule, claude-code
 - **Status:** Pushed manually. Rule already in CLAUDE.md — Claude Code not applying it.
+
+## WL-026
+- **Item:** Claude Code committed without pushing — again
+- **Symptom:** Commit 8c9bc3d local only until manual WSL push
+- **Suspected cause:** Same as WL-025 — Claude Code not applying PUSH rule after green pipeline
+- **Session:** 176
+- **Time lost:** ~5 mins
+- **Cost impact:** Direct
+- **Delay:** Fix not live until manual push
+- **Tags:** process-failure, push-rule, claude-code, recurring
+- **Status:** Pushed manually. Recurring — needs escalating to Claude Code instruction set
