@@ -542,10 +542,11 @@ function names, comments, and documentation.
 ## Bounded Contexts
 
 ### Scoring Context
-**Owns:** 12 scoring dimensions, computeF(), cultureScore(), ironyScore()
-**Does not own:** panel personalities, API calls, UI rendering
-**Interface:** receives (text, region) → returns ScoringResult (12 dimension scores)
+**Owns:** 10 scoring dimensions, computeF(), cultureScore()
+**Does not own:** panel personalities, API calls, UI rendering, irony classification
+**Interface:** receives (text, region) → returns ScoringResult (10 dimension scores)
 **Invariant:** scoring is stateless — same input always returns same output
+**Note:** ironyScore() / IronyAssessment lives in the Irony Context (standalone LLM panel), not here. "12th dimension" is an aspiration — not yet implemented.
 
 ### Panel Context
 **Owns:** panel member profiles, character state, RelationshipState, ConspireEngine arcs, FoodWeather pool, HypochondriaPool, event log
@@ -682,8 +683,11 @@ User submits Prompt
 - Immutable once calculated — same input always same output
 
 **IronyAssessment** (value object — immutable)
-- Owns: criterion_1_pass, criterion_2_pass, criterion_3_pass, band, explanation
-- Derived from ScoringResult — never calculated independently
+- Owns: verdict (enum), verdict_label (string), irony_score (0–100), alanis_score (0–100), explanation, panel (array of expert responses)
+- verdict enum: actually_ironic | coincidence | expected_outcome | bad_luck | vacuous_amplifier | random_juxtaposition | meatloaf_zone | pure_alanis
+- alanis_score > 70 renders with warning styling; alanis_score never overrides verdict
+- Produced by IronicPanel LLM call — not derived from ScoringResult
+- Not yet wired into the 10-dimension scoring engine
 
 **RelationshipState** (value object per pair per session)
 - Owns: temperature, woundActivated, debtLedger, extraFields
