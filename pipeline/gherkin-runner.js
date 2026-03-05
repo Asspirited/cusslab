@@ -39,7 +39,7 @@ const PANEL_CONFIG = {
 const HIDDEN_NAV_TABS = ['settings'];
 
 // Quantum Leeks — Ziggy character options, mirrors ql-ziggy-char select in index.html
-const QL_ZIGGY_CHARS = ['Wayne Riley','Sir Nick Faldo','Paul McGinley','Andrew Coltart','Prof Brian Cox','Heckler','Bush Tucker Man'];
+const QL_ZIGGY_CHARS = ['Sir Nick Faldo','Wayne Riley','Bill Hicks','Graeme Souness','Prof Brian Cox'];
 
 function createContext() {
   const store  = {};   // mock localStorage
@@ -775,7 +775,7 @@ function makeSteps(ctx) {
 
     [/^the selector contains all active Heckler and Cox characters$/,
       () => {
-        const required = ['Wayne Riley','Sir Nick Faldo','Paul McGinley'];
+        const required = ['Wayne Riley','Sir Nick Faldo','Prof Brian Cox'];
         for (const c of required) {
           if (!QL_ZIGGY_CHARS.includes(c))
             throw new Error(`expected QL_ZIGGY_CHARS to include "${c}"`);
