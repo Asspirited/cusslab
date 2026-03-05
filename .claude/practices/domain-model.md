@@ -513,7 +513,8 @@ function names, comments, and documentation.
 | Round | One complete exchange in a conversation | Turn, step, iteration, cycle |
 | Trigger | Word/phrase that changes panel state | Event, signal, detector, hook |
 | Intensity | Panel member's current emotional charge | Score, level, heat, anger, activation |
-| Baseline | Minimum intensity — 20% of peak | Floor, minimum, reset value |
+| Baseline | Resting intensity — 20% of peak, rounded down (min 1). Intensity decays to baseline, not to zero. | Floor, minimum, reset value |
+| Floor | Hard lower bound. Baseline IS the floor for current intensity. A separate floor concept (e.g. 0 or negative) is not yet defined — defer commitment. | Baseline, minimum |
 | Roast mode | Panels respond to the input laterally | Attack mode, critique mode, pile-on |
 | Debate mode | Panels respond to each other longitudinally | Argument mode, discussion mode |
 | Scoring dimension | One of the 12 measurable aspects | Metric, measure, attribute, criterion |
@@ -553,6 +554,7 @@ function names, comments, and documentation.
 **Does not own:** scoring logic, API calls, UI rendering
 **Interface:** receives (prompt, characterState, relState) → returns (panelResponse, updatedState)
 **Invariant:** state transitions follow intensity rules — intensity never below baseline; RelationshipState temperature changes by max 1 step per turn unless woundActivated
+**Constant:** EVENT_LOG_CONTEXT_WINDOW = 2 — only the last 2 events appear in the YOUR STATE block. Value chosen for initial implementation; review when richer context proves necessary.
 
 **Sub-contexts (panels):**
 - Boardroom Context: B1 RelationshipState active; Hicks excluded; ConspireEngine not yet wired

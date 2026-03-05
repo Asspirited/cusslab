@@ -8902,6 +8902,38 @@ const RelationshipState = (() => {
 })();
 
 // ============================================================
+// MODULE: CharacterState — intensity, baseline, event log, YOUR STATE block
+// ============================================================
+const CharacterState = (() => {
+  const EVENT_LOG_CONTEXT_WINDOW = 2;
+
+  function create(peak) {
+    const baseline = Math.max(Math.floor(peak * 0.2), 1);
+    return { peak, baseline, current: baseline, eventLog: [] };
+  }
+
+  function trigger(s) {
+    const before = s.current;
+    s.current = Math.min(s.current + 1, s.peak);
+    s.eventLog.push({ type: 'linguistic_trigger_fired', from: before, to: s.current });
+  }
+
+  function decay(s) {
+    const before = s.current;
+    s.current = Math.max(s.current - 1, s.baseline);
+    s.eventLog.push({ type: 'intensity_decayed', from: before, to: s.current });
+  }
+
+  function buildBlock(s) {
+    const recent = s.eventLog.slice(-EVENT_LOG_CONTEXT_WINDOW)
+      .map(e => `${e.type} (${e.from}→${e.to})`).join(', ') || 'none';
+    return `Intensity: ${s.current}/${s.peak} (baseline: ${s.baseline})\nRecent events: ${recent}`;
+  }
+
+  return { create, trigger, decay, buildBlock };
+})();
+
+// ============================================================
 // MODULE: ConspireEngine — Five-stage conspiracy arcs + Fight/Flight/Stasis
 // ============================================================
 const ConspireEngine = (() => {
