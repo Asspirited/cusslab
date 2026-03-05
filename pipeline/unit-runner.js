@@ -1,7 +1,7 @@
 // Unit test runner — tests pure functions in pipeline/logic.js
 // Run: node pipeline/unit-runner.js
 
-const { maskKey, isValidKey, shouldUpdateInput } = require('./logic.js');
+const { maskKey, isValidKey, shouldUpdateInput, Temperature } = require('./logic.js');
 
 let passed = 0;
 let failed = 0;
@@ -79,6 +79,57 @@ assert('shouldUpdateInput: false when inp is null',
 
 assert('shouldUpdateInput: true when activeElement is null',
   shouldUpdateInput(fakeInp, null), true);
+
+// ── Temperature.raise() ──────────────────────────────────────────────────────
+
+assert('Temperature.raise: hostile → wounded',   Temperature.raise('hostile'),   'wounded');
+assert('Temperature.raise: wounded → simmering', Temperature.raise('wounded'),   'simmering');
+assert('Temperature.raise: simmering → cooling', Temperature.raise('simmering'), 'cooling');
+assert('Temperature.raise: cooling → neutral',   Temperature.raise('cooling'),   'neutral');
+assert('Temperature.raise: neutral → warm',      Temperature.raise('neutral'),   'warm');
+assert('Temperature.raise: warm → reverent',     Temperature.raise('warm'),      'reverent');
+assert('Temperature.raise: reverent → reverent (capped)', Temperature.raise('reverent'), 'reverent');
+
+// ── Temperature.lower() ──────────────────────────────────────────────────────
+
+assert('Temperature.lower: reverent → warm',     Temperature.lower('reverent'),  'warm');
+assert('Temperature.lower: warm → neutral',      Temperature.lower('warm'),      'neutral');
+assert('Temperature.lower: neutral → cooling',   Temperature.lower('neutral'),   'cooling');
+assert('Temperature.lower: cooling → simmering', Temperature.lower('cooling'),   'simmering');
+assert('Temperature.lower: simmering → wounded', Temperature.lower('simmering'), 'wounded');
+assert('Temperature.lower: wounded → hostile',   Temperature.lower('wounded'),   'hostile');
+assert('Temperature.lower: hostile → hostile (capped)', Temperature.lower('hostile'), 'hostile');
+
+// ── Temperature.fromString() ─────────────────────────────────────────────────
+
+['hostile','wounded','simmering','cooling','neutral','warm','reverent'].forEach(v => {
+  assert(`Temperature.fromString: accepts "${v}"`, Temperature.fromString(v), v);
+});
+
+function assertThrows(description, fn) {
+  try { fn(); failed++; failures.push(`  FAIL: ${description}\n       expected error but none thrown`); }
+  catch(e) { passed++; }
+}
+
+assertThrows('Temperature.fromString: rejects "furious"',  () => Temperature.fromString('furious'));
+assertThrows('Temperature.fromString: rejects empty string', () => Temperature.fromString(''));
+assertThrows('Temperature.fromString: rejects null',        () => Temperature.fromString(null));
+
+// ── Temperature.interruptRate() ──────────────────────────────────────────────
+
+assert('Temperature.interruptRate: hostile → 0.45',   Temperature.interruptRate('hostile'),   0.45);
+assert('Temperature.interruptRate: wounded → 0.30',   Temperature.interruptRate('wounded'),   0.30);
+assert('Temperature.interruptRate: simmering → 0.20', Temperature.interruptRate('simmering'), 0.20);
+assert('Temperature.interruptRate: cooling → 0.08',   Temperature.interruptRate('cooling'),   0.08);
+assert('Temperature.interruptRate: neutral → 0.04',   Temperature.interruptRate('neutral'),   0.04);
+assert('Temperature.interruptRate: warm → 0.02',      Temperature.interruptRate('warm'),      0.02);
+assert('Temperature.interruptRate: reverent → 0.01',  Temperature.interruptRate('reverent'),  0.01);
+
+// ── Temperature.isValid() ────────────────────────────────────────────────────
+
+assert('Temperature.isValid: neutral → true',  Temperature.isValid('neutral'), true);
+assert('Temperature.isValid: furious → false', Temperature.isValid('furious'), false);
+assert('Temperature.isValid: empty → false',   Temperature.isValid(''),        false);
 
 // ── Results ──────────────────────────────────────────────────────────────────
 

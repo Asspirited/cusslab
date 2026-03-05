@@ -8725,6 +8725,24 @@ function submitQuizScore()           { Polls.submitQuizScore(); }
 
 // ============================================================
 // MODULE: RelationshipState — B1 dynamic relationship state
+// ============================================================
+// Temperature — immutable value object (R1)
+// Invalid temperatures are impossible not just unlikely.
+// Mirror of pipeline/logic.js Temperature — keep in sync.
+// ============================================================
+const Temperature = (() => {
+  const SCALE = ['hostile','wounded','simmering','cooling','neutral','warm','reverent'];
+  const RATES  = { hostile:0.45, wounded:0.30, simmering:0.20, cooling:0.08, neutral:0.04, warm:0.02, reverent:0.01 };
+  return {
+    SCALE,
+    raise(current)       { const i = SCALE.indexOf(current); if (i===-1) throw new Error(`Invalid temperature: "${current}"`); return SCALE[Math.min(i+1,SCALE.length-1)]; },
+    lower(current)       { const i = SCALE.indexOf(current); if (i===-1) throw new Error(`Invalid temperature: "${current}"`); return SCALE[Math.max(i-1,0)]; },
+    fromString(s)        { if (!s||!SCALE.includes(s)) throw new Error(`Invalid temperature: "${s}"`); return s; },
+    interruptRate(t)     { const r = RATES[t]; if (r===undefined) throw new Error(`Invalid temperature: "${t}"`); return r; },
+    isValid(s)           { return SCALE.includes(s); },
+  };
+})();
+
 // Shared by Boardroom and Golf panels.
 // Tracks temperature, wound activation, debt ledger per character pair.
 // State updated client-side after each turn — zero extra API calls.
