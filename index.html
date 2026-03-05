@@ -3115,13 +3115,44 @@
     </div>
   </div>
 
+  <div id="ql-stats-bar" style="display:none;margin-top:12px;background:var(--card);border:1px solid var(--border);border-radius:6px;padding:14px;">
+    <div style="font-size:11px;color:var(--muted);letter-spacing:1px;margin-bottom:10px;">SAM'S STATS</div>
+    <div id="ql-stats-grid"></div>
+  </div>
+
   <div id="ql-output" style="display:none;margin-top:20px;">
     <div id="ql-thread"></div>
 
     <div id="ql-reply-area" style="display:none;margin-top:16px;">
-      <label class="form-label">What does Al tell Sam?</label>
+      <div id="ql-ziggy-options" style="display:none;margin-bottom:14px;background:#0a001a;border:1px solid #8844cc;border-radius:6px;padding:12px;">
+        <div style="font-size:11px;color:#8844cc;letter-spacing:1px;margin-bottom:8px;">ZIGGY SUGGESTS — PICK ONE OR WRITE YOUR OWN</div>
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <button class="btn" id="ql-zopt-1" onclick="QuantumLeeks.selectZiggyOpt(0)" style="text-align:left;background:#0a001a;border-color:#8844cc;color:#cc99ff;font-size:12px;padding:8px 12px;white-space:normal;height:auto;line-height:1.5;"></button>
+          <button class="btn" id="ql-zopt-2" onclick="QuantumLeeks.selectZiggyOpt(1)" style="text-align:left;background:#0a001a;border-color:#8844cc;color:#cc99ff;font-size:12px;padding:8px 12px;white-space:normal;height:auto;line-height:1.5;"></button>
+          <button class="btn" id="ql-zopt-3" onclick="QuantumLeeks.selectZiggyOpt(2)" style="text-align:left;background:#0a001a;border-color:#8844cc;color:#cc99ff;font-size:12px;padding:8px 12px;white-space:normal;height:auto;line-height:1.5;"></button>
+        </div>
+        <label style="display:flex;align-items:center;gap:8px;margin-top:10px;font-size:12px;color:var(--muted);cursor:pointer;">
+          <input type="checkbox" id="ql-combine-cb"> Combine Ziggy's suggestion + my words
+        </label>
+      </div>
+      <label class="form-label">Advise Sam directly</label>
       <textarea id="ql-act-input" rows="3" placeholder="What does Al tell Sam? Brief him, mislead him, or say nothing..." style="width:100%;box-sizing:border-box;"></textarea>
-        <button class="btn" onclick="QuantumLeeks.act()" id="ql-act-btn" style="margin-top:10px;">ACT</button>
+      <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;align-items:center;">
+        <button class="btn" onclick="QuantumLeeks.act()" id="ql-act-btn">ACT</button>
+        <button class="btn" id="ql-spend-btn" onclick="QuantumLeeks.spendLeekiness()" style="background:#001a08;border-color:var(--green);color:var(--green);" disabled title="Spend 1 Leekiness — higher variance outcome">SPEND LEEKINESS</button>
+        <div style="display:flex;align-items:center;gap:4px;">
+          <button class="btn" id="ql-bet-btn" onclick="QuantumLeeks.betLeekiness()" style="background:#001a08;border-color:var(--green);color:var(--green);" disabled title="Bet Leekiness — amplify outcome magnitude">BET</button>
+          <input type="number" id="ql-bet-input" min="1" max="3" value="1" style="width:44px;background:var(--card);color:var(--text);border:1px solid var(--border);padding:6px;border-radius:4px;font-size:13px;text-align:center;">
+          <span style="font-size:11px;color:var(--muted);">pts</span>
+        </div>
+      </div>
+      <div style="margin-top:14px;border-top:1px solid var(--border);padding-top:12px;">
+        <div style="font-size:11px;color:var(--muted);letter-spacing:1px;margin-bottom:6px;">CALL THE LEEK</div>
+        <div style="display:flex;gap:8px;">
+          <input id="ql-leek-input" type="text" placeholder="what word did you catch?" style="flex:1;background:var(--card);color:var(--text);border:1px solid var(--border);padding:8px;border-radius:4px;font-size:13px;">
+          <button class="btn" onclick="QuantumLeeks.callLeek()" id="ql-leek-btn" style="white-space:nowrap;">THAT'S THE LEEK</button>
+        </div>
+      </div>
     </div>
     <div id="ql-thinking" style="display:none;margin-top:16px;text-align:center;color:var(--muted);font-size:13px;letter-spacing:0.08em;">
       <span style="display:inline-block;animation:ql-pulse 1.2s ease-in-out infinite;">ZIGGY IS COMPUTING</span>
@@ -10946,7 +10977,7 @@ const QuantumLeeks = (() => {
     },
   };
 
-  const _SYSTEM = (sc, ziggyChar) => `You are running a Quantum Leap simulation. The USER IS AL CALAVICCI — the hologram. The user decides what Al says, reveals, withholds, and lies about. Sam Beckett is fully AI-controlled. The system waits for the user's Al input before advancing the scene. Ziggy's reactions are voiced through: ${ziggyChar || 'Wayne Riley'}.
+  const _SYSTEM = (sc, ziggyChar) => `You are running a Quntum Leeks scene. The USER IS AL CALAVICCI — the hologram. The user decides what Al says, reveals, withholds, and lies about. Sam Beckett is fully AI-controlled. The system waits for the user's Al input before advancing the scene. Ziggy's reactions are voiced through: ${ziggyChar || 'Wayne Riley'}.
 
 CHARACTER VOICE RULES — apply the correct voice for the selected character:
 
@@ -11103,8 +11134,10 @@ RESPONSE FORMAT — return ONLY valid JSON, no text outside it:
   "al": "<Al's full dialogue — briefing, hints, distractions, hologram physics failures, Sam... deployments. Al is warm, specific, frequently interrupted by himself.>",
   "ziggy": "<Ziggy's output voiced entirely through ${ziggyChar || 'Wayne Riley'}. MANDATORY: Ziggy must do ALL of the following every turn: (1) Give leap probability as an oddly specific decimal. (2) Provide ONE piece of actionable intel Al can use — specific, about a scene character or object, potentially game-changing. (3) Make a character assessment of someone in the scene — devastating, delivered as data. (4) Add one completely irrelevant fact mid-crisis. (5) Voice ALL of this in ${ziggyChar || 'Wayne Riley'}'s exact register, vocabulary, and comic mechanism. Wayne-as-Ziggy: golf commentator reverence for Sam's disasters. Cox-as-Ziggy: situates everything cosmologically, finds Sam's predicament thermodynamically inevitable. Faldo-as-Ziggy: assesses the scene like a difficult lie, offers a sandwich. Heckler-as-Ziggy: dry, precise, fond of Sam, mildly exasperated. Souness-as-Ziggy: tactical breakdown, someone needs to be stronger. Radar-as-Ziggy: deadpan accurate, then silent.>",
   "scene": "<Scene characters' reactions to Sam/host's behaviour — dignity maintenance if incident active, otherwise normal scene interaction. Short. Specific. Period-appropriate. Never address the user directly. Never end with 'What do you do, Sam?' or any variant. The user is Al — they decide their own next move.>",
+  "sam": "<Sam's visible action and speech this turn — earnest, decent, morally serious. His behaviour is modified by his current Swiss Cheese Level. At SCL above 60% Sam may mishear Al's advice. At SCL above 80% Sam is in deathcap hallucination state — his actions follow internally consistent but externally catastrophic logic. Sam never knows he is doing this. Write in third person, specific to the scene.>",
   "sam_state": "<Sam's internal state — confusion, moral earnestness, Swiss cheese awareness. 1-2 sentences. First person. Sam does not understand why he keeps doing the thing with the ${sc.object}.>",
   "incident": <null or string describing a Swiss cheese incident if one is occurring this turn>,
+  "ziggy_options": ["<specific actionable advice option 1 for Al to give Sam next turn — concrete, about a character or object in the scene>", "<different approach, option 2>", "<riskier or more lateral option 3 — may involve the object of concern>"],
   "leaped": <boolean — true ONLY when all three leap conditions are clearly met by Sam's actions>,
   "ob_boy": <boolean — true on first turn and on leap/failure moments>
 }`;
@@ -11114,11 +11147,164 @@ RESPONSE FORMAT — return ONLY valid JSON, no text outside it:
   let _turnCount = 0;
   let _probability = 50;
   let _leaped = false;
+  let _samStats = { truthiness: 70, bottiness: 60, leekiness: 3, swissCheeseLevel: 20 };
+  let _samDamage = 0;
+  let _prevProbability = 50;
+  let _leekinessSpend = false;
+  let _leekinessBet = 0;
+  let _ziggyOptions = [];
+  let _selectedZiggyOpt = -1;
+  let _deathcapActive = false;
 
   function _esc(s) {
     return String(s || '')
       .replace(/&/g,'&amp;').replace(/</g,'&lt;')
       .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function _updateStats() {
+    const grid = document.getElementById('ql-stats-grid');
+    if (!grid) return;
+    const s = _samStats;
+    const deathcap = s.swissCheeseLevel >= 80;
+    const sclCol = deathcap ? 'var(--accent)' : s.swissCheeseLevel >= 50 ? '#ffaa44' : 'var(--green)';
+    const leekinessBar = Math.min(100, s.leekiness * 20);
+    grid.innerHTML =
+      UI.scoreBarHtml('Truthiness', s.truthiness, 'var(--cyan)') +
+      UI.scoreBarHtml('Bottiness', s.bottiness, '#aa88ff') +
+      `<div style="margin-bottom:8px;"><div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:3px;"><span>Leekiness</span><span style="color:var(--green);">${s.leekiness}pts</span></div><div style="background:#1a1a1a;border-radius:3px;height:5px;"><div style="background:var(--green);height:5px;border-radius:3px;width:${leekinessBar}%;transition:width 0.4s ease;"></div></div></div>` +
+      UI.scoreBarHtml('Swiss Cheese Level' + (deathcap ? ' — DEATHCAP' : ''), s.swissCheeseLevel, sclCol);
+    const noLeeks = s.leekiness <= 0;
+    const spendBtn = document.getElementById('ql-spend-btn');
+    const betBtn   = document.getElementById('ql-bet-btn');
+    if (spendBtn) spendBtn.disabled = noLeeks;
+    if (betBtn)   betBtn.disabled   = noLeeks;
+  }
+
+  function _populateZiggyOptions(opts) {
+    _ziggyOptions = Array.isArray(opts) ? opts : [];
+    _selectedZiggyOpt = -1;
+    const area = document.getElementById('ql-ziggy-options');
+    if (!area) return;
+    if (!_ziggyOptions.length) { area.style.display = 'none'; return; }
+    area.style.display = 'block';
+    [0, 1, 2].forEach(i => {
+      const btn = document.getElementById('ql-zopt-' + (i + 1));
+      if (!btn) return;
+      btn.textContent = _ziggyOptions[i] || '';
+      btn.style.borderColor = '#8844cc';
+    });
+  }
+
+  function _buildModifiers() {
+    const mods = [];
+    if (_leekinessSpend) mods.push('Al is pushing his luck on this action — higher variance outcome (Spend Leekiness active).');
+    if (_leekinessBet > 0) mods.push(`Al has bet ${_leekinessBet} Leekiness points — amplify outcome magnitude in both directions.`);
+    if (_samStats.swissCheeseLevel >= 80) mods.push('[DEATHCAP MODE ACTIVE] Sam is in a hallucination state. His actions follow internally consistent but externally catastrophic logic. Al is the only anchor he has left.');
+    if (_samDamage >= 4) mods.push(`Sam has suffered ${_samDamage} damage events. His dialogue reflects cumulative degradation — earnest but visibly deteriorating.`);
+    return mods.length ? '\n\nACTIVE MODIFIERS THIS TURN:\n' + mods.join('\n') : '';
+  }
+
+  function _processTurnEffects(data, isFirst) {
+    if (isFirst) return;
+    const newProb = typeof data.probability === 'number' ? data.probability : _probability;
+    if (newProb > _prevProbability) {
+      _samStats.leekiness++;
+    }
+    if (newProb < _prevProbability - 10) {
+      _samDamage++;
+    }
+    const accurateAdvice = _selectedZiggyOpt >= 0 && _samStats.truthiness > 60;
+    if (accurateAdvice) {
+      _samStats.swissCheeseLevel = Math.max(0, _samStats.swissCheeseLevel - 2);
+    } else {
+      _samStats.swissCheeseLevel = Math.min(100, _samStats.swissCheeseLevel + Math.floor(Math.random() * 6));
+    }
+    _deathcapActive = _samStats.swissCheeseLevel >= 80;
+    _leekinessSpend = false;
+    _leekinessBet = 0;
+    _selectedZiggyOpt = -1;
+    _prevProbability = newProb;
+    _updateStats();
+  }
+
+  function _appendDeath() {
+    const afterlife = _deathcapActive
+      ? 'QUANTUM DISENTANGLEMENT — Professor Brian Cox is here. He finds this fascinating.'
+      : "DANTE'S MODEL — there is paperwork. Your name is on the clipboard.";
+    _updateProb(0);
+    _append(`<div style="text-align:center;padding:32px;background:#1a0000;border:2px solid var(--accent);border-radius:8px;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--accent);letter-spacing:3px;">SAM IS DEAD.</div>
+      <div style="color:var(--muted);margin-top:12px;font-size:13px;line-height:1.8;">
+        Al closes his eyes for exactly one second.<br>
+        <em>"Okay, Sam. Don't panic."</em><br><br>
+        Afterlife loading: ${afterlife}<br><br>
+        The Bourbon is still on the shelf.
+      </div>
+    </div>`);
+  }
+
+  function selectZiggyOpt(i) {
+    _selectedZiggyOpt = i;
+    [0, 1, 2].forEach(j => {
+      const btn = document.getElementById('ql-zopt-' + (j + 1));
+      if (btn) btn.style.borderColor = j === i ? 'var(--green)' : '#8844cc';
+    });
+  }
+
+  function spendLeekiness() {
+    if (_samStats.leekiness <= 0) return;
+    _leekinessSpend = true;
+    _samStats.leekiness--;
+    _updateStats();
+    UI.toast('Leekiness spent — next action runs hot.', 'info');
+  }
+
+  function betLeekiness() {
+    const n = parseInt((document.getElementById('ql-bet-input') || {}).value || '1', 10);
+    const bet = Math.min(3, Math.max(1, isNaN(n) ? 1 : n));
+    if (_samStats.leekiness < bet) { UI.toast('Not enough Leekiness.', 'warn'); return; }
+    _leekinessBet = bet;
+    _samStats.leekiness -= bet;
+    _updateStats();
+    UI.toast(`Bet ${bet} Leekiness — outcome amplified in both directions.`, 'info');
+  }
+
+  async function callLeek() {
+    if (_leaped) return;
+    const word = ((document.getElementById('ql-leek-input') || {}).value || '').trim();
+    if (!word) { UI.toast('What word did you catch?', 'warn'); return; }
+    const sc = SCENARIOS[_scenario];
+    const ziggyCharEl = document.getElementById('ql-ziggy-char');
+    const ziggyChar = ziggyCharEl ? ziggyCharEl.value : 'Wayne Riley';
+    UI.setDisabled('ql-leek-btn', true);
+    UI.show('ql-thinking');
+    const sys = `You are the Quntum Leeks system. The user has called a word as the leek. Assess whether it matches a word meaning leek or leak that appeared in the current scene. Scenario: ${sc.name} (${sc.period}). Return ONLY valid JSON: {"correct": boolean, "response": "<If correct: Al sees it, blue light begins, voiced through ${ziggyChar}. One crisp sentence from Al. If incorrect: Al silences the handlink once. One terse sentence. The scene continues.>"}`;
+    const histSnippet = _history.slice(-4).map(h => h.role.toUpperCase() + ': ' + h.text.substring(0, 200)).join('\n');
+    const userMsg = `Called word: "${word}". Current leap probability: ${_probability.toFixed(1)}%.\nRecent history:\n${histSnippet}`;
+    try {
+      const raw  = await API.call(sys, userMsg, 300, 'qleeks/leek-call');
+      const json = raw.match(/\{[\s\S]*\}/);
+      if (!json) throw new Error('parse error');
+      const data = JSON.parse(json[0]);
+      const leekInput = document.getElementById('ql-leek-input');
+      if (leekInput) leekInput.value = '';
+      if (data.correct) {
+        _leaped = true;
+        _append(`<div style="background:#001a1a;border:1px solid var(--cyan);border-radius:6px;padding:12px 14px;font-size:13px;color:var(--text);line-height:1.7;">${_esc(data.response)}</div>`);
+        _appendLeaped();
+        UI.hide('ql-reply-area');
+      } else {
+        _append(`<div style="background:#1a0800;border:1px solid var(--gold);border-radius:6px;padding:10px 14px;">
+          <div style="font-size:10px;color:var(--gold);letter-spacing:1px;margin-bottom:4px;">NOT THE LEEK</div>
+          <div style="font-size:13px;color:var(--text);line-height:1.7;">${_esc(data.response)}</div>
+        </div>`);
+      }
+    } catch(e) {
+      UI.toast('Leek call failed.', 'error');
+    }
+    UI.hide('ql-thinking');
+    UI.setDisabled('ql-leek-btn', false);
   }
 
   function _updateProb(p) {
@@ -11182,6 +11368,17 @@ RESPONSE FORMAT — return ONLY valid JSON, no text outside it:
       </div>`);
     }
 
+    if (data.sam) {
+      parts.push(`<div style="background:var(--card);border:1px solid var(--border);border-radius:6px;padding:14px;">
+        <div style="font-size:10px;color:var(--muted);letter-spacing:1px;margin-bottom:6px;">SAM BECKETT</div>
+        <div style="font-size:14px;color:var(--text);line-height:1.7;">${_esc(data.sam)}</div>
+      </div>`);
+    }
+
+    if (Array.isArray(data.ziggy_options)) {
+      _populateZiggyOptions(data.ziggy_options);
+    }
+
     return parts.join('<div style="height:8px;"></div>');
   }
 
@@ -11197,7 +11394,7 @@ RESPONSE FORMAT — return ONLY valid JSON, no text outside it:
     const sc  = SCENARIOS[_scenario];
     const ziggyCharEl = document.getElementById('ql-ziggy-char');
     const ziggyChar = ziggyCharEl ? ziggyCharEl.value : 'Wayne Riley';
-    const sys = _SYSTEM(sc, ziggyChar);
+    const sys = _SYSTEM(sc, ziggyChar) + _buildModifiers();
 
     const histSnippet = _history.length
       ? '\n\nHistory so far:\n' + _history.slice(-6).map(h => h.role.toUpperCase() + ': ' + h.text.substring(0, 300)).join('\n---\n')
@@ -11207,7 +11404,7 @@ RESPONSE FORMAT — return ONLY valid JSON, no text outside it:
       ? `Sam has just leapt in. First moment. Generate ONLY: the mirror moment, the opening scene, Sam's initial state, and Ziggy's first probability output. Do NOT generate Al's dialogue — the user plays Al. Wait for Al's first move. Starting leap probability around 45-55%.`
       : `Al\'s move: "${userText}"\n\nProbability going into this turn: ${_probability.toFixed(1)}%. Sam and the scene react to what Al just told Sam — or withheld, or lied about. Generate Sam\'s response, scene reaction, and Ziggy\'s commentary on Al\'s moral choice.${histSnippet}\n\nSAM TRUST RULES: If Al\'s last move was truthful — Sam acts on it directly, usually correctly. If Al withheld — Sam flounders and improvises, makes it worse in a characteristically Sam way. If Al lied — Sam believes it completely, acts with full moral earnestness, disaster follows. After 2+ lies Sam starts giving Al a look. Doesn\'t say anything. Just the look. Then quietly: \'Al...\' Sam occasionally ignores Al regardless — Swiss-cheesed mid-briefing, or already committed to the wrong thing, or a woman walked past and Al stopped paying attention.`;
 
-    const raw  = await API.call(sys, userMsg, 800, 'qleeks/turn');
+    const raw  = await API.call(sys, userMsg, 1200, 'qleeks/turn');
     const json = raw.match(/\{[\s\S]*\}/);
     if (!json) throw new Error('Could not parse leap response.');
     const data = JSON.parse(json[0]);
@@ -11215,24 +11412,40 @@ RESPONSE FORMAT — return ONLY valid JSON, no text outside it:
     _history.push({ role:'sam',   text: isFirst ? '[leapt in]' : userText });
     _history.push({ role:'scene', text: (data.al || '') + ' ' + (data.ziggy || '') });
 
+    _processTurnEffects(data, isFirst);
     _updateProb(typeof data.probability === 'number' ? data.probability : _probability);
     _append(_renderTurn(data));
+    if (!isFirst && _samDamage >= 6 && !_leaped) {
+      _leaped = true;
+      _appendDeath();
+      UI.hide('ql-reply-area');
+    }
     return data;
   }
 
   async function leap() {
     const keys = Object.keys(SCENARIOS);
     _scenario    = keys[Math.floor(Math.random() * keys.length)];
-    _history     = [];
-    _turnCount   = 0;
-    _leaped      = false;
-    _probability = 50;
+    _history          = [];
+    _turnCount        = 0;
+    _leaped           = false;
+    _probability      = 50;
+    _prevProbability  = 50;
+    _samStats         = { truthiness: 70, bottiness: 60, leekiness: 3, swissCheeseLevel: 20 };
+    _samDamage        = 0;
+    _leekinessSpend   = false;
+    _leekinessBet     = 0;
+    _ziggyOptions     = [];
+    _selectedZiggyOpt = -1;
+    _deathcapActive   = false;
 
     const thread = document.getElementById('ql-thread');
     if (thread) thread.innerHTML = '';
 
     UI.show('ql-output');
     UI.show('ql-prob-bar');
+    UI.show('ql-stats-bar');
+    _updateStats();
     UI.hide('ql-reply-area');
     UI.setDisabled('ql-leap-btn', true);
     UI.show('ql-thinking');
@@ -11260,10 +11473,19 @@ RESPONSE FORMAT — return ONLY valid JSON, no text outside it:
 
   async function act() {
     if (_leaped) return;
-    const input = (document.getElementById('ql-act-input') || {}).value || '';
-    if (!input.trim()) { UI.toast('What does Al tell Sam?', 'warn'); return; }
+    const freeText = ((document.getElementById('ql-act-input') || {}).value || '').trim();
+    const combineChecked = !!(document.getElementById('ql-combine-cb') || {}).checked;
+    const ziggyText = _selectedZiggyOpt >= 0 ? (_ziggyOptions[_selectedZiggyOpt] || '') : '';
+    let input = freeText;
+    if (ziggyText && combineChecked && freeText) {
+      input = ziggyText + ' / ' + freeText;
+    } else if (ziggyText && !freeText) {
+      input = ziggyText;
+    }
+    if (!input) { UI.toast('What does Al tell Sam?', 'warn'); return; }
 
-    document.getElementById('ql-act-input').value = '';
+    const inputEl = document.getElementById('ql-act-input');
+    if (inputEl) inputEl.value = '';
     UI.setDisabled('ql-act-btn', true);
     UI.show('ql-thinking');
     _appendUserMove(input.trim());
@@ -11296,7 +11518,7 @@ RESPONSE FORMAT — return ONLY valid JSON, no text outside it:
     </div>`);
   }
 
-  return { leap, act };
+  return { leap, act, callLeek, spendLeekiness, betLeekiness, selectZiggyOpt };
 })();
 
 // =====================
