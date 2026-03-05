@@ -408,3 +408,14 @@ Entry format: copy schema above. Minimum viable entry is Item + Symptom + Tags +
 - **Delay:** Yes
 - **Tags:** naming, memory-failure, repeat-error, canonical-spelling, context-loss, session-start-protocol, file-rename
 - **Status:** Open — canonical spelling logged as CRITICAL FAILURE in memory; session-start protocol must include recent_chats before any work
+
+## WL-030
+- **Item:** Claude Code collapsing output behind ctrl+o
+- **Symptom:** git push output, file reads, and command results hidden in collapsible blocks — claude.ai cannot read them, Rod has to relay manually
+- **Suspected cause:** Claude Code defaulting to collapsed display for long output despite CLAUDE CODE OUTPUT RULE in STANDARDS.md
+- **Session:** 2026-03-05
+- **Time lost:** ~20 mins this session
+- **Cost impact:** Medium — repeated relay requests, broken flow
+- **Delay:** Yes
+- **Tags:** output, claude-code, collapsible, waste, standards-violation
+- **Status:** Open — CLAUDE CODE OUTPUT RULE must be reinforced at session start with Claude Code explicitly
