@@ -1922,6 +1922,7 @@
   <div class="panel-desc">Faldo has cycled back and thought about this. Butch Harmon sees something in the swing nobody else sees — his left eye may be operating independently. Coltart is fine. He is fine about Valderrama. He would like to be clear about that. Put a shot, a round, or a player in front of them.</div>
 
   <div style="margin-bottom:20px;">
+    <div id="gf-round-indicator" style="display:none;margin-bottom:12px;padding:8px 14px;border-radius:6px;background:rgba(255,215,0,0.08);border:1px solid rgba(255,215,0,0.2);font-size:13px;font-weight:600;letter-spacing:0.05em;color:#ffd700;"></div>
     <label>The shot. The player. The hole. The round. The decision.</label>
     <textarea id="gf-input" rows="3" placeholder="e.g. Was that the right club selection? Can he win from here? What does that swing tell you?"></textarea>
   </div>
@@ -10642,14 +10643,23 @@ HYPOCHONDRIA RESPONSE: Default silence. You note it once, as analysis. The panel
       ? ['dougherty', 'faldo', 'butch', 'mcginley', 'coltart', 'roe', 'radar', 'henni', 'murray']
       : ['murray', 'faldo', 'butch', 'mcginley', 'coltart', 'roe', 'radar', 'henni', 'dougherty'];
 
-    // Round escalation — increments each discuss() call this session
-    const gfRound = parseInt(sessionStorage.getItem('golf-round') || '0') + 1;
+    // Round escalation — increments each discuss() call this session, capped at 5
+    const ROUND_LABELS = [
+      'Sober and Watching',
+      'First Drink. Hat Tilting.',
+      'Properly On It',
+      'The Hat Is Now A Statement',
+      'Wayne. Full Corruption.'
+    ];
+    const gfRound = Math.min(parseInt(sessionStorage.getItem('golf-round') || '0') + 1, 5);
     sessionStorage.setItem('golf-round', gfRound.toString());
-    const roundNote = `\n\nThis is round ${gfRound} of this session.` + (gfRound >= 7
-      ? ' You are at full intensity. Your characteristic escalation is completely present. No restraint.'
-      : gfRound >= 4
-        ? ' Your characteristic behaviour is increasingly pronounced.'
-        : '');
+    const roundLabel = ROUND_LABELS[gfRound - 1];
+    const roundIndicator = document.getElementById('gf-round-indicator');
+    if (roundIndicator) {
+      roundIndicator.textContent = `ROUND ${gfRound} OF 5 — ${roundLabel}`;
+      roundIndicator.style.display = 'block';
+    }
+    const roundNote = `\n\nThis is round ${gfRound} of 5: "${roundLabel}". Calibrate your intensity accordingly. Round 1 = restrained, accurate, minimal. Round 5 = full escalation, characteristic behaviours completely present, no restraint.`;
 
     // Roe return mechanic — sessionStorage flag tracks first vs return visit
     const roeFirstVisit = !sessionStorage.getItem('roe-visited');
