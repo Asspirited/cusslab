@@ -73,6 +73,10 @@ No deflection. No "I'll try harder." Root cause only.
 
 ## Non-Negotiable Gates
 
+### Three Amigos Read-First Rule
+Before proposing any new scenarios in Three Amigos, read the existing feature file in full.
+Never propose scenarios from memory. Conflicts with green scenarios waste time and money.
+
 ### Panel Prompt Length Rule
 User-facing prompts sent to the API must NEVER specify paragraph counts.
 All panel characters have "Speeches are failure. Default is short." in their system prompts.
