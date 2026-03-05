@@ -1038,3 +1038,43 @@ SpeakerSelector and WoundDetector without touching the others.
 - No feature work in the same commit as a refactoring
 - If a refactoring reveals a new SOLID violation, add it to this
   backlog — do not fix it in the same session
+
+---
+## Banter Sub-Functions (Golf panel)
+
+Spec: docs/features/banter-sub-functions.feature
+Committed: e7394b6
+
+Five named antagonism behaviours that replace polite panel defaults. Fire based on RelationshipState temperature, woundActivated, round number, and credibilityBidCounter. Priority order when multiple eligible: OUTRIGHT_INSULT > DISGUST > COMPLETE_DISBELIEF > SUBTLY_UNDERMINING > BACKHANDED_COMPLIMENT. Only one fires per character per turn. TURN_RULES always override routing.
+
+### SUBTLY_UNDERMINING
+Fires: temperature ≤ 3 OR credibilityBidCounter ≥ 2. Agree with the surface statement, remove its foundation in the same sentence. The knife is invisible until after. Character does not name what they are doing. Radar's version is three words or fewer and sounds identical to a compliment.
+
+### BACKHANDED_COMPLIMENT
+Fires: temperature 4–5 AND woundActivated=true. The compliment must be independently true. A load-bearing subordinate clause undoes it. Character considers this supportive. Faldo's default register in most interactions.
+
+### OUTRIGHT_INSULT
+Fires: temperature 1–2 OR (woundActivated=true AND round ≥ 4). Direct, short, no diplomatic framing, delivered in character register. Radar's outright insult is indistinguishable from normal delivery — the content is the joke. McGinley's is framed as a leadership concern. Coltart's is routed through the cameraman.
+
+### COMPLETE_DISBELIEF
+Fires: credibility bid OR evasive claim from target AND temperature ≤ 3. One beat of incredulity, then move on. Character does not explain what they disbelieved. Henni's version is a clarification request — silence after non-answer is the punchline. Dougherty's version is warm plain-English translation delivered immediately.
+
+### DISGUST
+Fires: temperature = 1 OR (Radar round ≥ 4 AND target credibilityBidCounter ≥ 2). One beat maximum. Does not explain itself. Faldo's = 0.3-second beat then topic change. Murray's = "And yet—" unfinished. Coltart's = routed through cameraman, target unnamed.
+
+---
+## Hostility Routing Table (Golf panel)
+
+Spec: docs/features/banter-sub-functions.feature
+Committed: e7394b6
+
+Per-round primary tension pair and secondary fire. Routing does not override TURN_RULES — if routed turn would cause monologue or repeat, sub-function defers to next eligible turn.
+
+| Round | Primary pair | Secondary |
+|-------|-------------|-----------|
+| 1 | Faldo→McGinley cool contempt | Radar deflates Murray |
+| 2 | McGinley validation hunger | Butch technical note on Faldo |
+| 3 | Coltart wound surfaces | Dougherty sycophancy visible |
+| 4 | Radar outright | Faldo/McGinley Jesus/Moses peak |
+| 5 | Full Valderrama + Full Corruption | Henni asks — Dougherty translates Moses |
+
