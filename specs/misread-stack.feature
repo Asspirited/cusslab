@@ -45,13 +45,13 @@ Feature: Misread stack — perception filter and divergent realities
     Then <character>'s effective_misread_probability is <effective>
 
     Examples:
-      | character | base | pressure | effective | note                                   |
-      | mcginley  | 0.6  | 0        | 0.60      | cold start                             |
-      | mcginley  | 0.6  | 3        | 0.75      | antagonised — confirmation bias        |
-      | mcginley  | 0.6  | 5        | 0.85      | on the verge — looking for trouble     |
-      | mcginley  | 0.6  | 6        | 0.90      | gasket blown — sees slights everywhere |
-      | faldo     | 0.3  | 4        | 0.50      | quiet seething shifts his read         |
-      | wayne     | 0.4  | 6        | 0.70      | angry Wayne misreads everything        |
+      | character | base | pressure | effective | note                                    |
+      | mcginley  | 0.6  | 0        | 0.60      | cold start                              |
+      | mcginley  | 0.6  | 3        | 0.75      | antagonised — confirmation bias         |
+      | mcginley  | 0.6  | 5        | 0.85      | on the verge — looking for trouble      |
+      | mcginley  | 0.6  | 6        | 0.90      | gasket blown — sees slights everywhere  |
+      | faldo     | 0.3  | 4        | 0.50      | quiet seething shifts his read          |
+      | wayne     | 0.4  | 6        | 0.70      | angry Wayne misreads everything         |
 
   Scenario: Effective misread probability is clamped at 1.0
     Given mcginley's base_misread_probability is 0.6
@@ -111,13 +111,20 @@ Feature: Misread stack — perception filter and divergent realities
 
   # ── Silent misread ────────────────────────────────────────────────────────────
 
-  Scenario: Silent misread fires pressure increment without visible response
-    Given mcginley misreads a NEUTRAL turn as HOSTILE
-    And mcginley's silent_misread roll clears threshold
-    Then mcginley's pressure increments by 1
-    And mcginley does not respond to the perceived slight in their turn
-    And the turn prompt notes mcginley is visibly affected but silent
+  Scenario Outline: Silent misread fires pressure increment without visible response
+    Given <character> misreads a <actual_intent> turn as <perceived_intent>
+    And <character>'s silent_misread roll clears threshold
+    Then <character>'s pressure increments by 1
+    And <character> does not respond to the perceived slight in their turn
+    And the turn prompt notes <character> is visibly affected but silent
     And other characters may notice
+
+    Examples:
+      | character | actual_intent | perceived_intent | note                                    |
+      | mcginley  | NEUTRAL       | HOSTILE          | social filter reads slight into nothing |
+      | mcginley  | WARM          | HOSTILE          | performed warmth triggers paranoia      |
+      | faldo     | NEUTRAL       | DOWNWARD         | competence filter fires on neutral      |
+      | wayne     | NEUTRAL       | PHYSICAL         | outback filter on neutral turn          |
 
   Scenario: Silent misread is visible to the room before it surfaces
     Given mcginley is carrying a silent misread
@@ -135,37 +142,37 @@ Feature: Misread stack — perception filter and divergent realities
     Then counterpart detection <fires>
 
     Examples:
-      | source   | target   | intent  | received_intent | source_probability | roll | fires         |
-      | faldo    | mcginley | NEUTRAL | HOSTILE         | 0.30               | 0.40 | fires         |
-      | faldo    | mcginley | NEUTRAL | HOSTILE         | 0.30               | 0.20 | does not fire |
-      | cox      | mcginley | NEUTRAL | HOSTILE         | 0.80               | 0.85 | does not fire |
-      | wayne    | faldo    | WARM    | DOWNWARD        | 0.40               | 0.50 | fires         |
+      | source | target   | intent  | received_intent | source_probability | roll | fires         |
+      | faldo  | mcginley | NEUTRAL | HOSTILE         | 0.30               | 0.40 | fires         |
+      | faldo  | mcginley | NEUTRAL | HOSTILE         | 0.30               | 0.20 | does not fire |
+      | cox    | mcginley | NEUTRAL | HOSTILE         | 0.80               | 0.85 | does not fire |
+      | wayne  | faldo    | WARM    | DOWNWARD        | 0.40               | 0.50 | fires         |
 
-  Scenario Outline: Counterpart detection state determines source response
-    Given faldo detects that mcginley has misread his turn
-    And faldo's detection state is <state>
-    Then faldo's next turn fires with behaviour <behaviour>
+  Scenario Outline: Counterpart detection state determines source response and axis consequences
+    Given <source> detects that <target> has misread their turn
+    And <source>'s detection state is <state>
+    Then <source>'s next turn fires with behaviour <behaviour>
+    And <target>'s <axis> changes by <delta>
+    And <target>'s pressure changes by <pressure_delta>
 
     Examples:
-      | state               | behaviour                                                          |
-      | CALL_OUT_LAUGHING   | names the misread explicitly, laughs — mcginley humiliation spike  |
-      | GO_WITH_IT          | accepts misread reality, responds as if it were true               |
-      | WHAT_THE_FUCK       | confused confrontation — both now generating from crossed wires    |
-      | SCATHING_CORRECTION | subtle sarcastic correction — mcginley humiliation ESCALATE fires  |
+      | source | target   | state               | behaviour                                           | axis        | delta | pressure_delta |
+      | faldo  | mcginley | CALL_OUT_LAUGHING   | names misread explicitly laughs at target           | humiliation | +3    | +1             |
+      | faldo  | mcginley | GO_WITH_IT          | accepts misread reality responds as if true         | pressure    | 0     | 0              |
+      | faldo  | mcginley | WHAT_THE_FUCK       | confused confrontation both generating crossed      | anxiety     | +2    | +1             |
+      | faldo  | mcginley | SCATHING_CORRECTION | subtle sarcastic correction makes target look stupid| humiliation | +2    | +1             |
 
-  Scenario: SCATHING_CORRECTION fires humiliation ESCALATE and shame spike on target
+  Scenario: SCATHING_CORRECTION additionally fires shame spike and room ripple
     Given faldo's detection state is SCATHING_CORRECTION
     When faldo's correction turn fires
     Then mcginley's humiliation ESCALATE increments
     And mcginley's shame spikes by +2
-    And mcginley's pressure increments by 1
     And the room receives room_ripple pressure increment
 
-  Scenario: CALL_OUT_LAUGHING fires humiliation spike and room pressure ripple
+  Scenario: CALL_OUT_LAUGHING additionally increases target effective_misread_probability
     Given faldo's detection state is CALL_OUT_LAUGHING
     When faldo's call-out turn fires
-    Then mcginley's humiliation spikes by +3
-    And all other characters' pressure increments by room_ripple
+    Then all other characters' pressure increments by room_ripple
     And mcginley's effective_misread_probability increases for the next turn
 
   # ── Divergent realities ───────────────────────────────────────────────────────
@@ -183,7 +190,7 @@ Feature: Misread stack — perception filter and divergent realities
       | wayne       | bush tucker survival | cox         | cosmic entropy       | PARALLEL_ARGUMENT   |
       | mcginley    | team spirit          | faldo       | team spirit          | CONVERGENT_ACCIDENT |
 
-  Scenario: VIOLENT_AGREEMENT — same viewpoint opposite emotional reads
+  Scenario: VIOLENT_AGREEMENT — same viewpoint opposite emotional reads escalate both
     Given mcginley is passionately defending faldo's position
     And faldo believes mcginley is attacking him
     And both have missed the misread
@@ -191,19 +198,36 @@ Feature: Misread stack — perception filter and divergent realities
     And the turn content shows furious agreement from mcginley and furious rejection from faldo
     And no character has yet noticed they agree
 
-  Scenario: CONVERGENT_ACCIDENT — same conclusion different premises
+  Scenario: CONVERGENT_ACCIDENT — both claim victory from same conclusion
     Given mcginley and faldo both arrive at the same conclusion
     And each believes they have defeated the other's argument
     Then neither character acknowledges agreement
     And both claim victory
     And the room may notice before either participant does
 
-  Scenario: PARALLEL_ARGUMENT — conversation has forked entirely
+  Scenario: PARALLEL_ARGUMENT — conversation has forked and third character detection fires
     Given faldo and mcginley are each arguing a different topic
     And neither has noticed the fork
     Then each turn advances a different argument
     And the room prompt notes the conversation has diverged
     And a third character observer detection roll fires each turn
+
+  # ── Unresolved misread feeds pressure ────────────────────────────────────────
+
+  Scenario Outline: Unresolved misread feeds pressure and humiliation each turn
+    Given <character> has carried an unresolved misread for <turns> turns
+    And no detection roll has cleared
+    Then <character>'s pressure has incremented by <turns>
+    And <character>'s humiliation has ESCALATED by <turns>
+    And the misread remains active in the conversation state
+
+    Examples:
+      | character | turns |
+      | mcginley  | 1     |
+      | mcginley  | 3     |
+      | mcginley  | 5     |
+      | faldo     | 2     |
+      | wayne     | 3     |
 
   # ── Collision resolution ──────────────────────────────────────────────────────
 
@@ -216,7 +240,7 @@ Feature: Misread stack — perception filter and divergent realities
       | character_a | character_b | collision_trigger                   | resolution                                  |
       | faldo       | mcginley    | third character calls it out        | CALL_OUT_LAUGHING fires from observer       |
       | faldo       | mcginley    | mcginley erupts at gasket blown     | eruption content reveals divergence to room |
-      | wayne       | cox         | random detection roll clears        | one character suddenly understands the other|
+      | wayne       | cox         | random detection roll clears        | one character suddenly understands other    |
       | mcginley    | faldo       | mcginley apologises for wrong thing | faldo more confused — divergence deepens    |
 
   Scenario: Third character observer detection roll fires each turn during divergence
@@ -233,7 +257,7 @@ Feature: Misread stack — perception filter and divergent realities
     And mcginley's pressure increments believing the apology was rejected
     And the divergence mode may shift to VIOLENT_AGREEMENT
 
-  # ── Misread resolves — aftermath ──────────────────────────────────────────────
+  # ── Misread resolves — aftermath ─────────────────────────────────────────────
 
   Scenario: Character who realises their own misread apologises and gets laughed at
     Given mcginley realises he misread faldo's NEUTRAL turn
@@ -243,10 +267,3 @@ Feature: Misread stack — perception filter and divergent realities
     And mcginley's humiliation increments by +2
     And mcginley's effective_misread_probability increases temporarily
     And the panel prompt notes mcginley is being laughed at for being a sensitive twat
-
-  Scenario: Misread that is never resolved feeds pressure until eruption
-    Given mcginley has carried an unresolved misread for 3 turns
-    And no detection roll has cleared
-    Then mcginley's pressure has incremented by 3
-    And mcginley's humiliation has ESCALATED by 3
-    And the misread remains active in the conversation state
