@@ -452,3 +452,25 @@ Entry format: copy schema above. Minimum viable entry is Item + Symptom + Tags +
 - **Delay:** Yes
 - **Tags:** claude-code, wsl, agent-mode, session-startup, waste
 - **Status:** Logged — always open Claude Code from WSL with `cd ~/cusslab && claude`; verify at session start that the instance can read files directly (use Read tool, not ask user to paste)
+
+## WL-036
+- **Item:** Worker proxying OpenAI not Anthropic — never tested, never noticed
+- **Symptom:** All AI tab calls returning 400 for months; worker.js comment said "proxies requests to OpenAI API"; secret was OPENAI_API_KEY not ANTHROPIC_API_KEY
+- **Suspected cause:** worker.js generated incorrectly at some point and deployed without a live test
+- **Session:** 2026-03-05
+- **Time lost:** ~30 mins diagnosis
+- **Cost impact:** Medium — Rod bought $5 credits unnecessarily early in diagnosis
+- **Delay:** Yes
+- **Tags:** worker, cloudflare, openai, anthropic, untested-deploy
+- **Status:** Closed — worker rewritten to proxy Anthropic directly; live tested via curl before commit
+
+## WL-037
+- **Item:** Two different Cloudflare accounts causing wrong worker URL in index.html
+- **Symptom:** Wrangler CLI deployed to cusslab.workers.dev; dashboard showed leanspirited.workers.dev; secret set on cusslab account; index.html pointed at leanspirited — mismatch caused auth failures
+- **Suspected cause:** Wrangler logged into different Cloudflare account than browser session; never verified post-deploy URL against index.html ENDPOINT constant
+- **Session:** 2026-03-05
+- **Time lost:** ~20 mins
+- **Cost impact:** Low — one wasted API key rotation
+- **Delay:** Yes
+- **Tags:** cloudflare, wrangler, url-mismatch, accounts
+- **Status:** Closed — always curl-test the worker URL after deploy before updating index.html; confirm wrangler and dashboard are same account
