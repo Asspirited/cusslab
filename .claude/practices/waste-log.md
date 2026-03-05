@@ -474,3 +474,14 @@ Entry format: copy schema above. Minimum viable entry is Item + Symptom + Tags +
 - **Delay:** Yes
 - **Tags:** cloudflare, wrangler, url-mismatch, accounts
 - **Status:** Closed — always curl-test the worker URL after deploy before updating index.html; confirm wrangler and dashboard are same account
+
+## WL-038
+- **Item:** 33 hours total lost to authentication and API access friction — not a code problem
+- **Symptom:** ~30 hours early in project: SSH setup, API key procurement, Anthropic unresponsive to emails and tweets, account verification delays. Additional 3 hours this session: wrong worker URL, wrong proxy target, key rotation, billing confusion.
+- **Suspected cause:** Anthropic's onboarding and support is poor for independent developers. No acknowledgement of support requests. API key/billing system has no grace period or clear error messages. Cloudflare wrangler account isolation not surfaced until runtime.
+- **Session:** Ongoing — 2026-02-xx through 2026-03-05
+- **Time lost:** ~33 hours total (30 hours early project + 3 hours this session)
+- **Cost impact:** High — significant lost momentum at project start; $5 credits purchased before diagnosis complete
+- **Delay:** Yes — blocked feature delivery across multiple sessions
+- **Tags:** authentication, api-keys, anthropic, ssh, cloudflare, onboarding, support-failure
+- **Status:** Logged — no fix available; Anthropic support unresponsive; document as known project risk
