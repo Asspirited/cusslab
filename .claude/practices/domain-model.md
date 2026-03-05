@@ -1308,3 +1308,96 @@ Determined by what each character believes the conversation is about.
 Collision resolves via: third character CALL_OUT_LAUGHING, eruption reveal,
 or random detection roll clearing. Apology during divergence can deepen it.
 Misread never resolved feeds pressure +1 and humiliation ESCALATE per turn.
+
+---
+### Behaviour Triggers (Golf Panel)
+
+Spec: specs/behaviour-triggers.feature
+Bridge between emotional state numbers and turn-structure events.
+All thresholds are integers matching axis and pressure ranges.
+
+#### Trigger Table
+
+| Behaviour     | Condition                                                              |
+|---------------|------------------------------------------------------------------------|
+| INTERRUPT     | pressure >= 4 AND interrupt roll clears                                |
+| SILENCE       | pressure >= 4 AND dominance toward current speaker <= -2               |
+| WOLFPACK_LEAD | affect toward target <= -3 AND pressure >= 4                           |
+| WOLFPACK_JOIN | affect toward target <= -2 AND join roll clears weighted probability    |
+| STORM_OFF     | eruptionResponse STORM_OFF register OR FLIGHT response clears          |
+| SHUT_UP       | interrupt loop active AND shut_up_probability clears patience threshold |
+| FREEZE        | shame >= +4 OR anxiety >= +4 AND dominance toward attacker <= 0        |
+| FIGHT         | anger >= +4 AND dominance toward attacker >= 0                         |
+
+---
+
+#### Interrupt Mechanics
+
+Mid-generation interrupt — current speaker's text truncated at interrupt point.
+Recovery attempt probability weighted by interrupted speaker's dominance axis.
+Interrupt loop continues until SHUT_UP fires or one party yields.
+Each loop iteration increments both characters' pressure by 1.
+
+| Character | patience_threshold | note                                      |
+|-----------|--------------------|-------------------------------------------|
+| faldo     | 3                  | tolerates briefly then cuts both off      |
+| mcginley  | 4                  | lets it run, intervenes too late          |
+| cox       | 4                  | barely notices, SHUT_UP is cosmic         |
+| wayne     | 2                  | low tolerance, fires SHUT_UP fast         |
+
+---
+
+#### Wolfpack Mechanics
+
+Ringleader initiates: affect toward target <= -3 AND pressure >= 4.
+Ringleader carries pride spike +2 on initiation.
+Join probability = weighted combination of joiner affect toward target
+  AND joiner warmth toward ringleader.
+Joiner carries joy spike +2 on joining.
+Victim pressure increments by 1 per joining character.
+Victim humiliation spikes +2 per joining character.
+
+Counter-wolfpack available if victim response is FIGHT and victim has allies
+above hostility threshold toward ringleader.
+
+---
+
+#### Fight / Flight / Freeze
+
+Victim response determined by dominant active axis and dominance toward ringleader.
+
+| Response | Primary condition                     | What fires                                      |
+|----------|---------------------------------------|-------------------------------------------------|
+| FIGHT    | anger >= +4 AND dominance >= 0        | verbal abuse, counter-wolfpack roll, anger +2   |
+| FLIGHT   | humiliation >= +4 AND dominance <= -2 | STORM_OFF roll — if clears, permanent exit      |
+| FREEZE   | shame >= +4 OR anxiety >= +4          | silence, pressure +1, fume_turns +1             |
+
+---
+
+#### STORM_OFF — Permanent Exit
+
+Available as eruption register AND as FLIGHT response.
+Exit is permanent within current panel — character does not return.
+Emotional state preserved in round snapshot.
+Preserved state is cold start for next panel session — not reset to domain model values.
+Panel continues gracefully with N-1 cast — no errors on missing turns.
+Relationship matrix entries preserved but inactive.
+
+Updated eruption register affinity table — STORM_OFF additions:
+
+| Character | Added register | Condition                                                        |
+|-----------|----------------|------------------------------------------------------------------|
+| mcginley  | STORM_OFF      | FLIGHT primary — humiliation + low dominance                     |
+| wayne     | STORM_OFF      | FLIGHT after FIGHT fails                                         |
+| faldo     | STORM_OFF      | inversion only — dignity almost always prevents it               |
+| cox       | STORM_OFF      | inversion only — leaves mid-sentence, nobody notices immediately |
+
+---
+
+#### Remaining Cast Reaction to STORM_OFF
+
+| Character | warmth toward exited | reaction                                      |
+|-----------|----------------------|-----------------------------------------------|
+| wayne     | +3 (mcginley)        | distressed — joy drops, anxiety spikes        |
+| faldo     | -3 (mcginley)        | satisfied — affect toward mcginley increments |
+| cox       | 0 (anyone)           | notes the absence cosmically, continues       |
