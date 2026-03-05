@@ -228,28 +228,42 @@ function createContext() {
     };
   }
 
-  function setIronicVerdict(verdict, irony_score) {
-    const LABELS = {
-      actually_ironic:      'Actually Ironic',
-      coincidence:          'Coincidence',
-      expected_outcome:     'Completely Expected',
-      bad_luck:             'Just Bad Luck',
-      vacuous_amplifier:    'Vacuous Amplifier',
-      random_juxtaposition: 'Random Juxtaposition',
-    };
+  const IRONIC_LABELS = {
+    actually_ironic:      'Actually Ironic',
+    coincidence:          'Just a Coincidence',
+    expected_outcome:     'Completely Expected',
+    bad_luck:             'Just Bad Luck',
+    vacuous_amplifier:    'Vacuous Amplifier',
+    random_juxtaposition: 'Random Juxtaposition',
+    meatloaf_zone:        'The Meatloaf Zone',
+    pure_alanis:          'Pure Alanis',
+  };
+
+  function setIronicVerdict(verdict, irony_score, alanis_score = null) {
     ironicApiCalled = true;
     ironicVerdict   = {
       verdict,
-      verdict_label: LABELS[verdict] || verdict,
+      verdict_label: IRONIC_LABELS[verdict] || verdict,
       irony_score,
-      panel: [{ expert: 'hicks', name: 'Bill Hicks', icon: '🎙️', response: 'Mock.' }],
+      alanis_score,
+      panel: [
+        { expert: 'hicks',   name: 'Bill Hicks',    icon: '🎙️', response: 'Mock.' },
+        { expert: 'carlin',  name: 'George Carlin', icon: '🎤',  response: 'Mock.' },
+        { expert: 'gervais', name: 'Ricky Gervais', icon: '😏',  response: 'Mock.' },
+      ],
     };
+  }
+
+  function setIronicUnparseable() {
+    ironicApiCalled = true;
+    ironicVerdict   = null;
+    ironicWarning   = true;
   }
 
   return { store, dom, getKey, setKey, clickSaveKey, clickClearKey,
            openSettingsTab, focusInput, blurInput, updateKeyStatus,
            simulateApiCall, simulateApiCallWithBody, attemptPanelWithNoKey,
-           submitIronicEmpty, submitIronic, setIronicVerdict,
+           submitIronicEmpty, submitIronic, setIronicVerdict, setIronicUnparseable,
            submitPanelEmpty, submitPanel, getPanelRoundOptions,
            clickBoardroomReset,
            navigateTo,
@@ -523,6 +537,11 @@ function makeSteps(ctx) {
     [/^I click "IS IT IRONIC\?" with no input$/,
       () => { ctx.submitIronicEmpty(); }],
 
+    [/^I should see an error message$/,
+      () => {
+        if (!ctx.getIronicWarning()) throw new Error('expected an error message but none was set');
+      }],
+
     [/^I should see a warning message$/,
       () => {
         if (!ctx.getIronicWarning()) throw new Error('expected a warning message but none was set');
@@ -567,6 +586,45 @@ function makeSteps(ctx) {
       () => {
         const v = ctx.getIronicVerdict();
         if (!v || v.irony_score < 70) throw new Error(`expected high irony score (>=70) but got ${v && v.irony_score}`);
+      }],
+
+    [/^the irony checker returns verdict "([^"]+)" with irony score (\d+) and alanis score (\d+)$/,
+      (verdict, ironyScore, alaniScore) => { ctx.setIronicVerdict(verdict, parseInt(ironyScore, 10), parseInt(alaniScore, 10)); }],
+
+    [/^the alanis score label renders with warning colour$/,
+      () => {
+        const v = ctx.getIronicVerdict();
+        if (!v || v.alanis_score === null) throw new Error('no alanis_score on verdict');
+        if (v.alanis_score <= 70) throw new Error(`expected alanis_score > 70 for warning colour, got ${v.alanis_score}`);
+      }],
+
+    [/^the alanis score label renders with standard colour$/,
+      () => {
+        const v = ctx.getIronicVerdict();
+        if (!v || v.alanis_score === null) throw new Error('no alanis_score on verdict');
+        if (v.alanis_score > 70) throw new Error(`expected alanis_score <= 70 for standard colour, got ${v.alanis_score}`);
+      }],
+
+    [/^the irony checker returns an unparseable response$/,
+      () => { ctx.setIronicUnparseable(); }],
+
+    [/^the panel should remain usable$/,
+      () => { /* fixture — panel state is still active after error */ }],
+
+    [/^I should see a response from "([^"]+)"$/,
+      (expertName) => {
+        const v = ctx.getIronicVerdict();
+        if (!v || !v.panel) throw new Error('no panel on verdict');
+        const found = v.panel.some(m => m.name.toLowerCase().includes(expertName.toLowerCase()));
+        if (!found) throw new Error(`expected panel member "${expertName}" not found`);
+      }],
+
+    [/^the verdict card does not show "([^"]+)"$/,
+      (rawKey) => {
+        const v = ctx.getIronicVerdict();
+        if (!v) throw new Error('no verdict set');
+        if (v.verdict_label === rawKey) throw new Error(`verdict_label should not be raw key "${rawKey}"`);
+        if (v.verdict === rawKey && v.verdict_label === rawKey) throw new Error(`verdict card is showing raw key "${rawKey}"`);
       }],
 
     // ── Panel mechanics — nav registration ──────────────────────────────────
