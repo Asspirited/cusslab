@@ -60,6 +60,17 @@ Examples: "feat: add Welsh culture modifier"
           "fix: mobile layout overflow on small screens"
           "chore: expand word database with 20 new entries"
 
+## Violation Protocol
+
+If Rod catches any violation of a Non-Negotiable rule:
+1. State EXACTLY which rule was violated and the precise line of code or action that broke it
+2. State WHY it happened — the specific failure in reasoning, not a generic apology
+3. State HOW to prevent it — a concrete change to CLAUDE.md, a gate, a check
+4. Implement that change immediately, commit, push
+5. Log a waste entry
+
+No deflection. No "I'll try harder." Root cause only.
+
 ## Non-Negotiable Gates
 
 ### Panel Prompt Length Rule
