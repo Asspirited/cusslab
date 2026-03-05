@@ -1078,3 +1078,170 @@ Per-round primary tension pair and secondary fire. Routing does not override TUR
 | 4 | Radar outright | Faldo/McGinley Jesus/Moses peak |
 | 5 | Full Valderrama + Full Corruption | Henni asks — Dougherty translates Moses |
 
+
+---
+## Emotional Model (Golf panel — all panels to follow)
+
+Introduced: Slice 1–2, relationship-matrix.feature + emotional-drift.feature
+Commits: aba97dc, 5e12dc0
+
+The emotional model has three layers: structural axes (persistent, slow drift),
+performance axes (volatile, fast decay), and the pressure fuse (ratchets up,
+persists across rounds, named thresholds). All values are integers. All panels
+share the schema; starting weights and trigger tokens are panel-specific.
+
+---
+
+### Structural Axes (Relationship Matrix)
+
+Per character-pair, directional. Cold start from domain model. Drift slowly
+via trigger tokens. Do not decay between turns. Persist across rounds.
+Range: -5 to +5 integers.
+
+| Axis      | Meaning                                              |
+|-----------|------------------------------------------------------|
+| warmth    | cold contempt ↔ genuine affection                   |
+| dominance | deferential ↔ controlling                           |
+| affect    | hostile/negative ↔ delighted/positive               |
+
+Values are intentional caricature exaggerations — not psychological simulations.
+High magnitude = comic instability. Self-entries reflect self-regard, not neutral.
+
+#### Golf Panel Relationship Matrix (cold start)
+
+| Source          | Target          | warmth | dominance | affect | note                                      |
+|-----------------|-----------------|--------|-----------|--------|-------------------------------------------|
+| faldo           | mcginley        | -3     | +5        | -2     | cold dominance, active contempt           |
+| mcginley        | faldo           | +2     | -4        | -3     | performed warmth, actual misery           |
+| faldo           | cox             | -1     | +2        | -1     | mild irritation, doesn't understand him   |
+| cox             | faldo           | 0      | +3        | 0      | cosmic indifference                       |
+| cox             | mcginley        | 0      | +3        | 0      | cosmic indifference                       |
+| cox             | wayne           | 0      | +3        | 0      | cosmic indifference                       |
+| wayne           | bush_tucker_man | +5     | -5        | +5     | maximum everything, character wound       |
+| wayne           | faldo           | +3     | -2        | +3     | genuinely likes him, no reason            |
+| wayne           | mcginley        | +2     | -1        | +2     | warm, mildly baffled                      |
+| wayne           | cox             | +1     | -3        | +1     | doesn't follow a word, finds it exciting  |
+| mcginley        | wayne           | +3     | +1        | +2     | genuine warmth, rare for McGinley         |
+| faldo           | wayne           | -1     | +4        | -1     | tolerates him, slightly appalled          |
+
+#### Self-Regard Entries (Golf Panel)
+
+| Character | warmth | dominance | affect | note                                             |
+|-----------|--------|-----------|--------|--------------------------------------------------|
+| faldo     | 0      | 0         | 0      | neutral self-regard                              |
+| mcginley  | 0      | 0         | 0      | neutral self-regard                              |
+| cox       | +3     | +1        | +2     | performed warmth, latent dominance, self-delight |
+| wayne     | 0      | 0         | 0      | neutral self-regard                              |
+
+Bush Tucker Man is referenced-only — no outward matrix entries required. He is
+a god. Gods do not have relationship matrices.
+
+---
+
+### Performance Axes
+
+Per character, not per pair. Spike hard on trigger token fire. Decay by half
+each turn (rounded down) until zero. Do not persist across rounds — they cool
+toward zero between rounds, they do not reset instantly.
+Range: -5 to +5 integers.
+
+| Axis        | What it drives in the turn                        |
+|-------------|---------------------------------------------------|
+| anger       | aggression, clipped delivery, short turns         |
+| surprise    | register break, non-sequitur, visible confusion   |
+| disgust     | contempt register, physical recoil cues           |
+| joy         | warmth spike, expansive delivery, generosity      |
+| eroticism   | Wayne-specific mainly; inappropriate warmth       |
+| contempt    | SUBTLY_UNDERMINING / OUTRIGHT_INSULT register     |
+| anxiety     | hedging, topic change, deference                  |
+| pride       | self-aggrandisement, credential drop              |
+| humiliation | withdrawal, quiet seething, shame spiral entry    |
+| shame       | silence, performed recovery, McG tearful risk     |
+
+Decay rule: axis_value = floor(axis_value / 2) per turn. Reaches 0 in 3 turns
+from maximum.
+
+---
+
+### Pressure Fuse
+
+Per character. Ratchets up via trigger token pressure_delta and room_ripple.
+Does not decay between turns under any circumstance. Persists fully across
+rounds. Resets to 3 (not 0) after eruption fires.
+
+| Value | Named state                        |
+|-------|------------------------------------|
+| 0–2   | neutral                            |
+| 3     | antagonised                        |
+| 4     | quiet seething                     |
+| 5     | on the verge of blowing a gasket   |
+| 6     | gasket blown                       |
+
+At pressure 6: character enters fume_turns state (1–3 turns of visible
+suppression) before eruptionResponse() fires. The room can see the fuming.
+Other characters may reference it. Fume count is random within range.
+
+Defuse events do not exist as a separate mechanic. Laughs and apologies are
+trigger tokens with ambiguous valence — the receiving character's perception
+filter determines whether they reduce or increase pressure.
+
+---
+
+### Trigger Token Table
+
+Per character-pair, defined in domain model, loaded at panel initialisation.
+Match is case-insensitive. Multiple tokens in one turn all fire and accumulate.
+Results clamped after accumulation.
+
+Each token entry shape:
+  token: string
+  anger_delta, disgust_delta, joy_delta, eroticism_delta, contempt_delta,
+  anxiety_delta, pride_delta, humiliation_delta, shame_delta, surprise_delta,
+  warmth_delta, dominance_delta, affect_delta  (structural axes)
+  pressure_delta: integer (applied to target)
+  room_ripple: integer (applied to all other characters in cast)
+
+#### Golf Panel Trigger Tokens (canonical starting set — expand per character)
+
+| Source   | Target   | Token        | contempt | humiliation | disgust | pressure_delta | room_ripple | note                        |
+|----------|----------|--------------|----------|-------------|---------|----------------|-------------|-----------------------------|
+| faldo    | mcginley | Ryder Cup    | +4       | +3          | +2      | +2             | +1          | mcginley's core wound       |
+| faldo    | mcginley | the Open     | +2       | +2          | +1      | +1             | +1          | secondary wound             |
+| cox      | mcginley | insignificant| 0        | +4          | 0       | +2             | +1          | cox doesn't know he does it |
+| wayne    | wayne    | Bush         | 0        | 0           | 0       | +1             | +1          | self-trigger, eroticism +5  |
+| mcginley | faldo    | warmth       | 0        | 0           | 0       | +1             | +1          | pride +3 for mcginley       |
+
+Note: Full per-axis values in specs/emotional-drift.feature Examples tables.
+This table shows primary axes only for readability. Implement from feature file.
+
+---
+
+### Eruption Register Affinity Table
+
+Per character. Affinity register fires when inversion condition is not met.
+Inversion register fires when pressure has been at 6 for 3+ turns AND
+probability roll clears threshold. Inversion is rare, surprising, funnier.
+
+| Character | Affinity registers (in order)                        | Inversion register    | Why inversion is funny                          |
+|-----------|------------------------------------------------------|-----------------------|-------------------------------------------------|
+| faldo     | VERBAL_ASSAULT, SILENT_IMPLOSION                     | OBJECT_THROW          | dignity abandoned entirely                      |
+| mcginley  | VERBAL_ASSAULT, TEARFUL_COLLAPSE                     | TEARFUL_COLLAPSE      | performed warmth finally breaks                 |
+| cox       | SILENT_IMPLOSION, TEARFUL_COLLAPSE                   | ROOM_CONDEMNATION     | suddenly swearing, cosmically offended          |
+| wayne     | ROOM_CONDEMNATION, OBJECT_THROW                      | SILENT_IMPLOSION      | chaos monkey goes completely still              |
+
+#### Eruption Registers
+
+| Register          | What fires                                                        |
+|-------------------|-------------------------------------------------------------------|
+| VERBAL_ASSAULT    | directed profanity at target — "fuck yourself", "you're a cunt"  |
+| ROOM_CONDEMNATION | broadcast — "you're all cunts" — target is room, pressure ripples |
+| OBJECT_THROW      | physical — cup, mic, scorecard — disrupts all characters          |
+| TEARFUL_COLLAPSE  | unexpected, humiliating, very funny — target is self              |
+| SILENT_IMPLOSION  | says nothing, visibly dies inside — worse than shouting           |
+
+All registers are prompt instructions only. LLM generates content.
+No hardcoded dialogue strings. Target determined by highest dyadic pressure
+source except ROOM_CONDEMNATION (always targets room).
+
+Post-eruption: pressure resets to 3. Character does not immediately re-erupt.
+ROOM_CONDEMNATION fires room_ripple pressure increment to all characters.
