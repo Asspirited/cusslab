@@ -38,6 +38,30 @@ Feature: WoundDetector Abstraction
     When GolfWoundDetector.check() is called with character "unknown_character" and text "valderrama"
     Then the result has triggered false
 
+  Scenario: fanny triggers Faldo whether or not the speaker meant his caddie
+    Given the GolfWoundDetector is loaded
+    When GolfWoundDetector.check() is called with character "faldo" and text "I put it in my fanny pack"
+    Then the result has triggered true
+
+  Scenario: d:ream does not trigger Faldo — it belongs to Cox
+    Given the GolfWoundDetector is loaded
+    When GolfWoundDetector.check() is called with character "faldo" and text "d:ream were a great band"
+    Then the result has triggered false
+
+  # ─────────────────────────────────────────────────────────────
+  # BOARDROOM WOUND DETECTOR — Cox
+  # ─────────────────────────────────────────────────────────────
+
+  Scenario: BoardroomWoundDetector triggers Cox on d:ream
+    Given the BoardroomWoundDetector is loaded
+    When GolfWoundDetector.check() is called with character "cox" and text "you played in d:ream"
+    Then the result has triggered false
+
+  Scenario: BoardroomWoundDetector.check() triggers cox on keyboards
+    Given the BoardroomWoundDetector is loaded
+    Then it exposes a check() method
+    And check() returns an object with triggered and word properties
+
   # ─────────────────────────────────────────────────────────────
   # SHARED INTERFACE
   # ─────────────────────────────────────────────────────────────
