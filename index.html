@@ -3138,10 +3138,16 @@
     <div id="ql-reply-area" style="display:none;margin-top:16px;">
       <label class="form-label">What does Al tell Sam?</label>
       <textarea id="ql-act-input" rows="3" placeholder="What does Al tell Sam? Brief him, mislead him, or say nothing..." style="width:100%;box-sizing:border-box;"></textarea>
-      <button class="btn" onclick="QuantumLeeks.act()" id="ql-act-btn" style="margin-top:10px;">ACT</button>
+        <button class="btn" onclick="QuantumLeeks.act()" id="ql-act-btn" style="margin-top:10px;">ACT</button>
+    </div>
+    <div id="ql-thinking" style="display:none;margin-top:16px;text-align:center;color:var(--muted);font-size:13px;letter-spacing:0.08em;">
+      <span style="display:inline-block;animation:ql-pulse 1.2s ease-in-out infinite;">ZIGGY IS COMPUTING</span>
     </div>
   </div>
 </div>
+<style>
+@keyframes ql-pulse { 0%,100%{opacity:0.3} 50%{opacity:1} }
+</style>
 
 </main>
 </div><!-- #app-body -->
@@ -11246,6 +11252,7 @@ RESPONSE FORMAT — return ONLY valid JSON, no text outside it:
     UI.show('ql-prob-bar');
     UI.hide('ql-reply-area');
     UI.setDisabled('ql-leap-btn', true);
+    UI.show('ql-thinking');
 
     const sc = SCENARIOS[_scenario];
     _append(`<div style="text-align:center;padding:24px;font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--accent);letter-spacing:2px;">
@@ -11264,6 +11271,7 @@ RESPONSE FORMAT — return ONLY valid JSON, no text outside it:
     } catch(e) {
       UI.toast(e.userMessage || e.message || 'Something went wrong with the leap.', 'error');
     }
+    UI.hide('ql-thinking');
     UI.setDisabled('ql-leap-btn', false);
   }
 
@@ -11274,6 +11282,7 @@ RESPONSE FORMAT — return ONLY valid JSON, no text outside it:
 
     document.getElementById('ql-act-input').value = '';
     UI.setDisabled('ql-act-btn', true);
+    UI.show('ql-thinking');
     _appendUserMove(input.trim());
 
     try {
@@ -11286,6 +11295,7 @@ RESPONSE FORMAT — return ONLY valid JSON, no text outside it:
     } catch(e) {
       UI.toast(e.userMessage || e.message || 'The leap faltered.', 'error');
     }
+    UI.hide('ql-thinking');
     UI.setDisabled('ql-act-btn', false);
   }
 
