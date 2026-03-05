@@ -3091,26 +3091,9 @@
 <!-- ============ QUNTUM LEEKS ============ -->
 <div class="panel" id="panel-qleeks">
   <div class="panel-title">🐸 Quntum Leeks</div>
-  <div class="panel-desc">You are Al Calavicci. Sam has leapt — he doesn't know where, when, or why. You do. Mostly. Ziggy's working on it. Brief him, mislead him, or leave him to figure it out. That's your call. Pick your Ziggy voice below, choose a scenario, and leap in.</div>
+  <div class="panel-desc">You are Al Calavicci. Sam has leapt — he doesn't know where, when, or why. You do. Mostly. Ziggy's working on it. Brief him, mislead him, or leave him to figure it out. That's your call. Pick your Ziggy voice below and leap in. Sam goes where the universe sends him.</div>
 
   <div id="ql-setup" style="margin-top:20px;">
-    <label class="form-label">Choose your leap</label>
-    <select id="ql-scenario" style="width:100%;margin-bottom:16px;background:var(--card);color:var(--text);border:1px solid var(--border);padding:8px;border-radius:4px;font-size:14px;">
-      <option value="milk">The Milk Round — 1953, Rural Derbyshire</option>
-      <option value="advisory">The Advisory — 1974, Whitehall, London</option>
-      <option value="retro" selected>The Retrospective — Present Day, Agile Hell</option>
-      <option value="bletchley">Bletchley Park — 1943</option>
-      <option value="dunkirk">Dunkirk — 1940</option>
-      <option value="zulu">Rorke's Drift — 1879</option>
-      <option value="fawkes">Guy Fawkes' Cellar — 1605</option>
-      <option value="glastonbury">Glastonbury — 1971</option>
-      <option value="stalag">Stalag Luft III — 1943</option>
-      <option value="jerusalem">Jerusalem — 30AD</option>
-      <option value="pyramid">Pyramid Project — 2560BC</option>
-      <option value="ottoman">Ottoman Court — 1453</option>
-      <option value="kkk">KKK Rally, Alabama — 1923</option>
-      <option value="alcatraz">Alcatraz — 1962</option>
-    </select>
     <div style="font-size:11px;color:var(--muted);margin-bottom:6px;margin-top:4px;letter-spacing:1px;">ZIGGY VOICED BY</div>
     <select id="ql-ziggy-char" style="width:100%;margin-bottom:16px;background:var(--card);color:var(--text);border:1px solid var(--border);padding:8px;border-radius:4px;font-size:14px;">
       <option value="Sir Nick Faldo">Sir Nick Faldo</option>
@@ -11238,8 +11221,8 @@ RESPONSE FORMAT — return ONLY valid JSON, no text outside it:
   }
 
   async function leap() {
-    const sel = document.getElementById('ql-scenario');
-    _scenario    = sel ? sel.value : 'retro';
+    const keys = Object.keys(SCENARIOS);
+    _scenario    = keys[Math.floor(Math.random() * keys.length)];
     _history     = [];
     _turnCount   = 0;
     _leaped      = false;
