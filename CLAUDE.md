@@ -62,6 +62,13 @@ Examples: "feat: add Welsh culture modifier"
 
 ## Non-Negotiable Gates
 
+### Panel Prompt Length Rule
+User-facing prompts sent to the API must NEVER specify paragraph counts.
+All panel characters have "Speeches are failure. Default is short." in their system prompts.
+Any user prompt that says "3-4 paragraphs" or similar OVERRIDES that constraint and causes verbosity regressions.
+PERMANENT: user prompts specify sentences only (e.g. "2-3 sentences, no speeches").
+This rule cannot be relaxed without Rod's explicit approval.
+
 ### Gherkin Scenario Review Gate
 
 Before running the pipeline on any new or modified Gherkin scenario:
