@@ -419,3 +419,14 @@ Entry format: copy schema above. Minimum viable entry is Item + Symptom + Tags +
 - **Delay:** Yes
 - **Tags:** output, claude-code, collapsible, waste, standards-violation
 - **Status:** Open — CLAUDE CODE OUTPUT RULE must be reinforced at session start with Claude Code explicitly
+
+## WL-031
+- **Item:** Gherkin produced without scenario outlines — had to be rewritten
+- **Symptom:** First pass used flat scenarios with no Examples tables — Rod caught it immediately
+- **Suspected cause:** Pattern-matched "write Gherkin" and skipped skill check; also failed to apply scenario outline structure despite per-character variation being obvious from the domain model
+- **Session:** 2026-03-05
+- **Time lost:** ~15 mins rewrite
+- **Cost impact:** Low-medium
+- **Delay:** Yes
+- **Tags:** gherkin, bdd, waste, skill-check, standards-violation
+- **Status:** Closed — rewritten with scenario outlines and Examples tables per character
