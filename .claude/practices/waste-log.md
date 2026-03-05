@@ -430,3 +430,14 @@ Entry format: copy schema above. Minimum viable entry is Item + Symptom + Tags +
 - **Delay:** Yes
 - **Tags:** gherkin, bdd, waste, skill-check, standards-violation
 - **Status:** Closed — rewritten with scenario outlines and Examples tables per character
+
+## WL-034
+- **Item:** Feature file content missing from Claude Code paste — behaviour-triggers.feature
+- **Symptom:** Claude Code received domain-model append but not the feature file content — one extra round trip required
+- **Suspected cause:** Large paste split at claude.ai message boundary — feature file content referenced as "above" but did not arrive
+- **Session:** Emotional model slices 1–5
+- **Time lost:** ~5 minutes
+- **Cost impact:** 1 wasted exchange
+- **Delay:** Minor
+- **Tags:** paste-boundary, claude-ai-to-claude-code, large-paste
+- **Status:** Logged — always include feature file content inline not by reference
