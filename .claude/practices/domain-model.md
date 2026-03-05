@@ -892,3 +892,149 @@ Steve Davis (has evolved, now fascinating), John Virgo (cannot resist), Ronnie O
 Do not add a sport until real use reveals the gap.
 Cricket is next — Geoffrey Boycott on corporate strategy is 3/3 irony.
 "I'd 'ave done it better meself" as a response to any management consulting prompt is a complete product feature.
+
+---
+
+## Architectural Refactoring Backlog
+
+Reference: SOLID principles (Martin, 2000)
+Principles: see .claude/principles/solid.md
+
+Each item is architectural debt with a named SOLID violation.
+Each requires Gherkin scenarios before any code moves.
+Implement in priority order — do not skip ahead.
+
+---
+
+### R1. Temperature Value Object
+**SOLID violation:** Liskov Substitution — invalid temperatures are possible,
+not impossible. Any code can write any value directly.
+**Risk:** A character with a broken temperature is substituted into the panel
+silently. The system cannot detect it.
+**Fix:**
+Temperature as an immutable value object:
+  Temperature.raise(current)    → next step up, capped at reverent
+  Temperature.lower(current)    → next step down, capped at hostile
+  Temperature.fromString(s)     → validates against seven-step enum
+  Temperature.interruptRate(t)  → returns probability for that temperature
+Invalid temperatures become impossible not just unlikely.
+**Gherkin required before build:**
+  - Temperature.raise() from each of the seven steps
+  - Temperature.lower() from each of the seven steps
+  - Temperature.fromString() rejects invalid strings
+  - Temperature.raise() at reverent returns reverent
+  - Temperature.lower() at hostile returns hostile
+**Priority:** 1 — small, high value, makes existing Gherkin testable immediately
+**Blocks:** R3, R5
+
+---
+
+### R2. WoundDetector Abstraction
+**SOLID violation:** Dependency Inversion — orchestrator depends directly on
+GOLF_WOUNDS concrete data structure. Adding Boardroom wounds duplicates
+the pattern rather than reusing the abstraction.
+**Risk:** Each new panel adds its own wound detection code. No shared
+contract. Wound detection logic diverges across panels.
+**Fix:**
+  WoundDetector.check(characterId, text) → { triggered: bool, word: string }
+  GolfWoundDetector implements WoundDetector using GOLF_WOUNDS
+  BoardroomWoundDetector implements WoundDetector using BOARDROOM_WOUNDS
+Orchestrator calls WoundDetector.check() — never touches wound data directly.
+**Gherkin required before build:**
+  - WoundDetector.check() returns triggered:true for each known wound word
+  - WoundDetector.check() returns triggered:false for non-wound text
+  - GolfWoundDetector and BoardroomWoundDetector satisfy the same interface
+  - Unknown characterId returns triggered:false not an error
+**Priority:** 2 — needed before Boardroom wounds are added
+**Blocks:** R5
+
+---
+
+### R3. summariseFromState() Decomposition
+**SOLID violation:** Single Responsibility — currently reads state, translates
+intensity, builds YOUR STATE block, formats prompt prefix, and handles
+anti-corruption. Four responsibilities in one function.
+**Risk:** Every new character attribute touches this function. Untestable
+as a unit. A change for one character risks breaking all others.
+**Fix:** Split into four independently testable functions:
+  readCharacterState()    → reads from gfRelState, pure, no side effects
+  buildYourStateBlock()   → formats first-person monologue, character-specific
+  buildContextBlock()     → recent history, active debts, wounds this session
+  assemblePromptPrefix()  → composes the above into the final string
+Each has one reason to change. Each is independently testable.
+**Gherkin required before build:**
+  - readCharacterState() returns correct state for each character
+  - buildYourStateBlock() produces character-congruent language
+  - buildContextBlock() includes active debts and wound status
+  - assemblePromptPrefix() output is deterministic given same inputs
+  - First round: no YOUR STATE block in assembled prefix
+**Priority:** 3 — needed before 17-attribute character files generate
+complex YOUR STATE blocks
+**Blocks:** R5
+
+---
+
+### R4. CharacterState Interface Segregation
+**SOLID violation:** Interface Segregation — every character gets the full
+state object including fields that don't apply to them. Panel-specific
+extras bolted on as GOLF_EXTRA_STATE rather than typed interfaces.
+**Risk:** Adding McGinley's credibilityBidCounter touches the base state
+object. Wayne's hatAngle has no formal home. New character-specific
+mechanics have nowhere clean to live.
+**Fix:**
+Base CharacterState contains only what every character shares:
+  woundActivated, lastMove, debtLedger, toward{}
+Character-specific extensions implement on top:
+  McGinleyState extends CharacterState adds:
+    credibilityBidCounter, validationHungerCounter
+  WayneState extends CharacterState adds:
+    hatAngle, roundCorruption, bushTuckerReferences
+  RoeState extends CharacterState adds:
+    rulesInvoked, disqualificationRisk
+**Gherkin required before build:**
+  - Base CharacterState fields present for all characters
+  - McGinleyState fields absent from non-McGinley characters
+  - WayneState hatAngle increments correctly across rounds
+  - Extended state initialises correctly at panel start
+**Priority:** 4 — needed before Faldo and Coltart get full 17-attribute
+profiles implemented
+**Blocks:** R5
+
+---
+
+### R5. Orchestration Pipeline Decomposition
+**SOLID violation:** Single Responsibility and Open/Closed — round loop,
+speaker selection, wound detection, interrupt probability, speech mode
+evaluation, and prompt assembly in one place. Adding turn density touches
+all of it. Adding a new panel duplicates all of it.
+**Risk:** The biggest structural risk in the codebase. Every new feature
+is a modification not an extension. Every new panel is a copy-paste.
+**Fix:** Formal pipeline with discrete, substitutable stages:
+  RoundLoop            → iterates contributions, checks exhaustion
+  SpeakerSelector      → picks next speaker by intensity/obligation
+  WoundDetector        → checks output for trigger words (uses R2)
+  InterruptEvaluator   → computes probability, decides interruption
+  SpeechModeEvaluator  → sets reactive/extended/interrupted
+  PromptAssembler      → builds final API call (uses R3)
+Each stage independently testable. New panel plugs in its own
+SpeakerSelector and WoundDetector without touching the others.
+**Gherkin required before build:**
+  - RoundLoop exhausts only after minimum contributions met
+  - SpeakerSelector picks by intensity when no obligation exists
+  - InterruptEvaluator returns correct probability for each temperature
+  - SpeechModeEvaluator sets extended when wound unlocked
+  - PromptAssembler output is deterministic given same pipeline state
+  - New panel can substitute SpeakerSelector without touching RoundLoop
+**Priority:** 5 — the big one, needed before turn density implementation
+**Blocks:** nothing — this is the destination
+
+---
+
+## Refactoring Discipline
+
+- No refactoring without Gherkin scenarios written and red first
+- No skipping priority order — each item unblocks the next
+- Each refactoring is a separate commit with its own pipeline green
+- No feature work in the same commit as a refactoring
+- If a refactoring reveals a new SOLID violation, add it to this
+  backlog — do not fix it in the same session
