@@ -74,3 +74,27 @@ Feature: Quntum Leeks
     Given the leap is in progress
     Then Ziggy references the Bourbon at least once
     And nobody eats the Bourbon
+
+  # ─────────────────────────────────────────────────────────────
+  # ROLE AND FORMAT MECHANICS
+  # ─────────────────────────────────────────────────────────────
+
+  Scenario: User plays Al not Sam
+    Given the Quntum Leeks panel is active
+    When a leap begins
+    Then the system prompt identifies the user as Al Calavicci
+    And Sam Beckett is AI-controlled
+    And the system waits for user input before generating Al dialogue
+
+  Scenario: Ziggy character selector is present in the UI
+    Given the Quntum Leeks panel is active
+    When the panel renders
+    Then a character selector dropdown is visible
+    And the selector contains all active Heckler and Cox characters
+    And the selected character is passed into the system prompt as ziggyCharacter
+
+  Scenario: Ziggy reactions are voiced through the chosen character
+    Given the user has selected "Wayne" as the Ziggy character
+    When a Ziggy reaction is generated
+    Then the reaction uses Wayne's voice register and reference pools
+    And not generic Ziggy output

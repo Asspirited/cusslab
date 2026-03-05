@@ -263,6 +263,14 @@
 
 ---
 
+### WL-018
+**Item:** Numbering gap — entry never written
+**Symptom:** Log jumps from WL-017 to WL-019. No WL-018 exists.
+**Suspected cause:** Numbering error during session 2026-03-03 — WL-019 was likely written as the immediate follow-on to WL-017 and misnumbered.
+**Status:** Gap documented. Sequence continues from WL-021.
+
+---
+
 ### WL-019
 **Item:** Faldo chuckle spec incorrectly described as scheduled trigger
 **Symptom:** Chuckle mechanic written as firing on any panel banter — should only fire on genuine surprise, specific topics (food), or reliable named triggers (Guinness World Record entry)
@@ -301,3 +309,47 @@ Entry format: copy schema above. Minimum viable entry is Item + Symptom + Tags +
 
 **File lives at:** `.claude/practices/waste-log.md`
 **Committed to:** `origin/main` at session end, every session, no exceptions.
+
+### WL-021
+- **Item:** Claude Code output always collapsing — repeated across session
+- **Symptom:** grep/find/search results returned as collapsible blocks, requiring ctrl+o which only works once and is nested — Rod cannot read output
+- **Suspected cause:** Claude.ai repeatedly giving bare grep/find commands instead of piping to file and catting. Claude Code search tool used instead of bash. No persistent memory of this rule between sessions.
+- **Session:** 138
+- **Time lost:** ~20 mins this session
+- **Cost impact:** Direct — wasted API calls and Rod's time
+- **Delay:** Blocked reading @claude tag coverage analysis
+- **Tags:** process-failure, tooling, claude-code-commands
+- **Status:** Rule added to memory. All future commands must pipe to /tmp/out.txt and cat.
+
+## WL-022
+- **Item:** Claude Code ignoring bash commands, defaulting to search tool
+- **Symptom:** grep/find commands executed as search not bash — output collapsed, unreadable, blocks all file content work
+- **Suspected cause:** New Claude Code release broken on Windows — bash tool not executing correctly
+- **Session:** 138
+- **Time lost:** ~30 mins
+- **Cost impact:** Direct — blocked @claude tag analysis, blocked Gherkin planning
+- **Delay:** New Gherkin files deferred to next session
+- **Tags:** process-failure, tooling, claude-code-release, windows
+- **Status:** Open — Claude Code bash execution broken, no workaround available tonight
+
+## WL-023
+- **Item:** Claude Code bash execution broken — search tool used instead of terminal throughout session
+- **Symptom:** Every grep/find command executed as search, returning collapsed unreadable output. Prefix "Run this as a bash command" ignored. Multiple retries wasted per command.
+- **Suspected cause:** New Claude Code release broken on Windows — bash tool not executing correctly in this version
+- **Session:** 176
+- **Time lost:** ~45 mins
+- **Cost impact:** Direct — blocked @claude tag analysis, multiple failed attempts per command, Rod had to use WSL terminal directly
+- **Delay:** Quantum Leeks diagnosis delayed ~30 mins, @claude tag coverage analysis never completed via Claude Code
+- **Tags:** process-failure, tooling, claude-code-release, windows
+- **Status:** Open — Claude Code bash execution broken, workaround is WSL terminal directly
+
+## WL-024
+- **Item:** Rod caught waste and asked for log entry — should have been proactive
+- **Symptom:** Two separate occasions this session where Rod had to explicitly ask for waste to be logged
+- **Suspected cause:** Claude not applying proactive waste identification rule consistently
+- **Session:** 176
+- **Time lost:** ~5 mins
+- **Cost impact:** Minor direct, major trust
+- **Delay:** None
+- **Tags:** process-failure, claude-behaviour
+- **Status:** Rule reinforced in memory. Must not recur.
