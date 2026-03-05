@@ -485,3 +485,14 @@ Entry format: copy schema above. Minimum viable entry is Item + Symptom + Tags +
 - **Delay:** Yes — blocked feature delivery across multiple sessions
 - **Tags:** authentication, api-keys, anthropic, ssh, cloudflare, onboarding, support-failure
 - **Status:** Logged — no fix available; Anthropic support unresponsive; document as known project risk
+
+## WL-039
+- **Item:** Panel verbosity regression — "3-4 paragraphs" in user prompt contradicted "Speeches are failure" in system prompt
+- **Symptom:** Ask The Panel returning enormous blocks of text on first live test after worker was fixed
+- **Suspected cause:** Prompt written without checking against existing CONVERSATION MECHANICS constraint; regression not caught by pipeline (no LLM output assertion)
+- **Session:** 2026-03-05
+- **Time lost:** ~15 mins diagnosis + Rod's API credits wasted on verbose responses
+- **Cost impact:** Medium — every verbose response costs more tokens than necessary
+- **Delay:** Minor
+- **Tags:** verbosity, prompt, regression, panel, token-waste, permanent-constraint-violated
+- **Status:** Closed — user prompt changed to "2-3 sentences, no speeches"; PERMANENT rule: never set paragraph counts in user prompts that contradict system prompt length constraints
