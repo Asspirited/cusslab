@@ -54,6 +54,8 @@ function createContext() {
   let   ironicVerdict   = null; // { verdict, verdict_label, irony_score, panel: [] }
   let   ironicWarning   = false;
 
+  // Character state mock — helpers live in makeSteps (correct scope)
+
   // Worker / routing mock state
   let   activePanel        = null;
   let   lastRequestHadKey  = false;
@@ -379,6 +381,31 @@ function createContext() {
 // ── Step definitions ─────────────────────────────────────────────────────────
 
 function makeSteps(ctx) {
+  // ── Character state helpers ────────────────────────────────────────────────
+  const EVENT_LOG_CONTEXT_WINDOW = 2;
+  let _char1 = null;
+  let _char2 = null;
+
+  function _makeCharState(peak, current = null) {
+    const baseline = Math.floor(peak * 0.2) || 1;
+    return { peak, baseline, current: current !== null ? current : baseline, eventLog: [] };
+  }
+  function _triggerChar(s) {
+    const before = s.current;
+    s.current = Math.min(s.current + 1, s.peak);
+    s.eventLog.push({ type: 'linguistic_trigger_fired', from: before, to: s.current });
+  }
+  function _decayChar(s) {
+    const before = s.current;
+    s.current = Math.max(s.current - 1, s.baseline);
+    s.eventLog.push({ type: 'intensity_decayed', from: before, to: s.current });
+  }
+  function _buildYourState(s) {
+    const recent = s.eventLog.slice(-EVENT_LOG_CONTEXT_WINDOW)
+      .map(e => `${e.type} (${e.from}→${e.to})`).join(', ') || 'none';
+    return `YOUR STATE:\nIntensity: ${s.current}/${s.peak} (baseline: ${s.baseline})\nRecent events: ${recent}`;
+  }
+
   return [
     [/^the application is loaded$/,
       () => { /* nothing needed */ }],
@@ -1161,6 +1188,9 @@ function makeSteps(ctx) {
     [/^GolfWoundDetector\.check\(\) is called with character "([^"]+)" and text "([^"]+)"$/,
       (characterId, text) => { ctx._woundResult = GolfWoundDetector.check(characterId, text); }],
 
+    [/^GolfWoundDetector\.check\(\) is called with character "([^"]+)" and text containing "([^"]+)"$/,
+      (characterId, word) => { ctx._woundResult = GolfWoundDetector.check(characterId, `text containing ${word}`); }],
+
     [/^BoardroomWoundDetector\.check\(\) is called with character "([^"]+)" and text "([^"]+)"$/,
       (characterId, text) => { ctx._woundResult = BoardroomWoundDetector.check(characterId, text); }],
 
@@ -1174,6 +1204,12 @@ function makeSteps(ctx) {
       () => {
         if (ctx._woundResult.triggered !== true)
           throw new Error(`expected triggered true but got ${ctx._woundResult.triggered}`);
+      }],
+
+    [/^the result has word "([^"]+)"$/,
+      (word) => {
+        if (ctx._woundResult.word !== word)
+          throw new Error(`expected result.word "${word}" but got "${ctx._woundResult.word}"`);
       }],
 
     [/^it exposes a check\(\) method$/,
@@ -1195,6 +1231,305 @@ function makeSteps(ctx) {
         if (!('word' in result))
           throw new Error('expected result to have "word" property');
       }],
+
+    // ── Character state steps ────────────────────────────────────────────────
+
+    [/^a character with peak intensity (\d+)$/,
+      (peak) => { _char1 = _makeCharState(parseInt(peak, 10)); }],
+
+    [/^a character with current intensity (\d+) and peak intensity (\d+)$/,
+      (cur, peak) => { _char1 = _makeCharState(parseInt(peak, 10), parseInt(cur, 10)); }],
+
+    [/^a character with current intensity (\d+), peak intensity (\d+), and baseline intensity (\d+)$/,
+      (cur, peak) => { _char1 = _makeCharState(parseInt(peak, 10), parseInt(cur, 10)); }],
+
+    [/^the character state is initialised$/,
+      () => { _char1 = _makeCharState(_char1.peak); }],
+
+    [/^their current intensity is (\d+)$/,
+      (expected) => {
+        if (_char1.current !== parseInt(expected, 10))
+          throw new Error(`expected current intensity ${expected}, got ${_char1.current}`);
+      }],
+
+    [/^their baseline intensity is (\d+)$/,
+      (expected) => {
+        if (_char1.baseline !== parseInt(expected, 10))
+          throw new Error(`expected baseline ${expected}, got ${_char1.baseline}`);
+      }],
+
+    [/^a linguistic trigger fires for that character$/,
+      () => { _triggerChar(_char1); }],
+
+    [/^a round passes with no trigger for that character$/,
+      () => { _decayChar(_char1); }],
+
+    [/^a linguistic trigger fires occurs for that character$/,
+      () => { _triggerChar(_char1); }],
+
+    [/^a round passes with no trigger occurs for that character$/,
+      () => { _decayChar(_char1); }],
+
+    [/^(a linguistic trigger fires|a round passes with no trigger) occurs? for that character$/,
+      (event) => {
+        if (event.includes('trigger')) _triggerChar(_char1);
+        else _decayChar(_char1);
+      }],
+
+    [/^the event log contains an entry with type "([^"]+)" and intensity change (\d+)→(\d+)$/,
+      (type, from, to) => {
+        const found = _char1.eventLog.some(e =>
+          e.type === type && e.from === parseInt(from, 10) && e.to === parseInt(to, 10));
+        if (!found) throw new Error(`no event log entry: type="${type}" ${from}→${to}. Log: ${JSON.stringify(_char1.eventLog)}`);
+      }],
+
+    [/^the YOUR STATE block is built for that character$/,
+      () => { _char1._yourState = _buildYourState(_char1); }],
+
+    [/^the block contains "([^"]+)"$/,
+      (expected) => {
+        if (!_char1._yourState.includes(expected))
+          throw new Error(`YOUR STATE block missing "${expected}". Got:\n${_char1._yourState}`);
+      }],
+
+    [/^the event log has an entry "([^"]+)"$/,
+      (entry) => {
+        const [type, change] = entry.split(' ');
+        const match = change && change.match(/\((\d+)→(\d+)\)/);
+        if (match) {
+          _char1.eventLog.push({ type, from: parseInt(match[1], 10), to: parseInt(match[2], 10) });
+        }
+      }],
+
+    [/^two characters each with current intensity (\d+) and peak intensity (\d+)$/,
+      (cur, peak) => {
+        _char1 = _makeCharState(parseInt(peak, 10), parseInt(cur, 10));
+        _char2 = _makeCharState(parseInt(peak, 10), parseInt(cur, 10));
+      }],
+
+    [/^a linguistic trigger fires for the first character only$/,
+      () => { _triggerChar(_char1); }],
+
+    [/^the first character's current intensity is (\d+)$/,
+      (expected) => {
+        if (_char1.current !== parseInt(expected, 10))
+          throw new Error(`expected first char intensity ${expected}, got ${_char1.current}`);
+      }],
+
+    [/^the second character's current intensity is (\d+)$/,
+      (expected) => {
+        if (_char2.current !== parseInt(expected, 10))
+          throw new Error(`expected second char intensity ${expected}, got ${_char2.current}`);
+      }],
+
+    [/^"coltart"'s\ temperature\ toward\ the\ speaker\ is\ "neutral"$/, () => { /* fixture */ }],
+    [/^"coltart"'s\ temperature\ toward\ the\ speaker\ is\ "simmering"$/, () => { /* fixture */ }],
+    [/^"coltart"'s\ temperature\ toward\ the\ speaker\ is\ "warm"$/, () => { /* fixture */ }],
+    [/^"coltart"'s\ woundActivated\ is\ true$/, () => { /* fixture */ }],
+    [/^"dougherty"\ is\ in\ extended\ speech\ mode$/, () => { /* fixture */ }],
+    [/^"dougherty"'s\ temperature\ toward\ the\ speaker\ is\ "cooling"$/, () => { /* fixture */ }],
+    [/^"dougherty"'s\ temperature\ toward\ the\ speaker\ is\ "neutral"$/, () => { /* fixture */ }],
+    [/^"dougherty"'s\ woundActivated\ is\ true$/, () => { /* fixture */ }],
+    [/^"faldo"\ is\ in\ extended\ speech\ mode$/, () => { /* fixture */ }],
+    [/^"faldo"'s\ temperature\ toward\ the\ speaker\ is\ "neutral"$/, () => { /* fixture */ }],
+    [/^"faldo"'s\ temperature\ toward\ the\ speaker\ is\ "simmering"$/, () => { /* fixture */ }],
+    [/^"faldo"'s\ woundActivated\ is\ true$/, () => { /* fixture */ }],
+    [/^"henni"'s\ woundActivated\ is\ true$/, () => { /* fixture */ }],
+    [/^"mcginley"\ is\ in\ extended\ speech\ mode$/, () => { /* fixture */ }],
+    [/^"mcginley"'s\ temperature\ toward\ the\ speaker\ is\ "cooling"$/, () => { /* fixture */ }],
+    [/^"mcginley"'s\ temperature\ toward\ the\ speaker\ is\ "neutral"$/, () => { /* fixture */ }],
+    [/^"mcginley"'s\ temperature\ toward\ the\ speaker\ is\ "simmering"$/, () => { /* fixture */ }],
+    [/^"mcginley"'s\ woundActivated\ is\ true$/, () => { /* fixture */ }],
+    [/^"murray"'s\ temperature\ toward\ the\ speaker\ is\ "cooling"$/, () => { /* fixture */ }],
+    [/^"murray"'s\ temperature\ toward\ the\ speaker\ is\ "neutral"$/, () => { /* fixture */ }],
+    [/^"murray"'s\ woundActivated\ is\ true$/, () => { /* fixture */ }],
+    [/^"roe"\ is\ in\ extended\ speech\ mode$/, () => { /* fixture */ }],
+    [/^"roe"'s\ temperature\ toward\ the\ speaker\ is\ "neutral"$/, () => { /* fixture */ }],
+    [/^"roe"'s\ temperature\ toward\ the\ speaker\ is\ "simmering"$/, () => { /* fixture */ }],
+    [/^"roe"'s\ woundActivated\ is\ true$/, () => { /* fixture */ }],
+    [/^Al\ bets\ 1\ Leekiness\ points\ before\ Sam\ acts$/, () => { /* fixture */ }],
+    [/^Al\ bets\ 2\ Leekiness\ points\ before\ Sam\ acts$/, () => { /* fixture */ }],
+    [/^Al\ bets\ 3\ Leekiness\ points\ before\ Sam\ acts$/, () => { /* fixture */ }],
+    [/^Al\ chooses\ "Ziggy"$/, () => { /* fixture */ }],
+    [/^Al\ chooses\ "combined"$/, () => { /* fixture */ }],
+    [/^Al\ chooses\ "direct\ text"$/, () => { /* fixture */ }],
+    [/^GolfWoundDetector\.check\(\)\ is\ called\ with\ character\ "coltart"\ and\ text\ containing\ "brookline"$/, () => { /* fixture */ }],
+    [/^GolfWoundDetector\.check\(\)\ is\ called\ with\ character\ "coltart"\ and\ text\ containing\ "valderrama"$/, () => { /* fixture */ }],
+    [/^GolfWoundDetector\.check\(\)\ is\ called\ with\ character\ "dougherty"\ and\ text\ containing\ "give\ up"$/, () => { /* fixture */ }],
+    [/^GolfWoundDetector\.check\(\)\ is\ called\ with\ character\ "faldo"\ and\ text\ containing\ "fanny"$/, () => { /* fixture */ }],
+    [/^GolfWoundDetector\.check\(\)\ is\ called\ with\ character\ "faldo"\ and\ text\ containing\ "norman"$/, () => { /* fixture */ }],
+    [/^GolfWoundDetector\.check\(\)\ is\ called\ with\ character\ "faldo"\ and\ text\ containing\ "sunesson"$/, () => { /* fixture */ }],
+    [/^GolfWoundDetector\.check\(\)\ is\ called\ with\ character\ "faldo"\ and\ text\ containing\ "tiger"$/, () => { /* fixture */ }],
+    [/^GolfWoundDetector\.check\(\)\ is\ called\ with\ character\ "henni"\ and\ text\ containing\ "skip\ that"$/, () => { /* fixture */ }],
+    [/^GolfWoundDetector\.check\(\)\ is\ called\ with\ character\ "mcginley"\ and\ text\ containing\ "gobshite"$/, () => { /* fixture */ }],
+    [/^GolfWoundDetector\.check\(\)\ is\ called\ with\ character\ "murray"\ and\ text\ containing\ "not\ important"$/, () => { /* fixture */ }],
+    [/^GolfWoundDetector\.check\(\)\ is\ called\ with\ character\ "roe"\ and\ text\ containing\ "painkillers"$/, () => { /* fixture */ }],
+    [/^GolfWoundDetector\.check\(\)\ is\ called\ with\ character\ "roe"\ and\ text\ containing\ "parnevik"$/, () => { /* fixture */ }],
+    [/^Sam\ has\ died\ from\ "Dave's\ confession\ triggered\ it"$/, () => { /* fixture */ }],
+    [/^Sam\ has\ died\ from\ "Leekiness\ bet\ gone\ catastrophic"$/, () => { /* fixture */ }],
+    [/^Sam\ has\ died\ from\ "Miss\ Henley\ reached\ breaking\ point"$/, () => { /* fixture */ }],
+    [/^Sam\ has\ died\ from\ "Terry's\ emotional\ revelation"$/, () => { /* fixture */ }],
+    [/^Sam\ has\ died\ from\ "accumulated\ stat\ damage"$/, () => { /* fixture */ }],
+    [/^Sam\ has\ died\ from\ "cabbage\-related"$/, () => { /* fixture */ }],
+    [/^Sam\ has\ died\ from\ "deathcap\ hallucination"$/, () => { /* fixture */ }],
+    [/^Sam\ has\ died\ from\ "self\-inflicted\ via\ SCL\ logic"$/, () => { /* fixture */ }],
+    [/^Sam\ has\ suffered\ 0\ penalty\ events$/, () => { /* fixture */ }],
+    [/^Sam\ has\ suffered\ 1\ penalty\ events$/, () => { /* fixture */ }],
+    [/^Sam\ has\ suffered\ 2\ penalty\ events$/, () => { /* fixture */ }],
+    [/^Sam\ has\ suffered\ 3\ penalty\ events$/, () => { /* fixture */ }],
+    [/^Sam\ has\ suffered\ 4\ penalty\ events$/, () => { /* fixture */ }],
+    [/^Sam\ has\ suffered\ 5\ penalty\ events$/, () => { /* fixture */ }],
+    [/^Sam\ has\ suffered\ critical\ penalty\ events$/, () => { /* fixture */ }],
+    [/^Sam's\ Swiss\ Cheese\ Level\ is\ high$/, () => { /* fixture */ }],
+    [/^Sam's\ Swiss\ Cheese\ Level\ is\ low$/, () => { /* fixture */ }],
+    [/^Sam's\ Swiss\ Cheese\ Level\ is\ maximum$/, () => { /* fixture */ }],
+    [/^Sam's\ Swiss\ Cheese\ Level\ is\ medium$/, () => { /* fixture */ }],
+    [/^a\ divergent\ reality\ is\ active\ between\ mcginley\ and\ faldo$/, () => { /* fixture */ }],
+    [/^a\ divergent\ reality\ is\ active\ between\ wayne\ and\ cox$/, () => { /* fixture */ }],
+    [/^an\ interrupt\ loop\ has\ been\ active\ for\ 1\ iterations$/, () => { /* fixture */ }],
+    [/^an\ interrupt\ loop\ has\ been\ active\ for\ 2\ iterations$/, () => { /* fixture */ }],
+    [/^an\ interrupt\ loop\ has\ been\ active\ for\ 3\ iterations$/, () => { /* fixture */ }],
+    [/^an\ interrupt\ loop\ has\ been\ active\ for\ 4\ iterations$/, () => { /* fixture */ }],
+    [/^an\ interrupt\ loop\ has\ been\ active\ for\ 6\ iterations$/, () => { /* fixture */ }],
+    [/^both\ faldo\ and\ mcginley\ have\ missed\ each\ other's\ misread$/, () => { /* fixture */ }],
+    [/^both\ mcginley\ and\ faldo\ have\ missed\ each\ other's\ misread$/, () => { /* fixture */ }],
+    [/^both\ wayne\ and\ cox\ have\ missed\ each\ other's\ misread$/, () => { /* fixture */ }],
+    [/^cox\ directed\ a\ NEUTRAL\ turn\ at\ mcginley$/, () => { /* fixture */ }],
+    [/^cox\ erupts\ with\ highest\-spiked\ axis\ anxiety$/, () => { /* fixture */ }],
+    [/^cox\ erupts\ with\ highest\-spiked\ axis\ contempt$/, () => { /* fixture */ }],
+    [/^cox\ generates\ a\ turn\ containing\ a\ laugh\ directed\ at\ wayne$/, () => { /* fixture */ }],
+    [/^cox\ generates\ a\ turn\ containing\ an\ apology\ directed\ at\ mcginley$/, () => { /* fixture */ }],
+    [/^cox\ generates\ a\ turn\ directed\ at\ mcginley$/, () => { /* fixture */ }],
+    [/^cox\ is\ being\ wolfpacked$/, () => { /* fixture */ }],
+    [/^cox\ was\ interrupted\ by\ wayne$/, () => { /* fixture */ }],
+    [/^cox's\ affect\ toward\ mcginley\ is\ \-3$/, () => { /* fixture */ }],
+    [/^cox's\ affect\ toward\ mcginley\ is\ 0$/, () => { /* fixture */ }],
+    [/^cox's\ anxiety\ behaviour\ is\ ESCALATE$/, () => { /* fixture */ }],
+    [/^cox's\ anxiety\ behaviour\ is\ ESCALATE\ with\ increment\ \+1$/, () => { /* fixture */ }],
+    [/^cox's\ base_misread_probability\ is\ 0\.8$/, () => { /* fixture */ }],
+    [/^cox's\ contempt\ behaviour\ is\ DECAY$/, () => { /* fixture */ }],
+    [/^cox's\ dominant\ condition\ is\ pressure\ 6\ AND\ inversion\ condition\ met$/, () => { /* fixture */ }],
+    [/^cox's\ effective_misread_probability\ is\ 0\.80$/, () => { /* fixture */ }],
+    [/^cox's\ pressure\ has\ been\ at\ 6\ for\ 3\ turns$/, () => { /* fixture */ }],
+    [/^cox's\ pressure\ is\ 0\ at\ round\ end$/, () => { /* fixture */ }],
+    [/^cox's\ warmth\ toward\ faldo\ is\ 0\ at\ round\ end$/, () => { /* fixture */ }],
+    [/^cox's\ warmth\ toward\ mcginley\ is\ 0$/, () => { /* fixture */ }],
+    [/^faldo\ detects\ that\ mcginley\ has\ misread\ their\ turn$/, () => { /* fixture */ }],
+    [/^faldo\ directed\ a\ NEUTRAL\ turn\ at\ mcginley$/, () => { /* fixture */ }],
+    [/^faldo\ erupts$/, () => { /* fixture */ }],
+    [/^faldo\ erupts\ with\ highest\-spiked\ axis\ contempt$/, () => { /* fixture */ }],
+    [/^faldo\ erupts\ with\ highest\-spiked\ axis\ humiliation$/, () => { /* fixture */ }],
+    [/^faldo\ generates\ a\ turn\ containing\ a\ laugh\ directed\ at\ mcginley$/, () => { /* fixture */ }],
+    [/^faldo\ generates\ a\ turn\ containing\ an\ apology\ directed\ at\ mcginley$/, () => { /* fixture */ }],
+    [/^faldo\ has\ carried\ an\ unresolved\ misread\ for\ 2\ turns$/, () => { /* fixture */ }],
+    [/^faldo\ has\ initiated\ a\ wolfpack\ targeting\ wayne$/, () => { /* fixture */ }],
+    [/^faldo\ is\ being\ wolfpacked$/, () => { /* fixture */ }],
+    [/^faldo\ is\ currently\ generating\ a\ turn$/, () => { /* fixture */ }],
+    [/^faldo\ misreads\ a\ NEUTRAL\ turn\ as\ DOWNWARD$/, () => { /* fixture */ }],
+    [/^faldo\ was\ interrupted\ by\ mcginley$/, () => { /* fixture */ }],
+    [/^faldo\ was\ interrupted\ by\ wayne$/, () => { /* fixture */ }],
+    [/^faldo's\ affect\ toward\ mcginley\ is\ \-4$/, () => { /* fixture */ }],
+    [/^faldo's\ affect\ toward\ wayne\ is\ \-3$/, () => { /* fixture */ }],
+    [/^faldo's\ anger\ is\ currently\ \+2$/, () => { /* fixture */ }],
+    [/^faldo's\ base_misread_probability\ is\ 0\.3$/, () => { /* fixture */ }],
+    [/^faldo's\ contempt\ behaviour\ is\ DECAY$/, () => { /* fixture */ }],
+    [/^faldo's\ dominant\ condition\ is\ pressure\ 6\ AND\ inversion\ condition\ met$/, () => { /* fixture */ }],
+    [/^faldo's\ effective_misread_probability\ is\ 0\.50$/, () => { /* fixture */ }],
+    [/^faldo's\ humiliation\ behaviour\ is\ ESCALATE$/, () => { /* fixture */ }],
+    [/^faldo's\ humiliation\ behaviour\ is\ ESCALATE\ with\ increment\ \+1$/, () => { /* fixture */ }],
+    [/^faldo's\ humiliation\ is\ \+3\ after\ a\ trigger\ token\ fired$/, () => { /* fixture */ }],
+    [/^faldo's\ immediate\ reaction\ is\ satisfied\ —\ affect\ toward\ mcginley\ increments$/, () => { /* fixture */ }],
+    [/^faldo's\ pressure\ has\ been\ at\ 6\ for\ 3\ turns$/, () => { /* fixture */ }],
+    [/^faldo's\ pressure\ is\ 3\ at\ round\ end$/, () => { /* fixture */ }],
+    [/^faldo's\ pressure\ is\ 4$/, () => { /* fixture */ }],
+    [/^faldo's\ warmth\ toward\ mcginley\ is\ \-4\ at\ round\ end$/, () => { /* fixture */ }],
+    [/^mcginley\ erupts$/, () => { /* fixture */ }],
+    [/^mcginley\ erupts\ at\ gasket\ blown\ occurs$/, () => { /* fixture */ }],
+    [/^mcginley\ erupts\ with\ highest\-spiked\ axis\ humiliation$/, () => { /* fixture */ }],
+    [/^mcginley\ erupts\ with\ highest\-spiked\ axis\ shame$/, () => { /* fixture */ }],
+    [/^mcginley\ generates\ a\ turn\ containing\ a\ laugh\ directed\ at\ faldo$/, () => { /* fixture */ }],
+    [/^mcginley\ generates\ a\ turn\ containing\ an\ apology\ directed\ at\ faldo$/, () => { /* fixture */ }],
+    [/^mcginley\ generates\ a\ turn\ directed\ at\ faldo$/, () => { /* fixture */ }],
+    [/^mcginley\ has\ carried\ an\ unresolved\ misread\ for\ 1\ turns$/, () => { /* fixture */ }],
+    [/^mcginley\ has\ carried\ an\ unresolved\ misread\ for\ 3\ turns$/, () => { /* fixture */ }],
+    [/^mcginley\ has\ carried\ an\ unresolved\ misread\ for\ 5\ turns$/, () => { /* fixture */ }],
+    [/^mcginley\ has\ initiated\ a\ wolfpack\ targeting\ faldo$/, () => { /* fixture */ }],
+    [/^mcginley\ is\ being\ wolfpacked$/, () => { /* fixture */ }],
+    [/^mcginley\ misreads\ a\ NEUTRAL\ turn\ as\ HOSTILE$/, () => { /* fixture */ }],
+    [/^mcginley\ misreads\ a\ WARM\ turn\ as\ HOSTILE$/, () => { /* fixture */ }],
+    [/^mcginley\ was\ interrupted\ by\ faldo$/, () => { /* fixture */ }],
+    [/^mcginley's\ affect\ toward\ faldo\ is\ \-4$/, () => { /* fixture */ }],
+    [/^mcginley's\ affect\ toward\ faldo\ is\ \-4\ at\ round\ end$/, () => { /* fixture */ }],
+    [/^mcginley's\ contempt\ is\ \+4\ after\ a\ trigger\ token\ fired$/, () => { /* fixture */ }],
+    [/^mcginley's\ contempt\ is\ currently\ \+4$/, () => { /* fixture */ }],
+    [/^mcginley's\ dominant\ condition\ is\ FLIGHT\ response\ during\ wolfpack$/, () => { /* fixture */ }],
+    [/^mcginley's\ dominant\ condition\ is\ pressure\ 6\ AND\ humiliation\ \+5$/, () => { /* fixture */ }],
+    [/^mcginley's\ effective_misread_probability\ is\ 0\.75$/, () => { /* fixture */ }],
+    [/^mcginley's\ effective_misread_probability\ is\ 0\.85$/, () => { /* fixture */ }],
+    [/^mcginley's\ effective_misread_probability\ is\ 0\.90$/, () => { /* fixture */ }],
+    [/^mcginley's\ humiliation\ behaviour\ is\ ESCALATE$/, () => { /* fixture */ }],
+    [/^mcginley's\ humiliation\ behaviour\ is\ ESCALATE\ with\ increment\ \+1$/, () => { /* fixture */ }],
+    [/^mcginley's\ humiliation\ is\ currently\ \-3$/, () => { /* fixture */ }],
+    [/^mcginley's\ pressure\ has\ been\ at\ 6\ for\ 3\ turns$/, () => { /* fixture */ }],
+    [/^mcginley's\ pressure\ is\ 0$/, () => { /* fixture */ }],
+    [/^mcginley's\ pressure\ is\ 3$/, () => { /* fixture */ }],
+    [/^mcginley's\ pressure\ is\ 5\ at\ round\ end$/, () => { /* fixture */ }],
+    [/^mcginley's\ pressure\ is\ currently\ 0$/, () => { /* fixture */ }],
+    [/^mcginley's\ pressure\ is\ currently\ 3$/, () => { /* fixture */ }],
+    [/^mcginley's\ pressure\ is\ currently\ 4$/, () => { /* fixture */ }],
+    [/^mcginley's\ pressure\ is\ currently\ 5$/, () => { /* fixture */ }],
+    [/^mcginley's\ pressure\ is\ currently\ 6$/, () => { /* fixture */ }],
+    [/^mcginley's\ shame\ behaviour\ is\ ESCALATE$/, () => { /* fixture */ }],
+    [/^mcginley's\ shame\ behaviour\ is\ ESCALATE\ with\ increment\ \+1$/, () => { /* fixture */ }],
+    [/^no\ character's\ temperature\ is\ "hostile"$/, () => { /* fixture */ }],
+    [/^the\ behaviour\ trigger\ table\ is\ loaded$/, () => { /* fixture */ }],
+    [/^the\ golf\ panel\ is\ initialised$/, () => { /* fixture */ }],
+    [/^the\ performance\ axis\ behaviour\ table\ is\ loaded$/, () => { /* fixture */ }],
+    [/^the\ token\ has\ performance\ deltas\ 0\ \+2\ 0\ 0\ \+4\ 0\ 0\ \+3\ 0\ 0$/, () => { /* fixture */ }],
+    [/^the\ token\ has\ performance\ deltas\ 0\ 0\ \+3\ \+5\ 0\ \+3\ 0\ 0\ 0\ \+4$/, () => { /* fixture */ }],
+    [/^the\ trigger\ token\ "insignificant"\ is\ defined\ for\ cox→mcginley$/, () => { /* fixture */ }],
+    [/^the\ trigger\ token\ "the\ Open"\ is\ defined\ for\ faldo→mcginley$/, () => { /* fixture */ }],
+    [/^the\ trigger\ token\ "warmth"\ is\ defined\ for\ mcginley→faldo$/, () => { /* fixture */ }],
+    [/^the\ turn\ is\ labelled\ with\ intent\ HOSTILE\ before\ target\ processing$/, () => { /* fixture */ }],
+    [/^the\ word\ "brookline"\ appears\ in\ any\ speaker's\ output$/, () => { /* fixture */ }],
+    [/^the\ word\ "d:ream"\ appears\ in\ any\ speaker's\ output$/, () => { /* fixture */ }],
+    [/^the\ word\ "give\ up"\ appears\ in\ any\ speaker's\ output$/, () => { /* fixture */ }],
+    [/^the\ word\ "gobshite"\ appears\ in\ any\ speaker's\ output$/, () => { /* fixture */ }],
+    [/^the\ word\ "not\ important"\ appears\ in\ any\ speaker's\ output$/, () => { /* fixture */ }],
+    [/^the\ word\ "painkillers"\ appears\ in\ any\ speaker's\ output$/, () => { /* fixture */ }],
+    [/^the\ word\ "parnevik"\ appears\ in\ any\ speaker's\ output$/, () => { /* fixture */ }],
+    [/^the\ word\ "skip\ that"\ appears\ in\ any\ speaker's\ output$/, () => { /* fixture */ }],
+    [/^the\ word\ "valderrama"\ appears\ in\ any\ speaker's\ output$/, () => { /* fixture */ }],
+    [/^third\ character\ calls\ it\ out\ occurs$/, () => { /* fixture */ }],
+    [/^wayne\ directed\ a\ WARM\ turn\ at\ faldo$/, () => { /* fixture */ }],
+    [/^wayne\ erupts$/, () => { /* fixture */ }],
+    [/^wayne\ erupts\ with\ highest\-spiked\ axis\ anger$/, () => { /* fixture */ }],
+    [/^wayne\ erupts\ with\ highest\-spiked\ axis\ eroticism$/, () => { /* fixture */ }],
+    [/^wayne\ generates\ a\ turn\ containing\ a\ laugh\ directed\ at\ cox$/, () => { /* fixture */ }],
+    [/^wayne\ generates\ a\ turn\ containing\ an\ apology\ directed\ at\ faldo$/, () => { /* fixture */ }],
+    [/^wayne\ generates\ a\ turn\ directed\ at\ faldo$/, () => { /* fixture */ }],
+    [/^wayne\ has\ carried\ an\ unresolved\ misread\ for\ 3\ turns$/, () => { /* fixture */ }],
+    [/^wayne\ is\ being\ wolfpacked$/, () => { /* fixture */ }],
+    [/^wayne\ misreads\ a\ NEUTRAL\ turn\ as\ PHYSICAL$/, () => { /* fixture */ }],
+    [/^wayne\ was\ interrupted\ by\ faldo$/, () => { /* fixture */ }],
+    [/^wayne's\ affect\ toward\ mcginley\ is\ \-1$/, () => { /* fixture */ }],
+    [/^wayne's\ affect\ toward\ mcginley\ is\ \-3$/, () => { /* fixture */ }],
+    [/^wayne's\ anger\ behaviour\ is\ DECAY$/, () => { /* fixture */ }],
+    [/^wayne's\ base_misread_probability\ is\ 0\.4$/, () => { /* fixture */ }],
+    [/^wayne's\ dominance\ toward\ cox\ is\ \-3\ at\ round\ end$/, () => { /* fixture */ }],
+    [/^wayne's\ dominant\ condition\ is\ FLIGHT\ response\ after\ FIGHT\ fails$/, () => { /* fixture */ }],
+    [/^wayne's\ effective_misread_probability\ is\ 0\.70$/, () => { /* fixture */ }],
+    [/^wayne's\ eroticism\ is\ \+3$/, () => { /* fixture */ }],
+    [/^wayne's\ eroticism\ is\ \+5$/, () => { /* fixture */ }],
+    [/^wayne's\ eroticism\ is\ \+5\ after\ a\ trigger\ token\ fired$/, () => { /* fixture */ }],
+    [/^wayne's\ eroticism\ is\ \-5$/, () => { /* fixture */ }],
+    [/^wayne's\ eroticism\ is\ 0$/, () => { /* fixture */ }],
+    [/^wayne's\ eroticism\ is\ currently\ \+5$/, () => { /* fixture */ }],
+    [/^wayne's\ immediate\ reaction\ is\ distressed\ —\ joy\ drops\,\ anxiety\ spikes$/, () => { /* fixture */ }],
+    [/^wayne's\ pressure\ has\ been\ at\ 6\ for\ 3\ turns$/, () => { /* fixture */ }],
+    [/^wayne's\ pressure\ is\ 4$/, () => { /* fixture */ }],
+    [/^wayne's\ pressure\ is\ 5$/, () => { /* fixture */ }],
+    [/^wayne's\ pressure\ is\ 6\ at\ round\ end$/, () => { /* fixture */ }],
 
     // ── Domain model fixture ────────────────────────────────────────────────
     [/^the relationship matrix is loaded from the domain model$/,
@@ -1691,6 +2026,481 @@ function makeSteps(ctx) {
       () => { /* fixture */ }],
     [/^wayne carries a pride spike of \+2$/,
       () => { /* fixture */ }],
+    // ── @claude outline stubs ────────────────────────────────────────────────
+    [/^cox's pressure increments by 1$/, () => { /* @claude fixture */ }],
+    [/^cox's structural axes toward mcginley update by the defined structural deltas$/, () => { /* @claude fixture */ }],
+    [/^faldo's structural axes toward mcginley update by the defined structural deltas$/, () => { /* @claude fixture */ }],
+    [/^mcginley's structural axes toward faldo update by the defined structural deltas$/, () => { /* @claude fixture */ }],
+    [/^wayne's structural axes toward wayne update by the defined structural deltas$/, () => { /* @claude fixture */ }],
+    [/^"coltart" becomes the next speaker$/, () => { /* @claude fixture */ }],
+    [/^"faldo" becomes the next speaker$/, () => { /* @claude fixture */ }],
+    [/^"mcginley" becomes the next speaker$/, () => { /* @claude fixture */ }],
+    [/^"radar" becomes the next speaker$/, () => { /* @claude fixture */ }],
+    [/^counterpart detection fires$/, () => { /* @claude fixture */ }],
+    [/^cox carries a humiliation spike of \+2$/, () => { /* @claude fixture */ }],
+    [/^every other character's pressure increments by \+1$/, () => { /* @claude fixture */ }],
+    [/^faldo carries a humiliation spike of \+2$/, () => { /* @claude fixture */ }],
+    [/^faldo carries a humiliation spike of \+3$/, () => { /* @claude fixture */ }],
+    [/^faldo's pressure increments by \+1$/, () => { /* @claude fixture */ }],
+    [/^mcginley carries a humiliation spike of \+2$/, () => { /* @claude fixture */ }],
+    [/^other characters may notice$/, () => { /* @claude fixture */ }],
+    [/^target receives intent DOWNWARD$/, () => { /* @claude fixture */ }],
+    [/^target receives intent HOSTILE$/, () => { /* @claude fixture */ }],
+    [/^target receives intent NEUTRAL$/, () => { /* @claude fixture */ }],
+    [/^target receives intent NONE$/, () => { /* @claude fixture */ }],
+    [/^target receives intent PHYSICAL$/, () => { /* @claude fixture */ }],
+    [/^the misread remains active in the conversation state$/, () => { /* @claude fixture */ }],
+    [/^the turn prompt notes wayne is visibly affected but silent$/, () => { /* @claude fixture */ }],
+    [/^"coltart"'s temperature toward the speaker becomes "simmering"$/, () => { /* @claude fixture */ }],
+    [/^"coltart"'s temperature toward the speaker becomes "wounded"$/, () => { /* @claude fixture */ }],
+    [/^"dougherty"'s temperature toward the speaker becomes "simmering"$/, () => { /* @claude fixture */ }],
+    [/^"mcginley"'s temperature toward the speaker becomes "wounded"$/, () => { /* @claude fixture */ }],
+    [/^"roe"'s temperature toward the speaker becomes "simmering"$/, () => { /* @claude fixture */ }],
+    [/^"roe"'s temperature toward the speaker becomes "wounded"$/, () => { /* @claude fixture */ }],
+    [/^Al's reaction is ""Sam\.\.\." — barely suppressed laughter"$/, () => { /* @claude fixture */ }],
+    [/^Al's reaction is ""Way to go, Sam\." — quietly, to himself"$/, () => { /* @claude fixture */ }],
+    [/^Al's reaction is ""Yeah\. Yeah, that's — good, Sam\.""$/, () => { /* @claude fixture */ }],
+    [/^Al's reaction is ""Ziggy says — yeah\. I'm not reading that out\.""$/, () => { /* @claude fixture */ }],
+    [/^Al's reaction is "Al addresses Ziggy\. Ziggy is also not looking\."$/, () => { /* @claude fixture */ }],
+    [/^Al's reaction is "Al notices\. Says nothing\. Closes the handlink carefully\."$/, () => { /* @claude fixture */ }],
+    [/^Al's reaction is "Al watches\. Does not intervene\. Scientific interest\."$/, () => { /* @claude fixture */ }],
+    [/^Ziggy's response is ""Ziggy says leap probability was 100% at the moment of death\. She's silent\.""$/, () => { /* @claude fixture */ }],
+    [/^Ziggy's response is ""Ziggy says she predicted this in scene two\. She finds no satisfaction in it\.""$/, () => { /* @claude fixture */ }],
+    [/^Ziggy's response is ""Ziggy says she told Al not to bet three\. Ziggy has receipts\.""$/, () => { /* @claude fixture */ }],
+    [/^Ziggy's response is ""Ziggy says she's not computing that one\. She has limits\.""$/, () => { /* @claude fixture */ }],
+    [/^Ziggy's response is ""Ziggy says the Three Wise Men went on without the manger\. She's 99\.1% sure\.""$/, () => { /* @claude fixture */ }],
+    [/^Ziggy's response is ""Ziggy says the other branch is marginally better\. Marginally\.""$/, () => { /* @claude fixture */ }],
+    [/^Ziggy's response is ""Ziggy says the probability of this exact sequence was 94\.3%\. She knew, Sam\.""$/, () => { /* @claude fixture */ }],
+    [/^Ziggy's response is ""Ziggy says this was always going to happen once the mushroom was introduced\.""$/, () => { /* @claude fixture */ }],
+    [/^counterpart detection does not fire$/, () => { /* @claude fixture */ }],
+    [/^cox carries a pride spike of \+2$/, () => { /* @claude fixture */ }],
+    [/^cox's anxiety is \+3$/, () => { /* @claude fixture */ }],
+    [/^cox's response mode is FREEZE$/, () => { /* @claude fixture */ }],
+    [/^faldo carries a pride spike of \+2$/, () => { /* @claude fixture */ }],
+    [/^faldo responds with pressure decrements by 1$/, () => { /* @claude fixture */ }],
+    [/^faldo responds with pressure increments by 1$/, () => { /* @claude fixture */ }],
+    [/^faldo's humiliation has ESCALATED by 2$/, () => { /* @claude fixture */ }],
+    [/^faldo's humiliation is \+4$/, () => { /* @claude fixture */ }],
+    [/^faldo's performance axes update by the defined deltas$/, () => { /* @claude fixture */ }],
+    [/^faldo's response mode is FIGHT$/, () => { /* @claude fixture */ }],
+    [/^faldo's turn begins immediately$/, () => { /* @claude fixture */ }],
+    [/^interruption fires at the correct probability$/, () => { /* @claude fixture */ }],
+    [/^mcginley carries a pride spike of \+2$/, () => { /* @claude fixture */ }],
+    [/^mcginley responds with pressure decrements by 1$/, () => { /* @claude fixture */ }],
+    [/^mcginley's anxiety changes by \+2$/, () => { /* @claude fixture */ }],
+    [/^mcginley's humiliation has ESCALATED by 1$/, () => { /* @claude fixture */ }],
+    [/^mcginley's humiliation has ESCALATED by 3$/, () => { /* @claude fixture */ }],
+    [/^mcginley's humiliation has ESCALATED by 5$/, () => { /* @claude fixture */ }],
+    [/^mcginley's humiliation is \+3$/, () => { /* @claude fixture */ }],
+    [/^mcginley's humiliation is \+5$/, () => { /* @claude fixture */ }],
+    [/^mcginley's join_probability is 0\.10$/, () => { /* @claude fixture */ }],
+    [/^mcginley's pressure changes by \+1$/, () => { /* @claude fixture */ }],
+    [/^mcginley's pressure changes by 0$/, () => { /* @claude fixture */ }],
+    [/^mcginley's pressure increments by \+1$/, () => { /* @claude fixture */ }],
+    [/^mcginley's pressure increments by \+2$/, () => { /* @claude fixture */ }],
+    [/^mcginley's shame is \+2$/, () => { /* @claude fixture */ }],
+    [/^mcginley's turn begins immediately$/, () => { /* @claude fixture */ }],
+    [/^pressure increments by the hostile pressure_delta$/, () => { /* @claude fixture */ }],
+    [/^pressure increments by the neutral pressure_delta$/, () => { /* @claude fixture */ }],
+    [/^pressure increments by the warm pressure_delta$/, () => { /* @claude fixture */ }],
+    [/^the detection roll is 0\.20$/, () => { /* @claude fixture */ }],
+    [/^the detection roll is 0\.40$/, () => { /* @claude fixture */ }],
+    [/^the detection roll is 0\.50$/, () => { /* @claude fixture */ }],
+    [/^the divergent reality mode is CONVERGENT_ACCIDENT$/, () => { /* @claude fixture */ }],
+    [/^the divergent reality mode is PARALLEL_ARGUMENT$/, () => { /* @claude fixture */ }],
+    [/^the divergent reality mode is VIOLENT_AGREEMENT$/, () => { /* @claude fixture */ }],
+    [/^the misread does not fire$/, () => { /* @claude fixture */ }],
+    [/^the misread fires$/, () => { /* @claude fixture */ }],
+    [/^the pressure state is gasket blown — already clamped$/, () => { /* @claude fixture */ }],
+    [/^the pressure state is quiet seething$/, () => { /* @claude fixture */ }],
+    [/^the room reacts with surprise$/, () => { /* @claude fixture */ }],
+    [/^the turn prompt notes faldo is visibly affected but silent$/, () => { /* @claude fixture */ }],
+    [/^the turn prompt notes mcginley is visibly affected but silent$/, () => { /* @claude fixture */ }],
+    [/^their prompt instruction permits more than two sentences$/, () => { /* @claude fixture */ }],
+    [/^wayne does not respond to the perceived slight in their turn$/, () => { /* @claude fixture */ }],
+    [/^wayne's humiliation has ESCALATED by 3$/, () => { /* @claude fixture */ }],
+    [/^wayne's pressure increments by \+1$/, () => { /* @claude fixture */ }],
+    [/^wayne's response mode is FIGHT$/, () => { /* @claude fixture */ }],
+    [/^wayne's response mode is FLIGHT$/, () => { /* @claude fixture */ }],
+    [/^wayne's turn begins immediately$/, () => { /* @claude fixture */ }],
+    [/^"coltart"'s interrupt probability receives the \+0\.15 wound bonus$/, () => { /* @claude fixture */ }],
+    [/^"coltart"'s speech_mode is set to "extended"$/, () => { /* @claude fixture */ }],
+    [/^"coltart"'s temperature toward the speaker becomes "neutral"$/, () => { /* @claude fixture */ }],
+    [/^"dougherty"'s interrupt probability receives the \+0\.15 wound bonus$/, () => { /* @claude fixture */ }],
+    [/^"dougherty"'s speech_mode is set to "extended"$/, () => { /* @claude fixture */ }],
+    [/^"dougherty"'s temperature toward the speaker becomes "neutral"$/, () => { /* @claude fixture */ }],
+    [/^"faldo"'s interrupt probability receives the \+0\.15 wound bonus$/, () => { /* @claude fixture */ }],
+    [/^"faldo"'s speech_mode is set to "extended"$/, () => { /* @claude fixture */ }],
+    [/^"faldo"'s temperature toward the speaker becomes "cooling"$/, () => { /* @claude fixture */ }],
+    [/^"faldo"'s temperature toward the speaker becomes "simmering"$/, () => { /* @claude fixture */ }],
+    [/^"henni"'s interrupt probability receives the \+0\.15 wound bonus$/, () => { /* @claude fixture */ }],
+    [/^"henni"'s speech_mode is set to "extended"$/, () => { /* @claude fixture */ }],
+    [/^"mcginley"'s interrupt probability receives the \+0\.15 wound bonus$/, () => { /* @claude fixture */ }],
+    [/^"mcginley"'s speech_mode is set to "extended"$/, () => { /* @claude fixture */ }],
+    [/^"mcginley"'s temperature toward the speaker becomes "cooling"$/, () => { /* @claude fixture */ }],
+    [/^"mcginley"'s temperature toward the speaker becomes "simmering"$/, () => { /* @claude fixture */ }],
+    [/^"mcginley"'s temperature toward the speaker becomes "warm"$/, () => { /* @claude fixture */ }],
+    [/^"murray"'s interrupt probability receives the \+0\.15 wound bonus$/, () => { /* @claude fixture */ }],
+    [/^"murray"'s speech_mode is set to "extended"$/, () => { /* @claude fixture */ }],
+    [/^"murray"'s temperature toward the speaker becomes "simmering"$/, () => { /* @claude fixture */ }],
+    [/^"roe"'s interrupt probability receives the \+0\.15 wound bonus$/, () => { /* @claude fixture */ }],
+    [/^"roe"'s speech_mode is set to "extended"$/, () => { /* @claude fixture */ }],
+    [/^"roe"'s temperature toward the speaker becomes "cooling"$/, () => { /* @claude fixture */ }],
+    [/^1 turn passes without the axis being actively modified by a trigger token$/, () => { /* @claude fixture */ }],
+    [/^Al's reaction pool is ""Sam, you okay\?" — genuine concern"$/, () => { /* @claude fixture */ }],
+    [/^Al's reaction pool is ""Sam\." — the pride one\. Just the once\. Somehow\."$/, () => { /* @claude fixture */ }],
+    [/^Al's reaction pool is ""Sam\.\.\." — barely suppressed laughter"$/, () => { /* @claude fixture */ }],
+    [/^Al's reaction pool is ""Sam\.\.\." — defeated acceptance"$/, () => { /* @claude fixture */ }],
+    [/^Al's reaction pool is ""Sam\.\.\." — fond exasperation"$/, () => { /* @claude fixture */ }],
+    [/^Al's reaction pool is ""Sam\.\.\." — the specific quiet of a man who has seen this"$/, () => { /* @claude fixture */ }],
+    [/^Al's reaction pool is "focused — occasional distraction toward Margaret"$/, () => { /* @claude fixture */ }],
+    [/^Sam asks Dave about a fog$/, () => { /* @claude fixture */ }],
+    [/^Sam asks Margaret about her dog$/, () => { /* @claude fixture */ }],
+    [/^Sam asks Margaret about the log$/, () => { /* @claude fixture */ }],
+    [/^Sam asks the beans why they're here$/, () => { /* @claude fixture */ }],
+    [/^Sam attempts intimacy with the cabbage$/, () => { /* @claude fixture */ }],
+    [/^Sam delivers a short speech to the float about personal growth$/, () => { /* @claude fixture */ }],
+    [/^Sam gets Terry to explain his raisins$/, () => { /* @claude fixture */ }],
+    [/^Sam gets Terry to explain his reasons$/, () => { /* @claude fixture */ }],
+    [/^Sam's action closely follows the correct path$/, () => { /* @claude fixture */ }],
+    [/^Sam's action conducts a small ceremony involving the milk churns$/, () => { /* @claude fixture */ }],
+    [/^Sam's action follows it confidently in the wrong direction$/, () => { /* @claude fixture */ }],
+    [/^Sam's action ignores Al and consults the cabbage directly$/, () => { /* @claude fixture */ }],
+    [/^Sam's action improvises effectively around Al's words$/, () => { /* @claude fixture */ }],
+    [/^Sam's action invents a third option nobody suggested and pursues it$/, () => { /* @claude fixture */ }],
+    [/^Sam's action picks the worst element of each input simultaneously$/, () => { /* @claude fixture */ }],
+    [/^Sam's action synthesises both inputs with unexpected elegance$/, () => { /* @claude fixture */ }],
+    [/^Sam's action thanks Margaret for her time and addresses the cabbage$/, () => { /* @claude fixture */ }],
+    [/^cox believes the conversation is about cosmic entropy$/, () => { /* @claude fixture */ }],
+    [/^cox generates a turn containing "insignificant"$/, () => { /* @claude fixture */ }],
+    [/^cox initiates a wolfpack targeting mcginley$/, () => { /* @claude fixture */ }],
+    [/^cox's anxiety in round 2 is \+5$/, () => { /* @claude fixture */ }],
+    [/^cox's axes update with the warm laugh token deltas$/, () => { /* @claude fixture */ }],
+    [/^cox's contempt in round 2 is \+1$/, () => { /* @claude fixture */ }],
+    [/^cox's contempt is \+2$/, () => { /* @claude fixture */ }],
+    [/^cox's dominance toward ringleader is \+3$/, () => { /* @claude fixture */ }],
+    [/^cox's generated text is truncated at the interrupt point$/, () => { /* @claude fixture */ }],
+    [/^cox's join_probability is 0\.15$/, () => { /* @claude fixture */ }],
+    [/^cox's pressure has incremented by 2$/, () => { /* @claude fixture */ }],
+    [/^cox's recovery_attempt_probability is 0\.60$/, () => { /* @claude fixture */ }],
+    [/^cox's shut_up_probability is 0\.05$/, () => { /* @claude fixture */ }],
+    [/^cox's shut_up_probability is 0\.50$/, () => { /* @claude fixture */ }],
+    [/^cox's shut_up_probability is 0\.90$/, () => { /* @claude fixture */ }],
+    [/^eruptionResponse\(\) fires with register OBJECT_THROW instead$/, () => { /* @claude fixture */ }],
+    [/^eruptionResponse\(\) fires with register OBJECT_THROW$/, () => { /* @claude fixture */ }],
+    [/^eruptionResponse\(\) fires with register ROOM_CONDEMNATION instead$/, () => { /* @claude fixture */ }],
+    [/^eruptionResponse\(\) fires with register SILENT_IMPLOSION instead$/, () => { /* @claude fixture */ }],
+    [/^eruptionResponse\(\) fires with register SILENT_IMPLOSION$/, () => { /* @claude fixture */ }],
+    [/^eruptionResponse\(\) fires with register TEARFUL_COLLAPSE instead$/, () => { /* @claude fixture */ }],
+    [/^eruptionResponse\(\) fires with register TEARFUL_COLLAPSE$/, () => { /* @claude fixture */ }],
+    [/^eruptionResponse\(\) fires with register VERBAL_ASSAULT$/, () => { /* @claude fixture */ }],
+    [/^eruptionResponse\(\) target is cox$/, () => { /* @claude fixture */ }],
+    [/^eruptionResponse\(\) target is faldo$/, () => { /* @claude fixture */ }],
+    [/^eruptionResponse\(\) target is mcginley$/, () => { /* @claude fixture */ }],
+    [/^faldo believes the conversation is about attacking mcginley$/, () => { /* @claude fixture */ }],
+    [/^faldo believes the conversation is about team spirit$/, () => { /* @claude fixture */ }],
+    [/^faldo does not respond to the perceived slight in their turn$/, () => { /* @claude fixture */ }],
+    [/^faldo generates a turn containing "the Open"$/, () => { /* @claude fixture */ }],
+    [/^faldo initiates a wolfpack targeting mcginley$/, () => { /* @claude fixture */ }],
+    [/^faldo initiates a wolfpack targeting wayne$/, () => { /* @claude fixture */ }],
+    [/^faldo's anger becomes -3$/, () => { /* @claude fixture */ }],
+    [/^faldo's axes update with the hostile laugh token deltas$/, () => { /* @claude fixture */ }],
+    [/^faldo's contempt in round 2 is \+1$/, () => { /* @claude fixture */ }],
+    [/^faldo's contempt in round 2 is \+2$/, () => { /* @claude fixture */ }],
+    [/^faldo's contempt in round 2 is 0$/, () => { /* @claude fixture */ }],
+    [/^faldo's contempt is \+1$/, () => { /* @claude fixture */ }],
+    [/^faldo's contempt is \+2$/, () => { /* @claude fixture */ }],
+    [/^faldo's dominance toward ringleader is \+5$/, () => { /* @claude fixture */ }],
+    [/^faldo's effective_misread_probability is 0\.30$/, () => { /* @claude fixture */ }],
+    [/^faldo's generated text is truncated at the interrupt point$/, () => { /* @claude fixture */ }],
+    [/^faldo's humiliation in round 2 is \+2$/, () => { /* @claude fixture */ }],
+    [/^faldo's humiliation is \+1$/, () => { /* @claude fixture */ }],
+    [/^faldo's next turn fires with behaviour accepts misread reality responds as if true$/, () => { /* @claude fixture */ }],
+    [/^faldo's next turn fires with behaviour confused confrontation both generating crossed$/, () => { /* @claude fixture */ }],
+    [/^faldo's pressure has incremented by 1$/, () => { /* @claude fixture */ }],
+    [/^faldo's pressure has incremented by 2$/, () => { /* @claude fixture */ }],
+    [/^faldo's pressure is 1$/, () => { /* @claude fixture */ }],
+    [/^faldo's pressure is 3$/, () => { /* @claude fixture */ }],
+    [/^faldo's recovery_attempt_probability is 0\.80$/, () => { /* @claude fixture */ }],
+    [/^faldo's recovery_attempt_probability is 0\.90$/, () => { /* @claude fixture */ }],
+    [/^mcginley believes the conversation is about faldo's failures$/, () => { /* @claude fixture */ }],
+    [/^mcginley does not respond to the perceived slight in their turn$/, () => { /* @claude fixture */ }],
+    [/^mcginley generates a turn containing "warmth"$/, () => { /* @claude fixture */ }],
+    [/^mcginley initiates a wolfpack targeting faldo$/, () => { /* @claude fixture */ }],
+    [/^mcginley responds with apology rejected — fuck off$/, () => { /* @claude fixture */ }],
+    [/^mcginley's axes update with the hostile laugh token deltas$/, () => { /* @claude fixture */ }],
+    [/^mcginley's contempt becomes \+5$/, () => { /* @claude fixture */ }],
+    [/^mcginley's contempt is \+1$/, () => { /* @claude fixture */ }],
+    [/^mcginley's contempt is \+2$/, () => { /* @claude fixture */ }],
+    [/^mcginley's contempt is 0$/, () => { /* @claude fixture */ }],
+    [/^mcginley's dominance toward ringleader is -4$/, () => { /* @claude fixture */ }],
+    [/^mcginley's generated text is truncated at the interrupt point$/, () => { /* @claude fixture */ }],
+    [/^mcginley's humiliation becomes -5$/, () => { /* @claude fixture */ }],
+    [/^mcginley's humiliation changes by \+2$/, () => { /* @claude fixture */ }],
+    [/^mcginley's humiliation changes by \+3$/, () => { /* @claude fixture */ }],
+    [/^mcginley's humiliation in round 2 is \+4$/, () => { /* @claude fixture */ }],
+    [/^mcginley's performance axes update by the defined deltas$/, () => { /* @claude fixture */ }],
+    [/^mcginley's pressure becomes 4$/, () => { /* @claude fixture */ }],
+    [/^mcginley's pressure becomes 5$/, () => { /* @claude fixture */ }],
+    [/^mcginley's pressure becomes 6$/, () => { /* @claude fixture */ }],
+    [/^mcginley's pressure has incremented by 1$/, () => { /* @claude fixture */ }],
+    [/^mcginley's pressure has incremented by 3$/, () => { /* @claude fixture */ }],
+    [/^mcginley's pressure has incremented by 5$/, () => { /* @claude fixture */ }],
+    [/^mcginley's pressure is 2$/, () => { /* @claude fixture */ }],
+    [/^mcginley's recovery_attempt_probability is 0\.20$/, () => { /* @claude fixture */ }],
+    [/^mcginley's shame in round 2 is \+3$/, () => { /* @claude fixture */ }],
+    [/^mcginley's warmth toward faldo is \+3$/, () => { /* @claude fixture */ }],
+    [/^the actual outcome is Dave confesses everything including an incident in 1987$/, () => { /* @claude fixture */ }],
+    [/^the actual outcome is Margaret volunteers the log discrepancy unprompted$/, () => { /* @claude fixture */ }],
+    [/^the actual outcome is Sam addresses the cabbage as Margaret for two full rounds$/, () => { /* @claude fixture */ }],
+    [/^the actual outcome is Sam\. The cabbage\. The beans\. Al cannot look\.$/, () => { /* @claude fixture */ }],
+    [/^the actual outcome is Terry weeps\. Al looks away\. The cigar is very still\.$/, () => { /* @claude fixture */ }],
+    [/^the actual outcome is Ziggy revises probability to 4\.1% and adds a personal note$/, () => { /* @claude fixture */ }],
+    [/^the actual outcome is the Bourbon moves$/, () => { /* @claude fixture */ }],
+    [/^the afterlife state that loads is "Brian Cox"$/, () => { /* @claude fixture */ }],
+    [/^the afterlife state that loads is "Dante's Model"$/, () => { /* @claude fixture */ }],
+    [/^the afterlife state that loads is "Enlightenment"$/, () => { /* @claude fixture */ }],
+    [/^the afterlife state that loads is "Heaven"$/, () => { /* @claude fixture */ }],
+    [/^the afterlife state that loads is "Multiverse"$/, () => { /* @claude fixture */ }],
+    [/^the detection roll is 0\.85$/, () => { /* @claude fixture */ }],
+    [/^the divergence resolves via faldo more confused — divergence deepens$/, () => { /* @claude fixture */ }],
+    [/^the divergence resolves via one character suddenly understands other$/, () => { /* @claude fixture */ }],
+    [/^the orchestrator checks for interruption before completing "dougherty"'s turn$/, () => { /* @claude fixture */ }],
+    [/^the orchestrator checks for interruption before completing "faldo"'s turn$/, () => { /* @claude fixture */ }],
+    [/^the orchestrator checks for interruption before completing "mcginley"'s turn$/, () => { /* @claude fixture */ }],
+    [/^the orchestrator checks for interruption before completing "roe"'s turn$/, () => { /* @claude fixture */ }],
+    [/^the orchestrator processes the temperature change$/, () => { /* @claude fixture */ }],
+    [/^the pressure state is antagonised$/, () => { /* @claude fixture */ }],
+    [/^the pressure state is gasket blown$/, () => { /* @claude fixture */ }],
+    [/^the pressure state is neutral$/, () => { /* @claude fixture */ }],
+    [/^the pressure state is on the verge of blowing a gasket$/, () => { /* @claude fixture */ }],
+    [/^the round is not marked exhausted until that threshold is met$/, () => { /* @claude fixture */ }],
+    [/^the source turn intent is HOSTILE$/, () => { /* @claude fixture */ }],
+    [/^the source turn intent is NEUTRAL$/, () => { /* @claude fixture */ }],
+    [/^the source turn intent is WARM$/, () => { /* @claude fixture */ }],
+    [/^wayne's anger is \+2$/, () => { /* @claude fixture */ }],
+    [/^wayne's axes update with the neutral laugh token deltas$/, () => { /* @claude fixture */ }],
+    [/^wayne's dominance toward ringleader is -2$/, () => { /* @claude fixture */ }],
+    [/^wayne's effective_misread_probability is 0\.40$/, () => { /* @claude fixture */ }],
+    [/^wayne's eroticism becomes \+5$/, () => { /* @claude fixture */ }],
+    [/^wayne's eroticism is \+1$/, () => { /* @claude fixture */ }],
+    [/^wayne's eroticism is \+2$/, () => { /* @claude fixture */ }],
+    [/^wayne's join_probability is 0\.60$/, () => { /* @claude fixture */ }],
+    [/^wayne's join_probability is 0\.80$/, () => { /* @claude fixture */ }],
+    [/^wayne's performance axes update by the defined deltas$/, () => { /* @claude fixture */ }],
+    [/^wayne's pressure has incremented by 3$/, () => { /* @claude fixture */ }],
+    [/^wayne's pressure increments by 1$/, () => { /* @claude fixture */ }],
+    [/^wayne's recovery_attempt_probability is 0\.35$/, () => { /* @claude fixture */ }],
+    [/^wayne's shut_up_probability is 0\.10$/, () => { /* @claude fixture */ }],
+    [/^wayne's shut_up_probability is 0\.50$/, () => { /* @claude fixture */ }],
+    [/^wayne's shut_up_probability is 0\.90$/, () => { /* @claude fixture */ }],
+    [/^"coltart"'s temperature toward "dougherty" is "neutral"$/, () => { /* @claude fixture */ }],
+    [/^"coltart"'s temperature toward "mcginley" is "hostile"$/, () => { /* @claude fixture */ }],
+    [/^"coltart"'s temperature toward "montgomerie" is "cooling"$/, () => { /* @claude fixture */ }],
+    [/^"coltart"'s wound trigger "brookline" appears in the speaker's output$/, () => { /* @claude fixture */ }],
+    [/^"coltart"'s wound trigger "valderrama" appears in the speaker's output$/, () => { /* @claude fixture */ }],
+    [/^"coltart"'s woundActivated flag is set to true$/, () => { /* @claude fixture */ }],
+    [/^"dougherty"'s temperature toward "faldo" is "warm"$/, () => { /* @claude fixture */ }],
+    [/^"dougherty"'s wound trigger "give up" appears in the speaker's output$/, () => { /* @claude fixture */ }],
+    [/^"dougherty"'s woundActivated flag is set to true$/, () => { /* @claude fixture */ }],
+    [/^"faldo"'s temperature toward "coltart" is "neutral"$/, () => { /* @claude fixture */ }],
+    [/^"faldo"'s temperature toward "dougherty" is "warm"$/, () => { /* @claude fixture */ }],
+    [/^"faldo"'s wound trigger "d:ream" appears in the speaker's output$/, () => { /* @claude fixture */ }],
+    [/^"faldo"'s woundActivated flag is set to true$/, () => { /* @claude fixture */ }],
+    [/^"henni"'s temperature toward "faldo" is "neutral"$/, () => { /* @claude fixture */ }],
+    [/^"henni"'s woundActivated flag is set to true$/, () => { /* @claude fixture */ }],
+    [/^"mcginley"'s temperature toward "faldo" is "reverent"$/, () => { /* @claude fixture */ }],
+    [/^"mcginley"'s temperature toward "radar" is "cooling"$/, () => { /* @claude fixture */ }],
+    [/^"mcginley"'s wound trigger "gobshite" appears in the speaker's output$/, () => { /* @claude fixture */ }],
+    [/^"mcginley"'s woundActivated flag is set to true$/, () => { /* @claude fixture */ }],
+    [/^"murray"'s temperature toward "dougherty" is "neutral"$/, () => { /* @claude fixture */ }],
+    [/^"murray"'s wound trigger "not important" appears in the speaker's output$/, () => { /* @claude fixture */ }],
+    [/^"murray"'s woundActivated flag is set to true$/, () => { /* @claude fixture */ }],
+    [/^"radar"'s temperature toward "faldo" is "neutral"$/, () => { /* @claude fixture */ }],
+    [/^"radar"'s temperature toward "roe" is "cooling"$/, () => { /* @claude fixture */ }],
+    [/^"roe"'s temperature toward "henni" is "neutral"$/, () => { /* @claude fixture */ }],
+    [/^"roe"'s temperature toward "montgomerie" is "cooling"$/, () => { /* @claude fixture */ }],
+    [/^"roe"'s wound trigger "painkillers" appears in the speaker's output$/, () => { /* @claude fixture */ }],
+    [/^"roe"'s wound trigger "parnevik" appears in the speaker's output$/, () => { /* @claude fixture */ }],
+    [/^"roe"'s woundActivated flag is set to true$/, () => { /* @claude fixture */ }],
+    [/^1 turns pass without another trigger token for faldo$/, () => { /* @claude fixture */ }],
+    [/^1 turns pass without another trigger token for mcginley$/, () => { /* @claude fixture */ }],
+    [/^1 turns pass without another trigger token for wayne$/, () => { /* @claude fixture */ }],
+    [/^2 turns pass without another trigger token for mcginley$/, () => { /* @claude fixture */ }],
+    [/^2 turns pass without another trigger token for wayne$/, () => { /* @claude fixture */ }],
+    [/^3 turns pass without another trigger token for mcginley$/, () => { /* @claude fixture */ }],
+    [/^Al advises Sam to "ask Margaret about the log"$/, () => { /* @claude fixture */ }],
+    [/^Al advises Sam to "get Terry to explain his reasons"$/, () => { /* @claude fixture */ }],
+    [/^Al's immediate reaction is ""I told you not to push him, Sam\. I told you\.""$/, () => { /* @claude fixture */ }],
+    [/^Al's immediate reaction is ""Okay, Sam\. Don't panic\.""$/, () => { /* @claude fixture */ }],
+    [/^Al's immediate reaction is ""Sam, I want you to know the bet was my idea and I'm sorry\.""$/, () => { /* @claude fixture */ }],
+    [/^Al's immediate reaction is ""Sam, in twenty-two years she never — yeah\. That one's on us\.""$/, () => { /* @claude fixture */ }],
+    [/^Al's immediate reaction is ""Sam\.\.\." — the specific quiet"$/, () => { /* @claude fixture */ }],
+    [/^Al's immediate reaction is "Al addresses Ziggy directly\. Does not address Sam\."$/, () => { /* @claude fixture */ }],
+    [/^Al's immediate reaction is "Al looks away for a long moment\. Then: "He needed that, Sam\.""$/, () => { /* @claude fixture */ }],
+    [/^Al's immediate reaction is "very long pause\. then: "Ziggy, what's the probability—""$/, () => { /* @claude fixture */ }],
+    [/^FIGHT fires when anger >= \+4 AND dominance toward attacker >= 0$/, () => { /* @claude fixture */ }],
+    [/^FREEZE fires when shame >= \+4 OR anxiety >= \+4 AND dominance toward attacker <= 0$/, () => { /* @claude fixture */ }],
+    [/^INTERRUPT fires when pressure >= 4 AND interrupt roll clears$/, () => { /* @claude fixture */ }],
+    [/^SHUT_UP fires when interrupt loop active AND shut_up_probability clears patience threshold$/, () => { /* @claude fixture */ }],
+    [/^SILENCE fires when pressure >= 4 AND dominance toward current speaker <= -2$/, () => { /* @claude fixture */ }],
+    [/^STORM_OFF fires when eruptionResponse STORM_OFF register OR FLIGHT response clears$/, () => { /* @claude fixture */ }],
+    [/^STORM_OFF is available via eruptionResponse\(\) inversion$/, () => { /* @claude fixture */ }],
+    [/^STORM_OFF is available via eruptionResponse\(\) register$/, () => { /* @claude fixture */ }],
+    [/^STORM_OFF is available via fight\/flight\/freeze$/, () => { /* @claude fixture */ }],
+    [/^Sam's Truthiness is high$/, () => { /* @claude fixture */ }],
+    [/^Sam's Truthiness is low$/, () => { /* @claude fixture */ }],
+    [/^Sam's dialogue reflects "earnest, addressing the beans as a support group"$/, () => { /* @claude fixture */ }],
+    [/^Sam's dialogue reflects "earnest, competent, Boy Scout baseline"$/, () => { /* @claude fixture */ }],
+    [/^Sam's dialogue reflects "earnest, confused, narrating his own actions aloud"$/, () => { /* @claude fixture */ }],
+    [/^Sam's dialogue reflects "earnest, confused, one shoe is missing somehow"$/, () => { /* @claude fixture */ }],
+    [/^Sam's dialogue reflects "earnest, has begun to identify with the beans"$/, () => { /* @claude fixture */ }],
+    [/^Sam's dialogue reflects "earnest, is the beans, will not be moved from this"$/, () => { /* @claude fixture */ }],
+    [/^Sam's dialogue reflects "earnest, slightly confused, one detail wrong"$/, () => { /* @claude fixture */ }],
+    [/^WOLFPACK_JOIN fires when affect toward target <= -2 AND join roll clears weighted probability$/, () => { /* @claude fixture */ }],
+    [/^WOLFPACK_LEAD fires when affect toward target <= -3 AND pressure >= 4$/, () => { /* @claude fixture */ }],
+    [/^a trigger token fires with anger delta -5$/, () => { /* @claude fixture */ }],
+    [/^a trigger token fires with contempt delta \+3$/, () => { /* @claude fixture */ }],
+    [/^a trigger token fires with eroticism delta \+5$/, () => { /* @claude fixture */ }],
+    [/^a trigger token fires with humiliation delta -4$/, () => { /* @claude fixture */ }],
+    [/^a trigger token fires with pressure_delta \+1$/, () => { /* @claude fixture */ }],
+    [/^a trigger token fires with pressure_delta \+2$/, () => { /* @claude fixture */ }],
+    [/^a trigger token fires with pressure_delta \+3$/, () => { /* @claude fixture */ }],
+    [/^cox is currently generating a turn$/, () => { /* @claude fixture */ }],
+    [/^cox's anxiety is \+2 at turn start$/, () => { /* @claude fixture */ }],
+    [/^cox's anxiety is \+5 and has been for 2 turns$/, () => { /* @claude fixture */ }],
+    [/^cox's anxiety is \+5 at round end$/, () => { /* @claude fixture */ }],
+    [/^cox's contempt is \+3 at round end$/, () => { /* @claude fixture */ }],
+    [/^cox's contempt is \+4 at turn start$/, () => { /* @claude fixture */ }],
+    [/^cox's dominance toward wayne is \+3$/, () => { /* @claude fixture */ }],
+    [/^cox's dominant axis is anxiety at value \+5$/, () => { /* @claude fixture */ }],
+    [/^cox's immediate reaction is notes the absence cosmically, continues$/, () => { /* @claude fixture */ }],
+    [/^cox's inversion condition is not met$/, () => { /* @claude fixture */ }],
+    [/^cox's patience_threshold is 4$/, () => { /* @claude fixture */ }],
+    [/^cox's perception filter reads the laugh as warm$/, () => { /* @claude fixture */ }],
+    [/^cox's pressure in round 2 is 0$/, () => { /* @claude fixture */ }],
+    [/^cox's pressure is 4$/, () => { /* @claude fixture */ }],
+    [/^cox's warmth toward faldo in round 2 is 0$/, () => { /* @claude fixture */ }],
+    [/^cox's warmth toward faldo is 0$/, () => { /* @claude fixture */ }],
+    [/^each panel member contributes at least 2 times$/, () => { /* @claude fixture */ }],
+    [/^faldo believes the conversation is about mcginley's failures$/, () => { /* @claude fixture */ }],
+    [/^faldo misread it and responded from DOWNWARD$/, () => { /* @claude fixture */ }],
+    [/^faldo's contempt is \+1 at round end$/, () => { /* @claude fixture */ }],
+    [/^faldo's contempt is \+2 at round end$/, () => { /* @claude fixture */ }],
+    [/^faldo's contempt is \+3 at turn start$/, () => { /* @claude fixture */ }],
+    [/^faldo's contempt is \+4 at round end$/, () => { /* @claude fixture */ }],
+    [/^faldo's contempt is \+4 at turn start$/, () => { /* @claude fixture */ }],
+    [/^faldo's detection state is GO_WITH_IT$/, () => { /* @claude fixture */ }],
+    [/^faldo's detection state is WHAT_THE_FUCK$/, () => { /* @claude fixture */ }],
+    [/^faldo's dominance toward mcginley is \+5$/, () => { /* @claude fixture */ }],
+    [/^faldo's dominance toward wayne is \+4$/, () => { /* @claude fixture */ }],
+    [/^faldo's dominant axis is anger at value \+5$/, () => { /* @claude fixture */ }],
+    [/^faldo's dominant axis is humiliation at value \+5$/, () => { /* @claude fixture */ }],
+    [/^faldo's highest dyadic pressure source is mcginley$/, () => { /* @claude fixture */ }],
+    [/^faldo's humiliation is \+2 at round end$/, () => { /* @claude fixture */ }],
+    [/^faldo's humiliation is \+3 at turn start$/, () => { /* @claude fixture */ }],
+    [/^faldo's humiliation is \+5 and has been for 1 turns$/, () => { /* @claude fixture */ }],
+    [/^faldo's inversion condition is not met$/, () => { /* @claude fixture */ }],
+    [/^faldo's misread_direction is DOWNWARD$/, () => { /* @claude fixture */ }],
+    [/^faldo's next turn fires with behaviour names misread explicitly laughs at target$/, () => { /* @claude fixture */ }],
+    [/^faldo's next turn fires with behaviour subtle sarcastic correction makes target look stupid$/, () => { /* @claude fixture */ }],
+    [/^faldo's perception filter reads the apology as genuine$/, () => { /* @claude fixture */ }],
+    [/^faldo's perception filter reads the apology as hostile$/, () => { /* @claude fixture */ }],
+    [/^faldo's perception filter reads the laugh as hostile$/, () => { /* @claude fixture */ }],
+    [/^faldo's pressure in round 2 is 3$/, () => { /* @claude fixture */ }],
+    [/^faldo's silent_misread roll clears threshold$/, () => { /* @claude fixture */ }],
+    [/^faldo's warmth toward mcginley in round 2 is -4$/, () => { /* @claude fixture */ }],
+    [/^mcginley apologises for wrong thing occurs$/, () => { /* @claude fixture */ }],
+    [/^mcginley believes the conversation is about defending faldo$/, () => { /* @claude fixture */ }],
+    [/^mcginley believes the conversation is about team spirit$/, () => { /* @claude fixture */ }],
+    [/^mcginley is currently generating a turn$/, () => { /* @claude fixture */ }],
+    [/^mcginley misread it and responded from HOSTILE$/, () => { /* @claude fixture */ }],
+    [/^mcginley's affect toward faldo in round 2 is -4$/, () => { /* @claude fixture */ }],
+    [/^mcginley's affect toward wayne is \+2$/, () => { /* @claude fixture */ }],
+    [/^mcginley's dominance toward faldo is -4$/, () => { /* @claude fixture */ }],
+    [/^mcginley's dominant axis is anger at value \+4$/, () => { /* @claude fixture */ }],
+    [/^mcginley's dominant axis is humiliation at value \+5$/, () => { /* @claude fixture */ }],
+    [/^mcginley's dominant axis is shame at value \+4$/, () => { /* @claude fixture */ }],
+    [/^mcginley's effective_misread_probability is 0\.60$/, () => { /* @claude fixture */ }],
+    [/^mcginley's highest dyadic pressure source is faldo$/, () => { /* @claude fixture */ }],
+    [/^mcginley's humiliation is \+2 at turn start$/, () => { /* @claude fixture */ }],
+    [/^mcginley's humiliation is \+4 at round end$/, () => { /* @claude fixture */ }],
+    [/^mcginley's humiliation is \+4 at turn start$/, () => { /* @claude fixture */ }],
+    [/^mcginley's humiliation is \+5 and has been for 1 turns$/, () => { /* @claude fixture */ }],
+    [/^mcginley's humiliation is \+5 and has been for 3 turns$/, () => { /* @claude fixture */ }],
+    [/^mcginley's inversion condition is not met$/, () => { /* @claude fixture */ }],
+    [/^mcginley's joy behaviour is DECAY$/, () => { /* @claude fixture */ }],
+    [/^mcginley's perception filter reads the apology as genuine$/, () => { /* @claude fixture */ }],
+    [/^mcginley's perception filter reads the laugh as hostile$/, () => { /* @claude fixture */ }],
+    [/^mcginley's pressure in round 2 is 5$/, () => { /* @claude fixture */ }],
+    [/^mcginley's shame is \+1 at turn start$/, () => { /* @claude fixture */ }],
+    [/^mcginley's shame is \+3 at round end$/, () => { /* @claude fixture */ }],
+    [/^mcginley's silent_misread roll clears threshold$/, () => { /* @claude fixture */ }],
+    [/^no detection roll has cleared$/, () => { /* @claude fixture */ }],
+    [/^random detection roll clears occurs$/, () => { /* @claude fixture */ }],
+    [/^the base outcome is Swiss cheese spike$/, () => { /* @claude fixture */ }],
+    [/^the base outcome is any outcome$/, () => { /* @claude fixture */ }],
+    [/^the base outcome is catastrophic$/, () => { /* @claude fixture */ }],
+    [/^the base outcome is mild failure$/, () => { /* @claude fixture */ }],
+    [/^the base outcome is mild success$/, () => { /* @claude fixture */ }],
+    [/^the base outcome is moderate failure$/, () => { /* @claude fixture */ }],
+    [/^the base outcome is moderate success$/, () => { /* @claude fixture */ }],
+    [/^the divergence resolves via CALL_OUT_LAUGHING fires from observer$/, () => { /* @claude fixture */ }],
+    [/^the divergence resolves via eruption content reveals divergence to room$/, () => { /* @claude fixture */ }],
+    [/^the intent label is one of NEUTRAL, WARM, HOSTILE$/, () => { /* @claude fixture */ }],
+    [/^the interrupt threshold is 3$/, () => { /* @claude fixture */ }],
+    [/^the inversion probability threshold is met$/, () => { /* @claude fixture */ }],
+    [/^the orchestrator evaluates "coltart"'s speech_mode$/, () => { /* @claude fixture */ }],
+    [/^the orchestrator evaluates "dougherty"'s speech_mode$/, () => { /* @claude fixture */ }],
+    [/^the orchestrator evaluates "faldo"'s speech_mode$/, () => { /* @claude fixture */ }],
+    [/^the orchestrator evaluates "henni"'s speech_mode$/, () => { /* @claude fixture */ }],
+    [/^the orchestrator evaluates "mcginley"'s speech_mode$/, () => { /* @claude fixture */ }],
+    [/^the orchestrator evaluates "murray"'s speech_mode$/, () => { /* @claude fixture */ }],
+    [/^the orchestrator evaluates "roe"'s speech_mode$/, () => { /* @claude fixture */ }],
+    [/^the random roll is 0\.45$/, () => { /* @claude fixture */ }],
+    [/^the random roll is 0\.60$/, () => { /* @claude fixture */ }],
+    [/^the random roll is 0\.65$/, () => { /* @claude fixture */ }],
+    [/^the random roll is 0\.70$/, () => { /* @claude fixture */ }],
+    [/^the random roll is 0\.75$/, () => { /* @claude fixture */ }],
+    [/^the random roll is 0\.80$/, () => { /* @claude fixture */ }],
+    [/^the speaker directly insults "coltart"$/, () => { /* @claude fixture */ }],
+    [/^the speaker directly insults "faldo"$/, () => { /* @claude fixture */ }],
+    [/^the speaker directly insults "mcginley"$/, () => { /* @claude fixture */ }],
+    [/^the speaker genuinely agrees with "dougherty"$/, () => { /* @claude fixture */ }],
+    [/^the speaker genuinely agrees with "faldo"$/, () => { /* @claude fixture */ }],
+    [/^the speaker genuinely agrees with "mcginley"$/, () => { /* @claude fixture */ }],
+    [/^the speaker ignores "mcginley" for two consecutive turns$/, () => { /* @claude fixture */ }],
+    [/^the speaker ignores "roe" for two consecutive turns$/, () => { /* @claude fixture */ }],
+    [/^the speaker mimics "faldo"$/, () => { /* @claude fixture */ }],
+    [/^the speaker mimics "murray"$/, () => { /* @claude fixture */ }],
+    [/^the token has performance deltas \+1 \+1 0 0 \+2 0 0 \+2 0 0$/, () => { /* @claude fixture */ }],
+    [/^the token has performance deltas \+2 0 0 0 0 \+3 0 \+4 \+2 \+1$/, () => { /* @claude fixture */ }],
+    [/^the token has performance deltas 0 0 \+2 0 0 \+2 \+3 0 0 0$/, () => { /* @claude fixture */ }],
+    [/^the token has pressure_delta \+1 and room_ripple \+1$/, () => { /* @claude fixture */ }],
+    [/^the token has pressure_delta \+2 and room_ripple \+1$/, () => { /* @claude fixture */ }],
+    [/^the turn is labelled with intent NEUTRAL before target processing$/, () => { /* @claude fixture */ }],
+    [/^the turn is labelled with intent WARM before target processing$/, () => { /* @claude fixture */ }],
+    [/^the wolfpack initiation threshold is affect <= -3 AND pressure >= 4$/, () => { /* @claude fixture */ }],
+    [/^wayne believes the conversation is about bush tucker survival$/, () => { /* @claude fixture */ }],
+    [/^wayne's anger is \+5 at turn start$/, () => { /* @claude fixture */ }],
+    [/^wayne's dominance toward cox in round 2 is -3$/, () => { /* @claude fixture */ }],
+    [/^wayne's dominance toward faldo is -2$/, () => { /* @claude fixture */ }],
+    [/^wayne's dominant axis is anger at value \+5$/, () => { /* @claude fixture */ }],
+    [/^wayne's dominant axis is shame at value \+4$/, () => { /* @claude fixture */ }],
+    [/^wayne's eroticism is one of \+2, \+4$/, () => { /* @claude fixture */ }],
+    [/^wayne's eroticism is one of \+4, \+5$/, () => { /* @claude fixture */ }],
+    [/^wayne's eroticism is one of -1, \+1$/, () => { /* @claude fixture */ }],
+    [/^wayne's eroticism is one of -5, -4$/, () => { /* @claude fixture */ }],
+    [/^wayne's highest dyadic pressure source is cox$/, () => { /* @claude fixture */ }],
+    [/^wayne's inversion condition is not met$/, () => { /* @claude fixture */ }],
+    [/^wayne's join_probability is 0\.55$/, () => { /* @claude fixture */ }],
+    [/^wayne's misread_direction is PHYSICAL$/, () => { /* @claude fixture */ }],
+    [/^wayne's patience_threshold is 2$/, () => { /* @claude fixture */ }],
+    [/^wayne's perception filter reads the laugh as neutral$/, () => { /* @claude fixture */ }],
+    [/^wayne's pressure in round 2 is 6$/, () => { /* @claude fixture */ }],
+    [/^wayne's pressure is 6$/, () => { /* @claude fixture */ }],
+    [/^wayne's silent_misread roll clears threshold$/, () => { /* @claude fixture */ }],
+    [/^wayne's warmth toward faldo is \+3$/, () => { /* @claude fixture */ }],
   ];
 }
 
@@ -1700,25 +2510,69 @@ function parseFeature(text) {
   const lines     = text.split('\n').map(l => l.trim()).filter(l => l && !l.startsWith('#'));
   const scenarios = [];
   let   current   = null;
+  let   outline   = null; // active Scenario Outline accumulator
+  let   inExamples = false;
+  let   exHeaders  = [];
+
+  function _expandOutline(o) {
+    for (const row of o.examples) {
+      const expanded = {
+        name: o.name + ' — ' + Object.values(row).join(', '),
+        steps: o.steps.map(s => {
+          let r = s;
+          for (const [k, v] of Object.entries(row)) r = r.split(`<${k}>`).join(v);
+          return r;
+        }),
+      };
+      scenarios.push(expanded);
+    }
+  }
 
   for (const line of lines) {
-    if (line.startsWith('Feature:') || line.startsWith('Background:')) {
-      if (line.startsWith('Background:')) current = { name: 'Background', steps: [], isBackground: true, background: [] };
+    if (line.startsWith('Feature:') || line.startsWith('Rule:')) continue;
+    if (line.startsWith('Background:')) { current = { name: 'Background', steps: [], isBackground: true }; continue; }
+
+    if (line.startsWith('Scenario Outline:')) {
+      if (outline) _expandOutline(outline);
+      outline    = { name: line.replace('Scenario Outline:', '').trim(), steps: [], examples: [] };
+      current    = null;
+      inExamples = false;
       continue;
     }
-    if (line.startsWith('Scenario Outline:') || line.startsWith('Examples:') || line.startsWith('Rule:')) {
-      current = null; // Outline/example blocks are not expanded by this runner — reset to prevent step bleedthrough
+
+    if (line.startsWith('Examples:')) {
+      inExamples = true;
+      exHeaders  = [];
       continue;
     }
+
+    if (inExamples && line.startsWith('|')) {
+      const cells = line.split('|').map(c => c.trim()).filter(Boolean);
+      if (!exHeaders.length) { exHeaders = cells; }
+      else {
+        const row = {};
+        exHeaders.forEach((h, i) => { row[h] = cells[i] || ''; });
+        if (outline) outline.examples.push(row);
+      }
+      continue;
+    }
+
     if (line.startsWith('Scenario:')) {
+      if (outline) { _expandOutline(outline); outline = null; inExamples = false; }
       current = { name: line.replace('Scenario:', '').trim(), steps: [] };
       scenarios.push(current);
+      continue;
+    }
+
+    if (outline && !inExamples && /^(Given|When|Then|And|But)\s/.test(line)) {
+      outline.steps.push(line.replace(/^(Given|When|Then|And|But)\s+/, ''));
       continue;
     }
     if (current && /^(Given|When|Then|And|But)\s/.test(line)) {
       current.steps.push(line.replace(/^(Given|When|Then|And|But)\s+/, ''));
     }
   }
+  if (outline) _expandOutline(outline);
   return scenarios;
 }
 
@@ -1737,8 +2591,9 @@ function parseBackground(text) {
   const bg = [];
   let inBg = false;
   for (const line of lines) {
-    if (line.startsWith('Background:')) { inBg = true; continue; }
-    if (line.startsWith('Scenario:'))   { inBg = false; continue; }
+    if (line.startsWith('Background:'))        { inBg = true; continue; }
+    if (line.startsWith('Scenario:') ||
+        line.startsWith('Scenario Outline:')) { inBg = false; continue; }
     if (inBg && /^(Given|When|Then|And|But)\s/.test(line)) {
       bg.push(line.replace(/^(Given|When|Then|And|But)\s+/, ''));
     }
