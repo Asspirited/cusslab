@@ -441,3 +441,14 @@ Entry format: copy schema above. Minimum viable entry is Item + Symptom + Tags +
 - **Delay:** Minor
 - **Tags:** paste-boundary, claude-ai-to-claude-code, large-paste
 - **Status:** Logged — always include feature file content inline not by reference
+
+## WL-035
+- **Item:** 90-minute waste session — new Claude Code instance didn't realise it was Claude Code in WSL
+- **Symptom:** The instance behaved as if it were claude.ai chat — suggested Python heredocs and sed commands for the user to run manually instead of using its own file editing tools; kept proposing shell one-liners with broken escaping; user had to stop the session and open a fresh instance
+- **Suspected cause:** Unclear session initialisation — the instance did not identify itself as Claude Code with WSL filesystem access; defaulted to advisory/chat mode instead of acting as an agent
+- **Session:** 2026-03-05
+- **Time lost:** ~90 minutes
+- **Cost impact:** High — entire session wasted
+- **Delay:** Yes
+- **Tags:** claude-code, wsl, agent-mode, session-startup, waste
+- **Status:** Logged — always open Claude Code from WSL with `cd ~/cusslab && claude`; verify at session start that the instance can read files directly (use Read tool, not ask user to paste)
