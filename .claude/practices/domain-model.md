@@ -1270,3 +1270,41 @@ DRIFT: ±1 random walk per turn. One random step at round boundary.
 | cox       | anxiety     | ESCALATE  | +1        | cosmic dread accumulates                 |
 | wayne     | eroticism   | DRIFT     | ±1        | has its own weather system               |
 | wayne     | anger       | DECAY     | —         | blows fast, gone fast                    |
+
+---
+### Perception Filter Table (Golf Panel)
+
+Loaded at panel initialisation. base_misread_probability grows with pressure.
+Formula: effective_probability = base_probability + (pressure * 0.05), clamped at 1.0.
+Higher pressure = more misreads = confirmation bias = looking for trouble.
+
+| Character | base_misread_probability | misread_direction | note                                           |
+|-----------|--------------------------|-------------------|------------------------------------------------|
+| faldo     | 0.3                      | DOWNWARD          | everything more incompetent than it is         |
+| mcginley  | 0.6                      | SOCIAL            | everything is a slight against his warmth      |
+| cox       | 0.8                      | NONE              | consistently doesn't read rather than misreads |
+| wayne     | 0.4                      | PHYSICAL          | everything reminds him of the outback          |
+
+#### Misread Directions
+
+| Direction | What the character hears instead of what was said                  |
+|-----------|--------------------------------------------------------------------|
+| DOWNWARD  | neutral or warm intent read as evidence of incompetence            |
+| SOCIAL    | neutral or warm intent read as a slight against warmth or status   |
+| PHYSICAL  | any intent filtered through outback/physical survival associations |
+| NONE      | emotional content stripped entirely — receives facts only          |
+
+#### Divergent Reality Modes
+
+Fires when both source and target have missed each other's misread.
+Determined by what each character believes the conversation is about.
+
+| Mode                | Condition                                          | Comic outcome                                          |
+|---------------------|----------------------------------------------------|--------------------------------------------------------|
+| PARALLEL_ARGUMENT   | each arguing a completely different topic          | conversation forked, room watches in confusion         |
+| VIOLENT_AGREEMENT   | same viewpoint, opposite emotional reads           | furious agreement neither party notices                |
+| CONVERGENT_ACCIDENT | same conclusion, different premises                | both claim victory, both correct, neither acknowledges |
+
+Collision resolves via: third character CALL_OUT_LAUGHING, eruption reveal,
+or random detection roll clearing. Apology during divergence can deepen it.
+Misread never resolved feeds pressure +1 and humiliation ESCALATE per turn.
