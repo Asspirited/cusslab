@@ -14,16 +14,19 @@ Feature: WoundDetector Abstraction
     And the result has word "<wound_word>"
 
     Examples:
-      | character  | wound_word  |
-      | coltart    | valderrama  |
-      | coltart    | brookline   |
-      | mcginley   | gobshite    |
-      | faldo      | d:ream      |
-      | dougherty  | give up     |
-      | roe        | parnevik    |
-      | roe        | painkillers |
+      | character  | wound_word    |
+      | coltart    | valderrama    |
+      | coltart    | brookline     |
+      | mcginley   | gobshite      |
+      | faldo      | fanny         |
+      | faldo      | sunesson      |
+      | faldo      | tiger         |
+      | faldo      | norman        |
+      | dougherty  | give up       |
+      | roe        | parnevik      |
+      | roe        | painkillers   |
       | murray     | not important |
-      | henni      | skip that   |
+      | henni      | skip that     |
 
   Scenario: GolfWoundDetector.check() returns triggered false for non-wound text
     Given the GolfWoundDetector is loaded
