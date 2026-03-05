@@ -496,3 +496,14 @@ Entry format: copy schema above. Minimum viable entry is Item + Symptom + Tags +
 - **Delay:** Minor
 - **Tags:** verbosity, prompt, regression, panel, token-waste, permanent-constraint-violated
 - **Status:** Closed — user prompt changed to "2-3 sentences, no speeches"; PERMANENT rule: never set paragraph counts in user prompts that contradict system prompt length constraints
+
+## WL-040
+- **Item:** ironic.feature written without reading it first in Three Amigos — caused duplicate/conflicting scenario risk
+- **Symptom:** claude.ai had to ask Claude Code to paste the existing feature file before Three Amigos could proceed; middle two bands (Meatloaf Zone, Pure Alanis) have zero scenario coverage despite being implemented
+- **Suspected cause:** 6 missing scenarios were noted in retro but never written; Three Amigos started from memory not from the actual file
+- **Session:** 2026-03-05
+- **Time lost:** ~10 mins
+- **Cost impact:** Low
+- **Delay:** Minor
+- **Tags:** three-amigos, gherkin, ironic, feature-file, read-first
+- **Status:** Logged — PERMANENT: always read the existing feature file at the start of Three Amigos before proposing any new scenarios
