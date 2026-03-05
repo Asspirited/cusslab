@@ -54,13 +54,18 @@ Feature: WoundDetector Abstraction
 
   Scenario: BoardroomWoundDetector triggers Cox on d:ream
     Given the BoardroomWoundDetector is loaded
-    When GolfWoundDetector.check() is called with character "cox" and text "you played in d:ream"
-    Then the result has triggered false
+    When BoardroomWoundDetector.check() is called with character "cox" and text "you played in d:ream"
+    Then the result has triggered true
 
-  Scenario: BoardroomWoundDetector.check() triggers cox on keyboards
+  Scenario: BoardroomWoundDetector triggers Cox on keyboards
     Given the BoardroomWoundDetector is loaded
-    Then it exposes a check() method
-    And check() returns an object with triggered and word properties
+    When BoardroomWoundDetector.check() is called with character "cox" and text "he played the keyboards"
+    Then the result has triggered true
+
+  Scenario: BoardroomWoundDetector does not trigger Cox on unrelated text
+    Given the BoardroomWoundDetector is loaded
+    When BoardroomWoundDetector.check() is called with character "cox" and text "the universe is 13.8 billion years old"
+    Then the result has triggered false
 
   # ─────────────────────────────────────────────────────────────
   # SHARED INTERFACE
