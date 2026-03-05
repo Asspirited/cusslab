@@ -4705,8 +4705,8 @@ Style: Long unhurried sentences that carry no particular weight. Something is sa
           : '');
 
         const prompt = i === 0
-          ? `Question: "${question}"\n\nAnswer fully in your style. 3-4 paragraphs.`
-          : `Question: "${question}"\n\nInterrupt, mock (${FEROCITY[i]}), then answer. 3-4 paragraphs.`;
+          ? `Question: "${question}"\n\nAnswer in your style. 2-3 sentences. No speeches.`
+          : `Question: "${question}"\n\nInterrupt, mock (${FEROCITY[i]}), then answer. 2-3 sentences. No speeches.`;
 
         const resp = await API.call(system, prompt, 500, 'bills/' + id);
         responses.push(resp);
