@@ -11250,8 +11250,14 @@ RESPONSE FORMAT — return ONLY valid JSON, no text outside it:
     _selectedZiggyOpt = i;
     [0, 1, 2].forEach(j => {
       const btn = document.getElementById('ql-zopt-' + (j + 1));
-      if (btn) btn.style.borderColor = j === i ? 'var(--green)' : '#8844cc';
+      if (!btn) return;
+      const active = j === i;
+      btn.style.borderColor  = active ? 'var(--green)' : '#8844cc';
+      btn.style.background   = active ? '#001a08'      : '#0a001a';
+      btn.style.color        = active ? 'var(--green)' : '#cc99ff';
     });
+    const textarea = document.getElementById('ql-act-input');
+    if (textarea) textarea.value = _ziggyOptions[i] || '';
   }
 
   function spendLeekiness() {
