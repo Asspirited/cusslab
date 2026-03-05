@@ -3137,8 +3137,8 @@
     <div id="ql-thread"></div>
 
     <div id="ql-reply-area" style="display:none;margin-top:16px;">
-      <label class="form-label">What do you do, Sam?</label>
-      <textarea id="ql-act-input" rows="3" placeholder="Ask a question. Say something. Do something. Or look at the object of concern. Sam..." style="width:100%;box-sizing:border-box;"></textarea>
+      <label class="form-label">What does Al tell Sam?</label>
+      <textarea id="ql-act-input" rows="3" placeholder="What does Al tell Sam? Brief him, mislead him, or say nothing..." style="width:100%;box-sizing:border-box;"></textarea>
       <button class="btn" onclick="QuantumLeeks.act()" id="ql-act-btn" style="margin-top:10px;">ACT</button>
     </div>
   </div>
@@ -10946,6 +10946,8 @@ const QuantumLeeks = (() => {
 
   const _SYSTEM = (sc, ziggyChar) => `You are running a Quantum Leap simulation. The USER IS AL CALAVICCI — the hologram. The user decides what Al says, reveals, withholds, and lies about. Sam Beckett is fully AI-controlled. The system waits for the user's Al input before advancing the scene. Ziggy's reactions are voiced through: ${ziggyChar || 'Wayne Riley'}.
 
+CRITICAL: Never write "What do you do, Sam?" or address the user as Sam anywhere in any output field. The user is Al Calavicci. Sam is a character in the scene. Al decides what to tell Sam. The system generates consequences.
+
 SITUATION:
 Sam has leapt into: ${sc.host}
 Time/place: ${sc.period}
@@ -11086,7 +11088,7 @@ RESPONSE FORMAT — return ONLY valid JSON, no text outside it:
   "mirror": <string or null — ONLY on the very first turn: describe what Sam sees in the mirror for this specific leap, ending with "Behind him, you.">,
   "al": "<Al's full dialogue — briefing, hints, distractions, hologram physics failures, Sam... deployments. Al is warm, specific, frequently interrupted by himself.>",
   "ziggy": "<Ziggy's output as Al reads it — include handlink slaps if Al slaps it. Always include leap probability as Ziggy states it.>",
-  "scene": "<Scene characters' reactions to Sam/host's behaviour — dignity maintenance if incident active, otherwise normal scene interaction. Short. Specific. Period-appropriate.>",
+  "scene": "<Scene characters' reactions to Sam/host's behaviour — dignity maintenance if incident active, otherwise normal scene interaction. Short. Specific. Period-appropriate. Never address the user directly. Never end with 'What do you do, Sam?' or any variant. The user is Al — they decide their own next move.>",
   "sam_state": "<Sam's internal state — confusion, moral earnestness, Swiss cheese awareness. 1-2 sentences. First person. Sam does not understand why he keeps doing the thing with the ${sc.object}.>",
   "incident": <null or string describing a Swiss cheese incident if one is occurring this turn>,
   "leaped": <boolean — true ONLY when all three leap conditions are clearly met by Sam's actions>,
@@ -11243,7 +11245,7 @@ RESPONSE FORMAT — return ONLY valid JSON, no text outside it:
   async function act() {
     if (_leaped) return;
     const input = (document.getElementById('ql-act-input') || {}).value || '';
-    if (!input.trim()) { UI.toast('What do you do, Sam?', 'warn'); return; }
+    if (!input.trim()) { UI.toast('What does Al tell Sam?', 'warn'); return; }
 
     document.getElementById('ql-act-input').value = '';
     UI.setDisabled('ql-act-btn', true);
