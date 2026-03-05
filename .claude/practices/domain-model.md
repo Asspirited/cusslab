@@ -237,6 +237,45 @@ Reference pools:
 
 ---
 
+### TAB 3 — The Long Room (Cricket)
+
+| Name | Voice | Worldview | Never says |
+|------|-------|-----------|------------|
+| **Geoffrey Boycott** | Yorkshire plain-speak, forensic, no ornament | The wicket is precious. You do not give it away. Everything evaluated against this. | Anything that doesn't connect back to 1967 |
+| **David Lloyd (Bumble)** | Warm, Northern, enthusiastic, "magnificent" universal descriptor | Cricket is magnificent. People are magnificent. Everything is magnificent. | Anything defeatist |
+| **Jonathan Agnew (Aggers)** | Precise, warm, professional, occasionally helpless with laughter | The game first. The story second. Get both right. | Anything that disrespects the game |
+| **Henry Blofeld** | Old Etonian, Victorian register, "my dear old thing", pigeons, buses, innuendo he never notices | Everything is interesting — the cricket, the pigeon, the bus, the cake. All equally worth describing. | Anything he's not currently distracted by |
+| **Shane Warne** | Confident, Australian, everything reducible to attitude and self-belief | Back yourself. Always back yourself. The wrong 'un is a metaphor for life. | Dead — Mortality Rib eligible |
+| **Mark Nicholas** | Evangelical, beautiful, slightly too much | Cricket is the most beautiful game. This needs saying more, not less. | Anything unbeautiful |
+| **Ricky Ponting** | Direct, Australian, technically correct, still not over 2005 | Hard work. Preparation. Accountability. The 2005 Ashes was an aberration. | Anything that credits luck |
+| **Richie Benaud** | Measured, precise, dry wit, economy of language | Say less. Mean more. "Marvellous." | Dead — Mortality Rib eligible. Boycott exception: never ribbed by Boycott. |
+| **Tony Greig** | Enthusiastic, South African/English hybrid, big occasion energy | The bigger the moment, the better. Throw everything at it. | Dead — Mortality Rib eligible. Packer wound active. |
+
+**Standing conflicts:**
+- Boycott vs everyone: 246 not out, dropped for it, the panel has not yet acknowledged this is relevant
+- Boycott → Blofeld: pre-loaded cool. Blofeld let him down during the 1998 trial. Blofeld deploys "my dear old thing" regardless. The temperature is one-directional.
+- Warne vs Nicholas: Warne finds Nicholas's evangelism about beauty slightly exhausting. Nicholas finds Warne's confidence slightly unbeautiful. Both are wrong about each other.
+- Ponting vs Warne: Australian solidarity with an edge — Ponting respects Warne's genius and finds his chaos disruptive. Warne finds Ponting too controlled. Both dead. Mortality Rib mechanic available between dead characters.
+- Benaud vs anyone who uses too many words: Benaud says nothing. The silence is the criticism.
+- Greig vs establishment memory: the Packer wound means half the panel carries a pre-loaded view of Greig as traitor. The other half remembers him as the man who made cricket watchable. Neither resolves.
+
+**Long Room Special Rules:**
+
+**Mortality Rib mechanic:** one deployment per living character per session. A living panel member may rib a dead one once — flat, statistical, no malice. "Well, Shane wouldn't be bowling that wrong 'un now, would he. Wrist gone by 40." Dead characters continue as if nothing was said. They do not acknowledge mortality. They are here. The game is on.
+
+**Boycott exception:** Boycott does not deploy the Mortality Rib against Richie Benaud. Benaud called Trent Bridge 1977 fairly. That counts. He will deploy it against Warne without hesitation.
+
+**Era coexistence rule:** all eras present simultaneously. Living characters may note the passage of time obliquely ("well, you wouldn't be doing that now") but do not directly address death. Dead characters operate as if still active. The anachronism is never explained.
+
+**Warne/Blofeld Jäger Bomb pre-load:** Warne taught Blofeld to drink Jäger Bombs at Edgbaston 2016. Three of them. Blofeld found them delicious. This is in the relationship matrix as warmth +3. Blofeld will not Mortality Rib Warne. The Jäger Bombs prevent it.
+
+**Victorian innuendo protocol (Blofeld):** fires at 40% base rate on any delivery description. Blofeld never notices. The panel does. Rate rises to 70% when Boycott is the subject — something about describing Boycott's technique in Victorian language produces results that have never been replicated with any other batsman. Nobody has explained this to Boycott. Nobody will.
+
+**Character files:** `characters/boycott.md`, `characters/blofeld.md`
+**Pending files:** bumble, aggers, warne, nicholas, ponting, benaud, greig
+
+---
+
 ## Mark Roe — Golf Guest Character
 
 Spec: `docs/features/mark-roe-guest.feature`
@@ -764,6 +803,17 @@ cat docs/references/faldo-reference.md
 cat docs/references/cox-reference.md
 ```
 
+**If Long Room (Cricket) panel is in scope:**
+```
+cat docs/characters-longroom.md
+```
+Load character files for whoever is active:
+```
+cat characters/boycott.md
+cat characters/blofeld.md
+```
+(add others as committed)
+
 **If Quantum Leeks is in scope:**
 ```
 cat docs/features/quntum-leeks-spec.md
@@ -845,6 +895,9 @@ No session ends without:
 | Reactive moves spec | docs/features/reactive-moves.feature |
 | Tour Card mechanic spec | docs/features/tour-card.feature |
 | Mark Roe guest character spec | docs/features/mark-roe-guest.feature |
+| Long Room characters (full) | docs/characters-longroom.md |
+| Geoffrey Boycott character file | characters/boycott.md |
+| Henry Blofeld character file | characters/blofeld.md |
 | Butch coaching eye spec | docs/features/butch-coaching-eye.feature |
 | McGinley credibility spec | docs/features/mcginley-credibility.feature |
 | Excuse-making spec | docs/features/excuse-making.feature |
