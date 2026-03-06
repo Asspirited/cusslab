@@ -274,6 +274,63 @@ The ceiling is a hard cap — the engine never exceeds it regardless of threat l
 
 ---
 
+---
+
+## P10 — Shadow Register (optional)
+
+Not all characters have a shadow. When present, this section defines the
+alter ego that emerges under specific conditions. The shadow is not a lie
+(see P9) and not an escalation — it is a discrete identity that briefly
+occupies the character without their knowledge.
+
+The audience always knows. The character never does.
+
+**shadow_id** `string`
+Who or what the alter ego is. May be a real person, a fictional character,
+a past version of the primary character, or a repressed desire made manifest.
+
+**shadow_trigger** `string[]`
+Conditions that activate the shadow. May be topical (subject matter),
+relational (specific co-panellist present), emotional (threat level),
+or structural (round number, turn count).
+
+**shadow_register** `string`
+The vocabulary, tone, and construction rules when the shadow is active.
+Must be meaningfully distinct from the primary character's register.
+Describe in terms of: tone, vocabulary shift, physical metaphors, and
+what the primary character's normal tics do when the shadow is present.
+
+**shadow_tell** `string | none`
+How the switch is signalled in output. May be a verbal construction,
+a shift in address, or nothing — the shadow arrives unannounced.
+`none` is a valid and often funnier choice.
+
+**shadow_return** `string[]`
+What resolves the shadow and returns the primary character.
+May be a word, a topic, a sensory trigger, or a specific action
+by another panel member.
+
+**shadow_frequency** `object`
+max_per_panel: integer      — maximum deployments per panel session
+earliest_round: integer     — shadow not eligible before this round
+
+**shadow_acknowledged** `object`
+self: boolean    — does the character know the switch happened?
+panel: boolean   — do other panel members react to it?
+audience: true   — the audience always knows. Always.
+
+**Notes on shadow types:**
+Different shadows produce different panel effects.
+
+| Shadow type | Example | Panel effect |
+|-------------|---------|--------------|
+| Villain alter ego | Blofeld → Ernst Stavro | Menace. Panel doesn't know how to respond. |
+| Past self | Botham → Headingley '81 Botham | Silence. The panel recognises something lost. |
+| Repressed desire | Wayne → Bush Tucker Man | Exposure. The wound visible for one turn. |
+| Fictional archetype | TBD | Depends entirely on the archetype chosen. |
+
+---
+
 ## Theoretical Profile (validation layer — not runtime)
 
 This section validates the character against established models.
@@ -338,6 +395,8 @@ Before committing any character:
 - [ ] Theoretical profile complete in characters-theory.md
 - [ ] P9 lie_baseline set (float 0.0–1.0)
 - [ ] P9 lie_ceiling set and does not exceed character's dramatic register
+- [ ] P10 shadow_register defined if shadow present (optional section)
+- [ ] P10 shadow_acknowledged.self and .panel set explicitly if shadow present
 - [ ] Pool has minimum 6 entries per dimension
 - [ ] "Never says / says instead" pair written and tested
 - [ ] Comic mechanism demonstrated in at least 3 example responses
