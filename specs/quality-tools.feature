@@ -42,6 +42,23 @@ Feature: Quality Tools — ACC, FMEA, 5 Whys, Ishikawa, PDCA, VSM, DORA wizards
     When I click the tab for panel "cynefin"
     Then the nav group "ng-backlog" should have class "active"
 
+  Scenario Outline: All quality tool panels are registered in the consultant skin tabs
+    Then the panel "<panel>" should be in the consultant skin tabs
+
+    Examples:
+      | panel       |
+      | acc         |
+      | fmea        |
+      | fivewhys    |
+      | ishikawa    |
+      | pdca        |
+      | vsm         |
+      | dora        |
+      | cynefin     |
+      | toc         |
+      | sevenwastes |
+      | dmaic       |
+
   # ── ACC ─────────────────────────────────────────────────────────────────────
 
   Scenario: ACC panel renders title and description
