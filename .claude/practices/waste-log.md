@@ -514,3 +514,14 @@ Entry format: copy schema above. Minimum viable entry is Item + Symptom + Tags +
 - **Session:** 2026-03-06
 - **Tags:** ux, mobile, tablet, navigation, three-amigos-pending
 - **Status:** OPEN — Three Amigos required. Options: sticky sidebar (≥768px), bottom nav bar (mobile), larger tap targets. No code changes until Three Amigos completed.
+
+## WL-042
+- **Item:** domain-model.md fetch blocked by egress proxy
+- **Symptom:** PERMISSIONS_ERROR — URL not in allowed domains when attempting web_fetch of raw.githubusercontent.com in claude.ai session
+- **Suspected cause:** Egress proxy whitelist does not include raw.githubusercontent.com
+- **Session:** 2026-03-06 Long Room character build session
+- **Time lost:** 1 exchange
+- **Cost impact:** minimal
+- **Delay:** none (Rod pasted file section; Claude Code had already updated the file directly)
+- **Tags:** infrastructure, egress, domain-model
+- **Status:** KNOWN LIMITATION — workaround is Rod pastes the file section, or Claude Code reads it directly via Read tool in Claude Code sessions
