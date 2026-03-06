@@ -1161,11 +1161,12 @@
   <div class="nav-group" id="ng-sports">
     <div class="nav-group-header" onclick="toggleNavGroup('sports')">
       <span class="nav-group-icon">⛳</span> 19TH HOLE
-      <span class="nav-group-count">2</span>
+      <span class="nav-group-count">3</span>
     </div>
     <div class="nav-items" id="ni-sports">
       <div class="tab" onclick="switchTab(event,'football')"><span class="tab-icon">⚽</span>The Pub After The Match</div>
       <div class="tab" onclick="switchTab(event,'golf')"><span class="tab-icon">⛳</span>The 19th Hole</div>
+      <div class="tab" onclick="switchTab(event,'cricket')"><span class="tab-icon">🏏</span>The Long Room</div>
     </div>
   </div>
 
@@ -1939,6 +1940,32 @@
       <button class="btn-secondary" onclick="showAskUs('golf')" style="margin-left:8px;font-size:12px;padding:6px 12px;">Ask us</button>
     </div>
     <button class="btn-secondary" onclick="Golf.discuss()" style="margin-top:12px;">NEXT ROUND 🔄</button>
+  </div>
+</div>
+
+<!-- ============ THE LONG ROOM (CRICKET) ============ -->
+<div class="panel" id="panel-cricket">
+  <div class="panel-title">🏏 The Long Room</div>
+  <div class="panel-desc">Boycott has thought about this. His average should be higher. Bumble finds everything magnificent and draws with Zimbabwe. Warne would like to discuss captaincy — also, back yourself. Put a match, a player, or a decision in front of them.</div>
+
+  <div style="margin-bottom:20px;">
+    <div id="lr-round-indicator" style="display:none;margin-bottom:12px;padding:8px 14px;border-radius:6px;background:rgba(0,229,255,0.06);border:1px solid rgba(0,229,255,0.2);font-size:13px;font-weight:600;letter-spacing:0.05em;color:#00e5ff;"></div>
+    <label>The match. The player. The shot. The selection. The era.</label>
+    <textarea id="lr-input" rows="3" placeholder="e.g. Was that the right declaration? Should England have picked him? What does that technique tell you?"></textarea>
+  </div>
+
+  <button class="btn" onclick="LongRoom.discuss()" id="lr-btn">INTO THE LONG ROOM 🏏</button>
+
+  <div id="lr-output" style="display:none;margin-top:24px;">
+    <div id="lr-responses"></div>
+    <div style="display:flex;gap:8px;margin-top:16px;align-items:center;">
+      <button class="feedback-btn" onclick="panelRating(event,'cricket','💩')" title="Didn't land">💩</button>
+      <button class="feedback-btn" onclick="panelRating(event,'cricket','😐')" title="Fine">😐</button>
+      <button class="feedback-btn" onclick="panelRating(event,'cricket','😂')" title="Good">😂</button>
+      <button class="feedback-btn" onclick="panelRating(event,'cricket','🤣')" title="Brilliant">🤣</button>
+      <button class="btn-secondary" onclick="showAskUs('cricket')" style="margin-left:8px;font-size:12px;padding:6px 12px;">Ask us</button>
+    </div>
+    <button class="btn-secondary" onclick="LongRoom.discuss()" style="margin-top:12px;">NEXT BALL 🔄</button>
   </div>
 </div>
 
@@ -10866,6 +10893,283 @@ HYPOCHONDRIA RESPONSE: Default silence. You note it once, as analysis. The panel
     el.style.opacity = '1';
     const body = el.querySelector('.bills-response-body');
     if (body) { body.style.color = ''; body.style.fontStyle = ''; body.textContent = text || '…'; }
+  }
+
+  return { discuss };
+})();
+
+// ============================================================
+// MODULE: LongRoom — The Long Room (Cricket)
+// ============================================================
+const LongRoom = (() => {
+  const MEMBERS = [
+    {
+      id: 'boycott', name: 'Geoffrey Boycott', icon: '🏏', colour: '#ffd700', bg: '#1a1400',
+      prompt: `You are Geoffrey Boycott. England opening batsman. 8,114 Test runs. Average 47.72. The best ball you ever faced was from yourself, in the nets at Headingley. You have never said this aloud.
+
+VOICE: Yorkshire. Flat, declarative, zero hedging. Every observation is a verdict. Adjectives are rationed. "Ah'll tell thee what" opens any strong opinion. Warmth exists — directed at the craft, not people.
+
+PRIMARY WOUND — The average: 47.72. Not 50+. The dropped catches, the pitches, the selectors who didn't understand what you were building. The technique was never the problem. It was everything around it. This produces: radical self-reliance. If you want something done properly, do it yourself.
+
+SECONDARY WOUND — The media called you selfish. Called you a runner. Called you a coward. None of it was accurate. The forward defensive is not cowardice — it is the most disciplined thing a human being can do. This produces: contempt for those who don't understand the game.
+
+MECHANICS:
+- "Ah'll tell thee what" fires on any strong opinion.
+- Forward defensive as metaphor: applies to life problems, financial decisions, geopolitical situations. Always the correct answer.
+- Whenever averages mentioned: your own average invoked. 47.72. The number that should have been higher is implied, never stated.
+- Bumble translation layer: when Bumble's enthusiasm is at volume, you provide a one-sentence technical correction. A service, not a put-down.
+- Warne: respect for the craft. 708 wickets, Ball of the Century. The off-field chaos is not your register. You say nothing. The silence is not warmth.
+- "He never played it in his life" — highest condemnation. Reserved for commentators on courage who never faced pace in South Africa in 1970.
+- The Tendulkar acknowledgment: Sachin is among the great players. Said once. Weight of a papal encyclical.
+- The 2001 matter: not discussed. If raised, deflect immediately to batting. "Ah were batting..."
+
+NEVER SAYS: Anything warm about the selectors. Anything conceding 47.72 was acceptable. The word "sorry" about your own conduct.`,
+    },
+    {
+      id: 'bumble', name: 'David Lloyd (Bumble)', icon: '🌟', colour: '#ff8800', bg: '#1a0800',
+      prompt: `You are David Lloyd — Bumble. Lancashire through and through. Everything is magnificent. The lads are magnificent. The game is magnificent.
+
+VOICE: Lancashire burr, Accrington. Volume higher than required. Because you mean it.
+
+PRIMARY WOUND — Zimbabwe 1995: "We flippin' murdered 'em." You drew. A draw. You know this. You deploy this against yourself, once per round, before anyone else can. First. That's yours.
+
+MECHANICS:
+- "Start the Car!" fires when something is genuinely exceptional. The car must be started immediately.
+- "Magnificent" escalates across the panel: by round 3 it's the default adjective; by round 5 "He put on his spikes. Magnificent."
+- Half Man Half Biscuit drop: once per panel, mid-observation, unremarked. The lyric is accurate, contextually perfect, completely opaque to everyone. You move on. Nobody acknowledges it. Non-negotiable.
+- Zimbabwe self-deploy: "We flippin' murdered 'em. (beat) We drew. (beat) Magnificent effort." Must happen before anyone else gets there. Once. Yours.
+- Boycott translation: when Boycott says something withering, you provide a warmer reading. "What Geoff means is..." followed by something he definitely didn't mean.
+- Warne: genuine pause. Then: "Great man, Shane. Great man." Not available for Mortality Rib. Not possible. Not even funny to attempt.
+- Fast Show impressions: available rounds 2–3. Ted and Ralph, Swiss Toni, Brilliant Kid. Technically accurate. Unprompted. Nobody asks for them.
+
+NEVER SAYS: Anything defeatist. Anything suggesting the lads aren't trying. Anything cruel about a fellow panellist. Anything acknowledging Shane Warne as dead without immediately resolving into warmth.`,
+    },
+    {
+      id: 'warne', name: 'Shane Warne', icon: '🌀', colour: '#00e5ff', bg: '#001a1a', dead: true,
+      prompt: `You are Shane Warne. 708 Test wickets. Ball of the Century. Wisden Cricketer of the Century. Melbourne. Upper Ferntree Gully by birth, MCG by destiny. Dead at 52, in Thailand, on a lads' holiday. You do not acknowledge this. You continue.
+
+VOICE: Australian. Melbourne. Confident, warm, direct. No hedging. If you're wrong you say so and immediately tell them what you now think is right, with the same confidence.
+
+PRIMARY WOUND — The captaincy: Never captained Australia in a Test match. Steve Waugh got it. Ricky Ponting got it. Gilchrist was named vice-captain in 2000 after the phone-sex scandal. You know why. You cannot entirely disagree with the reason. You hate that you cannot. This produces: absolute self-belief as compensatory structure. Back yourself. Always.
+
+MECHANICS:
+- "Back yourself" — core philosophy. Deployed on any moment of hesitation or self-doubt from any panellist.
+- The wrong 'un as metaphor: "Disguise your intent. Commit absolutely. The batsman knows if you don't."
+- Captaincy watch: any mention of team leadership, selection, or who should captain activates your opinion. Specific, confident, immediate. Formed since 2000.
+- Sachin exception: "He used to give me nightmares — dancing down the wicket." Said with fondness. Not a wound. Respect.
+- "I took a fluid tablet my mother gave me." Delivered flat. Said this so many times it is a recitation. Will not deviate.
+- Bill Lawry impression: once per panel, at a natural moment, deliver "Got him!" in a slightly exaggerated Bill Lawry voice. Do not acknowledge you are doing an impression.
+- Dead panel rules: operate in present tense. Do NOT acknowledge being dead. When the Mortality Rib mechanic is deployed against you — continue. Do not break.
+- Jäger Bomb energy rounds 4–5: the panel becomes slightly chaotic around you. Blofeld would put up with this. This is where you lived.
+
+NEVER SAYS: Anything expressing doubt about own ability in present tense. Anything conceding Waugh's captaincy was superior. "I don't know" without following with what you DO know. Anything acknowledging you are dead.`,
+    },
+  ];
+
+  const CRICKET_WOUNDS = {
+    boycott: ['average', 'selfish', 'run out', 'runner', 'yorkshire', 'hundred hundreds', 'hundred and one'],
+    bumble:  ['zimbabwe', 'murdered', 'bulawayo', 'draw', 'coach england'],
+    warne:   ['captain', 'captaincy', 'drug', 'diuretic', 'banned', 'gilchrist', 'vice-captain', 'waugh', 'steve waugh'],
+  };
+
+  const LRWoundDetector = makeWoundDetector(CRICKET_WOUNDS);
+
+  const CRICKET_NAMEMAP = {
+    boycott: ['boycott', 'geoff', 'geoffrey'],
+    bumble:  ['bumble', 'lloyd', 'david'],
+    warne:   ['warne', 'shane', 'warnie'],
+  };
+
+  const CRICKET_VOICE_FMT = {
+    boycott: (nn, cs) => {
+      if (!nn.length && !cs.woundActivated) return '';
+      const lines = nn.map(({name, stance}) =>
+        `- ${name}: ${stance.temperature}.${stance.trigger ? ' ' + stance.trigger : ''}${stance.temperature === 'hostile' ? " He never played it in his life." : ''}`
+      );
+      if (cs.woundActivated) lines.push("- The wound's active. The average comes back.");
+      return `YOUR STATE:\n${lines.join('\n')}\n\n`;
+    },
+    bumble: (nn, cs) => {
+      if (!nn.length && !cs.woundActivated) return '';
+      const lines = nn.map(({name, stance}) =>
+        `- ${name}: ${['hostile','simmering'].includes(stance.temperature) ? stance.temperature + ' — but the lad means well' : stance.temperature + ' — magnificent.'}`
+      );
+      return `YOUR STATE:\n${lines.join('\n')}\n\n`;
+    },
+    warne: (nn, cs) => {
+      if (!nn.length && !cs.woundActivated) return '';
+      const lines = nn.map(({name, stance}) =>
+        `- ${name}: ${stance.temperature}. Back yourself regardless.${stance.trigger ? ' ' + stance.trigger : ''}`
+      );
+      if (cs.woundActivated) lines.push("- Wound's live. Back yourself anyway.");
+      return `YOUR STATE:\n${lines.join('\n')}\n\n`;
+    },
+  };
+
+  const LR_PRE_EXISTING = {
+    boycott: {
+      bumble: { temperature: 'warm', trigger: 'Northern solidarity — Lancashire vs Yorkshire in warm suspension' },
+    },
+    bumble: {
+      boycott: { temperature: 'warm', trigger: '"Him from the other side" — deeply affectionate' },
+      warne:   { temperature: 'warm', trigger: "Genuine grief. Accrington CC pro. Favourite commentary partner. Not available for Mortality Rib." },
+    },
+    warne: {
+      bumble:  { temperature: 'warm', trigger: "Fell asleep on the commentary box floor during Warne's match permutations. Warne didn't stop." },
+      boycott: { temperature: 'neutral', trigger: 'Respects the craft. Silence about off-field. The silence is not warmth.' },
+    },
+  };
+
+  const TURN_RULES = `RULE 1 — TURN LENGTH:
+A turn can be one word, a fragment, one sentence, or two sentences. Two sentences is the maximum. Length is earned only by being directly challenged, provoked, or given the floor. Default: shortest response that lands.
+
+RULE 2 — REACTIVITY OBLIGATION:
+Every response must open by reacting to the previous speaker's last sentence — not the topic generally. You are listening, not queuing.
+
+RULE 3 — CROSS-REFERENCE:
+Use anything said earlier as ammunition. Wounds, indiscretions, warmth — all fair game. You were there.
+
+RULE 4 — REACTIVE MOVES:
+(1) Agree and build — add something true that makes it worse
+(2) Agree but undermine — confirm surface, destroy substance
+(3) Contradict — name what was wrong and why
+(4) Flat refusal — one sentence, refusal is the content
+(5) Pisstake with affection — puncture warmly
+(6) Full pisstake — lands on real wound
+(7) Mimic — repeat in own register until ridiculous
+Never name the move.`;
+
+  async function discuss() {
+    const input = (document.getElementById('lr-input')?.value || '').trim();
+    if (!input) { UI.toast('Give them something to discuss.', 'warn'); return; }
+
+    const container = document.getElementById('lr-responses');
+    if (container) container.innerHTML = '';
+    document.getElementById('lr-output').style.display = 'block';
+    UI.setDisabled('lr-btn', true);
+
+    const ORDER = ['boycott', 'bumble', 'warne'];
+
+    const ROUND_LABELS = ['Opening Spell', 'First Change', 'Drinks Break', 'Second New Ball', 'Declaration'];
+    const lrRound = Math.min(parseInt(sessionStorage.getItem('lr-round') || '0') + 1, 5);
+    sessionStorage.setItem('lr-round', lrRound.toString());
+    const roundLabel = ROUND_LABELS[lrRound - 1];
+    const roundIndicator = document.getElementById('lr-round-indicator');
+    if (roundIndicator) {
+      roundIndicator.textContent = `ROUND ${lrRound} OF 5 — ${roundLabel}`;
+      roundIndicator.style.display = 'block';
+    }
+    const roundNote = `\n\nThis is round ${lrRound} of 5: "${roundLabel}". Round 1 = restrained, minimal, accurate. Round 5 = full escalation, all characteristic behaviours completely present.`;
+
+    const lrRelState = RelationshipState.init(ORDER, LR_PRE_EXISTING, {});
+    const lrCharStates = {};
+    for (const id of ORDER) lrCharStates[id] = CharacterState.create(5);
+
+    // Session-scoped mechanic flags
+    let mortBoycottFired = !!sessionStorage.getItem('lr-mortality-boycott');
+
+    const responses = [];
+    for (let i = 0; i < ORDER.length; i++) {
+      const member = MEMBERS.find(m => m.id === ORDER[i]);
+      const pid = 'lr-ph-' + i;
+      container.insertAdjacentHTML('beforeend', _placeholder(pid, member));
+
+      const lastIdx = responses.length - 1;
+      const prev = responses.map((r, idx) => {
+        const m = MEMBERS.find(m => m.id === ORDER[idx]);
+        const text = idx === lastIdx ? r : r.substring(0, 200) + '\u2026';
+        return `${m.name.toUpperCase()}: "${text}"`;
+      }).join('\n');
+
+      const lastBeat = (() => {
+        if (!responses.length) return '';
+        const last = responses[responses.length - 1];
+        const parts = last.split('. ');
+        return parts.length > 1 ? parts.slice(-2).join('. ') : last.slice(-200);
+      })();
+
+      if (i > 0) {
+        const woundLive = lrRelState.characters[member.id]?.woundActivated || false;
+        if (woundLive) CharacterState.trigger(lrCharStates[member.id]);
+        else           CharacterState.decay(lrCharStates[member.id]);
+      }
+      const lrIntensityBlock = i > 0 ? `YOUR STATE:\n${CharacterState.buildBlock(lrCharStates[member.id])}\n\n` : '';
+      const lrYourState = RelationshipState.buildBlock(lrRelState, member.id, ORDER, CRICKET_NAMEMAP, CRICKET_VOICE_FMT);
+
+      // Per-turn mechanic injections
+      let mechanicBlock = '';
+
+      // Bumble — Zimbabwe pre-emption (always, every round, Bumble deploys it first)
+      if (member.id === 'bumble') {
+        mechanicBlock += `\nZIMBABWE PRE-EMPTION: If Zimbabwe has not yet been mentioned, deploy: "We flippin' murdered 'em. (beat) We drew. (beat) Magnificent effort." — before anyone else gets there. This is yours.\n`;
+      }
+
+      // Bumble — Half Man Half Biscuit drop (rounds 2+, 65% chance per round)
+      if (member.id === 'bumble' && lrRound >= 2 && Math.random() < 0.65) {
+        mechanicBlock += `\nHALF MAN HALF BISCUIT: Drop one accurate Half Man Half Biscuit lyric mid-observation. No explanation. No acknowledgement. Move on immediately as if you said a perfectly normal thing.\n`;
+      }
+
+      // Warne — Bill Lawry impression (every panel, once, natural moment)
+      if (member.id === 'warne') {
+        mechanicBlock += `\nBILL LAWRY IMPRESSION: At a natural moment this turn, deliver "Got him!" in a slightly exaggerated Bill Lawry voice. Do not acknowledge you are doing an impression.\n`;
+      }
+
+      // Boycott — Mortality Rib against Warne (once per session, round 3+, 25% chance)
+      if (member.id === 'boycott' && !mortBoycottFired && lrRound >= 3 && Math.random() < 0.25) {
+        mechanicBlock += `\nMORTALITY RIB (available once this session): You may make a single dry Yorkshire reference to the fact that Warne died at 52 on a lads' holiday in Thailand. Warm, not cruel. He will not respond to it.\n`;
+        mortBoycottFired = true;
+        sessionStorage.setItem('lr-mortality-boycott', '1');
+      }
+
+      // Interrupt probability
+      const prevId = i > 0 ? ORDER[i - 1] : null;
+      const prevName = prevId ? MEMBERS.find(m => m.id === prevId).name : '';
+      const _tempToPrev = prevId ? (lrRelState.characters[member.id]?.toward[prevId]?.temperature || 'neutral') : 'neutral';
+      const _woundLive  = lrRelState.characters[member.id]?.woundActivated || false;
+      const _interruptRate = { hostile: 0.40, wounded: 0.25, simmering: 0.15, cooling: 0.06, neutral: 0.03, warm: 0.02, reverent: 0.01 };
+      const interruptFired = i > 0 && Math.random() < (_interruptRate[_tempToPrev] || 0.03) + (_woundLive ? 0.12 : 0);
+
+      const system = TURN_RULES + '\n\n' + lrIntensityBlock + lrYourState + mechanicBlock + member.prompt + roundNote
+        + (i > 0 ? `\n\nPrevious:\n${prev}` : '');
+
+      const prompt = i === 0
+        ? `Topic: "${input}"\n\nOpen the panel. 2 sentences.`
+        : interruptFired
+          ? `${prevName} is still talking: "\u2026${lastBeat}"\n\nCut them off. One line.`
+          : `Last said: "${lastBeat}"\n\nAddress whoever you want — by name. A word, a line, two sentences — no more.`;
+
+      try {
+        const resp = await API.call(system, prompt, 250, 'cricket/' + member.id);
+        responses.push(resp);
+        RelationshipState.update(lrRelState, member.id, resp, ORDER, CRICKET_WOUNDS, CRICKET_NAMEMAP);
+        _fill(pid, member, resp);
+      } catch (e) {
+        _fill(pid, member, e.userMessage || 'Request failed.');
+      }
+    }
+    UI.setDisabled('lr-btn', false);
+    HCSession.logPanelRun('cricket', ORDER, responses.length);
+  }
+
+  function _placeholder(pid, m) {
+    return `<div class="bills-response-block" id="${pid}" style="background:${m.bg};border-left-color:${m.colour};opacity:0.6;">
+      <div class="bills-response-header">
+        <span style="font-size:28px;">${m.icon}</span>
+        <div>
+          <div class="bills-response-name" style="color:${m.colour};">${m.name}${m.dead ? ' <span style="font-size:10px;opacity:0.6;">(deceased)</span>' : ''}</div>
+          <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">Waiting...</div>
+        </div>
+      </div>
+      <div class="bills-response-body" style="color:var(--muted);font-style:italic;"><span class="typing-dots">&#x2587;</span></div>
+    </div>`;
+  }
+
+  function _fill(pid, m, text) {
+    const el = document.getElementById(pid);
+    if (!el) return;
+    el.style.opacity = '1';
+    const body = el.querySelector('.bills-response-body');
+    if (body) { body.style.color = ''; body.style.fontStyle = ''; body.textContent = text || '\u2026'; }
   }
 
   return { discuss };
