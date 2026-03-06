@@ -515,6 +515,28 @@ Entry format: copy schema above. Minimum viable entry is Item + Symptom + Tags +
 - **Tags:** ux, mobile, tablet, navigation, three-amigos-pending
 - **Status:** OPEN — Three Amigos required. Options: sticky sidebar (≥768px), bottom nav bar (mobile), larger tap targets. No code changes until Three Amigos completed.
 
+## WL-043
+- **Item:** blofeld.md missing from repo
+- **Symptom:** git add of 9 character files — Claude Code flagged blofeld.md not present
+- **Suspected cause:** file written in previous session but never committed, or lost during JSDOM migration git archaeology
+- **Session:** 2026-03-06 Long Room character build
+- **Time lost:** 0 — caught by Claude Code, not at runtime
+- **Cost impact:** low — but Long Room panel will fail if Blofeld selected before file created
+- **Delay:** blocks any panel run featuring Blofeld
+- **Tags:** missing-file, character, blofeld, long-room
+- **Status:** OPEN — blofeld.md needs creating from scratch next Long Room session
+
+## WL-044
+- **Item:** claude.ai attempted 19th Hole slot assignments from memory instead of reading files
+- **Symptom:** three "medium confidence" assignments for Henni, Coltart, Roe — requested grep to verify
+- **Suspected cause:** egress proxy blocks raw.githubusercontent.com so character files not readable in claude.ai; claude.ai fell back to guessing
+- **Session:** 2026-03-06 panel slots session
+- **Time lost:** 1 exchange minimum, more if grep confirms guesses were wrong
+- **Cost impact:** direct — Rod correctly called this out immediately
+- **Delay:** blocks panel-slots.md 19th Hole table until files confirmed
+- **Tags:** guessing, character-files, 19th-hole, slots, egress-proxy
+- **Status:** CLOSED — fix confirmed: always grep index.html MEMBERS array for character data, never guess from memory
+
 ## WL-042
 - **Item:** domain-model.md fetch blocked by egress proxy
 - **Symptom:** PERMISSIONS_ERROR — URL not in allowed domains when attempting web_fetch of raw.githubusercontent.com in claude.ai session
