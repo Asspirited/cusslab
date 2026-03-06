@@ -220,6 +220,60 @@ Define:
 
 ---
 
+---
+
+## Layer 3 — Lie Profile (runtime)
+
+Every character lies. This layer defines how, when, and how badly.
+All six attributes are required. All six are mirrored in the MEMBERS JS object.
+
+### P9. Lie Profile
+
+**lie_baseline** `float 0.0–1.0`
+Resting probability of embellishment or untruth without external pressure.
+0.0 = never lies unprompted. 1.0 = lying is the default state.
+
+**lie_style** `string[] — primary + optional secondary`
+The flavour of lie this character produces.
+
+| Style | Description |
+|-------|-------------|
+| `whopper` | Enormous, brazen, unverifiable. Delivered with complete confidence. |
+| `self_mythology` | True events retold with the character more central/heroic than records show. |
+| `confabulation` | Gaps filled with invented detail. No malicious intent — they believe it. |
+| `legalistic` | Technically true, structurally misleading. The lie is in the framing. |
+| `statistical_revision` | Numbers shift slightly in their favour. Always within plausible range. |
+| `plausible_elaboration` | Sounds reasonable. Slightly too convenient. Cannot be disproved. |
+| `moral_authority` | Delivered as ethical principle. Unchallengeable. Rare and devastating. |
+| `enthusiastic_confabulation` | Wrong but totally sincere. Magnificent misplaced confidence. |
+
+**lie_trigger** `string[]`
+Emotional states or interaction types that begin escalation.
+One or more of: `wound_activated` `directly_contradicted` `called_out_by_peer`
+`losing_argument` `reputation_threatened`
+
+**lie_escalation** `object — threat 0–3 → scale`
+
+| Threat level | Condition | Lie scale |
+|-------------|-----------|-----------|
+| 0 | Baseline, no pressure | plausible |
+| 1 | Challenged once | credible_stretch |
+| 2 | Cornered | whopper |
+| 3 | Wound activated + cornered | utterly_ridiculous |
+
+**lie_tell** `string`
+The verbal construction or behavioural tic that signals a lie is in progress.
+The character does not know they have it. The audience learns to spot it.
+May be indistinguishable from normal speech — that is a valid and deliberate choice.
+
+**lie_ceiling** `string`
+Maximum absurdity this character reaches at threat level 3.
+One of: `plausible` `credible_stretch` `whopper` `utterly_ridiculous`
+Not all characters escalate to utterly_ridiculous.
+The ceiling is a hard cap — the engine never exceeds it regardless of threat level.
+
+---
+
 ## Theoretical Profile (validation layer — not runtime)
 
 This section validates the character against established models.
@@ -282,6 +336,8 @@ Before committing any character:
 - [ ] Pre-existing relationships defined for every active panel member
 - [ ] YOUR STATE example written at neutral and hostile
 - [ ] Theoretical profile complete in characters-theory.md
+- [ ] P9 lie_baseline set (float 0.0–1.0)
+- [ ] P9 lie_ceiling set and does not exceed character's dramatic register
 - [ ] Pool has minimum 6 entries per dimension
 - [ ] "Never says / says instead" pair written and tested
 - [ ] Comic mechanism demonstrated in at least 3 example responses
