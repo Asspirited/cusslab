@@ -547,3 +547,11 @@ Entry format: copy schema above. Minimum viable entry is Item + Symptom + Tags +
 - **Delay:** none (Rod pasted file section; Claude Code had already updated the file directly)
 - **Tags:** infrastructure, egress, domain-model
 - **Status:** KNOWN LIMITATION — workaround is Rod pastes the file section, or Claude Code reads it directly via Read tool in Claude Code sessions
+
+---
+
+WL-045
+Date: 2026-03-06
+Type: Paste failure — placeholder not replaced
+Cost: 2 exchanges
+Description: Claude Code received the alliss.md commit paste twice with placeholder text ([paste the full alliss.md content here]) instead of actual content. File did not exist until third attempt when full content was provided inline. Root cause: claude.ai generated a paste instruction referencing content from earlier in the conversation rather than reproducing it explicitly. Fix: always reproduce file content inline in the paste, never reference it by pointer.
