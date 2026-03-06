@@ -10149,9 +10149,10 @@ HYPOCHONDRIA RESPONSE: Once per session — the microphone is always on. Very br
     },
   ];
 
-  const ORDER = ['souness', 'micah', 'neville', 'carragher', 'bigron'];
+  const BASE_ORDER = ['souness', 'micah', 'neville', 'carragher', 'bigron'];
 
   async function discuss() {
+    const ORDER = [...BASE_ORDER].sort(() => Math.random() - 0.5);
     const input = (document.getElementById('fb-input')?.value || '').trim();
     if (!input) { UI.toast('Give them something to discuss.', 'warn'); return; }
 
