@@ -507,3 +507,10 @@ Entry format: copy schema above. Minimum viable entry is Item + Symptom + Tags +
 - **Delay:** Minor
 - **Tags:** three-amigos, gherkin, ironic, feature-file, read-first
 - **Status:** Logged — PERMANENT: always read the existing feature file at the start of Three Amigos before proposing any new scenarios
+
+## WL-041
+- **Item:** Mobile/tablet UI — nav tabs not prominent enough, users missing panels on banner scroll
+- **Symptom:** Users not finding panels on small screens; left-hand nav pattern not present on mobile
+- **Session:** 2026-03-06
+- **Tags:** ux, mobile, tablet, navigation, three-amigos-pending
+- **Status:** OPEN — Three Amigos required. Options: sticky sidebar (≥768px), bottom nav bar (mobile), larger tap targets. No code changes until Three Amigos completed.
