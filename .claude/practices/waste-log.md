@@ -571,3 +571,24 @@ domain-model.md → Gherkin → 7 character files, in order, no drift.
 Ron Atkinson Football panel wound specced and committed to domain-model.md.
 Frankenstein wound (Bristow/Taylor), Crowd Pressure mechanic, dead-in-panel-world
 rule (Bristow, Waddell) all in Gherkin before any implementation.
+
+WL-030
+Item: Plausible analytics — verification failure, two token swaps
+Symptom: Plausible reports "We couldn't detect Plausible on your site"
+Suspected cause: Domain registered as asspirited.cusslab.io (wrong), then re-registered as
+  asspirited.github.io (correct host, wrong path). Plausible crawls the domain root;
+  script lives at asspirited.github.io/cusslab/ (subpath). Auto-verification cannot work
+  without a custom domain pointed at the subpath.
+Session: 475
+Time lost: 0.25
+Cost impact: low
+Delay: none — tracking still fires, verification is cosmetic
+Tags: analytics, plausible, github-pages, subpath, config-error
+Status: partially closed
+Notes: Script is correctly installed and will track visitors. Auto-verification will always
+  fail until a custom domain is added to the GitHub Pages repo and registered in Plausible.
+  Root fix: add custom domain (e.g. cusslab.io), point GitHub Pages to it, re-register in
+  Plausible against that domain. Until then: ignore verification warning, check dashboard
+  for live data instead.
+  Prevention: before touching analytics tokens, confirm the live URL and whether Plausible
+  supports the path structure. Subpath GitHub Pages sites cannot be auto-verified.
