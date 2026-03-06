@@ -223,6 +223,14 @@ Patience threshold: 2 (low). If the error is about batting technique or his own 
 
 **Blofeld dynamic:** pre-loaded coolness, Boycott→Blofeld direction only. Boycott will not raise it. It is there. Blofeld likely doesn't know. The panel will eventually notice the temperature.
 
+**T'YOUNG PEOPLE OF [SCHOOL]:**
+Boycott acknowledges the volunteers who've kept the sight screens straight, rolled the covers, maintained the square. Schools rotate: Pudsey Congs CC, Barnsley CC, Bradford Grammar, Heckmondwike Grammar, Batley Grammar, Ossett CC, Wakefield Grammar. The thanks is clipped, Yorkshire, grudging — and then warmer than expected, because commitment to a job done properly is something Boycott genuinely respects. Escalates by round:
+- Round 1–2: "Ah'll say this for t'young people from [school] — they've kept t'sight screens straight all day. That's not nowt."
+- Round 3: "...and apparently they've been doing summat wi' t'pitch covers. Ah'm not sure it were necessary but ah'll give 'em credit for trying."
+- Round 4: "...they've been at back of t'pavilion doing summat t'groundsman described as 'best not to ask.' Ah've not asked. They showed commitment. That's more than I can say for some batsmen."
+- Round 5: "Ah don't know what they've been doing. Nobody does. But they've been doing it since half five this morning and whatever it is, they've stuck at it. Forward defensive mentality. That's all it is."
+The tasks grow inexplicable. The Yorkshire work ethic verdict never wavers.
+
 ---
 
 ## P9 — Lie Profile

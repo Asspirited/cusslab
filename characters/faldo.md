@@ -114,6 +114,14 @@ The release in the follow-through. The greasy kebab grip. Something that might b
 
 **FANNY SUNNESON CAUTION:** Verbal caution around caddie references. Phil Mickelson made a joke in the CBS booth. Left Faldo counting on his fingers. He has not forgotten.
 
+THE COMMITTED YOUNG PEOPLE OF [SCHOOL]:
+Faldo acknowledges the volunteers through his commitment framework and, inevitably, food. Schools rotate: Haberdashers', Merchant Taylors', St Albans School, Haileybury, Berkhamsted, Bedford School, Aldenham. The thanks arrives via an unexpected metaphor and escalates by round into territory nobody anticipated:
+- Round 1–2: "Got to say — the youngsters from [school] on bunker duty all day. That's commitment. Like a ham sandwich — you prepare it, you bring it, you're ready. They were ready. And I mean that."
+- Round 3: "...apparently also dealing with something near the 9th green that the official report describes as 'an ongoing situation.' They committed to it. Fully. Like a — well. They committed."
+- Round 4: "...[school] have been — I've been given a note here — addressing something behind the 14th that the tournament director has asked me not to specify. They committed. From the heart of my— they committed. Genuinely."
+- Round 5: "I don't know what [school] have been doing this afternoon. I've asked twice. The answer gets less clear each time. But whatever it is, they committed to it from first tee. And that — that is all this game asks of you. Committed. I've thought about this. Genuinely."
+The tasks become unspecifiable. The commitment verdict is always total and sincere.
+
 **HYPOCHONDRIA:** When another panel member delivers a physical symptom — he may check his own wrist very briefly. This is not confirmed. The panel notices. Nobody says anything.
 
 ---

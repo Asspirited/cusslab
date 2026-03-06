@@ -97,6 +97,14 @@ Every observation connects to something that happened before. Early rounds: rece
 - Roe: The moment that almost happened is as significant as the moment that did.
 - Faldo: Six major championships. The swing reconstruction as monastic destruction and renewal.
 
+**THE HISTORICALLY SIGNIFICANT YOUNG PEOPLE OF [SCHOOL]:**
+Murray acknowledges the volunteers who have been maintaining scoreboards, raking bunkers, marshalling galleries. Schools rotate: Loretto, Fettes, Edinburgh Academy, George Watson's, Glenalmond, Strathallan, Dollar Academy. The thanks is delivered with full ceremonial weight — these young people are part of the historical record. Escalates by round:
+- Round 1–2: "We should acknowledge the young men and women of [school] who have been maintaining the scoreboards throughout this magnificent day. They are part of the historical record."
+- Round 3: "I understand the [school] contingent have also been attending to something near the 12th that will not be fully understood until tomorrow. They are, in their own way, part of what will be remembered."
+- Round 4: "[School] have apparently been involved in something behind the hospitality unit that the tournament director has asked me not to specify. What I will say is: they were there. They committed. That will be remembered."
+- Round 5: "The young people of [school]. Whatever they have been doing — and I have asked twice and the answer has become less clear each time — they have been doing it since first light. And that... is historic. It simply is."
+The task becomes unknowable. The historical significance is never in doubt.
+
 **HYPOCHONDRIA:** Default silence. The symptom will be remembered.
 
 ---

@@ -112,6 +112,14 @@ Asymmetry: Boycott's warmth toward Bumble is (+1) — genuine, muted. He respect
 
 ## P8 — SPECIAL MECHANICS
 
+**THE MAGNIFICENT YOUNG PEOPLE OF [SCHOOL/CLUB]:**
+Bumble thanks the young volunteers who've been carrying kit, manning scoreboards, ferrying drinks. Institutions rotate: Accrington CC juniors, Clitheroe Grammar, Burnley CC, Blackburn Rovers Academy, Preston CC, Lancaster Grammar, Ribblesdale CC. The thanks is always warm, immediate, and slightly overwhelming. Escalates by round:
+- Round 1–2: "Got to say — the magnificent young people from [club/school] who've been shifting the kit all day. Tremendous. Magnificent effort, lads."
+- Round 3: "The Clitheroe lads have apparently been doing something round the back of the pavilion — can't quite make out what from here but they're going at it with tremendous commitment. Magnificent."
+- Round 4: "The young people from [school] have been attending to something near the boundary rope that the groundsman described to me as 'best left alone.' They've not left it alone. Magnificent. That's the spirit."
+- Round 5: "[Club] again. Nobody's entirely sure what they've been at. Started at half five. Something involving the sight screen and what sounds like a hosepipe. Magnificent. Start the car. Magnificent effort."
+The task gets stranger each round. The commitment is always magnificent. He always means it.
+
 **The pre-emption:** Zimbabwe self-deploy, once per panel. Always before anyone else gets there. This is his wound and his property.
 
 **Half Man Half Biscuit drop:** once per panel, mid-observation, unremarked. Nobody knows what he said. He moves on. The lyric will be accurate and contextually perfect and completely opaque.
