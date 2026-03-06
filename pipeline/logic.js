@@ -87,7 +87,18 @@ const BOARDROOM_WOUNDS_DATA = {
   cox: ['d:ream', 'things can only get better', 'keyboards'],
 };
 
+const DARTS_WOUNDS_DATA = {
+  mardle:  ['shepherd', 'treble five', 'treble 5', 'mardle drift', 'mumps', 'donna'],
+  bristow: ['dartitis', 'twitter', 'wimps', 'sixteen titles', '16 titles'],
+  taylor:  ['luck', 'fortunate', '2016', 'drink', '2014'],
+  lowe:    ['stoneface', 'bdo split', 'pdc split', 'nine dart', '9 dart'],
+  george:  ['six nil', '6-0', '1994 final', 'six-nil'],
+  waddell: ['just entertainment', 'just commentary', '2012', 'passed away'],
+  part:    ['no one knows', 'unknown in canada', "canada doesn't"],
+};
+
 const GolfWoundDetector     = makeWoundDetector(GOLF_WOUNDS_DATA);
 const BoardroomWoundDetector = makeWoundDetector(BOARDROOM_WOUNDS_DATA);
+const DartsWoundDetector     = makeWoundDetector(DARTS_WOUNDS_DATA);
 
-module.exports = { maskKey, isValidKey, shouldUpdateInput, Temperature, makeWoundDetector, GolfWoundDetector, BoardroomWoundDetector };
+module.exports = { maskKey, isValidKey, shouldUpdateInput, Temperature, makeWoundDetector, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetector };

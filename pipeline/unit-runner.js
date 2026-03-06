@@ -1,7 +1,7 @@
 // Unit test runner — tests pure functions in pipeline/logic.js
 // Run: node pipeline/unit-runner.js
 
-const { maskKey, isValidKey, shouldUpdateInput, Temperature, makeWoundDetector, GolfWoundDetector, BoardroomWoundDetector } = require('./logic.js');
+const { maskKey, isValidKey, shouldUpdateInput, Temperature, makeWoundDetector, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetector } = require('./logic.js');
 
 let passed = 0;
 let failed = 0;
@@ -182,6 +182,44 @@ assert('BoardroomWoundDetector: cox triggered case-insensitively by things can o
 
 assert('BoardroomWoundDetector: returns boolean triggered',
   typeof BoardroomWoundDetector.check('cox', 'test').triggered, 'boolean');
+
+// ── DartsWoundDetector.check() ────────────────────────────────────────────────
+
+assert('DartsWoundDetector: satisfies WoundDetector interface - has check function',
+  typeof DartsWoundDetector.check, 'function');
+
+assert('DartsWoundDetector: triggered false for unknown character',
+  DartsWoundDetector.check('unknown', 'shepherd').triggered, false);
+
+assert('DartsWoundDetector: triggered false for non-wound text',
+  DartsWoundDetector.check('mardle', 'great throw tonight').triggered, false);
+
+assert('DartsWoundDetector: mardle triggered by shepherd',
+  DartsWoundDetector.check('mardle', 'kirk shepherd ranked 142').triggered, true);
+
+assert('DartsWoundDetector: mardle triggered by donna',
+  DartsWoundDetector.check('mardle', 'I spoke to donna from accounts').triggered, true);
+
+assert('DartsWoundDetector: bristow triggered by dartitis',
+  DartsWoundDetector.check('bristow', 'the dartitis was a problem').triggered, true);
+
+assert('DartsWoundDetector: george triggered by six nil',
+  DartsWoundDetector.check('george', 'the match finished six nil').triggered, true);
+
+assert('DartsWoundDetector: george triggered by 6-0',
+  DartsWoundDetector.check('george', 'the score was 6-0').triggered, true);
+
+assert('DartsWoundDetector: taylor not triggered by six-nil',
+  DartsWoundDetector.check('taylor', 'it finished six-nil').triggered, false);
+
+assert('DartsWoundDetector: waddell triggered by passed away',
+  DartsWoundDetector.check('waddell', 'sid passed away in 2012').triggered, true);
+
+assert('DartsWoundDetector: case-insensitive - bristow DARTITIS',
+  DartsWoundDetector.check('bristow', 'everyone knows about the DARTITIS').triggered, true);
+
+assert('DartsWoundDetector: returns boolean triggered',
+  typeof DartsWoundDetector.check('mardle', 'test').triggered, 'boolean');
 
 // ── makeWoundDetector() ───────────────────────────────────────────────────────
 

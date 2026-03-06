@@ -3,7 +3,7 @@
 
 const fs   = require('fs');
 const path = require('path');
-const { Temperature, GolfWoundDetector, BoardroomWoundDetector } = require('./logic.js');
+const { Temperature, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetector } = require('./logic.js');
 
 // ── Mock state (simulates browser localStorage + DOM) ────────────────────────
 
@@ -1184,6 +1184,15 @@ function makeSteps(ctx) {
 
     [/^the BoardroomWoundDetector is loaded$/,
       () => { ctx._woundDetector = BoardroomWoundDetector; }],
+
+    [/^the DartsWoundDetector is loaded$/,
+      () => { ctx._woundDetector = DartsWoundDetector; }],
+
+    [/^DartsWoundDetector\.check\(\) is called with character "([^"]+)" and text "([^"]+)"$/,
+      (characterId, text) => { ctx._woundResult = DartsWoundDetector.check(characterId, text); }],
+
+    [/^DartsWoundDetector\.check\(\) is called with character "([^"]+)" and text containing "([^"]+)"$/,
+      (characterId, word) => { ctx._woundResult = DartsWoundDetector.check(characterId, word); }],
 
     [/^GolfWoundDetector\.check\(\) is called with character "([^"]+)" and text "([^"]+)"$/,
       (characterId, text) => { ctx._woundResult = GolfWoundDetector.check(characterId, text); }],
