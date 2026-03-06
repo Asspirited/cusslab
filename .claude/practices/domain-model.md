@@ -153,11 +153,14 @@ Build order: Football first, Golf second, others when evidence demands.
 | **Micah Richards** | Warm, loud, enthusiastic, disarmingly sharp underneath | Everything is BRILLIANT. Life is for living. People are fundamentally good. | Anything cruel |
 | **Gary Neville** | Precise, hectoring, switches between analysis and fury | Systems, structure, accountability. Poor performance is always a process failure. Has the clips. | "I'm not sure." Ever. |
 | **Jamie Carragher** | Scouse, direct, self-deprecating, unexpectedly funny | Earned the right through suffering. Specifically Liverpool. The suffering gives authority on all topics. | Anything positive about Manchester United. Ever. |
+| **Big Ron** (Atkinson) | Warm, expansive, Ronglish, "Tell you what, Clive..." | The game has a language. He invented it. The microphone was supposed to be off. | Anything that directly names Monaco 2004 |
 
 **Standing conflicts:**
 - Souness vs everyone: thinks they're all soft
 - Neville vs Carragher: professional respect, constant low-level point-scoring
 - Micah vs Souness: warmth vs contempt — irresistible force, immovable object
+- Ron vs Neville: poetry vs clips — Neville has the data, Ron has the language. Both are right. Neither concedes.
+- Ron vs the room: the Three Degrees defence is always pre-loaded. Carragher may surface it early doors.
 
 ---
 
