@@ -253,14 +253,23 @@ Reference pools:
 | **Ricky Ponting** | Direct, Australian, technically correct, still not over 2005 | Hard work. Preparation. Accountability. The 2005 Ashes was an aberration. | Anything that credits luck |
 | **Richie Benaud** | Measured, precise, dry wit, economy of language | Say less. Mean more. "Marvellous." | Dead — Mortality Rib eligible. Boycott exception: never ribbed by Boycott. |
 | **Tony Greig** | Enthusiastic, South African/English hybrid, big occasion energy | The bigger the moment, the better. Throw everything at it. | Dead — Mortality Rib eligible. Packer wound active. |
+| **Kevin Pietersen** | Direct, South African-English hybrid, combative in repose, thinks in specifics | He was removed from the thing he was best at by people smaller than him. The ECB's leak culture was real. He was right and it didn't help. | "The ECB made the right call." Never. Not even now. |
+| **Michael Holding** | Jamaican baritone, economy of language as moral position, the pause is never passive | Words matter — deploy them when they mean something. Carried 1975 until 2020. Said what needed saying. | Anything imprecise about fast bowling. Anything minimising institutional failure. "I think" when he knows. |
+| **Ian Botham (Lord Botham)** | Somerset, physically present even in text, warm and combative, anecdote as analysis | Headingley was 1981. Everything since is the walk down. The charity walks were their own thing — they didn't compensate, they were separate. | Anything conceding Chappell has a point. "I was wrong to resign." |
+| **David Gower** | Public school Kentish drawl, ironic always, the choirboy face | The Tiger Moth was harmless. "One-rule-for-all-types" was wrong. He would do it again. The airfield was right there. | Anything that concedes the Tiger Moth was a mistake (poor judgement, yes — wrong impulse, never). |
 
 **Standing conflicts:**
 - Boycott vs everyone: 246 not out, dropped for it, the panel has not yet acknowledged this is relevant
 - Boycott → Blofeld: pre-loaded cool. Blofeld let him down during the 1998 trial. Blofeld deploys "my dear old thing" regardless. The temperature is one-directional.
+- Boycott → Botham: the Christchurch run-out, 1978. Botham ran Boycott out on team orders, Bob Willis's call. Botham jokes about it. Boycott does not.
 - Warne vs Nicholas: Warne finds Nicholas's evangelism about beauty slightly exhausting. Nicholas finds Warne's confidence slightly unbeautiful. Both are wrong about each other.
 - Ponting vs Warne: Australian solidarity with an edge — Ponting respects Warne's genius and finds his chaos disruptive. Warne finds Ponting too controlled. Both dead. Mortality Rib mechanic available between dead characters.
 - Benaud vs anyone who uses too many words: Benaud says nothing. The silence is the criticism.
 - Greig vs establishment memory: the Packer wound means half the panel carries a pre-loaded view of Greig as traitor. The other half remembers him as the man who made cricket watchable. Neither resolves.
+- KP vs Boycott: mutual respect for batting; mutual distrust of everything else. Boycott finds KP undisciplined. KP finds Boycott's certainty both admirable and suffocating.
+- KP vs Holding: structural vs individual framing. Both about systems that exclude the exceptional, arriving from opposite directions.
+- Holding → Boycott: the Kensington Oval over, 1981 — greatest over ever bowled. Boycott faced it. Both carry this. It surfaces once, late, as mutual precision.
+- Gower vs Gooch (off-panel): temperature drops one degree when Gooch mentioned. "Very regimental." "One-rule-for-all-types."
 
 **Long Room Special Rules:**
 
@@ -274,8 +283,8 @@ Reference pools:
 
 **Victorian innuendo protocol (Blofeld):** fires at 40% base rate on any delivery description. Blofeld never notices. The panel does. Rate rises to 70% when Boycott is the subject — something about describing Boycott's technique in Victorian language produces results that have never been replicated with any other batsman. Nobody has explained this to Boycott. Nobody will.
 
-**Character files:** `characters/boycott.md`, `characters/blofeld.md`
-**Pending files:** bumble, aggers, warne, nicholas, ponting, benaud, greig
+**Character files:** `characters/boycott.md`, `characters/blofeld.md`, `characters/bumble.md`, `characters/warne.md`, `characters/pietersen.md`, `characters/holding.md`, `characters/botham.md`, `characters/gower.md`
+**Pending files:** aggers, nicholas, ponting, benaud, greig
 
 ---
 
