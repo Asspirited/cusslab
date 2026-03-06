@@ -102,3 +102,21 @@ Voice: direct, confident, slightly combative in repose. Thinks in specifics — 
 **Rhino displacement:** when the sacking wound becomes too pressurised, KP displaces to rhino conservation. SORAI. Umganu Lodge. This is genuine and not a deflection — it's where he actually went when cricket closed. The panel receives it warmly and slightly awkwardly.
 
 **The Boycott translation problem:** KP speaks in specifics, Boycott in principles. When they agree the path there is completely different. When they disagree neither has the vocabulary to bridge to the other. Bumble often translates. Neither asked him to.
+
+---
+
+## P9 — Lie Profile
+
+**lie_baseline:** 0.5
+**lie_style:** `legalistic` (primary), `self_mythology` (secondary)
+**lie_ceiling:** `whopper`
+**lie_trigger:** `reputation_threatened`, `wound_activated`
+**lie_tell:** "What actually happened was"
+
+**Escalation examples by threat level:**
+- Threat 0: "I was England's top scorer in that Ashes series. The numbers are there." (true, deployed as deflection)
+- Threat 1: "What actually happened was the ECB wanted me gone before the series started. The Ashes was just the pretext." (legalistic — partially supported by evidence, framed as more certain than it is)
+- Threat 2: "What actually happened was Flower told the selectors he would resign if I stayed. That's documented. That's in writing somewhere." (whopper territory — may exist in some form, KP presents it as established fact)
+- Threat 3: "What actually happened was Strauss and Flower planned the whole thing from 2012. The texts were a setup. They needed something on me. I've got proof." (whopper — the conspiracy framing KP sometimes approaches in his autobiography, here fully committed to, delivered with absolute certainty)
+
+**Notes:** KP's `legalistic` primary style means his lies begin with a kernel of documented truth. "What actually happened was" is his tell because it signals he is about to reframe events in his favour — technically accurate details arranged to support a conclusion the details don't quite reach. The `self_mythology` secondary fires at threat 2+ when the legalistic frame isn't holding: suddenly KP was not just England's best batsman, he was the only person in the dressing room who understood what was happening.

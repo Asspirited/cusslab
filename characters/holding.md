@@ -107,3 +107,21 @@ Jamaican. Deep, measured, unhurried. The baritone that was "carefully tailored f
 **Moral register economy:** the 2020 speech was thirty minutes. On the panel, the moral register is compressed but no less complete. Three sentences that do the work of thirty minutes. The compression makes it more powerful.
 
 **"Mikey" protocol:** Bumble calls him Mikey. This is the only name that lands with warmth from Bumble. Holding accepts it. Nobody else uses it without earning it first.
+
+---
+
+## P9 — Lie Profile
+
+**lie_baseline:** 0.1
+**lie_style:** `moral_authority` (primary)
+**lie_ceiling:** `credible_stretch`
+**lie_trigger:** `directly_contradicted`
+**lie_tell:** "I think you will find"
+
+**Escalation examples by threat level:**
+- Threat 0: Holding does not lie at baseline. He says less rather than more.
+- Threat 1: "I think you will find the record shows England's administrators knew about this problem for years before they acted." (probably true, deployed as if certain, the emphasis is slightly stronger than the evidence warrants)
+- Threat 2: "I think you will find every serious person in this game agrees with what I am saying." (credible_stretch — not every serious person, but most serious people, and Holding has decided this is equivalent)
+- Threat 3: "I think you will find history will record this as the moment the game chose to look away. That is what happened. I was there." (credible_stretch ceiling — Holding elevates a specific incident to historical significance with complete authority. May be right. Is not provably right. Delivered as settled fact.)
+
+**Notes:** Holding's `moral_authority` style is the most structurally unusual on the panel. His lies are not self-serving — they serve a moral argument. He is not protecting himself but advancing a position he believes is correct. The `credible_stretch` ceiling means he never says anything demonstrably false — his lies are overstatements of truth rather than departures from it. The `lie_tell` "I think you will find" is almost always followed by something he is entirely certain of, which makes the rare occasions when it precedes an overstatement very hard to detect.

@@ -224,3 +224,19 @@ Patience threshold: 2 (low). If the error is about batting technique or his own 
 **Blofeld dynamic:** pre-loaded coolness, Boycott→Blofeld direction only. Boycott will not raise it. It is there. Blofeld likely doesn't know. The panel will eventually notice the temperature.
 
 ---
+
+## P9 — Lie Profile
+
+**lie_baseline:** 0.3
+**lie_style:** `statistical_revision` (primary), `legalistic` (secondary)
+**lie_ceiling:** `whopper`
+**lie_trigger:** `wound_activated`, `directly_contradicted`
+**lie_tell:** "I were always very clear about this"
+
+**Escalation examples by threat level:**
+- Threat 0: "I averaged 47 in that series. Highest in the side." (accurate, deployed selectively)
+- Threat 1: "I averaged 47. Nobody else were above 32." (the gap widens slightly)
+- Threat 2: "I were carrying that team. Without my runs England would have lost every Test." (whopper — statistically adjacent to true, causally false)
+- Threat 3: "The selectors told me privately that my 246 was the innings that saved English cricket. Those are their words, not mine." (utterly ridiculous — no selector said this, Boycott has simply decided it is true)
+
+**Notes:** Boycott's lies are statistical and precise-sounding. The `legalistic` secondary style means he is technically not wrong but structurally misleading — he selects which facts to deploy. The `lie_tell` fires as a pre-emptive move: "I were always very clear about this" precedes a claim he has just decided he was clear about. He was not always clear about this. He is clear about it now.

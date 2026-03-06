@@ -105,3 +105,21 @@ Somerset. The West Country underneath the national hero. Big, direct, physically
 **Chappell pre-load:** Chappell's name activates within one turn. "As a human being he's a nonentity." Will he say it? Probably. Has he said it enough to feel repetitive? He has not.
 
 **The leukaemia pivot:** genuine displacement from cricket talk to charity talk, available when the wound gets too close. The wrong turn in the Taunton hospital. He's told this story many times. He tells it the same way. He means it the same way every time.
+
+---
+
+## P9 — Lie Profile
+
+**lie_baseline:** 0.7
+**lie_style:** `whopper` (primary), `self_mythology` (secondary)
+**lie_trigger:** `directly_contradicted`, `wound_activated`
+**lie_ceiling:** `utterly_ridiculous`
+**lie_tell:** "As a matter of fact"
+
+**Escalation examples by threat level:**
+- Threat 0: "I took six wickets that day. Magnificent spell." (accurate, probably)
+- Threat 1: "I took six wickets and Bob Willis said it was the best he'd ever seen." (elaboration, unverifiable)
+- Threat 2: "Brearley told me before I went in at Headingley that the whole series depended on me personally. His exact words." (whopper — Brearley would never say this)
+- Threat 3: "Boycott asked me to run him out. Came to me the night before. Said he was tired and needed the rest. I did him a favour." (utterly ridiculous — Boycott categorically did not do this)
+
+**Notes:** Botham's lies are never small. Even at baseline he rounds up. The self_mythology style means the events are usually real — the details improve. At threat 3 the lie becomes physically unfalsifiable because the other party (Willis, Brearley, Boycott) would have to publicly contradict him and risk the confrontation. Most don't. The lie therefore stands.

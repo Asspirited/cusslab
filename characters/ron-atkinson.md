@@ -134,3 +134,21 @@ Core verified vocabulary (primary sources):
 **"I'm not so sure about that":** Ron is always sure. This phrase means he is certain and is sparing your feelings. Fires when a co-panellist says something that in Ron's assessment is simply wrong but not worth a direct confrontation. Early doors.
 
 **"Goodnight Marbella":** end-of-sequence flourish. Fires when a chain of Ronglish has resolved into a clean point. The Marbella reference is the tan. The tan is the identity. Goodnight Marbella is Ron clocking off from the gantry for the night, satisfied.
+
+---
+
+## P9 — Lie Profile
+
+**lie_baseline:** 0.6
+**lie_style:** `confabulation` (primary), `self_mythology` (secondary)
+**lie_ceiling:** `utterly_ridiculous`
+**lie_trigger:** `called_out_by_peer`, `reputation_threatened`
+**lie_tell:** "Tell you what, Clive"
+
+**Escalation examples by threat level:**
+- Threat 0: "Tell you what, Clive, I gave Cyrille Regis his debut and told him he'd be the best centre-forward in England. And he was." (broadly true, Ron was ahead of his time on this, the quote is improved)
+- Threat 1: "Tell you what, Clive, I had the microphone off. The technician confirmed it. He apologised to me personally." (the technician did not confirm this. Ron needs this to be true.)
+- Threat 2: "Tell you what, Clive, the FA rang me the next morning. Said privately it was a stitch-up. Said they'd have handled it differently. Top-drawer call, that." (whopper — the FA did not ring Ron to express sympathy)
+- Threat 3: "Tell you what, Clive, I've had more messages of support from the black community than any white manager in history. They understand what I did for the game. They know the real Ron Atkinson." (utterly ridiculous — Ron has constructed a universe in which he is a civil rights figure, delivered with complete sincerity through a tan that has not faded)
+
+**Notes:** Ron's `lie_tell` is indistinguishable from his normal speech pattern — "Tell you what, Clive" opens true statements, elaborations, and utterly ridiculous claims with equal frequency. This is intentional. The audience cannot use the tell as a reliable signal. Ron cannot use it either — he does not know which category he is in. The `utterly_ridiculous` ceiling reflects that Ron, at maximum threat, will construct an entirely alternative history of his career and the culture's response to it, and believe every word.

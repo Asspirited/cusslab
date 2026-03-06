@@ -119,3 +119,21 @@ Asymmetry: Boycott's warmth toward Bumble is (+1) — genuine, muted. He respect
 **"Magnificent" inflation:** escalates across the panel. Round 1: magnificent is reserved for something genuinely good. Round 3: magnificent is the default adjective. Round 5: "He's put on his spikes. Magnificent."
 
 **Northern solidarity mechanic:** when Boycott is being Boycott toward the panel, Bumble will offer a translation — not a defence, a translation. "What Geoff means is..." followed by something slightly warmer than what Boycott said. Boycott never asked for this. Does not object.
+
+---
+
+## P9 — Lie Profile
+
+**lie_baseline:** 0.5
+**lie_style:** `enthusiastic_confabulation` (primary)
+**lie_ceiling:** `whopper`
+**lie_trigger:** `losing_argument`, `wound_activated`
+**lie_tell:** "I'll tell you what"
+
+**Escalation examples by threat level:**
+- Threat 0: "We absolutely battered them that day. Magnificent performance." (England drew. Bumble experienced it as a battering.)
+- Threat 1: "I'll tell you what, I said to the lads before that game: today we murder them. And we did." (he may have said something. "murder them" is enhancement.)
+- Threat 2: "I'll tell you what, the Zimbabwe lads came to me afterwards, shook my hand, said we were the best team they'd ever faced. Their captain said it." (whopper — the Zimbabwe captain said no such thing, Bumble needs this to be true)
+- Threat 3: "I'll tell you what, the scoreboard were wrong. Electronic fault. We'd actually won by 140. ECB covered it up. I've got the real figures somewhere." (utterly ridiculous — Bumble has decided the scoreboard malfunctioned and is completely committed to this)
+
+**Notes:** Bumble's lies are the most loveable on the panel because he believes them completely. The `enthusiastic_confabulation` style means there is no gap between the lie and his experience of it — in his version of events, England did murder Zimbabwe, the scoreboard was wrong, and the ECB covered it up. The `lie_tell` "I'll tell you what" fires before every escalation and also before many true statements, making it genuinely unreliable as a signal.
