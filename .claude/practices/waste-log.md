@@ -555,3 +555,19 @@ Date: 2026-03-06
 Type: Paste failure — placeholder not replaced
 Cost: 2 exchanges
 Description: Claude Code received the alliss.md commit paste twice with placeholder text ([paste the full alliss.md content here]) instead of actual content. File did not exist until third attempt when full content was provided inline. Root cause: claude.ai generated a paste instruction referencing content from earlier in the conversation rather than reproducing it explicitly. Fix: always reproduce file content inline in the paste, never reference it by pointer.
+
+WL-019
+Item: Session 475 — no waste
+Symptom: N/A
+Suspected cause: N/A
+Session: 475
+Time lost: 0
+Cost impact: 0
+Delay: 0
+Tags: clean-session
+Status: closed
+Notes: Watching the Oche panel fully specced and committed in one session.
+domain-model.md → Gherkin → 7 character files, in order, no drift.
+Ron Atkinson Football panel wound specced and committed to domain-model.md.
+Frankenstein wound (Bristow/Taylor), Crowd Pressure mechanic, dead-in-panel-world
+rule (Bristow, Waddell) all in Gherkin before any implementation.
