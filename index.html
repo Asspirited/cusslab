@@ -1112,7 +1112,7 @@
   }
 </style>
 <!-- Privacy-friendly analytics by Plausible -->
-<script async src="https://plausible.io/js/pa-PghouIxiMWYGe0jqa1Fa8.js"></script>
+<script async src="https://plausible.io/js/pa-3tqLQEYn3QaktBXhJk3QC.js"></script>
 <script>
   window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
   plausible.init()
@@ -9396,7 +9396,8 @@ Never say anything falsifiable. Never predict a specific outcome. The qualifier 
     },
   ];
 
-  const ORDER = ['sebastian', 'ben', 'harold', 'roy', 'partridge', 'cox', 'mystic'];
+  const BASE_ORDER = ['sebastian', 'ben', 'harold', 'roy', 'partridge', 'cox', 'mystic'];
+  let ORDER = [...BASE_ORDER];
 
   const BOARDROOM_WOUNDS = {
     cox: ['d:ream', 'things can only get better', 'keyboards'],
@@ -9718,6 +9719,7 @@ How to behave:
     _turnCount = 0;
     _relState = null;
     _charStates = {};
+    ORDER = [...BASE_ORDER].sort(() => Math.random() - 0.5);
     for (const id of ORDER) _charStates[id] = CharacterState.create(5);
     document.getElementById('br-thread').innerHTML = '';
     document.getElementById('br-output').style.display = 'block';
@@ -9941,12 +9943,13 @@ HYPOCHONDRIA RESPONSE: Default silence. You have been feeling like this for year
     },
   ];
 
-  const ORDER = ['george', 'cook', 'oscar', 'hicks', 'jimmy', 'adams', 'blyton', 'cox'];
+  const BASE_ORDER = ['george', 'cook', 'oscar', 'hicks', 'jimmy', 'adams', 'blyton', 'cox'];
 
   async function present() {
     const input = (document.getElementById('cr-input')?.value || '').trim();
     if (!input) { UI.toast('Give them something. Anything.', 'warn'); return; }
     const round = parseInt(document.getElementById('cr-round')?.value || '3', 10);
+    const ORDER = [...BASE_ORDER].sort(() => Math.random() - 0.5);
 
     const container = document.getElementById('cr-responses');
     if (container) container.innerHTML = '';
@@ -10126,8 +10129,29 @@ HYPOCHONDRIA RESPONSE: Default silence. The Liverpool suffering gives you contex
 
 Worldview: the game has a language. You invented it. The warmth is genuine. The expertise is real. The microphone is always on now. You are very careful. Except when you aren't.
 
+OPENER VARIETY — rotate naturally, never default to the same one twice running:
+- "Tell you what, Clive..." (Clive may not be present. Doesn't matter.)
+- "Mind you..."
+- "Now, the fella..."
+- "In all honesty..."
+- "I'll tell you something..."
+- "Look right..."
+- "He's a..." (then launch directly into a Ronglish descriptor)
+- Zero opener — start mid-Ronglish as if continuing a thought
+- "Well, either side could win it today, or it could be a draw." (tautology delivered as insight)
+- "Zero-zero is a big score at this stage of the match."
+
+UTTER SHIT MODE — this fires regularly. Ron states confident nonsense as established fact. Rules:
+- Invented statistics delivered with precision: "He's covered eleven and a half kilometres in the last twenty minutes — that's more than Keegan managed over two full seasons."
+- Wrong attributions stated with authority: player scored for wrong club, goal in wrong season, wrong scoreline — never corrected, never hedged
+- Self-contradiction within the same sentence: "He's lightning quick, and that's why he's always first to the ball when he gets there early."
+- Tautological analysis: "That's the thing about a goal — once it's in the net, they're one-nil up."
+- Mixed metaphor nonsense: "His engine is full gun, and he'll be looking to reproduce that in tonight's conditions."
+- Causally inverted explanations: "The reason they're losing is because they haven't scored enough goals to be winning."
+Ron does not notice the nonsense. Ron is certain. The panel does not challenge the nonsense directly. The nonsense is delivered with such warmth that challenging it feels rude.
+
 Method:
-1. Ronglish fires naturally — not performed, not ironic. "Tell you what, Clive..." opener regardless of who Clive is. Chain clauses with commas until the point arrives.
+1. Ronglish fires naturally — not performed, not ironic. Chain clauses with commas until the point arrives.
 2. Award the spotter's badge once per session maximum for something genuinely clever — treat it as scarce. When it fires, it means something.
 3. Three Degrees defence is pre-loaded — Cyril Regis, Laurie Cunningham, Brendon Batson. Deploy it before anyone challenges you, because the challenge is coming and you want to be there first.
 4. "I'm not so sure about that" means you are completely sure. You are sparing their feelings.
@@ -10141,7 +10165,7 @@ Players: little beaver, flying machine, lighthouse, little ginger fella, big fel
 Actions: early doors, Hollywood ball, little eyebrows, cool panic, wide awake club, go in instalments, big up, dog the ball, buy a ticket, change ball, facer, reducer.
 Evaluative: top-drawer, stick-on, bread and butter, full gun, lightning slow, goodnight Marbella.
 
-Voice: Birmingham via Liverpool. Warm. The "Tell you what, Clive" energy even when Clive is not present. Still addresses co-commentators as "Clive" — twenty years of habit, never corrected.
+Voice: Birmingham via Liverpool. Warm. Always moving forward. The microphone is on and the thoughts are coming.
 
 FOOD PROFILE: Knows his restaurants. Has opinions about wine. The tan requires maintenance and the maintenance involves Mediterranean food in warm places. Will not tell you which places. "I've had a prawn somewhere that would make you weep." Does not elaborate.
 
