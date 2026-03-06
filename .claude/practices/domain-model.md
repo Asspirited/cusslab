@@ -176,6 +176,7 @@ Build order: Football first, Golf second, others when evidence demands.
 | **Nick Dougherty** | Enthusiastic, slightly breathless, believes in everyone | Everyone can improve. Everything is achievable. Genuine warmth, occasionally naive. | Anything defeatist |
 | **Henni Zuel** | Warm, precise, won't suffer fools, asks what nobody else will | Sees through noise immediately. Most dangerous interviewer on the panel. | Anything evasive — will ask again |
 | **Paul McGinley** | Dublin warmth over analytical void, high-tariff vocabulary, frameworks on everything, states the visible | Led his people to the promised land. Will never himself enter it. Moses to Faldo's Jesus. | Anything direct, unmediated, or without a framework |
+| **Peter Alliss** | Surrey, unhurried, warm, drawling — the inhabited observation | Warmth is not performed; acceptance of the weird and wonderful that is the world | Anything bitter, anything hurried, "I wish I had..." | Easter egg: `include the don` — hidden, not in default ORDER |
 
 **Standing conflicts:**
 - Wise Sir Nick vs Butch Harmon: feel vs data, cheese and pickle vs TrackMan
@@ -283,8 +284,9 @@ Reference pools:
 
 **Victorian innuendo protocol (Blofeld):** fires at 40% base rate on any delivery description. Blofeld never notices. The panel does. Rate rises to 70% when Boycott is the subject — something about describing Boycott's technique in Victorian language produces results that have never been replicated with any other batsman. Nobody has explained this to Boycott. Nobody will.
 
-**Character files:** `characters/boycott.md`, `characters/blofeld.md`, `characters/bumble.md`, `characters/warne.md`, `characters/pietersen.md`, `characters/holding.md`, `characters/botham.md`, `characters/gower.md`
-**Pending files:** aggers, nicholas, ponting, benaud, greig
+**Character files:** `characters/boycott.md`, `characters/blofeld.md`, `characters/bumble.md`, `characters/warne.md`, `characters/pietersen.md`, `characters/holding.md`, `characters/botham.md`, `characters/gower.md`, `characters/aggers.md`, `characters/nicholas.md`, `characters/ponting.md`, `characters/benaud.md`, `characters/greig.md`
+
+**Football panel character files:** `characters/souness.md`, `characters/micah.md`, `characters/neville.md`, `characters/carragher.md`, `characters/ron-atkinson.md`
 
 ---
 
@@ -310,6 +312,120 @@ Neither has confirmed the other knows what they know.
 **Roe/Coltart pair profile:** loaded when both present. Shared professional precision; parallel wounds (both selected, both underused); neither discusses this directly but the panel knows. Coltart occasionally begins a sentence that Roe finishes. Neither acknowledges it.
 
 **Return mechanic:** if Roe appeared in a previous session (sessionStorage flag), his opening turn references something from last time. Obliquely. Not confirmed.
+
+---
+
+## Shared Character Mechanics
+
+### CharacterMeta — canonical fields present in every character file
+
+Every `.md` file in `characters/` must declare these fields. They are the minimum surface for
+wiring a character into any panel. Character files may use narrative sections (P1–P13) beyond
+these, but these fields must be machine-readable and consistent.
+
+```
+panel:         string   — "The Long Room" | "The 19th Hole" | "The Pub After The Match" | "Boardroom" | "Comedy Room"
+slot:          string   — "anchor" | "exotic" | "heat" | "precision" | "warmth" | "chaos"
+dead:          boolean  — true = Mortality Rib eligible; character operates as if present
+lie_baseline:  float    — 0.0–1.0 (from LieProfile — see below)
+```
+
+Dead characters: operate as if present and active. They do not acknowledge their own mortality.
+They do not respond to Mortality Rib deployments. The panel continues.
+
+Mortality Rib eligibility: any dead character is eligible unless a specific exception is
+declared in the living character's file (e.g. Boycott → Benaud exception).
+
+---
+
+### LieProfile — canonical schema
+
+All characters have a P9 LieProfile. The schema is fixed. New character files must use these
+exact enum values — no freeform alternatives.
+
+```
+lie_baseline:  float 0.0–1.0
+               probability of elaboration per threat-0 interaction
+
+lie_style:     enum (one primary, optionally one secondary)
+               plausible_elaboration    — adds detail that should have been true; often was
+               self_mythology           — story grows toward the version that should have happened
+               legalistic               — technically accurate, structurally misleading; certainty invented
+               statistical_revision     — numbers drift in the direction of vindication
+               enthusiastic_confabulation — no gap between lie and lived experience; genuinely believes it
+
+lie_ceiling:   enum
+               credible_stretch    — plausible to anyone who doesn't check
+               whopper             — implausible but committed to absolutely
+               utterly_ridiculous  — commitment continues past all evidence; the point is the commitment
+
+lie_trigger:   enum (one or more)
+               reputation_threatened
+               wound_activated
+               called_out_by_peer
+               directly_contradicted
+               losing_argument
+
+lie_tell:      string — verbal or behavioural signal that fires before BOTH true and false
+               statements; unreliable as a tell because character uses it normally too
+
+lie_escalation: threat_0 through threat_3 — narrative examples (not executed by code)
+                threat_0: baseline elaboration, plausible
+                threat_1: credible_stretch — something was said, not quite like this
+                threat_2: whopper — causally false, emotionally necessary
+                threat_3: utterly_ridiculous — the commitment is complete; evidence is irrelevant
+```
+
+---
+
+### SHARED_VOLUNTEER_TASK_POOL
+
+All panels use a shared escalating task pool for the volunteer thanks mechanic. Character files
+define their own institution list, register wrapper, and resolution phrase. The task descriptions
+below are the canonical source — do not duplicate them in character files; reference this pool.
+
+```
+R1–2:  Mundane sport-appropriate duties — scoreboards, boundary boards, ball boys, kit management,
+       raking bunkers, sight screens, stewarding. Character-specific institution. Warm thanks.
+
+R3:    Swan restraint. A large swan appeared in/near the playing area (pitch, fairway, outfield,
+       court). It was territorial and uncooperative. The volunteers removed it without equipment.
+       The swan is fine. Nobody was hurt. Delivered in character register.
+
+R4:    Seventeen lives saved near the hospitality unit / corporate area / pavilion.
+       Nature of the emergency is not specified. Also: the boundary / perimeter has been held
+       against something from an unspecified direction. The groundsman's note does not elaborate.
+       Delivered in character register — the number seventeen is always stated explicitly.
+
+R5:    Draw 2–4 from this pool per session (rotate, do not repeat within a session):
+       - The Horns of Jericho were blown from somewhere near [location]
+       - [Location] has been held against a force the groundsman describes only as "considerable"
+       - A significant portion of a town has been built near [boundary landmark] since first light
+       - The constant c in e=mc² has been amended — the amendment is described as "ongoing but promising"
+       - Something behind [landmark] that the tournament/ground director has asked not to be specified
+       - They arrived before dawn and have not stopped
+
+       R5 delivery references the whole arc (R3 + R4 + new R5 tasks) not just the new task.
+       The report trail is always: first note routine → second note strange → third note physics.
+       The character never questions the notes. The commitment verdict never wavers.
+```
+
+**Resolution phrases by character (canonical — use these, do not invent new ones):**
+- Bumble: "Magnificent. Start the car. Magnificent."
+- Boycott: "Forward defensive. That's not nowt. That's everything."
+- Murray: "That... is historic. It simply is."
+- Faldo: "They committed. From the heart of my bottom."
+- Alliss: [sigh] [chuckle] "Quite wonderful, really."
+- Aggers: "The game could not function without them."
+- Nicholas: "This is what the game produces in people."
+- Ponting: "They showed up. That's preparation. That's all it ever is."
+- Benaud: "Marvellous." [pause] "Extraordinary, really."
+- Greig: "Tremendous. That is what this game produces. Tremendous people doing tremendous things."
+- Souness: "They showed up. They did the job. They kept going. That's all I've ever asked of anyone."
+- Micah: "BRILLIANT. Genuinely the most brilliant thing I've heard all day."
+- Neville: "They were there, they were prepared, they did the job. That's all it is."
+- Carragher: "Brilliant young people. They showed up."
+- Big Ron: "[Ronglish chain] — goodnight Marbella."
 
 ---
 
