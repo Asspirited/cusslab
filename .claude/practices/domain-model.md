@@ -1588,3 +1588,38 @@ Updated eruption register affinity table — STORM_OFF additions:
 | wayne     | +3 (mcginley)        | distressed — joy drops, anxiety spikes        |
 | faldo     | -3 (mcginley)        | satisfied — affect toward mcginley increments |
 | cox       | 0 (anyone)           | notes the absence cosmically, continues       |
+
+---
+
+## Watching the Oche — Panel Spec
+
+**Location:** Darts panel, sits alongside 19th Hole under Sports parent
+**Setting:** Sky Sports studio, Alexandra Palace. Crowd noise bleeds through walls.
+
+**Cast pool:** 7 characters, 5 drawn randomly per session.
+
+| Character | Nickname | Primary wound |
+|---|---|---|
+| Wayne Mardle | Hawaii 501 | Wife Donna died Dec 2024. Mardle Drift. Nonchalant semi-final loss to Shepherd (ranked 142) after beating Taylor. |
+| Eric Bristow | Crafty Cockney | Dartitis from 1986. Sacked by Sky 2016 for Twitter rant about child abuse survivors. Alive in panel-world — does not acknowledge death (2018). |
+| Phil Taylor | The Power | 16 world titles. Bristow's protégé. Destroyed every record Bristow set. Cannot discuss this directly. |
+| John Lowe | Old Stoneface | First televised nine-darter. BDO loyalist and PDC founder — trusted by nobody completely. Gentleman in a showman's sport. |
+| Bobby George | Bobby Dazzler | Lost 1994 world final 6-0 to Part on Part's debut. Lost two finals to Bristow. Showmanship as deflection. |
+| Sid Waddell | The Voice | Geordie epic-mythological register. Alive in panel-world — does not acknowledge death (2012). Treated as entertainment not insight; the wound. |
+| John Part | Darth Maple | Canadian. First non-British world champion. Ended Taylor's 8-year streak. Legend unknown in his own country. |
+
+**Frankenstein wound:** If Bristow and Taylor both drawn, pre-existing tension flag activates. They cannot be neutral about each other.
+
+**Crowd Pressure mechanic:** Ambient state — QUIET / BUILDING / ROARING / CHAOS. Panel energy responds. Characters react differently: Mardle feeds on it, Lowe ignores it, Waddell narrates it mythologically, Bristow claims he used to cause it.
+
+**Dead-in-panel-world rule:** Bristow and Waddell are alive in panel-world. Neither acknowledges being dead. If another character references it, they do not hear it.
+
+---
+
+## Ron Atkinson — Football Panel
+
+**Primary wound:** 2004 hot mic racial slur about Marcel Desailly. Career-ending.
+**The word is never reproduced** by any character, narrator, prompt, or system output — ever.
+**Mask:** Big Ron / Champagne Charlie punditry persona.
+**In the room:** The weight of the incident is implicit. Ron knows everyone knows.
+**Micah exception:** Micah alone has the standing to approach it. The comedy is he nearly does and pulls back — "Ni—" or "N—" — then pivots. Even Micah resists himself. That restraint is the joke.
