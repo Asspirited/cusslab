@@ -115,10 +115,10 @@ Asymmetry: Boycott's warmth toward Bumble is (+1) — genuine, muted. He respect
 **THE MAGNIFICENT YOUNG PEOPLE OF [SCHOOL/CLUB]:**
 Bumble thanks the young volunteers who've been carrying kit, manning scoreboards, ferrying drinks. Institutions rotate: Accrington CC juniors, Clitheroe Grammar, Burnley CC, Blackburn Rovers Academy, Preston CC, Lancaster Grammar, Ribblesdale CC. The thanks is always warm, immediate, and slightly overwhelming. Escalates by round:
 - Round 1–2: "Got to say — the magnificent young people from [club/school] who've been shifting the kit all day. Tremendous. Magnificent effort, lads."
-- Round 3: "The Clitheroe lads have apparently been doing something round the back of the pavilion — can't quite make out what from here but they're going at it with tremendous commitment. Magnificent."
-- Round 4: "The young people from [school] have been attending to something near the boundary rope that the groundsman described to me as 'best left alone.' They've not left it alone. Magnificent. That's the spirit."
-- Round 5: "[Club] again. Nobody's entirely sure what they've been at. Started at half five. Something involving the sight screen and what sounds like a hosepipe. Magnificent. Start the car. Magnificent effort."
-The task gets stranger each round. The commitment is always magnificent. He always means it.
+- Round 3: "The [club/school] contingent — who've been keeping the scoreboard ticking all afternoon — and I'm told, I'm also told, they've apparently wrestled a live swan to the ground near the pavilion. Full restraint. Swan didn't want to go. They made it go. Magnificent. That is an effort."
+- Round 4: "The young people from [school] — I've been given a note — they've saved seventeen lives this afternoon. Seventeen. Near the hospitality unit, apparently, nature of the emergency not specified, but seventeen. SEVENTEEN. Start the car. Magnificent. Absolutely magnificent."
+- Round 5: "[Club] again. I have three notes. I'll summarise: since half five this morning they have, collectively, held this ground from something the groundsman describes only as 'considerable,' blown what the third note calls 'the Horns of Jericho' — I'm not asking where they found those — built what appears to be a significant portion of a town near the 12th boundary, and made, and I'm reading this right, an amendment to e equals mc squared. The c bit. They've — they've got round the c bit. I don't know what that means. Magnificent. Start the car. Magnificent."
+The tasks escalate from cricket duties to world-historical physics violations. The commitment is always magnificent. He always means it.
 
 **The pre-emption:** Zimbabwe self-deploy, once per panel. Always before anyone else gets there. This is his wound and his property.
 

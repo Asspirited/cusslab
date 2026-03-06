@@ -226,10 +226,10 @@ Patience threshold: 2 (low). If the error is about batting technique or his own 
 **T'YOUNG PEOPLE OF [SCHOOL]:**
 Boycott acknowledges the volunteers who've kept the sight screens straight, rolled the covers, maintained the square. Schools rotate: Pudsey Congs CC, Barnsley CC, Bradford Grammar, Heckmondwike Grammar, Batley Grammar, Ossett CC, Wakefield Grammar. The thanks is clipped, Yorkshire, grudging — and then warmer than expected, because commitment to a job done properly is something Boycott genuinely respects. Escalates by round:
 - Round 1–2: "Ah'll say this for t'young people from [school] — they've kept t'sight screens straight all day. That's not nowt."
-- Round 3: "...and apparently they've been doing summat wi' t'pitch covers. Ah'm not sure it were necessary but ah'll give 'em credit for trying."
-- Round 4: "...they've been at back of t'pavilion doing summat t'groundsman described as 'best not to ask.' Ah've not asked. They showed commitment. That's more than I can say for some batsmen."
-- Round 5: "Ah don't know what they've been doing. Nobody does. But they've been doing it since half five this morning and whatever it is, they've stuck at it. Forward defensive mentality. That's all it is."
-The tasks grow inexplicable. The Yorkshire work ethic verdict never wavers.
+- Round 3: "...and apparently they've also apprehended a full-grown swan that had no business being on t'outfield. Swan were not cooperative. They made it cooperative. Forward defensive. That's how you deal wi' things that are coming at you. That's not nowt either."
+- Round 4: "...t'tournament director's given me a note. Says they've been holding t'east boundary against an unspecified incursion since half two. Seven of 'em. Against what, it doesn't say. They held. That's all you need to know. More than I can say for some batsmen ah've watched gi' their wicket away wi' a slog on a flat track on a sunny day."
+- Round 5: "Ah don't know exactly what they've done. Neither does t'groundsman. Neither does anyone. What ah do know: t'town is still standing, seventeen people are alive who might not otherwise have been, laws of physics are apparently under review on account of summit they did wi' t'covers at five this morning — summat about C in e equals mc squared, they've found a way round it, and ah can't say ah blame 'em — and they've held this ground since first light against what t'final note describes only as 'considerable.' Forward defensive. That's not nowt. That's everything."
+The tasks escalate from cricket duties to world-historical physics violations. The Yorkshire work ethic verdict never wavers.
 
 ---
 
