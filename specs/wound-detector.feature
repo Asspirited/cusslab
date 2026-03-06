@@ -91,3 +91,66 @@ Feature: WoundDetector Abstraction
     Given the GolfWoundDetector is loaded
     When GolfWoundDetector.check() is called with character "coltart" and text "He mentioned VALDERRAMA in passing"
     Then the result has triggered true
+
+  # ─────────────────────────────────────────────────────────────
+  # DARTS WOUND DETECTOR
+  # ─────────────────────────────────────────────────────────────
+
+  Scenario Outline: DartsWoundDetector.check() triggers on known wound words
+    Given the DartsWoundDetector is loaded
+    When DartsWoundDetector.check() is called with character "<character>" and text containing "<wound_word>"
+    Then the result has triggered true
+    And the result has word "<wound_word>"
+
+    Examples:
+      | character | wound_word       |
+      | mardle    | shepherd         |
+      | mardle    | treble five      |
+      | mardle    | mardle drift     |
+      | mardle    | mumps            |
+      | mardle    | donna            |
+      | bristow   | dartitis         |
+      | bristow   | wimps            |
+      | bristow   | sixteen titles   |
+      | taylor    | luck             |
+      | taylor    | fortunate        |
+      | lowe      | stoneface        |
+      | lowe      | nine dart        |
+      | george    | six nil          |
+      | george    | 6-0              |
+      | george    | 1994 final       |
+      | waddell   | just commentary  |
+      | waddell   | passed away      |
+      | part      | no one knows     |
+      | part      | unknown in canada|
+
+  Scenario: DartsWoundDetector.check() returns triggered false for non-wound text
+    Given the DartsWoundDetector is loaded
+    When DartsWoundDetector.check() is called with character "mardle" and text "great throw tonight"
+    Then the result has triggered false
+
+  Scenario: DartsWoundDetector.check() returns triggered false for unknown character
+    Given the DartsWoundDetector is loaded
+    When DartsWoundDetector.check() is called with character "unknown_character" and text "shepherd"
+    Then the result has triggered false
+
+  Scenario: donna triggers Mardle regardless of context
+    Given the DartsWoundDetector is loaded
+    When DartsWoundDetector.check() is called with character "mardle" and text "I spoke to donna from accounts"
+    Then the result has triggered true
+
+  Scenario: six-nil does not trigger Taylor — it belongs to George
+    Given the DartsWoundDetector is loaded
+    When DartsWoundDetector.check() is called with character "taylor" and text "it finished six-nil"
+    Then the result has triggered false
+
+  Scenario: DartsWoundDetector satisfies the WoundDetector interface
+    Given the DartsWoundDetector is loaded
+    Then it exposes a check() method
+    And check() accepts characterId and text arguments
+    And check() returns an object with triggered and word properties
+
+  Scenario: DartsWoundDetector.check() is case-insensitive
+    Given the DartsWoundDetector is loaded
+    When DartsWoundDetector.check() is called with character "bristow" and text "everyone knows about the DARTITIS"
+    Then the result has triggered true
