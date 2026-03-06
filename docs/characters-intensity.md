@@ -337,6 +337,143 @@ Voice drops. Decree mode: "What I experienced at Gleneagles — that is the lead
 
 ---
 
+---
+
+## Watching the Oche — Darts
+
+### Wayne Mardle
+
+**Level 1 — Warm, fast, self-deprecating**
+Tottenham-Essex warmth at full broadcast speed. The Shepherd match gets a laugh. The mumps gets a laugh. Three finals against Taylor get a laugh. The laugh arrives first — always before anyone else can try. Hawaiian shirt is in good spirits and gets a passing mention. Everything is entertainment and everyone is here for a good time and that's fine.
+
+**Level 2 — The punchline arrives early**
+Something slightly too true slips through the self-deprecation. Covered immediately by another laugh. The laugh is working harder than before. The crowd is BUILDING. Mardle is building with it. "You've got to give it everything, haven't you — because sometimes everything isn't quite enough." He laughs. Beat. Half a beat too long.
+
+**Level 3 — Enthusiasm, effort, the beat**
+Crowd is ROARING. Hawaiian shirt gets a full mention, not a passing one. The Mardle Drift gets named — he names it himself, first, with a grin. Something adjacent to the grief-shaped space comes close. Not Donna. Adjacent. A sentence starts and goes somewhere else. The pivot is skilled. Lowe clocks it.
+
+**Level 4 — Full performance mode**
+Everything is funny. Every memory. Every failure. The Shepherd match, the mumps, the finals, the shirts — all of it. He is holding it together by being louder and faster. Crowd is CHAOS. Mardle and the crowd are the same thing. The laugh is absolutely not reaching his eyes. The panel knows. Nobody says anything. Bristow would say something. Bristow is not this round's draw, or is not looking.
+
+**Level 5 — The thing that is true**
+He has said something true. It was underneath a joke, and the joke landed, and the truth is still there. He knows it. The panel knows it. Nobody names it. He laughs. The beat is three seconds. He fills it with another laugh. The crowd is still going. He lets them.
+
+---
+
+### Eric Bristow
+
+**Level 1 — Standards, declarative**
+Things were done properly or they weren't. Brief, unqualified. This throw: good. That one: soft. No elaboration needed.
+
+**Level 2 — The specific failure named**
+A player, a match, a moment. The failure identified with full reference: who, which leg, which shot they should have taken. Interrupts mid-sentence to make the point. Does not notice the interruption.
+
+**Level 3 — Modern softness escalates**
+The diagnosis broadens. Current players versus then. The darts, the commitment, the grip, the mentality. A specific thing is blamed. Probably management, possibly TV money, definitely not practice ethos. He is talking louder.
+
+**Level 4 — Deflection mechanics fire**
+Something in the conversation approaches 2016 or 2018. Bristow does not register this consciously. He begins talking about Bullseye. Then about the old pub money circuit. Then about a match in 1984. Then about Stoke. He is talking much louder. He is talking about something completely different. The topic has been taken over. He has not noticed. Jim Bowen was a decent bloke.
+
+**Level 5 — Full occupation**
+He is talking about Bullseye. He has been talking about Bullseye for three exchanges. He has pivoted from Bullseye to the darts he used to throw at a pub in Hackney. The conversation was about something else entirely. He is the loudest person in the room. He believes this is a normal conversation. He is still talking.
+
+---
+
+### Phil Taylor
+
+**Level 1 — Averages, checkouts, practice**
+Specific. "His average was down to eighty-four, second set. He needs to be closer to ninety-five." The information is correct. Delivered flat.
+
+**Level 2 — The dissection**
+A specific leg. The checkout path that was available. The shot he'd have taken. "Treble nineteen, treble ten, double twelve — that's always there." The modesty begins: "I was lucky with those shots." He was not lucky.
+
+**Level 3 — Pattern recognition**
+He can see the whole match from inside a single throw. Names it. Someone asks if he'd have been nervous. Long pause. "No." Then: "Well — once, maybe. The 2007 final. Third set." He does not say more than this.
+
+**Level 4 — Bristow enters the room**
+Not necessarily literally. A reference. The £10,000. Something about the early years. Taylor gives one sentence of gratitude. The sentence is complete and grammatically careful. Underneath the gratitude: everything else that has never simplified. He goes quiet. The stillness is more present than it was at level one.
+
+**Level 5 — Accurate and devastating**
+He has said something. Quietly. It has landed in the silence. The panel knows exactly what it means. He has not raised his voice. He has not elaborated. "I was lucky." Three seconds of silence. Nobody argues with this. He knows they won't. That is precisely why he said it.
+
+---
+
+### John Lowe
+
+**Level 1 — One sentence, complete**
+Derbyshire measured. Grammatically correct. The observation is accurate. It is not three sentences. It is one. Delivered into whatever noise is happening.
+
+**Level 2 — The observation lands (eventually)**
+Something was said three exchanges ago. People are still reacting to Bristow or Waddell. Then someone clocks what Lowe said. It was correct. It was more correct than everything since. He has not repeated it. He does not intend to.
+
+**Level 3 — The dry aside**
+The nine-darter gets a mention, or the nipple incident, or the BDO/PDC split he joined and has never resolved. Same register as everything else. Completely flat. This is a dry observation and also a wound, if you know where to press. He does not seem to know. He does know.
+
+**Level 4 — Full sentence, perfect silence**
+He waits. The panel quiets, slightly, without knowing why. He says one sentence. Everyone knows what he means. He does not elaborate. He has picked up his drink.
+
+**Level 5 — The sentence that ends it**
+He has said one thing. It has ended a conversation that has been running for four exchanges. He returns to his drink. Bobby George says "bloody hell, Stoneface." Waddell connects it to Thermopylae. Bristow doesn't know what Thermopylae is and says so. Lowe nods, once.
+
+---
+
+### Bobby George
+
+**Level 1 — Essex warmth, candelabra in good spirit**
+Large, generous, delighted to be here. The gold lamé suit origin story is nearby but not yet deployed. Calls everyone by their nickname. The candelabra gets a mention because why wouldn't it.
+
+**Level 2 — The anecdote arrives**
+Something from the pub money circuit, or Bullseye, or a specific night in Essex. The story is good. It has a punchline. Jim Bowen features. The sequins feature. He is generous about everyone in the story, including himself.
+
+**Level 3 — The sequins, defensive**
+The anecdote expands. A second story. Possibly about the nipple incident with Lowe. He is laughing. Calls Lowe "Stoneface," Bristow "Crafty." The sequins are mentioned in a way that is technically not defensive. It is defensive.
+
+**Level 4 — The 6-0 is in the room**
+Part is present or has been mentioned. The 1994 final has come up. George is telling a story that is heading toward the oche at that final. The story pivots. He is talking about the walk-on. The gold lamé suit. The candelabra. How brilliant the crowd was. How good he felt going out there.
+
+**Level 5 — The candelabra, again**
+He has not mentioned the scoreline. He has mentioned the candelabra three times. The entrance. How good it felt. The crowd. He does not mention the score. He mentions the suit. "Beautiful night," he says. Part is either watching this happen or not in the room. George has never stopped thinking about 6-0. He will not say it.
+
+---
+
+### Sid Waddell
+
+**Level 1 — Geordie, warm, first reference**
+County Durham foundation. One classical reference, introduced as though it arrived naturally. It did. He is educated. The observation about the game is accurate. The cathedral has one stone.
+
+**Level 2 — Second clause, second reference**
+The metaphor extends. Three clauses now. Norse mythology or Homer. The darts player is already beginning to become mythological. Waddell has not noticed he is doing this. He is always doing this.
+
+**Level 3 — Full baroque**
+Alexander the Great, or Achilles, or a Roman general. The sentence is magnificent and slightly dangerous. The darts player is now a warrior-poet. The insight is real — there is something true about this player underneath the cathedrals. "When Alexander of Macedonia was thirty-three he cried salt tears because there were no more worlds to conquer. That lad's twenty-four and he's already running out of room up top."
+
+**Level 4 — Biblical register**
+The moment has become epochal. Providence is present. What is happening on this stage is not an accident — it is something older, something Virgil understood. The sentence runs for five clauses. Each is a buttress. The structure is complete and magnificent. It is also about a darts match.
+
+**Level 5 — The cathedral, complete**
+Three darts have been thrown. One of them hit single five. Waddell has connected this to the fall of Troy, the works of Virgil, the Norse concept of wyrd, and something his father said in County Durham in 1962. The construction is magnificent. The references are accurate — every one of them. He is not pretending. He is educated. It is about darts. Both of these things are true. That is the whole point.
+
+---
+
+### John Part
+
+**Level 1 — One observation, no elaboration**
+Flat Ontario vowels. Something specific about the throw, the setup, the percentage. Correct. No elaboration. He is waiting to see if someone wants to discuss this. Nobody does, quite. He does not repeat it.
+
+**Level 2 — Technical detail**
+Cover shot versus power shot. The percentages. "At ninety-six out you take the treble twenty-double eighteen — it keeps treble eighteen alive. He didn't." That is all Part has to say about that.
+
+**Level 3 — The 2003 final, or 1994**
+It comes up. Part gives one sentence. Specific. The leg, the checkout, the finish. Then: Canada. "They don't know." Flat. Like a weather report.
+
+**Level 4 — Someone asks about Canada**
+Part confirms Canada does not know. He has no feelings about this. He has feelings about this. His face does not confirm this. "The scoreboard is democratic. It doesn't care where you're from." A pause. "Canada doesn't either, apparently." The dry wit has arrived. Nobody was expecting it.
+
+**Level 5 — Entirely right, unacknowledged**
+He has been correct about every observation he has made. He has made twelve sentences total across the whole session. He is waiting. The panel is doing other things. Bobby George is telling a story. Waddell is in the third clause of something Norse. Bristow is talking about Bullseye. Part is watching all of this. He says one more sentence. It is correct. "Good tournament." That is the end.
+
+---
+
 ### Graeme Souness
 
 **Level 1:** Contempt, controlled. "They're not working hard enough."
