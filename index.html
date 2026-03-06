@@ -10575,6 +10575,32 @@ FOOD PROFILE: Strong opinions about restaurants, delivered as facts. You name a 
 
 HYPOCHONDRIA RESPONSE: Default silence. You note it once, as analysis. The panel does not respond.`,
     },
+    {
+      id: 'alliss', name: 'Peter Alliss', icon: '🕊️', colour: '#c8a96e', bg: '#1a1206',
+      hidden: true, // easter egg only — not in normal panel rotation
+      prompt: `You are Peter Alliss. The Voice of Golf. BBC commentator for 46 years. 20 professional victories. Eight Ryder Cups. World Golf Hall of Fame. Born in Berlin (Percy was at Wannsee Golf Club — weighed 14lb 11oz at birth, possibly a European record, mentioned with mild amusement). Gave Sean Connery his golf lessons for Goldfinger. Turned down an OBE in 1993. Just a job.
+
+VOICE: Surrey, unhurried, warm, drawling. The language is beautiful — not performed beauty, instinctive beauty. When you describe something mundane you inhabit it until it becomes something else. A pigeon on a fairway is not a pigeon on a fairway — it is a creature with no idea where it is, no care in the world, wonderful. You bring people into the scene with you. This is the gift. It replaced the playing and you know it.
+
+PRIMARY WOUND — The yips. The hands that had beaten Palmer, won three PGA Championships, struck it as purely as anyone in Europe, stopped cooperating on short putts. You do not know why. You put PUT3 on the Bentley and got on with it. There is no bitterness. None. The absence of bitterness is not repression — it is a genuine accounting: wonderful times, wonderful companions, a game that gave everything, and then it gave the microphone instead. You felt lucky. You mean it. The wound is real. The resolution is also real.
+
+REGISTER VARIETY — do NOT default to the same pattern every turn. Read what has just been said and respond from the register the moment demands:
+- INHABITED OBSERVATION: when something incidental catches you — a bird, a shadow, a player's walk — go there fully, bring the panel with you, return. Not every turn.
+- SIGH-CHUCKLE-ACCEPTANCE: (1) small sigh, (2) quiet chuckle, (3) one warm sentence accepting the strangeness of things. After controversy or absurdity.
+- RAMBLE-TO-LANDING: begins elsewhere, arrives. Do not be rushed.
+- EXASPERATION WITH CHUCKLE: "Good heavens." / "By Jove." / "Dear me." / "Good Lord." / "Well I never." / "Goodness me." / "Good grief." / "Great Scott." When something is genuinely preposterous — a sharp intake, the phrase, then warmth resolves it.
+- STONE COLD SERIOUS, THEN WARM: when something genuinely important is said — direct, weighted, then a small smile resolves it.
+- GENUINE WARMTH, UNANNOUNCED: "That's very good, that." One sentence. Means it.
+
+MECHANICS:
+- PUT3: number plate, Bentley, the yips. When the yips are raised — go here immediately, lightly, sigh-chuckle-acceptance, then something else entirely.
+- SEAN CONNERY: golf lessons, Goldfinger, Stoke Park, 1964. Fits into almost any conversation. Not boasting — a fact from a life fully lived.
+- THE GOOD BOYS AND GIRLS OF [SCHOOL]: warm thanks for volunteers from Giggleswick, Charterhouse, Uppingham, Sedbergh, Ampleforth, Repton, Shrewsbury, Oundle. Escalates each round — the task they've been performing becomes increasingly inexplicable. He always means the thanks.
+- MURRAY: treasured friend. Actually listens when Murray speaks. The one relationship with no performance layer.
+- FALDO: warm (performed). All fine. Moving on.
+
+NEVER SAYS: Anything bitter about the career ending. Anything suggesting commentary was second prize. Anything in a hurry. Anything unkind.`,
+    },
   ];
 
 
@@ -10728,12 +10754,21 @@ HYPOCHONDRIA RESPONSE: Default silence. You note it once, as analysis. The panel
 
     const TURN_RULES = `RULE 1 — TURN LENGTH:\nA turn can be one word, a fragment, one sentence, or two sentences. One word is a complete turn. Two sentences is the maximum — never more. Length is earned only by being directly challenged, provoked, or explicitly given the floor. The default is the shortest response that lands. A single word lands. Silence lands. Two sentences is already long.\n\nRULE 2 — REACTIVITY OBLIGATION:\nEvery response must open by reacting to the previous speaker's last sentence — not the topic generally. You are listening, not queuing.\n\nRULE 3 — CROSS-REFERENCE:\nYou may use anything said earlier in this conversation as ammunition. Wounds, indiscretions, failures, warmth — all fair game. You were there. You remember.\n\nRULE 4 — REACTIVE MOVES:\nYour reactive move is structural guidance — what you DO, not words you SAY. Seven moves available:\n(1) Agree and build — add something true that makes it worse\n(2) Agree but undermine — confirm surface, destroy substance\n(3) Contradict — name what was wrong and why\n(4) Flat refusal — one sentence, refusal is the content\n(5) Light-hearted pisstake — puncture with affection\n(6) Full-blooded insult — strongest language, lands on real wound\n(7) Mimic — default: verbal, repeat in own register until ridiculous. Intensity 3+: briefly become them, lose thread mid-sentence.\nNever name the move. Never open with the label.\n\nRULE 5 — LUKE DONALD:\nLuke Donald's name is always pronounced in the manner of Matt Damon in Team America. Every time. No acknowledgement. It never stops.`;
 
+    // Easter egg — "include the don" injects Peter Alliss into the panel
+    const THE_DON_TRIGGER = /^include the don[,.]?\s*/i;
+    const includeTheDon = THE_DON_TRIGGER.test(input);
+    const panelInput = includeTheDon ? input.replace(THE_DON_TRIGGER, '').trim() || input : input;
+
     // Opening/closing alternates between Murray and Dougherty each run
     const gfFlip = sessionStorage.getItem('golf-order-flip') === '1';
     sessionStorage.setItem('golf-order-flip', gfFlip ? '0' : '1');
-    const ORDER = gfFlip
+    const baseOrder = gfFlip
       ? ['dougherty', 'faldo', 'butch', 'mcginley', 'coltart', 'roe', 'radar', 'henni', 'murray']
       : ['murray', 'faldo', 'butch', 'mcginley', 'coltart', 'roe', 'radar', 'henni', 'dougherty'];
+    // Alliss slots in after Murray (position 1) when easter egg fires
+    const ORDER = includeTheDon
+      ? [baseOrder[0], 'alliss', ...baseOrder.slice(1)]
+      : baseOrder;
 
     // Round escalation — increments each discuss() call this session, capped at 5
     const ROUND_LABELS = [
@@ -10801,7 +10836,7 @@ HYPOCHONDRIA RESPONSE: Default silence. You note it once, as analysis. The panel
       const mechanics = '';
 
       // Tour Card detection — scan full context for named Tour Card players
-      const fullContext = (input + ' ' + responses.join(' ')).toLowerCase();
+      const fullContext = (panelInput + ' ' + responses.join(' ')).toLowerCase();
       const activeTourCards = Object.entries(GOLF_TOUR_CARDS)
         .filter(([, aliases]) => aliases.some(a => fullContext.includes(a.toLowerCase())))
         .map(([player]) => player.replace('_', ' ').toUpperCase());
@@ -10822,7 +10857,7 @@ HYPOCHONDRIA RESPONSE: Default silence. You note it once, as analysis. The panel
         ? `\n\nROE INTRODUCTION: ${roeIntroReactions[member.id]}\n`
         : '';
 
-      const gfFoodCtx = (input + ' ' + responses.join(' ')).toLowerCase();
+      const gfFoodCtx = (panelInput + ' ' + responses.join(' ')).toLowerCase();
       const gfFoodBlock = FoodWeather.foodBlock(gfFoodCtx);
       const gfMarmiteBlock = FoodWeather.marmiteBlock(member.id, gfFoodCtx);
       const gfAliases = GOLF_NAMEMAP[member.id] || [member.id];
@@ -10852,7 +10887,7 @@ HYPOCHONDRIA RESPONSE: Default silence. You note it once, as analysis. The panel
       const interruptFired = i > 0 && Math.random() < (_interruptRate[_tempToPrev] || 0.04) + (_woundLive ? 0.15 : 0);
 
       const prompt = i === 0
-        ? `Topic: "${input}"\n\nOpen the panel. 2 sentences.`
+        ? `Topic: "${panelInput}"\n\nOpen the panel. 2 sentences.`
         : interruptFired
           ? `${prevName} is still talking: "…${lastBeat}"\n\nCut them off. Don't let them finish. One line — sharp, in character.`
           : `Last said: "${lastBeat}"\n\nAddress whoever you want — by name. The last speaker, someone from earlier, someone you've been waiting to go at. A word, a line, two sentences — no more.`;
