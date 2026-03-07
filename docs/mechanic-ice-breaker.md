@@ -305,11 +305,53 @@ Nick produces a golf metaphor for the recovery that almost but doesn't quite wor
 
 ## Recovery outcome probability summary
 
-| Character | CLEAN | PARTIAL | FAILED | Signature |
-|-----------|-------|---------|--------|-----------|
-| Faldo     | 0.1   | 0.3     | 0.6    | Clarification that makes it worse |
-| Boycott   | 0.05  | 0.15    | 0.8    | Restatement + historical alibi |
-| Tufnell   | 0.15  | 0.35    | 0.5    | Spiral; self-owns occasionally land |
-| Blofeld   | 0.0*  | 0.2     | 0.8    | Never notices; pivot to pigeon |
+| Character | CLEAN | PARTIAL | FAILED | Style | Signature |
+|-----------|-------|---------|--------|-------|-----------|
+| **Cricket** | | | | | |
+| Faldo | 0.1 | 0.3 | 0.6 | FALDO_CLARIFICATION | Clarification that makes it worse |
+| Boycott | 0.05 | 0.15 | 0.8 | BOYCOTT_RESTATEMENT | Restatement + historical alibi |
+| Tufnell | 0.15 | 0.35 | 0.5 | TUFNELL_SPIRAL | Spiral; self-owns occasionally land |
+| Blofeld | 0.0* | 0.2 | 0.8 | BLOFELD_NON_RECOVERY | Never notices; pivot to pigeon |
+| **Golf** | | | | | |
+| Harmon | 0.5 | 0.3 | 0.2 | HARMON_TECHNICAL_FIX | Fixes it like a swing fault |
+| Coltart | 0.2 | 0.4 | 0.4 | COLTART_NEUTRALISE | One sentence; the cameraman moved |
+| Murray | 0.2 | 0.5 | 0.3 | MURRAY_ELEVATION | Turns discomfort into a moment |
+| Radar | 0.4 | 0.4 | 0.2 | RADAR_NOTHING | One word. Maybe two. |
+| Dougherty | 0.6 | 0.3 | 0.1 | DOUGHERTY_ABSORB | Absorbs warmly, moves on |
+| McGinley | 0.1 | 0.2 | 0.7 | MCGINLEY_RESTATEMENT | High-tariff analysis of the damage |
+| Henni | 0.5 | 0.4 | 0.1 | HENNI_QUESTION | "What did you mean by that?" |
+| Alliss | 0.3 | 0.3 | 0.4 | ALLISS_PRESS_ON | "Oh well, shall we press on?" |
+| **Darts** | | | | | |
+| Mardle | 0.3 | 0.4 | 0.3 | MARDLE_REDIRECT | Self-deprecates before anyone else can |
+| Bristow | 0.1 | 0.2 | 0.7 | BRISTOW_NON_CONCESSION | Talks louder about something else |
+| Taylor | 0.3 | 0.4 | 0.3 | TAYLOR_DEFLECTION | "The words were kind to me" |
+| Lowe | 0.4 | 0.4 | 0.2 | LOWE_PATIENCE | Waits for the room to resettle |
+| George | 0.4 | 0.4 | 0.2 | GEORGE_ANECDOTE | Warm anecdote absorbs the damage |
+| Waddell | 0.2 | 0.5 | 0.3 | WADDELL_ELEVATION | Elevates into literature |
+| Part | 0.5 | 0.3 | 0.2 | PART_MINIMISE | "Right." One sentence. Done. |
+| Studd | 0.15 | 0.35 | 0.5 | STUDD_ENTHUSIASM | More enthusiasm about the wrong thing |
+| Pyke | 0.3 | 0.4 | 0.3 | PYKE_BROADCAST_RESET | "And we continue." |
+| **Football** | | | | | |
+| Souness | 0.05 | 0.15 | 0.8 | SOUNESS_INTENSIFY | The room is too soft for what he said |
+| Micah | 0.6 | 0.3 | 0.1 | MICAH_REFRAME | "THAT'S what makes this interesting!" |
+| Neville | 0.2 | 0.4 | 0.4 | NEVILLE_REVIEW | Analyses the footage of the incident |
+| Carragher | 0.5 | 0.35 | 0.15 | CARRAGHER_SELF_DEPRECATE | "I can't believe I said that either" |
+| Big Ron | 0.3 | 0.4 | 0.3 | RON_LEXICAL_PIVOT | Invents a phrase to cover the transition |
+| **Boardroom** | | | | | |
+| Harold | 0.3 | 0.5 | 0.2 | HAROLD_SILENCE | "Yes." Silence. "That's what language does." |
+| Sebastian | 0.1 | 0.3 | 0.6 | SEBASTIAN_REFRAME | Process improvement. No accountability. |
+| Roy | 0.4 | 0.4 | 0.2 | ROY_CLOSE_IT | "That was wrong. Moving on." |
+| Hicks | 0.3 | 0.4 | 0.3 | HICKS_CONTEXT | 40 seconds on the structural failure |
+| Partridge | 0.15 | 0.35 | 0.5 | PARTRIDGE_FILE_IT | "I have notes on this." |
+| Mystic | 0.2 | 0.4 | 0.4 | MYSTIC_ANTICIPATED | "I felt the energy shift." |
+| Cox | 0.3 | 0.4 | 0.3 | COX_COSMIC_CONTEXT | The sun will expand in four billion years |
+| **Comedy Room** | | | | | |
+| Carlin | 0.2 | 0.4 | 0.4 | CARLIN_CONFIRMATION | Adds it to the evidence log |
+| Cook | 0.3 | 0.4 | 0.3 | COOK_EVALUATE | "Thirty percent efficiency on that remark" |
+| Adams | 0.4 | 0.4 | 0.2 | ADAMS_OH_WELL | "Oh well. Let's crack on." |
+| Wilde | 0.5 | 0.3 | 0.2 | WILDE_EPIGRAM | Inevitable epigram that redeems the moment |
+| Blyton | 0.3 | 0.4 | 0.3 | BLYTON_NARRATE_PAST | Translates it into Famous Five syntax |
+| Carr | 0.4 | 0.3 | 0.3 | CARR_CONVERT | Converts the silence into material |
+| Wise Sir Nick | 0.2 | 0.4 | 0.4 | NICK_GOLF_METAPHOR_RECOVERY | Golf metaphor that almost works |
 
 *Blofeld's CLEAN is THE_PIVOT — structurally different, once per session.
