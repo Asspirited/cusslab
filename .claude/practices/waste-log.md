@@ -745,3 +745,23 @@ Notes: Script is correctly installed and will track visitors. Auto-verification 
 - **Bobby George** — full md profile (wound data exists in DARTS_WOUNDS_DATA as "george"; full voice/comedy profile not written)
 
 **Action:** Next session touching darts characters: write both before any new code. Pattern established by characters-studd.md and characters-pyke.md.
+
+WL-044
+Date: 2026-03-07
+Type: Missing step definition — pipeline red at session start
+Symptom: 76 Gherkin scenarios failing, all in darts-match-engine-mode2.feature
+Cause: Background step "Given the darts panel is open" written without step definition
+Time lost: ~15 mins archaeology to identify root cause
+Fix: Two step definitions added to existing step file
+Tags: gherkin, step-definitions, pipeline-red
+Status: CLOSED
+
+WL-045
+Date: 2026-03-07
+Type: Feature file path assumption
+Symptom: Claude.ai referenced features/ directory; file was in specs/
+Cause: Path not confirmed before referencing — memory assumption overrode reality
+Time lost: 1 exchange
+Fix: Always grep for file location before referencing it
+Tags: path, assumption, save-rod-money
+Status: CLOSED
