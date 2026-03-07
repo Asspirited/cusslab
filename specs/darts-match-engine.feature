@@ -5,6 +5,8 @@ Feature: Darts match engine
   It detects checkout opportunities and bust conditions
   It fires nine-darter and big fish alerts when conditions are met
   It fires CHECKOUT_ROUTE_OPINION on non-standard finish routes
+  Note: these scenarios test the underlying Darts engine module
+  Mode 2 historic match UI behaviours are in darts-match-engine-mode2.feature
 
   Background:
     Given a match is initialised with format "best of 5 sets, first to 3 legs"
