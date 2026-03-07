@@ -58,6 +58,13 @@ check('All skin tabs registered in NAV_GROUP_MAP',
   missingNav.length === 0,
   missingNav.length ? `missing: ${missingNav.join(', ')}` : '');
 
+// 3b. All NAV_GROUP_MAP keys (excluding 'settings') have a panel and are in consultant skin tabs
+const navOnlyKeys = navKeys.filter(k => k !== 'settings');
+const missingFromSkin = navOnlyKeys.filter(k => !skinTabs.includes(k));
+check('All nav-linked panels are in consultant skin tabs',
+  missingFromSkin.length === 0,
+  missingFromSkin.length ? `missing from skin: ${missingFromSkin.join(', ')}` : '');
+
 // 4. settings-key-input exists
 check('settings-key-input element exists',
   html.includes('id="settings-key-input"'));

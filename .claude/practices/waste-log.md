@@ -592,3 +592,31 @@ Notes: Script is correctly installed and will track visitors. Auto-verification 
   for live data instead.
   Prevention: before touching analytics tokens, confirm the live URL and whether Plausible
   supports the path structure. Subpath GitHub Pages sites cannot be auto-verified.
+
+---
+
+### WL-022
+**Item:** Quality tools panel (ACC, FMEA, 5 Whys, Ishikawa, PDCA, VSM, DORA + 4 backlog stubs) built into wrong project
+**Symptom:** Rod asked for a side panel with quality tools. Claude Code fetched cusslab structure without confirming which project, assumed cusslab, built everything there. User intended RIA (risk-and-impact-assessor). Full session of work in wrong repo.
+**Suspected cause:** No project confirmation step at feature request. When user described quality tools in a cusslab session, Claude assumed the work belonged there. Should have asked "which project?" before opening any file.
+**Session:** 2026-03-06
+**Time lost:** ~3 hours (nav groups, 7 wizard panels, 7 JS modules, 60 Gherkin scenarios, UI audit extension, skin tab fixes, sync script updates — all in wrong project)
+**Cost impact:** High — full session of build work needs reverting from cusslab and redoing in RIA
+**Delay:** RIA quality tools feature pushed by at least 1 session. Cusslab now carries dead code until unpicked.
+**Tags:** `#wrong-project` `#repeated-work` `#save-rod-money`
+**Status:** closed — cusslab fully unpicked (GREEN pipeline, 498/498), quality tools built correctly in RIA and committed (bb92809)
+**Prevention:** Before building any feature, confirm which project/repo. Project separation rule now in Claude Code memory: RIA = risk/RAID/quality tools; Cusslab = comedy/characters/panels. If ambiguous, flag before touching any file. Two windows simultaneously is fine — losing track of active project is not.
+
+---
+
+### WL-023
+**Item:** Panel tabs (comedyroom, boardroom, football, golf, darts) hidden after skin toggle — live site broken
+**Symptom:** User reported "can't select any object" in UI panels on live site. Toggling the skin (consultant → science → consultant) called `_applySkin('consultant')` which hid any tab not in `SKIN_CONFIGS.consultant.tabs`. Those five panel tabs were missing from the array, so they disappeared after any skin toggle.
+**Suspected cause:** Panel tabs were added to the nav (HTML) and `_NAV_GROUP_MAP` incrementally across multiple commits, but `SKIN_CONFIGS.consultant.tabs` was never updated to include them. No test existed to enforce the invariant that nav-linked panels must appear in the skin config.
+**Session:** 2026-03-07
+**Time lost:** ~1 hour (diagnosis across wrong project, diff analysis, fix, new tests)
+**Cost impact:** Medium
+**Delay:** Panel selection broken on live site until fix deployed
+**Tags:** `#missing-test` `#false-green` `#regression` `#incremental-drift`
+**Status:** closed — fix committed (consultant tabs updated, ui-audit static check added, two Gherkin scenarios added to panel-init.feature)
+**Prevention:** ui-audit.js now enforces: all `_NAV_GROUP_MAP` keys must be in consultant skin tabs. Gherkin scenarios in panel-init.feature assert panel tab visibility in consultant skin and after skin toggle. Future panel additions must update both `_NAV_GROUP_MAP` and `SKIN_CONFIGS.consultant.tabs`.

@@ -1263,6 +1263,7 @@
   <div class="nav-group" id="ng-tools" style="display:none;">
     <div class="nav-items" id="ni-tools"></div>
   </div>
+
 </nav>
 
 <main id="main-content">
@@ -3962,7 +3963,8 @@ const App = (() => {
       title: 'HECKLER\'S',
       pageTitle: 'Heckler\'s — The Comedy Panel',
       slogans: CONSULTANT_SLOGANS,
-      tabs: ['bills','joketest','clash','roulette','professionals','ironic',
+      tabs: ['comedyroom','boardroom','football','golf','darts',
+             'bills','joketest','clash','roulette','professionals','ironic',
              'comscience','evolution','blend','experiment',
              'roastbattle','dinner','topcnuts','comedylab','trumps','qleeks',
              'premise','charlens','bizcard','training',
@@ -4021,6 +4023,7 @@ const App = (() => {
     premise:'generate', charlens:'generate', bizcard:'generate', training:'generate',
     // ARCHIVE
     localiser:'analyse', generator:'analyse', historian:'analyse', sentence:'analyse', it:'analyse', polls:'analyse',
+
   };
 
   function switchTab(evt, name) {
@@ -12589,7 +12592,6 @@ RESPONSE FORMAT — return ONLY valid JSON, no text outside it:
 
   return { leap, act, callLeek, spendLeekiness, betLeekiness, selectZiggyOpt };
 })();
-
 // =====================
 // INIT
 // =====================

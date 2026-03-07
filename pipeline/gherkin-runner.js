@@ -17,14 +17,16 @@ const USER_MESSAGES = {
   'no-key':  'No API key — go to ⚙️ Settings to add one',
 };
 
+
 // Nav tabs present in each nav group — mirrors index.html structure
 const NAV_GROUPS = {
   personas:  ['Ask The Panel','Joke Test','Expert Clash','The Wheel','Professionals',"Isn't It Ironic?"],
   boardroom: ['Present to the Boardroom'],
   comedy:    ['The Comedy Room'],
   sports:    ['The Pub After The Match', 'The 19th Hole'],
-  play:      ['Roast Battle','Dinner Party',"Rogues' Gallery",'Comedy Lab','Dimension Duel','Quntum Leeks'],
+  play:      ['Roast Battle','Dinner Party',"Rogues' Gallery",'Comedy Lab','Dimension Duel','Quntum Leeks']
 };
+
 
 // Panel configuration — member counts and round options, mirrors JS modules
 // Boardroom uses charge-driven dynamic speaker selection: 3–5 speakers per round
@@ -40,6 +42,21 @@ const HIDDEN_NAV_TABS = ['settings'];
 
 // Quantum Leeks — Ziggy character options, mirrors ql-ziggy-char select in index.html
 const QL_ZIGGY_CHARS = ['Sir Nick Faldo','Wayne Riley','Bill Hicks','Graeme Souness','Prof Brian Cox'];
+
+// Skin tab configs — mirrors SKIN_CONFIGS in index.html. Must stay in sync.
+// _applySkin() hides any tab NOT in this list. Missing = panel tab disappears on skin toggle.
+const CONSULTANT_SKIN_TABS = [
+  'comedyroom','boardroom','football','golf','darts',
+  'bills','joketest','clash','roulette','professionals','ironic',
+  'comscience','evolution','blend','experiment',
+  'roastbattle','dinner','topcnuts','comedylab','trumps','qleeks',
+  'premise','charlens','bizcard','training',
+  'localiser','generator','historian','sentence','it','polls',
+];
+const SCIENCE_SKIN_TABS = [
+  'experiment','evolution','comscience','blend','bills','joketest',
+  'clash','roastbattle','training','premise','charlens','dinner','bizcard',
+];
 
 function createContext() {
   const store  = {};   // mock localStorage
@@ -74,6 +91,7 @@ function createContext() {
   let   qleeksWarning   = false;
   let   qleeksApiCalled = false;
   let   qleeksLeaped    = false;
+
 
   // Golf panel state machine mock
   let   golfPanelActive          = false;
@@ -286,6 +304,7 @@ function createContext() {
            getQleeksWarning:  () => qleeksWarning,
            getQleeksApiCalled: () => qleeksApiCalled,
 
+
            // Golf panel state machine methods
            activateGolfPanel:              () => { golfPanelActive = true; },
            setGolfRound:                   (n) => { golfRound = n; },
@@ -381,6 +400,9 @@ function createContext() {
 // ── Step definitions ─────────────────────────────────────────────────────────
 
 function makeSteps(ctx) {
+  // ── Skin toggle state (per scenario) ──────────────────────────────────────
+  let currentSkinTabs = CONSULTANT_SKIN_TABS; // default on load is consultant
+
   // ── Character state helpers ────────────────────────────────────────────────
   const EVENT_LOG_CONTEXT_WINDOW = 2;
   let _char1 = null;
@@ -409,6 +431,19 @@ function makeSteps(ctx) {
   return [
     [/^the application is loaded$/,
       () => { /* nothing needed */ }],
+
+    // ── Skin toggle steps ──────────────────────────────────────────────────
+    [/^the consultant skin is active$/,
+      () => { currentSkinTabs = CONSULTANT_SKIN_TABS; }],
+    [/^the user toggles from consultant to science skin$/,
+      () => { currentSkinTabs = SCIENCE_SKIN_TABS; }],
+    [/^the user toggles back to consultant skin$/,
+      () => { currentSkinTabs = CONSULTANT_SKIN_TABS; }],
+    [/^the "([^"]+)" tab is not hidden$/,
+      (tabId) => {
+        if (!currentSkinTabs.includes(tabId))
+          throw new Error(`Tab "${tabId}" is missing from current skin tabs — _applySkin() would hide it`);
+      }],
 
     [/^the app is loaded$/,
       () => { /* nothing needed */ }],
@@ -2510,6 +2545,7 @@ function makeSteps(ctx) {
     [/^wayne's pressure is 6$/, () => { /* @claude fixture */ }],
     [/^wayne's silent_misread roll clears threshold$/, () => { /* @claude fixture */ }],
     [/^wayne's warmth toward faldo is \+3$/, () => { /* @claude fixture */ }],
+
   ];
 }
 
