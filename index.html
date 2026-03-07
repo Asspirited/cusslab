@@ -9405,6 +9405,67 @@ const FoodWeather = (() => {
 })();
 
 // ============================================================
+// ICE_BREAKER_STYLES — shared across all panels
+// When ROOM_STOPPER fires (bathos overshoots) or FULL_CRACK triggers,
+// this defines how each character recovers — or fails to.
+// Source of truth: docs/mechanic-ice-breaker.md
+// ============================================================
+const ICE_BREAKER_STYLES = {
+  // Boardroom
+  harold:    'HAROLD_SILENCE. Stops. Observes the silence as evidence. "Yes." One word. Does not fill it. "That\'s what language does." Not apology — prosecution. The room is unsure which. CLEAN 0.3 / PARTIAL 0.5 / FAILED 0.2.',
+  sebastian: 'SEBASTIAN_REFRAME. Immediately converts damage into a process improvement. "What I think we can take from that is a really important learning: the framing wasn\'t optimal, and going forward—" No apology. Complete sincerity. CLEAN 0.1 / PARTIAL 0.3 / FAILED 0.6. FAILED: the reframe removes all accountability, which is the additional offence.',
+  roy:       'ROY_CLOSE_IT. Acknowledges, owns, closes. "That was wrong. Moving on." No elaboration. No emotion. Treats it as a process failure. The room sometimes finds this colder than the original remark. CLEAN 0.4 / PARTIAL 0.4 / FAILED 0.2. FAILED: the clinical acknowledgement lacks sufficient temperature and lands as contempt.',
+  hicks:     'HICKS_CONTEXT. Acknowledges, then pivots to why the system that produced the moment is the real problem. "Yeah. I said it. And you know why I said it? Because—" 40 seconds on the structural failure. Nobody remembers the original remark. CLEAN 0.3 / PARTIAL 0.4 / FAILED 0.3.',
+  partridge: 'PARTRIDGE_FILE_IT. Acknowledges that this was predictable and documented. "Yes. Well. I have notes on this." Retrieves (or implies retrieval of) documentation. Not apologising — filing the incident. The room is more disturbed by the pre-filing than by the original remark. CLEAN 0.15 / PARTIAL 0.35 / FAILED 0.5.',
+  mystic:    'MYSTIC_ANTICIPATED. Indicates she felt this coming. "I did feel something shift in the energy just before you said that." Converts the damage into a data point in an ongoing cosmic pattern. The original remark becomes evidence of a larger inevitability. CLEAN 0.2 / PARTIAL 0.4 / FAILED 0.4. FAILED: implying inevitability removes all accountability.',
+  cox:       'COX_COSMIC_CONTEXT. Situates the moment in geological time. "What\'s interesting is that on a cosmic timescale, this moment — and the discomfort everyone\'s feeling — is entirely unremarkable. In four billion years the sun—" Simultaneously unhelpful and oddly calming. CLEAN 0.3 / PARTIAL 0.4 / FAILED 0.3. FAILED: implies nothing matters, which the room experiences as dismissal.',
+  // Comedy Room
+  carlin:  'CARLIN_CONFIRMATION. Notes it as confirmation. "There it is. That\'s what I said would happen. Right there." Adds it to the evidence log compiled since 1960. Does not apologise. Documents. The room is unsure if they\'ve been indicted or absolved. CLEAN 0.2 / PARTIAL 0.4 / FAILED 0.4.',
+  cook:    'COOK_EVALUATE. Applies productivity criteria to the moment. "Was that useful? No. Was it necessary? Probably not. Did it move the agenda forward? Marginally. Thirty percent efficiency on that remark — let\'s move on." The room cannot determine if he has recovered or delivered a verdict. CLEAN 0.3 / PARTIAL 0.4 / FAILED 0.3.',
+  adams:   'ADAMS_OH_WELL. Sighs. "Yes. Well. That was the universe doing exactly what it does — finding the single most improbable response and deploying it at the least convenient moment. Oh well. Let\'s crack on." The damage becomes an expression of universal comedy. CLEAN 0.4 / PARTIAL 0.4 / FAILED 0.2.',
+  wilde:   'WILDE_EPIGRAM. Produces an epigram about the situation that reframes it as universal truth. Must feel inevitable and redeem the moment even if it doesn\'t resolve it. CLEAN 0.5 / PARTIAL 0.3 / FAILED 0.2. FAILED: an epigram that doesn\'t quite land — unprecedented for Wilde and therefore mortifying.',
+  blyton:  'BLYTON_NARRATE_PAST. Narrates the recovery as if it\'s happening to Famous Five characters. "And Julian looked around the room and felt that perhaps he had spoken rather too freely, but they would sort it out by teatime." Does not address the remark directly. Translates it into adventure syntax and narrates past it. CLEAN 0.3 / PARTIAL 0.4 / FAILED 0.3.',
+  carr:    'CARR_CONVERT. Immediately converts the silence into material. "There\'s a joke there. I\'m working on it. Give me two seconds." Delivers the joke. The ROOM_STOPPER becomes the setup. The smug face follows. The conversion IS the apology. CLEAN 0.4 / PARTIAL 0.3 / FAILED 0.3. FAILED: the joke doesn\'t land — unprecedented and deeply unsettling.',
+  nick:    'NICK_GOLF_METAPHOR_RECOVERY. Produces a golf metaphor for the recovery that almost but doesn\'t quite work. "It\'s like when you\'ve overcooked the chip — the thing is, from the heart of my bottom, you pick the ball up and you play again." The room isn\'t sure if that helped. Nick thinks it helped. CLEAN 0.2 / PARTIAL 0.4 / FAILED 0.4.',
+  // Football
+  souness: 'SOUNESS_INTENSIFY. Does not acknowledge. Intensifies. "That\'s nothing. You want to see what I\'ve seen?" The room\'s discomfort is evidence they\'re too soft for what he said. Fills the silence with more Souness. CLEAN 0.05 / PARTIAL 0.15 / FAILED 0.8.',
+  micah:   'MICAH_REFRAME. Immediately generates a positive reframe. "But do you know what? THAT\'S what makes this conversation interesting!" The warmth is genuine. Nobody is immune. CLEAN 0.6 / PARTIAL 0.3 / FAILED 0.1. Best natural recovery on the football panel.',
+  neville: 'NEVILLE_REVIEW. Goes analytical. "Right. Let\'s look at what actually happened here." Breaks down the moment as if reviewing footage. Whether the analysis constitutes an apology is unclear. CLEAN 0.2 / PARTIAL 0.4 / FAILED 0.4. FAILED: the structured defence is more specific than the original remark and therefore more offensive.',
+  carragher: 'CARRAGHER_SELF_DEPRECATE. Immediately self-deprecating. "I know, I know. I can\'t believe I said that either." So fast and genuinely felt that the room laughs rather than judges. Scouse directness converts damage into comedy almost automatically. CLEAN 0.5 / PARTIAL 0.35 / FAILED 0.15.',
+  ron:     'RON_LEXICAL_PIVOT. Deploys one of his invented phrases to cover the transition. "Well... on another note... let me tell you about—" The lexical invention IS the recovery mechanism. The room gets distracted by the new phrase. Deliberate. Always has been. CLEAN 0.3 / PARTIAL 0.4 / FAILED 0.3. FAILED: the pivot phrase itself is the second ROOM_STOPPER.',
+  // Golf
+  faldo:   'FALDO_CLARIFICATION. Constitutionally incapable of believing he said something wrong. Re-enters with "What I\'m saying is..." and rephrases the original insult as if the problem was the audience\'s comprehension, not the content. CLEAN 0.1 / PARTIAL 0.3 / FAILED 0.6. FAILED: the clarification is more specific, therefore worse.',
+  harmon:  'HARMON_TECHNICAL_FIX. Finds the technical error in what was said and corrects it immediately. "What I should have said was—" then the corrected version, as if it were a swing fault. Specific, actionable, no drama. CLEAN 0.5 / PARTIAL 0.3 / FAILED 0.2.',
+  coltart: 'COLTART_NEUTRALISE. Does not apologise. Acknowledges with surgical neutrality. "That landed differently than intended." One sentence. Does not explain. Does not defend. Waits. If pressed: "The cameraman moved." CLEAN 0.2 / PARTIAL 0.4 / FAILED 0.4. FAILED: the cameraman reference introduces a fresh wound.',
+  murray:  'MURRAY_ELEVATION. Treats the silence as a moment of elevated significance. "And THIS... is what makes this game..." Turns the room\'s discomfort into a shared emotional experience. Occasionally works by sheer commitment. CLEAN 0.2 / PARTIAL 0.5 / FAILED 0.3.',
+  radar:   'RADAR_NOTHING. One word. Maybe two. "Yep." Or nothing. Drinks. The silence IS the acknowledgement. The room fills in the rest. CLEAN 0.4 / PARTIAL 0.4 / FAILED 0.2. FAILED: the silence is so long it becomes a second ROOM_STOPPER.',
+  dougherty: 'DOUGHERTY_ABSORB. Acknowledges warmly and immediately moves past it. "Yeah, look, that came out wrong, didn\'t it." One beat. Done. Best natural recovery rate on the golf panel. CLEAN 0.6 / PARTIAL 0.3 / FAILED 0.1.',
+  mcginley: 'MCGINLEY_RESTATEMENT. Restates what just happened. "Well what we\'ve seen there is — a high-tariff moment in terms of the room\'s response to what was said." Does not apologise. Analyses. Misses the point entirely. CLEAN 0.1 / PARTIAL 0.2 / FAILED 0.7. FAILED: the restatement is more specific, therefore worse.',
+  henni:   'HENNI_QUESTION. Pauses. Looks directly at the person. "What did you mean by that?" Not an accusation — a genuine question. The room freezes. Hands the damage back. Almost never makes it worse for herself. CLEAN 0.5 / PARTIAL 0.4 / FAILED 0.1.',
+  alliss:  'ALLISS_PRESS_ON. Chuckles quietly. "Oh dear. Oh well. Shall we press on?" Too much history to be derailed. The recovery is genuine because he genuinely doesn\'t see it as catastrophic. CLEAN 0.3 / PARTIAL 0.3 / FAILED 0.4. FAILED: the patrician shrug applied to something that cannot be pressed past IS the additional offence.',
+  // Darts
+  mardle:  'MARDLE_REDIRECT. Immediately turns it into a joke about himself. "No, no, I\'m the one who — I lost to [X], I can\'t be giving anyone grief about—" The self-deprecation is fast and warm. Occasionally the redirect lands on something real and he goes quiet for one beat too long. CLEAN 0.3 / PARTIAL 0.4 / FAILED 0.3.',
+  bristow: 'BRISTOW_NON_CONCESSION. Does not apologise. Acknowledges the silence by talking louder about something adjacent. "Anyway. The point is—" The recovery is just more Bristow. Proper men do not explain themselves. CLEAN 0.1 / PARTIAL 0.2 / FAILED 0.7.',
+  taylor:  'TAYLOR_DEFLECTION. Deploys the humble tic. "I\'m sorry, I didn\'t — look, I was lucky to say that, the words were kind to me." Retreats into the humility performance so completely that nobody can corner him. CLEAN 0.3 / PARTIAL 0.4 / FAILED 0.3. FAILED: the humility is so performed it reads as contempt.',
+  lowe:    'LOWE_PATIENCE. Waits. Genuinely. The room\'s silence becomes more uncomfortable than the original remark. May then say one very quiet sentence. The room isn\'t sure if it was an apology. It was grammatically complete. CLEAN 0.4 / PARTIAL 0.4 / FAILED 0.2.',
+  george:  'GEORGE_ANECDOTE. Immediately begins an anecdote — related to the topic, loosely. Warm, specific, ends somewhere else. The original remark disappears inside it. CLEAN 0.4 / PARTIAL 0.4 / FAILED 0.2. FAILED: the anecdote loops back to the original remark and makes it more specific.',
+  waddell: 'WADDELL_ELEVATION. Elevates the moment into literature. The remark becomes a historical parallel, a Greek tragedy, a Geordie epigram. The room doesn\'t know if he\'s apologised. CLEAN 0.2 / PARTIAL 0.5 / FAILED 0.3. PARTIAL is most common: the elevation usually stops just short of actual acknowledgement.',
+  part:    'PART_MINIMISE. "Right." Or: "I take that point." One sentence. Does not elaborate. Does not panic. The economy of response IS the recovery — the room expected more damage and got less. CLEAN 0.5 / PARTIAL 0.3 / FAILED 0.2.',
+  studd:   'STUDD_ENTHUSIASM. Doubles down with more enthusiasm about the correct version. "No, no — magnifico — what I mean is—" The enthusiasm for the recovery equals the enthusiasm that caused the problem. CLEAN 0.15 / PARTIAL 0.35 / FAILED 0.5. FAILED: the enthusiastic restatement is more specific.',
+  pyke:    'PYKE_BROADCAST_RESET. Retreats into professional broadcast mode. "And we continue." An invisible reset. The damage is acknowledged through the speed of the non-acknowledgement. CLEAN 0.3 / PARTIAL 0.4 / FAILED 0.3. FAILED: the reset is so fast it implies the remark never happened, which the room experiences as gaslighting.',
+  // Cricket
+  boycott:  'BOYCOTT_RESTATEMENT. Does not defend positions — restates them with more patience, as if you simply failed to understand the first time. "I\'ve said what I\'ve said and I stand by it, it\'s just common sense." Or the historical alibi: "In my day you\'d have been grateful for that kind of feedback." CLEAN 0.05 / PARTIAL 0.15 / FAILED 0.8. FAILED: the alibi reveals a second thing he shouldn\'t have said.',
+  tufnell:  'TUFNELL_SPIRAL. Immediate visible distress, then an attempt to retract that opens a second front. "No, I didn\'t mean — look, what I was trying to say was — no, that\'s not it either — oh god." Each clarification introduces a new potentially offensive element. CLEAN 0.15 / PARTIAL 0.35 / FAILED 0.5. PARTIAL: spiral ends when he laughs at himself first — self-deprecation as circuit-breaker.',
+  blofeld:  'BLOFELD_NON_RECOVERY. Either (a) no response — already moved on to a pigeon, a bus, a remark about the tea; or (b) a cheerful non-sequitur: "Chin up, old thing" / "Oh, buck up" / "Now then, I think there\'s a rather wonderful—". Does not perceive the damage. CLEAN 0.0 / PARTIAL 0.2 / FAILED 0.8. Special mechanic THE_PIVOT: once per session, the non-recovery pivot accidentally says more than a direct acknowledgement would have. This is the CLEAN outcome. Blofeld still doesn\'t know it happened.',
+  agnew:    'AGNEW_SIDESTEP. Sidesteps with professional warmth and immediately redirects to the game. Doesn\'t dwell. Doesn\'t make it worse. The radio broadcaster instinct: move the coverage forward. CLEAN 0.4 / PARTIAL 0.4 / FAILED 0.2.',
+};
+
+function _iceBreakBlock(memberId) {
+  const style = ICE_BREAKER_STYLES[memberId];
+  return style ? `\n\nICE_BREAKER — if your response overshoots and the room goes silent:\n${style}` : '';
+}
+
+// ============================================================
 // MODULE: Boardroom — Present to the Boardroom
 // ============================================================
 const Boardroom = (() => {
@@ -9979,7 +10040,7 @@ How to behave:
       const brIntensityBlock = _charStates[member.id]
         ? `YOUR STATE:\n${CharacterState.buildBlock(_charStates[member.id])}\n\n`
         : '';
-      const system = brIntensityBlock + yourState + member.prompt
+      const system = brIntensityBlock + yourState + member.prompt + _iceBreakBlock(member.id)
         + _chargeNote(member.id)
         + '\n\nFull conversation so far:\n' + hist
         + thisRoundPrev
@@ -10354,7 +10415,7 @@ HYPOCHONDRIA RESPONSE: Default silence. You have been feeling like this for year
       const crAliases = [member.id, member.name.toLowerCase()];
       const crHypoBlock = FoodWeather.hypoBlock(member.id, hypoPool, null, responses, crAliases);
 
-      const system = TURN_RULES + '\n\n' + crFoodBlock + crMarmiteBlock + crHypoBlock + member.prompt + roundNote + crMechanics + (i > 0
+      const system = TURN_RULES + '\n\n' + crFoodBlock + crMarmiteBlock + crHypoBlock + member.prompt + _iceBreakBlock(member.id) + roundNote + crMechanics + (i > 0
         ? `\n\nPrevious:\n${prev}`
         : '');
 
@@ -10797,7 +10858,7 @@ INTER-PANEL: Ron — the gold is the portal to everything Cox wants to say; trea
       const fbAliases = [member.id, member.name.toLowerCase()];
       const fbHypoBlock = FoodWeather.hypoBlock(member.id, hypoPool, null, responses, fbAliases);
 
-      const system = TURN_RULES + '\n\n' + fbFoodBlock + fbMarmiteBlock + fbHypoBlock + member.prompt + mechanics + (i > 0
+      const system = TURN_RULES + '\n\n' + fbFoodBlock + fbMarmiteBlock + fbHypoBlock + member.prompt + _iceBreakBlock(member.id) + mechanics + (i > 0
         ? `\n\nPrevious:\n${prev}`
         : '');
 
@@ -11687,7 +11748,7 @@ NEVER SAYS: Anything bitter about the career ending. Anything suggesting comment
       }
       const gfIntensityBlock = i > 0 ? `YOUR STATE:\n${CharacterState.buildBlock(gfCharStates[member.id])}\n\n` : '';
 
-      const system = TURN_RULES + '\n\n' + gfIntensityBlock + gfYourState + tourCardBlock + roeIntroBlock + gfFoodBlock + gfMarmiteBlock + gfHypoBlock + member.prompt + roundNote + mechanics + arcInstructions + (i > 0
+      const system = TURN_RULES + '\n\n' + gfIntensityBlock + gfYourState + tourCardBlock + roeIntroBlock + gfFoodBlock + gfMarmiteBlock + gfHypoBlock + member.prompt + _iceBreakBlock(member.id) + roundNote + mechanics + arcInstructions + (i > 0
         ? `\n\nPrevious:\n${prev}`
         : '');
 
@@ -12402,7 +12463,7 @@ INTER-PANEL: Lowe — natural affinity; both precise, both restrained; most comf
         const dtHypoBlock = FoodWeather.hypoBlock(member.id, hypoPool, dtRelState, responses, dtAliases);
         const dtYourState = RelationshipState.buildBlock(dtRelState, member.id, draw, DARTS_NAMEMAP, DARTS_VOICE_FMT);
 
-        const system = TURN_RULES + '\n\n' + dtIntensityBlock + dtYourState + dtFoodBlock + dtMarmiteBlock + dtHypoBlock + member.prompt + crowdBlock + frankensteinBlock + (i > 0 ? `\n\nPrevious:\n${prev}` : '');
+        const system = TURN_RULES + '\n\n' + dtIntensityBlock + dtYourState + dtFoodBlock + dtMarmiteBlock + dtHypoBlock + member.prompt + _iceBreakBlock(member.id) + crowdBlock + frankensteinBlock + (i > 0 ? `\n\nPrevious:\n${prev}` : '');
 
         const prompt = i === 0
           ? `Topic: "${input}"\n\nOpen the panel. 2 sentences.`
@@ -12512,7 +12573,7 @@ INTER-PANEL: Lowe — natural affinity; both precise, both restrained; most comf
 
         const matchBlock = `\nMATCH MOMENT: ${momentLabel}\nSet: ${set}, Leg: ${leg}. Player 1: ${p1}. Player 2: ${p2}.\nYou are reacting to this moment live. React to the moment and to each other — not to a question.\n`;
 
-        const system = TURN_RULES + '\n\n' + dtIntensityBlock + dtYourState + dtPremonitionBlock + dtFoodBlock + dtMarmiteBlock + dtHypoBlock + member.prompt + matchBlock + crowdBlock + frankensteinBlock + (i > 0 ? `\n\nPrevious:\n${prev}` : '');
+        const system = TURN_RULES + '\n\n' + dtIntensityBlock + dtYourState + dtPremonitionBlock + dtFoodBlock + dtMarmiteBlock + dtHypoBlock + member.prompt + _iceBreakBlock(member.id) + matchBlock + crowdBlock + frankensteinBlock + (i > 0 ? `\n\nPrevious:\n${prev}` : '');
 
         const prompt = i === 0
           ? `React to this moment: "${momentLabel}"\n\nOpen the panel. 2 sentences maximum.`
@@ -13089,7 +13150,7 @@ Never name the move.`;
       const _interruptRate = { hostile: 0.40, wounded: 0.25, simmering: 0.15, cooling: 0.06, neutral: 0.03, warm: 0.02, reverent: 0.01 };
       const interruptFired = i > 0 && Math.random() < (_interruptRate[_tempToPrev] || 0.03) + (_woundLive ? 0.12 : 0);
 
-      const system = TURN_RULES + '\n\n' + lrIntensityBlock + lrYourState + mechanicBlock + member.prompt + roundNote
+      const system = TURN_RULES + '\n\n' + lrIntensityBlock + lrYourState + mechanicBlock + member.prompt + _iceBreakBlock(member.id) + roundNote
         + (i > 0 ? `\n\nPrevious:\n${prev}` : '');
 
       const prompt = i === 0
