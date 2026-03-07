@@ -618,5 +618,5 @@ Notes: Script is correctly installed and will track visitors. Auto-verification 
 **Cost impact:** Medium
 **Delay:** Panel selection broken on live site until fix deployed
 **Tags:** `#missing-test` `#false-green` `#regression` `#incremental-drift`
-**Status:** closed — fix committed (consultant tabs updated, ui-audit static check added, two Gherkin scenarios added to panel-init.feature)
-**Prevention:** ui-audit.js now enforces: all `_NAV_GROUP_MAP` keys must be in consultant skin tabs. Gherkin scenarios in panel-init.feature assert panel tab visibility in consultant skin and after skin toggle. Future panel additions must update both `_NAV_GROUP_MAP` and `SKIN_CONFIGS.consultant.tabs`.
+**Status:** closed — two bugs fixed: (1) Prof Cox inserted outside football members array (syntax error — full JS non-functional); (2) panel tabs missing from consultant skin config (hidden after skin toggle). Both committed and pushed.
+**Prevention:** ui-audit.js now (a) enforces all `_NAV_GROUP_MAP` keys in consultant skin tabs, (b) syntax-checks the main script block via `new Function()`. Gherkin scenarios in panel-init.feature assert panel tab visibility. Root cause of "nothing works": syntax error in faeb105 went undetected because pipeline only tests src/ modules, not index.html script block. The syntax guard closes that gap.

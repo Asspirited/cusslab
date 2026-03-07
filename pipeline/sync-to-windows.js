@@ -8,9 +8,13 @@ const fs   = require('fs');
 const path = require('path');
 
 const ROOT       = path.join(__dirname, '..');
-const WIN_TARGET = '/mnt/c/Users/roden/Downloads/cusslab';
+const WIN_TARGET  = '/mnt/c/Users/roden/Downloads/cusslab';
+const WIN_TARGET2 = '/mnt/c/Users/roden/OneDrive/Pictures/Documents/GitHub/cusslab';
 
 const SYNC_FILES = [
+  // App — main HTML file
+  'index.html',
+
   // Domain model and practices
   '.claude/practices/domain-model.md',
   '.claude/practices/waste-log.md',
@@ -32,40 +36,43 @@ const SYNC_FILES = [
   'docs/CLAUDE_AI_PROJECT_INSTRUCTIONS.md',
 ];
 
-function sync() {
+function syncToDir(target, label) {
   let ok = 0;
   let skip = 0;
   let fail = 0;
 
-  if (!fs.existsSync(WIN_TARGET)) {
+  if (!fs.existsSync(target)) {
     try {
-      fs.mkdirSync(WIN_TARGET, { recursive: true });
+      fs.mkdirSync(target, { recursive: true });
     } catch (e) {
-      console.log(`  ! sync-to-windows: could not create target dir: ${e.message}`);
-      console.log(`  ! Is WSL running with Windows filesystem mounted at /mnt/c?`);
+      console.log(`  ! sync-to-windows: could not create ${label}: ${e.message}`);
       return;
     }
   }
 
   for (const rel of SYNC_FILES) {
     const src  = path.join(ROOT, rel);
-    const dest = path.join(WIN_TARGET, path.basename(rel));
+    const dest = path.join(target, path.basename(rel));
 
-    if (!fs.existsSync(src)) {
-      skip++;
-      continue;
-    }
+    if (!fs.existsSync(src)) { skip++; continue; }
 
     try {
       fs.copyFileSync(src, dest);
       ok++;
     } catch (e) {
-      console.log(`  ! sync-to-windows: failed to copy ${rel}: ${e.message}`);
+      console.log(`  ! sync-to-windows: failed to copy ${rel} to ${label}: ${e.message}`);
       fail++;
     }
   }
 
-  console.log(`  Sync → C:\\Users\\roden\\Downloads\\cusslab\\  [${ok} files, ${skip} skipped, ${fail} failed]`);
+  console.log(`  Sync → ${label}  [${ok} files, ${skip} skipped, ${fail} failed]`);
+}
+
+function sync() {
+  syncToDir(WIN_TARGET,  'C:\\Users\\roden\\Downloads\\cusslab\\');
+  if (fs.existsSync(path.dirname(WIN_TARGET2))) {
+    syncToDir(WIN_TARGET2, 'C:\\Users\\roden\\OneDrive\\...\\GitHub\\cusslab\\');
+  }
 }
 
 sync();
