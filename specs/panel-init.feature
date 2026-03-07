@@ -22,3 +22,20 @@ Feature: Application initialisation — modules load and key status renders
     Given no API key is stored
     When the key status is updated
     Then the header indicator state is "no-key"
+
+  Scenario: All panel tabs are visible in the consultant skin
+    When the consultant skin is active
+    Then the "comedyroom" tab is not hidden
+    And the "boardroom" tab is not hidden
+    And the "football" tab is not hidden
+    And the "golf" tab is not hidden
+    And the "darts" tab is not hidden
+
+  Scenario: Panel tabs remain visible after toggling back to consultant skin
+    When the user toggles from consultant to science skin
+    And the user toggles back to consultant skin
+    Then the "comedyroom" tab is not hidden
+    And the "boardroom" tab is not hidden
+    And the "football" tab is not hidden
+    And the "golf" tab is not hidden
+    And the "darts" tab is not hidden
