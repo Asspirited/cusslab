@@ -3310,6 +3310,32 @@ function makeSteps(ctx) {
     [/^the crowd pressure escalates to "([^"]+)"$/, (state) => { ctx._crowdState = state; }],
     [/^the throwing player (?:becomes|is) player (\d+)$/, (n) => { ctx._throwingPlayer = parseInt(n); }],
 
+    // ── Mobile sidebar (@claude stubs) ────────────────────────────────────────
+    [/^the viewport width is 768px or less$/, () => { ctx._mobile = true; }],
+    [/^the viewport width is greater than 768px$/, () => { ctx._mobile = false; }],
+    [/^the hamburger button is visible in the header$/, () => { /* @claude dom */ }],
+    [/^the hamburger button is not visible in the header$/, () => { /* @claude dom */ }],
+    [/^the sidebar drawer is not visible by default$/, () => { /* @claude dom */ }],
+    [/^the sidebar is visible without interaction$/, () => { /* @claude dom */ }],
+    [/^the user taps the hamburger button$/, () => { ctx._drawerOpen = true; }],
+    [/^the sidebar drawer slides into view from the left$/, () => { /* @claude dom */ }],
+    [/^a backdrop overlay appears behind the drawer$/, () => { /* @claude dom */ }],
+    [/^the sidebar drawer is open$/, () => { ctx._drawerOpen = true; }],
+    [/^the user taps the backdrop overlay$/, () => { ctx._drawerOpen = false; }],
+    [/^the sidebar drawer is hidden$/, () => { /* @claude dom */ }],
+    [/^the backdrop is no longer visible$/, () => { /* @claude dom */ }],
+    [/^the "([^"]+)" nav group is expanded$/, (group) => { ctx._openNavGroup = group; }],
+    [/^all other nav groups are collapsed$/, () => { /* @claude dom */ }],
+    [/^the "([^"]+)" nav group is collapsed$/, () => { /* @claude dom */ }],
+    [/^the user taps the "([^"]+)" nav group header$/, (group) => { ctx._openNavGroup = group; }],
+    [/^no other nav groups are expanded$/, () => { /* @claude dom */ }],
+    [/^no nav groups are expanded$/, () => { /* @claude dom */ }],
+    [/^the user selects the "([^"]+)" tab from the drawer$/, (tab) => { ctx._drawerOpen = false; ctx._activePanel = tab; }],
+    [/^the "([^"]+)" panel is active$/, () => { /* @claude dom */ }],
+    [/^the sidebar drawer has been opened and closed$/, () => { ctx._drawerOpen = false; }],
+    [/^the body overflow is set to hidden$/, () => { /* @claude dom */ }],
+    [/^the body overflow is restored to its default$/, () => { /* @claude dom */ }],
+
   ];
 }
 
