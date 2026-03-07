@@ -221,6 +221,24 @@ assert('DartsWoundDetector: case-insensitive - bristow DARTITIS',
 assert('DartsWoundDetector: returns boolean triggered',
   typeof DartsWoundDetector.check('mardle', 'test').triggered, 'boolean');
 
+assert('DartsWoundDetector: studd triggered by magnifico',
+  DartsWoundDetector.check('studd', 'is that all he can say, magnifico').triggered, true);
+
+assert('DartsWoundDetector: studd triggered by dave clark',
+  DartsWoundDetector.check('studd', 'dave clark would have called that differently').triggered, true);
+
+assert('DartsWoundDetector: studd not triggered by unrelated text',
+  DartsWoundDetector.check('studd', 'great dart, nine-darter on the way').triggered, false);
+
+assert('DartsWoundDetector: pyke triggered by minehead',
+  DartsWoundDetector.check('pyke', 'they moved the whole thing to minehead').triggered, true);
+
+assert('DartsWoundDetector: pyke triggered by nobody watches',
+  DartsWoundDetector.check('pyke', 'nobody watches the bdo these days').triggered, true);
+
+assert('DartsWoundDetector: pyke not triggered by unrelated text',
+  DartsWoundDetector.check('pyke', 'great finish on double top').triggered, false);
+
 // ── makeWoundDetector() ───────────────────────────────────────────────────────
 
 assert('makeWoundDetector: returns object with check function',
@@ -248,7 +266,7 @@ assert('makeWoundDetector: empty wound data - always returns false',
 // Bug: DARTS_VOICE_FMT had plain strings. buildBlock called them as functions → TypeError.
 // Fix: strings replaced with formatter functions. These tests guard against regression.
 
-const DARTS_CHAR_IDS = ['mardle','bristow','taylor','lowe','george','waddell','part'];
+const DARTS_CHAR_IDS = ['mardle','bristow','taylor','lowe','george','waddell','part','studd','pyke'];
 
 DARTS_CHAR_IDS.forEach(id => {
   assert(`DartsVoiceFmt.${id} is a function`, typeof DartsVoiceFmt[id], 'function');

@@ -95,6 +95,8 @@ const DARTS_WOUNDS_DATA = {
   george:  ['six nil', '6-0', '1994 final', 'six-nil'],
   waddell: ['just entertainment', 'just commentary', '2012', 'passed away'],
   part:    ['no one knows', 'unknown in canada', "canada doesn't"],
+  studd:   ['magnifico', 'dave clark', 'waddell', 'trying too hard', 'football commentator'],
+  pyke:    ['bdo is dead', 'minehead', 'nobody watches', 'five viewers', 'empty seats', 'other tournament'],
 };
 
 const GolfWoundDetector     = makeWoundDetector(GOLF_WOUNDS_DATA);
@@ -169,6 +171,24 @@ const DartsVoiceFmt = {
       `- Toward ${name}: ${stance.temperature}. ${stance.trigger || 'Filed.'}`
     );
     if (cs.woundActivated) lines.push('- Wound is active. I have noted it. Moving on.');
+    return `YOUR STATE:\n${lines.join('\n')}\n\n`;
+  },
+  studd: (nn, cs) => {
+    if (!nn.length && !cs.woundActivated) return '';
+    const lines = nn.map(({name, stance}) =>
+      ['hostile','wounded','simmering'].includes(stance.temperature)
+        ? `- ${name}: ${stance.temperature}. And listen — ${stance.trigger || "I may have oversized that slightly."}`
+        : `- ${name}: ${stance.temperature}. Magnifico.`
+    );
+    if (cs.woundActivated) lines.push("- Wound's live. I'm going to describe it enthusiastically and hope that helps.");
+    return `YOUR STATE:\n${lines.join('\n')}\n\n`;
+  },
+  pyke: (nn, cs) => {
+    if (!nn.length && !cs.woundActivated) return '';
+    const lines = nn.map(({name, stance}) =>
+      `- ${name}: ${stance.temperature}. ${stance.trigger || 'Noted.'}`
+    );
+    if (cs.woundActivated) lines.push('- Wound is noted. The competition continues regardless.');
     return `YOUR STATE:\n${lines.join('\n')}\n\n`;
   },
 };
