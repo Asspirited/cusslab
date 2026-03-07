@@ -85,6 +85,23 @@ check('API module is declared (const API)',
 check('switchTab global function exists',
   /function switchTab\s*\(/.test(html));
 
+// 9. Main script has no syntax errors
+// The main script is the large one (not the plausible stub) — find the last <script>...</script>
+const scriptMatch = html.match(/[\s\S]*<script>([\s\S]*?)<\/script>/);
+let syntaxOk = false;
+let syntaxDetail = '';
+if (scriptMatch) {
+  try {
+    new Function(scriptMatch[1]);
+    syntaxOk = true;
+  } catch (e) {
+    syntaxDetail = e.message.split('\n')[0];
+  }
+} else {
+  syntaxDetail = 'could not extract main script block';
+}
+check('Main script has no syntax errors', syntaxOk, syntaxDetail);
+
 // ── Summary ───────────────────────────────────────────────────────────────────
 
 const total = passed + failed;
