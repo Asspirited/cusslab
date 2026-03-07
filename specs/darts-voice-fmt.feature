@@ -18,6 +18,8 @@ Feature: Darts panel voice format — callable formatters
       | george  |
       | waddell |
       | part    |
+      | studd   |
+      | pyke    |
 
   Scenario: dartsBuildBlock does not throw when darts character has non-neutral state
     Given the darts panel voice format map is loaded
