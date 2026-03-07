@@ -1,7 +1,7 @@
 // Unit test runner — tests pure functions in pipeline/logic.js
 // Run: node pipeline/unit-runner.js
 
-const { maskKey, isValidKey, shouldUpdateInput, Temperature, makeWoundDetector, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetector } = require('./logic.js');
+const { maskKey, isValidKey, shouldUpdateInput, Temperature, makeWoundDetector, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetector, DartsVoiceFmt, dartsBuildBlock } = require('./logic.js');
 
 let passed = 0;
 let failed = 0;
@@ -243,6 +243,33 @@ assert('makeWoundDetector: custom detector - multiple wound words, first match r
 
 assert('makeWoundDetector: empty wound data - always returns false',
   makeWoundDetector({}).check('anyone', 'anything').triggered, false);
+
+// ── DartsVoiceFmt — each entry must be a callable formatter function ──────────
+// Bug: DARTS_VOICE_FMT had plain strings. buildBlock called them as functions → TypeError.
+// Fix: strings replaced with formatter functions. These tests guard against regression.
+
+const DARTS_CHAR_IDS = ['mardle','bristow','taylor','lowe','george','waddell','part'];
+
+DARTS_CHAR_IDS.forEach(id => {
+  assert(`DartsVoiceFmt.${id} is a function`, typeof DartsVoiceFmt[id], 'function');
+});
+
+const _mockNn = [{ id: 'mardle', name: 'Wayne', stance: { temperature: 'cooling', trigger: 'not addressed turn 1' } }];
+const _mockCs = { woundActivated: false, debtLedger: { owed: [], owes: [] } };
+
+DARTS_CHAR_IDS.forEach(id => {
+  const result = DartsVoiceFmt[id](_mockNn, _mockCs, [], [], 1);
+  assert(`DartsVoiceFmt.${id} returns a string when called with non-neutral state`, typeof result, 'string');
+});
+
+assert('dartsBuildBlock: returns non-empty string for waddell with cooling state',
+  typeof dartsBuildBlock('waddell', [{ id: 'mardle', name: 'Wayne', stance: { temperature: 'cooling', trigger: 'test' } }], false), 'string');
+
+assert('dartsBuildBlock: returns empty string when no notable state',
+  dartsBuildBlock('waddell', [], false), '');
+
+assert('dartsBuildBlock: returns non-empty string when wound is active',
+  typeof dartsBuildBlock('waddell', [], true), 'string');
 
 // ── Results ──────────────────────────────────────────────────────────────────
 

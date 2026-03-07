@@ -3,7 +3,7 @@
 
 const fs   = require('fs');
 const path = require('path');
-const { Temperature, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetector } = require('./logic.js');
+const { Temperature, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetector, DartsVoiceFmt, dartsBuildBlock } = require('./logic.js');
 
 // ── Mock state (simulates browser localStorage + DOM) ────────────────────────
 
@@ -1210,6 +1210,56 @@ function makeSteps(ctx) {
         const col = ctx.getContributions('coltart');
         if (mcg < 3) throw new Error(`expected McGinley to contribute at least 3 times but got ${mcg}`);
         if (col < 3) throw new Error(`expected Coltart to contribute at least 3 times but got ${col}`);
+      }],
+
+    // ── DartsVoiceFmt — callable formatter functions ──────────────────────────
+
+    [/^the darts panel voice format map is loaded$/,
+      () => { ctx._dartsVoiceFmt = DartsVoiceFmt; ctx._buildBlockError = null; ctx._buildBlockResult = null; }],
+
+    [/^the entry for "([^"]+)" is retrieved$/,
+      (id) => { ctx._fmt = ctx._dartsVoiceFmt[id]; }],
+
+    [/^the entry is a function$/,
+      () => {
+        if (typeof ctx._fmt !== 'function')
+          throw new Error(`expected function but got ${typeof ctx._fmt}`);
+      }],
+
+    [/^calling it with a non-neutral state returns a non-empty string$/,
+      () => {
+        const nn = [{ id: 'mardle', name: 'Wayne', stance: { temperature: 'cooling', trigger: 'not addressed' } }];
+        const cs = { woundActivated: false, debtLedger: { owed: [], owes: [] } };
+        const result = ctx._fmt(nn, cs, [], [], 1);
+        if (typeof result !== 'string' || result.length === 0)
+          throw new Error(`expected non-empty string but got ${JSON.stringify(result)}`);
+      }],
+
+    [/^a non-neutral state with temperature "([^"]+)" is constructed for "([^"]+)"$/,
+      (temperature, id) => {
+        ctx._buildBlockNn = [{ id: 'mardle', name: 'Wayne', stance: { temperature, trigger: 'not addressed turn 1' } }];
+        ctx._buildBlockId = id;
+      }],
+
+    [/^dartsBuildBlock is called for "([^"]+)" with that state$/,
+      (id) => {
+        try {
+          ctx._buildBlockResult = dartsBuildBlock(id, ctx._buildBlockNn, false);
+        } catch (e) {
+          ctx._buildBlockError = e;
+        }
+      }],
+
+    [/^no TypeError is thrown$/,
+      () => {
+        if (ctx._buildBlockError)
+          throw new Error(`expected no error but got: ${ctx._buildBlockError.message}`);
+      }],
+
+    [/^the result is a non-empty string$/,
+      () => {
+        if (typeof ctx._buildBlockResult !== 'string' || ctx._buildBlockResult.length === 0)
+          throw new Error(`expected non-empty string but got ${JSON.stringify(ctx._buildBlockResult)}`);
       }],
 
     // ── WoundDetector abstraction — R2 ────────────────────────────────────────

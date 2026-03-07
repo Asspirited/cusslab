@@ -524,7 +524,7 @@ Entry format: copy schema above. Minimum viable entry is Item + Symptom + Tags +
 - **Cost impact:** low — but Long Room panel will fail if Blofeld selected before file created
 - **Delay:** blocks any panel run featuring Blofeld
 - **Tags:** missing-file, character, blofeld, long-room
-- **Status:** OPEN — blofeld.md needs creating from scratch next Long Room session
+- **Status:** closed — blofeld-reference.md and blofeld-review-log.md created (60aa828)
 
 ## WL-044
 - **Item:** claude.ai attempted 19th Hole slot assignments from memory instead of reading files
@@ -657,3 +657,26 @@ Notes: Script is correctly installed and will track visitors. Auto-verification 
 **Second RPN — pipeline GREEN but feature broken (30):** Now closed by syntax guard in ui-audit.js. Monitor for new classes of false-green.
 
 **Cross-project shared root cause:** both projects suffer from "work started before context verified". Prevention: session-start protocol (read CLAUDE.md → run pipeline → read recent waste entries) before any file is opened. This is already in memory — enforce it.
+
+---
+
+### WL-048 — Darts panel frozen after first speaker (DARTS_VOICE_FMT bug)
+**Item:** All darts characters from position 2 onwards silently hanging at "Waiting..." state. User reported as "Sid Waddell doesn't answer."
+**Symptom:** User report — character placeholder stuck in Waiting... state indefinitely. Panel appeared to work (first character responded) then silently froze.
+**Suspected cause:** `DARTS_VOICE_FMT` contained plain strings. `RelationshipState.buildBlock` at line 8946 calls `fmt(nonNeutral, ...)` as a function. After the first speaker's turn, subsequent characters develop non-neutral state ('cooling') → `buildBlock` reaches the `fmt` call → `TypeError: fmt is not a function` → thrown outside try-catch in `discuss()` → async function exits → all remaining placeholders stuck in "Waiting..." forever. All characters at positions 2–5 affected, not just Waddell.
+**Session:** 2026-03-07
+**Time lost:** ~30 min diagnosis + fix
+**Cost impact:** Medium (user-facing, silent failure, no error shown)
+**Delay:** None — hotfix same session
+**Tags:** `#false-progress` `#regression`
+**Status:** closed
+
+**5 Whys:**
+1. Why did Waddell hang? → The `API.call()` for position 2+ was never reached — a TypeError was thrown before it.
+2. Why was a TypeError thrown? → `DARTS_VOICE_FMT` entries were plain strings; `buildBlock` called the string as a function.
+3. Why were strings used instead of functions? → Other panels (golf, cricket) have proper formatter functions. When darts was built, the strings were typed as labels/descriptions, not as formatters. The value type was wrong from the start.
+4. Why wasn't this caught by the pipeline? → `buildBlock` is not extracted to `logic.js`. The Gherkin runner uses mock state that never reaches non-neutral temperature for darts. Unit tests had no coverage of `DartsVoiceFmt` or `dartsBuildBlock`.
+5. Why was there no coverage? → No test was written for this code path. Tests were written for WoundDetector (extracted to logic.js) but not for VoiceFmt formatters, which were left as unverified inline code.
+
+**Root cause:** Architecture gap — `DARTS_VOICE_FMT` was untestable inline code with no extracted unit. The wrong type (string vs function) was undetectable by existing tests.
+**Corrective action:** (1) Extracted `DartsVoiceFmt` and `dartsBuildBlock` to `logic.js`. (2) Added 17 unit tests covering type and return value. (3) Added 8 Gherkin scenarios in `specs/darts-voice-fmt.feature`. (4) Fixed `DARTS_VOICE_FMT` in `index.html` — strings replaced with proper formatter functions.

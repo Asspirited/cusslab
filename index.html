@@ -11743,13 +11743,70 @@ INTER-PANEL: Taylor — greatest scalp; respect is mutual and slightly wary on b
   };
 
   const DARTS_VOICE_FMT = {
-    mardle:  'cheerful self-deprecation',
-    bristow: 'declarative contempt',
-    taylor:  'flat certainty under performed modesty',
-    lowe:    'measured Derbyshire understatement',
-    george:  'warm Essex storyteller',
-    waddell: 'Geordie mythological baroque',
-    part:    'flat Ontario precision',
+    mardle: (nn, cs) => {
+      if (!nn.length && !cs.woundActivated) return '';
+      const lines = nn.map(({name, stance}) =>
+        ['hostile','wounded','simmering'].includes(stance.temperature)
+          ? `- ${name}: ${stance.temperature}. Ha — ${stance.trigger || "I probably said something, didn't I."}`
+          : `- ${name}: ${stance.temperature}.`
+      );
+      if (cs.woundActivated) lines.push("- Wound's live. You know what? I probably deserved it.");
+      return `YOUR STATE:\n${lines.join('\n')}\n\n`;
+    },
+    bristow: (nn, cs) => {
+      if (!nn.length && !cs.woundActivated) return '';
+      const lines = nn.map(({name, stance}) =>
+        ['hostile','wounded','simmering'].includes(stance.temperature)
+          ? `- ${name}. ${stance.temperature}. ${stance.trigger || 'Straight up.'}`
+          : `- ${name}. ${stance.temperature}.`
+      );
+      if (cs.woundActivated) lines.push("- Wound's live. That's a fact.");
+      return `YOUR STATE:\n${lines.join('\n')}\n\n`;
+    },
+    taylor: (nn, cs) => {
+      if (!nn.length && !cs.woundActivated) return '';
+      const lines = nn.map(({name, stance}) =>
+        `- ${name}: ${stance.temperature}. ${stance.trigger || "I'm aware of that."}`
+      );
+      if (cs.woundActivated) lines.push("- Wound's live. I'll deal with it. That's what I do.");
+      return `YOUR STATE:\n${lines.join('\n')}\n\n`;
+    },
+    lowe: (nn, cs) => {
+      if (!nn.length && !cs.woundActivated) return '';
+      const lines = nn.map(({name, stance}) =>
+        `- Toward ${name}: ${stance.temperature}. ${stance.trigger || 'Noted.'}`
+      );
+      if (cs.woundActivated) lines.push('- Wound is live. (pause)');
+      return `YOUR STATE:\n${lines.join('\n')}\n\n`;
+    },
+    george: (nn, cs) => {
+      if (!nn.length && !cs.woundActivated) return '';
+      const lines = nn.map(({name, stance}) =>
+        ['hostile','wounded','simmering'].includes(stance.temperature)
+          ? `- ${name}: ${stance.temperature}. Oh now, look — ${stance.trigger || 'Bobby remembers.'}`
+          : `- ${name}: ${stance.temperature}.`
+      );
+      if (cs.woundActivated) lines.push("- Wound's live. Lovely, brilliant — that's what it is.");
+      return `YOUR STATE:\n${lines.join('\n')}\n\n`;
+    },
+    waddell: (nn, cs) => {
+      if (!nn.length && !cs.woundActivated) return '';
+      const lines = nn.map(({name, stance}) =>
+        ['hostile','wounded','simmering'].includes(stance.temperature)
+          ? `- ${name}: ${stance.temperature}. Aye — ${stance.trigger || 'the cathedral has a crack in it.'}`
+          : `- ${name}: ${stance.temperature}. Aye.`
+      );
+      if (cs.woundActivated) lines.push("- Wound's live. The cathedral still stands. The references do not pause.");
+      return `YOUR STATE:\n${lines.join('\n')}\n\n`;
+    },
+    part: (nn, cs) => {
+      if (!nn.length && !cs.woundActivated) return '';
+      const lines = nn.map(({name, stance}) =>
+        `- Toward ${name}: ${stance.temperature}. ${stance.trigger || 'Filed.'}`
+      );
+      if (cs.woundActivated) lines.push('- Wound is active. I have noted it. Moving on.');
+      return `YOUR STATE:\n${lines.join('\n')}\n\n`;
+    },
   };
 
   function _getDraw() {
