@@ -1623,3 +1623,103 @@ Updated eruption register affinity table — STORM_OFF additions:
 **Mask:** Big Ron / Champagne Charlie punditry persona.
 **In the room:** The weight of the incident is implicit. Ron knows everyone knows.
 **Micah exception:** Micah alone has the standing to approach it. The comedy is he nearly does and pulls back — "Ni—" or "N—" — then pivots. Even Micah resists himself. That restraint is the joke.
+
+---
+
+## Ubiquitous Language Additions — mode-tabs-and-match-engine
+
+| Domain Term | Meaning | Never call it |
+|---|---|---|
+| Anchor | Commentary role — sets scene, owns narrative thread, reads score, introduces moments | Host, presenter, lead, MC |
+| Colour | Commentary role — player perspective, technical analysis, emotional reaction | Analyst, expert, summariser |
+| Character | Commentary role — opinion, wound, chaos, history; less tied to match flow | Pundit, guest, personality |
+| Commentary role | Named function a panel member performs in In-Game mode | Position, job, type |
+| Role function | Shared function assigning commentary roles per panel config | Role manager, role system |
+| Big Fish | The 170 checkout — T20, T20, bull. Coined by Studd. Called by Mardle. | Max checkout, 170 finish |
+| BIG_FISH_CALL | Mardle's attempt to call the Big Fish before the player commits | Prediction, announcement |
+| Checkout route opinion | A character's reaction to a player taking an unorthodox finish route | Checkout criticism |
+| Sweet pool | Ambient audible constant for a specific character — background that escalates | Sound effect |
+| Three-horizon model | Commentary payload — H1 this moment, H2 recent pattern, H3 match context | Multi-timeframe |
+| Premonition Engine | First-class shared function handling the full lifecycle of a public commentator commitment | Prediction system, call mechanic |
+| COMMIT | The moment a commentator publicly stakes a position on what is about to happen | Prediction, call, guess |
+| RESOLUTION | Reality's response to a COMMIT — EXACT, PARTIAL, MISS, TRANSCENDENT, or ABANDONED | Outcome, result |
+| AFTERMATH | Session-persistent consequence state following RESOLUTION — GLORY, PARTIAL_CREDIT, HAUNTED, DOUBLED_DOWN | Effect, consequence |
+| Truth-teller | Characters who will publicly call out a false RETROSPECTIVE_CALL — Studd, Lowe, Part | Honest character, fact-checker |
+| DOUBLED_DOWN | Aftermath state where character refuses to accept a MISS — stackable, no expiry | Denial, stubbornness |
+
+---
+
+## Named Mechanics Additions — mode-tabs-and-match-engine
+
+### COMMENTARY ROLE FUNCTION (shared, cross-panel)
+
+Panel-agnostic function assigning ANCHOR, COLOUR, or CHARACTER roles.
+Enforces minimum 1 ANCHOR for In-Game mode.
+ANCHOR introduces moments, COLOUR reacts technically, CHARACTER reacts personally.
+Blocks match start with "Select at least one anchor commentator" if no ANCHOR selected.
+Takes panelConfig.roleMap (characterId to role). Same logic all panels.
+
+Darts roleMap: Studd=ANCHOR, Pyke=ANCHOR, Mardle=COLOUR, Part=COLOUR,
+Harrington=COLOUR, Bristow=CHARACTER, Lowe=CHARACTER, Waddell=CHARACTER,
+Jocky=CHARACTER, George=CHARACTER, Fordham=CHARACTER
+
+### THREE-HORIZON COMMENTARY MODEL (shared, cross-panel)
+
+STANDARD moment types carry H1 (this moment), H2 (recent pattern), H3 (match context).
+Horizon weighting by role: ANCHOR is H3-dominant, COLOUR is H1+H2, CHARACTER is character-dependent.
+Lowe=H3, Waddell ignores H2, Jocky ignores all three.
+
+### BIG_FISH_CALL MECHANIC (darts, Mardle-specific)
+
+When remaining === 170: BIG_FISH_OPPORTUNITY fires.
+BIG_FISH_CALLED_CORRECT: big_fish_glory = true, 0.4 callback per Mardle response.
+BIG_FISH_CALLED_WRONG: peers react, Studd delivers ownership line once.
+Coined by Studd. Called by Mardle. Tension is permanent.
+
+### CHECKOUT_ROUTE_OPINION MECHANIC (darts, cross-character)
+
+Fires on non-standard checkout route. Named philosophies per character.
+Bristow: aggression. Lowe: mathematics. Part: professional respect.
+Mardle: frustration. Jocky: Kirkcaldy oblique.
+
+### SWEET_POOL MECHANIC (Jocky Wilson, ambient constant)
+
+Background audible texture. Wine gums, mints, wrapped boiled sweets, occasional biscuit.
+Frequency increases with session intensity. Wrapper at worst moment. One character notices.
+Never foregrounded as a joke in its own right.
+
+### DEAD IN PANEL WORLD — three characters (darts)
+
+Sid Waddell, Eric Bristow, Jocky Wilson. Dead. Present. Unremarked.
+
+### PREMONITION ENGINE (shared, cross-panel, first-class component)
+
+Full lifecycle: COMMIT to RESOLUTION to AFTERMATH.
+
+Five modes:
+PREMONITION — instinct, no evidence, Waddell register
+PREDICTION — analytical, specific outcome, Lowe register
+RUNNING_COMMENTARY — step-by-step crescendo, Mardle register. ABANDONED is a valid resolution.
+RETROSPECTIVE_CALL — claims prior knowledge after the fact, Bristow register.
+  Truth-tellers (Studd, Lowe, Part) call it out. Others let it pass.
+COLLECTIVE_CALL — two characters disagree publicly before outcome. Both get AFTERMATH.
+
+AFTERMATH states:
+GLORY — 0.4 callback probability per response. Peers grow weary.
+PARTIAL_CREDIT — defends once, releases.
+HAUNTED — peers reference it. Cannot ignore. Clears on subsequent successful COMMIT.
+DOUBLED_DOWN — stackable, no expiry. Broken only by second MISS on same topic.
+
+Natural conflict pairs: Mardle/Lowe, Bristow/Part, Waddell/Studd (darts).
+Faldo/McGinley (golf, always).
+
+---
+
+## Character Builder Attribute Additions
+
+12. **Commentary role** — ANCHOR, COLOUR, or CHARACTER. In-Game mode only.
+    Q&A mode this distinction dissolves. Required for all characters.
+
+13. **Premonition affinity** — object with weights per mode:
+    { premonition, prediction, running_commentary, retrospective_call, collective_call }
+    Range 0.0 to 1.0. Must be defined before character participates in Premonition Engine.
