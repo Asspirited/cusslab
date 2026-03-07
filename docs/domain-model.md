@@ -178,6 +178,78 @@ A partial character is worse than no character — it produces inconsistent voic
 
 ---
 
+## Character Attributes (Canonical — domain-map-v2)
+
+These are the 20 canonical character-level and panel-level attributes. The authoritative graph is `docs/domain-map-v2.jsx`. This section is the markdown mirror — keep in sync when the graph changes.
+
+| ID | Label | Short | Description |
+|----|-------|-------|-------------|
+| a1 | bathos_affinity | Attr 15 | 0.0–1.0. How readily a character drops from elevated register to naked feeling. Cricket panel: all characters start high — affinity governs how fast they fall, not whether. |
+| a2 | temporal_bleed_affinity | Attr 14 | leak_probability + bleed_response_weights (TRAIL_OFF / MISFIRE / ADJACENCY_RUSH / CALLED_OUT / MYSTIC_MEG). Historic match mode only. |
+| a3 | premonition_affinity | Attr 13 | Five sub-weights: premonition / prediction / running_commentary / retrospective_call / collective_call. Governs which Premonition Engine mode a character favours. HAUNTED aftermath state suppresses this. |
+| a4 | commentary_role | Attr 12 | ANCHOR / COLOUR / CHARACTER. Defined at character level. Read by COMMENTARY_ROLE_TAX at panel level. Governs three-horizon weighting (H1/H2/H3) and routing priority. |
+| a5 | exaggeration_tendency | Attr 16 | 0.0–1.0. How much a character amplifies claims beyond evidence. High: overshoots bathos into ROOM_STOPPER more frequently; premonition commits bolder, misses more spectacular; warm insults more extreme. |
+| a6 | lie_tendency | Attr 17 | 0.0–1.0. Propensity to deploy selective truth, misdirection or fabrication. High: bathos used as cover not weapon. Temporal bleed leaks become suspect. Premonition retrospective calls unreliable. Tracy memos are institutional lie_tendency made visible. |
+| a7 | wound | Attr 2 | The real thing underneath the mask. Drives Eventually Cracks escalation. When wound fires, character loses performed register entirely. Recovery = ice_breaker_style. |
+| a8 | ice_breaker_style | Attr 18 | Character-specific recovery mechanic after ROOM_STOPPER or FULL_CRACK. Must acknowledge the room without fully owning the damage. Governs ICE_BREAKER event. Outcome feeds RECOVERY_OUTCOME. |
+| a9 | truth_teller_eligible | Attr 19 | Boolean. Can this character call out a false RETROSPECTIVE_CALL in the Premonition Engine? Darts: Studd, Lowe, Part only. Separate from CONFLICT_PAIR — being an antagonist does not make you a truth-teller. |
+| a10 | bathos_register_start | Attr 20 | The elevated register this character performs before the drop. Governs how far the drop feels. Blofeld: cosmic. Boycott: authoritative. Tufnell: warmly chaotic. |
+
+### Mechanics
+
+| ID | Label | Description |
+|----|-------|-------------|
+| m1 | BATHOS | Sudden drop from elevated register to actual feeling underneath. Shared across all panels. lie_tendency changes whether it lands as weapon or cover. Cricket: not occasional but atmospheric baseline. |
+| m2 | EVENTUALLY_CRACKS | Five pressure tiers: SWALLOW → LAUGH_OFF → PASSIVE_AGGRESSIVE → FULL_CRACK → FULL_MONTY. Pressure from: wound exposure, hostile banter, food/hypochondria collision, asymmetric wound, Tracy memos, wrong premonition, failed recovery. |
+| m3 | PREMONITION_ENGINE | COMMIT → RESOLUTION → AFTERMATH. Five modes. Resolution types: EXACT / PARTIAL / MISS / TRANSCENDENT / ABANDONED. Aftermath: GLORY / PARTIAL_CREDIT / HAUNTED / DOUBLED_DOWN. Climax act boosts commit probability. |
+| m4 | TEMPORAL_BLEED | Historic match mode only (enabled by ERA_LOCK). Character leaks a future fact without realising. Room reacts with BLEED_RESPONSE. Nobody names it. lie_tendency makes leak suspect. |
+| m5 | FOOD_WEATHER | Ambient probabilistic. Marmite effect. Per-character food profiles. Can collide with HYPOCHONDRIA_POOL to add pressure. |
+| m6 | HYPOCHONDRIA_POOL | Grows across session. Negative emotional pressure trigger. Collision with FOOD_WEATHER escalates Eventually Cracks pressure. |
+| m7 | HOSTILE_BANTER | Sub-functions: SUBTLY_UNDERMINING / BACKHANDED_COMPLIMENT / OUTRIGHT_INSULT / COMPLETE_DISBELIEF / DISGUST. Routed by: commentary_role + conflict_pair + dramatic act. |
+| m8 | ROUND_TRACKER | ROUND_LABELS array. Defcon-style escalating labels per round. Governs unlock conditions (FULL_MONTY eligible rounds 4–5). Tracy memos escalate with rounds. |
+
+### Events
+
+| ID | Label | Description |
+|----|-------|-------------|
+| e1 | ROOM_STOPPER | Bathos overshoots. Character loses warm register entirely. Contempt lands naked. The room goes quiet. Distinct from FULL_CRACK (wound-driven). Frequency scales with exaggeration_tendency. |
+| e2 | ICE_BREAKER | Recovery event after ROOM_STOPPER or FULL_CRACK. Defined by ice_breaker_style. Must acknowledge the room without fully owning the damage. Outcome: CLEAN / PARTIAL / FAILED → feeds RECOVERY_OUTCOME. |
+| e3 | FULL_MONTY | Montgomerie walks in as full guest. Escalating presence counter N=1–5. Eligible rounds 4–5 only. |
+| e4 | FULL_CRACK | Eventually Cracks tier 4. Wound fires. Character loses performed register. Unlike ROOM_STOPPER: wound-driven not bathos-driven. Triggers ICE_BREAKER. |
+| e5 | BIG_FISH_CALL | Darts. 170 remaining → BIG_FISH_OPPORTUNITY (m8 governs window) → Mardle PENDING (conflict_pair routes to Mardle) → CALLED_CORRECT / CALLED_WRONG. Wrong call adds pressure. Once per session. |
+| e6 | TEMPORAL_BLEED_RESPONSE | TRAIL_OFF / MISFIRE / ADJACENCY_RUSH / CALLED_OUT / MYSTIC_MEG. Fired by TEMPORAL_BLEED. Weights from temporal_bleed_affinity. lie_tendency makes MYSTIC_MEG more likely. |
+| e7 | WADDELL_ECHO | Darts. Studd quotes Waddell once per session without attribution. Asymmetry: Studd knows, Waddell doesn't. It is a bathos moment — warmth masking grief. Instance of ASYMMETRIC_WOUND. |
+| e8 | PREMONITION_AFTERMATH | GLORY: others gain pressure. PARTIAL_CREDIT: character defends once. HAUNTED: suppresses premonition_affinity until next success. DOUBLED_DOWN: stackable, no expiry (Bristow special). |
+| e9 | RECOVERY_OUTCOME | Result of ICE_BREAKER attempt. CLEAN: pressure reduces, register resets. PARTIAL: pressure holds, register partly restored. FAILED: pressure increases, next ROOM_STOPPER cheaper to trigger. Closes the recovery feedback loop. |
+
+### Dynamics and Panel Nodes
+
+| ID | Label | Description |
+|----|-------|-------------|
+| d3 | WARM_INSULT_TAXONOMY | Cricket-primary, cross-panel available. Four weapons: FAINT_PRAISE_THAT_DAMNS / REMINISCENCE_THAT_WOUNDS / AGREEMENT_THAT_DISAGREES / COMPLIMENT_ABOUT_SPEAKER. Preferred weapon is a per-character enum value, not a separate attribute node. |
+| d4 | ASYMMETRIC_WOUND | A resents B. B is oblivious. C deploys it. Directional wound between specific character pairs. Not mutual. Feeds pressure into EVENTUALLY_CRACKS for A only. WADDELL_ECHO is a live instance of this pattern. |
+| d5 | CONFLICT_PAIR | Named natural antagonists per panel — governs HOSTILE_BANTER routing priority only. Separate from truth_teller_eligible: being an antagonist does not make you a truth-teller. |
+| p1 | CRICKET_BASELINE | Cricket panel operates bathos at panel level not character level. The shared register IS elevated. The drop is structurally always available. |
+| p2 | COMMENTARY_ROLE_TAX | ANCHOR / COLOUR / CHARACTER taxonomy. Reads commentary_role from each character — does not define it. Governs three-horizon model and routing priority. |
+| p3 | ERA_LOCK | Historic match mode. Characters cannot reference events after era_knowledge_cutoff. Enables TEMPORAL_BLEED. |
+| p4 | DEAD_IN_PANEL_WORLD | Darts: Waddell, Bristow, Jocky. Golf: various. Present. Unremarked. Their presence is ambient bathos. WADDELL_ECHO is the purest expression of this. |
+| p5 | TRACY_FROM_HR | Named ambient constant. Memos escalate with round number. Institutional lie_tendency made visible — Tracy acknowledges nothing directly. |
+| p6 | PANEL_SIZE | EXP-001: 4 vs 5 vs 6 characters. Optimum: 5 hypothesised. In-Game mode: 3 min / 4 max, at least 1 ANCHOR mandatory. |
+| p7 | DRAMATIC_STRUCTURE | Football historic: SETUP→CRISIS→CLIMAX→AFTERMATH four-act structure. CLIMAX boosts premonition commit probability and routes more extreme hostile banter. AFTERMATH peaks bathos. |
+
+### Structural notes (v2 changes from v1)
+
+- **d1 EXAGGERATION_DYNAMIC removed** — was a duplicate of a5. Merged description into a5 (exaggeration_tendency).
+- **d2 LIE_DYNAMIC removed** — was a duplicate of a6. Merged description into a6 (lie_tendency).
+- **a9 warm_insult_preferred removed** — was a single enum selector. Merged as a per-character enum value into d3's description.
+- **a9 truth_teller_eligible added** — Boolean. Split off from d5 which was doing two unrelated jobs.
+- **e9 RECOVERY_OUTCOME added** — closes the ICE_BREAKER feedback loop. FAILED outcome lowers the ROOM_STOPPER threshold, creating a genuine pressure spiral.
+- **p2 → a4 dependency flipped** — a4 is now "read by" p2, not defined by it. Panels read character attributes; they do not write them.
+- **e5, e7, e8, p4, p5, p7 all wired** — previously orphaned nodes now have meaningful connections in both directions.
+- **Edge count**: 40 → 52 (12 new real connections, no phantom edges).
+
+---
+
 ## Named Character and Panel Mechanics
 
 These are the canonical named mechanics across all panels. When building a new character or panel, apply all general mechanics and any panel-specific ones that fit. Add to this list only when a mechanic has been applied to at least two characters or one complete panel — never name something until it has proven itself.
