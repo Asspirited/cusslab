@@ -703,3 +703,45 @@ Notes: Script is correctly installed and will track visitors. Auto-verification 
 
 **Root cause:** Structural — try-catch scope too narrow + missing fetch timeout. Both errors individually cause the identical user-visible symptom.
 **Corrective action:** (1) Extended try-catch in `discuss()` to cover all pre-API prompt-building code. (2) Added `AbortController` with 30-second timeout to `API.call` — timeout throws `AbortError`, caught, surfaced as "Request timed out — please try again."
+
+---
+
+### WL-MODE-001 — Mode tabs and match engine designed without In-Game UI audit
+**Item:** Full QandA/In-Game mode tab architecture and darts match engine specified and Gherkin-written as design-only, with no prior audit of what mode/tab UI structure already exists in `index.html`.
+**Symptom:** After writing all 5 feature files in branch 1, a codebase grep revealed no existing mode tab structure in index.html — meaning the spec assumes a greenfield implementation against a codebase that has no equivalent scaffold. Risk: implementation session will discover structural blockers that the design session did not surface.
+**Suspected cause:** Design-first session proceeded without a "what already exists?" scan. The instruction was "design-only, no implementation" which is correct — but a lightweight codebase audit (grep for existing tab/mode structure) was not performed before writing specs.
+**Session:** 2026-03-07
+**Time lost:** ~15 min risk — not lost yet; risk materialises at implementation
+**Cost impact:** Low (design sessions are cheap; implementation rework is expensive)
+**Delay:** Potential 1-session delay if implementation discovers structural conflicts
+**Tags:** `#knowledge-loss` `#missing-audit` `#design-risk`
+**Status:** open
+
+**5 Whys:**
+1. Why is there a risk of implementation blockers? → Specs assume a UI structure that may not match what index.html can accommodate without significant refactor.
+2. Why wasn't the existing structure checked? → Session was framed as "design-only" — the implicit assumption was that implementation details were deferred, including what the codebase currently has.
+3. Why was the assumption not challenged? → "Design-only" instruction correctly excluded implementation — but it should not exclude a read-only codebase audit to ground the design.
+4. Why is "design-only" conflated with "no codebase reading"? → No rule or practice distinguishes the two. The session-start protocol says "run pipeline, report scorecard" — it does not say "grep for relevant structure before writing specs."
+5. Why is that missing from protocol? → Protocol was written for code-change sessions, not design sessions. Design sessions have no equivalent "look before you write" gate.
+
+**Root cause:** Session-start protocol has no design-session variant. "Design-only" sessions skip implementation but should not skip the codebase audit.
+**Corrective action:** Before any design session that will produce specs: grep codebase for relevant structural hooks. Add to CLAUDE.md as a design-session protocol step. At implementation time, read relevant index.html sections before writing any code.
+
+---
+
+### WL-MODE-002 — Open character debt: Rod Harrington, Bobby George, Andy Fordham
+**Item:** Three darts characters identified as candidates for full character profiles (md files) during the design session — Rod Harrington, Bobby George (full profile, not just wound data), Andy Fordham — but not written this session. Debt carried forward.
+**Symptom:** Characters are referenced in specs and wound data but have no `docs/characters-*.md` profile. Any future prompt-writing or panel tuning for these characters will require research from scratch.
+**Suspected cause:** Session ran out of context. The design phase (mode tabs, match engine, Premonition Engine — 10 feature files) consumed the bulk of session capacity. Character profiles were explicitly listed as pending but not reached.
+**Session:** 2026-03-07
+**Time lost:** 0 this session — pure debt, no rework yet
+**Cost impact:** Low now; Medium if implementation session needs character voice accuracy and profiles are missing
+**Delay:** Deferred to next session that touches darts characters
+**Tags:** `#character-debt` `#knowledge-loss`
+**Status:** open
+
+**Characters owed:**
+- **Rod Harrington** — darts referee/MC, not commentator; precise, formal, occasionally sardonic; wound TBD
+- **Bobby George** — full md profile (wound data exists in DARTS_WOUNDS_DATA as "george"; full voice/comedy profile not written)
+
+**Action:** Next session touching darts characters: write both before any new code. Pattern established by characters-studd.md and characters-pyke.md.

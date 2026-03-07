@@ -1,7 +1,7 @@
 // Unit test runner — tests pure functions in pipeline/logic.js
 // Run: node pipeline/unit-runner.js
 
-const { maskKey, isValidKey, shouldUpdateInput, Temperature, makeWoundDetector, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetector, DartsVoiceFmt, dartsBuildBlock } = require('./logic.js');
+const { maskKey, isValidKey, shouldUpdateInput, Temperature, makeWoundDetector, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetector, DartsVoiceFmt, dartsBuildBlock, DARTS_PREMONITION_AFFINITIES, COLLECTIVE_CALL_MINIMUM, premonitionEligible, blankPremonitionLedger, assignPremonitionRC, resolvePremonitionCommits, isPremonitionTruthTeller } = require('./logic.js');
 
 let passed = 0;
 let failed = 0;
@@ -288,6 +288,164 @@ assert('dartsBuildBlock: returns empty string when no notable state',
 
 assert('dartsBuildBlock: returns non-empty string when wound is active',
   typeof dartsBuildBlock('waddell', [], true), 'string');
+
+// ── PremonitionEngine — affinities, eligibility, resolution ──────────────────
+
+// COLLECTIVE_CALL minimum
+assert('COLLECTIVE_CALL_MINIMUM is 3', COLLECTIVE_CALL_MINIMUM, 3);
+
+// premonitionEligible — mode: premonition
+assert('premonitionEligible: waddell premonition → true',  premonitionEligible('waddell', 'premonition'), true);
+assert('premonitionEligible: george premonition → true',   premonitionEligible('george',  'premonition'), true);
+assert('premonitionEligible: mardle premonition → true',   premonitionEligible('mardle',  'premonition'), true);
+assert('premonitionEligible: lowe premonition → false',    premonitionEligible('lowe',    'premonition'), false);
+assert('premonitionEligible: part premonition → false',    premonitionEligible('part',    'premonition'), false);
+
+// premonitionEligible — mode: prediction
+assert('premonitionEligible: lowe prediction → true',      premonitionEligible('lowe',    'prediction'),  true);
+assert('premonitionEligible: part prediction → true',      premonitionEligible('part',    'prediction'),  true);
+assert('premonitionEligible: studd prediction → true',     premonitionEligible('studd',   'prediction'),  true);
+assert('premonitionEligible: waddell prediction → false',  premonitionEligible('waddell', 'prediction'),  false);
+
+// premonitionEligible — mode: running_commentary
+assert('premonitionEligible: mardle running_commentary → true',   premonitionEligible('mardle',  'running_commentary'), true);
+assert('premonitionEligible: waddell running_commentary → true',  premonitionEligible('waddell', 'running_commentary'), true);
+assert('premonitionEligible: lowe running_commentary → false',    premonitionEligible('lowe',    'running_commentary'), false);
+
+// premonitionEligible — mode: retrospective_call
+assert('premonitionEligible: george retrospective_call → true',  premonitionEligible('george',  'retrospective_call'), true);
+assert('premonitionEligible: studd retrospective_call → false',  premonitionEligible('studd',   'retrospective_call'), false);
+assert('premonitionEligible: lowe retrospective_call → false',   premonitionEligible('lowe',    'retrospective_call'), false);
+
+// premonitionEligible — mode: collective_call
+assert('premonitionEligible: george collective_call → true',   premonitionEligible('george',  'collective_call'), true);
+assert('premonitionEligible: waddell collective_call → true',  premonitionEligible('waddell', 'collective_call'), true);
+assert('premonitionEligible: lowe collective_call → false',    premonitionEligible('lowe',    'collective_call'), false);
+assert('premonitionEligible: studd collective_call → false',   premonitionEligible('studd',   'collective_call'), false);
+
+// isPremonitionTruthTeller
+assert('isPremonitionTruthTeller: lowe → true',    isPremonitionTruthTeller('lowe'),    true);
+assert('isPremonitionTruthTeller: part → true',    isPremonitionTruthTeller('part'),    true);
+assert('isPremonitionTruthTeller: studd → true',   isPremonitionTruthTeller('studd'),   true);
+assert('isPremonitionTruthTeller: waddell → false', isPremonitionTruthTeller('waddell'), false);
+assert('isPremonitionTruthTeller: george → false',  isPremonitionTruthTeller('george'),  false);
+assert('isPremonitionTruthTeller: mardle → false',  isPremonitionTruthTeller('mardle'),  false);
+
+// resolvePremonitionCommits — CHECKOUT_HIT resolves CHECKOUT_OPPORTUNITY as GLORY
+(function() {
+  const ledger = blankPremonitionLedger();
+  ledger.commits.push({ speakerId: 'waddell', mode: 'PREMONITION', momentType: 'CHECKOUT_OPPORTUNITY', resolved: false });
+  resolvePremonitionCommits('CHECKOUT_HIT', ledger);
+  assert('resolvePremonitionCommits: CHECKOUT_HIT → CHECKOUT_OPPORTUNITY → GLORY', ledger.aftermath['waddell'], 'GLORY');
+  assert('resolvePremonitionCommits: CHECKOUT_HIT → commit marked resolved', ledger.commits[0].resolved, true);
+})();
+
+// resolvePremonitionCommits — CHECKOUT_HIT resolves BIG_FISH as GLORY
+(function() {
+  const ledger = blankPremonitionLedger();
+  ledger.commits.push({ speakerId: 'mardle', mode: 'PREMONITION', momentType: 'BIG_FISH', resolved: false });
+  resolvePremonitionCommits('CHECKOUT_HIT', ledger);
+  assert('resolvePremonitionCommits: CHECKOUT_HIT → BIG_FISH → GLORY', ledger.aftermath['mardle'], 'GLORY');
+})();
+
+// resolvePremonitionCommits — CHECKOUT_MISS resolves CHECKOUT_OPPORTUNITY as HAUNTED
+(function() {
+  const ledger = blankPremonitionLedger();
+  ledger.commits.push({ speakerId: 'george', mode: 'PREMONITION', momentType: 'CHECKOUT_OPPORTUNITY', resolved: false });
+  resolvePremonitionCommits('CHECKOUT_MISS', ledger);
+  assert('resolvePremonitionCommits: CHECKOUT_MISS → CHECKOUT_OPPORTUNITY → HAUNTED', ledger.aftermath['george'], 'HAUNTED');
+})();
+
+// resolvePremonitionCommits — CHECKOUT_MISS resolves NINE_DARTER_POSSIBLE as HAUNTED
+(function() {
+  const ledger = blankPremonitionLedger();
+  ledger.commits.push({ speakerId: 'waddell', mode: 'RUNNING_COMMENTARY', momentType: 'NINE_DARTER_POSSIBLE', resolved: false });
+  resolvePremonitionCommits('CHECKOUT_MISS', ledger);
+  assert('resolvePremonitionCommits: CHECKOUT_MISS → NINE_DARTER_POSSIBLE → HAUNTED', ledger.aftermath['waddell'], 'HAUNTED');
+})();
+
+// resolvePremonitionCommits — LEG_WON resolves LEG_WON commit as GLORY
+(function() {
+  const ledger = blankPremonitionLedger();
+  ledger.commits.push({ speakerId: 'bristow', mode: 'PREMONITION', momentType: 'LEG_WON', resolved: false });
+  resolvePremonitionCommits('LEG_WON', ledger);
+  assert('resolvePremonitionCommits: LEG_WON → LEG_WON → GLORY', ledger.aftermath['bristow'], 'GLORY');
+})();
+
+// resolvePremonitionCommits — MATCH_WON resolves SET_WON commit as GLORY (supersedes)
+(function() {
+  const ledger = blankPremonitionLedger();
+  ledger.commits.push({ speakerId: 'taylor', mode: 'PREMONITION', momentType: 'SET_WON', resolved: false });
+  resolvePremonitionCommits('MATCH_WON', ledger);
+  assert('resolvePremonitionCommits: MATCH_WON → SET_WON → GLORY', ledger.aftermath['taylor'], 'GLORY');
+})();
+
+// resolvePremonitionCommits — unmatched commit is not resolved
+(function() {
+  const ledger = blankPremonitionLedger();
+  ledger.commits.push({ speakerId: 'lowe', mode: 'PREDICTION', momentType: 'BIG_FISH', resolved: false });
+  resolvePremonitionCommits('LEG_WON', ledger);
+  assert('resolvePremonitionCommits: BIG_FISH commit not resolved by LEG_WON', ledger.commits[0].resolved, false);
+  assert('resolvePremonitionCommits: no aftermath for unresolved commit', ledger.aftermath['lowe'], undefined);
+})();
+
+// resolvePremonitionCommits — RC holder resolves on CHECKOUT_HIT
+(function() {
+  const ledger = blankPremonitionLedger();
+  ledger.rcHolder = 'mardle';
+  resolvePremonitionCommits('CHECKOUT_HIT', ledger);
+  assert('resolvePremonitionCommits: RC holder GLORY on CHECKOUT_HIT', ledger.aftermath['mardle'], 'GLORY');
+  assert('resolvePremonitionCommits: rcHolder cleared after resolution', ledger.rcHolder, null);
+})();
+
+// resolvePremonitionCommits — RC holder HAUNTED on CHECKOUT_MISS
+(function() {
+  const ledger = blankPremonitionLedger();
+  ledger.rcHolder = 'waddell';
+  resolvePremonitionCommits('CHECKOUT_MISS', ledger);
+  assert('resolvePremonitionCommits: RC holder HAUNTED on CHECKOUT_MISS', ledger.aftermath['waddell'], 'HAUNTED');
+})();
+
+// assignPremonitionRC — assigns highest running_commentary affinity in draw
+(function() {
+  const draw = ['lowe', 'mardle', 'george', 'bristow', 'taylor'];
+  const ledger = blankPremonitionLedger();
+  assignPremonitionRC(draw, 'NINE_DARTER_POSSIBLE', ledger);
+  assert('assignPremonitionRC: mardle gets RC (highest running_commentary in draw)', ledger.rcHolder, 'mardle');
+})();
+
+// assignPremonitionRC — waddell wins if in draw (0.70 > mardle 0.80... wait mardle is 0.80)
+(function() {
+  const draw = ['waddell', 'lowe', 'george', 'bristow', 'taylor'];
+  const ledger = blankPremonitionLedger();
+  assignPremonitionRC(draw, 'NINE_DARTER_POSSIBLE', ledger);
+  assert('assignPremonitionRC: waddell gets RC when mardle not in draw', ledger.rcHolder, 'waddell');
+})();
+
+// assignPremonitionRC — no assignment for non-nine-darter moment
+(function() {
+  const draw = ['mardle', 'waddell', 'george'];
+  const ledger = blankPremonitionLedger();
+  assignPremonitionRC(draw, 'CHECKOUT_OPPORTUNITY', ledger);
+  assert('assignPremonitionRC: no RC assigned for non-nine-darter moment', ledger.rcHolder, null);
+})();
+
+// assignPremonitionRC — does not override existing holder
+(function() {
+  const draw = ['mardle', 'waddell', 'george'];
+  const ledger = blankPremonitionLedger();
+  ledger.rcHolder = 'george';
+  assignPremonitionRC(draw, 'NINE_DARTER_POSSIBLE', ledger);
+  assert('assignPremonitionRC: does not override existing rcHolder', ledger.rcHolder, 'george');
+})();
+
+// blankPremonitionLedger — structure
+(function() {
+  const l = blankPremonitionLedger();
+  assert('blankPremonitionLedger: commits is empty array',    Array.isArray(l.commits),            true);
+  assert('blankPremonitionLedger: aftermath is empty object', typeof l.aftermath,                   'object');
+  assert('blankPremonitionLedger: rcHolder is null',          l.rcHolder,                           null);
+})();
 
 // ── Results ──────────────────────────────────────────────────────────────────
 

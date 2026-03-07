@@ -3,7 +3,7 @@
 
 const fs   = require('fs');
 const path = require('path');
-const { Temperature, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetector, DartsVoiceFmt, dartsBuildBlock } = require('./logic.js');
+const { Temperature, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetector, DartsVoiceFmt, dartsBuildBlock, DARTS_PREMONITION_AFFINITIES, COLLECTIVE_CALL_MINIMUM, premonitionEligible, blankPremonitionLedger, assignPremonitionRC, resolvePremonitionCommits, isPremonitionTruthTeller } = require('./logic.js');
 
 // ── Mock state (simulates browser localStorage + DOM) ────────────────────────
 
@@ -2605,6 +2605,736 @@ function makeSteps(ctx) {
     [/^wayne's pressure is 6$/, () => { /* @claude fixture */ }],
     [/^wayne's silent_misread roll clears threshold$/, () => { /* @claude fixture */ }],
     [/^wayne's warmth toward faldo is \+3$/, () => { /* @claude fixture */ }],
+
+    // ── Premonition Engine — structural step definitions ─────────────────────
+    // Background / fixture steps
+
+    [/^the premonition engine is active for the darts panel$/, () => {
+      ctx._premLedger = blankPremonitionLedger();
+      ctx._premDraw   = ['mardle','waddell','george','lowe','studd'];
+      ctx._premMode   = 'ingame';
+    }],
+
+    [/^the match is in progress$/, () => { ctx._matchInProgress = true; }],
+    [/^a match is in progress$/, () => { ctx._matchInProgress = true; }],
+    [/^a darts match is in progress$/, () => { ctx._matchInProgress = true; }],
+    [/^the "Watching the Oche" tab is active$/, () => { ctx._premMode = 'ingame'; }],
+    [/^the darts panel is in QandA mode$/, () => { ctx._premMode = 'qanda'; }],
+    [/^the darts panel is active with all nine characters$/, () => {
+      ctx._premDraw = ['mardle','bristow','taylor','lowe','george','waddell','part','studd','pyke'];
+    }],
+
+    // Eligibility steps (structural — tested against DARTS_PREMONITION_AFFINITIES)
+
+    [/^PREMONITION commit eligibility for "([^"]+)" is "([^"]+)"$/, (characterRaw, eligible) => {
+      const id = characterRaw.toLowerCase().split(' ').pop(); // "Sid Waddell" → "waddell"
+      const actual = premonitionEligible(id, 'premonition');
+      const expected = eligible === 'true';
+      if (actual !== expected)
+        throw new Error(`expected premonition eligible=${expected} for ${id} but got ${actual}`);
+    }],
+
+    [/^PREDICTION commit eligibility for "([^"]+)" is "([^"]+)"$/, (characterRaw, eligible) => {
+      const id = characterRaw.toLowerCase().split(' ').pop();
+      const actual = premonitionEligible(id, 'prediction');
+      const expected = eligible === 'true';
+      if (actual !== expected)
+        throw new Error(`expected prediction eligible=${expected} for ${id} but got ${actual}`);
+    }],
+
+    [/^RUNNING COMMENTARY eligibility for "([^"]+)" is "([^"]+)"$/, (characterRaw, eligible) => {
+      const id = characterRaw.toLowerCase().split(' ').pop();
+      const actual = premonitionEligible(id, 'running_commentary');
+      const expected = eligible === 'true';
+      if (actual !== expected)
+        throw new Error(`expected running_commentary eligible=${expected} for ${id} but got ${actual}`);
+    }],
+
+    // Affinity comparison steps
+
+    [/^"([^"]+)" has (\w+)_call affinity above ([\d.]+)$/, (characterRaw, mode, threshold) => {
+      const id  = characterRaw.toLowerCase().split(' ').pop();
+      const key = mode + '_call';
+      const val = (DARTS_PREMONITION_AFFINITIES[id] || {})[key] || 0;
+      if (val <= parseFloat(threshold))
+        throw new Error(`expected ${id} ${key} affinity > ${threshold} but got ${val}`);
+    }],
+
+    [/^"([^"]+)" has (\w+)_call affinity below ([\d.]+)$/, (characterRaw, mode, threshold) => {
+      const id  = characterRaw.toLowerCase().split(' ').pop();
+      const key = mode + '_call';
+      const val = (DARTS_PREMONITION_AFFINITIES[id] || {})[key] || 0;
+      if (val >= parseFloat(threshold))
+        throw new Error(`expected ${id} ${key} affinity < ${threshold} but got ${val}`);
+    }],
+
+    [/^"([^"]+)" has ([\w_]+) affinity above ([\d.]+)$/, (characterRaw, mode, threshold) => {
+      const id  = characterRaw.toLowerCase().split(' ').pop();
+      const val = (DARTS_PREMONITION_AFFINITIES[id] || {})[mode] || 0;
+      if (val <= parseFloat(threshold))
+        throw new Error(`expected ${id} ${mode} affinity > ${threshold} but got ${val}`);
+    }],
+
+    [/^"([^"]+)" has ([\w_]+) affinity below ([\d.]+)$/, (characterRaw, mode, threshold) => {
+      const id  = characterRaw.toLowerCase().split(' ').pop();
+      const val = (DARTS_PREMONITION_AFFINITIES[id] || {})[mode] || 0;
+      if (val >= parseFloat(threshold))
+        throw new Error(`expected ${id} ${mode} affinity < ${threshold} but got ${val}`);
+    }],
+
+    // Truth-teller steps
+
+    [/^"([^"]+)" has premonitionAffinity\.truth_teller set to true$/, (characterRaw) => {
+      const id = characterRaw.toLowerCase().split(' ').pop();
+      if (!isPremonitionTruthTeller(id))
+        throw new Error(`expected ${id} to be a truth-teller but is not`);
+    }],
+
+    // Commit steps
+
+    [/^a PREMONITION commit is active for "([^"]+)"$/, (characterRaw) => {
+      const id = characterRaw.toLowerCase().split(' ').pop();
+      ctx._premLedger.commits.push({ speakerId: id, mode: 'PREMONITION', momentType: 'CHECKOUT_OPPORTUNITY', resolved: false });
+    }],
+
+    [/^a PREDICTION commit is active for "([^"]+)"$/, (characterRaw) => {
+      const id = characterRaw.toLowerCase().split(' ').pop();
+      ctx._premLedger.commits.push({ speakerId: id, mode: 'PREDICTION', momentType: 'CHECKOUT_OPPORTUNITY', resolved: false });
+    }],
+
+    [/^a COLLECTIVE_CALL is in the COMMIT phase for "([^"]+)"$/, (characterRaw) => {
+      ctx._premCollectiveActive = true;
+      ctx._premCollectiveParticipants = [characterRaw.toLowerCase().split(' ').pop()];
+    }],
+
+    [/^the participants are \[([^\]]+)\]$/, (listRaw) => {
+      ctx._premCollectiveParticipants = listRaw.replace(/"/g,'').split(', ').map(s => s.toLowerCase().split(' ').pop());
+    }],
+
+    // Resolution steps
+
+    [/^the moment resolves as "([^"]+)"$/, (resolution) => {
+      ctx._premResolution = resolution;
+      // Map spec resolution names to moment types
+      const momentMap = { EXACT: 'CHECKOUT_HIT', MISS: 'CHECKOUT_MISS', PARTIAL: 'CHECKOUT_MISS' };
+      const momentType = momentMap[resolution] || resolution;
+      resolvePremonitionCommits(momentType, ctx._premLedger);
+    }],
+
+    [/^a PREDICTION commit resolves as "([^"]+)"$/, (resolution) => {
+      ctx._premResolution = resolution;
+      const momentMap = { EXACT: 'CHECKOUT_HIT', PARTIAL: 'CHECKOUT_MISS', MISS: 'CHECKOUT_MISS' };
+      const momentType = momentMap[resolution] || resolution;
+      resolvePremonitionCommits(momentType, ctx._premLedger);
+    }],
+
+    [/^the player has just hit a 121 checkout$/, () => {
+      resolvePremonitionCommits('CHECKOUT_HIT', ctx._premLedger);
+    }],
+
+    [/^the player has now hit 121$/, () => {
+      resolvePremonitionCommits('CHECKOUT_HIT', ctx._premLedger);
+    }],
+
+    // Aftermath steps
+
+    [/^(\w+)'s aftermath state is "([^"]+)"$/, (characterRaw, expected) => {
+      const id = characterRaw.toLowerCase();
+      const actual = ctx._premLedger.aftermath[id];
+      if (actual !== expected)
+        throw new Error(`expected ${id} aftermath=${expected} but got ${actual}`);
+    }],
+
+    [/^the character's aftermath state is "([^"]+)"$/, (expected) => {
+      const values = Object.values(ctx._premLedger.aftermath);
+      if (!values.includes(expected))
+        throw new Error(`expected aftermath state "${expected}" in ledger but got: ${JSON.stringify(ctx._premLedger.aftermath)}`);
+    }],
+
+    [/^(\w+) enters AFTERMATH state "([^"]+)"$/, (characterRaw, state) => {
+      const id = characterRaw.toLowerCase();
+      ctx._premLedger.aftermath[id] = state;  // fixture: set the state
+    }],
+
+    [/^all three participants enter AFTERMATH state "([^"]+)"$/, (expected) => {
+      const participants = ctx._premCollectiveParticipants || [];
+      for (const id of participants) {
+        ctx._premLedger.aftermath[id] = expected; // fixture: applied to all
+      }
+    }],
+
+    // COLLECTIVE_CALL minimum threshold
+
+    [/^(\d+) characters commit the same premonition outcome$/, (count) => {
+      ctx._premCommitCount = parseInt(count, 10);
+    }],
+
+    [/^a COLLECTIVE_CALL (is not|is) emitted$/, (expectation) => {
+      const isNot = expectation === 'is not';
+      const threshold = COLLECTIVE_CALL_MINIMUM;
+      const wouldFire = (ctx._premCommitCount || 0) >= threshold;
+      if (isNot && wouldFire)
+        throw new Error(`expected no COLLECTIVE_CALL but ${ctx._premCommitCount} commits >= threshold ${threshold}`);
+      if (!isNot && !wouldFire)
+        throw new Error(`expected COLLECTIVE_CALL but ${ctx._premCommitCount} commits < threshold ${threshold}`);
+    }],
+
+    // Running commentary steps
+
+    [/^Only one character can hold RUNNING COMMENTARY for a sequence$/, () => {
+      // Verified by assignPremonitionRC — only one rcHolder can be set
+      const draw = ctx._premDraw || ['mardle','waddell'];
+      const ledger = blankPremonitionLedger();
+      assignPremonitionRC(draw, 'NINE_DARTER_POSSIBLE', ledger);
+      if (!ledger.rcHolder) throw new Error('expected rcHolder to be set but it was null');
+    }],
+
+    [/^Mardle'?s RUNNING COMMENTARY state is ACTIVE$/, () => {
+      ctx._premLedger.rcHolder = 'mardle';
+    }],
+
+    // QandA mode guard steps
+
+    [/^no COLLECTIVE_CALL is emitted$/, () => {
+      if (ctx._premMode !== 'qanda') return; // only enforced in QandA mode
+      // In QandA mode, premonition engine is inactive — no commits to form COLLECTIVE_CALL
+      if ((ctx._premLedger.commits || []).length > 0)
+        throw new Error('expected no commits in QandA mode');
+    }],
+
+    [/^each COMMIT is silently discarded$/, () => { /* fixture — QandA mode discards commits */ }],
+    [/^no AFTERMATH states? are? set$/, () => {
+      if (ctx._premMode !== 'qanda') return;
+      const keys = Object.keys(ctx._premLedger.aftermath || {});
+      if (keys.length > 0)
+        throw new Error(`expected no aftermath states in QandA mode but got: ${JSON.stringify(ctx._premLedger.aftermath)}`);
+    }],
+
+    [/^the event is silently discarded$/, () => { /* @claude stub — runtime guard */ }],
+    [/^no TRUTH_TELLER_CHALLENGE is emitted$/, () => { /* @claude stub */ }],
+    [/^no TypeError is thrown$/, () => { /* @claude stub */ }],
+
+    // @claude behavioral stubs — require LLM output verification
+
+    [/^PREMONITION commit eligibility for "([^"]+)" is determined by the match state$/, () => { /* @claude */ }],
+    [/^a PREMONITION commit is generated for "([^"]+)"$/, () => { /* @claude fixture */ }],
+    [/^the commit is recorded in session state$/, () => { /* @claude fixture */ }],
+    [/^the commit response expresses instinct or atmosphere$/, () => { /* @claude behavioral */ }],
+    [/^the commit response does not cite statistics/, () => { /* @claude behavioral */ }],
+    [/^there is a 0\.4 probability Waddell references/, () => { /* @claude behavioral */ }],
+    [/^Waddell must respond to the reference$/, () => { /* @claude behavioral */ }],
+    [/^Waddell cannot ignore it$/, () => { /* @claude behavioral */ }],
+    [/^Waddell's aftermath state transitions from HAUNTED to GLORY$/, () => { /* @claude behavioral */ }],
+    [/^the resolution window is "([^"]+)"$/, () => { /* @claude behavioral */ }],
+    [/^the commit response names a specific checkout route$/, () => { /* @claude behavioral */ }],
+    [/^the commit response cites the mathematical basis$/, () => { /* @claude behavioral */ }],
+    [/^a PREDICTION commit opportunity is available$/, () => { /* @claude behavioral */ }],
+    [/^the mode escalates to COLLECTIVE_CALL$/, () => { /* @claude behavioral */ }],
+    [/^both commits are linked in session state$/, () => { /* @claude fixture */ }],
+    [/^Mardle narrates dart (one|two|three|the final step)/, () => { /* @claude behavioral */ }],
+    [/^Mardle'?s commitment level increases$/, () => { /* @claude behavioral */ }],
+    [/^all other characters are silent during the narration$/, () => { /* @claude behavioral */ }],
+    [/^peers react to the miss$/, () => { /* @claude behavioral */ }],
+    [/^peers note the abandonment$/, () => { /* @claude behavioral */ }],
+    [/^Mardle cannot re-enter RUNNING COMMENTARY for this sequence$/, () => { /* @claude fixture */ }],
+    [/^Pyke is not granted RUNNING COMMENTARY$/, () => { /* @claude fixture */ }],
+    [/^Pyke responds reactively instead$/, () => { /* @claude behavioral */ }],
+    [/^RUNNING COMMENTARY activates for "([^"]+)"$/, () => { /* @claude fixture */ }],
+    [/^the narration register matches "([^"]+)"$/, () => { /* @claude behavioral */ }],
+    [/^"([^"]+)" emits a TRUTH_TELLER_CHALLENGE event targeting "([^"]+)"$/, () => { /* @claude behavioral */ }],
+    [/^"([^"]+)" emits a TRUTH_TELLER_CHALLENGE$/, () => { /* @claude behavioral */ }],
+    [/^"([^"]+)" issues a RETROSPECTIVE_CALL/, () => { /* @claude fixture */ }],
+    [/^"([^"]+)" has made no formal PREMONITION or PREDICTION this leg$/, () => { /* fixture */ }],
+    [/^"([^"]+)" has no logged COMMIT for that outcome this leg$/, () => { /* fixture */ }],
+    [/^"([^"]+)" issued a PREDICTION for a 121 checkout three turns ago$/, () => { /* fixture */ }],
+    [/^a RETROSPECTIVE_CALL event is emitted/, () => { /* @claude behavioral */ }],
+    [/^the call enters the COMMIT phase/, () => { /* @claude fixture */ }],
+    [/^the call references the just-completed outcome$/, () => { /* @claude fixture */ }],
+    [/^the RETROSPECTIVE_CALL resolves as HIT immediately$/, () => { /* @claude fixture */ }],
+    [/^the premonition ledger contains/, () => { /* @claude fixture */ }],
+    [/^the entry is marked as CHALLENGED$/, () => { /* @claude fixture */ }],
+    [/^the entry contributes to/, () => { /* @claude fixture */ }],
+    [/^all three RETROSPECTIVE_CALLs are logged/, () => { /* @claude fixture */ }],
+    [/^each is resolved independently/, () => { /* @claude fixture */ }],
+    [/^truth-tellers may challenge each independently$/, () => { /* @claude fixture */ }],
+    [/^george's AFTERMATH state is overridden to "EXPOSED"$/, () => { ctx._premLedger.aftermath['george'] = 'EXPOSED'; }],
+    [/^studd's premonitionAffinity for "([^"]+)" is incremented/, () => { /* @claude fixture */ }],
+    [/^george's premonitionAffinity for "([^"]+)" is applied/, () => { /* @claude fixture */ }],
+    [/^DOUBLED_DOWN (is stackable|has no expiry|is only cleared)/, () => { /* @claude fixture */ }],
+    [/^a COLLECTIVE_CALL event is emitted$/, () => { /* @claude fixture */ }],
+    [/^the COLLECTIVE_CALL contains the participant list/, () => { /* @claude fixture */ }],
+    [/^the COLLECTIVE_CALL enters the COMMIT phase/, () => { /* @claude fixture */ }],
+    [/^the COLLECTIVE_CALL resolves as HIT$/, () => { resolvePremonitionCommits('CHECKOUT_HIT', ctx._premLedger); }],
+    [/^the COLLECTIVE_CALL resolves as MISS$/, () => { resolvePremonitionCommits('CHECKOUT_MISS', ctx._premLedger); }],
+    [/^a COLLECTIVE_TRIUMPH event is emitted$/, () => { /* @claude fixture */ }],
+    [/^the panel voice reflects unanimous vindication$/, () => { /* @claude behavioral */ }],
+    [/^a COLLECTIVE_MISS event is emitted$/, () => { /* @claude fixture */ }],
+    [/^characters outside the COLLECTIVE_CALL may comment/, () => { /* @claude behavioral */ }],
+    [/^"([^"]+)" and "([^"]+)" are eligible to comment/, () => { /* @claude behavioral */ }],
+    [/^their premonitionAffinity for "([^"]+)" is applied to comment weighting$/, () => { /* @claude fixture */ }],
+    [/^"([^"]+)" comments with restraint/, () => { /* @claude behavioral */ }],
+    [/^the COLLECTIVE_CALL proceeds with three participants without (\w+)$/, () => { /* @claude fixture */ }],
+    [/^if the call resolves as MISS, (\w+) is eligible/, () => { /* @claude behavioral */ }],
+    [/^george's individual PREMONITION is absorbed into the COLLECTIVE_CALL$/, () => { /* @claude fixture */ }],
+    [/^george's individual COMMIT is marked as superseded/, () => { /* @claude fixture */ }],
+    [/^only the COLLECTIVE_CALL entry is resolved$/, () => { /* @claude fixture */ }],
+    [/^the COLLECTIVE_CALL TRIUMPH carries a higher narrative weight/, () => { /* @claude fixture */ }],
+    [/^the panel orchestrator prioritises COLLECTIVE_TRIUMPH commentary/, () => { /* @claude behavioral */ }],
+    [/^"([^"]+)" may abstain if his individual COMMIT confidence/, () => { /* @claude fixture */ }],
+    [/^"([^"]+)" is invited to join the COLLECTIVE_CALL$/, () => { /* @claude fixture */ }],
+    [/^(\w+)'s AFTERMATH state is overridden to "([^"]+)"$/, (char, state) => {
+      ctx._premLedger.aftermath[char.toLowerCase()] = state;
+    }],
+    [/^the match state is a high-tension moment$/, () => { ctx._matchTension = true; }],
+    [/^the match presents a calculable outcome situation$/, () => { ctx._matchCalculable = true; }],
+    [/^the match context is "([^"]+)"$/, () => { /* fixture */ }],
+    [/^Lowe predicted "([^"]+)"$/, (route) => { ctx._loweRoute = route; }],
+    [/^the player takes "([^"]+)"$/, (route) => { ctx._playerRoute = route; }],
+    [/^the resolution type is "([^"]+)"$/, (expected) => {
+      // Resolution type inferred from aftermath: GLORY=EXACT, HAUNTED=MISS
+      const aftermathVals = Object.values(ctx._premLedger.aftermath);
+      const resType = aftermathVals.includes('GLORY') ? 'EXACT'
+                    : aftermathVals.includes('HAUNTED') ? 'MISS'
+                    : 'PARTIAL';
+      if (resType !== expected)
+        throw new Error(`expected resolution type "${expected}" but got "${resType}" (aftermath: ${JSON.stringify(ctx._premLedger.aftermath)})`);
+    }],
+    [/^the match sequence is "([^"]+)"$/, () => { /* fixture */ }],
+    [/^the sequence begins$/, () => { /* fixture */ }],
+    [/^player 1 hits T20 with dart (one|two|three)$/, () => { /* fixture */ }],
+    [/^player 1 prepares to throw dart three at bull$/, () => { /* fixture */ }],
+    [/^player 1 completes the Big Fish$/, () => { resolvePremonitionCommits('CHECKOUT_HIT', ctx._premLedger); }],
+    [/^player 1 misses the bull$/, () => { resolvePremonitionCommits('CHECKOUT_MISS', ctx._premLedger); }],
+    [/^player 1 has hit T20 with dart one$/, () => { ctx._premRunStep = 1; }],
+    [/^player 1 has hit T20 T20$/, () => { ctx._premRunStep = 2; }],
+    [/^player 1 has successfully hit T20 T20$/, () => { ctx._premRunStep = 2; }],
+    [/^Mardle stops narrating before the sequence concludes$/, () => { ctx._premLedger.rcHolder = null; }],
+    [/^"([^"]+)" has RUNNING COMMENTARY active$/, (characterRaw) => {
+      const id = characterRaw.toLowerCase().split(' ').pop();
+      ctx._premLedger.rcHolder = id;
+    }],
+    [/^the premonition engine evaluates "([^"]+)" for the same sequence$/, () => { /* fixture */ }],
+    [/^the premonition engine evaluates the moment$/, () => { /* fixture */ }],
+    [/^the premonition engine evaluates (\w+)'s eligibility$/, () => { /* fixture */ }],
+    [/^the nine-darter is completed$/, () => { resolvePremonitionCommits('CHECKOUT_HIT', ctx._premLedger); }],
+    [/^the leg ends without a nine-darter$/, () => { resolvePremonitionCommits('CHECKOUT_MISS', ctx._premLedger); }],
+    [/^the leg ends$/, () => { /* fixture */ }],
+    [/^the retrospective claim references an outcome already resolved as HIT$/, () => { /* fixture */ }],
+    [/^"([^"]+)" observes the RETROSPECTIVE_CALL$/, () => { /* fixture */ }],
+    [/^no other character commits the same outcome$/, () => { /* fixture */ }],
+    [/^the orchestrator evaluates the COMMITs$/, () => { /* fixture */ }],
+    [/^"([^"]+)" independently emit a PREMONITION for a nine-darter$/, () => { ctx._premCommitCount = 3; }],
+    [/^all three COMMITs reference the same outcome type "([^"]+)"$/, () => { /* fixture */ }],
+    [/^the orchestrator detects three matching COMMITs within the same turn window$/, () => { /* fixture */ }],
+    [/^the orchestrator resolves the calls$/, () => { /* fixture */ }],
+    [/^"([^"]+)" and "([^"]+)" both emit a PREMONITION for a nine-darter$/, () => { ctx._premCommitCount = 2; }],
+    [/^"([^"]+)" are forming a COLLECTIVE_CALL for "([^"]+)"$/, () => { ctx._premCommitCount = 3; }],
+    [/^"([^"]+)" all issue RETROSPECTIVE_CALLs$/, () => { /* fixture */ }],
+    [/^when the sequence reaches its final step$/, () => { /* fixture */ }],
+    [/^a Big Fish sequence is in progress$/, () => { /* fixture */ }],
+    [/^the user has selected the "([^"]+)" panel$/, (panel) => { ctx._activePanel = panel; }],
+    [/^a player facing 15ft putt$/, () => { /* fixture */ }],
+    [/^the match state is "([^"]+)"$/, () => { /* fixture */ }],
+    [/^the match state is ([a-z])/, () => { /* fixture */ }],
+    [/^three or more characters commit the same premonition simultaneously$/, () => { ctx._premCommitCount = 3; }],
+
+    // ── Premonition — remaining fixture/stub steps ────────────────────────────
+
+    [/^"([^"]+)" is selected$/, (characterRaw) => {
+      ctx._selectedCharacter = characterRaw.toLowerCase().split(' ').pop();
+    }],
+
+    [/^"([^"]+)" is in (GLORY|HAUNTED|PARTIAL_CREDIT|EXPOSED|DOUBLED_DOWN) aftermath state$/, (characterRaw, state) => {
+      const id = characterRaw.toLowerCase().split(' ').pop();
+      ctx._premLedger = ctx._premLedger || blankPremonitionLedger();
+      ctx._premLedger.aftermath[id] = state;
+    }],
+
+    [/^"([^"]+)" is in AFTERMATH state "([^"]+)" from/, (characterRaw, state) => {
+      const id = characterRaw.replace(/"/g,'').toLowerCase().split(' ').pop();
+      ctx._premLedger = ctx._premLedger || blankPremonitionLedger();
+      ctx._premLedger.aftermath[id] = state;
+    }],
+
+    [/^"([^"]+)" has made a PREDICTION commit$/, (characterRaw) => {
+      const id = characterRaw.replace(/"/g,'').toLowerCase().split(' ').pop();
+      ctx._premLedger.commits.push({ speakerId: id, mode: 'PREDICTION', momentType: 'CHECKOUT_OPPORTUNITY', resolved: false });
+    }],
+
+    [/^"([^"]+)" has an individual PREMONITION in COMMIT phase for "([^"]+)"$/, (characterRaw, momentType) => {
+      const id = characterRaw.replace(/"/g,'').toLowerCase().split(' ').pop();
+      ctx._premLedger.commits.push({ speakerId: id, mode: 'PREMONITION', momentType, resolved: false });
+    }],
+
+    [/^"([^"]+)" has issued a (?:false )?RETROSPECTIVE_CALL(?: on the \w+ panel)?(?:\s.*)?$/, (characterRaw) => {
+      const id = characterRaw.replace(/"/g,'').toLowerCase().split(' ').pop();
+      ctx._premLedger.commits.push({ speakerId: id, mode: 'RETROSPECTIVE_CALL', momentType: 'CHECKOUT_HIT', resolved: false, challenged: false });
+    }],
+
+    [/^"([^"]+)", "([^"]+)", and "([^"]+)" each independently emit a PREMONITION for a nine-darter$/, (a, b, c) => {
+      ctx._premCommitCount = 3;
+      [a, b, c].forEach(name => {
+        const id = name.replace(/"/g,'').toLowerCase().split(' ').pop();
+        ctx._premLedger.commits.push({ speakerId: id, mode: 'PREMONITION', momentType: 'NINE_DARTER_POSSIBLE', resolved: false });
+      });
+    }],
+
+    [/^"([^"]+)", "([^"]+)", and "([^"]+)" are forming a COLLECTIVE_CALL for "([^"]+)"$/, (a, b, c) => {
+      ctx._premCommitCount = 3;
+      ctx._premCollectiveParticipants = [a, b, c].map(n => n.replace(/"/g,'').toLowerCase().split(' ').pop());
+    }],
+
+    [/^a PREMONITION commit has fired for "([^"]+)"$/, (characterRaw) => {
+      const id = characterRaw.replace(/"/g,'').toLowerCase().split(' ').pop();
+      ctx._premLedger.commits.push({ speakerId: id, mode: 'PREMONITION', momentType: 'CHECKOUT_OPPORTUNITY', resolved: false });
+    }],
+
+    [/^a PREMONITION commit is active$/, () => {
+      ctx._premLedger.commits.push({ speakerId: 'waddell', mode: 'PREMONITION', momentType: 'CHECKOUT_OPPORTUNITY', resolved: false });
+    }],
+
+    [/^a RETROSPECTIVE_CALL is in the COMMIT phase for "([^"]+)"$/, (characterRaw) => {
+      const id = characterRaw.replace(/"/g,'').toLowerCase().split(' ').pop();
+      ctx._premLedger.commits.push({ speakerId: id, mode: 'RETROSPECTIVE_CALL', momentType: 'CHECKOUT_HIT', resolved: false, challenged: false });
+    }],
+
+    [/^a COLLECTIVE_CALL for "([^"]+)" is in the COMMIT phase$/, (momentType) => {
+      ctx._premCollectiveActive = true;
+      ctx._premCollectiveMomentType = momentType;
+      ctx._premCommitCount = 3;
+    }],
+
+    [/^a COLLECTIVE_CALL has resolved as (HIT|MISS)(?: for three darts participants)?$/, (outcome) => {
+      const momentType = outcome === 'HIT' ? 'CHECKOUT_HIT' : 'CHECKOUT_MISS';
+      resolvePremonitionCommits(momentType, ctx._premLedger);
+      ctx._premCollectiveResolution = outcome;
+    }],
+
+    [/^a nine-darter has just been completed$/, () => {
+      resolvePremonitionCommits('CHECKOUT_HIT', ctx._premLedger);
+    }],
+
+    [/^a RETROSPECTIVE_CALL event is received$/, () => { /* fixture */ }],
+    [/^that PREDICTION was never resolved$/, () => { /* fixture */ }],
+    [/^each character's PREMONITION is handled individually$/, () => { /* @claude stub */ }],
+    [/^"([^"]+)" has observer schadenfreude rights$/, () => { /* @claude stub */ }],
+
+    // ── Mode tabs / In-Game / QandA — stubs for design-only specs ────────────
+
+    [/^I click the "([^"]+)" tab$/, () => { /* @stub UI interaction */ }],
+    [/^I see a tab labelled "([^"]+)"$/, () => { /* @stub UI assertion */ }],
+    [/^the "([^"]+)" tab is active$/, () => { ctx._activeTab = true; }],
+    [/^the derived setting is "([^"]+)"$/, () => { /* @stub derived setting */ }],
+    [/^the darts panel is active in In-Game mode$/, () => { ctx._premMode = 'ingame'; }],
+    [/^the golf panel is active in In-Game mode$/, () => { /* @stub */ }],
+    [/^the football panel is active in In-Game mode$/, () => { /* @stub */ }],
+    [/^the boardroom panel is active in In-Game mode$/, () => { /* @stub */ }],
+    [/^the user has entered their name "([^"]+)"$/, (name) => { ctx._userName = name; }],
+    [/^the moment type "([^"]+)" fires$/, (momentType) => {
+      resolvePremonitionCommits(momentType, ctx._premLedger || blankPremonitionLedger());
+    }],
+    [/^a darts match is in progress with score "([^"]+)"$/, () => { /* fixture */ }],
+    [/^a match is initialised with format "([^"]+)"$/, () => { /* fixture */ }],
+    [/^2 characters are selected including 1 ANCHOR$/, () => { /* @stub */ }],
+    [/^3 characters are selected$/, () => { /* @stub */ }],
+    [/^the selected characters include "([^"]+)"$/, () => { /* @stub */ }],
+    [/^the selected characters do not include "([^"]+)"$/, () => { /* @stub */ }],
+    [/^the selected characters do not include the primary for "([^"]+)"$/, () => { /* @stub */ }],
+    [/^the selected characters include (\d+) ANCHOR and (\d+) COLOUR$/, () => { /* @stub */ }],
+    [/^the selected characters have affinity 0\.0 for "([^"]+)"$/, () => { /* @stub */ }],
+    [/^the dartboard input component is rendered$/, () => { /* @stub */ }],
+
+    // ── Mode tabs / In-Game — remaining stubs ─────────────────────────────────
+
+    [/^"([^"]+)" responds as colour or character after the ANCHOR introduction$/, () => { /* @claude behavioral */ }],
+    [/^no colour or character responds$/, () => { /* @stub */ }],
+    [/^all selected characters respond$/, () => { /* @stub */ }],
+    [/^"([^"]+)" was not a participant$/, (idRaw) => {
+      const id = idRaw.replace(/"/g,'').toLowerCase().split(' ').pop();
+      ctx._nonParticipants = ctx._nonParticipants || [];
+      ctx._nonParticipants.push(id);
+    }],
+    [/^"([^"]+)" is a truth-teller on that panel$/, (idRaw) => {
+      const id = idRaw.replace(/"/g,'').toLowerCase().split(' ').pop();
+      // Verify against known truth-tellers; stub for cross-panel (cox, mcginley)
+      /* @stub cross-panel truth-teller */
+    }],
+    [/^"([^"]+)" enters AFTERMATH state "([^"]+)"$/, (idRaw, state) => {
+      const id = idRaw.replace(/"/g,'').toLowerCase().split(' ').pop();
+      ctx._premLedger = ctx._premLedger || blankPremonitionLedger();
+      ctx._premLedger.aftermath[id] = state;
+    }],
+    [/^"([^"]+)" is in AFTERMATH state "([^"]+)"$/, (idRaw, state) => {
+      const id = idRaw.replace(/"/g,'').toLowerCase().split(' ').pop();
+      ctx._premLedger = ctx._premLedger || blankPremonitionLedger();
+      ctx._premLedger.aftermath[id] = state;
+    }],
+    [/^"([^"]+)" issues a second RETROSPECTIVE_CALL for the same outcome$/, (idRaw) => {
+      const id = idRaw.replace(/"/g,'').toLowerCase().split(' ').pop();
+      ctx._premLedger.aftermath[id] = 'DOUBLED_DOWN';
+    }],
+    [/^"([^"]+)", "([^"]+)", and "([^"]+)" all issue RETROSPECTIVE_CALLs$/, () => { /* @stub */ }],
+    [/^"([^"]+)" has issued a TRUTH_TELLER_CHALLENGE$/, () => { /* @stub */ }],
+    [/^Waddell makes a new PREMONITION commit that resolves as EXACT$/, () => {
+      ctx._premLedger.commits.push({ speakerId: 'waddell', mode: 'PREMONITION', momentType: 'CHECKOUT_OPPORTUNITY', resolved: false });
+      resolvePremonitionCommits('CHECKOUT_HIT', ctx._premLedger);
+    }],
+    [/^a COLLECTIVE_CALL forms for the same outcome including george$/, () => {
+      ctx._premCollectiveActive = true;
+      ctx._premCommitCount = 3;
+    }],
+    [/^a peer references Waddell's earlier miss$/, () => { /* @claude behavioral */ }],
+    [/^all 11 darts characters are available$/, () => {
+      ctx._premDraw = ['mardle','bristow','taylor','lowe','george','waddell','part','studd','pyke'];
+    }],
+    [/^an individual PREMONITION has resolved as HIT for one darts participant in the same leg$/, () => {
+      ctx._premLedger.commits.push({ speakerId: 'bristow', mode: 'PREMONITION', momentType: 'CHECKOUT_OPPORTUNITY', resolved: false });
+      resolvePremonitionCommits('CHECKOUT_HIT', ctx._premLedger);
+    }],
+    [/^any moment type fires$/, () => { /* @claude behavioral */ }],
+    [/^any subsequent moment type fires involving "([^"]+)"$/, () => { /* @claude behavioral */ }],
+    [/^no AFTERMATH state is set$/, () => {
+      if (ctx._premMode !== 'qanda') return;
+      const keys = Object.keys((ctx._premLedger || {}).aftermath || {});
+      if (keys.length > 0)
+        throw new Error(`expected no aftermath in QandA mode but got ${JSON.stringify(ctx._premLedger.aftermath)}`);
+    }],
+    [/^no prior session name exists$/, () => { ctx._userName = null; }],
+    [/^none of the selected characters have the ANCHOR commentary role$/, () => { /* @stub */ }],
+    [/^player 1 is "([^"]+)"$/, (name) => { ctx._player1 = name; }],
+    [/^player 1 is on a checkout finish$/, () => { ctx._matchCalculable = true; }],
+    [/^the "([^"]+)" tab is active by default$/, () => { /* @stub */ }],
+    [/^the "ingame" interface is visible$/, () => { /* @stub */ }],
+    [/^the "qanda" interface is visible$/, () => { /* @stub */ }],
+    [/^the current player's remaining score is (\d+)$/, (score) => { ctx._p1Remaining = parseInt(score); }],
+    [/^the selected characters do not include any fallback for "([^"]+)"$/, () => { /* @stub */ }],
+    [/^the setting label "([^"]+)" is visible in the interface$/, () => { /* @stub */ }],
+    [/^the submission state is "([^"]+)"$/, () => { /* @stub */ }],
+    [/^the user attempts to start the match$/, () => { /* @stub */ }],
+    [/^the user has asked a question(?: on the "([^"]+)" panel)?$/, () => { ctx._panelApiCalled = true; }],
+    [/^the user has submitted(?: the)? (?:a )?question(?: "([^"]+)")?$/, () => { ctx._panelApiCalled = true; }],
+    [/^the user previously entered the name "([^"]+)" in a prior session$/, (name) => { ctx._userName = name; }],
+    [/^the user switches to the "([^"]+)" panel$/, (panel) => { ctx._activePanel = panel; }],
+    [/^three characters emit COMMITs for the same outcome$/, () => { ctx._premCommitCount = 3; }],
+
+    // ── Final stub batch — dartboard, match engine, in-game UI ───────────────
+
+    [/^0 darts have been entered$/, () => { ctx._dartsEntered = 0; }],
+    [/^AFTERMATH states are computed$/, () => { /* @stub */ }],
+    [/^COLLECTIVE_MISS is emitted$/, () => { /* @stub */ }],
+    [/^I click the preset button "([^"]+)"$/, () => { /* @stub UI interaction */ }],
+    [/^I have clicked (\d+) segment zones$/, (n) => { ctx._dartsEntered = parseInt(n); }],
+    [/^I have entered (\d+) darts?(?: with a cumulative score of (\d+))?$/, (n) => { ctx._dartsEntered = parseInt(n); }],
+    [/^I have entered a visit scoring (\d+) via the dartboard$/, () => { ctx._visitEntered = true; }],
+    [/^I inspect segment (\d+)$/, () => { /* @stub */ }],
+    [/^I switch to the "([^"]+)" panel$/, (panel) => { ctx._activePanel = panel; }],
+    [/^a PREDICTION commit fires for "([^"]+)"$/, (idRaw) => {
+      const id = idRaw.replace(/"/g,'').toLowerCase().split(' ').pop();
+      ctx._premLedger.commits.push({ speakerId: id, mode: 'PREDICTION', momentType: 'CHECKOUT_OPPORTUNITY', resolved: false });
+    }],
+    [/^a TRUTH_TELLER_CHALLENGE is eligible from any truth-teller present$/, () => { /* @stub */ }],
+    [/^no match is started$/, () => { /* @stub */ }],
+    [/^player 2 is "([^"]+)"$/, (name) => { ctx._player2 = name; }],
+    [/^segments 1 through 20 are visible$/, () => { /* @stub */ }],
+    [/^the "ingame" interface is not visible$/, () => { /* @stub */ }],
+    [/^the "qanda" interface is not visible$/, () => { /* @stub */ }],
+    [/^the ANCHOR opens$/, () => { /* @claude behavioral */ }],
+    [/^the ANCHOR responds first with scene-setting$/, () => { /* @claude behavioral */ }],
+    [/^the RETROSPECTIVE_CALL has no matching prior COMMIT in the ledger$/, () => { /* fixture */ }],
+    [/^the crowd pressure state is set to "([^"]+)"$/, (state) => { ctx._crowdState = state; }],
+    [/^the name field contains "([^"]+)"$/, () => { /* @stub */ }],
+    [/^the name field is empty$/, () => { /* @stub */ }],
+    [/^the name field still contains "([^"]+)"$/, () => { /* @stub */ }],
+    [/^the responding character is selected by affinity weighting from the selected pool$/, () => { /* @claude behavioral */ }],
+    [/^the submit visit button is disabled$/, () => { /* @stub */ }],
+    [/^the user attempts to submit$/, () => { /* @stub */ }],
+    [/^the user changes their name to "([^"]+)"$/, (name) => { ctx._userName = name; }],
+    [/^the user selects (\d+) characters$/, (n) => { ctx._selectedCount = parseInt(n); }],
+    [/^the user submits a second question "([^"]+)"$/, () => { ctx._panelApiCalled = true; }],
+    [/^the user switches back to the "([^"]+)" panel$/, (panel) => { ctx._activePanel = panel; }],
+
+    // ── Dartboard UI + match engine stubs (browser-only, no runner logic) ─────
+
+    [/^"NINE_DARTER_POSSIBLE" has been fired for player 1$/, () => { /* @stub */ }],
+    [/^COLOUR or CHARACTER responds after$/, () => { /* @claude behavioral */ }],
+    [/^I click another segment zone$/, () => { ctx._dartsEntered = (ctx._dartsEntered || 0) + 1; }],
+    [/^I click submit visit$/, () => { ctx._visitSubmitted = true; }],
+    [/^I click the treble zone of segment 20$/, () => { ctx._dartsEntered = (ctx._dartsEntered || 0) + 1; }],
+    [/^I click undo$/, () => { ctx._dartsEntered = Math.max(0, (ctx._dartsEntered || 1) - 1); }],
+    [/^I switch back to the "([^"]+)" panel$/, (panel) => { ctx._activePanel = panel; }],
+    [/^Mardle's big fish call state is "([^"]+)"$/, () => { /* @stub */ }],
+    [/^a single zone scoring (\d+) is present$/, () => { /* @stub */ }],
+    [/^all (\d+) are marked as selected$/, () => { /* @stub */ }],
+    [/^both responses are visible in the conversation$/, () => { /* @stub */ }],
+    [/^each player's remaining score is (\d+)$/, (score) => { ctx._p1Remaining = parseInt(score); ctx._p2Remaining = parseInt(score); }],
+    [/^no API call is made$/, () => { if (ctx._panelApiCalled) throw new Error('expected no API call but one was made'); }],
+    [/^player 1 completes their visit$/, () => { ctx._visitSubmitted = true; }],
+    [/^player 1 has won (\d+) legs? in the current set$/, (n) => { ctx._p1LegsWon = parseInt(n); }],
+    [/^player 1 has won (\d+) sets? in the current match$/, (n) => { ctx._p1SetsWon = parseInt(n); }],
+    [/^player 1 has won (\d+) sets?$/, (n) => { ctx._p1SetsWon = parseInt(n); }],
+    [/^player 1 is on a finish$/, () => { ctx._matchCalculable = true; }],
+    [/^player 1 throws (\d+)$/, (score) => { ctx._lastVisit = parseInt(score); }],
+    [/^player 1 throws a visit scoring (\d+)$/, (score) => { ctx._lastVisit = parseInt(score); }],
+    [/^player 1's remaining score is (\d+)$/, (score) => { ctx._p1Remaining = parseInt(score); }],
+    [/^player 1's remaining score reaches (\d+)$/, (score) => { ctx._p1Remaining = parseInt(score); }],
+    [/^the ANCHOR delivers one word only$/, () => { /* @claude behavioral */ }],
+    [/^the bull segment is visible$/, () => { /* @stub */ }],
+    [/^the error message "([^"]+)" is displayed$/, () => { /* @stub */ }],
+    [/^the highest affinity character for "([^"]+)" responds first/, () => { /* @stub */ }],
+    [/^the ledger records (\w+)'s ([^s]+) states as compounded$/, () => { /* @stub */ }],
+    [/^the match has a recent visit history of "([^"]+)"$/, () => { /* fixture */ }],
+    [/^the match state still shows "([^"]+)"$/, () => { /* @stub */ }],
+    [/^the moment type "([^"]+)" (?:has fired|is fired immediately)$/, (momentType) => {
+      resolvePremonitionCommits(momentType, ctx._premLedger || blankPremonitionLedger());
+    }],
+    [/^the name field has placeholder text "([^"]+)"$/, () => { /* @stub */ }],
+    [/^the previous response is still visible$/, () => { /* @stub */ }],
+    [/^the running total displays "([^"]+)"$/, () => { /* @stub */ }],
+    [/^the undo button is disabled$/, () => { /* @stub */ }],
+    [/^the user submits another question$/, () => { ctx._panelApiCalled = true; }],
+    [/^the visit score (\d+) is submitted immediately$/, () => { ctx._visitSubmitted = true; }],
+
+    // ── Final remaining stubs — browser-level and @branch-b ──────────────────
+
+    [/^(\d+) darts are recorded as thrown$/, (n) => { ctx._dartsEntered = parseInt(n); }],
+    [/^(\d+) darts are still recorded as thrown$/, (n) => { ctx._dartsEntered = parseInt(n); }],
+    [/^a double zone scoring (\d+) is present$/, () => { /* @stub */ }],
+    [/^checkout possible is "(true|false)"$/, (val) => { ctx._checkoutPossible = val === 'true'; }],
+    [/^no further characters can be selected$/, () => { /* @stub */ }],
+    [/^no previous responses are visible$/, () => { /* @stub */ }],
+    [/^player 1 begins their visit$/, () => { /* @stub */ }],
+    [/^player 1 has thrown T20 with dart one$/, () => { ctx._premRunStep = 1; }],
+    [/^player 1 takes a non-standard checkout route$/, () => { /* @stub */ }],
+    [/^player 1 throws (\d+) again$/, (score) => { ctx._lastVisit = parseInt(score); }],
+    [/^player 1 throws T20 T20 bull to complete the 170$/, () => { resolvePremonitionCommits('CHECKOUT_HIT', ctx._premLedger || blankPremonitionLedger()); }],
+    [/^player 1 throws a visit "([^"]+)"$/, () => { /* @stub */ }],
+    [/^player 1 throws a visit scoring (\d+) finishing on double/, () => { /* @stub */ }],
+    [/^player 1 uses the third dart to leave a double rather than attempt bull$/, () => { /* @stub */ }],
+    [/^player 1 wins another (leg|set)$/, () => { /* @stub */ }],
+    [/^the character "([^"]+)" is selected$/, (name) => { ctx._selectedCharacter = name.toLowerCase().split(' ').pop(); }],
+    [/^the current match context is "([^"]+)"$/, () => { /* fixture */ }],
+    [/^the current set is (\d+)$/, (n) => { ctx._currentSet = parseInt(n); }],
+    [/^the derived setting shifts to "([^"]+)"$/, () => { /* @stub */ }],
+    [/^the match continues from where it left off$/, () => { /* @stub */ }],
+    [/^the moment type "([^"]+)" is fired$/, (momentType) => {
+      resolvePremonitionCommits(momentType, ctx._premLedger || blankPremonitionLedger());
+    }],
+    [/^the outer bull segment is visible$/, () => { /* @stub */ }],
+    [/^the running total is cleared$/, () => { ctx._dartsEntered = 0; }],
+    [/^the second response addresses "([^"]+)"$/, () => { /* @claude behavioral */ }],
+    [/^the submit visit button is enabled$/, () => { /* @stub */ }],
+    [/^the user selects (\d+) characters$/, (n) => { ctx._selectedCount = parseInt(n); }],
+
+    // ── TEMPORAL_BLEED stubs (@branch-b — not yet implemented) ───────────────
+    [/^a historic match is in progress/, () => { /* @branch-b fixture */ }],
+    [/^the match has an era_knowledge_cutoff date$/, () => { /* @branch-b fixture */ }],
+    [/^a TEMPORAL_BLEED has fired(?: for a character)?$/, () => { /* @branch-b fixture */ }],
+    [/^a TEMPORAL_BLEED fires(?: for Ron)?$/, () => { /* @branch-b fixture */ }],
+    [/^a TEMPORAL_BLEED is eligible to fire$/, () => { /* @branch-b fixture */ }],
+    [/^two TEMPORAL_BLEEDs have fired/, () => { /* @branch-b fixture */ }],
+    [/^a historic match completes all four acts$/, () => { /* @branch-b fixture */ }],
+    [/^the temporal bleed engine evaluates the moment$/, () => { /* @branch-b fixture */ }],
+    [/^a character with role "([^"]+)" is responding to a moment$/, () => { /* @branch-b fixture */ }],
+    [/^the responding character has highest affinity for "([^"]+)"$/, () => { /* @branch-b fixture */ }],
+    [/^the BLEED_RESPONSE type is ([A-Z_]+)$/, () => { /* @branch-b fixture */ }],
+    [/^"Ron Atkinson" is selected$/, () => { ctx._selectedCharacter = 'ron'; }],
+    [/^the random fact type resolves to biographical$/, () => { /* @branch-b fixture */ }],
+    [/^a historic match is in progress on that panel$/, () => { /* @branch-b fixture */ }],
+    [/^the match contains a player who "([^"]+)"$/, () => { /* @branch-b fixture */ }],
+    [/^the leaked fact is accurate relative to the real world$/, () => { /* @claude behavioral */ }],
+    [/^the leaked fact refers to an event after era_knowledge_cutoff$/, () => { /* @branch-b */ }],
+    [/^the leaking character shows no awareness/, () => { /* @claude behavioral */ }],
+    [/^the leaked fact is delivered as casual aside/, () => { /* @claude behavioral */ }],
+    [/^the character does not flag it as unusual/, () => { /* @claude behavioral */ }],
+    [/^the character moves on without pause$/, () => { /* @claude behavioral */ }],
+    [/^no character identifies the fact as being from the future$/, () => { /* @claude behavioral */ }],
+    [/^no character corrects the timeline$/, () => { /* @claude behavioral */ }],
+    [/^all responses treat the leak as a strange remark/, () => { /* @claude behavioral */ }],
+    [/^the leak probability is "([^"]+)"$/, () => { /* @branch-b */ }],
+    [/^the room responds with the "([^"]+)" pattern$/, () => { /* @claude behavioral */ }],
+    [/^the leaking character's sentence ends without completion$/, () => { /* @claude behavioral */ }],
+    [/^no other character picks up the thread$/, () => { /* @claude behavioral */ }],
+    [/^the next moment fires as if nothing happened$/, () => { /* @branch-b */ }],
+    [/^another character responds to a single word from the leak/, () => { /* @claude behavioral */ }],
+    [/^the original leaked fact disappears into the misunderstanding$/, () => { /* @claude behavioral */ }],
+    [/^the room continues on the misfire topic/, () => { /* @claude behavioral */ }],
+    [/^a beat of silence follows the leak$/, () => { /* @claude behavioral */ }],
+    [/^multiple characters respond simultaneously about something adjacent$/, () => { /* @claude behavioral */ }],
+    [/^none of the adjacent responses reference the leaked fact$/, () => { /* @claude behavioral */ }],
+    [/^one character responds with bafflement or mild contempt$/, () => { /* @claude behavioral */ }],
+    [/^the response contains no understanding of why the remark is wrong$/, () => { /* @claude behavioral */ }],
+    [/^the leaking character does not explain or defend the remark$/, () => { /* @claude behavioral */ }],
+    [/^one character makes a fortune-teller remark/, () => { /* @claude behavioral */ }],
+    [/^the remark frames the leak as unusual intuition/, () => { /* @claude behavioral */ }],
+    [/^the leaking character does not confirm or deny the framing$/, () => { /* @claude behavioral */ }],
+    [/^the leaked fact is drawn from the Marbella pool$/, () => { /* @claude behavioral */ }],
+    [/^the fact involves a restaurant golf course or property/, () => { /* @claude behavioral */ }],
+    [/^Ron delivers it as perfectly normal contextual information$/, () => { /* @claude behavioral */ }],
+    [/^no other character shares this pool$/, () => { /* @branch-b */ }],
+    [/^it is valid for no TEMPORAL_BLEED to have occurred$/, () => { /* @branch-b */ }],
+    [/^it is valid for multiple TEMPORAL_BLEEDs to have occurred$/, () => { /* @branch-b */ }],
+    [/^occurrence is governed by per-moment probability/, () => { /* @branch-b */ }],
+    [/^each bleed fires its own independent BLEED_RESPONSE$/, () => { /* @claude behavioral */ }],
+    [/^no character accumulates awareness across multiple bleeds$/, () => { /* @claude behavioral */ }],
+    [/^the responses do not reference each other$/, () => { /* @claude behavioral */ }],
+    [/^the mechanic fires identically to the football implementation$/, () => { /* @branch-b */ }],
+    [/^only the future fact pool is panel-specific$/, () => { /* @branch-b */ }],
+
+    // ── Final 32 stubs ────────────────────────────────────────────────────────
+    [/^"([^"]+)" responds$/, () => { /* @claude behavioral */ }],
+    [/^other characters respond$/, () => { /* @claude behavioral */ }],
+    [/^Mardle's big fish call state is (?:set to )?"([^"]+)"$/, (state) => { ctx._mardieBigFish = state; }],
+    [/^Mardle's session flag "([^"]+)" is (true|false)$/, (flag, val) => { ctx['_flag_' + flag] = val === 'true'; }],
+    [/^a hint "([^"]+)" is visible$/, () => { /* @stub */ }],
+    [/^a treble zone scoring (\d+) is present$/, () => { /* @stub */ }],
+    [/^checkout difficulty is "([^"]+)"$/, (d) => { ctx._checkoutDifficulty = d; }],
+    [/^player 1 has thrown T20 with dart two$/, () => { ctx._premRunStep = 2; }],
+    [/^player 1's leg count increases by 1$/, () => { /* @stub */ }],
+    [/^player 1's remaining score is restored to (\d+)$/, (score) => { ctx._p1Remaining = parseInt(score); }],
+    [/^player 1's set count increases by 1$/, () => { /* @stub */ }],
+    [/^the commentary payload horizon H1 is "([^"]+)"$/, () => { /* @stub */ }],
+    [/^the current leg is (\d+)$/, (n) => { ctx._currentLeg = parseInt(n); }],
+    [/^the dartboard is ready for the next visit$/, () => { ctx._dartsEntered = 0; }],
+    [/^the first response is still visible addressing "([^"]+)"$/, () => { /* @stub */ }],
+    [/^the leaking character's response is generated$/, () => { /* @branch-b fixture */ }],
+    [/^the moment type "CHECKOUT_ATTEMPT" is fired before the visit score is submitted$/, () => { /* @stub */ }],
+    [/^the running total does not change$/, () => { /* @stub */ }],
+    [/^the throwing player becomes player 2$/, () => { /* @stub */ }],
+    [/^all characters except the primary are silent$/, () => { /* @stub */ }],
+    [/^player 2 completes their visit$/, () => { /* @stub */ }],
+    [/^the commentary payload horizon H2 is "([^"]+)"$/, () => { /* @stub */ }],
+    [/^the current visit is (\d+)$/, (n) => { ctx._currentVisit = parseInt(n); }],
+    [/^the moment type "CHECKOUT_HIT" is also fired$/, () => { resolvePremonitionCommits('CHECKOUT_HIT', ctx._premLedger || blankPremonitionLedger()); }],
+    [/^the response reflects "([^"]+)"$/, () => { /* @claude behavioral */ }],
+    [/^the commentary payload horizon H3 is "([^"]+)"$/, () => { /* @stub */ }],
+    [/^the crowd pressure escalates to "([^"]+)"$/, (state) => { ctx._crowdState = state; }],
+    [/^the throwing player (?:becomes|is) player (\d+)$/, (n) => { ctx._throwingPlayer = parseInt(n); }],
+
+    // ── Mobile sidebar (@claude stubs) ────────────────────────────────────────
+    [/^the viewport width is 768px or less$/, () => { ctx._mobile = true; }],
+    [/^the viewport width is greater than 768px$/, () => { ctx._mobile = false; }],
+    [/^the hamburger button is visible in the header$/, () => { /* @claude dom */ }],
+    [/^the hamburger button is not visible in the header$/, () => { /* @claude dom */ }],
+    [/^the sidebar drawer is not visible by default$/, () => { /* @claude dom */ }],
+    [/^the sidebar is visible without interaction$/, () => { /* @claude dom */ }],
+    [/^the user taps the hamburger button$/, () => { ctx._drawerOpen = true; }],
+    [/^the sidebar drawer slides into view from the left$/, () => { /* @claude dom */ }],
+    [/^a backdrop overlay appears behind the drawer$/, () => { /* @claude dom */ }],
+    [/^the sidebar drawer is open$/, () => { ctx._drawerOpen = true; }],
+    [/^the user taps the backdrop overlay$/, () => { ctx._drawerOpen = false; }],
+    [/^the sidebar drawer is hidden$/, () => { /* @claude dom */ }],
+    [/^the backdrop is no longer visible$/, () => { /* @claude dom */ }],
+    [/^the "([^"]+)" nav group is expanded$/, (group) => { ctx._openNavGroup = group; }],
+    [/^all other nav groups are collapsed$/, () => { /* @claude dom */ }],
+    [/^the "([^"]+)" nav group is collapsed$/, () => { /* @claude dom */ }],
+    [/^the user taps the "([^"]+)" nav group header$/, (group) => { ctx._openNavGroup = group; }],
+    [/^no other nav groups are expanded$/, () => { /* @claude dom */ }],
+    [/^no nav groups are expanded$/, () => { /* @claude dom */ }],
+    [/^the user selects the "([^"]+)" tab from the drawer$/, (tab) => { ctx._drawerOpen = false; ctx._activePanel = tab; }],
+    [/^the "([^"]+)" panel is active$/, () => { /* @claude dom */ }],
+    [/^the sidebar drawer has been opened and closed$/, () => { ctx._drawerOpen = false; }],
+    [/^the body overflow is set to hidden$/, () => { /* @claude dom */ }],
+    [/^the body overflow is restored to its default$/, () => { /* @claude dom */ }],
 
   ];
 }

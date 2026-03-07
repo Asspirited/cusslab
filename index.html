@@ -157,26 +157,50 @@
   }
   .tab .tab-icon { font-size: 13px; min-width: 16px; opacity: 0.8; }
 
-  /* Mobile: sidebar collapses to horizontal strip */
+  /* Mobile: accordion drawer */
+  #mob-nav-btn { display: none; }
+  #mob-nav-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 199;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+  }
+  #mob-nav-backdrop.mob-open { opacity: 1; pointer-events: auto; }
+
   @media (max-width: 768px) {
-    #app-body { flex-direction: column; }
+    #mob-nav-btn { display: flex; }
+    #mob-nav-backdrop { display: block; }
+
     nav {
-      width: 100%;
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 280px;
       min-width: 0;
-      height: auto;
-      position: relative;
-      flex-direction: row;
-      overflow-x: auto;
-      overflow-y: hidden;
-      border-right: none;
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 0;
+      height: 100vh;
+      flex-direction: column;
+      overflow-y: auto;
+      overflow-x: hidden;
+      border-right: 1px solid var(--border);
+      border-bottom: none;
+      padding-bottom: 40px;
+      transform: translateX(-100%);
+      transition: transform 0.25s ease;
+      z-index: 200;
     }
-    .nav-group { display: flex; flex-direction: row; margin-top: 0; border-top: none; }
-    .nav-group-header { display: none; }
-    .nav-items { flex-direction: row; }
-    .tab { padding: 10px 14px; border-left: none; border-bottom: 3px solid transparent; white-space: nowrap; }
-    .tab.active { border-bottom-color: var(--accent); border-left-color: transparent; }
+    nav.mob-open { transform: translateX(0); }
+
+    .nav-group { display: flex; flex-direction: column; margin-top: 0; border-top: 1px solid var(--border); }
+    .nav-group-header { display: flex; }
+    .nav-items { flex-direction: column; display: none; }
+    .nav-group.open > .nav-items { display: flex; }
+    .tab { padding: 9px 14px 9px 28px; border-left: 3px solid transparent; border-bottom: none; white-space: normal; }
+    .tab.active { border-left-color: var(--accent); border-bottom-color: transparent; background: rgba(255,45,85,0.07); }
   }
 
   main {
@@ -1121,9 +1145,12 @@
 <body>
 
 <header id="app-header">
-  <div class="logo-block">
-    <h1 id="app-title">HECKLER &amp; COX</h1>
-    <div id="slogan"></div>
+  <div style="display:flex;align-items:center;gap:12px;">
+    <button id="mob-nav-btn" onclick="openMobileNav()" aria-label="Open navigation" style="background:transparent;border:1px solid var(--border);border-radius:4px;padding:7px 11px;cursor:pointer;color:var(--text);font-size:18px;line-height:1;align-items:center;justify-content:center;">☰</button>
+    <div class="logo-block">
+      <h1 id="app-title">HECKLER &amp; COX</h1>
+      <div id="slogan"></div>
+    </div>
   </div>
   <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
     <div onclick="switchTab(event,'settings')" style="cursor:pointer;display:none;align-items:center;gap:8px;background:var(--card);border:1px solid var(--border);border-radius:6px;padding:6px 12px;">
@@ -1140,6 +1167,8 @@
     <div class="header-flags" id="header-flags">🇬🇧🇺🇸🇦🇺🇮🇪🇨🇦🇿🇦🇳🇿🇮🇳🇳🇬🇯🇲</div>
   </div>
 </header>
+
+<div id="mob-nav-backdrop" onclick="closeMobileNav()"></div>
 
 <!-- ── SIDEBAR + CONTENT WRAPPER ─────────────────────────────────── -->
 <div id="app-body">
@@ -1899,12 +1928,43 @@
   <div class="panel-title">⚽ Post Game Cunditry</div>
   <div class="panel-desc">Souness thinks everyone in this room is soft. Micah thinks everything is BRILLIANT. Neville has the clips. Carragher has suffered, specifically, through Liverpool, and that suffering gives him authority on all topics. Big Ron invented the language and the microphone is always on now. Put something in front of them.</div>
 
-  <div style="margin-bottom:20px;">
-    <label>The match. The incident. The player. The decision. Whatever it is.</label>
-    <textarea id="fb-input" rows="3" placeholder="e.g. Was that a red card? Should he have been dropped? Is modern football too soft? Was it a penalty?"></textarea>
+  <!-- Mode tabs -->
+  <div style="display:flex;gap:8px;margin-bottom:20px;">
+    <button id="fb-tab-qanda" class="btn-secondary" onclick="Football.switchMode('qanda')" style="flex:1;font-size:13px;padding:8px 12px;border-color:var(--accent);color:var(--accent);">The Pub After</button>
+    <button id="fb-tab-ingame" class="btn-secondary" onclick="Football.switchMode('ingame')" style="flex:1;font-size:13px;padding:8px 12px;">Desk by the Cornerflag</button>
   </div>
 
-  <button class="btn" onclick="Football.discuss()" id="fb-btn">TO THE PUB ⚽</button>
+  <!-- Q&A mode -->
+  <div id="fb-qanda-view">
+    <div style="margin-bottom:20px;">
+      <label>The match. The incident. The player. The decision. Whatever it is.</label>
+      <textarea id="fb-input" rows="3" placeholder="e.g. Was that a red card? Should he have been dropped? Is modern football too soft? Was it a penalty?"></textarea>
+    </div>
+    <button class="btn" onclick="Football.discuss()" id="fb-btn">TO THE PUB ⚽</button>
+  </div>
+
+  <!-- In-Game mode (Desk by the Cornerflag) -->
+  <div id="fb-ingame-view" style="display:none;">
+    <div style="margin-bottom:14px;">
+      <label style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);display:block;margin-bottom:4px;">Situation (optional)</label>
+      <input type="text" id="fb-situation" placeholder="e.g. 89th minute, 1-0 up, left back injured" style="width:100%;box-sizing:border-box;padding:8px;background:var(--card);border:1px solid var(--border);border-radius:4px;color:var(--text);font-size:14px;">
+    </div>
+    <div style="margin-bottom:16px;">
+      <label>Match moment</label>
+      <select id="fb-moment" style="width:100%;padding:10px;background:var(--card);border:1px solid var(--border);border-radius:4px;color:var(--text);font-size:14px;">
+        <option value="">-- Select moment --</option>
+        <option value="GOAL">Goal scored</option>
+        <option value="PENALTY">Penalty — awarded</option>
+        <option value="RED_CARD">Red card</option>
+        <option value="VAR_DECISION">VAR decision</option>
+        <option value="HALF_TIME">Half time</option>
+        <option value="FULL_TIME">Full time</option>
+        <option value="SUBSTITUTION">Substitution</option>
+        <option value="INJURY">Player down / injury</option>
+      </select>
+    </div>
+    <button class="btn" onclick="Football.callMoment()" id="fb-moment-btn">TO THE DESK ⚽</button>
+  </div>
 
   <div id="fb-output" style="display:none;margin-top:24px;">
     <div id="fb-responses"></div>
@@ -1915,7 +1975,7 @@
       <button class="feedback-btn" onclick="panelRating(event,'football','🤣')" title="Brilliant">🤣</button>
       <button class="btn-secondary" onclick="showAskUs('football')" style="margin-left:8px;font-size:12px;padding:6px 12px;">Ask us</button>
     </div>
-    <button class="btn-secondary" onclick="Football.discuss()" style="margin-top:12px;">NEXT ROUND 🔄</button>
+    <button class="btn-secondary" onclick="Football.nextRound()" style="margin-top:12px;">NEXT ROUND 🔄</button>
   </div>
 </div>
 
@@ -1924,13 +1984,45 @@
   <div class="panel-title">⛳ The 19th Hole</div>
   <div class="panel-desc">Faldo has cycled back and thought about this. Butch Harmon sees something in the swing nobody else sees — his left eye may be operating independently. Coltart is fine. He is fine about Valderrama. He would like to be clear about that. Put a shot, a round, or a player in front of them.</div>
 
-  <div style="margin-bottom:20px;">
-    <div id="gf-round-indicator" style="display:none;margin-bottom:12px;padding:8px 14px;border-radius:6px;background:rgba(255,215,0,0.08);border:1px solid rgba(255,215,0,0.2);font-size:13px;font-weight:600;letter-spacing:0.05em;color:#ffd700;"></div>
-    <label>The shot. The player. The hole. The round. The decision.</label>
-    <textarea id="gf-input" rows="3" placeholder="e.g. Was that the right club selection? Can he win from here? What does that swing tell you?"></textarea>
+  <!-- Mode tabs -->
+  <div style="display:flex;gap:8px;margin-bottom:20px;">
+    <button id="gf-tab-qanda" class="btn-secondary" onclick="Golf.switchMode('qanda')" style="flex:1;font-size:13px;padding:8px 12px;border-color:var(--accent);color:var(--accent);">The 19th Hole</button>
+    <button id="gf-tab-ingame" class="btn-secondary" onclick="Golf.switchMode('ingame')" style="flex:1;font-size:13px;padding:8px 12px;">On the Course</button>
   </div>
 
-  <button class="btn" onclick="Golf.discuss()" id="gf-btn">INTO THE 19TH ⛳</button>
+  <!-- Q&A mode -->
+  <div id="gf-qanda-view">
+    <div style="margin-bottom:20px;">
+      <div id="gf-round-indicator" style="display:none;margin-bottom:12px;padding:8px 14px;border-radius:6px;background:rgba(255,215,0,0.08);border:1px solid rgba(255,215,0,0.2);font-size:13px;font-weight:600;letter-spacing:0.05em;color:#ffd700;"></div>
+      <label>The shot. The player. The hole. The round. The decision.</label>
+      <textarea id="gf-input" rows="3" placeholder="e.g. Was that the right club selection? Can he win from here? What does that swing tell you?"></textarea>
+    </div>
+    <button class="btn" onclick="Golf.discuss()" id="gf-btn">INTO THE 19TH ⛳</button>
+  </div>
+
+  <!-- In-Game mode (On the Course) -->
+  <div id="gf-ingame-view" style="display:none;">
+    <div style="margin-bottom:14px;">
+      <label style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);display:block;margin-bottom:4px;">Situation (optional)</label>
+      <input type="text" id="gf-situation" placeholder="e.g. 14th hole, -4 through 13, wind into" style="width:100%;box-sizing:border-box;padding:8px;background:var(--card);border:1px solid var(--border);border-radius:4px;color:var(--text);font-size:14px;">
+    </div>
+    <div style="margin-bottom:16px;">
+      <label>Shot moment</label>
+      <select id="gf-moment" style="width:100%;padding:10px;background:var(--card);border:1px solid var(--border);border-radius:4px;color:var(--text);font-size:14px;">
+        <option value="">-- Select moment --</option>
+        <option value="TEE_SHOT">Tee shot</option>
+        <option value="APPROACH">Approach shot</option>
+        <option value="CHIP">Chip</option>
+        <option value="PUTT">Putt</option>
+        <option value="BIRDIE">Birdie</option>
+        <option value="EAGLE">Eagle</option>
+        <option value="BOGEY">Bogey</option>
+        <option value="HOLE_COMPLETE">Hole complete</option>
+        <option value="ROUND_COMPLETE">Round complete</option>
+      </select>
+    </div>
+    <button class="btn" onclick="Golf.callMoment()" id="gf-moment-btn">ON THE COURSE ⛳</button>
+  </div>
 
   <div id="gf-output" style="display:none;margin-top:24px;">
     <div id="gf-responses"></div>
@@ -1941,22 +2033,70 @@
       <button class="feedback-btn" onclick="panelRating(event,'golf','🤣')" title="Brilliant">🤣</button>
       <button class="btn-secondary" onclick="showAskUs('golf')" style="margin-left:8px;font-size:12px;padding:6px 12px;">Ask us</button>
     </div>
-    <button class="btn-secondary" onclick="Golf.discuss()" style="margin-top:12px;">NEXT ROUND 🔄</button>
+    <button class="btn-secondary" onclick="Golf.nextRound()" style="margin-top:12px;">NEXT ROUND 🔄</button>
   </div>
 </div>
 
 <!-- ============ WATCHING THE OCHE (DARTS) ============ -->
 <div class="panel" id="panel-darts">
   <div class="panel-title">🎯 Watching the Oche</div>
-  <div class="panel-desc">Five from seven, drawn at session start. Bristow made Taylor. Taylor knows it. George lost 6-0 to a Canadian no one had heard of. Waddell is narrating this in heroic couplets. Put something in front of them.</div>
+  <div class="panel-desc">Five from nine, drawn at session start. Bristow made Taylor. Taylor knows it. George lost 6-0 to a Canadian no one had heard of. Waddell is narrating this in heroic couplets. Put something in front of them.</div>
 
-  <div style="margin-bottom:20px;">
-    <div id="dt-crowd-indicator" style="display:none;margin-bottom:12px;padding:8px 14px;border-radius:6px;background:rgba(255,102,51,0.08);border:1px solid rgba(255,102,51,0.2);font-size:13px;font-weight:600;letter-spacing:0.05em;color:#ff6633;"></div>
-    <label>The throw. The player. The finish. The match. The moment.</label>
-    <textarea id="dt-input" rows="3" placeholder="e.g. Was that the right double to go for? Can he win from here? Was the nine-darter the greatest moment in darts history?"></textarea>
+  <!-- Mode tabs: Players' Lounge (Q&A) / Watching the Oche (In-Game) -->
+  <div style="display:flex;gap:8px;margin-bottom:20px;">
+    <button id="dt-tab-qanda" class="btn-secondary" onclick="Darts.switchMode('qanda')" style="flex:1;font-size:13px;padding:8px 12px;border-color:var(--accent);color:var(--accent);">Players' Lounge</button>
+    <button id="dt-tab-ingame" class="btn-secondary" onclick="Darts.switchMode('ingame')" style="flex:1;font-size:13px;padding:8px 12px;">Watching the Oche</button>
   </div>
 
-  <button class="btn" onclick="Darts.discuss()" id="dt-btn">TO THE OCHE 🎯</button>
+  <!-- Q&A mode -->
+  <div id="dt-qanda-view">
+    <div style="margin-bottom:20px;">
+      <div id="dt-crowd-indicator" style="display:none;margin-bottom:12px;padding:8px 14px;border-radius:6px;background:rgba(255,102,51,0.08);border:1px solid rgba(255,102,51,0.2);font-size:13px;font-weight:600;letter-spacing:0.05em;color:#ff6633;"></div>
+      <label>The throw. The player. The finish. The match. The moment.</label>
+      <textarea id="dt-input" rows="3" placeholder="e.g. Was that the right double to go for? Can he win from here? Was the nine-darter the greatest moment in darts history?"></textarea>
+    </div>
+    <button class="btn" onclick="Darts.discuss()" id="dt-btn">TO THE OCHE 🎯</button>
+  </div>
+
+  <!-- In-Game mode (Watching the Oche) -->
+  <div id="dt-ingame-view" style="display:none;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
+      <div>
+        <label style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);display:block;margin-bottom:4px;">Player 1 remaining</label>
+        <input type="number" id="dt-p1" value="501" min="0" max="501" style="width:100%;box-sizing:border-box;padding:8px;background:var(--card);border:1px solid var(--border);border-radius:4px;color:var(--text);font-size:22px;font-family:'Bebas Neue',sans-serif;letter-spacing:2px;text-align:center;">
+      </div>
+      <div>
+        <label style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);display:block;margin-bottom:4px;">Player 2 remaining</label>
+        <input type="number" id="dt-p2" value="501" min="0" max="501" style="width:100%;box-sizing:border-box;padding:8px;background:var(--card);border:1px solid var(--border);border-radius:4px;color:var(--text);font-size:22px;font-family:'Bebas Neue',sans-serif;letter-spacing:2px;text-align:center;">
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+      <div>
+        <label style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);display:block;margin-bottom:4px;">Leg</label>
+        <input type="number" id="dt-leg" value="1" min="1" max="99" style="width:100%;box-sizing:border-box;padding:8px;background:var(--card);border:1px solid var(--border);border-radius:4px;color:var(--text);font-size:16px;text-align:center;">
+      </div>
+      <div>
+        <label style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);display:block;margin-bottom:4px;">Set</label>
+        <input type="number" id="dt-set" value="1" min="1" max="99" style="width:100%;box-sizing:border-box;padding:8px;background:var(--card);border:1px solid var(--border);border-radius:4px;color:var(--text);font-size:16px;text-align:center;">
+      </div>
+    </div>
+    <div style="margin-bottom:16px;">
+      <label>Match moment</label>
+      <select id="dt-moment" style="width:100%;padding:10px;background:var(--card);border:1px solid var(--border);border-radius:4px;color:var(--text);font-size:14px;">
+        <option value="">-- Select moment --</option>
+        <option value="CHECKOUT_OPPORTUNITY">Checkout opportunity</option>
+        <option value="BIG_FISH">Big Fish — 170 on the board</option>
+        <option value="NINE_DARTER_POSSIBLE">Nine-darter possible</option>
+        <option value="CHECKOUT_HIT">Checkout — hit</option>
+        <option value="CHECKOUT_MISS">Checkout — miss / bust</option>
+        <option value="LEG_WON">Leg won</option>
+        <option value="SET_WON">Set won</option>
+        <option value="MATCH_WON">Match won</option>
+      </select>
+    </div>
+    <div id="dt-premonition-status" style="display:none;margin-bottom:14px;padding:8px 14px;border-radius:6px;background:rgba(100,100,200,0.08);border:1px solid rgba(100,100,200,0.2);font-size:12px;color:#8888cc;"></div>
+    <button class="btn" onclick="Darts.callMoment()" id="dt-moment-btn">CALL IT 🎯</button>
+  </div>
 
   <div id="dt-output" style="display:none;margin-top:24px;">
     <div id="dt-responses"></div>
@@ -1967,7 +2107,7 @@
       <button class="feedback-btn" onclick="panelRating(event,'darts','🤣')" title="Brilliant">🤣</button>
       <button class="btn-secondary" onclick="showAskUs('darts')" style="margin-left:8px;font-size:12px;padding:6px 12px;">Ask us</button>
     </div>
-    <button class="btn-secondary" onclick="Darts.discuss()" style="margin-top:12px;">NEXT ROUND 🔄</button>
+    <button class="btn-secondary" id="dt-next-btn" onclick="Darts.nextRound()" style="margin-top:12px;">NEXT ROUND 🔄</button>
   </div>
 </div>
 
@@ -1976,13 +2116,45 @@
   <div class="panel-title">🏏 The Long Room</div>
   <div class="panel-desc">Boycott has thought about this. His average should be higher. Bumble finds everything magnificent and draws with Zimbabwe. Warne would like to discuss captaincy — also, back yourself. Put a match, a player, or a decision in front of them.</div>
 
-  <div style="margin-bottom:20px;">
-    <div id="lr-round-indicator" style="display:none;margin-bottom:12px;padding:8px 14px;border-radius:6px;background:rgba(0,229,255,0.06);border:1px solid rgba(0,229,255,0.2);font-size:13px;font-weight:600;letter-spacing:0.05em;color:#00e5ff;"></div>
-    <label>The match. The player. The shot. The selection. The era.</label>
-    <textarea id="lr-input" rows="3" placeholder="e.g. Was that the right declaration? Should England have picked him? What does that technique tell you?"></textarea>
+  <!-- Mode tabs -->
+  <div style="display:flex;gap:8px;margin-bottom:20px;">
+    <button id="lr-tab-qanda" class="btn-secondary" onclick="LongRoom.switchMode('qanda')" style="flex:1;font-size:13px;padding:8px 12px;border-color:var(--accent);color:var(--accent);">The Long Room</button>
+    <button id="lr-tab-ingame" class="btn-secondary" onclick="LongRoom.switchMode('ingame')" style="flex:1;font-size:13px;padding:8px 12px;">At the Crease</button>
   </div>
 
-  <button class="btn" onclick="LongRoom.discuss()" id="lr-btn">INTO THE LONG ROOM 🏏</button>
+  <!-- Q&A mode -->
+  <div id="lr-qanda-view">
+    <div style="margin-bottom:20px;">
+      <div id="lr-round-indicator" style="display:none;margin-bottom:12px;padding:8px 14px;border-radius:6px;background:rgba(0,229,255,0.06);border:1px solid rgba(0,229,255,0.2);font-size:13px;font-weight:600;letter-spacing:0.05em;color:#00e5ff;"></div>
+      <label>The match. The player. The shot. The selection. The era.</label>
+      <textarea id="lr-input" rows="3" placeholder="e.g. Was that the right declaration? Should England have picked him? What does that technique tell you?"></textarea>
+    </div>
+    <button class="btn" onclick="LongRoom.discuss()" id="lr-btn">INTO THE LONG ROOM 🏏</button>
+  </div>
+
+  <!-- In-Game mode (At the Crease) -->
+  <div id="lr-ingame-view" style="display:none;">
+    <div style="margin-bottom:14px;">
+      <label style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);display:block;margin-bottom:4px;">Situation (optional)</label>
+      <input type="text" id="lr-situation" placeholder="e.g. over 34, 180-4, tail exposed, pitch turning" style="width:100%;box-sizing:border-box;padding:8px;background:var(--card);border:1px solid var(--border);border-radius:4px;color:var(--text);font-size:14px;">
+    </div>
+    <div style="margin-bottom:16px;">
+      <label>Match moment</label>
+      <select id="lr-moment" style="width:100%;padding:10px;background:var(--card);border:1px solid var(--border);border-radius:4px;color:var(--text);font-size:14px;">
+        <option value="">-- Select moment --</option>
+        <option value="DELIVERY">Delivery</option>
+        <option value="BOUNDARY_FOUR">Boundary — four</option>
+        <option value="BOUNDARY_SIX">Boundary — six</option>
+        <option value="WICKET">Wicket</option>
+        <option value="OVER_COMPLETE">Over complete</option>
+        <option value="DRS_REVIEW">DRS review</option>
+        <option value="FIFTY">Fifty</option>
+        <option value="HUNDRED">Hundred</option>
+        <option value="INNINGS_COMPLETE">Innings complete</option>
+      </select>
+    </div>
+    <button class="btn" onclick="LongRoom.callMoment()" id="lr-moment-btn">AT THE CREASE 🏏</button>
+  </div>
 
   <div id="lr-output" style="display:none;margin-top:24px;">
     <div id="lr-responses"></div>
@@ -1993,7 +2165,7 @@
       <button class="feedback-btn" onclick="panelRating(event,'cricket','🤣')" title="Brilliant">🤣</button>
       <button class="btn-secondary" onclick="showAskUs('cricket')" style="margin-left:8px;font-size:12px;padding:6px 12px;">Ask us</button>
     </div>
-    <button class="btn-secondary" onclick="LongRoom.discuss()" style="margin-top:12px;">NEXT BALL 🔄</button>
+    <button class="btn-secondary" onclick="LongRoom.nextRound()" style="margin-top:12px;">NEXT BALL 🔄</button>
   </div>
 </div>
 
@@ -4045,11 +4217,33 @@ const App = (() => {
       const grpEl = document.getElementById('ng-' + groupKey);
       if (grpEl) grpEl.classList.add('active');
     }
+    // Close mobile drawer after navigation
+    closeMobileNav();
   }
 
   function toggleNavGroup(key) {
-    // On desktop the groups are always visible — this is a noop for now
-    // but wired up for future collapse behaviour
+    if (window.innerWidth > 768) return;
+    const target = document.getElementById('ng-' + key);
+    if (!target) return;
+    const isOpen = target.classList.contains('open');
+    document.querySelectorAll('.nav-group').forEach(g => g.classList.remove('open'));
+    if (!isOpen) target.classList.add('open');
+  }
+
+  function openMobileNav() {
+    // Reset accordion to active group
+    document.querySelectorAll('.nav-group').forEach(g => {
+      g.classList.toggle('open', g.classList.contains('active'));
+    });
+    document.getElementById('sidebar').classList.add('mob-open');
+    document.getElementById('mob-nav-backdrop').classList.add('mob-open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeMobileNav() {
+    document.getElementById('sidebar').classList.remove('mob-open');
+    document.getElementById('mob-nav-backdrop').classList.remove('mob-open');
+    document.body.style.overflow = '';
   }
 
   function toggleSkin() {
@@ -4118,7 +4312,7 @@ const App = (() => {
     }, 6000);
   }
 
-  return { init, switchTab, toggleSkin };
+  return { init, switchTab, toggleSkin, toggleNavGroup, openMobileNav, closeMobileNav };
 })();
 
 // ============================================================
@@ -8655,6 +8849,8 @@ const ExperimentRunner = (() => {
 function switchTab(evt, name)        { App.switchTab(evt, name); }
 function toggleSkin()                { App.toggleSkin(); }
 function toggleNavGroup(key)         { App.toggleNavGroup(key); }
+function openMobileNav()             { App.openMobileNav(); }
+function closeMobileNav()            { App.closeMobileNav(); }
 
 // Comedy Science
 function showScienceSection(id, btn) { ComedyScience.showSection(id, btn); }
@@ -10643,7 +10839,47 @@ INTER-PANEL: Ron — the gold is the portal to everything Cox wants to say; trea
     if (body) { body.style.color = ''; body.style.fontStyle = ''; body.textContent = text || '…'; }
   }
 
-  return { discuss };
+  const FB_MOMENT_LABELS = {
+    GOAL:         'Goal scored',
+    PENALTY:      'Penalty — awarded',
+    RED_CARD:     'Red card',
+    VAR_DECISION: 'VAR decision',
+    HALF_TIME:    'Half time',
+    FULL_TIME:    'Full time',
+    SUBSTITUTION: 'Substitution',
+    INJURY:       'Player down / injury',
+  };
+
+  function callMoment() {
+    const momentType = (document.getElementById('fb-moment') || {}).value;
+    if (!momentType) { alert('Select a moment first.'); return; }
+    const situation = ((document.getElementById('fb-situation') || {}).value || '').trim();
+    const label = FB_MOMENT_LABELS[momentType] || momentType;
+    const prompt = situation ? `${label} — ${situation}` : label;
+    const inp = document.getElementById('fb-input');
+    if (inp) inp.value = prompt;
+    discuss();
+  }
+
+  function switchMode(mode) {
+    sessionStorage.setItem('fb-mode', mode);
+    const isIngame = mode === 'ingame';
+    document.getElementById('fb-qanda-view').style.display  = isIngame ? 'none' : '';
+    document.getElementById('fb-ingame-view').style.display = isIngame ? ''     : 'none';
+    const activeStyle   = 'border-color:var(--accent);color:var(--accent);';
+    const inactiveStyle = '';
+    document.getElementById('fb-tab-qanda').style.cssText  = isIngame ? inactiveStyle : activeStyle;
+    document.getElementById('fb-tab-ingame').style.cssText = isIngame ? activeStyle   : inactiveStyle;
+    const out = document.getElementById('fb-output');
+    if (out) out.style.display = 'none';
+  }
+
+  function nextRound() {
+    const mode = sessionStorage.getItem('fb-mode') || 'qanda';
+    if (mode === 'ingame') callMoment(); else discuss();
+  }
+
+  return { discuss, callMoment, switchMode, nextRound };
 })();
 
 // ============================================================
@@ -11508,7 +11744,48 @@ NEVER SAYS: Anything bitter about the career ending. Anything suggesting comment
     if (body) { body.style.color = ''; body.style.fontStyle = ''; body.textContent = text || '…'; }
   }
 
-  return { discuss };
+  const GF_MOMENT_LABELS = {
+    TEE_SHOT:       'Tee shot',
+    APPROACH:       'Approach shot',
+    CHIP:           'Chip',
+    PUTT:           'Putt',
+    BIRDIE:         'Birdie',
+    EAGLE:          'Eagle',
+    BOGEY:          'Bogey',
+    HOLE_COMPLETE:  'Hole complete',
+    ROUND_COMPLETE: 'Round complete',
+  };
+
+  function callMoment() {
+    const momentType = (document.getElementById('gf-moment') || {}).value;
+    if (!momentType) { alert('Select a moment first.'); return; }
+    const situation = ((document.getElementById('gf-situation') || {}).value || '').trim();
+    const label = GF_MOMENT_LABELS[momentType] || momentType;
+    const prompt = situation ? `${label} — ${situation}` : label;
+    const inp = document.getElementById('gf-input');
+    if (inp) inp.value = prompt;
+    discuss();
+  }
+
+  function switchMode(mode) {
+    sessionStorage.setItem('gf-mode', mode);
+    const isIngame = mode === 'ingame';
+    document.getElementById('gf-qanda-view').style.display  = isIngame ? 'none' : '';
+    document.getElementById('gf-ingame-view').style.display = isIngame ? ''     : 'none';
+    const activeStyle   = 'border-color:var(--accent);color:var(--accent);';
+    const inactiveStyle = '';
+    document.getElementById('gf-tab-qanda').style.cssText  = isIngame ? inactiveStyle : activeStyle;
+    document.getElementById('gf-tab-ingame').style.cssText = isIngame ? activeStyle   : inactiveStyle;
+    const out = document.getElementById('gf-output');
+    if (out) out.style.display = 'none';
+  }
+
+  function nextRound() {
+    const mode = sessionStorage.getItem('gf-mode') || 'qanda';
+    if (mode === 'ingame') callMoment(); else discuss();
+  }
+
+  return { discuss, callMoment, switchMode, nextRound };
 })();
 
 // ============================================================
@@ -11887,6 +12164,149 @@ INTER-PANEL: Lowe — natural affinity; both precise, both restrained; most comf
     },
   };
 
+  // ── Premonition Engine ───────────────────────────────────────────────────────
+  // premonitionAffinity: 0.0–1.0 per mode. truth_teller: challenges false claims.
+  // Mirrors character builder attribute 13 in domain-model.md.
+
+  const DARTS_PREMONITION_AFFINITIES = {
+    mardle:  { premonition: 0.70, prediction: 0.30, running_commentary: 0.80, retrospective_call: 0.60, collective_call: 0.50 },
+    bristow: { premonition: 0.50, prediction: 0.45, running_commentary: 0.40, retrospective_call: 0.40, collective_call: 0.30 },
+    taylor:  { premonition: 0.40, prediction: 0.55, running_commentary: 0.50, retrospective_call: 0.25, collective_call: 0.25 },
+    lowe:    { premonition: 0.20, prediction: 0.80, running_commentary: 0.30, retrospective_call: 0.10, collective_call: 0.20, truth_teller: true },
+    george:  { premonition: 0.60, prediction: 0.30, running_commentary: 0.50, retrospective_call: 0.70, collective_call: 0.60 },
+    waddell: { premonition: 0.80, prediction: 0.20, running_commentary: 0.70, retrospective_call: 0.50, collective_call: 0.60 },
+    part:    { premonition: 0.20, prediction: 0.80, running_commentary: 0.30, retrospective_call: 0.10, collective_call: 0.20, truth_teller: true },
+    studd:   { premonition: 0.40, prediction: 0.70, running_commentary: 0.60, retrospective_call: 0.20, collective_call: 0.40, truth_teller: true },
+    pyke:    { premonition: 0.50, prediction: 0.50, running_commentary: 0.50, retrospective_call: 0.30, collective_call: 0.30 },
+  };
+
+  // Ledger: { commits: [{speakerId, mode, momentType, resolved}], aftermath: {id: state}, rcHolder: id|null }
+  const _BLANK_LEDGER = () => ({ commits: [], aftermath: {}, rcHolder: null });
+
+  function _getLedger() {
+    try { return JSON.parse(sessionStorage.getItem('darts-premonition') || 'null') || _BLANK_LEDGER(); }
+    catch { return _BLANK_LEDGER(); }
+  }
+
+  function _setLedger(l) { sessionStorage.setItem('darts-premonition', JSON.stringify(l)); }
+
+  // Attempt a probabilistic commit for speakerId given the moment type.
+  function _maybeCommit(speakerId, momentType, ledger) {
+    const aff = DARTS_PREMONITION_AFFINITIES[speakerId] || {};
+    const alreadyOpen = ledger.commits.some(c => c.speakerId === speakerId && !c.resolved);
+    if (alreadyOpen) return;
+    const isCalculable = ['CHECKOUT_OPPORTUNITY', 'BIG_FISH'].includes(momentType);
+    const isMultiStep  = ['NINE_DARTER_POSSIBLE'].includes(momentType);
+    let mode, affScore;
+    if (isCalculable) { mode = 'PREDICTION'; affScore = aff.prediction || 0; }
+    else if (isMultiStep) { mode = 'RUNNING_COMMENTARY'; affScore = aff.running_commentary || 0; }
+    else { mode = 'PREMONITION'; affScore = aff.premonition || 0; }
+    if (Math.random() < affScore * 0.7) {
+      ledger.commits.push({ speakerId, mode, momentType, resolved: false });
+    }
+  }
+
+  // Assign RUNNING_COMMENTARY holder to highest-affinity character in draw.
+  function _assignRC(draw, momentType, ledger) {
+    if (momentType !== 'NINE_DARTER_POSSIBLE' || ledger.rcHolder) return;
+    let best = null, bestScore = -1;
+    for (const id of draw) {
+      const score = (DARTS_PREMONITION_AFFINITIES[id] || {}).running_commentary || 0;
+      if (score > bestScore) { best = id; bestScore = score; }
+    }
+    ledger.rcHolder = best;
+  }
+
+  // Resolve open commits when a terminal moment fires.
+  function _resolveCommits(momentType, ledger) {
+    const HIT_MAP = {
+      CHECKOUT_HIT:  ['CHECKOUT_OPPORTUNITY', 'BIG_FISH'],
+      LEG_WON:       ['LEG_WON', 'CHECKOUT_OPPORTUNITY'],
+      SET_WON:       ['SET_WON', 'LEG_WON', 'CHECKOUT_OPPORTUNITY'],
+      MATCH_WON:     ['MATCH_WON', 'SET_WON', 'LEG_WON', 'CHECKOUT_OPPORTUNITY'],
+    };
+    const MISS_MAP = {
+      CHECKOUT_MISS: ['CHECKOUT_OPPORTUNITY', 'BIG_FISH', 'NINE_DARTER_POSSIBLE'],
+    };
+    // Nine-darter complete resolves running_commentary with GLORY
+    if (momentType === 'CHECKOUT_HIT' && ledger.rcHolder) {
+      ledger.aftermath[ledger.rcHolder] = 'GLORY';
+      ledger.rcHolder = null;
+    }
+    const hitTargets  = HIT_MAP[momentType]  || [];
+    const missTargets = MISS_MAP[momentType] || [];
+    for (const c of ledger.commits) {
+      if (c.resolved) continue;
+      if (hitTargets.includes(c.momentType))  { c.resolved = true; ledger.aftermath[c.speakerId] = 'GLORY'; }
+      else if (missTargets.includes(c.momentType)) { c.resolved = true; ledger.aftermath[c.speakerId] = 'HAUNTED'; }
+    }
+    // Any rcHolder abandoned by a CHECKOUT_MISS
+    if (momentType === 'CHECKOUT_MISS' && ledger.rcHolder) {
+      ledger.aftermath[ledger.rcHolder] = 'HAUNTED';
+      ledger.rcHolder = null;
+    }
+  }
+
+  // Build the premonition context block injected into each character's system prompt.
+  function _buildPremonitionBlock(speakerId, ledger) {
+    const aff = DARTS_PREMONITION_AFFINITIES[speakerId] || {};
+    const aftermath = ledger.aftermath[speakerId];
+    const openCommit = ledger.commits.find(c => c.speakerId === speakerId && !c.resolved);
+    const isRC = ledger.rcHolder === speakerId;
+    const lines = [];
+    if (aftermath) {
+      const desc = {
+        GLORY:          'You called it. The room knows. Reference it — once, without overselling it.',
+        HAUNTED:        'You got one wrong. The room remembers. You carry it. Do not pretend it did not happen.',
+        PARTIAL_CREDIT: 'You were close. Close enough to claim. Not close enough to gloat.',
+      };
+      lines.push(`AFTERMATH: ${aftermath} — ${desc[aftermath] || aftermath}`);
+    }
+    if (openCommit) {
+      lines.push(`ACTIVE COMMIT: You went on record — ${openCommit.mode} on ${openCommit.momentType}. This is the moment it resolves. React.`);
+    }
+    if (isRC) {
+      lines.push(`RUNNING COMMENTARY: You have the floor. The others are silent. Build to the final dart. This is yours.`);
+    }
+    if (aff.truth_teller) {
+      const falseClaims = ledger.commits.filter(c =>
+        !c.resolved && c.mode === 'RETROSPECTIVE_CALL' && c.speakerId !== speakerId
+      );
+      if (falseClaims.length) {
+        const who = [...new Set(falseClaims.map(c => c.speakerId))].join(', ');
+        lines.push(`TRUTH-TELLER: ${who} is claiming retrospective credit. You have no record of them calling it. You may call it out.`);
+      }
+    }
+    return lines.length ? `PREMONITION ENGINE:\n${lines.join('\n')}\n\n` : '';
+  }
+
+  // Build a human-readable summary of current premonition state for the UI indicator.
+  function _buildPremonitionStatus(draw, ledger) {
+    const parts = [];
+    for (const id of draw) {
+      const m = POOL.find(p => p.id === id);
+      if (!m) continue;
+      const a = ledger.aftermath[id];
+      const open = ledger.commits.find(c => c.speakerId === id && !c.resolved);
+      const isRC = ledger.rcHolder === id;
+      if (a) parts.push(`${m.name}: ${a}`);
+      else if (open) parts.push(`${m.name}: ${open.mode} active`);
+      else if (isRC) parts.push(`${m.name}: RUNNING COMMENTARY`);
+    }
+    return parts.join(' · ');
+  }
+
+  const MOMENT_LABELS = {
+    CHECKOUT_OPPORTUNITY: (p1, p2) => `Checkout opportunity. Player 1 on ${p1}. Player 2 on ${p2}. Finish is on.`,
+    BIG_FISH:             (p1)     => `The Big Fish. Player 1 on 170. Maximum checkout. Three darts. Everything on the line.`,
+    NINE_DARTER_POSSIBLE: ()       => `Nine-darter possible. T20 T20. One visit remains. The sequence is alive.`,
+    CHECKOUT_HIT:         (p1, p2) => `Checkout. Hit. Leg over. The oche goes quiet.`,
+    CHECKOUT_MISS:        ()       => `Checkout miss. The chance was there. It has gone. The board does not forgive.`,
+    LEG_WON:              (p1, p2, leg, set) => `Leg won. Set ${set}, Leg ${leg}. The board resets.`,
+    SET_WON:              (p1, p2, leg, set) => `Set ${set} won. On to the next.`,
+    MATCH_WON:            ()       => `Match over. Done. The winner steps back from the oche.`,
+  };
+
   function _getDraw() {
     const stored = sessionStorage.getItem('darts-draw');
     if (stored) return JSON.parse(stored);
@@ -12000,6 +12420,151 @@ INTER-PANEL: Lowe — natural affinity; both precise, both restrained; most comf
     HCSession.logPanelRun('darts', draw, responses.length);
   }
 
+  async function callMoment() {
+    const momentType = (document.getElementById('dt-moment')?.value || '').trim();
+    if (!momentType) { UI.toast('Select a match moment first.', 'warn'); return; }
+
+    const p1  = parseInt(document.getElementById('dt-p1')?.value)  || 0;
+    const p2  = parseInt(document.getElementById('dt-p2')?.value)  || 0;
+    const leg = parseInt(document.getElementById('dt-leg')?.value)  || 1;
+    const set = parseInt(document.getElementById('dt-set')?.value)  || 1;
+
+    const labelFn = MOMENT_LABELS[momentType];
+    const momentLabel = labelFn ? labelFn(p1, p2, leg, set) : momentType;
+
+    const draw = _getDraw();
+    const crowdState = _escalateCrowd();
+    const ledger = _getLedger();
+
+    // Assign running commentary if nine-darter, then generate probabilistic commits.
+    _assignRC(draw, momentType, ledger);
+    for (const id of draw) _maybeCommit(id, momentType, ledger);
+
+    const container = document.getElementById('dt-responses');
+    if (container) container.innerHTML = '';
+    document.getElementById('dt-output').style.display = 'block';
+    UI.setDisabled('dt-moment-btn', true);
+
+    const crowdBlock = `\n\nCROWD PRESSURE STATE: ${crowdState}. Alexandra Palace. The crowd noise bleeds through the studio walls.\n`;
+
+    const frankenstein = draw.includes('bristow') && draw.includes('taylor');
+    const DARTS_PRE_EXISTING = frankenstein ? {
+      bristow: { taylor: { temperature: 'simmering', trigger: 'Frankenstein wound' } },
+      taylor:  { bristow: { temperature: 'warm',      trigger: 'Frankenstein wound' } },
+    } : {};
+    const frankensteinBlock = frankenstein ? `\n\nFRANKENSTEIN WOUND ACTIVE: Bristow and Taylor are both in this session.\n` : '';
+
+    const dtRelState = RelationshipState.init(draw, DARTS_PRE_EXISTING, {});
+    const hypoPool = FoodWeather.createPool();
+    const dtCharStates = {};
+    for (const id of draw) dtCharStates[id] = CharacterState.create(5);
+
+    // In-Game: silence the RC non-holder during a nine-darter sequence.
+    const rcSilenced = new Set(
+      momentType === 'NINE_DARTER_POSSIBLE' && ledger.rcHolder
+        ? draw.filter(id => id !== ledger.rcHolder)
+        : []
+    );
+
+    const responses = [];
+    for (let i = 0; i < draw.length; i++) {
+      const member = POOL.find(m => m.id === draw[i]);
+      const pid = 'dt-ph-' + i;
+      container.insertAdjacentHTML('beforeend', _placeholder(pid, member));
+
+      // Silenced characters get a placeholder fill but no API call.
+      if (rcSilenced.has(member.id)) {
+        _fill(pid, member, '...');
+        responses.push('...');
+        continue;
+      }
+
+      try {
+        const lastIdx = responses.length - 1;
+        const prev = responses.map((r, idx) => {
+          const m = POOL.find(m => m.id === draw[idx]);
+          const text = idx === lastIdx ? r : r.substring(0, 120) + '…';
+          return `${m.name.toUpperCase()}: "${text}"`;
+        }).join('\n');
+
+        const lastBeat = (() => {
+          const nonEmpty = responses.filter(r => r !== '...');
+          if (!nonEmpty.length) return '';
+          const last = nonEmpty[nonEmpty.length - 1];
+          const parts = last.split('. ');
+          return parts.length > 1 ? parts.slice(-2).join('. ') : last.slice(-200);
+        })();
+
+        if (i > 0) {
+          const woundLive = dtRelState.characters[member.id]?.woundActivated || false;
+          if (woundLive) CharacterState.trigger(dtCharStates[member.id]);
+          else           CharacterState.decay(dtCharStates[member.id]);
+        }
+
+        const dtIntensityBlock  = i > 0 ? `YOUR STATE:\n${CharacterState.buildBlock(dtCharStates[member.id])}\n\n` : '';
+        const dtAliases         = DARTS_NAMEMAP[member.id] || [member.id];
+        const dtFoodCtx         = (momentLabel + ' ' + responses.join(' ')).toLowerCase();
+        const dtFoodBlock       = FoodWeather.foodBlock(dtFoodCtx);
+        const dtMarmiteBlock    = FoodWeather.marmiteBlock(member.id, dtFoodCtx);
+        const dtHypoBlock       = FoodWeather.hypoBlock(member.id, hypoPool, dtRelState, responses, dtAliases);
+        const dtYourState       = RelationshipState.buildBlock(dtRelState, member.id, draw, DARTS_NAMEMAP, DARTS_VOICE_FMT);
+        const dtPremonitionBlock = _buildPremonitionBlock(member.id, ledger);
+
+        const matchBlock = `\nMATCH MOMENT: ${momentLabel}\nSet: ${set}, Leg: ${leg}. Player 1: ${p1}. Player 2: ${p2}.\nYou are reacting to this moment live. React to the moment and to each other — not to a question.\n`;
+
+        const system = TURN_RULES + '\n\n' + dtIntensityBlock + dtYourState + dtPremonitionBlock + dtFoodBlock + dtMarmiteBlock + dtHypoBlock + member.prompt + matchBlock + crowdBlock + frankensteinBlock + (i > 0 ? `\n\nPrevious:\n${prev}` : '');
+
+        const prompt = i === 0
+          ? `React to this moment: "${momentLabel}"\n\nOpen the panel. 2 sentences maximum.`
+          : `Last said: "${lastBeat}"\n\nReact. Address the moment and whoever you want. A word, a line, two sentences — no more.`;
+
+        const resp = await API.call(system, prompt, 250, 'darts-ingame/' + member.id);
+        responses.push(resp);
+        RelationshipState.update(dtRelState, member.id, resp, draw, DARTS_WOUNDS, DARTS_NAMEMAP);
+        _fill(pid, member, resp);
+      } catch (e) {
+        _fill(pid, member, e.userMessage || 'Request failed.');
+        responses.push('');
+      }
+    }
+
+    // Resolve commits after all responses.
+    _resolveCommits(momentType, ledger);
+    _setLedger(ledger);
+
+    // Update premonition status indicator.
+    const statusEl = document.getElementById('dt-premonition-status');
+    if (statusEl) {
+      const statusText = _buildPremonitionStatus(draw, ledger);
+      if (statusText) {
+        statusEl.textContent = `Premonition: ${statusText}`;
+        statusEl.style.display = 'block';
+      }
+    }
+
+    UI.setDisabled('dt-moment-btn', false);
+    HCSession.logPanelRun('darts', draw, responses.filter(r => r !== '...').length);
+  }
+
+  function switchMode(mode) {
+    sessionStorage.setItem('darts-mode', mode);
+    const isIngame = mode === 'ingame';
+    document.getElementById('dt-qanda-view').style.display  = isIngame ? 'none' : '';
+    document.getElementById('dt-ingame-view').style.display = isIngame ? ''     : 'none';
+    const activeStyle   = 'border-color:var(--accent);color:var(--accent);';
+    const inactiveStyle = '';
+    document.getElementById('dt-tab-qanda').style.cssText  = isIngame ? inactiveStyle : activeStyle;
+    document.getElementById('dt-tab-ingame').style.cssText = isIngame ? activeStyle   : inactiveStyle;
+    // Reset output when switching modes.
+    const out = document.getElementById('dt-output');
+    if (out) out.style.display = 'none';
+  }
+
+  function nextRound() {
+    const mode = sessionStorage.getItem('darts-mode') || 'qanda';
+    if (mode === 'ingame') callMoment(); else discuss();
+  }
+
   function _placeholder(pid, m) {
     return `<div class="bills-response-block" id="${pid}" style="background:${m.bg};border-left-color:${m.colour};opacity:0.6;">
       <div class="bills-response-header">
@@ -12021,7 +12586,7 @@ INTER-PANEL: Lowe — natural affinity; both precise, both restrained; most comf
     if (body) { body.style.color = ''; body.style.fontStyle = ''; body.textContent = text || '…'; }
   }
 
-  return { discuss };
+  return { discuss, callMoment, switchMode, nextRound };
 })();
 
 // ============================================================
@@ -12567,7 +13132,48 @@ Never name the move.`;
     if (body) { body.style.color = ''; body.style.fontStyle = ''; body.textContent = text || '\u2026'; }
   }
 
-  return { discuss };
+  const LR_MOMENT_LABELS = {
+    DELIVERY:         'Delivery',
+    BOUNDARY_FOUR:    'Boundary — four',
+    BOUNDARY_SIX:     'Boundary — six',
+    WICKET:           'Wicket',
+    OVER_COMPLETE:    'Over complete',
+    DRS_REVIEW:       'DRS review',
+    FIFTY:            'Fifty',
+    HUNDRED:          'Hundred',
+    INNINGS_COMPLETE: 'Innings complete',
+  };
+
+  function callMoment() {
+    const momentType = (document.getElementById('lr-moment') || {}).value;
+    if (!momentType) { alert('Select a moment first.'); return; }
+    const situation = ((document.getElementById('lr-situation') || {}).value || '').trim();
+    const label = LR_MOMENT_LABELS[momentType] || momentType;
+    const prompt = situation ? `${label} — ${situation}` : label;
+    const inp = document.getElementById('lr-input');
+    if (inp) inp.value = prompt;
+    discuss();
+  }
+
+  function switchMode(mode) {
+    sessionStorage.setItem('lr-mode', mode);
+    const isIngame = mode === 'ingame';
+    document.getElementById('lr-qanda-view').style.display  = isIngame ? 'none' : '';
+    document.getElementById('lr-ingame-view').style.display = isIngame ? ''     : 'none';
+    const activeStyle   = 'border-color:var(--accent);color:var(--accent);';
+    const inactiveStyle = '';
+    document.getElementById('lr-tab-qanda').style.cssText  = isIngame ? inactiveStyle : activeStyle;
+    document.getElementById('lr-tab-ingame').style.cssText = isIngame ? activeStyle   : inactiveStyle;
+    const out = document.getElementById('lr-output');
+    if (out) out.style.display = 'none';
+  }
+
+  function nextRound() {
+    const mode = sessionStorage.getItem('lr-mode') || 'qanda';
+    if (mode === 'ingame') callMoment(); else discuss();
+  }
+
+  return { discuss, callMoment, switchMode, nextRound };
 })();
 
 // ============================================================
