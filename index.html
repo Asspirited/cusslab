@@ -12383,13 +12383,6 @@ function dtSubmitScore() {
     commentaryMode = 'LEG_WON';
   }
 
-  // Inject match context into premonition block for callMoment
-  const prem = document.getElementById('dt-premonition-status');
-  if (prem) {
-    prem.style.display = 'block';
-    prem.textContent = `${m.competition} ${m.year} — ${you} (you) ${dtState.userRemaining} | ${them} ${dtState.aiRemaining} — Mode: ${commentaryMode}`;
-  }
-
   // Store match context for callMoment to pick up
   sessionStorage.setItem('dt-match-ctx', JSON.stringify({
     match_id: m.id, you, them, userScore: effective, aiScore,
@@ -13014,6 +13007,8 @@ PYKE-ISMS — phrases that recur in your speech. Use them naturally. Other panel
     return next;
   }
 
+  const DARTS_TURN_RULES = `RULE 1 — TURN LENGTH:\nA turn can be one word, a fragment, one sentence, or two sentences. One word is a complete turn. Two sentences is the maximum — never more. Length is earned only by being directly challenged, provoked, or explicitly given the floor. The default is the shortest response that lands. A single word lands. Silence lands. Two sentences is already long.\n\nRULE 2 — REACTIVITY OBLIGATION:\nEvery response must open by reacting to the previous speaker's last sentence — not the topic generally. You are listening, not queuing.\n\nRULE 3 — CROSS-REFERENCE:\nYou may use anything said earlier in this conversation as ammunition. Wounds, indiscretions, failures, warmth — all fair game. You were there. You remember.\n\nRULE 4 — REACTIVE MOVES:\nYour reactive move is structural guidance — what you DO, not words you SAY. Seven moves available:\n(1) Agree and build — add something true that makes it worse\n(2) Agree but undermine — confirm surface, destroy substance\n(3) Contradict — name what was wrong and why\n(4) Flat refusal — one sentence, refusal is the content\n(5) Light-hearted pisstake — puncture with affection\n(6) Full-blooded insult — strongest language, lands on real wound\n(7) Mimic — three types, each distinct. Never name the type. Never signal you're doing it:\nType A — ECHO (affectionate): repeat their phrase in your own voice, gently. Part doing Bristow: "He's the best." Mardle doing Waddell: failed baroque attempt, trails off smiling.\nType B — SUBSTITUTION (weaponized or comic): take their signature phrase, swap the noun or subject for something wrong. Waddell echo: "He hit that arrow like Achilles hitting a slightly softer arrow." Taylor's modesty echoed back at Taylor with a straight face.\nType C — SUSTAINED IMPRESSION (satirical): briefly become them. Same syntax, wrong content. Lose thread mid-sentence because they would. Once only per session.\nWADDELL PATTERN: mythological noun — Mardle: attempted baroque, gets three words in, abandons it. Part: one baroque sentence, delivered flatly. Bristow: refuses on principle.\nBRISTOW PATTERN: "He's the best." / "That's a fact." — Taylor echoes with quiet devastation. Mardle uses it cheerfully, drains it of meaning.\nTAYLOR PATTERN: "He's better than me, really." — Bristow cannot hear this without reacting. George echoes it for warmth. Lowe: one silence.\nLOWE PATTERN: the long pause — everyone attempts it, nobody does it right. Mardle breaks first. Waddell fills it mythologically.\nGEORGE PATTERN: the tangent opening "I remember when—" — anyone can start it. Nobody can finish it like George.\nMARDLE PATTERN: "Oh, he's loving it!" — Part: flat and clinical. Bristow: does not attempt. Waddell: escalates it to prophecy.\nPART PATTERN: "That's a 180." zero affect — Mardle: too cheerful. Waddell: mythologises the number. George: tells a story about a different 180.\nNever name the move. Never open with the label.`;
+
   async function discuss() {
     const draw = _getDraw();
     const crowdState = _escalateCrowd();
@@ -13031,7 +13026,7 @@ PYKE-ISMS — phrases that recur in your speech. Use them naturally. Other panel
       crowdIndicator.style.display = 'block';
     }
 
-    const TURN_RULES = `RULE 1 — TURN LENGTH:\nA turn can be one word, a fragment, one sentence, or two sentences. One word is a complete turn. Two sentences is the maximum — never more. Length is earned only by being directly challenged, provoked, or explicitly given the floor. The default is the shortest response that lands. A single word lands. Silence lands. Two sentences is already long.\n\nRULE 2 — REACTIVITY OBLIGATION:\nEvery response must open by reacting to the previous speaker's last sentence — not the topic generally. You are listening, not queuing.\n\nRULE 3 — CROSS-REFERENCE:\nYou may use anything said earlier in this conversation as ammunition. Wounds, indiscretions, failures, warmth — all fair game. You were there. You remember.\n\nRULE 4 — REACTIVE MOVES:\nYour reactive move is structural guidance — what you DO, not words you SAY. Seven moves available:\n(1) Agree and build — add something true that makes it worse\n(2) Agree but undermine — confirm surface, destroy substance\n(3) Contradict — name what was wrong and why\n(4) Flat refusal — one sentence, refusal is the content\n(5) Light-hearted pisstake — puncture with affection\n(6) Full-blooded insult — strongest language, lands on real wound\n(7) Mimic — three types, each distinct. Never name the type. Never signal you're doing it:\nType A — ECHO (affectionate): repeat their phrase in your own voice, gently. Part doing Bristow: "He's the best." Mardle doing Waddell: failed baroque attempt, trails off smiling.\nType B — SUBSTITUTION (weaponized or comic): take their signature phrase, swap the noun or subject for something wrong. Waddell echo: "He hit that arrow like Achilles hitting a slightly softer arrow." Taylor's modesty echoed back at Taylor with a straight face.\nType C — SUSTAINED IMPRESSION (satirical): briefly become them. Same syntax, wrong content. Lose thread mid-sentence because they would. Once only per session.\nWADDELL PATTERN: mythological noun — Mardle: attempted baroque, gets three words in, abandons it. Part: one baroque sentence, delivered flatly. Bristow: refuses on principle.\nBRISTOW PATTERN: "He's the best." / "That's a fact." — Taylor echoes with quiet devastation. Mardle uses it cheerfully, drains it of meaning.\nTAYLOR PATTERN: "He's better than me, really." — Bristow cannot hear this without reacting. George echoes it for warmth. Lowe: one silence.\nLOWE PATTERN: the long pause — everyone attempts it, nobody does it right. Mardle breaks first. Waddell fills it mythologically.\nGEORGE PATTERN: the tangent opening "I remember when—" — anyone can start it. Nobody can finish it like George.\nMARDLE PATTERN: "Oh, he's loving it!" — Part: flat and clinical. Bristow: does not attempt. Waddell: escalates it to prophecy.\nPART PATTERN: "That's a 180." zero affect — Mardle: too cheerful. Waddell: mythologises the number. George: tells a story about a different 180.\nNever name the move. Never open with the label.`;
+    const TURN_RULES = DARTS_TURN_RULES;
 
     const frankenstein = draw.includes('bristow') && draw.includes('taylor');
     const DARTS_PRE_EXISTING = frankenstein ? {
@@ -13104,6 +13099,7 @@ PYKE-ISMS — phrases that recur in your speech. Use them naturally. Other panel
   }
 
   async function callMoment() {
+    const TURN_RULES = DARTS_TURN_RULES;
     // Match engine mode — context written by dtSubmitScore()
     const rawCtx = sessionStorage.getItem('dt-match-ctx');
     const matchCtx = rawCtx ? JSON.parse(rawCtx) : null;
