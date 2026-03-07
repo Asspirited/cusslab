@@ -620,3 +620,40 @@ Notes: Script is correctly installed and will track visitors. Auto-verification 
 **Tags:** `#missing-test` `#false-green` `#regression` `#incremental-drift`
 **Status:** closed — two bugs fixed: (1) Prof Cox inserted outside football members array (syntax error — full JS non-functional); (2) panel tabs missing from consultant skin config (hidden after skin toggle). Both committed and pushed.
 **Prevention:** ui-audit.js now (a) enforces all `_NAV_GROUP_MAP` keys in consultant skin tabs, (b) syntax-checks the main script block via `new Function()`. Gherkin scenarios in panel-init.feature assert panel tab visibility. Root cause of "nothing works": syntax error in faeb105 went undetected because pipeline only tests src/ modules, not index.html script block. The syntax guard closes that gap.
+
+---
+
+### WL-046
+**Item:** OPENER VARIETY and MIMIC rollout — 7 commits, zero regressions, clean delivery
+**Symptom:** (no failure — logging as positive pattern)
+**Session:** 2026-03-07
+**Time lost:** 0
+**Cost impact:** 0
+**Delay:** 0
+**Tags:** clean-session, character-mechanics, opener-variety, mimic
+**Status:** closed
+**Notes:** Full OPENER VARIETY rollout across all 5 panels (44 characters), MIMIC three-type expansion across all 5 panels with panel-specific character target patterns. 7 commits, each preceded by green pipeline (10/10 + 6/6 + 86/86 + 500/500). Session continued cleanly from summary after context compaction — no context-recovery waste.
+
+---
+
+### WL-047 — Cross-Project Analysis (Cusslab + RIA)
+**Item:** Recurring failure modes across both projects — FMEA summary
+**Session:** 2026-03-07
+**Status:** analysis complete — logged for action tracking
+
+| Failure Mode | Projects | Severity (1-5) | Frequency (1-5) | Detection (1-5) | RPN | Root Cause (5 Whys) |
+|---|---|---|---|---|---|---|
+| Work in wrong project/directory | Both | 5 | 3 | 1 | 15 | No project-confirmation step before any file open |
+| Context/knowledge loss between sessions | Both | 4 | 5 | 2 | 40 | Insights live in conversation, not repo; session-end commit rule not always followed |
+| Docs drift from live code | Cusslab | 3 | 4 | 1 | 12 | No runtime link between docs/ and index.html; single-file architecture has no import mechanism |
+| Pipeline GREEN but feature broken | Cusslab | 5 | 3 | 2 | 30 | Pipeline tests src/ modules only, not inline script block; solved by syntax guard |
+| Missing Gherkin coverage | Both | 4 | 3 | 2 | 24 | Feature built before spec; BDD-first rule not enforced consistently |
+| Wrong implementation (ACC, OpenAI vs Anthropic) | Both | 4 | 2 | 3 | 24 | Memory not read at session start; training data overrides explicit memory |
+| Session-start protocol skipped | Both | 4 | 4 | 1 | 16 | No hard gate enforcing protocol before first file touch |
+
+**Top RPN — context/knowledge loss (40):** 5 Whys — (1) insight flagged as "worth a conversation"; (2) not committed to repo; (3) session-end commit rule not followed; (4) no enforcement — rule is advisory; (5) no machine-checkable gate exists at session close.
+**Action:** session-end waste-log entry is the closest enforcement we have. Keep it mandatory.
+
+**Second RPN — pipeline GREEN but feature broken (30):** Now closed by syntax guard in ui-audit.js. Monitor for new classes of false-green.
+
+**Cross-project shared root cause:** both projects suffer from "work started before context verified". Prevention: session-start protocol (read CLAUDE.md → run pipeline → read recent waste entries) before any file is opened. This is already in memory — enforce it.
