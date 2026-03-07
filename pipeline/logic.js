@@ -201,4 +201,91 @@ function dartsBuildBlock(speakerId, nonNeutral, woundActivated) {
   return fmt(nonNeutral, cs, [], [], 1);
 }
 
-module.exports = { maskKey, isValidKey, shouldUpdateInput, Temperature, makeWoundDetector, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetector, DartsVoiceFmt, dartsBuildBlock };
+// ── Premonition Engine — extracted for unit/Gherkin testing ──────────────────
+// Mirrors DARTS_PREMONITION_AFFINITIES and engine helpers in index.html — keep in sync.
+
+const DARTS_PREMONITION_AFFINITIES = {
+  mardle:  { premonition: 0.70, prediction: 0.30, running_commentary: 0.80, retrospective_call: 0.60, collective_call: 0.50 },
+  bristow: { premonition: 0.50, prediction: 0.45, running_commentary: 0.40, retrospective_call: 0.40, collective_call: 0.30 },
+  taylor:  { premonition: 0.40, prediction: 0.55, running_commentary: 0.50, retrospective_call: 0.25, collective_call: 0.25 },
+  lowe:    { premonition: 0.20, prediction: 0.80, running_commentary: 0.30, retrospective_call: 0.10, collective_call: 0.20, truth_teller: true },
+  george:  { premonition: 0.60, prediction: 0.30, running_commentary: 0.50, retrospective_call: 0.70, collective_call: 0.60 },
+  waddell: { premonition: 0.80, prediction: 0.20, running_commentary: 0.70, retrospective_call: 0.50, collective_call: 0.60 },
+  part:    { premonition: 0.20, prediction: 0.80, running_commentary: 0.30, retrospective_call: 0.10, collective_call: 0.20, truth_teller: true },
+  studd:   { premonition: 0.40, prediction: 0.70, running_commentary: 0.60, retrospective_call: 0.20, collective_call: 0.40, truth_teller: true },
+  pyke:    { premonition: 0.50, prediction: 0.50, running_commentary: 0.50, retrospective_call: 0.30, collective_call: 0.30 },
+};
+
+// A character is "eligible" for a mode if affinity > 0.5.
+// (In index.html the threshold is mediated by _maybeCommit with RNG; the eligibility
+//  threshold is the same deterministic boundary used in specs and unit tests.)
+const PREMONITION_ELIGIBLE_THRESHOLD = 0.5;
+
+function premonitionEligible(speakerId, mode, affinities) {
+  const aff = (affinities || DARTS_PREMONITION_AFFINITIES)[speakerId] || {};
+  return (aff[mode] || 0) > PREMONITION_ELIGIBLE_THRESHOLD;
+}
+
+// Minimum simultaneous commits for a COLLECTIVE_CALL to form.
+const COLLECTIVE_CALL_MINIMUM = 3;
+
+// Blank ledger factory.
+function blankPremonitionLedger() {
+  return { commits: [], aftermath: {}, rcHolder: null };
+}
+
+// Assign running-commentary holder for nine-darter sequence.
+// Picks the character in draw with highest running_commentary affinity.
+function assignPremonitionRC(draw, momentType, ledger, affinities) {
+  if (momentType !== 'NINE_DARTER_POSSIBLE' || ledger.rcHolder) return ledger;
+  const aff = affinities || DARTS_PREMONITION_AFFINITIES;
+  let best = null, bestScore = -1;
+  for (const id of draw) {
+    const score = (aff[id] || {}).running_commentary || 0;
+    if (score > bestScore) { best = id; bestScore = score; }
+  }
+  ledger.rcHolder = best;
+  return ledger;
+}
+
+// Resolve open commits deterministically when a terminal moment fires.
+// Mutates ledger in place; returns ledger for chaining.
+function resolvePremonitionCommits(momentType, ledger) {
+  const HIT_MAP = {
+    CHECKOUT_HIT: ['CHECKOUT_OPPORTUNITY', 'BIG_FISH'],
+    LEG_WON:      ['LEG_WON', 'CHECKOUT_OPPORTUNITY'],
+    SET_WON:      ['SET_WON', 'LEG_WON', 'CHECKOUT_OPPORTUNITY'],
+    MATCH_WON:    ['MATCH_WON', 'SET_WON', 'LEG_WON', 'CHECKOUT_OPPORTUNITY'],
+  };
+  const MISS_MAP = {
+    CHECKOUT_MISS: ['CHECKOUT_OPPORTUNITY', 'BIG_FISH', 'NINE_DARTER_POSSIBLE'],
+  };
+  const hitTargets  = HIT_MAP[momentType]  || [];
+  const missTargets = MISS_MAP[momentType] || [];
+  for (const c of ledger.commits) {
+    if (c.resolved) continue;
+    if (hitTargets.includes(c.momentType))       { c.resolved = true; ledger.aftermath[c.speakerId] = 'GLORY'; }
+    else if (missTargets.includes(c.momentType)) { c.resolved = true; ledger.aftermath[c.speakerId] = 'HAUNTED'; }
+  }
+  // RC holder resolves with moment outcome.
+  if (ledger.rcHolder && (hitTargets.length || missTargets.length)) {
+    ledger.aftermath[ledger.rcHolder] = missTargets.length ? 'HAUNTED' : 'GLORY';
+    ledger.rcHolder = null;
+  }
+  return ledger;
+}
+
+// Returns true if the speakerId is marked as a truth-teller.
+function isPremonitionTruthTeller(speakerId, affinities) {
+  return !!((affinities || DARTS_PREMONITION_AFFINITIES)[speakerId] || {}).truth_teller;
+}
+
+module.exports = {
+  maskKey, isValidKey, shouldUpdateInput,
+  Temperature,
+  makeWoundDetector, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetector,
+  DartsVoiceFmt, dartsBuildBlock,
+  DARTS_PREMONITION_AFFINITIES, PREMONITION_ELIGIBLE_THRESHOLD, COLLECTIVE_CALL_MINIMUM,
+  premonitionEligible, blankPremonitionLedger, assignPremonitionRC,
+  resolvePremonitionCommits, isPremonitionTruthTeller,
+};

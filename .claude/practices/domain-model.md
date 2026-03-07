@@ -1723,3 +1723,36 @@ Faldo/McGinley (golf, always).
 13. **Premonition affinity** — object with weights per mode:
     { premonition, prediction, running_commentary, retrospective_call, collective_call }
     Range 0.0 to 1.0. Must be defined before character participates in Premonition Engine.
+
+---
+
+## Named Mechanic — TEMPORAL BLEED (shared, cross-panel, historic match mode only)
+
+A character leaks a future fact into historic match commentary without realising.
+Accurate from audience perspective but post era_knowledge_cutoff. Leaking character
+shows no awareness. Room reacts with one BLEED_RESPONSE. Nobody corrects it.
+Nobody names it. Audience holds it alone.
+
+Panel scope: Football historic (Branch B). Applies identically to all future panels
+with historic match mode. Mechanic is panel-agnostic. Fact pool is panel-specific.
+
+Leak probability: ANCHOR=0.02, COLOUR=0.07, CHARACTER=0.15 per moment.
+Probabilistic — may not fire in a match, may fire multiple times.
+
+BLEED_RESPONSE types:
+- TRAIL_OFF — leaking character loses thought mid-sentence, moves on, nobody follows
+- MISFIRE — another character picks up one word and responds to it in a different context entirely
+- ADJACENCY_RUSH — brief silence then everyone talks at once about something adjacent
+- CALLED_OUT — one character calls leaker an idiot, asks who?, says what are you on about — genuine bafflement, no understanding of why
+- MYSTIC_MEG — one character treats leak as eccentric prediction — Mystic Meg, crystal ball, taking bookings
+
+Future fact weights: player transfer HIGH, managerial appointment HIGH,
+player decline HIGH, future competition result MEDIUM, random biographical LOW.
+
+MARBELLA POOL (Ron Atkinson, CHARACTER, football only): ambient pool of vague
+biographical details involving restaurants, golf courses, or property in southern Spain.
+Ron leaks these as casual contextual information. Ron never notices. Nobody shares this pool.
+
+### Character attribute 14 — temporal_bleed_affinity
+{ leak_probability: float 0.0–1.0, bleed_response_weights: { TRAIL_OFF, MISFIRE, ADJACENCY_RUSH, CALLED_OUT, MYSTIC_MEG } }
+Weights must sum to 1.0. Required for all characters before historic match mode.
