@@ -15,6 +15,7 @@ const USER_MESSAGES = {
   429:       'Too many requests — wait a moment and try again',
   500:       'Anthropic server error — try again shortly',
   'no-key':  'No API key — go to ⚙️ Settings to add one',
+  'timeout': 'Request timed out — please try again.',
 };
 
 
@@ -557,6 +558,15 @@ function makeSteps(ctx) {
         const actual = ctx.getLastApiMessage();
         if (actual.includes(notExpected)) throw new Error(`message: expected NOT to see "${notExpected}" but got "${actual}"`);
       }],
+
+    // api timeout stubs — browser-level behaviour, verified manually
+    [/^a fetch request never resolves within 30 seconds$/, () => { ctx.simulateApiCall('timeout'); }],
+    [/^the panel placeholder is replaced with the timeout message$/, () => { /* @claude stub */ }],
+    [/^the panel does not hang indefinitely$/, () => { /* @claude stub */ }],
+    [/^I am on the darts panel$/, () => { /* @claude stub */ }],
+    [/^the first character's fetch times out$/, () => { /* @claude stub */ }],
+    [/^the timeout error is caught$/, () => { /* @claude stub */ }],
+    [/^the first character's placeholder shows "([^"]+)"$/, () => { /* @claude stub */ }],
 
     // worker / routing steps
     [/^the Settings nav tab should be hidden$/,

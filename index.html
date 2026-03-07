@@ -3483,6 +3483,8 @@ const API = (() => {
     if (key) headers['x-api-key'] = key;
 
     let res, errBody;
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 30000);
     try {
       res = await fetch(ENDPOINT, {
         method: 'POST',
@@ -3493,12 +3495,16 @@ const API = (() => {
           system: systemPrompt,
           messages: [{ role: 'user', content: userMessage }],
         }),
+        signal: controller.signal,
       });
     } catch(networkErr) {
-      const msg = _userMessage('network', null);
-      _logError(panel, 'Network failure', networkErr);
+      clearTimeout(timeoutId);
+      const isTimeout = networkErr.name === 'AbortError';
+      const msg = isTimeout ? 'Request timed out — please try again.' : _userMessage('network', null);
+      _logError(panel, isTimeout ? 'Timeout (30s)' : 'Network failure', networkErr);
       throw Object.assign(new Error(msg), { userMessage: msg });
     }
+    clearTimeout(timeoutId);
 
     const duration = Date.now() - start;
 
@@ -11875,41 +11881,41 @@ INTER-PANEL: Taylor — greatest scalp; respect is mutual and slightly wary on b
       const pid = 'dt-ph-' + i;
       container.insertAdjacentHTML('beforeend', _placeholder(pid, member));
 
-      const lastIdx = responses.length - 1;
-      const prev = responses.map((r, idx) => {
-        const m = POOL.find(m => m.id === draw[idx]);
-        const text = idx === lastIdx ? r : r.substring(0, 120) + '…';
-        return `${m.name.toUpperCase()}: "${text}"`;
-      }).join('\n');
-
-      const lastBeat = (() => {
-        if (responses.length === 0) return '';
-        const last = responses[responses.length - 1];
-        const parts = last.split('. ');
-        return parts.length > 1 ? parts.slice(-2).join('. ') : last.slice(-200);
-      })();
-
-      if (i > 0) {
-        const woundLive = dtRelState.characters[member.id]?.woundActivated || false;
-        if (woundLive) CharacterState.trigger(dtCharStates[member.id]);
-        else           CharacterState.decay(dtCharStates[member.id]);
-      }
-      const dtIntensityBlock = i > 0 ? `YOUR STATE:\n${CharacterState.buildBlock(dtCharStates[member.id])}\n\n` : '';
-
-      const dtAliases = DARTS_NAMEMAP[member.id] || [member.id];
-      const dtFoodCtx = (input + ' ' + responses.join(' ')).toLowerCase();
-      const dtFoodBlock = FoodWeather.foodBlock(dtFoodCtx);
-      const dtMarmiteBlock = FoodWeather.marmiteBlock(member.id, dtFoodCtx);
-      const dtHypoBlock = FoodWeather.hypoBlock(member.id, hypoPool, dtRelState, responses, dtAliases);
-      const dtYourState = RelationshipState.buildBlock(dtRelState, member.id, draw, DARTS_NAMEMAP, DARTS_VOICE_FMT);
-
-      const system = TURN_RULES + '\n\n' + dtIntensityBlock + dtYourState + dtFoodBlock + dtMarmiteBlock + dtHypoBlock + member.prompt + crowdBlock + frankensteinBlock + (i > 0 ? `\n\nPrevious:\n${prev}` : '');
-
-      const prompt = i === 0
-        ? `Topic: "${input}"\n\nOpen the panel. 2 sentences.`
-        : `Last said: "${lastBeat}"\n\nAddress whoever you want — by name. A word, a line, two sentences — no more.`;
-
       try {
+        const lastIdx = responses.length - 1;
+        const prev = responses.map((r, idx) => {
+          const m = POOL.find(m => m.id === draw[idx]);
+          const text = idx === lastIdx ? r : r.substring(0, 120) + '…';
+          return `${m.name.toUpperCase()}: "${text}"`;
+        }).join('\n');
+
+        const lastBeat = (() => {
+          if (responses.length === 0) return '';
+          const last = responses[responses.length - 1];
+          const parts = last.split('. ');
+          return parts.length > 1 ? parts.slice(-2).join('. ') : last.slice(-200);
+        })();
+
+        if (i > 0) {
+          const woundLive = dtRelState.characters[member.id]?.woundActivated || false;
+          if (woundLive) CharacterState.trigger(dtCharStates[member.id]);
+          else           CharacterState.decay(dtCharStates[member.id]);
+        }
+        const dtIntensityBlock = i > 0 ? `YOUR STATE:\n${CharacterState.buildBlock(dtCharStates[member.id])}\n\n` : '';
+
+        const dtAliases = DARTS_NAMEMAP[member.id] || [member.id];
+        const dtFoodCtx = (input + ' ' + responses.join(' ')).toLowerCase();
+        const dtFoodBlock = FoodWeather.foodBlock(dtFoodCtx);
+        const dtMarmiteBlock = FoodWeather.marmiteBlock(member.id, dtFoodCtx);
+        const dtHypoBlock = FoodWeather.hypoBlock(member.id, hypoPool, dtRelState, responses, dtAliases);
+        const dtYourState = RelationshipState.buildBlock(dtRelState, member.id, draw, DARTS_NAMEMAP, DARTS_VOICE_FMT);
+
+        const system = TURN_RULES + '\n\n' + dtIntensityBlock + dtYourState + dtFoodBlock + dtMarmiteBlock + dtHypoBlock + member.prompt + crowdBlock + frankensteinBlock + (i > 0 ? `\n\nPrevious:\n${prev}` : '');
+
+        const prompt = i === 0
+          ? `Topic: "${input}"\n\nOpen the panel. 2 sentences.`
+          : `Last said: "${lastBeat}"\n\nAddress whoever you want — by name. A word, a line, two sentences — no more.`;
+
         const resp = await API.call(system, prompt, 250, 'darts/' + member.id);
         responses.push(resp);
         RelationshipState.update(dtRelState, member.id, resp, draw, DARTS_WOUNDS, DARTS_NAMEMAP);

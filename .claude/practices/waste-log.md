@@ -680,3 +680,26 @@ Notes: Script is correctly installed and will track visitors. Auto-verification 
 
 **Root cause:** Architecture gap — `DARTS_VOICE_FMT` was untestable inline code with no extracted unit. The wrong type (string vs function) was undetectable by existing tests.
 **Corrective action:** (1) Extracted `DartsVoiceFmt` and `dartsBuildBlock` to `logic.js`. (2) Added 17 unit tests covering type and return value. (3) Added 8 Gherkin scenarios in `specs/darts-voice-fmt.feature`. (4) Fixed `DARTS_VOICE_FMT` in `index.html` — strings replaced with proper formatter functions.
+
+---
+
+### WL-049 — Darts discuss() unguarded pre-API code + no fetch timeout
+**Item:** After WL-048 fix, darts characters at position 2+ could still silently hang. Two structural issues identified: (1) try-catch in `discuss()` only wrapped the `API.call()` line — all prompt-building code (15+ lines) was unguarded; (2) `API.call` had no `AbortController` timeout — a hung fetch waits forever with no error shown.
+**Symptom:** Placeholder stuck at "Waiting..." indefinitely. Identical symptom to WL-048, so initially hard to distinguish. After DARTS_VOICE_FMT fix, if a JS error occurred in prompt-building OR if the network fetch hung, the loop still exited silently or waited forever.
+**Suspected cause:** Try-catch scope was too narrow — written to catch API errors only, but the build-up code (RelationshipState.buildBlock, CharacterState.buildBlock, FoodWeather.* calls) was placed outside it. Additionally, `API.call` used bare `await fetch(...)` with no signal or timeout.
+**Session:** 2026-03-07
+**Time lost:** ~30 min investigation + fix (second pass on same bug)
+**Cost impact:** Medium (user-facing silent failure; same symptom as prior bug made root cause ambiguous)
+**Delay:** None — hotfix same session
+**Tags:** `#error-handling` `#silent-failure` `#network-resilience`
+**Status:** closed
+
+**5 Whys:**
+1. Why did position-2 character hang after WL-048 fix? → Either a JS exception in pre-try-catch code escaped to unhandled rejection, or the fetch for the second API call hung indefinitely.
+2. Why did a JS exception escape? → The try-catch only started at `API.call()` — all prompt-building code above it was unguarded. Any throw there propagates to the async function level, exits the loop, and leaves placeholders filled.
+3. Why was try-catch placed so late? → The try-catch was written to guard API errors specifically. Pre-API code was assumed safe and left unguarded. Assumption not validated.
+4. Why did a network hang produce no error? → `API.call` had no `AbortController` — `await fetch(...)` blocks forever if the server never responds. No catch is ever reached. No `_fill` is called.
+5. Why was there no timeout? → `API.call` was built for correctness, not resilience. No timeout was specified because it was never explicitly required.
+
+**Root cause:** Structural — try-catch scope too narrow + missing fetch timeout. Both errors individually cause the identical user-visible symptom.
+**Corrective action:** (1) Extended try-catch in `discuss()` to cover all pre-API prompt-building code. (2) Added `AbortController` with 30-second timeout to `API.call` — timeout throws `AbortError`, caught, surfaced as "Request timed out — please try again."
