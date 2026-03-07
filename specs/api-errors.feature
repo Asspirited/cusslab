@@ -41,3 +41,17 @@ Feature: API error messages — user sees specific, actionable feedback
     And I am on the Ask The Panel tab
     When an API call returns status 401
     Then I should see "API key rejected — check your key in ⚙️ Settings"
+
+  Scenario: Hung fetch times out after 30 seconds and shows error message
+    Given I am on the Ask The Panel tab
+    When a fetch request never resolves within 30 seconds
+    Then I should see "Request timed out — please try again."
+    And the panel placeholder is replaced with the timeout message
+    And the panel does not hang indefinitely
+
+  Scenario: Darts panel continues to next character when one fetch times out
+    Given I am on the darts panel
+    And the first character's fetch times out
+    When the timeout error is caught
+    Then the first character's placeholder shows "Request timed out — please try again."
+    And the panel does not hang indefinitely
