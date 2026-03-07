@@ -1134,6 +1134,101 @@
     transition: width 0.8s ease;
     min-width: 4px;
   }
+
+  /* ── GOLF MODE 1 ADDITIONS ──────────────────────────────────── */
+  .gf-name-strip { display:flex; align-items:center; gap:10px; padding:8px 12px; margin-bottom:14px; background:rgba(255,215,0,0.04); border:1px solid rgba(255,215,0,0.12); border-radius:4px; }
+  .gf-name-strip__label { font-size:10px; letter-spacing:2px; color:var(--muted); text-transform:uppercase; white-space:nowrap; flex-shrink:0; }
+  .gf-name-strip__input { background:transparent; border:none; border-bottom:1px solid rgba(255,215,0,0.2); color:var(--accent); font-size:15px; font-weight:600; padding:2px 4px; flex:1; outline:none; min-width:80px; max-width:220px; transition:border-color 0.2s; }
+  .gf-name-strip__input:focus { border-bottom-color:var(--accent); }
+  .gf-name-strip__input::placeholder { color:var(--muted); font-style:italic; font-weight:400; }
+  .gf-name-strip__hint { font-size:11px; color:var(--muted); font-style:italic; flex:1; }
+  .gf-name-strip__required { font-size:10px; color:#e06040; letter-spacing:1px; display:none; }
+  .gf-name-strip__required.visible { display:block; }
+  @keyframes gfNamePulse { 0%,100% { border-color:#e06040; } 50% { border-color:var(--accent); } }
+  .gf-name-strip__input.error { animation:gfNamePulse 0.6s ease 2; border-bottom-color:#e06040; }
+  .gf-suggestion-tray { margin-bottom:14px; }
+  .gf-suggestion-scroll { display:flex; gap:8px; overflow-x:auto; padding-bottom:6px; scrollbar-width:thin; scrollbar-color:rgba(255,215,0,0.1) transparent; flex-wrap:nowrap; }
+  .gf-suggestion-card { flex-shrink:0; width:148px; min-height:76px; padding:9px 10px; border-radius:3px; cursor:pointer; position:relative; transition:transform 0.15s ease, box-shadow 0.15s ease; font-size:12px; line-height:1.4; color:#1a1208; user-select:none; }
+  .gf-suggestion-card:hover { transform:translateY(-3px) rotate(0deg) !important; box-shadow:0 8px 20px rgba(0,0,0,0.4); z-index:2; }
+  .gf-suggestion-card[data-cat="golf"] { background:#f5e6b2; box-shadow:2px 3px 8px rgba(0,0,0,0.35); }
+  .gf-suggestion-card[data-cat="big"] { background:#d4e8d4; box-shadow:2px 3px 8px rgba(0,0,0,0.35); }
+  .gf-suggestion-card[data-cat="contemporary"] { background:#d4dff5; box-shadow:2px 3px 8px rgba(0,0,0,0.35); }
+  .gf-suggestion-card[data-cat="absurd"] { background:#f5d4d4; box-shadow:2px 3px 8px rgba(0,0,0,0.35); }
+  .gf-suggestion-card__cat { font-size:9px; letter-spacing:1.5px; text-transform:uppercase; opacity:0.45; margin-bottom:4px; font-family:monospace; }
+  .gf-anchor-readback { display:none; margin-top:14px; opacity:0; transform:translateY(-4px); transition:opacity 0.4s ease, transform 0.4s ease; }
+  .gf-anchor-readback.visible { display:block; opacity:1; transform:translateY(0); }
+  .gf-anchor-inner { background:var(--card); border:1px solid rgba(170,136,255,0.2); border-left:3px solid rgba(170,136,255,0.6); border-radius:4px; padding:12px 16px; }
+  .gf-anchor-inner.dougherty { border-left-color:rgba(255,215,0,0.6); }
+  .gf-anchor-who { font-size:9px; letter-spacing:2.5px; color:rgba(170,136,255,0.8); margin-bottom:5px; display:flex; align-items:center; gap:5px; }
+  .gf-anchor-who::before { content:''; display:inline-block; width:5px; height:5px; border-radius:50%; background:currentColor; opacity:0.7; }
+  .gf-anchor-who.dougherty { color:rgba(255,215,0,0.7); }
+  .gf-anchor-text { font-style:italic; color:var(--text); font-size:14px; line-height:1.6; }
+  .gf-anchor-text strong { font-style:normal; font-weight:600; color:var(--accent); }
+
+  /* ── DARTS MODE 2 — MATCH ENGINE UI ────────────────────────── */
+  .dt-era-toggle { display:flex; align-items:center; gap:10px; margin-bottom:14px; }
+  .dt-era-label { font-family:'Bebas Neue',sans-serif; font-size:11px; letter-spacing:2px; color:var(--muted); }
+  .dt-era-track { position:relative; width:48px; height:24px; background:var(--card); border:1px solid var(--border); border-radius:12px; cursor:pointer; transition:background 0.2s; flex-shrink:0; }
+  .dt-era-track.current { background:rgba(74,158,255,0.12); border-color:rgba(74,158,255,0.3); }
+  .dt-era-thumb { position:absolute; top:3px; left:3px; width:16px; height:16px; border-radius:50%; background:var(--accent); transition:transform 0.2s, background 0.2s; }
+  .dt-era-track.current .dt-era-thumb { transform:translateX(24px); background:#4a9eff; }
+  .dt-era-caption { font-size:12px; color:var(--muted); font-style:italic; transition:color 0.2s; }
+  .dt-era-caption.current { color:#4a9eff; }
+  .dt-match-list { display:flex; flex-direction:column; gap:6px; margin-bottom:16px; max-height:320px; overflow-y:auto; scrollbar-width:thin; }
+  .dt-match-card { background:var(--card); border:1px solid rgba(255,102,51,0.1); border-radius:4px; padding:12px 14px; cursor:pointer; transition:border-color 0.15s, background 0.15s; }
+  .dt-match-card:hover { border-color:rgba(255,102,51,0.25); }
+  .dt-match-card.selected { border-color:var(--accent); background:rgba(255,102,51,0.05); }
+  .dt-match-card__top { display:flex; justify-content:space-between; align-items:flex-start; gap:10px; margin-bottom:4px; }
+  .dt-match-card__participants { font-family:'Bebas Neue',sans-serif; font-size:15px; letter-spacing:1px; color:var(--text); line-height:1.1; }
+  .dt-match-card__meta { display:flex; flex-direction:column; align-items:flex-end; gap:2px; flex-shrink:0; }
+  .dt-match-card__year { font-family:'Bebas Neue',sans-serif; font-size:12px; color:var(--muted); letter-spacing:1px; }
+  .dt-match-card__dw { display:flex; gap:2px; }
+  .dt-dw-pip { width:5px; height:5px; border-radius:50%; background:rgba(255,102,51,0.15); }
+  .dt-dw-pip.lit { background:var(--accent); }
+  .dt-match-card__comp { font-size:11px; color:var(--muted); font-style:italic; }
+  .dt-match-card__tier { display:inline-block; font-size:9px; font-family:monospace; letter-spacing:1px; padding:1px 5px; border-radius:2px; margin-left:6px; background:rgba(255,102,51,0.1); color:var(--muted); }
+  .dt-match-card__tier.ELITE { background:rgba(255,102,51,0.2); color:var(--accent); }
+  .dt-match-card__setter { display:none; margin-top:9px; padding-top:9px; border-top:1px solid rgba(255,102,51,0.1); font-size:13px; font-style:italic; color:var(--muted); line-height:1.6; }
+  .dt-match-card.selected .dt-match-card__setter { display:block; }
+  .dt-match-card__triggers { display:flex; flex-wrap:wrap; gap:4px; margin-top:7px; }
+  .dt-trigger-pill { font-size:9px; font-family:monospace; letter-spacing:0.8px; padding:2px 6px; border-radius:10px; background:rgba(255,102,51,0.07); color:var(--muted); border:1px solid rgba(255,102,51,0.15); }
+  .dt-trigger-pill.hot { background:rgba(255,50,50,0.1); color:#cc6655; border-color:rgba(255,50,50,0.2); }
+  .dt-side-picker { display:none; margin-bottom:16px; }
+  .dt-side-picker.visible { display:block; }
+  .dt-side-prompt { font-size:13px; color:var(--muted); font-style:italic; margin-bottom:10px; }
+  .dt-side-options { display:flex; gap:8px; }
+  .dt-side-btn { flex:1; padding:13px 10px; text-align:center; background:var(--card); border:1px solid var(--border); border-radius:4px; cursor:pointer; transition:border-color 0.15s, background 0.15s; }
+  .dt-side-btn:hover { border-color:var(--accent); }
+  .dt-side-btn.selected { border-color:var(--accent); background:rgba(255,102,51,0.06); }
+  .dt-side-btn__name { font-family:'Bebas Neue',sans-serif; font-size:16px; letter-spacing:1px; margin-bottom:2px; }
+  .dt-side-btn__sub { font-size:11px; color:var(--muted); font-style:italic; }
+  .dt-scoreboard { background:var(--card); border:1px solid var(--border); border-radius:4px; padding:12px 14px; margin-bottom:12px; display:flex; align-items:center; }
+  .dt-scoreboard__player { flex:1; text-align:center; }
+  .dt-scoreboard__player-name { font-family:'Bebas Neue',sans-serif; font-size:12px; letter-spacing:2px; color:var(--muted); margin-bottom:2px; }
+  .dt-scoreboard__player-name.you { color:var(--accent); }
+  .dt-scoreboard__remaining { font-family:'Bebas Neue',sans-serif; font-size:34px; letter-spacing:-1px; line-height:1; color:var(--text); }
+  .dt-scoreboard__remaining.you { color:var(--accent); }
+  .dt-scoreboard__remaining.danger { color:#cc3322; }
+  .dt-scoreboard__divider { font-family:'Bebas Neue',sans-serif; font-size:16px; color:rgba(255,255,255,0.15); padding:0 14px; }
+  .dt-scoreboard__leg { font-size:10px; color:rgba(255,255,255,0.2); margin-top:2px; font-style:italic; }
+  .dt-ctx-badge { display:inline-flex; align-items:center; gap:5px; font-size:11px; font-family:monospace; letter-spacing:1px; padding:3px 9px; border-radius:2px; margin-bottom:12px; background:rgba(255,102,51,0.07); color:var(--muted); border:1px solid rgba(255,102,51,0.15); }
+  .dt-ctx-badge.finish-on { background:rgba(255,140,50,0.1); color:#cc8855; border-color:rgba(255,140,50,0.25); }
+  .dt-ctx-badge.max-pressure { background:rgba(200,50,50,0.12); color:#dd6655; border-color:rgba(200,50,50,0.3); animation:dtPressurePulse 1.8s ease-in-out infinite; }
+  @keyframes dtPressurePulse { 0%,100% { opacity:1; } 50% { opacity:0.65; } }
+  .dt-ctx-dot { width:4px; height:4px; border-radius:50%; background:currentColor; opacity:0.7; }
+  .dt-band-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:7px; margin-bottom:10px; }
+  .dt-band-btn { padding:11px 7px; text-align:center; background:var(--card); border:1px solid var(--border); border-radius:4px; cursor:pointer; transition:border-color 0.12s, background 0.12s; }
+  .dt-band-btn:hover { border-color:var(--accent); }
+  .dt-band-btn.selected { border-color:var(--accent); background:rgba(255,102,51,0.06); }
+  .dt-band-btn__label { font-family:'Bebas Neue',sans-serif; font-size:14px; letter-spacing:1.5px; color:var(--text); display:block; margin-bottom:2px; }
+  .dt-band-btn__range { font-size:9px; color:var(--muted); font-family:monospace; }
+  .dt-band-btn__modal { font-size:9px; color:var(--accent); font-family:monospace; margin-top:2px; font-style:italic; display:block; }
+  .dt-direct-entry { display:flex; gap:8px; align-items:center; margin-bottom:14px; }
+  .dt-direct-label { font-size:12px; color:var(--muted); font-style:italic; white-space:nowrap; }
+  .dt-direct-input { width:72px; background:var(--card); border:1px solid var(--border); border-radius:4px; color:var(--accent); font-family:'Bebas Neue',sans-serif; font-size:20px; padding:5px 8px; text-align:center; outline:none; transition:border-color 0.15s; }
+  .dt-direct-input:focus { border-color:rgba(255,102,51,0.4); }
+  .dt-trigger-flash { display:none; background:rgba(200,50,50,0.1); border:1px solid rgba(200,50,50,0.25); border-radius:4px; padding:7px 11px; font-family:monospace; font-size:11px; color:#dd6655; letter-spacing:1px; margin-bottom:9px; }
+  .dt-trigger-flash.visible { display:block; }
 </style>
 <!-- Privacy-friendly analytics by Plausible -->
 <script async src="https://plausible.io/js/pa-3tqLQEYn3QaktBXhJk3QC.js"></script>
@@ -1992,12 +2087,30 @@
 
   <!-- Q&A mode -->
   <div id="gf-qanda-view">
+    <!-- Name strip -->
+    <div class="gf-name-strip" id="gf-name-strip">
+      <span class="gf-name-strip__label">You are</span>
+      <input type="text" id="gf-username" class="gf-name-strip__input" placeholder="your name" maxlength="40" autocomplete="off" spellcheck="false" oninput="golfNameInput()" onkeydown="if(event.key==='Enter')this.blur()">
+      <span class="gf-name-strip__hint" id="gf-name-hint">— your name will be read out by the panel</span>
+      <span class="gf-name-strip__required" id="gf-name-required">NAME REQUIRED</span>
+    </div>
+    <!-- Suggestion cards -->
+    <div class="gf-suggestion-tray">
+      <div class="gf-suggestion-scroll" id="gf-suggestion-scroll"></div>
+    </div>
     <div style="margin-bottom:20px;">
       <div id="gf-round-indicator" style="display:none;margin-bottom:12px;padding:8px 14px;border-radius:6px;background:rgba(255,215,0,0.08);border:1px solid rgba(255,215,0,0.2);font-size:13px;font-weight:600;letter-spacing:0.05em;color:#ffd700;"></div>
       <label>The shot. The player. The hole. The round. The decision.</label>
       <textarea id="gf-input" rows="3" placeholder="e.g. Was that the right club selection? Can he win from here? What does that swing tell you?"></textarea>
     </div>
     <button class="btn" onclick="Golf.discuss()" id="gf-btn">INTO THE 19TH ⛳</button>
+    <!-- Anchor read-back — appears immediately on submit -->
+    <div class="gf-anchor-readback" id="gf-anchor-readback">
+      <div class="gf-anchor-inner" id="gf-anchor-inner">
+        <div class="gf-anchor-who" id="gf-anchor-who">EWEN MURRAY</div>
+        <div class="gf-anchor-text" id="gf-anchor-text"></div>
+      </div>
+    </div>
   </div>
 
   <!-- In-Game mode (On the Course) -->
@@ -2058,44 +2171,59 @@
     <button class="btn" onclick="Darts.discuss()" id="dt-btn">TO THE OCHE 🎯</button>
   </div>
 
-  <!-- In-Game mode (Watching the Oche) -->
+  <!-- In-Game mode (Watching the Oche) — 3-step match engine -->
   <div id="dt-ingame-view" style="display:none;">
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
-      <div>
-        <label style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);display:block;margin-bottom:4px;">Player 1 remaining</label>
-        <input type="number" id="dt-p1" value="501" min="0" max="501" style="width:100%;box-sizing:border-box;padding:8px;background:var(--card);border:1px solid var(--border);border-radius:4px;color:var(--text);font-size:22px;font-family:'Bebas Neue',sans-serif;letter-spacing:2px;text-align:center;">
+
+    <!-- Step 1: Match selection -->
+    <div id="dt-step-match">
+      <div class="dt-era-toggle">
+        <span class="dt-era-label">Era</span>
+        <div class="dt-era-track" id="dt-era-track" onclick="dtToggleEra()">
+          <div class="dt-era-thumb"></div>
+        </div>
+        <span class="dt-era-caption" id="dt-era-caption">Classics</span>
       </div>
-      <div>
-        <label style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);display:block;margin-bottom:4px;">Player 2 remaining</label>
-        <input type="number" id="dt-p2" value="501" min="0" max="501" style="width:100%;box-sizing:border-box;padding:8px;background:var(--card);border:1px solid var(--border);border-radius:4px;color:var(--text);font-size:22px;font-family:'Bebas Neue',sans-serif;letter-spacing:2px;text-align:center;">
-      </div>
+      <div class="dt-match-list" id="dt-match-list"></div>
+      <button class="btn" style="display:none;margin-bottom:0;" id="dt-match-confirm-btn" onclick="dtConfirmMatch()">SELECT THIS MATCH →</button>
     </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
-      <div>
-        <label style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);display:block;margin-bottom:4px;">Leg</label>
-        <input type="number" id="dt-leg" value="1" min="1" max="99" style="width:100%;box-sizing:border-box;padding:8px;background:var(--card);border:1px solid var(--border);border-radius:4px;color:var(--text);font-size:16px;text-align:center;">
-      </div>
-      <div>
-        <label style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);display:block;margin-bottom:4px;">Set</label>
-        <input type="number" id="dt-set" value="1" min="1" max="99" style="width:100%;box-sizing:border-box;padding:8px;background:var(--card);border:1px solid var(--border);border-radius:4px;color:var(--text);font-size:16px;text-align:center;">
-      </div>
+
+    <!-- Step 2: Side picker -->
+    <div class="dt-side-picker" id="dt-step-side">
+      <div class="dt-side-prompt" id="dt-side-prompt">Who are you throwing for?</div>
+      <div class="dt-side-options" id="dt-side-options"></div>
+      <br>
+      <button class="btn" style="display:none;margin-bottom:0;" id="dt-side-confirm-btn" onclick="dtConfirmSide()">PLAY AS THIS PLAYER →</button>
     </div>
-    <div style="margin-bottom:16px;">
-      <label>Match moment</label>
-      <select id="dt-moment" style="width:100%;padding:10px;background:var(--card);border:1px solid var(--border);border-radius:4px;color:var(--text);font-size:14px;">
-        <option value="">-- Select moment --</option>
-        <option value="CHECKOUT_OPPORTUNITY">Checkout opportunity</option>
-        <option value="BIG_FISH">Big Fish — 170 on the board</option>
-        <option value="NINE_DARTER_POSSIBLE">Nine-darter possible</option>
-        <option value="CHECKOUT_HIT">Checkout — hit</option>
-        <option value="CHECKOUT_MISS">Checkout — miss / bust</option>
-        <option value="LEG_WON">Leg won</option>
-        <option value="SET_WON">Set won</option>
-        <option value="MATCH_WON">Match won</option>
-      </select>
+
+    <!-- Step 3: Score panel -->
+    <div id="dt-step-score" style="display:none;">
+      <div class="dt-scoreboard">
+        <div class="dt-scoreboard__player">
+          <div class="dt-scoreboard__player-name you" id="dt-sb-you-name">YOU</div>
+          <div class="dt-scoreboard__remaining you" id="dt-sb-you-rem">501</div>
+          <div class="dt-scoreboard__leg" id="dt-sb-you-leg">Leg 1</div>
+        </div>
+        <div class="dt-scoreboard__divider">vs</div>
+        <div class="dt-scoreboard__player">
+          <div class="dt-scoreboard__player-name" id="dt-sb-them-name">OPPONENT</div>
+          <div class="dt-scoreboard__remaining" id="dt-sb-them-rem">501</div>
+          <div class="dt-scoreboard__leg" id="dt-sb-them-leg">Leg 1</div>
+        </div>
+      </div>
+      <div class="dt-ctx-badge" id="dt-ctx-badge">
+        <span class="dt-ctx-dot"></span>
+        <span id="dt-ctx-text">Scoring visit — momentum territory</span>
+      </div>
+      <div class="dt-trigger-flash" id="dt-trigger-flash"></div>
+      <div class="dt-band-grid" id="dt-band-grid"></div>
+      <div class="dt-direct-entry">
+        <span class="dt-direct-label">or exact:</span>
+        <input type="number" id="dt-direct-input" class="dt-direct-input" placeholder="—" min="1" max="180" oninput="dtOnDirectInput(this.value)" onkeydown="if(event.key==='Enter')dtSubmitScore()">
+      </div>
+      <button class="btn" onclick="dtSubmitScore()" style="margin-bottom:0;">SCORE THIS VISIT 🎯</button>
     </div>
-    <div id="dt-premonition-status" style="display:none;margin-bottom:14px;padding:8px 14px;border-radius:6px;background:rgba(100,100,200,0.08);border:1px solid rgba(100,100,200,0.2);font-size:12px;color:#8888cc;"></div>
-    <button class="btn" onclick="Darts.callMoment()" id="dt-moment-btn">CALL IT 🎯</button>
+
+    <div id="dt-premonition-status" style="display:none;margin-top:10px;padding:8px 14px;border-radius:6px;background:rgba(100,100,200,0.08);border:1px solid rgba(100,100,200,0.2);font-size:12px;color:#8888cc;"></div>
   </div>
 
   <div id="dt-output" style="display:none;margin-top:24px;">
@@ -10944,6 +11072,120 @@ INTER-PANEL: Ron — the gold is the portal to everything Cox wants to say; trea
 })();
 
 // ============================================================
+// ── GOLF MODE 1 HELPERS ──────────────────────────────────────────────────────
+
+const GOLF_NAME_KEY = 'hc_golf_username';
+
+const GOLF_SUGGESTIONS = [
+  { cat: 'golf',         text: 'Is LIV Golf good for the game, or a slow-motion disaster?' },
+  { cat: 'golf',         text: 'What is the single worst club in your bag and why is it the driver?' },
+  { cat: 'golf',         text: 'Did Tiger save golf, or just delay the inevitable?' },
+  { cat: 'golf',         text: 'Is a round of golf too long, or is that the entire point?' },
+  { cat: 'golf',         text: 'Augusta: sacred cathedral of the sport, or a very expensive garden party?' },
+  { cat: 'big',          text: 'At what point does a person stop improving?' },
+  { cat: 'big',          text: 'Is confidence a skill you learn or a story you tell yourself?' },
+  { cat: 'big',          text: 'Does pressure reveal character, or just create a character that pressure demands?' },
+  { cat: 'big',          text: 'What separates the people who succeed from those who nearly did?' },
+  { cat: 'contemporary', text: 'Is the 19th hole dying out, and does it matter if it is?' },
+  { cat: 'contemporary', text: 'Golf and social media — is it helping or just making everyone\'s grip look worse?' },
+  { cat: 'contemporary', text: 'Pay-per-view majors: when does it happen and who gets the blame?' },
+  { cat: 'absurd',       text: 'If a bunker could speak, what would it say to the person who just landed in it?' },
+  { cat: 'absurd',       text: 'How many excuses is a golfer legally entitled to before they\'re just bad?' },
+  { cat: 'absurd',       text: 'Who has done more damage: the slice, or the person who invented the word \'slice\'?' },
+];
+
+const GOLF_ANCHOR_MURRAY = [
+  '{name} asks — and it\'s a genuinely important question — <strong>"{question}"</strong>',
+  '{name} puts it to the panel: <strong>"{question}"</strong>',
+  'The question from {name}, and it\'s a big one: <strong>"{question}"</strong>',
+  '{name} wants to know. And rightly so. <strong>"{question}"</strong>',
+  'Ladies and gentlemen — {name} asks: <strong>"{question}"</strong>',
+];
+
+const GOLF_ANCHOR_DOUGHERTY = [
+  '{name}! Great question. <strong>"{question}"</strong> — let\'s get into it.',
+  'Right, {name} has asked: <strong>"{question}"</strong> — and I love this one.',
+  '{name} is asking: <strong>"{question}"</strong>',
+];
+
+function golfLoadName() {
+  const saved = localStorage.getItem(GOLF_NAME_KEY) || '';
+  const el = document.getElementById('gf-username');
+  if (el) { el.value = saved; golfUpdateNameHint(saved); }
+}
+
+function golfNameInput() {
+  const val = (document.getElementById('gf-username')?.value || '').trim();
+  localStorage.setItem(GOLF_NAME_KEY, val);
+  golfUpdateNameHint(val);
+  document.getElementById('gf-username')?.classList.remove('error');
+  const req = document.getElementById('gf-name-required');
+  if (req) req.classList.remove('visible');
+}
+
+function golfUpdateNameHint(name) {
+  const hint = document.getElementById('gf-name-hint');
+  if (hint) hint.style.display = name ? 'none' : '';
+}
+
+function golfBuildSuggestions() {
+  const tray = document.getElementById('gf-suggestion-scroll');
+  if (!tray) return;
+  const shuffled = [...GOLF_SUGGESTIONS].sort(() => Math.random() - 0.5);
+  shuffled.forEach(s => {
+    const card = document.createElement('div');
+    card.className = 'gf-suggestion-card';
+    card.setAttribute('data-cat', s.cat);
+    const rot = (Math.random() * 3 - 1.5).toFixed(1);
+    card.style.transform = `rotate(${rot}deg)`;
+    card.innerHTML = `<div class="gf-suggestion-card__cat">${s.cat}</div><div>${s.text}</div>`;
+    card.addEventListener('click', () => {
+      const inp = document.getElementById('gf-input');
+      if (inp) { inp.value = s.text; inp.focus(); }
+      card.style.outline = '2px solid rgba(255,215,0,0.5)';
+      setTimeout(() => card.style.outline = '', 600);
+    });
+    tray.appendChild(card);
+  });
+}
+
+function golfShowAnchorReadback(name, question) {
+  const readback = document.getElementById('gf-anchor-readback');
+  const inner    = document.getElementById('gf-anchor-inner');
+  const whoEl    = document.getElementById('gf-anchor-who');
+  const textEl   = document.getElementById('gf-anchor-text');
+  if (!readback || !textEl) return;
+
+  // Use Murray if present in current order, else Dougherty
+  const useMurray = true; // default; could check panel order
+  const templates = useMurray ? GOLF_ANCHOR_MURRAY : GOLF_ANCHOR_DOUGHERTY;
+  const template  = templates[Math.floor(Math.random() * templates.length)];
+
+  const safeQ    = question.replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const safeName = name.replace(/</g,'&lt;');
+  const html = template.replace('{name}', `<strong>${safeName}</strong>`).replace('{question}', safeQ);
+
+  whoEl.textContent = useMurray ? 'EWEN MURRAY' : 'NICK DOUGHERTY';
+  whoEl.className   = 'gf-anchor-who' + (useMurray ? '' : ' dougherty');
+  inner.className   = 'gf-anchor-inner' + (useMurray ? '' : ' dougherty');
+
+  textEl.innerHTML = '';
+  readback.style.display = 'block';
+  readback.style.opacity  = '0';
+
+  setTimeout(() => {
+    readback.classList.add('visible');
+    textEl.style.clipPath = 'inset(0 100% 0 0)';
+    textEl.innerHTML = html;
+    const len = html.replace(/<[^>]+>/g,'').length;
+    const dur = Math.min(600, len * 16);
+    textEl.style.transition = `clip-path ${dur}ms ease-out`;
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      textEl.style.clipPath = 'inset(0 0% 0 0)';
+    }));
+  }, 80);
+}
+
 // MODULE: Golf — The 19th Hole
 // ============================================================
 const Golf = (() => {
@@ -11622,10 +11864,21 @@ NEVER SAYS: Anything bitter about the career ending. Anything suggesting comment
     const input = (document.getElementById('gf-input')?.value || '').trim();
     if (!input) { UI.toast('Give them something to discuss.', 'warn'); return; }
 
+    const golfName = (document.getElementById('gf-username')?.value || '').trim();
+    if (!golfName) {
+      const nameInput = document.getElementById('gf-username');
+      const nameReq   = document.getElementById('gf-name-required');
+      if (nameInput) { nameInput.classList.add('error'); nameInput.focus(); }
+      if (nameReq)   nameReq.classList.add('visible');
+      return;
+    }
+
     const container = document.getElementById('gf-responses');
     if (container) container.innerHTML = '';
     document.getElementById('gf-output').style.display = 'block';
     UI.setDisabled('gf-btn', true);
+
+    golfShowAnchorReadback(golfName, input);
 
     const TURN_RULES = `RULE 1 — TURN LENGTH:\nA turn can be one word, a fragment, one sentence, or two sentences. One word is a complete turn. Two sentences is the maximum — never more. Length is earned only by being directly challenged, provoked, or explicitly given the floor. The default is the shortest response that lands. A single word lands. Silence lands. Two sentences is already long.\n\nRULE 2 — REACTIVITY OBLIGATION:\nEvery response must open by reacting to the previous speaker's last sentence — not the topic generally. You are listening, not queuing.\n\nRULE 3 — CROSS-REFERENCE:\nYou may use anything said earlier in this conversation as ammunition. Wounds, indiscretions, failures, warmth — all fair game. You were there. You remember.\n\nRULE 4 — REACTIVE MOVES:\nYour reactive move is structural guidance — what you DO, not words you SAY. Seven moves available:\n(1) Agree and build — add something true that makes it worse\n(2) Agree but undermine — confirm surface, destroy substance\n(3) Contradict — name what was wrong and why\n(4) Flat refusal — one sentence, refusal is the content\n(5) Light-hearted pisstake — puncture with affection\n(6) Full-blooded insult — strongest language, lands on real wound\n(7) Mimic — three types, each distinct. Never name the type. Never signal you're doing it:\n\nType A — ECHO (affectionate): repeat their phrase in your own voice, meaning it approximately sincerely. Dougherty doing Murray: "What. A. Shot." He means it. Murray is appalled it came from him. The appalment is historically significant.\n\nType B — SUBSTITUTION (weaponized or comic): keep the verbal structure, replace the payload. "What. A. Shot." becomes: "What. A. Putt." (too small — Radar, deadpan, after a three-footer). "What. A. Cunt." (Radar again, same cadence, different noun, different round). "What. A. Framework." (Roe, at wrong volume, not knowing he's doing it). "What. A. Sandwich." (Dougherty, having lost the thread, meaning it).\n\nType C — SUSTAINED IMPRESSION (satirical): briefly become them — full register, voice, posture — until the impression loses thread mid-sentence and you re-emerge in your own voice without acknowledgement. Use once. Lands once. Does not repeat.\n\nMURRAY PATTERN — highest mimic availability in this panel. "What. A. [X]." is universal. Substitute any noun. Each panellist has a preferred substitution:\n- Radar: a devastating noun, delivered deadpan, after a pause. He has already had a drink.\n- Dougherty: a warm noun, completely sincere. "What. A. Moment." He means it. Murray cannot decide if this is better or worse.\n- McGinley: an abstract noun. "What. A. Dynamic." He has a framework for why this fits.\n- Roe: the wrong noun for the context, at wrong volume, as analysis.\n- Faldo: does not mimic Murray. Murray has never noticed this.\n\nOTHER TARGET PATTERNS:\n- McGINLEY: "high-tariff [X]" / "top-drawer [X]" / "in my wheelhouse" — substitute freely. Radar's version of "wheelhouse": one pause, then "being a gobshite."\n- DOUGHERTY: "What I love about this is—" followed by silence, or one wrong word. Radar's standard move.\n- FALDO: "I've cycled back on this." Dangerous to mimic directly. Anyone who does it gets the look. The look has been documented. Henni has notes.\n- HENNI: "I just want to ask—" deployed by McGinley to redirect, twice, in one session. She noticed. She has a follow-up.\n\nNever name the move. Never open with the label.\n\nRULE 5 — LUKE DONALD:\nLuke Donald's name is always pronounced in the manner of Matt Damon in Team America. Every time. No acknowledgement. It never stops.`;
 
@@ -11747,8 +12000,9 @@ NEVER SAYS: Anything bitter about the career ending. Anything suggesting comment
         else           CharacterState.decay(gfCharStates[member.id]);
       }
       const gfIntensityBlock = i > 0 ? `YOUR STATE:\n${CharacterState.buildBlock(gfCharStates[member.id])}\n\n` : '';
+      const golfNameBlock = golfName ? `\nThe question was brought by ${golfName}. Address ${golfName} by name at least once in your response.\n` : '';
 
-      const system = TURN_RULES + '\n\n' + gfIntensityBlock + gfYourState + tourCardBlock + roeIntroBlock + gfFoodBlock + gfMarmiteBlock + gfHypoBlock + member.prompt + _iceBreakBlock(member.id) + roundNote + mechanics + arcInstructions + (i > 0
+      const system = TURN_RULES + '\n\n' + gfIntensityBlock + gfYourState + tourCardBlock + roeIntroBlock + golfNameBlock + gfFoodBlock + gfMarmiteBlock + gfHypoBlock + member.prompt + _iceBreakBlock(member.id) + roundNote + mechanics + arcInstructions + (i > 0
         ? `\n\nPrevious:\n${prev}`
         : '');
 
@@ -11850,6 +12104,309 @@ NEVER SAYS: Anything bitter about the career ending. Anything suggesting comment
 })();
 
 // ============================================================
+// ── DARTS MATCH ENGINE ───────────────────────────────────────────────────────
+
+const DT_MATCHES = [
+  { id:'taylor-bristow-1994-wc-sf', era:'classic', participants:['Phil Taylor','Eric Bristow'], competition:'BDO World Championship', tier:'ELITE', year:1994, dramatic_weight:10,
+    stage_setter:'Frimley Green, 1994. Phil Taylor lines up against the man who gave him his first set of darts and a place to sleep. Bristow\'s hands have been betraying him for years — the yips, though nobody calls them that. Taylor knows every dart Bristow throws. He learned from watching them.',
+    triggers:['NINE_DARTER_POSSIBLE','BIG_FISH_ON_BOARD','MATCH_DART'], ai_style:{avg:102,doubles_rate:0.88,volatile:false} },
+  { id:'taylor-barneveld-2007-wc-final', era:'classic', participants:['Phil Taylor','Raymond van Barneveld'], competition:'PDC World Championship Final', tier:'ELITE', year:2007, dramatic_weight:10,
+    stage_setter:'Alexandra Palace, 2007. Taylor is two sets from a record-extending world title. Van Barneveld is being politely destroyed. Then something goes wrong for Taylor, or right for everyone else.',
+    triggers:['NINE_DARTER_POSSIBLE','BIG_FISH_ON_BOARD','MATCH_DART','COMEBACK'], ai_style:{avg:98,doubles_rate:0.82,volatile:true} },
+  { id:'lowe-nine-darter-1984', era:'classic', participants:['John Lowe','Kirk Stevens'], competition:'BDO World Championship', tier:'ELITE', year:1984, dramatic_weight:10,
+    stage_setter:'Lakeside, 1984. John Lowe has just thrown six perfect darts. In the history of televised darts, nobody has ever done what he is about to attempt.',
+    triggers:['NINE_DARTER_POSSIBLE','MATCH_DART'], ai_style:{avg:85,doubles_rate:0.75,volatile:false} },
+  { id:'bristow-wilson-1983-wc-final', era:'classic', participants:['Eric Bristow','Jocky Wilson'], competition:'BDO World Championship Final', tier:'ELITE', year:1983, dramatic_weight:9,
+    stage_setter:'Jollees Cabaret Club, Stoke, 1983. Two men who have been drinking since before the tournament started face each other for the world title.',
+    triggers:['BIG_FISH_ON_BOARD','MATCH_DART'], ai_style:{avg:88,doubles_rate:0.78,volatile:true} },
+  { id:'taylor-barneveld-2013-worlds', era:'classic', participants:['Phil Taylor','Raymond van Barneveld'], competition:'PDC World Championship', tier:'ELITE', year:2013, dramatic_weight:10,
+    stage_setter:'Alexandra Palace, 2013. Phil Taylor is losing a PDC World Championship match. This is unusual enough to be news. Van Barneveld has three sets. Taylor has none.',
+    triggers:['NINE_DARTER_POSSIBLE','BIG_FISH_ON_BOARD','MATCH_DART','COMEBACK','MAXIMUMS_RUN'], ai_style:{avg:97,doubles_rate:0.84,volatile:true} },
+  { id:'littler-humphries-2024-wc-final', era:'current', participants:['Luke Littler','Luke Humphries'], competition:'PDC World Championship Final', tier:'ELITE', year:2024, dramatic_weight:9,
+    stage_setter:'Alexandra Palace, 2024. Luke Littler is sixteen years old and has reached the World Championship Final. Luke Humphries, who is excellent and adult, finds himself cast as the obstacle in someone else\'s story.',
+    triggers:['NINE_DARTER_POSSIBLE','BIG_FISH_ON_BOARD','MATCH_DART','MAXIMUMS_RUN'], ai_style:{avg:103,doubles_rate:0.87,volatile:false} },
+  { id:'littler-mvg-2024-premier-league', era:'current', participants:['Luke Littler','Michael van Gerwen'], competition:'Premier League Darts', tier:'MAJOR', year:2024, dramatic_weight:9,
+    stage_setter:'The O2, 2024. Luke Littler is seventeen. Van Gerwen has been the best darts player in the world for a decade and has no intention of discussing the implications of that.',
+    triggers:['NINE_DARTER_POSSIBLE','BIG_FISH_ON_BOARD','MATCH_DART','MAXIMUMS_RUN'], ai_style:{avg:105,doubles_rate:0.91,volatile:false} },
+  { id:'wright-price-2021-wc-final', era:'current', participants:['Peter Wright','Gerwyn Price'], competition:'PDC World Championship Final', tier:'ELITE', year:2021, dramatic_weight:9,
+    stage_setter:'Alexandra Palace, 2021. Wright has painted his face. Price played rugby. Between them they account for more personality than most darts finals have produced in the previous decade combined.',
+    triggers:['NINE_DARTER_POSSIBLE','BIG_FISH_ON_BOARD','MATCH_DART','MAXIMUMS_RUN'], ai_style:{avg:99,doubles_rate:0.83,volatile:true} },
+];
+
+const DT_HOT_TRIGGERS = ['BIG_FISH_ON_BOARD','NINE_DARTER_POSSIBLE','COMEBACK'];
+
+function dtGetBands(remaining) {
+  if (remaining <= 60) {
+    return [
+      { label:'Miss',    range:'0',                         modal:'turn lost', band:0 },
+      { label:'Partial', range:'1–'+Math.floor(remaining*0.6), modal:'leave awkward', band:Math.floor(remaining*0.3) },
+      { label:'Finish',  range:String(remaining),           modal:'game shot', band:remaining },
+    ];
+  }
+  if (remaining <= 170) {
+    return [
+      { label:'Miss',       range:'0',     modal:'turn lost',      band:0 },
+      { label:'Set Up',     range:'1–40',  modal:'leave a double', band:32 },
+      { label:'Ton Plus',   range:'60–100',modal:'scoring visit',  band:100 },
+      { label:'Big Finish', range:String(remaining), modal:'game shot', band:remaining },
+    ];
+  }
+  return [
+    { label:'Bed & Breakfast', range:'26',      modal:'26',  band:26 },
+    { label:'Dogshit',         range:'27–59',   modal:'41',  band:41 },
+    { label:'Ton Plus',        range:'60–139',  modal:'100', band:100 },
+    { label:'Ton-Forty Plus',  range:'140–179', modal:'140', band:140 },
+    { label:'Maxi',            range:'180',     modal:'180', band:180 },
+  ];
+}
+
+const dtState = {
+  era:'classic', selectedMatch:null, userSide:null,
+  userRemaining:501, aiRemaining:501, legNum:1,
+  selectedBand:null, directVal:null,
+};
+
+function dtToggleEra() {
+  dtState.era = dtState.era === 'classic' ? 'current' : 'classic';
+  dtState.selectedMatch = null;
+  const track   = document.getElementById('dt-era-track');
+  const caption = document.getElementById('dt-era-caption');
+  const btn     = document.getElementById('dt-match-confirm-btn');
+  if (dtState.era === 'current') {
+    track?.classList.add('current');
+    caption?.classList.add('current');
+    if (caption) caption.textContent = 'Current Season (2023–24)';
+  } else {
+    track?.classList.remove('current');
+    caption?.classList.remove('current');
+    if (caption) caption.textContent = 'Classics';
+  }
+  if (btn) btn.style.display = 'none';
+  dtRenderMatchList();
+}
+
+function dtRenderMatchList() {
+  const list = document.getElementById('dt-match-list');
+  if (!list) return;
+  const matches = DT_MATCHES.filter(m => m.era === dtState.era);
+  list.innerHTML = '';
+  matches.forEach(m => {
+    const card = document.createElement('div');
+    card.className = 'dt-match-card';
+    card.id = 'dt-mc-' + m.id;
+    const pips = Array.from({length:10},(_,i) => `<span class="dt-dw-pip${i < m.dramatic_weight ? ' lit':''}"></span>`).join('');
+    const trigHtml = m.triggers.map(t => `<span class="dt-trigger-pill${DT_HOT_TRIGGERS.includes(t)?' hot':''}">${t}</span>`).join('');
+    card.innerHTML = `
+      <div class="dt-match-card__top">
+        <div class="dt-match-card__participants">${m.participants.join(' vs ')}</div>
+        <div class="dt-match-card__meta"><span class="dt-match-card__year">${m.year}</span><div class="dt-match-card__dw">${pips}</div></div>
+      </div>
+      <div class="dt-match-card__comp">${m.competition}<span class="dt-match-card__tier ${m.tier}">${m.tier}</span></div>
+      <div class="dt-match-card__setter">${m.stage_setter}<div class="dt-match-card__triggers">${trigHtml}</div></div>`;
+    card.addEventListener('click', () => dtSelectMatch(m.id, card));
+    list.appendChild(card);
+  });
+}
+
+function dtSelectMatch(id, cardEl) {
+  document.querySelectorAll('.dt-match-card').forEach(c => c.classList.remove('selected'));
+  cardEl.classList.add('selected');
+  dtState.selectedMatch = DT_MATCHES.find(m => m.id === id);
+  const btn = document.getElementById('dt-match-confirm-btn');
+  if (btn) btn.style.display = '';
+}
+
+function dtConfirmMatch() {
+  if (!dtState.selectedMatch) return;
+  document.getElementById('dt-step-match').style.display = 'none';
+  dtRenderSidePicker();
+  document.getElementById('dt-step-side')?.classList.add('visible');
+}
+
+function dtRenderSidePicker() {
+  const m = dtState.selectedMatch;
+  const prompt = document.getElementById('dt-side-prompt');
+  if (prompt) prompt.textContent = `${m.competition}, ${m.year}. Who are you throwing for?`;
+  const opts = document.getElementById('dt-side-options');
+  if (!opts) return;
+  opts.innerHTML = '';
+  m.participants.forEach((p, i) => {
+    const btn = document.createElement('div');
+    btn.className = 'dt-side-btn';
+    btn.innerHTML = `<div class="dt-side-btn__name">${p}</div><div class="dt-side-btn__sub">${i===0?'Player 1':'Player 2'}</div>`;
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.dt-side-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      dtState.userSide = i;
+      const conf = document.getElementById('dt-side-confirm-btn');
+      if (conf) conf.style.display = '';
+    });
+    opts.appendChild(btn);
+  });
+}
+
+function dtConfirmSide() {
+  if (dtState.userSide === null) return;
+  document.getElementById('dt-step-side')?.classList.remove('visible');
+  document.getElementById('dt-step-score').style.display = '';
+  dtState.userRemaining = 501; dtState.aiRemaining = 501; dtState.legNum = 1;
+  dtRenderScorePanel();
+}
+
+function dtRenderScorePanel() {
+  const m    = dtState.selectedMatch;
+  const you  = m.participants[dtState.userSide];
+  const them = m.participants[1 - dtState.userSide];
+  const youNameEl  = document.getElementById('dt-sb-you-name');
+  const themNameEl = document.getElementById('dt-sb-them-name');
+  if (youNameEl)  youNameEl.textContent  = you.toUpperCase();
+  if (themNameEl) themNameEl.textContent = them.toUpperCase();
+  dtUpdateScoreboard();
+  dtRenderBands();
+  dtUpdateCtxBadge();
+}
+
+function dtUpdateScoreboard() {
+  const youRemEl  = document.getElementById('dt-sb-you-rem');
+  const themRemEl = document.getElementById('dt-sb-them-rem');
+  const youLegEl  = document.getElementById('dt-sb-you-leg');
+  const themLegEl = document.getElementById('dt-sb-them-leg');
+  if (youRemEl)  { youRemEl.textContent  = dtState.userRemaining; youRemEl.className = 'dt-scoreboard__remaining you' + (dtState.userRemaining <= 60 ? ' danger' : ''); }
+  if (themRemEl) themRemEl.textContent = dtState.aiRemaining;
+  if (youLegEl)  youLegEl.textContent  = `Leg ${dtState.legNum}`;
+  if (themLegEl) themLegEl.textContent = `Leg ${dtState.legNum}`;
+}
+
+function dtRenderBands() {
+  const grid = document.getElementById('dt-band-grid');
+  if (!grid) return;
+  const bands = dtGetBands(dtState.userRemaining);
+  dtState.selectedBand = null;
+  grid.innerHTML = '';
+  grid.style.gridTemplateColumns = bands.length <= 3 ? 'repeat(3,1fr)' : 'repeat(3,1fr)';
+  bands.forEach(b => {
+    const btn = document.createElement('div');
+    btn.className = 'dt-band-btn';
+    btn.innerHTML = `<span class="dt-band-btn__label">${b.label}</span><span class="dt-band-btn__range">${b.range}</span>${b.modal?`<span class="dt-band-btn__modal">~${b.modal}</span>`:''}`;
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.dt-band-btn').forEach(x => x.classList.remove('selected'));
+      btn.classList.add('selected');
+      dtState.selectedBand = b.band;
+      dtState.directVal = null;
+      const di = document.getElementById('dt-direct-input');
+      if (di) di.value = '';
+    });
+    grid.appendChild(btn);
+  });
+}
+
+function dtUpdateCtxBadge() {
+  const badge  = document.getElementById('dt-ctx-badge');
+  const textEl = document.getElementById('dt-ctx-text');
+  if (!badge || !textEl) return;
+  const r = dtState.userRemaining;
+  badge.className = 'dt-ctx-badge';
+  if (r <= 60) {
+    badge.classList.add('max-pressure');
+    textEl.textContent = `${r} remaining — maximum pressure`;
+  } else if (r <= 170) {
+    badge.classList.add('finish-on');
+    textEl.textContent = `${r} remaining — finish is on`;
+  } else {
+    textEl.textContent = `${r} remaining — scoring visit`;
+  }
+}
+
+function dtOnDirectInput(val) {
+  dtState.directVal    = parseInt(val) || null;
+  dtState.selectedBand = null;
+  document.querySelectorAll('.dt-band-btn').forEach(x => x.classList.remove('selected'));
+}
+
+function dtGenerateAiScore(match, remaining) {
+  const style = match.ai_style;
+  if (remaining <= 40) return Math.random() < style.doubles_rate ? remaining : 0;
+  if (remaining <= 170) {
+    const v = Math.round(style.avg * (0.7 + Math.random() * 0.6));
+    return Math.min(v, remaining);
+  }
+  const variance = style.volatile ? 0.5 : 0.25;
+  const v = Math.round(style.avg * (1 - variance/2 + Math.random() * variance));
+  return Math.min(Math.max(v, 20), 180);
+}
+
+function dtCheckTriggers(score, remaining) {
+  const flash    = document.getElementById('dt-trigger-flash');
+  const triggers = dtState.selectedMatch?.triggers || [];
+  let msg = '';
+  if (remaining === 170 && triggers.includes('BIG_FISH_ON_BOARD'))
+    msg = 'BIG_FISH_ON_BOARD — 170 remaining. Mardle is pending.';
+  else if (score === 180 && triggers.includes('MAXIMUMS_RUN'))
+    msg = '180 — MAXIMUMS_RUN. Nine-darter watch begins.';
+  if (msg && flash) {
+    flash.textContent = msg;
+    flash.classList.add('visible');
+    setTimeout(() => flash.classList.remove('visible'), 4000);
+  }
+}
+
+function dtSubmitScore() {
+  const score = dtState.directVal ?? dtState.selectedBand;
+  if (score === null) return;
+  const effective = score > dtState.userRemaining ? 0 : score;
+  if (effective === 0 && score !== 0) {
+    dtState.userRemaining; // stay (bust)
+  } else {
+    dtState.userRemaining = dtState.userRemaining - effective;
+  }
+  const aiScore = dtGenerateAiScore(dtState.selectedMatch, dtState.aiRemaining);
+  dtState.aiRemaining = Math.max(0, dtState.aiRemaining - aiScore);
+  dtUpdateScoreboard();
+  dtRenderBands();
+  dtUpdateCtxBadge();
+  dtCheckTriggers(effective, dtState.userRemaining);
+  dtState.selectedBand = null; dtState.directVal = null;
+  const di = document.getElementById('dt-direct-input');
+  if (di) di.value = '';
+  document.querySelectorAll('.dt-band-btn').forEach(x => x.classList.remove('selected'));
+
+  // Build context and fire commentary via callMoment
+  const m = dtState.selectedMatch;
+  const you  = m.participants[dtState.userSide];
+  const them = m.participants[1 - dtState.userSide];
+  let commentaryMode = dtState.userRemaining > 170 ? 'MOMENTUM' : dtState.userRemaining <= 60 ? 'MAX_PRESSURE' : 'FINISH_TERRITORY';
+  if (dtState.userRemaining === 0 || dtState.aiRemaining === 0) {
+    const winner = dtState.userRemaining === 0 ? you : them;
+    dtState.legNum++;
+    dtState.userRemaining = 501; dtState.aiRemaining = 501;
+    dtUpdateScoreboard(); dtRenderBands(); dtUpdateCtxBadge();
+    commentaryMode = 'LEG_WON';
+  }
+
+  // Inject match context into premonition block for callMoment
+  const prem = document.getElementById('dt-premonition-status');
+  if (prem) {
+    prem.style.display = 'block';
+    prem.textContent = `${m.competition} ${m.year} — ${you} (you) ${dtState.userRemaining} | ${them} ${dtState.aiRemaining} — Mode: ${commentaryMode}`;
+  }
+
+  // Store match context for callMoment to pick up
+  sessionStorage.setItem('dt-match-ctx', JSON.stringify({
+    match_id: m.id, you, them, userScore: effective, aiScore,
+    userRemaining: dtState.userRemaining, aiRemaining: dtState.aiRemaining,
+    legNum: dtState.legNum, commentaryMode,
+    bust: effective === 0 && score !== 0,
+    era_lock: m.era === 'classic' ? m.year : null,
+    ai_style: m.ai_style, triggers: m.triggers,
+  }));
+
+  Darts.callMoment();
+}
+
+function dtInitMatchEngine() {
+  dtRenderMatchList();
+}
+
 // MODULE: Darts — Watching the Oche
 // ============================================================
 const Darts = (() => {
@@ -12547,16 +13104,28 @@ PYKE-ISMS — phrases that recur in your speech. Use them naturally. Other panel
   }
 
   async function callMoment() {
-    const momentType = (document.getElementById('dt-moment')?.value || '').trim();
-    if (!momentType) { UI.toast('Select a match moment first.', 'warn'); return; }
+    // Match engine mode — context written by dtSubmitScore()
+    const rawCtx = sessionStorage.getItem('dt-match-ctx');
+    const matchCtx = rawCtx ? JSON.parse(rawCtx) : null;
+    sessionStorage.removeItem('dt-match-ctx');
 
-    const p1  = parseInt(document.getElementById('dt-p1')?.value)  || 0;
-    const p2  = parseInt(document.getElementById('dt-p2')?.value)  || 0;
-    const leg = parseInt(document.getElementById('dt-leg')?.value)  || 1;
-    const set = parseInt(document.getElementById('dt-set')?.value)  || 1;
-
-    const labelFn = MOMENT_LABELS[momentType];
-    const momentLabel = labelFn ? labelFn(p1, p2, leg, set) : momentType;
+    let p1, p2, leg, set, momentType, momentLabel;
+    if (matchCtx) {
+      p1 = matchCtx.userRemaining; p2 = matchCtx.aiRemaining;
+      leg = matchCtx.legNum; set = 1;
+      momentType = matchCtx.commentaryMode;
+      const bustNote = matchCtx.bust ? ' (BUST)' : '';
+      momentLabel = `${matchCtx.match_id} — ${matchCtx.you} ${matchCtx.bust?'BUST':matchCtx.userScore} (rem: ${p1}) | ${matchCtx.them} ${matchCtx.aiScore} (rem: ${p2}) — ${momentType}${bustNote}. Leg ${leg}. Era: ${matchCtx.era_lock ? matchCtx.era_lock : 'current'}.`;
+    } else {
+      momentType = (document.getElementById('dt-moment')?.value || '').trim();
+      if (!momentType) { UI.toast('Select a match moment first.', 'warn'); return; }
+      p1  = parseInt(document.getElementById('dt-p1')?.value)  || 0;
+      p2  = parseInt(document.getElementById('dt-p2')?.value)  || 0;
+      leg = parseInt(document.getElementById('dt-leg')?.value)  || 1;
+      set = parseInt(document.getElementById('dt-set')?.value)  || 1;
+      const labelFn = MOMENT_LABELS[momentType];
+      momentLabel = labelFn ? labelFn(p1, p2, leg, set) : momentType;
+    }
 
     const draw = _getDraw();
     const crowdState = _escalateCrowd();
@@ -12636,7 +13205,8 @@ PYKE-ISMS — phrases that recur in your speech. Use them naturally. Other panel
         const dtYourState       = RelationshipState.buildBlock(dtRelState, member.id, draw, DARTS_NAMEMAP, DARTS_VOICE_FMT);
         const dtPremonitionBlock = _buildPremonitionBlock(member.id, ledger);
 
-        const matchBlock = `\nMATCH MOMENT: ${momentLabel}\nSet: ${set}, Leg: ${leg}. Player 1: ${p1}. Player 2: ${p2}.\nYou are reacting to this moment live. React to the moment and to each other — not to a question.\n`;
+        const eraLockNote = matchCtx?.era_lock ? `\nERA LOCK: You have knowledge only up to ${matchCtx.era_lock}. No future results, no players not yet active, no technology not yet invented.\n` : '';
+        const matchBlock = `\nMATCH MOMENT: ${momentLabel}\nSet: ${set}, Leg: ${leg}. ${matchCtx ? `${matchCtx.you}: ${p1} remaining. ${matchCtx.them}: ${p2} remaining.` : `Player 1: ${p1}. Player 2: ${p2}.`}\nYou are reacting to this moment live. React to the moment and to each other — not to a question.${eraLockNote}\n`;
 
         const system = TURN_RULES + '\n\n' + dtIntensityBlock + dtYourState + dtPremonitionBlock + dtFoodBlock + dtMarmiteBlock + dtHypoBlock + member.prompt + _iceBreakBlock(member.id) + matchBlock + crowdBlock + frankensteinBlock + (i > 0 ? `\n\nPrevious:\n${prev}` : '');
 
@@ -14068,6 +14638,9 @@ RESPONSE FORMAT — return ONLY valid JSON, no text outside it:
 // INIT
 // =====================
 App.init();
+golfLoadName();
+golfBuildSuggestions();
+dtInitMatchEngine();
 
 // Settings panel accessible via URL hash — e.g. asspirited.cusslab.io/#settings
 function _checkSettingsHash() {
