@@ -1899,12 +1899,43 @@
   <div class="panel-title">⚽ Post Game Cunditry</div>
   <div class="panel-desc">Souness thinks everyone in this room is soft. Micah thinks everything is BRILLIANT. Neville has the clips. Carragher has suffered, specifically, through Liverpool, and that suffering gives him authority on all topics. Big Ron invented the language and the microphone is always on now. Put something in front of them.</div>
 
-  <div style="margin-bottom:20px;">
-    <label>The match. The incident. The player. The decision. Whatever it is.</label>
-    <textarea id="fb-input" rows="3" placeholder="e.g. Was that a red card? Should he have been dropped? Is modern football too soft? Was it a penalty?"></textarea>
+  <!-- Mode tabs -->
+  <div style="display:flex;gap:8px;margin-bottom:20px;">
+    <button id="fb-tab-qanda" class="btn-secondary" onclick="Football.switchMode('qanda')" style="flex:1;font-size:13px;padding:8px 12px;border-color:var(--accent);color:var(--accent);">The Pub After</button>
+    <button id="fb-tab-ingame" class="btn-secondary" onclick="Football.switchMode('ingame')" style="flex:1;font-size:13px;padding:8px 12px;">Desk by the Cornerflag</button>
   </div>
 
-  <button class="btn" onclick="Football.discuss()" id="fb-btn">TO THE PUB ⚽</button>
+  <!-- Q&A mode -->
+  <div id="fb-qanda-view">
+    <div style="margin-bottom:20px;">
+      <label>The match. The incident. The player. The decision. Whatever it is.</label>
+      <textarea id="fb-input" rows="3" placeholder="e.g. Was that a red card? Should he have been dropped? Is modern football too soft? Was it a penalty?"></textarea>
+    </div>
+    <button class="btn" onclick="Football.discuss()" id="fb-btn">TO THE PUB ⚽</button>
+  </div>
+
+  <!-- In-Game mode (Desk by the Cornerflag) -->
+  <div id="fb-ingame-view" style="display:none;">
+    <div style="margin-bottom:14px;">
+      <label style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);display:block;margin-bottom:4px;">Situation (optional)</label>
+      <input type="text" id="fb-situation" placeholder="e.g. 89th minute, 1-0 up, left back injured" style="width:100%;box-sizing:border-box;padding:8px;background:var(--card);border:1px solid var(--border);border-radius:4px;color:var(--text);font-size:14px;">
+    </div>
+    <div style="margin-bottom:16px;">
+      <label>Match moment</label>
+      <select id="fb-moment" style="width:100%;padding:10px;background:var(--card);border:1px solid var(--border);border-radius:4px;color:var(--text);font-size:14px;">
+        <option value="">-- Select moment --</option>
+        <option value="GOAL">Goal scored</option>
+        <option value="PENALTY">Penalty — awarded</option>
+        <option value="RED_CARD">Red card</option>
+        <option value="VAR_DECISION">VAR decision</option>
+        <option value="HALF_TIME">Half time</option>
+        <option value="FULL_TIME">Full time</option>
+        <option value="SUBSTITUTION">Substitution</option>
+        <option value="INJURY">Player down / injury</option>
+      </select>
+    </div>
+    <button class="btn" onclick="Football.callMoment()" id="fb-moment-btn">TO THE DESK ⚽</button>
+  </div>
 
   <div id="fb-output" style="display:none;margin-top:24px;">
     <div id="fb-responses"></div>
@@ -1915,7 +1946,7 @@
       <button class="feedback-btn" onclick="panelRating(event,'football','🤣')" title="Brilliant">🤣</button>
       <button class="btn-secondary" onclick="showAskUs('football')" style="margin-left:8px;font-size:12px;padding:6px 12px;">Ask us</button>
     </div>
-    <button class="btn-secondary" onclick="Football.discuss()" style="margin-top:12px;">NEXT ROUND 🔄</button>
+    <button class="btn-secondary" onclick="Football.nextRound()" style="margin-top:12px;">NEXT ROUND 🔄</button>
   </div>
 </div>
 
@@ -1924,13 +1955,45 @@
   <div class="panel-title">⛳ The 19th Hole</div>
   <div class="panel-desc">Faldo has cycled back and thought about this. Butch Harmon sees something in the swing nobody else sees — his left eye may be operating independently. Coltart is fine. He is fine about Valderrama. He would like to be clear about that. Put a shot, a round, or a player in front of them.</div>
 
-  <div style="margin-bottom:20px;">
-    <div id="gf-round-indicator" style="display:none;margin-bottom:12px;padding:8px 14px;border-radius:6px;background:rgba(255,215,0,0.08);border:1px solid rgba(255,215,0,0.2);font-size:13px;font-weight:600;letter-spacing:0.05em;color:#ffd700;"></div>
-    <label>The shot. The player. The hole. The round. The decision.</label>
-    <textarea id="gf-input" rows="3" placeholder="e.g. Was that the right club selection? Can he win from here? What does that swing tell you?"></textarea>
+  <!-- Mode tabs -->
+  <div style="display:flex;gap:8px;margin-bottom:20px;">
+    <button id="gf-tab-qanda" class="btn-secondary" onclick="Golf.switchMode('qanda')" style="flex:1;font-size:13px;padding:8px 12px;border-color:var(--accent);color:var(--accent);">The 19th Hole</button>
+    <button id="gf-tab-ingame" class="btn-secondary" onclick="Golf.switchMode('ingame')" style="flex:1;font-size:13px;padding:8px 12px;">On the Course</button>
   </div>
 
-  <button class="btn" onclick="Golf.discuss()" id="gf-btn">INTO THE 19TH ⛳</button>
+  <!-- Q&A mode -->
+  <div id="gf-qanda-view">
+    <div style="margin-bottom:20px;">
+      <div id="gf-round-indicator" style="display:none;margin-bottom:12px;padding:8px 14px;border-radius:6px;background:rgba(255,215,0,0.08);border:1px solid rgba(255,215,0,0.2);font-size:13px;font-weight:600;letter-spacing:0.05em;color:#ffd700;"></div>
+      <label>The shot. The player. The hole. The round. The decision.</label>
+      <textarea id="gf-input" rows="3" placeholder="e.g. Was that the right club selection? Can he win from here? What does that swing tell you?"></textarea>
+    </div>
+    <button class="btn" onclick="Golf.discuss()" id="gf-btn">INTO THE 19TH ⛳</button>
+  </div>
+
+  <!-- In-Game mode (On the Course) -->
+  <div id="gf-ingame-view" style="display:none;">
+    <div style="margin-bottom:14px;">
+      <label style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);display:block;margin-bottom:4px;">Situation (optional)</label>
+      <input type="text" id="gf-situation" placeholder="e.g. 14th hole, -4 through 13, wind into" style="width:100%;box-sizing:border-box;padding:8px;background:var(--card);border:1px solid var(--border);border-radius:4px;color:var(--text);font-size:14px;">
+    </div>
+    <div style="margin-bottom:16px;">
+      <label>Shot moment</label>
+      <select id="gf-moment" style="width:100%;padding:10px;background:var(--card);border:1px solid var(--border);border-radius:4px;color:var(--text);font-size:14px;">
+        <option value="">-- Select moment --</option>
+        <option value="TEE_SHOT">Tee shot</option>
+        <option value="APPROACH">Approach shot</option>
+        <option value="CHIP">Chip</option>
+        <option value="PUTT">Putt</option>
+        <option value="BIRDIE">Birdie</option>
+        <option value="EAGLE">Eagle</option>
+        <option value="BOGEY">Bogey</option>
+        <option value="HOLE_COMPLETE">Hole complete</option>
+        <option value="ROUND_COMPLETE">Round complete</option>
+      </select>
+    </div>
+    <button class="btn" onclick="Golf.callMoment()" id="gf-moment-btn">ON THE COURSE ⛳</button>
+  </div>
 
   <div id="gf-output" style="display:none;margin-top:24px;">
     <div id="gf-responses"></div>
@@ -1941,7 +2004,7 @@
       <button class="feedback-btn" onclick="panelRating(event,'golf','🤣')" title="Brilliant">🤣</button>
       <button class="btn-secondary" onclick="showAskUs('golf')" style="margin-left:8px;font-size:12px;padding:6px 12px;">Ask us</button>
     </div>
-    <button class="btn-secondary" onclick="Golf.discuss()" style="margin-top:12px;">NEXT ROUND 🔄</button>
+    <button class="btn-secondary" onclick="Golf.nextRound()" style="margin-top:12px;">NEXT ROUND 🔄</button>
   </div>
 </div>
 
@@ -2024,13 +2087,45 @@
   <div class="panel-title">🏏 The Long Room</div>
   <div class="panel-desc">Boycott has thought about this. His average should be higher. Bumble finds everything magnificent and draws with Zimbabwe. Warne would like to discuss captaincy — also, back yourself. Put a match, a player, or a decision in front of them.</div>
 
-  <div style="margin-bottom:20px;">
-    <div id="lr-round-indicator" style="display:none;margin-bottom:12px;padding:8px 14px;border-radius:6px;background:rgba(0,229,255,0.06);border:1px solid rgba(0,229,255,0.2);font-size:13px;font-weight:600;letter-spacing:0.05em;color:#00e5ff;"></div>
-    <label>The match. The player. The shot. The selection. The era.</label>
-    <textarea id="lr-input" rows="3" placeholder="e.g. Was that the right declaration? Should England have picked him? What does that technique tell you?"></textarea>
+  <!-- Mode tabs -->
+  <div style="display:flex;gap:8px;margin-bottom:20px;">
+    <button id="lr-tab-qanda" class="btn-secondary" onclick="LongRoom.switchMode('qanda')" style="flex:1;font-size:13px;padding:8px 12px;border-color:var(--accent);color:var(--accent);">The Long Room</button>
+    <button id="lr-tab-ingame" class="btn-secondary" onclick="LongRoom.switchMode('ingame')" style="flex:1;font-size:13px;padding:8px 12px;">At the Crease</button>
   </div>
 
-  <button class="btn" onclick="LongRoom.discuss()" id="lr-btn">INTO THE LONG ROOM 🏏</button>
+  <!-- Q&A mode -->
+  <div id="lr-qanda-view">
+    <div style="margin-bottom:20px;">
+      <div id="lr-round-indicator" style="display:none;margin-bottom:12px;padding:8px 14px;border-radius:6px;background:rgba(0,229,255,0.06);border:1px solid rgba(0,229,255,0.2);font-size:13px;font-weight:600;letter-spacing:0.05em;color:#00e5ff;"></div>
+      <label>The match. The player. The shot. The selection. The era.</label>
+      <textarea id="lr-input" rows="3" placeholder="e.g. Was that the right declaration? Should England have picked him? What does that technique tell you?"></textarea>
+    </div>
+    <button class="btn" onclick="LongRoom.discuss()" id="lr-btn">INTO THE LONG ROOM 🏏</button>
+  </div>
+
+  <!-- In-Game mode (At the Crease) -->
+  <div id="lr-ingame-view" style="display:none;">
+    <div style="margin-bottom:14px;">
+      <label style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);display:block;margin-bottom:4px;">Situation (optional)</label>
+      <input type="text" id="lr-situation" placeholder="e.g. over 34, 180-4, tail exposed, pitch turning" style="width:100%;box-sizing:border-box;padding:8px;background:var(--card);border:1px solid var(--border);border-radius:4px;color:var(--text);font-size:14px;">
+    </div>
+    <div style="margin-bottom:16px;">
+      <label>Match moment</label>
+      <select id="lr-moment" style="width:100%;padding:10px;background:var(--card);border:1px solid var(--border);border-radius:4px;color:var(--text);font-size:14px;">
+        <option value="">-- Select moment --</option>
+        <option value="DELIVERY">Delivery</option>
+        <option value="BOUNDARY_FOUR">Boundary — four</option>
+        <option value="BOUNDARY_SIX">Boundary — six</option>
+        <option value="WICKET">Wicket</option>
+        <option value="OVER_COMPLETE">Over complete</option>
+        <option value="DRS_REVIEW">DRS review</option>
+        <option value="FIFTY">Fifty</option>
+        <option value="HUNDRED">Hundred</option>
+        <option value="INNINGS_COMPLETE">Innings complete</option>
+      </select>
+    </div>
+    <button class="btn" onclick="LongRoom.callMoment()" id="lr-moment-btn">AT THE CREASE 🏏</button>
+  </div>
 
   <div id="lr-output" style="display:none;margin-top:24px;">
     <div id="lr-responses"></div>
@@ -2041,7 +2136,7 @@
       <button class="feedback-btn" onclick="panelRating(event,'cricket','🤣')" title="Brilliant">🤣</button>
       <button class="btn-secondary" onclick="showAskUs('cricket')" style="margin-left:8px;font-size:12px;padding:6px 12px;">Ask us</button>
     </div>
-    <button class="btn-secondary" onclick="LongRoom.discuss()" style="margin-top:12px;">NEXT BALL 🔄</button>
+    <button class="btn-secondary" onclick="LongRoom.nextRound()" style="margin-top:12px;">NEXT BALL 🔄</button>
   </div>
 </div>
 
@@ -10691,7 +10786,47 @@ INTER-PANEL: Ron — the gold is the portal to everything Cox wants to say; trea
     if (body) { body.style.color = ''; body.style.fontStyle = ''; body.textContent = text || '…'; }
   }
 
-  return { discuss };
+  const FB_MOMENT_LABELS = {
+    GOAL:         'Goal scored',
+    PENALTY:      'Penalty — awarded',
+    RED_CARD:     'Red card',
+    VAR_DECISION: 'VAR decision',
+    HALF_TIME:    'Half time',
+    FULL_TIME:    'Full time',
+    SUBSTITUTION: 'Substitution',
+    INJURY:       'Player down / injury',
+  };
+
+  function callMoment() {
+    const momentType = (document.getElementById('fb-moment') || {}).value;
+    if (!momentType) { alert('Select a moment first.'); return; }
+    const situation = ((document.getElementById('fb-situation') || {}).value || '').trim();
+    const label = FB_MOMENT_LABELS[momentType] || momentType;
+    const prompt = situation ? `${label} — ${situation}` : label;
+    const inp = document.getElementById('fb-input');
+    if (inp) inp.value = prompt;
+    discuss();
+  }
+
+  function switchMode(mode) {
+    sessionStorage.setItem('fb-mode', mode);
+    const isIngame = mode === 'ingame';
+    document.getElementById('fb-qanda-view').style.display  = isIngame ? 'none' : '';
+    document.getElementById('fb-ingame-view').style.display = isIngame ? ''     : 'none';
+    const activeStyle   = 'border-color:var(--accent);color:var(--accent);';
+    const inactiveStyle = '';
+    document.getElementById('fb-tab-qanda').style.cssText  = isIngame ? inactiveStyle : activeStyle;
+    document.getElementById('fb-tab-ingame').style.cssText = isIngame ? activeStyle   : inactiveStyle;
+    const out = document.getElementById('fb-output');
+    if (out) out.style.display = 'none';
+  }
+
+  function nextRound() {
+    const mode = sessionStorage.getItem('fb-mode') || 'qanda';
+    if (mode === 'ingame') callMoment(); else discuss();
+  }
+
+  return { discuss, callMoment, switchMode, nextRound };
 })();
 
 // ============================================================
@@ -11556,7 +11691,48 @@ NEVER SAYS: Anything bitter about the career ending. Anything suggesting comment
     if (body) { body.style.color = ''; body.style.fontStyle = ''; body.textContent = text || '…'; }
   }
 
-  return { discuss };
+  const GF_MOMENT_LABELS = {
+    TEE_SHOT:       'Tee shot',
+    APPROACH:       'Approach shot',
+    CHIP:           'Chip',
+    PUTT:           'Putt',
+    BIRDIE:         'Birdie',
+    EAGLE:          'Eagle',
+    BOGEY:          'Bogey',
+    HOLE_COMPLETE:  'Hole complete',
+    ROUND_COMPLETE: 'Round complete',
+  };
+
+  function callMoment() {
+    const momentType = (document.getElementById('gf-moment') || {}).value;
+    if (!momentType) { alert('Select a moment first.'); return; }
+    const situation = ((document.getElementById('gf-situation') || {}).value || '').trim();
+    const label = GF_MOMENT_LABELS[momentType] || momentType;
+    const prompt = situation ? `${label} — ${situation}` : label;
+    const inp = document.getElementById('gf-input');
+    if (inp) inp.value = prompt;
+    discuss();
+  }
+
+  function switchMode(mode) {
+    sessionStorage.setItem('gf-mode', mode);
+    const isIngame = mode === 'ingame';
+    document.getElementById('gf-qanda-view').style.display  = isIngame ? 'none' : '';
+    document.getElementById('gf-ingame-view').style.display = isIngame ? ''     : 'none';
+    const activeStyle   = 'border-color:var(--accent);color:var(--accent);';
+    const inactiveStyle = '';
+    document.getElementById('gf-tab-qanda').style.cssText  = isIngame ? inactiveStyle : activeStyle;
+    document.getElementById('gf-tab-ingame').style.cssText = isIngame ? activeStyle   : inactiveStyle;
+    const out = document.getElementById('gf-output');
+    if (out) out.style.display = 'none';
+  }
+
+  function nextRound() {
+    const mode = sessionStorage.getItem('gf-mode') || 'qanda';
+    if (mode === 'ingame') callMoment(); else discuss();
+  }
+
+  return { discuss, callMoment, switchMode, nextRound };
 })();
 
 // ============================================================
@@ -12903,7 +13079,48 @@ Never name the move.`;
     if (body) { body.style.color = ''; body.style.fontStyle = ''; body.textContent = text || '\u2026'; }
   }
 
-  return { discuss };
+  const LR_MOMENT_LABELS = {
+    DELIVERY:         'Delivery',
+    BOUNDARY_FOUR:    'Boundary — four',
+    BOUNDARY_SIX:     'Boundary — six',
+    WICKET:           'Wicket',
+    OVER_COMPLETE:    'Over complete',
+    DRS_REVIEW:       'DRS review',
+    FIFTY:            'Fifty',
+    HUNDRED:          'Hundred',
+    INNINGS_COMPLETE: 'Innings complete',
+  };
+
+  function callMoment() {
+    const momentType = (document.getElementById('lr-moment') || {}).value;
+    if (!momentType) { alert('Select a moment first.'); return; }
+    const situation = ((document.getElementById('lr-situation') || {}).value || '').trim();
+    const label = LR_MOMENT_LABELS[momentType] || momentType;
+    const prompt = situation ? `${label} — ${situation}` : label;
+    const inp = document.getElementById('lr-input');
+    if (inp) inp.value = prompt;
+    discuss();
+  }
+
+  function switchMode(mode) {
+    sessionStorage.setItem('lr-mode', mode);
+    const isIngame = mode === 'ingame';
+    document.getElementById('lr-qanda-view').style.display  = isIngame ? 'none' : '';
+    document.getElementById('lr-ingame-view').style.display = isIngame ? ''     : 'none';
+    const activeStyle   = 'border-color:var(--accent);color:var(--accent);';
+    const inactiveStyle = '';
+    document.getElementById('lr-tab-qanda').style.cssText  = isIngame ? inactiveStyle : activeStyle;
+    document.getElementById('lr-tab-ingame').style.cssText = isIngame ? activeStyle   : inactiveStyle;
+    const out = document.getElementById('lr-output');
+    if (out) out.style.display = 'none';
+  }
+
+  function nextRound() {
+    const mode = sessionStorage.getItem('lr-mode') || 'qanda';
+    if (mode === 'ingame') callMoment(); else discuss();
+  }
+
+  return { discuss, callMoment, switchMode, nextRound };
 })();
 
 // ============================================================
