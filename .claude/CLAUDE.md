@@ -97,6 +97,17 @@ Write scenario in Given-When-Then. Then:
 
 Previous session approval does not count.
 
+**BDD GHERKIN QUALITY GATE — run this before outputting any feature file for approval:**
+
+1. **Scenario Outline first** — if two or more scenarios share the same step structure with different data, they MUST be a Scenario Outline + Examples table. Never write individual scenarios for tabular data.
+2. **Merge opportunity check** — after drafting all outlines, ask: do any two outlines share the same Given/When with only the Examples data different? If yes, merge unless the Then steps are materially different.
+3. **Examples table scope** — an Examples table represents one dimension of variation only. Characters × modules = two separate outlines, not one combined table.
+4. **Scenario count discipline** — if count exceeds 12, review for redundancy before adding more. Every scenario must assert a distinct behaviour not covered elsewhere.
+5. **Background audit** — if three or more scenarios share the same Given, it belongs in Background, not repeated per scenario.
+6. **No scenario for constants** — if an assertion is true by definition, it is one tightly named Scenario, not an outline. Do not iterate over constants.
+
+Self-review against this checklist before printing "WAITING FOR ROD'S APPROVAL". Never skip.
+
 ### Step 3 — Outside-In Design (SOLID)
 Read: principles/ddd.md, practices/solid.md, principles/systems-thinking.md
 Design the public interface before writing any code or test.
