@@ -1046,6 +1046,48 @@ body::after {
   margin-bottom: 10px;
   text-transform: uppercase;
 }
+/* ── SENSORY CHANNEL BADGE COLOURS ── */
+.channel-hear        { color: #8bc4ff; }
+.channel-see         { color: #ffe080; }
+.channel-smell       { color: #b8e890; }
+.channel-taste       { color: #ffb0b0; }
+.channel-feel        { color: #e0b8ff; }
+.channel-sixth       { color: #80ffcc; }
+.channel-umami       { color: var(--accent-bright); letter-spacing: 0.2em; }
+
+/* ── IMAGE SYSTEM ── */
+.event-image {
+  margin-bottom: 12px;
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+.event-image img {
+  width: 100%;
+  max-height: 240px;
+  object-fit: cover;
+  display: block;
+  filter: sepia(0.2) contrast(1.1);
+}
+.event-img-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  color: var(--muted);
+  text-align: center;
+  padding: 4px;
+  background: var(--surface);
+  text-transform: uppercase;
+  border-top: 1px solid var(--border);
+}
+.event-img-loading {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--muted);
+  text-align: center;
+  padding: 20px;
+  text-transform: uppercase;
+}
 </style>
 </head>
 <body>
@@ -1611,6 +1653,7 @@ const TOURNAMENTS = [
   // ── WILDLIFE EVENTS ──
   {
     id: "king_brown_approach", triggerChance: 0.12,
+    hasImage: true,
     header: "A KING BROWN SNAKE HAS APPEARED ON THE FAIRWAY",
     text: `It is between you and your ball. It is not moving. Approximately 1.8 metres long and appears to be having a perfectly good morning that you have now interrupted.`,
     riley_activates: true,
@@ -1623,6 +1666,7 @@ const TOURNAMENTS = [
   },
   {
     id: "adder_rough", triggerChance: 0.10,
+    hasImage: true,
     header: "THERE IS AN ADDER IN THE ROUGH",
     text: `British. Venomous. Technically protected under the Wildlife and Countryside Act 1981. Your ball is next to it. The rulebook does not cover this adequately.`,
     riley_note: "Riley is dismissive. 'That's not a snake.'",
@@ -1636,6 +1680,7 @@ const TOURNAMENTS = [
   {
     id: "funnel_web_bag", triggerChance: 0.08,
     riley_activates: true,
+    hasImage: true,
     header: "A FUNNEL-WEB SPIDER HAS APPEARED IN YOUR BAG",
     text: `Your caddy has opened the bag for your 7-iron and taken three steps backward without explanation. You can see why.`,
     choices: [
@@ -1648,6 +1693,7 @@ const TOURNAMENTS = [
   {
     id: "alligator_water", triggerChance: 0.15,
     tournament_only: ["tiger_2005"],
+    hasImage: true,
     header: "THERE IS AN ALLIGATOR IN THE WATER HAZARD",
     text: `Augusta National's water management system connects to local wetlands. This is not normally relevant. Today it is relevant.`,
     choices: [
@@ -1659,6 +1705,7 @@ const TOURNAMENTS = [
   },
   {
     id: "honey_badger", triggerChance: 0.03,
+    hasImage: true,
     header: "A HONEY BADGER HAS EMERGED FROM THE ROUGH",
     text: `It is not large. This is not reassuring. It has assessed the situation and appears to have made a decision. The decision involves you specifically.`,
     riley_activates: true,
@@ -1672,6 +1719,7 @@ const TOURNAMENTS = [
   // ── ITEM AND SENSORY EVENTS ──
   {
     id: "caddy_water", triggerChance: 0.18,
+    hasImage: true,
     header: "YOUR PLAYING PARTNER'S CADDY OFFERS YOU WATER",
     text: `He's smiling. Sealed bottle. Probably. You've been on the course three hours and it's warm. Your own caddy is 40 yards ahead.`,
     isItemEvent: true,
@@ -1700,6 +1748,7 @@ const TOURNAMENTS = [
   },
   {
     id: "hip_flask", triggerChance: 0.12,
+    hasImage: true,
     header: "A SPECTATOR HAS OFFERED YOU SOMETHING FROM A FLASK",
     text: `He's been following you since the 4th. He seems friendly. The flask is silver. Engraved. It says something in Latin.`,
     isItemEvent: true,
@@ -1727,6 +1776,7 @@ const TOURNAMENTS = [
   },
   {
     id: "marshals_pie", triggerChance: 0.14,
+    hasImage: true,
     header: "A MARSHAL HAS OFFERED YOU A PIE",
     text: `He's been carrying it since the 1st. It's still warm. He seems very keen for you to have it.`,
     isItemEvent: true,
@@ -1752,6 +1802,7 @@ const TOURNAMENTS = [
   },
   {
     id: "found_glove", triggerChance: 0.10,
+    hasImage: true,
     header: "YOU FIND A GLOVE IN THE ROUGH",
     text: `Clean. Good condition. Your size, approximately. Your own glove has been uncomfortable since the 3rd.`,
     isItemEvent: true,
@@ -1824,6 +1875,7 @@ const TOURNAMENTS = [
   },
   {
     id: "urine_smell", triggerChance: 0.10,
+    hasImage: true,
     header: "YOU HAVE SMELLED SOMETHING",
     text: `Undeniable. Unlocatable. The wind has shifted and brought something that is absolutely not the sea, the gorse, or the cut grass.`,
     isItemEvent: true,
@@ -1852,6 +1904,7 @@ const TOURNAMENTS = [
   },
   {
     id: "mashed_potato", triggerChance: 0.15,
+    hasImage: true,
     header: "SOMEONE HAS SHOUTED 'MASHED POTATO'",
     text: `Mid-backswing. Clear as a bell. Right at the top. 'MASHED POTATO.' You know the tradition. You do not endorse the tradition.`,
     isItemEvent: true,
@@ -1878,6 +1931,663 @@ const TOURNAMENTS = [
         { result: 'composure_loss', chance: 0.30, desc: "It did not land. You're the villain now." }
       ]}
     ], danger: false
+  },
+
+  // ══════════════════════════════════════════
+  // SENSORY POOL — PATCH F
+  // ══════════════════════════════════════════
+
+  // ── HEAR ──
+  {
+    id: "hear_wrong_name", triggerChance: 0.08,
+    channel: "HEAR",
+    header: "👂 SOMEONE HAS CALLED THE WRONG NAME",
+    text: `Clear as a bell. Not your name. Someone else's name. Possibly your playing partner's. Possibly a name that hasn't been in a major since 1987. The gallery doesn't correct it.`,
+    isItemEvent: true,
+    choices: [
+      { label: "Ignore it completely", outcomes: [
+        { result: 'nothing',        chance: 0.60 },
+        { result: 'composure_loss', chance: 0.30, desc: "It's still there. Renting space." },
+        { result: 'fortune',        chance: 0.10, desc: "The anonymity was clarifying." }
+      ]},
+      { label: "Look up — locate the source", outcomes: [
+        { result: 'composure_loss', chance: 0.50 },
+        { result: 'anger',          chance: 0.30 },
+        { result: 'nothing',        chance: 0.20 }
+      ]},
+      { label: "Answer to it anyway", outcomes: [
+        { result: 'fortune',        chance: 0.40, desc: "The crowd accepted this. You are briefly someone else. It helps." },
+        { result: 'composure_loss', chance: 0.60, desc: "The crowd realised. You are you again. Worse." }
+      ]}
+    ], danger: false
+  },
+  {
+    id: "hear_wrong_advice", triggerChance: 0.10,
+    channel: "HEAR",
+    header: "👂 SOMEONE IN THE GALLERY HAS SHOUTED ADVICE",
+    text: `Specific advice. Technically detailed. Completely wrong. Delivered with absolute confidence. Your caddy has heard it. He's making a face.`,
+    isItemEvent: true,
+    choices: [
+      { label: "Block it out", outcomes: [
+        { result: 'nothing',        chance: 0.50 },
+        { result: 'composure_loss', chance: 0.30, desc: "You can't stop thinking about the grip adjustment they suggested." },
+        { result: 'fortune',        chance: 0.20 }
+      ]},
+      { label: "Try it — just briefly", outcomes: [
+        { result: 'threshold_up',   chance: 0.60, desc: "It was wrong. Completely wrong. You knew it was wrong." },
+        { result: 'fortune',        chance: 0.20, desc: "It was wrong but it broke your existing pattern. Accidentally correct." },
+        { result: 'death',          chance: 0.20, death_type: 'cardiac', desc: "Your body rejected the adjustment at the cellular level." }
+      ]},
+      { label: "Make eye contact with the caddy — you both know", outcomes: [
+        { result: 'composure_up',   chance: 0.40, desc: "Shared contempt is briefly bonding. Composure +1." },
+        { result: 'nothing',        chance: 0.40 },
+        { result: 'anger',          chance: 0.20 }
+      ]}
+    ], danger: false
+  },
+  {
+    id: "hear_someone_crying", triggerChance: 0.06,
+    channel: "HEAR",
+    header: "👂 SOMEONE IN THE GALLERY IS CRYING",
+    text: `Not quietly. Not discretely. Full, genuine grief. Three rows back. The marshal has noticed. No one is doing anything. This is not about golf — something has happened in this person's life today and they are here at a golf tournament and they are crying.`,
+    isItemEvent: true,
+    choices: [
+      { label: "Focus — this is not your business", outcomes: [
+        { result: 'composure_loss', chance: 0.50, desc: "You focused. But." },
+        { result: 'nothing',        chance: 0.30 },
+        { result: 'fortune',        chance: 0.20, desc: "The perspective was clarifying. Everything else is just golf." }
+      ]},
+      { label: "Pause — a moment of human acknowledgment", outcomes: [
+        { result: 'fortune',        chance: 0.50, desc: "The gallery saw it. They're with you now in a different way." },
+        { result: 'composure_loss', chance: 0.30, desc: "You paused too long. Now you're thinking about it." },
+        { result: 'stroke_penalty', chance: 0.20, desc: "Slow play. The referee was not moved." }
+      ]},
+      { label: "Ask the marshal to help them", outcomes: [
+        { result: 'composure_up',   chance: 0.40, desc: "The marshal helped. You helped indirectly. Composure +2." },
+        { result: 'stroke_penalty', chance: 0.30, desc: "Slow play. The marshal was also crying by this point." },
+        { result: 'nothing',        chance: 0.30 }
+      ]}
+    ], danger: false
+  },
+  {
+    id: "hear_phone_ringtone", triggerChance: 0.12,
+    channel: "HEAR",
+    hasImage: true,
+    header: "👂 A PHONE HAS RUNG MID-BACKSWING",
+    text: `Full volume. A ringtone that was briefly popular in 2009 and should not have survived. The owner is now the most hated person on this fairway.`,
+    isItemEvent: true,
+    choices: [
+      { label: "Step away and reset", outcomes: [
+        { result: 'composure_loss', chance: 0.40, desc: "The reset helped mechanically. The ringtone is still in your head." },
+        { result: 'nothing',        chance: 0.40 },
+        { result: 'fortune',        chance: 0.20, desc: "The interruption broke a tension you'd been building for three holes." }
+      ]},
+      { label: "Play through — already committed", outcomes: [
+        { result: 'threshold_up',   chance: 0.50, desc: "Mid-backswing. The damage is done." },
+        { result: 'nothing',        chance: 0.30 },
+        { result: 'fortune',        chance: 0.20, desc: "Fury golf. The ringtone became fuel." }
+      ]},
+      { label: "Locate the owner — deal with this", outcomes: [
+        { result: 'anger',          chance: 0.50 },
+        { result: 'fortune',        chance: 0.20, desc: "The gallery agreed with you. They applauded. The owner apologised." },
+        { result: 'stroke_penalty', chance: 0.30, desc: "Slow play. The referee was also distracted by the ringtone." }
+      ]}
+    ], danger: false
+  },
+  {
+    id: "hear_commentator_earpiece", triggerChance: 0.07,
+    channel: "HEAR",
+    header: "👂 YOU CAN HEAR THE TV COMMENTARY THROUGH SOMEONE'S EARPIECE",
+    text: `Three feet away. A spectator with one earpiece in. The commentator is discussing your swing. In detail. The spectator has realised you can hear. They are not removing the earpiece.`,
+    isItemEvent: true,
+    choices: [
+      { label: "Listen — what are they saying?", outcomes: [
+        { result: 'fortune',        chance: 0.25, desc: "They said something genuinely useful. Accidentally." },
+        { result: 'composure_loss', chance: 0.50, desc: "They said something about your hip rotation that you cannot now un-know." },
+        { result: 'anger',          chance: 0.25, desc: "They named someone you don't like as having a better technique." }
+      ]},
+      { label: "Move away from the spectator", outcomes: [
+        { result: 'nothing',        chance: 0.60 },
+        { result: 'composure_up',   chance: 0.40, desc: "Distance was the correct answer." }
+      ]},
+      { label: "Ask the spectator what they're saying", outcomes: [
+        { result: 'fortune',        chance: 0.20 },
+        { result: 'anger',          chance: 0.40, desc: "The spectator repeated it. Direct. No filter." },
+        { result: 'composure_loss', chance: 0.40 }
+      ]}
+    ], danger: false
+  },
+  {
+    id: "hear_premonition_sound", triggerChance: 0.05,
+    channel: "HEAR",
+    header: "👂 YOU HEAR YOUR OWN SHOT — BEFORE YOU'VE PLAYED IT",
+    text: `The click of impact. The flight. The crowd's reaction. All of it, three seconds ahead of reality. Your caddy hands you the club. You know exactly what's about to happen. You're not sure if that's good.`,
+    isItemEvent: true,
+    choices: [
+      { label: "Trust it — play the shot you heard", outcomes: [
+        { result: 'fortune',        chance: 0.50, desc: "It happened exactly as you heard it. The caddy looks unsettled." },
+        { result: 'threshold_down', chance: 0.30, desc: "Certainty reduced the threshold. You'd already played this." },
+        { result: 'composure_loss', chance: 0.20, desc: "You heard something different the second time." }
+      ]},
+      { label: "Step away — reset completely", outcomes: [
+        { result: 'nothing',        chance: 0.50 },
+        { result: 'composure_loss', chance: 0.30, desc: "The premonition followed you." },
+        { result: 'fortune',        chance: 0.20 }
+      ]},
+      { label: "Tell the caddy what you heard", outcomes: [
+        { result: 'composure_loss', chance: 0.50, desc: "The caddy's expression is not reassuring." },
+        { result: 'fortune',        chance: 0.30, desc: "The caddy said 'good — play that'. You did. It worked." },
+        { result: 'anger',          chance: 0.20, desc: "The caddy told you to stop talking and hit the ball." }
+      ]}
+    ], danger: false
+  },
+
+  // ── SEE ──
+  {
+    id: "see_child_copying", triggerChance: 0.10,
+    channel: "SEE",
+    header: "👁️ A CHILD IS COPYING YOUR STANCE",
+    text: `Front row. Approximately six years old. Has found a stick. Is adopting your exact pre-shot routine, beat for beat. The parents are filming it. The child is not joking — this is sincere mimicry.`,
+    isItemEvent: true,
+    choices: [
+      { label: "Acknowledge the child — nod", outcomes: [
+        { result: 'crowd_cheer',    chance: 0.50, desc: "The gallery erupted. The child nodded back. Something happened." },
+        { result: 'fortune',        chance: 0.30 },
+        { result: 'composure_loss', chance: 0.20, desc: "The child then immediately hit a better shot than you with their stick." }
+      ]},
+      { label: "Give the child your tee", outcomes: [
+        { result: 'crowd_cheer',    chance: 0.60 },
+        { result: 'fortune',        chance: 0.30 },
+        { result: 'lost_accessory', chance: 0.10, desc: "You gave away your last good tee. You didn't check." }
+      ]},
+      { label: "Focus — use it as fuel", outcomes: [
+        { result: 'fortune',        chance: 0.40, desc: "You played for the child. The child deserved better but got this." },
+        { result: 'nothing',        chance: 0.40 },
+        { result: 'composure_loss', chance: 0.20, desc: "The child copied your exact hesitation. The gallery laughed." }
+      ]}
+    ], danger: false
+  },
+  {
+    id: "see_scoreboard_wrong", triggerChance: 0.09,
+    channel: "SEE",
+    header: "👁️ THE SCOREBOARD HAS YOUR SCORE WRONG",
+    text: `Two shots worse than you actually are. The manual scoreboard operator is looking at the wrong sheet. Half the gallery thinks you're in trouble you're not in.`,
+    isItemEvent: true,
+    choices: [
+      { label: "Ignore it — you know your score", outcomes: [
+        { result: 'nothing',        chance: 0.50 },
+        { result: 'composure_loss', chance: 0.30, desc: "You can't stop looking at it." },
+        { result: 'fortune',        chance: 0.20, desc: "Playing without expectation. The pressure was on the wrong player." }
+      ]},
+      { label: "Signal to the operator", outcomes: [
+        { result: 'nothing',        chance: 0.40, desc: "It's corrected. The gallery shifts." },
+        { result: 'stroke_penalty', chance: 0.30, desc: "Slow play. The operator took a while. Also the referee is now involved." },
+        { result: 'fortune',        chance: 0.30, desc: "The correction caused a ripple. The gallery reaction to your real score was enormous." }
+      ]},
+      { label: "Play to the wrong scoreboard — use the pressure", outcomes: [
+        { result: 'fortune',        chance: 0.40, desc: "Extra pressure activated something. Your body didn't know it was fake." },
+        { result: 'threshold_up',   chance: 0.40, desc: "Extra pressure was just extra pressure." },
+        { result: 'anger',          chance: 0.20 }
+      ]}
+    ], danger: false
+  },
+  {
+    id: "see_flash_of_light", triggerChance: 0.08,
+    channel: "SEE",
+    header: "👁️ A FLASH OF LIGHT AT THE TOP OF YOUR BACKSWING",
+    text: `Camera flash. Watch reflection. Phone screen. The sun off a hospitality tent. Something. Right at the top. The ball is in motion.`,
+    isItemEvent: true,
+    choices: [
+      { label: "Commit — the shot is gone, go with it", outcomes: [
+        { result: 'nothing',        chance: 0.40 },
+        { result: 'fortune',        chance: 0.20, desc: "Fury and commitment produced something extraordinary." },
+        { result: 'threshold_up',   chance: 0.40, desc: "The flash interrupted something that can't be recovered mid-swing." }
+      ]},
+      { label: "Abort — step away and reset", outcomes: [
+        { result: 'composure_loss', chance: 0.30, desc: "The abort was clean. The rhythm isn't." },
+        { result: 'nothing',        chance: 0.50 },
+        { result: 'fortune',        chance: 0.20, desc: "The reset was the reset you needed anyway." }
+      ]}
+    ], danger: false
+  },
+  {
+    id: "see_playing_partner_tells", triggerChance: 0.09,
+    channel: "SEE",
+    header: "👁️ YOU'VE SPOTTED YOUR PLAYING PARTNER'S TELL",
+    text: `The left hand tightens on long putts. The shoulder drops before a pull. Three holes of data. You now know something about their game they don't know you know.`,
+    isItemEvent: true,
+    choices: [
+      { label: "File it — say nothing", outcomes: [
+        { result: 'fortune',        chance: 0.60, desc: "Information is composure. You're calmer." },
+        { result: 'nothing',        chance: 0.40 }
+      ]},
+      { label: "Discard it — not your business", outcomes: [
+        { result: 'nothing',        chance: 0.70 },
+        { result: 'composure_up',   chance: 0.30, desc: "Clean mind. The ethical clarity helped." }
+      ]},
+      { label: "Let them know, casually, that you noticed", outcomes: [
+        { result: 'anger',          chance: 0.50, desc: "They did not appreciate this." },
+        { result: 'fortune',        chance: 0.30, desc: "They appreciated it. An unusual camaraderie developed." },
+        { result: 'composure_loss', chance: 0.20, desc: "They pointed out one of yours in return." }
+      ]}
+    ], danger: false
+  },
+  {
+    id: "see_your_own_shadow", triggerChance: 0.06,
+    channel: "SEE",
+    header: "👁️ YOUR SHADOW IS DOING SOMETHING YOUR BODY ISN'T",
+    text: `Late afternoon light. Long shadow. The shadow's backswing is wrong — too steep, early extension. You've been compensating for this for years. You've never seen it from the outside before.`,
+    isItemEvent: true,
+    choices: [
+      { label: "Look away immediately — this is not useful now", outcomes: [
+        { result: 'nothing',        chance: 0.50 },
+        { result: 'composure_loss', chance: 0.30, desc: "Too late. The shadow is in your head." },
+        { result: 'fortune',        chance: 0.20 }
+      ]},
+      { label: "Make a minor adjustment based on what you saw", outcomes: [
+        { result: 'skill_up',       chance: 0.30, desc: "The adjustment was correct. Two holes only — it won't last." },
+        { result: 'threshold_up',   chance: 0.40, desc: "Mid-round swing change. The textbooks are clear on this." },
+        { result: 'fortune',        chance: 0.30, desc: "Sometimes you need to see it once. Just once." }
+      ]},
+      { label: "Tell the caddy what you saw", outcomes: [
+        { result: 'composure_up',   chance: 0.30, desc: "He'd noticed. He was waiting for you to notice. Composure +2." },
+        { result: 'composure_loss', chance: 0.40, desc: "He'd noticed. He said he'd been going to mention it after the round." },
+        { result: 'anger',          chance: 0.30, desc: "He'd noticed and had not said anything in six holes." }
+      ]}
+    ], danger: false
+  },
+
+  // ── SMELL ──
+  {
+    id: "smell_hot_dog", triggerChance: 0.12,
+    channel: "SMELL",
+    hasImage: true,
+    header: "👃 HOT DOG",
+    text: `From the concession stand behind the 8th green. Onions. Possibly mustard. You haven't eaten since 6am. It is now 1:17pm. This is not a distraction. This is a structural problem.`,
+    isItemEvent: true,
+    choices: [
+      { label: "Focus — you're a professional", outcomes: [
+        { result: 'nothing',        chance: 0.40 },
+        { result: 'composure_loss', chance: 0.40, desc: "You're thinking about the hot dog. You're still thinking about it." },
+        { result: 'fortune',        chance: 0.20, desc: "Hunger sharpened something. The body prioritised survival." }
+      ]},
+      { label: "Ask the caddy if he has anything", outcomes: [
+        { result: 'composure_up',   chance: 0.30, desc: "He had a cereal bar from 2022. It was fine. Composure +1." },
+        { result: 'lost_accessory', chance: 0.30, desc: "He had something but it went into the bag pocket that also has the spare glove. The glove is now flavoured." },
+        { result: 'nothing',        chance: 0.40, desc: "He had nothing. You both knew this. The asking made it worse." }
+      ]},
+      { label: "Acquire a hot dog between shots", outcomes: [
+        { result: 'fortune',        chance: 0.20, desc: "The hot dog was magnificent. Worth every second. Composure +3." },
+        { result: 'stroke_penalty', chance: 0.40, desc: "Slow play. Worth it." },
+        { result: 'illness',        chance: 0.20, desc: "The hot dog was not magnificent." },
+        { result: 'composure_up',   chance: 0.20, desc: "The hot dog was fine. Adequate. The problem is solved." }
+      ]}
+    ], danger: false
+  },
+  {
+    id: "smell_aftershave", triggerChance: 0.09,
+    channel: "SMELL",
+    header: "👃 SOMEONE IS WEARING AN AFTERSHAVE YOU RECOGNISE",
+    text: `Your father. Your first coach. An ex-partner. Someone from the past who is not here. The olfactory system does not understand time. You are briefly somewhere else entirely.`,
+    isItemEvent: true,
+    choices: [
+      { label: "Let the memory pass — return to the present", outcomes: [
+        { result: 'fortune',        chance: 0.30, desc: "The memory passed and left something useful behind." },
+        { result: 'composure_loss', chance: 0.40, desc: "It didn't fully pass." },
+        { result: 'nothing',        chance: 0.30 }
+      ]},
+      { label: "Stay in the memory — briefly", outcomes: [
+        { result: 'fortune',        chance: 0.40, desc: "The person in the memory would have loved this. Play for them." },
+        { result: 'composure_loss', chance: 0.40, desc: "You stayed too long." },
+        { result: 'skill_up',       chance: 0.20, desc: "Their voice came back. Something specific and correct." }
+      ]},
+      { label: "Locate the source — who is wearing this?", outcomes: [
+        { result: 'composure_loss', chance: 0.60, desc: "It was nobody from your past. A stranger. The gap between expectation and reality was significant." },
+        { result: 'fortune',        chance: 0.20 },
+        { result: 'nothing',        chance: 0.20 }
+      ]}
+    ], danger: false
+  },
+  {
+    id: "smell_petrol", triggerChance: 0.07,
+    channel: "SMELL",
+    header: "👃 YOU CAN SMELL PETROL",
+    text: `On a golf course. No obvious source. The greenkeeper's machinery is 400 yards away. The marshal's buggy passed three minutes ago. The smell is here. It is specifically here.`,
+    isItemEvent: true,
+    choices: [
+      { label: "Note it and continue", outcomes: [
+        { result: 'nothing',        chance: 0.50 },
+        { result: 'composure_loss', chance: 0.30, desc: "The not-knowing is worse than knowing." },
+        { result: 'death',          chance: 0.20, death_type: 'greenkeeper', desc: "There was a reason for the petrol smell." }
+      ]},
+      { label: "Move away from the area quickly", outcomes: [
+        { result: 'nothing',        chance: 0.70 },
+        { result: 'fortune',        chance: 0.30, desc: "You moved. Nothing happened. The relief was enormous." }
+      ]},
+      { label: "Investigate — where is it coming from?", outcomes: [
+        { result: 'nothing',        chance: 0.40, desc: "A small spill from the buggy. Nothing more." },
+        { result: 'stroke_penalty', chance: 0.30, desc: "Slow play. The investigation took time." },
+        { result: 'fortune',        chance: 0.20, desc: "The investigation revealed something unrelated but useful." },
+        { result: 'death',          chance: 0.10, death_type: 'greenkeeper' }
+      ]}
+    ], danger: false
+  },
+  {
+    id: "smell_sunscreen", triggerChance: 0.08,
+    channel: "SMELL",
+    header: "👃 THE SMELL OF SUNSCREEN FROM THE GALLERY",
+    text: `Coconut. It's a cool, overcast day in Scotland. Someone in the front row has applied factor 50. They are not wrong to do this but you are now in Ibiza.`,
+    isItemEvent: true,
+    choices: [
+      { label: "Lean into it — play with warmth", outcomes: [
+        { result: 'fortune',        chance: 0.40, desc: "The warmth was real. The birdie was also real." },
+        { result: 'nothing',        chance: 0.40 },
+        { result: 'composure_loss', chance: 0.20, desc: "The warmth was not appropriate to this situation." }
+      ]},
+      { label: "Ignore it — you are in Scotland", outcomes: [
+        { result: 'nothing',        chance: 0.70 },
+        { result: 'composure_loss', chance: 0.30, desc: "You are now thinking about Ibiza. You have not been to Ibiza." }
+      ]}
+    ], danger: false
+  },
+
+  // ── TASTE ──
+  {
+    id: "taste_borrowed_tee", triggerChance: 0.07,
+    channel: "TASTE",
+    header: "👅 YOU HAVE ACCIDENTALLY PUT A BORROWED TEE IN YOUR MOUTH",
+    text: `Habit. Pre-shot routine. You put it between your teeth without thinking. Then you thought about whose tee it was. The thinking has not helped.`,
+    isItemEvent: true,
+    choices: [
+      { label: "Remove it immediately — reset the routine", outcomes: [
+        { result: 'composure_loss', chance: 0.40, desc: "The routine is now broken and you know why." },
+        { result: 'nothing',        chance: 0.40 },
+        { result: 'fortune',        chance: 0.20, desc: "The break in routine was the break in pattern you needed." }
+      ]},
+      { label: "Continue the routine — you're committed now", outcomes: [
+        { result: 'nothing',        chance: 0.30 },
+        { result: 'illness',        chance: 0.40, desc: "Something about the tee. The caddy's face when you showed him suggests it was the tee." },
+        { result: 'fortune',        chance: 0.30, desc: "You committed fully to the routine and the shot. The tee was fine." }
+      ]}
+    ], danger: false
+  },
+  {
+    id: "taste_sea_air", triggerChance: 0.10,
+    channel: "TASTE",
+    header: "👅 THE SEA AIR HAS BECOME VERY PRESENT",
+    text: `Turnberry. Carnoustie. Muirfield. The sea is there and now you can taste it — salt, iodine, the particular mineral quality of Scottish coastal air that either focuses people or makes them want to sit down.`,
+    isItemEvent: true,
+    tournament_only_courses: ["turnberry","carnoustie","muirfield"],
+    choices: [
+      { label: "Breathe it in — this is golf", outcomes: [
+        { result: 'fortune',        chance: 0.40, desc: "The sea was with you." },
+        { result: 'composure_up',   chance: 0.40, desc: "Composure +2. The coast." },
+        { result: 'composure_loss', chance: 0.20, desc: "The coast suggested the scale of things. Briefly too large." }
+      ]},
+      { label: "Focus on the shot — the sea is not playing", outcomes: [
+        { result: 'nothing',        chance: 0.50 },
+        { result: 'fortune',        chance: 0.30 },
+        { result: 'composure_loss', chance: 0.20 }
+      ]}
+    ], danger: false
+  },
+  {
+    id: "taste_blood", triggerChance: 0.05,
+    channel: "TASTE",
+    header: "👅 YOU CAN TASTE BLOOD",
+    text: `Bitten your cheek. Lip. Something. No obvious cause. Just the copper. Unmistakable. Your caddy hasn't noticed. The shot is still waiting.`,
+    isItemEvent: true,
+    choices: [
+      { label: "Ignore it — play through", outcomes: [
+        { result: 'nothing',        chance: 0.40 },
+        { result: 'anger',          chance: 0.30, desc: "The blood activated something primitive." },
+        { result: 'fortune',        chance: 0.30, desc: "The copper taste cut through everything. Pure signal." }
+      ]},
+      { label: "Investigate — something is wrong", outcomes: [
+        { result: 'composure_loss', chance: 0.50 },
+        { result: 'nothing',        chance: 0.30, desc: "Minor. Nothing. You are fine." },
+        { result: 'illness',        chance: 0.20 }
+      ]}
+    ], danger: false
+  },
+
+  // ── FEEL / GET FELT ──
+  {
+    id: "feel_wind_on_neck", triggerChance: 0.10,
+    channel: "FEEL",
+    header: "🤚 A COLD WIND ON THE BACK OF YOUR NECK AT ADDRESS",
+    text: `Sudden. Specific. Coming from behind you. The flag was not moving before you addressed the ball. It is moving now. Your caddy is watching the flag with an expression you cannot interpret.`,
+    isItemEvent: true,
+    choices: [
+      { label: "Step away — the wind has changed", outcomes: [
+        { result: 'nothing',        chance: 0.50, desc: "It settled. New read. Proceed." },
+        { result: 'fortune',        chance: 0.30, desc: "The wind change revealed the correct line." },
+        { result: 'stroke_penalty', chance: 0.20, desc: "Slow play." }
+      ]},
+      { label: "Play the original shot — commit", outcomes: [
+        { result: 'threshold_up',   chance: 0.40, desc: "The wind was real and it mattered." },
+        { result: 'nothing',        chance: 0.30 },
+        { result: 'fortune',        chance: 0.30, desc: "The wind changed back. The read was right." }
+      ]},
+      { label: "Ask the caddy what he's seeing", outcomes: [
+        { result: 'fortune',        chance: 0.40, desc: "He'd already switched clubs. He was waiting for you." },
+        { result: 'composure_loss', chance: 0.30, desc: "He wasn't sure either. This was the wrong answer." },
+        { result: 'nothing',        chance: 0.30 }
+      ]}
+    ], danger: false
+  },
+  {
+    id: "feel_caddy_elbow", triggerChance: 0.07,
+    channel: "FEEL",
+    header: "🤚 THE CADDY'S ELBOW — MID-BACKSWING",
+    text: `He was handing you something. The timing was wrong. Contact was made. Clean, accidental, unintentional. You are both pretending it didn't happen.`,
+    isItemEvent: true,
+    choices: [
+      { label: "Continue — this didn't happen", outcomes: [
+        { result: 'nothing',        chance: 0.40 },
+        { result: 'threshold_up',   chance: 0.40, desc: "It happened. The body registered it." },
+        { result: 'fortune',        chance: 0.20, desc: "The interruption was a reset. Accidentally optimal." }
+      ]},
+      { label: "Step away — acknowledge, reset", outcomes: [
+        { result: 'composure_loss', chance: 0.30, desc: "The acknowledgment made it real." },
+        { result: 'nothing',        chance: 0.50 },
+        { result: 'fortune',        chance: 0.20 }
+      ]},
+      { label: "Look at the caddy", outcomes: [
+        { result: 'nothing',        chance: 0.40, desc: "He's looking at a tree. This is handled." },
+        { result: 'anger',          chance: 0.30, desc: "He's also looking at you. There's a conversation happening silently." },
+        { result: 'composure_up',   chance: 0.30, desc: "He mouthed 'sorry'. It was enough." }
+      ]}
+    ], danger: false
+  },
+  {
+    id: "feel_child_hand", triggerChance: 0.05,
+    channel: "FEEL",
+    header: "🤚 A CHILD HAS GRABBED YOUR HAND",
+    text: `Front row. Small hand. Complete confidence. They're not asking for an autograph — they're just holding your hand. The gallery has noticed. You have a shot to play.`,
+    isItemEvent: true,
+    choices: [
+      { label: "Gently free your hand and acknowledge the child", outcomes: [
+        { result: 'crowd_cheer',    chance: 0.60 },
+        { result: 'fortune',        chance: 0.30 },
+        { result: 'composure_loss', chance: 0.10, desc: "The child looked sad. You're thinking about it." }
+      ]},
+      { label: "Play one-handed — the child stays", outcomes: [
+        { result: 'threshold_up',   chance: 0.50, desc: "This was not a good idea technically." },
+        { result: 'crowd_cheer',    chance: 0.40, desc: "The gallery lost their minds. The shot was fine." },
+        { result: 'fortune',        chance: 0.10 }
+      ]},
+      { label: "Sign something for the child first — then play", outcomes: [
+        { result: 'stroke_penalty', chance: 0.30, desc: "Slow play." },
+        { result: 'fortune',        chance: 0.40, desc: "The gallery was completely with you for the next three holes." },
+        { result: 'crowd_cheer',    chance: 0.30 }
+      ]}
+    ], danger: false
+  },
+  {
+    id: "feel_something_in_rough", triggerChance: 0.08,
+    channel: "FEEL",
+    hasImage: true,
+    header: "🤚 SOMETHING IN THE ROUGH BRUSHED YOUR LEG",
+    text: `You were walking through rough to your ball. Something made contact with your lower leg. Fast. Gone. You looked down. Nothing visible. The caddy was looking the other way.`,
+    isItemEvent: true,
+    choices: [
+      { label: "Continue — it was nothing", outcomes: [
+        { result: 'nothing',        chance: 0.50 },
+        { result: 'composure_loss', chance: 0.30, desc: "It was nothing. But you're checking every step now." },
+        { result: 'death',          chance: 0.05, death_type: 'adder', desc: "It was not nothing." },
+        { result: 'fortune',        chance: 0.15 }
+      ]},
+      { label: "Stop and look carefully before proceeding", outcomes: [
+        { result: 'nothing',        chance: 0.60, desc: "Grass. Just grass. Probably grass." },
+        { result: 'composure_loss', chance: 0.20, desc: "You looked carefully. You found something. You wish you hadn't looked carefully." },
+        { result: 'fortune',        chance: 0.20, desc: "You found your provisional ball from the 6th. Useful." }
+      ]},
+      { label: "Tell the caddy — loudly", outcomes: [
+        { result: 'nothing',        chance: 0.40 },
+        { result: 'composure_loss', chance: 0.30, desc: "The caddy made a noise that was not reassuring." },
+        { result: 'anger',          chance: 0.20, desc: "The caddy said 'probably fine' in a way that wasn't." },
+        { result: 'fortune',        chance: 0.10 }
+      ]}
+    ], danger: false
+  },
+  {
+    id: "feel_blister", triggerChance: 0.08,
+    channel: "FEEL",
+    header: "🤚 A BLISTER HAS ANNOUNCED ITSELF",
+    text: `Right hand. Grip hand. It's been building since the 5th and has now decided this is the moment. Thirteen holes of golf remaining. The caddy has plasters in the bag — probably. You've never asked.`,
+    isItemEvent: true,
+    choices: [
+      { label: "Play through — it's fine", outcomes: [
+        { result: 'nothing',        chance: 0.40 },
+        { result: 'threshold_up',   chance: 0.40, desc: "It's not fine. The grip has shifted." },
+        { result: 'composure_loss', chance: 0.20 }
+      ]},
+      { label: "Ask the caddy for a plaster", outcomes: [
+        { result: 'fortune',        chance: 0.30, desc: "He had one. The right size. Composure restored." },
+        { result: 'lost_accessory', chance: 0.30, desc: "He had one. Application disturbed something in the bag." },
+        { result: 'stroke_penalty', chance: 0.20, desc: "Slow play. The plaster took time." },
+        { result: 'nothing',        chance: 0.20, desc: "He had one. The plaster worked. This is manageable now." }
+      ]},
+      { label: "Retape the grip entirely", outcomes: [
+        { result: 'skill_up',       chance: 0.30, desc: "Fresh tape. The grip feels right for two holes." },
+        { result: 'stroke_penalty', chance: 0.50, desc: "Slow play. The retaping took the full allotted time plus thirty seconds." },
+        { result: 'composure_up',   chance: 0.20, desc: "The ritual of retaping was the reset you needed." }
+      ]}
+    ], danger: false
+  },
+
+  // ── 6TH SENSE ──
+  {
+    id: "sixth_deja_vu", triggerChance: 0.06,
+    channel: "SIXTH_SENSE",
+    header: "🔮 DÉJÀ VU — YOU HAVE PLAYED THIS EXACT SHOT BEFORE",
+    text: `Not similar. This exact shot. This exact light, this exact lie, this exact distance, this exact crowd noise. You know what you did last time. You're not sure if that's the same as knowing what to do now.`,
+    isItemEvent: true,
+    choices: [
+      { label: "Play the same shot as last time", outcomes: [
+        { result: 'fortune',        chance: 0.50, desc: "The memory was accurate and the shot was right. Déjà vu as instruction manual." },
+        { result: 'threshold_up',   chance: 0.30, desc: "The memory was accurate. The shot was wrong last time too." },
+        { result: 'composure_loss', chance: 0.20, desc: "The memory was wrong. You've confused two shots." }
+      ]},
+      { label: "Play the opposite of what you remember doing", outcomes: [
+        { result: 'fortune',        chance: 0.40, desc: "The correction of the remembered mistake was the correct instinct." },
+        { result: 'threshold_up',   chance: 0.40, desc: "The opposite was also wrong." },
+        { result: 'nothing',        chance: 0.20 }
+      ]},
+      { label: "Ignore the déjà vu — play fresh", outcomes: [
+        { result: 'nothing',        chance: 0.50 },
+        { result: 'fortune',        chance: 0.30 },
+        { result: 'composure_loss', chance: 0.20, desc: "The déjà vu didn't go away." }
+      ]}
+    ], danger: false
+  },
+  {
+    id: "sixth_certainty", triggerChance: 0.05,
+    channel: "SIXTH_SENSE",
+    header: "🔮 ABSOLUTE CERTAINTY — YOU KNOW THIS IS GOING IN",
+    text: `Before you've struck it. Complete, total, physical certainty. Not confidence — certainty. The kind that is either correct or humiliating. There is no third option.`,
+    isItemEvent: true,
+    choices: [
+      { label: "Commit fully — trust it", outcomes: [
+        { result: 'fortune',        chance: 0.60, desc: "It went in. The certainty was correct. The gallery." },
+        { result: 'threshold_down', chance: 0.20, desc: "The certainty was correct. Something aligned." },
+        { result: 'composure_loss', chance: 0.20, desc: "The certainty was wrong. This is a specific kind of wrong." }
+      ]},
+      { label: "Doubt it — recalibrate", outcomes: [
+        { result: 'nothing',        chance: 0.50 },
+        { result: 'composure_loss', chance: 0.30, desc: "You recalibrated away from the correct answer." },
+        { result: 'fortune',        chance: 0.20 }
+      ]}
+    ], danger: false
+  },
+  {
+    id: "sixth_watched", triggerChance: 0.07,
+    channel: "SIXTH_SENSE",
+    hasImage: true,
+    header: "🔮 YOU ARE BEING WATCHED BY SOMEONE WHO ISN'T THERE",
+    text: `Your old coach. A parent. Someone who shaped your game and is no longer present in the world. The feeling is not unpleasant. It is specific. They are watching from where they always watched — slightly left of the fairway, three back.`,
+    isItemEvent: true,
+    choices: [
+      { label: "Play for them", outcomes: [
+        { result: 'fortune',        chance: 0.50, desc: "The shot was for them. They would have approved." },
+        { result: 'crowd_cheer',    chance: 0.30, desc: "Something in your demeanour reached the gallery." },
+        { result: 'composure_loss', chance: 0.20, desc: "You looked toward where they were watching. Nothing there. You knew nothing was there." }
+      ]},
+      { label: "Stay in the technical present — just golf", outcomes: [
+        { result: 'nothing',        chance: 0.40 },
+        { result: 'fortune',        chance: 0.40 },
+        { result: 'composure_loss', chance: 0.20 }
+      ]},
+      { label: "Acknowledge it briefly — then play", outcomes: [
+        { result: 'fortune',        chance: 0.40 },
+        { result: 'composure_up',   chance: 0.40, desc: "The acknowledgment was sufficient. The feeling settled." },
+        { result: 'composure_loss', chance: 0.20 }
+      ]}
+    ], danger: false
+  },
+  {
+    id: "sixth_bad_feeling", triggerChance: 0.07,
+    channel: "SIXTH_SENSE",
+    header: "🔮 SOMETHING IS WRONG AND YOU DON'T KNOW WHAT",
+    text: `Address the ball. Everything looks correct. Everything is correct. And yet. Something is wrong. The body knows something the brain hasn't processed yet. The caddy is fine. The lie is fine. The wind is manageable. Something is wrong.`,
+    isItemEvent: true,
+    choices: [
+      { label: "Trust the feeling — step away", outcomes: [
+        { result: 'nothing',        chance: 0.30, desc: "Nothing was wrong. The feeling was wrong." },
+        { result: 'fortune',        chance: 0.40, desc: "Something was wrong. You avoided it by stepping away." },
+        { result: 'stroke_penalty', chance: 0.30, desc: "Slow play. Nothing was wrong. This time." }
+      ]},
+      { label: "Override it — play the shot", outcomes: [
+        { result: 'nothing',        chance: 0.40 },
+        { result: 'threshold_up',   chance: 0.30, desc: "Something was wrong." },
+        { result: 'fortune',        chance: 0.20, desc: "Nothing was wrong. Trusting the override." },
+        { result: 'death',          chance: 0.10, death_type: 'bunker_rake', desc: "Something was wrong." }
+      ]}
+    ], danger: false
+  },
+
+  // ── UMAMI ──
+  // UMAMI does not appear in the normal event pool.
+  // It fires from checkUmami() called in advancePhase() when:
+  //   - composure >= 7
+  //   - last shot quality was 'solid' or 'miracle'
+  //   - Math.random() < 0.04 (4% chance per qualifying shot)
+  // It is never a choice event — it simply happens and is reported.
+  {
+    id: "umami_moment", triggerChance: 0.0, // controlled externally
+    channel: "UMAMI",
+    header: "✨ UMAMI",
+    text: `The shot before this one was exactly right. Not spectacular — right. The weight, the contact, the flight. The sound. You knew it before you looked up. The caddy knew it. The ball knew it. This happens perhaps once in a tournament.`,
+    isItemEvent: true,
+    choices: [
+      { label: "Carry this forward", outcomes: [
+        { result: 'fortune',        chance: 1.0 },
+      ]}
+    ],
+    // Note: applyOutcome also runs checkUmamiBonus() which sets:
+    // G.fortuneActive = true, G.tempThresholdMod = -2, G.tempThresholdHoles = 1
+    danger: false
   },
 ];
 
@@ -1988,7 +2698,11 @@ let G = {
   day:0, holeIdx:0, holesPerDay:3,
   yourScore:0, holeResults:[],
   phase:"tee", holeStrokes:0, currentShot:null, isRolling:false,
-  composure:10, fieldScores:{}, history:[]
+  composure:10, fieldScores:{}, history:[],
+  panelState: {
+    runningJokes: [], playerNickname: null, lastInsult: null,
+    atmosphere_escalation: 0, panelFeuds: {}, momentsMentioned: []
+  }
 };
 
 // ═══════════════════════════════════════════
@@ -2208,7 +2922,13 @@ function maybeShowEvent(hole) {
   const ev = eligible[Math.floor(Math.random()*eligible.length)];
   const card = document.getElementById('event-card');
   card.className = ev.danger ? 'event-card danger' : 'event-card';
-  document.getElementById('event-hdr').textContent = ev.header;
+  const channelLabels = {
+    HEAR: '👂 HEAR', SEE: '👁️ SEE', SMELL: '👃 SMELL',
+    TASTE: '👅 TASTE', FEEL: '🤚 FEEL', SIXTH_SENSE: '🔮 SIXTH SENSE', UMAMI: '✨ UMAMI'
+  };
+  document.getElementById('event-hdr').textContent = ev.channel
+    ? `[${channelLabels[ev.channel] || ev.channel}] ${ev.header}`
+    : ev.header;
   document.getElementById('event-txt').textContent = ev.text;
   const ch = document.getElementById('event-choices');
   ch.innerHTML='';
@@ -2221,6 +2941,8 @@ function maybeShowEvent(hole) {
   });
   card.classList.remove('hidden');
   document.getElementById('shot-wrap').style.display='none';
+  // Image system — async, non-blocking
+  if (ev.hasImage) renderEventWithImage(ev);
 }
 
 function resolveEvent(choice) {
@@ -2364,6 +3086,9 @@ function processRoll(roll) {
   const catastrophic=roll===1&&shot.risk>=3;
   const great=roll===6&&shot.risk<=3;
   const quality=catastrophic?'disaster':!success?'trouble':great?'miracle':'solid';
+  if (quality === 'disaster' && G.panelState) {
+    G.panelState.atmosphere_escalation = Math.min(5, (G.panelState.atmosphere_escalation || 0) + 1);
+  }
   if ((quality==='disaster'||quality==='trouble') && mod.compCost) {
     G.composure=Math.max(0,G.composure-mod.compCost);
     updateComposure();
@@ -2490,6 +3215,7 @@ RULES:
 - Characters with wounds should have those wounds influence their commentary
 - If DISASTER: relish the horror
 - If MIRACLE: grudging admiration or find fault anyway
+${buildPanelEngagementContext()}
 
 Return ONLY a JSON array with one entry per commentator, no preamble:
 [
@@ -2524,6 +3250,8 @@ Return ONLY a JSON array with one entry per commentator, no preamble:
     feed.innerHTML=`<div class="loading-bar" style="color:var(--danger-hi)">Commentary signal lost.</div>`;
   }
   G.isRolling=false;
+  // Generate player nickname after hole 2 commentary
+  if (G.holeIdx >= 1) generatePlayerNickname();
   setTimeout(()=>advancePhase(quality),600);
 }
 
@@ -2563,6 +3291,9 @@ function advancePhase(quality) {
 
   const hole=G.tournament.holes[G.holeIdx];
   if(quality==='disaster') G.holeStrokes++;
+
+  // Umami check — fires on qualifying shots
+  checkUmami(quality);
 
   const finish=()=>{endHole(); return;};
   const next=(type)=>{ G.phase=type; loadShots(type); document.getElementById('shot-wrap').style.display='block'; };
@@ -2810,7 +3541,7 @@ function showScreen(name) {
 function resetGame() {
   const savedPanel=[...G.selectedPanel]; // persist panel across sessions
   document.body.className='';
-  G={tournament:null,player:null,atmosphere:"NORMAL",selectedPanel:savedPanel,day:0,holeIdx:0,holesPerDay:3,yourScore:0,holeResults:[],phase:"tee",holeStrokes:0,currentShot:null,isRolling:false,composure:10,fieldScores:{},history:[],characterFiles:{},fortuneActive:false,angerActive:false,angerShots:0,illnessActive:false,illnessHoles:0,tempThresholdMod:0,tempThresholdHoles:0,tempSkillBonus:false,tempSkillHoles:0,isDead:false,causeOfDeath:null,collapseNode:null,collapseChipOutAvailable:true,clothing:{trousers:true,glove:true,shoes:true,hat:true,shirt:true}};
+  G={tournament:null,player:null,atmosphere:"NORMAL",selectedPanel:savedPanel,day:0,holeIdx:0,holesPerDay:3,yourScore:0,holeResults:[],phase:"tee",holeStrokes:0,currentShot:null,isRolling:false,composure:10,fieldScores:{},history:[],characterFiles:{},fortuneActive:false,angerActive:false,angerShots:0,illnessActive:false,illnessHoles:0,tempThresholdMod:0,tempThresholdHoles:0,tempSkillBonus:false,tempSkillHoles:0,isDead:false,causeOfDeath:null,collapseNode:null,collapseChipOutAvailable:true,clothing:{trousers:true,glove:true,shoes:true,hat:true,shirt:true},panelState:{runningJokes:[],playerNickname:null,lastInsult:null,atmosphere_escalation:0,panelFeuds:{},momentsMentioned:[]}};
   document.querySelectorAll('.tc').forEach(c=>c.classList.remove('selected'));
   document.querySelectorAll('.player-btn').forEach(b=>b.classList.remove('selected'));
   document.getElementById('player-area').classList.add('hidden');
@@ -3171,6 +3902,7 @@ function applyOutcome(outcome) {
       msg(outcome.desc || 'Composure −2.'); break;
     case 'anger':
       G.angerActive = true; G.angerShots = 0;
+      if (G.panelState) G.panelState.atmosphere_escalation = Math.min(5, (G.panelState.atmosphere_escalation || 0) + 1);
       msg(outcome.desc || 'Anger active. Safe shots harder. Risky shots easier. 2 shots.');
       showAngerIndicator(); break;
     case 'threshold_down':
@@ -3199,6 +3931,7 @@ function applyOutcome(outcome) {
       msg(outcome.desc || 'Disqualified. Tournament over.');
       setTimeout(() => triggerDQ(), 1500); break;
     case 'death':
+      if (G.panelState) G.panelState.atmosphere_escalation = Math.min(5, (G.panelState.atmosphere_escalation || 0) + 2);
       setTimeout(() => triggerDeath(outcome.death_type || 'cardiac'), 800); break;
     case 'nothing':
       msg(outcome.desc || 'Nothing happens.'); break;
@@ -3661,7 +4394,13 @@ function getAmbientDeathWarning(type) {
 function showForcedEvent(eventDef) {
   const card = document.getElementById('event-card');
   card.className = 'event-card danger';
-  document.getElementById('event-hdr').textContent = eventDef.header;
+  const channelLabels = {
+    HEAR: '👂 HEAR', SEE: '👁️ SEE', SMELL: '👃 SMELL',
+    TASTE: '👅 TASTE', FEEL: '🤚 FEEL', SIXTH_SENSE: '🔮 SIXTH SENSE', UMAMI: '✨ UMAMI'
+  };
+  document.getElementById('event-hdr').textContent = eventDef.channel
+    ? `[${channelLabels[eventDef.channel] || eventDef.channel}] ${eventDef.header}`
+    : eventDef.header;
   document.getElementById('event-txt').textContent = eventDef.text;
   const ch = document.getElementById('event-choices');
   ch.innerHTML = '';
@@ -3671,6 +4410,278 @@ function showForcedEvent(eventDef) {
   });
   card.classList.remove('hidden');
   document.getElementById('shot-wrap').style.display = 'none';
+}
+
+// ═══════════════════════════════════════════
+// PATCH F — SENSORY POOL HELPERS
+// ═══════════════════════════════════════════
+
+function checkUmami(quality) {
+  if (G.isDead) return;
+  if (G.composure < 7) return;
+  if (quality !== 'solid' && quality !== 'miracle') return;
+  if (Math.random() > 0.04) return;
+
+  // Umami fires
+  const feed = document.getElementById('commentary');
+  const div = document.createElement('div');
+  div.className = 'bubble';
+  div.style.animationDelay = '0.3s';
+  div.innerHTML = `
+    <div class="bav">✨</div>
+    <div class="bbody">
+      <div class="bname" style="color:var(--accent)">UMAMI</div>
+      <div class="btext" style="font-style:italic">The shot before this one was exactly right. Not spectacular — right. The weight, the contact, the flight. The sound. You knew it before you looked up. This happens perhaps once in a tournament.</div>
+    </div>`;
+  feed.appendChild(div);
+
+  // Apply umami bonus
+  G.fortuneActive = true;
+  G.tempThresholdMod = -2;
+  G.tempThresholdHoles = 1;
+  showFortuneIndicator();
+
+  // Trigger umami commentary — one line from each panellist
+  getUmamiCommentary();
+}
+
+async function getUmamiCommentary() {
+  const commentatorBlocks = G.selectedPanel.map(buildCommentatorBlock).join('\n\n');
+  const speakerList = G.selectedPanel.map(id => {
+    const ch = CHARACTERS.find(c => c.id === id);
+    return `{"speaker":"${ch.name}","text":"one sentence only"}`;
+  }).join(',\n  ');
+
+  const prompt = `Golf Adventure — UMAMI moment. A shot was played that was simply, perfectly correct. Not a miracle, not spectacular — exactly right in every dimension.
+
+PLAYER: ${G.player?.name}
+HOLE: ${G.tournament?.holes[G.holeIdx]?.name}
+COMPOSURE: ${G.composure}/10
+
+YOUR PANEL:
+${commentatorBlocks}
+
+Each panellist gets ONE SENTENCE only. The sentence must reflect their authentic voice responding to perfection.
+Faldo: one sentence that sounds like a compliment and isn't. Technically precise. Devastating in its accuracy.
+McGinley: tries to say something profound. Gets close. Doesn't quite land.
+Riley: names an Australian who also once did something like this, but bigger, in worse conditions.
+Souness: relates it to a midfield player who had this quality in 1986.
+KP: says it reminded him of one of his innings. Names the innings.
+Brian Cox: entropy paused briefly. The second law looked away.
+
+Return ONLY a JSON array — one sentence per panellist:
+[
+  ${speakerList}
+]`;
+
+  try {
+    const resp = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ model: "claude-sonnet-4-20250514", max_tokens: 500,
+        messages: [{ role: "user", content: prompt }] })
+    });
+    const data = await resp.json();
+    const raw = (data.content?.[0]?.text || '[]').replace(/```json|```/g, '').trim();
+    const lines = JSON.parse(raw);
+    const feed = document.getElementById('commentary');
+    lines.forEach((l, i) => {
+      const ch = CHARACTERS.find(c => c.name === l.speaker);
+      const div = document.createElement('div');
+      div.className = 'bubble';
+      div.style.animationDelay = `${0.5 + i * 0.15}s`;
+      div.innerHTML = `<div class="bav">${ch ? ch.initials : '??'}</div><div class="bbody"><div class="bname">${l.speaker}</div><div class="btext">${l.text}</div></div>`;
+      feed.appendChild(div);
+    });
+  } catch(e) { /* umami is silent on failure — appropriate */ }
+}
+
+// ═══════════════════════════════════════════
+// PATCH G — IMAGE SYSTEM
+// ═══════════════════════════════════════════
+
+function buildImageQuery(eventId, imageType) {
+  const queries = {
+    king_brown_approach:  { exact: "king brown snake grass", adjacent: "grass snake coiled", misleading: "brown rope in grass", juxtaposition: "toy snake garden", non_sequitur: "nuclear reactor aerial view" },
+    adder_rough:          { exact: "adder snake golf rough", adjacent: "stick in grass that looks like snake", misleading: "garden hose coiled", juxtaposition: "snake charmer shopping centre", non_sequitur: "filing cabinet open" },
+    funnel_web_bag:       { exact: "funnel web spider", adjacent: "spider web golf bag", misleading: "velcro on bag closeup", juxtaposition: "toy spider Halloween", non_sequitur: "nuclear submarine periscope" },
+    honey_badger:         { exact: "honey badger aggressive", adjacent: "badger garden night", misleading: "small dog aggressive", juxtaposition: "honey badger cartoon meme", non_sequitur: "traffic cone roundabout" },
+    alligator_water:      { exact: "alligator water hazard golf", adjacent: "log in water that looks like alligator", misleading: "rubber duck pond", juxtaposition: "inflatable alligator swimming pool", non_sequitur: "filing cabinet submerged" },
+    swan:                 { exact: "swan aggressive wings spread", adjacent: "goose threatening", misleading: "white plastic bag in water", juxtaposition: "swan pedalo", non_sequitur: "lighthouse foghorn" },
+    wasp:                 { exact: "wasp on golf ball", adjacent: "bee on flower", misleading: "yellow sticky label on white ball", juxtaposition: "wasp nest enormous", non_sequitur: "accordion player park bench" },
+    caddy_water:          { exact: "sealed water bottle offer", adjacent: "suspicious looking drink", misleading: "similar bottle unlabelled", juxtaposition: "poison bottle cartoon skull", non_sequitur: "submarine hatch" },
+    marshals_pie:         { exact: "old pie slightly concerning", adjacent: "Greggs pastry hand", misleading: "road cone similar colour", juxtaposition: "pie chart corporate presentation", non_sequitur: "Pope waving crowd" },
+    hip_flask:            { exact: "silver hip flask engraved", adjacent: "suspicious looking flask", misleading: "thermos flask similar shape", juxtaposition: "hip flask wedding gift box", non_sequitur: "oil drum industrial" },
+    mashed_potato:        { exact: "man shouting crowd sports", adjacent: "crowd golf tournament generic", misleading: "bowl of mashed potato", juxtaposition: "mashed potato art installation", non_sequitur: "traffic light red" },
+    hear_phone_ringtone:  { exact: "old Nokia phone 2009", adjacent: "embarrassed person crowd", misleading: "phone face down grass", juxtaposition: "phone in cement", non_sequitur: "lighthouse keeper surprised" },
+    smell_hot_dog:        { exact: "hot dog concession stand stadium", adjacent: "hot dog slightly concerning", misleading: "suspicious sausage", juxtaposition: "hot dog eating contest", non_sequitur: "oil refinery night" },
+    feel_something_rough: { exact: "long rough golf course", adjacent: "grass close up", misleading: "green carpet", juxtaposition: "something definitely in that grass", non_sequitur: "submarine periscope grass" },
+    sixth_watched:        { exact: "empty space golf gallery slight fog", adjacent: "crowd with one gap", misleading: "shape in mist", juxtaposition: "ghost tour guide daytime", non_sequitur: "lamppost suburban" },
+    urine_smell:          { exact: "golf crowd large mysterious smell face", adjacent: "crowd golf wincing", misleading: "yellow flowers meadow", juxtaposition: "portable toilet golf tournament", non_sequitur: "chemistry lab beaker smoking" },
+  };
+
+  const q = queries[eventId];
+  if (!q) return `golf tournament crowd event`;
+  return q[imageType] || q.exact || `golf tournament`;
+}
+
+async function fetchEventImage(eventId) {
+  // Determine image type probabilistically
+  const roll = Math.random();
+  let imageType;
+  if (roll < 0.30)      imageType = 'exact';
+  else if (roll < 0.55) imageType = 'adjacent';
+  else if (roll < 0.75) imageType = 'misleading';
+  else if (roll < 0.90) imageType = 'juxtaposition';
+  else                   imageType = 'non_sequitur';
+
+  const query = buildImageQuery(eventId, imageType);
+
+  try {
+    const resp = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 200,
+        tools: [{ type: "web_search_20250305", name: "web_search" }],
+        messages: [{ role: "user", content: `Find one image for: ${query}. Return only the direct image URL, nothing else.` }]
+      })
+    });
+    const data = await resp.json();
+    const toolResult = data.content?.find(b => b.type === 'tool_result' || b.type === 'text');
+    if (toolResult) {
+      const urlMatch = (toolResult.text || toolResult.content?.[0]?.text || '').match(/https?:\/\/[^\s"']+\.(jpg|jpeg|png|webp|gif)/i);
+      if (urlMatch) return { url: urlMatch[0], type: imageType };
+    }
+    return null;
+  } catch(e) {
+    return null;
+  }
+}
+
+async function renderEventWithImage(eventDef) {
+  const card = document.getElementById('event-card');
+
+  if (eventDef.hasImage) {
+    const imgDiv = document.createElement('div');
+    imgDiv.id = 'event-image';
+    imgDiv.className = 'event-image loading';
+    imgDiv.innerHTML = '<div class="event-img-loading">OFFICIAL PHOTOGRAPHIC RECORD — retrieving...</div>';
+    const eventTxt = card.querySelector('.event-txt') || card.querySelector('#event-txt');
+    if (eventTxt) card.insertBefore(imgDiv, eventTxt);
+
+    fetchEventImage(eventDef.id).then(result => {
+      const imgEl = document.getElementById('event-image');
+      if (!imgEl) return;
+      if (result?.url) {
+        imgEl.className = 'event-image loaded';
+        imgEl.innerHTML = `
+          <img src="${result.url}" alt="Official photographic record" onerror="this.parentElement.style.display='none'">
+          <div class="event-img-label">OFFICIAL PHOTOGRAPHIC RECORD</div>`;
+      } else {
+        imgEl.style.display = 'none';
+      }
+    });
+  }
+}
+
+// ═══════════════════════════════════════════
+// PATCH H — PANEL ENGAGEMENT SYSTEM
+// ═══════════════════════════════════════════
+
+// Initialise panelState on G — called after G is set up
+function initPanelState() {
+  G.panelState = {
+    runningJokes: [],
+    playerNickname: null,
+    lastInsult: null,
+    atmosphere_escalation: 0,
+    panelFeuds: {},
+    momentsMentioned: [],
+  };
+}
+
+function buildPanelEngagementContext() {
+  const ps = G.panelState;
+  if (!ps) return '';
+
+  let ctx = '';
+
+  if (ps.playerNickname) {
+    ctx += `\nPLAYER NICKNAME (established, use it): "${ps.playerNickname}"`;
+  }
+
+  if (ps.runningJokes && ps.runningJokes.length > 0) {
+    const recent = ps.runningJokes.slice(-2);
+    ctx += `\nRUNNING JOKES IN PLAY (call back to these): ${recent.map(j => j.setup).join(' | ')}`;
+  }
+
+  const atmoEscalationDesc = [
+    "Professional. Sharp but measured.",
+    "The gloves are slightly off. Still technically broadcast-safe.",
+    "Characters are saying things they'd normally pull back from.",
+    "The professional veneer has cracked. Direct personal attacks are occurring.",
+    "Nobody is pretending anymore. This is a roast.",
+    "Complete dissolution of professional standards. The producer has left the booth."
+  ][ps.atmosphere_escalation || 0];
+
+  ctx += `\nCOMMENTARY REGISTER: ${atmoEscalationDesc}`;
+
+  if (ps.atmosphere_escalation >= 2) {
+    ctx += `\nATMOSPHERE ESCALATION LEVEL: ${ps.atmosphere_escalation}/5 — commentators are increasingly willing to say things they shouldn't.`;
+  }
+
+  const feudPairs = Object.entries(ps.panelFeuds || {}).filter(([,v]) => v > 0);
+  if (feudPairs.length > 0) {
+    ctx += `\nACTIVE PANEL FEUDS: ${feudPairs.map(([k,v]) => `${k} (intensity ${v}/3)`).join(', ')}`;
+  }
+
+  ctx += `\n\nROASTING RULES:
+- The player is being watched by a room full of people who know golf and are not impressed yet.
+- Characters should address the player directly at least once per hole.
+- Characters should reference each other's previous comments — agree, contradict, escalate.
+- Faldo: finds the technical flaw even in success. Never praises without qualification. Will address the player by surname only.
+- McGinley: performs warmth. His warmth toward the player is hollow. His warmth toward Faldo is also hollow but in a different direction.
+- Riley: has given the player a nickname by now. Uses it. Also has opinions on the caddy.
+- Souness: has decided whether the player has bottle. This opinion was formed in hole 1 and has not changed.
+- KP: is comparing the player's round to one of his innings. The comparison always flatters KP.
+- Brian Cox: has worked out the statistical probability of the player's score. It was not high.
+- Characters should occasionally talk directly to each other in their commentary lines — not just about the player.`;
+
+  return ctx;
+}
+
+async function generatePlayerNickname() {
+  if (!G.panelState) return;
+  if (G.panelState.playerNickname) return;
+  if (G.holeIdx < 1) return; // wait until hole 2
+
+  const panel = G.selectedPanel.map(id => CHARACTERS.find(c => c.id === id)?.name).join(', ');
+  const prompt = `The commentary panel (${panel}) need to give this player a nickname.
+
+Player: ${G.player?.name}
+Performance so far: ${G.yourScore === 0 ? 'level par' : G.yourScore > 0 ? `+${G.yourScore}` : `${G.yourScore}`} after ${G.holeIdx + 1} holes.
+Atmosphere: ${G.atmosphere}
+
+Generate ONE nickname. It should be:
+- Specific to this player's performance or a wound/characteristic
+- Something the panel would genuinely use
+- Slightly cruel but not vicious
+- The kind of thing that sticks
+
+Return ONLY the nickname as a plain string, no quotes, no explanation.`;
+
+  try {
+    const resp = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ model: "claude-sonnet-4-20250514", max_tokens: 30,
+        messages: [{ role: "user", content: prompt }] })
+    });
+    const data = await resp.json();
+    const nickname = data.content?.[0]?.text?.trim();
+    if (nickname && nickname.length < 40) {
+      G.panelState.playerNickname = nickname;
+    }
+  } catch(e) { /* silent */ }
 }
 
 </script>
