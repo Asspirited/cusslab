@@ -608,11 +608,13 @@ const ss1 = initState();
 ss1.samStats.leekiness = 2;
 spendLeekiness(ss1);
 assert('spendLeekiness: sets flag when leekiness > 0', ss1.leekinessSpend, true);
+assert('spendLeekiness: decrements leekiness', ss1.samStats.leekiness, 1);
 
 const ss2 = initState();
 ss2.samStats.leekiness = 0;
 spendLeekiness(ss2);
 assert('spendLeekiness: no-op when leekiness is 0', ss2.leekinessSpend, false);
+assert('spendLeekiness: leekiness unchanged at 0', ss2.samStats.leekiness, 0);
 
 // Group D: processTurnEffects
 const pt1 = initState();

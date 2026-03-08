@@ -3554,6 +3554,10 @@
 </main>
 </div><!-- #app-body -->
 
+<!-- ── src/ layer: data first, then logic (dependency order) ── -->
+<script src="src/data/quntum-leeks-scenarios.js"></script>
+<script src="src/logic/quntum-leeks-engine.js"></script>
+
 <script>
 // ============================================================
 // PROFANI-CONSULTANT — Refactored Architecture v2.0
@@ -14090,162 +14094,9 @@ Never name the move.`;
 // ============================================================
 const QuantumLeeks = (() => {
 
-  const SCENARIOS = {
-    milk: {
-      name: 'The Milk Round',
-      period: '1953, Rural Derbyshire',
-      host: 'Arthur Broadbent, 34, milkman. 5am. Foggy. A float full of milk.',
-      mirror: 'a ruddy-faced man in a white coat and cap. Behind him, barely visible, you.',
-      situation: 'Arthur has been quietly delivering milk to the wrong addresses for six months, causing a long-running dispute between two farming families that is about to turn violent. Nobody has admitted the deliveries were wrong. Sam must get both families to admit the mistake was mutual.',
-      al_note: 'Al was in Derbyshire once. 1962. Well — 1962 for her. Dressed in something that would be mildly alarming in 1979; in 1953 it is incomprehensible. Distracted by any woman who passes, including women on bicycles in period clothing.',
-      object: 'a particularly round cabbage in the back of the float',
-      leap_questions: '1. Why has nobody complained about the wrong deliveries for six months?\n2. Who knew first — and when?\n3. What does each family actually want from the other?',
-      characters: 'The Bramley family (96% probability of being "difficult") and one other farming family — both stubborn, both guilty, both performing victim. Other characters: women cycling past (Al\'s concern, not Sam\'s). A dog.',
-    },
-    advisory: {
-      name: 'The Advisory',
-      period: '1974, Whitehall, London',
-      host: 'Derek Fitch, 41, Senior Civil Servant, Department of Trade. Three-piece suit. An actual in-tray. The in-tray has things in it from 1967.',
-      mirror: 'a grey, precise man with a centre parting and an expression suggesting he has never once been surprised by anything. Behind him, you.',
-      situation: 'A government report that would have prevented a significant industrial collapse has been in the system for eight months and has not been read by anyone with authority to act on it. It needs to reach the right person by 5pm today or it is binned. The wrong: institutional inertia dressed as process. The right: someone admits they read it and buried it deliberately.',
-      al_note: 'Al loves 1974. Had three wives in the seventies. Not simultaneously. Well — briefly simultaneously. That is not relevant. Distracted by any woman in the building — there are not many women in 1974 Whitehall, which makes each one more distracting.',
-      object: 'the Xerox machine in the corridor',
-      leap_questions: '1. Who filed the report — and did they read it first?\n2. What would happen to them if they admitted they had buried it?\n3. What do they actually want — protection, or to be caught?',
-      characters: 'Permanent Secretary Hollis (91.4% probability of being "a coward in a good suit"). Junior civil servants who have all seen the report and said nothing. A secretary who knows everything and has been asked nothing. Someone making tea on the third floor.',
-    },
-    retro: {
-      name: 'The Retrospective',
-      period: 'Present Day — Corporate Agile Hell',
-      host: 'Darren Coates, 38, Delivery Manager. Open plan office. Standing desks nobody stands at. A Jira board on three separate screens. The sprint has delivered nothing for four consecutive cycles.',
-      mirror: 'a man in an untucked shirt with a lanyard that says DARREN and underneath it, in smaller font, TRANSFORMATION. Behind him, you.',
-      situation: 'The team has not delivered a story in four sprints. The cause is known by two people and admitted by neither. The product owner role is being "shared" which means it belongs to nobody. A steering committee meets in 40 minutes and the plan is to present velocity metrics that are technically accurate and functionally meaningless. Sam must say the true thing plainly, in the meeting, out loud.',
-      al_note: 'Al does not understand Jira. Was a POW. Somehow thinks this is worse. Distracted by anyone attractive regardless of context — this is the modern era, Al finds this more equalising than he expected.',
-      object: 'a cylindrical whiteboard marker',
-      leap_questions: '1. Who made the decision to split the product owner role — and why?\n2. What would the steering committee do if they knew the real number (zero)?\n3. What does Sam — as Darren — actually want to happen? (Self-knowledge condition: Sam must answer this honestly about himself.)',
-      characters: 'Scrum Master (has read neither the Scrum Guide nor any book about agile, ever — Ziggy says this is "almost impressive"). Product Owner A (knows nothing about the product). Product Owner B (does not speak in meetings). Steering committee member (wants a dashboard, not truth). Someone who has been writing on post-it notes for six months with zero intention of actioning any of them.',
-    },
-    bletchley: {
-      name: "Bletchley Park 1943",
-      period: "Bletchley Park, Buckinghamshire, England — February 1943",
-      host: "Dr Edmund Crowe, 34, senior cryptanalyst, Hut 6. Thin, ink-stained fingers, round spectacles, tweed jacket with a burn mark on the left cuff from a careless cigarette.",
-      mirror: "A gaunt, exhausted man stares back. His eyes are red from no sleep. A cigarette burns down to nothing between his fingers. On the wall behind him, columns of letters that mean nothing to you. Behind him, you.",
-      situation: "The Enigma decryption team is 72 hours from a critical naval convoy intercept window. Crowe's team has stalled. His second-in-command speaks only in anagram — a nervous breakdown presenting as wordplay — and has infected two others. The whole hut now communicates in anagram. Sam must decode the team, fix the breakdown, and get the intercept before the window closes. Everything anyone says to Sam is in anagram.",
-      al_note: "Al is distracted by a 1943 ENSA showgirl calendar on the wall and keeps losing his place. He forgets to mention the anagram situation entirely in the initial briefing.",
-      object: "The Bombe machine printout — covered in annotations that are themselves anagrams",
-      leap_questions: "1. Has Sam correctly decoded what the second-in-command is actually trying to say?\n2. Has Sam restored functional communication to the hut without breaking the man further?\n3. Has Sam got the intercept data to the naval command in time?",
-      characters: "Gordon Marsh, 28, second-in-command, speaks only in anagram (Ziggy: 73% chance he's having a breakdown, 19% chance he's a German spy, 8% chance he's just showing off) | Vera Sykes, 41, tea lady, only person in the hut who speaks normally, knows everything (Ziggy: 94% chance she's the most important person in this room)",
-    },
-    dunkirk: {
-      name: "Dunkirk 1940",
-      period: "Dunkirk beach, northern France — 1 June 1940, Day 7 of the evacuation",
-      host: "Major Peter Hallows, 41, logistics coordinator, British Expeditionary Force. Large moustache, sand in everything, one boot missing.",
-      mirror: "A red-faced major with a clipboard and one boot looks back at you from a wing mirror propped against a sand dune. 338,000 men queue behind him into the sea. Behind him, you.",
-      situation: "Hallows is responsible for queue management on the eastern mole. The queue has become an argument. A Church of England padre has declared one section of beach a 'moral priority zone' and is refusing to let anyone through who cannot name all twelve apostles. A corporal has started charging sixpence for a better position. The little ships are arriving but nobody is getting on them. Sam has 4 hours.",
-      al_note: "Al briefs Sam that this is 'a simple queue management problem' and does not mention the padre, the corporal, or the sixpence. He is eating a sandwich throughout.",
-      object: "The clipboard — the manifest is soaking wet and the ink is running",
-      leap_questions: "1. Has Sam neutralised the padre's moral priority zone?\n2. Has Sam dealt with the corporal's toll operation?\n3. Have the men begun boarding the little ships in good order?",
-      characters: "Padre Reginald Fitch, 55, immovable, genuinely believes God sent him to this beach for this purpose (Ziggy: 61% chance he is clinically insane, 31% chance he is correct) | Corporal Baz Nunn, 22, entrepreneurial, has made 14 shillings (Ziggy: 88% chance he has done this before)",
-    },
-    zulu: {
-      name: "Rorke's Drift 1879",
-      period: "Rorke's Drift mission station, Natal, South Africa — 22 January 1879, evening",
-      host: "Lieutenant Archie Watts, 26, Royal Engineers, assigned to defensive fortifications. Sunburned, shaking slightly, has never been in a battle.",
-      mirror: "A young officer who looks considerably less confident than his rank suggests stares back from a shaving mirror nailed to a post. Outside, approximately 4,000 Zulu warriors are forming up. Behind him, you.",
-      situation: "139 British soldiers are defending a supply depot against 4,000 Zulu warriors. Sam has leapt into the engineer responsible for the biscuit tin barricade. The barricade plan is wrong. The officer in charge, Lieutenant Chard, is calm and competent and does not need Sam's help. The problem is the hospital — it has no connecting internal doors and the wounded cannot be moved. Sam must fix the hospital evacuation route before the attack begins.",
-      al_note: "Al tells Sam the battle is already won — 'you get eleven Victoria Crosses, it's fine' — and does not tell Sam that the hospital problem gets people killed. Al is very confident. Al is wrong about what Sam needs to do.",
-      object: "The biscuit tin fortification plan — drawn on the back of a ration card",
-      leap_questions: "1. Has Sam identified the hospital door problem?\n2. Has Sam communicated the fix to the right person before the attack begins?\n3. Has the evacuation route been created?",
-      characters: "Lieutenant John Chard, 31, Royal Engineers, calm and correct, mildly puzzled by Watts today (Ziggy: 97% chance he handles this without Sam's help, 3% chance Sam accidentally makes things worse) | Private Henry Hook, 25, hospital defender, about to become a hero (Ziggy: no assessment — Ziggy respects this one)",
-    },
-    fawkes: {
-      name: "Guy Fawkes' Cellar 1605",
-      period: "Undercroft beneath the House of Lords, Westminster — 4 November 1605, midnight",
-      host: "Thomas Wintour, 33, co-conspirator, responsible for gunpowder logistics. Nervous, devout, increasingly certain this is a terrible idea.",
-      mirror: "A man in a dark cloak holding a lantern peers back from his own reflection in a damp stone wall. He looks like someone who has recently made several very bad decisions. Behind him, you.",
-      situation: "36 barrels of gunpowder are in place. The plot is 8 hours from execution. Sam has leapt into the one conspirator who has serious doubts — and has left a letter warning a Catholic lord to stay away from Parliament tomorrow. The letter has been intercepted. The conspirators do not know yet. Sam must decide: warn them (blowing the leap), let history proceed (blowing up Parliament), or find a third option that doesn't exist.",
-      al_note: "Al's initial briefing is: 'You need to stop the plot.' Al does not mention that Wintour wrote the warning letter, that it's been intercepted, or that the authorities are already on their way. Al mentions he once dated a woman named Fawkes. Unrelated.",
-      object: "The warning letter — Wintour's handwriting, already in the wrong hands",
-      leap_questions: "1. Has Sam understood that the plot is already compromised?\n2. Has Sam found a way to warn the conspirators without being arrested himself?\n3. Has Sam prevented the execution of the plotters who might have lived?",
-      characters: "Guy Fawkes, 35, waiting in the cellar, entirely committed, slightly annoyed Wintour is acting strange (Ziggy: 100% chance this ends badly for Fawkes, Ziggy declines to elaborate) | Robert Cecil, 42, Secretary of State, already knows, already coming (Ziggy: 99% chance he wins this one)",
-    },
-    glastonbury: {
-      name: "Glastonbury 1971",
-      period: "Worthy Farm, Pilton, Somerset — June 1971, dawn, day before the festival",
-      host: "Michael Eavis, 31, dairy farmer, festival organiser, entirely out of his depth. Wellies, a worried expression, and 12,000 unexpected people already on his land.",
-      mirror: "A dairy farmer who has not slept looks back from the mirror in his farmhouse bathroom. Through the window behind him, a field that was empty yesterday now contains several thousand people and at least one tepee. Behind him, you.",
-      situation: "The 1971 Glastonbury Fayre has no stage (the pyramid stage is half-built), no toilets (there are fields), no food vendors (someone brought a van), and David Bowie has just cancelled. The 12,000 attendees do not know any of this yet. Sam must manage the situation using only what is available on a Somerset dairy farm in 1971. Nobody has heard of this festival. Nobody will for another decade.",
-      al_note: "Al tells Sam this is 'basically Woodstock' and that it 'all works out fine in the end.' Al does not mention the toilets. Al is very enthusiastic about the music.",
-      object: "The running order — written in crayon on a piece of cardboard, partially rained on",
-      leap_questions: "1. Has Sam solved the immediate toilet situation?\n2. Has Sam found a replacement for David Bowie?\n3. Has Sam kept Michael Eavis from cancelling the whole thing?",
-      characters: "Arabella Churchill, 21, co-organiser, entirely calm about everything (Ziggy: 78% chance she is the reason this works) | A man called Keith, no surname, responsible for the pyramid stage, currently asleep (Ziggy: 44% chance the stage falls down)",
-    },
-    stalag: {
-      name: "Stalag Luft III 1943",
-      period: "Stalag Luft III POW camp, Sagan, Lower Silesia — March 1943",
-      host: "Squadron Leader Douglas Brent, 29, RAF, escape committee logistics officer. Dry, precise, deeply sceptical of everything.",
-      mirror: "A lean officer with the thousand-yard stare of someone who has been here for eighteen months looks back from a small mirror above a tin washbasin. The room behind him contains men doing things that are definitely not what they appear to be doing. Behind him, you.",
-      situation: "The Great Escape tunnel — Harry — is three weeks from completion. The escape committee has 600 men involved and a German ferret (informant guard) who is getting suspicious. Sam has leapt into the man responsible for the forgery operation. The forgery operation has a critical error: every forged pass uses the same fictitious German colonel's name — Oberst Wilhelm Braun — and there are now 76 passes in circulation with that name. Sam must fix the forgery problem without alerting the ferret.",
-      al_note: "Al's initial briefing focuses entirely on the tunnel and does not mention the forgery operation. Al thinks Sam is here to help with the tunnel. Sam is not here to help with the tunnel.",
-      object: "The master forgery ledger — hidden inside a copy of Goethe",
-      leap_questions: "1. Has Sam identified the Wilhelm Braun duplication problem?\n2. Has Sam corrected the passes already in circulation?\n3. Has Sam done this without the ferret noticing?",
-      characters: "Roger Bushell, 33, Big X, runs the escape committee, does not suffer fools (Ziggy: 87% chance he already knows about the Wilhelm Braun problem and is waiting to see if Brent catches it) | Corporal Hermann Glemnitz, 40, German ferret, competent, getting closer (Ziggy: 63% chance he already knows something is wrong)",
-    },
-    jerusalem: {
-      name: "Jerusalem 30AD",
-      period: "Jerusalem, Roman-occupied Judaea — approximately 30AD, three days before Passover",
-      host: "Matthias, 31, minor apostle, logistics and catering, not one of the famous ones. Worried, underslept, perpetually overlooked.",
-      mirror: "A man in rough linen robes peers at his reflection in a bronze water vessel. He looks like someone who has been walking for three years and is not entirely sure why. Behind him, twelve men are arguing about seating arrangements. Behind him, you.",
-      situation: "The Last Supper requires logistics. There are 13 people, one room, a table that seats 10, a host who wants paying, and a disciple who has just made a private financial arrangement that Matthias suspects is not good. Sam must manage the event logistics, handle the seating crisis, and work out what Judas is up to without any of the other apostles noticing that something is wrong. Jesus is serenely unhelpful on all practical matters.",
-      al_note: "Al tells Sam this is 'a catering job, just make sure everyone gets fed.' Al does not mention Judas. Al is not religious but is finding this one a bit much.",
-      object: "The seating plan — written on a wax tablet, already contested by at least four apostles",
-      leap_questions: "1. Has Sam resolved the seating situation without a theological argument?\n2. Has Sam identified what Judas has done?\n3. Has Sam managed the host payment without incident?",
-      characters: "Jesus, serene, unhelpful on logistics, occasionally says something that reframes the entire situation (Ziggy: probability assessment not available for this one) | Judas Iscariot, 33, distracted, counting something under the table (Ziggy: 94% chance this ends badly for everyone involved)",
-    },
-    pyramid: {
-      name: "Pyramid Project 2560BC",
-      period: "Giza plateau, Egypt — approximately 2560BC, Year 17 of Khufu's reign",
-      host: "Amenhotep, 38, senior scribe and logistics overseer, responsible for the critical path of the north face casing stones. Efficient, exhausted, one sandal broken.",
-      mirror: "A lean, ink-fingered man in white linen looks back from a polished copper sheet. Behind him, 20,000 workers and a project that is running four flood seasons behind schedule. Behind him, you.",
-      situation: "The Great Pyramid is behind schedule. The critical path failure is the ramp. There are currently four competing ramp theories in operation simultaneously — the straight ramp faction, the spiral ramp faction, the internal ramp faction, and a small but vocal group who believe the stones were carried by a method that Amenhotep's papyrus describes only as 'the other way.' The Pharaoh has asked for a progress report in three days. Sam must consolidate the ramp methodology, get the critical path back on track, and produce a progress report that does not get anyone executed.",
-      al_note: "Al's briefing: 'Big construction project, needs a project manager.' Al does not mention the four ramp factions, the execution risk, or that the Pharaoh has already had the previous two overseers dealt with. Al finds the whole thing very impressive architecturally.",
-      object: "The master papyrus — the critical path document, currently in four contradictory versions",
-      leap_questions: "1. Has Sam identified which ramp method is actually being used?\n2. Has Sam produced a coherent progress report?\n3. Has Sam avoided getting anyone executed in the process?",
-      characters: "Hemiunu, 45, Grand Vizier and chief architect, has a ramp opinion and it is correct and he is tired of explaining it (Ziggy: 71% chance he resolves this himself if Sam stays out of the way) | The Pharaoh Khufu, 42, expects results, has a very direct management style (Ziggy: 100% chance this meeting goes badly if Sam attends unprepared)",
-    },
-    ottoman: {
-      name: "Ottoman Court 1453",
-      period: "Topkapi Palace, Constantinople — May 1453, one week after the fall",
-      host: "Selim, 44, Chief Eunuch of the Imperial Harem, administrator of the household, keeper of 300 secrets. Precise, political, survives by knowing more than everyone else.",
-      mirror: "A composed, watchful man in silk robes looks back from a polished silver mirror. His expression reveals nothing. Behind him, a corridor of closed doors, each one a problem. Behind him, you.",
-      situation: "Constantinople has just fallen to Mehmed II. The old Byzantine court staff have been retained in their roles — for now. Selim must manage the transition: 300 harem residents from three different factions, a new Sultan who is 21 and unpredictable, and a Byzantine eunuch colleague who knows where the imperial treasury is hidden and is negotiating his own survival. Sam must navigate the politics, protect as many people as possible, and not reveal that he has no idea what a Chief Eunuch actually does.",
-      al_note: "Al's briefing is thorough and detailed and entirely about the wrong faction. Al also spends two minutes explaining what a eunuch is, which Sam does not need explained and which Al clearly finds awkward.",
-      object: "The household register — 300 names, three factions, coded in a system only Selim understands",
-      leap_questions: "1. Has Sam identified which faction poses the immediate threat?\n2. Has Sam protected the Byzantine eunuch long enough to extract the treasury location?\n3. Has Sam avoided revealing his ignorance to the Sultan?",
-      characters: "Sultan Mehmed II, 21, brilliant, mercurial, testing everyone (Ziggy: 55% chance he already knows Sam is not Selim) | Konstantinos, 52, Byzantine eunuch, negotiating, terrified, holding the one piece of information everyone wants (Ziggy: 83% chance he survives if Sam handles the next conversation correctly)",
-    },
-    kkk: {
-      name: "KKK Rally, Alabama 1923",
-      period: "Rural Alabama, United States — August 1923, night",
-      host: "Grand Wizard Earl Maddox, 48, insurance salesman by day, white supremacist by night. Sam has leapt into him. Sam is Black.",
-      mirror: "Sam looks in the mirror of a truck cab and sees Earl Maddox looking back. Sam is wearing robes. Outside, 200 men in identical robes are waiting for Earl Maddox to address them. Sam is Black. Behind him, you.",
-      situation: "Sam has leapt into the Grand Wizard moments before he is due to address a Klan rally. Sam is disgusted. Sam wants to break character immediately. Al must manage Sam's moral crisis while also acknowledging that the situation is genuinely horrifying. Sam's task — the reason for the leap — is to prevent a planned act of violence against a specific family that will take place after the rally. Sam must stay in character long enough to redirect the evening without becoming complicit in what he is witnessing.",
-      al_note: "Al is not making jokes. Al's opening briefing is direct: there is a family in danger, their name is [name], they live on [road], the plan is to go there after this rally. That is what Sam is here to stop. Al tells Sam: 'I know. I know what this is. You have to stay in it.'",
-      object: "A list of names — the targets, written in pencil on a folded piece of paper in Maddox's robe pocket",
-      leap_questions: "1. Has Sam identified the specific family at risk?\n2. Has Sam redirected or ended the rally without triggering immediate violence?\n3. Has Sam found a way to warn the family?",
-      characters: "Deputy Harlan Voss, 35, Maddox's lieutenant, suspicious that something is off tonight (Ziggy: 77% chance he notices Sam is not behaving like Maddox) | The family [name], unaware, at home (Ziggy: this is why you are here)",
-    },
-    alcatraz: {
-      name: "Alcatraz 1962",
-      period: "Alcatraz Island, San Francisco Bay — night of 11 June 1962",
-      host: "Associate Warden Chester Beaumont, 52, 22 years of service, has never lost a prisoner. Tonight is the night Frank Morris and the Anglin brothers go over the wall.",
-      mirror: "A heavyset man in a correctional officer's uniform looks back from the bathroom mirror in the warden's office. He has the face of a man who will be very famous tomorrow for the wrong reasons. Behind him, you.",
-      situation: "Frank Morris and John and Clarence Anglin are in the process of escaping right now. They have been preparing for months. Their papier-mâché heads are in their beds. The ventilation grilles are already loose. Sam has leapt into the warden the night it happens — not to stop the escape, but to discover why he has leapt here. The leap condition is not 'prevent the escape.' Ziggy cannot determine the leap condition. Al doesn't know either. Something else is wrong tonight and Sam has to find it.",
-      al_note: "Al's opening: 'I'm going to level with you. Ziggy has no idea why you're here. It's definitely not to stop the escape — that never gets solved, they're never found. Something else is happening tonight. We need to figure out what.' Al is genuinely uncertain for once.",
-      object: "The night duty log — Chester Beaumont's handwriting, last entry 11:15pm, something crossed out",
-      leap_questions: "1. Has Sam identified what Ziggy cannot — the actual reason for the leap?\n2. Has Sam resolved whatever that is?\n3. Has Sam done it before 6am when the escape is discovered?",
-      characters: "Frank Morris, 35, already in the ventilation shaft, brilliant, disciplined, does not know Sam is not Beaumont (Ziggy: 100% chance of successful escape, Ziggy sounds almost admiring) | Night guard Roy Bales, 28, on duty, about to miss something important that isn't the escape (Ziggy: 67% chance Bales is the reason Sam is here)",
-    },
-  };
+  // SCENARIOS data loaded from src/data/quntum-leeks-scenarios.js
+  const SCENARIOS = QUNTUM_LEEKS_SCENARIOS;
+
 
   const _SYSTEM = (sc, ziggyChar) => `You are running a Quntum Leeks scene. The USER IS AL CALAVICCI — the hologram. The user decides what Al says, reveals, withholds, and lies about. Sam Beckett is fully AI-controlled. The system waits for the user's Al input before advancing the scene. Ziggy's reactions are voiced through: ${ziggyChar || 'Wayne Riley'}.
 
@@ -14414,19 +14265,8 @@ RESPONSE FORMAT — return ONLY valid JSON, no text outside it:
   "ob_boy": <boolean — true on first turn and on leap/failure moments>
 }`;
 
-  let _scenario = null;
-  let _history  = [];
-  let _turnCount = 0;
-  let _probability = 50;
-  let _leaped = false;
-  let _samStats = { truthiness: 70, bottiness: 60, leekiness: 3, swissCheeseLevel: 20 };
-  let _samDamage = 0;
-  let _prevProbability = 50;
-  let _leekinessSpend = false;
-  let _leekinessBet = 0;
-  let _ziggyOptions = [];
-  let _selectedZiggyOpt = -1;
-  let _deathcapActive = false;
+  // State object — managed by QuntumLeeksEngine. initState() on each leap.
+  let _state = null;
 
   function _esc(s) {
     return String(s || '')
@@ -14437,7 +14277,7 @@ RESPONSE FORMAT — return ONLY valid JSON, no text outside it:
   function _updateStats() {
     const grid = document.getElementById('ql-stats-grid');
     if (!grid) return;
-    const s = _samStats;
+    const s = _state.samStats;
     const deathcap = s.swissCheeseLevel >= 80;
     const sclCol = deathcap ? 'var(--accent)' : s.swissCheeseLevel >= 50 ? '#ffaa44' : 'var(--green)';
     const leekinessBar = Math.min(100, s.leekiness * 20);
@@ -14454,54 +14294,31 @@ RESPONSE FORMAT — return ONLY valid JSON, no text outside it:
   }
 
   function _populateZiggyOptions(opts) {
-    _ziggyOptions = Array.isArray(opts) ? opts : [];
-    _selectedZiggyOpt = -1;
+    _state.ziggyOptions = Array.isArray(opts) ? opts : [];
+    _state.selectedZiggyOpt = -1;
     const area = document.getElementById('ql-ziggy-options');
     if (!area) return;
-    if (!_ziggyOptions.length) { area.style.display = 'none'; return; }
+    if (!_state.ziggyOptions.length) { area.style.display = 'none'; return; }
     area.style.display = 'block';
     [0, 1, 2].forEach(i => {
       const btn = document.getElementById('ql-zopt-' + (i + 1));
       if (!btn) return;
-      btn.textContent = _ziggyOptions[i] || '';
+      btn.textContent = _state.ziggyOptions[i] || '';
       btn.style.borderColor = '#8844cc';
     });
   }
 
   function _buildModifiers() {
-    const mods = [];
-    if (_leekinessSpend) mods.push('Al is pushing his luck on this action — higher variance outcome (Spend Leekiness active).');
-    if (_leekinessBet > 0) mods.push(`Al has bet ${_leekinessBet} Leekiness points — amplify outcome magnitude in both directions.`);
-    if (_samStats.swissCheeseLevel >= 80) mods.push('[DEATHCAP MODE ACTIVE] Sam is in a hallucination state. His actions follow internally consistent but externally catastrophic logic. Al is the only anchor he has left.');
-    if (_samDamage >= 4) mods.push(`Sam has suffered ${_samDamage} damage events. His dialogue reflects cumulative degradation — earnest but visibly deteriorating.`);
-    return mods.length ? '\n\nACTIVE MODIFIERS THIS TURN:\n' + mods.join('\n') : '';
+    return QuntumLeeksEngine.buildModifiers(_state);
   }
 
   function _processTurnEffects(data, isFirst) {
-    if (isFirst) return;
-    const newProb = typeof data.probability === 'number' ? data.probability : _probability;
-    if (newProb > _prevProbability) {
-      _samStats.leekiness++;
-    }
-    if (newProb < _prevProbability - 10) {
-      _samDamage++;
-    }
-    const accurateAdvice = _selectedZiggyOpt >= 0 && _samStats.truthiness > 60;
-    if (accurateAdvice) {
-      _samStats.swissCheeseLevel = Math.max(0, _samStats.swissCheeseLevel - 2);
-    } else {
-      _samStats.swissCheeseLevel = Math.min(100, _samStats.swissCheeseLevel + Math.floor(Math.random() * 6));
-    }
-    _deathcapActive = _samStats.swissCheeseLevel >= 80;
-    _leekinessSpend = false;
-    _leekinessBet = 0;
-    _selectedZiggyOpt = -1;
-    _prevProbability = newProb;
-    _updateStats();
+    QuntumLeeksEngine.processTurnEffects(_state, data, isFirst);
+    if (!isFirst) _updateStats();
   }
 
   function _appendDeath() {
-    const afterlife = _deathcapActive
+    const afterlife = _state.deathcapActive
       ? 'QUANTUM DISENTANGLEMENT — Professor Brian Cox is here. He finds this fascinating.'
       : "DANTE'S MODEL — there is paperwork. Your name is on the clipboard.";
     _updateProb(0);
@@ -14517,7 +14334,7 @@ RESPONSE FORMAT — return ONLY valid JSON, no text outside it:
   }
 
   function selectZiggyOpt(i) {
-    _selectedZiggyOpt = i;
+    _state.selectedZiggyOpt = i;
     [0, 1, 2].forEach(j => {
       const btn = document.getElementById('ql-zopt-' + (j + 1));
       if (!btn) return;
@@ -14527,39 +14344,34 @@ RESPONSE FORMAT — return ONLY valid JSON, no text outside it:
       btn.style.color        = active ? 'var(--green)' : '#cc99ff';
     });
     const textarea = document.getElementById('ql-act-input');
-    if (textarea) textarea.value = _ziggyOptions[i] || '';
+    if (textarea) textarea.value = _state.ziggyOptions[i] || '';
   }
 
   function spendLeekiness() {
-    if (_samStats.leekiness <= 0) return;
-    _leekinessSpend = true;
-    _samStats.leekiness--;
+    if (!QuntumLeeksEngine.spendLeekiness(_state)) return;
     _updateStats();
     UI.toast('Leekiness spent — next action runs hot.', 'info');
   }
 
   function betLeekiness() {
     const n = parseInt((document.getElementById('ql-bet-input') || {}).value || '1', 10);
-    const bet = Math.min(3, Math.max(1, isNaN(n) ? 1 : n));
-    if (_samStats.leekiness < bet) { UI.toast('Not enough Leekiness.', 'warn'); return; }
-    _leekinessBet = bet;
-    _samStats.leekiness -= bet;
+    if (!QuntumLeeksEngine.betLeekiness(_state, n)) { UI.toast('Not enough Leekiness.', 'warn'); return; }
     _updateStats();
-    UI.toast(`Bet ${bet} Leekiness — outcome amplified in both directions.`, 'info');
+    UI.toast(`Bet ${_state.leekinessBet} Leekiness — outcome amplified in both directions.`, 'info');
   }
 
   async function callLeek() {
-    if (_leaped) return;
+    if (_state.leaped) return;
     const word = ((document.getElementById('ql-leek-input') || {}).value || '').trim();
     if (!word) { UI.toast('What word did you catch?', 'warn'); return; }
-    const sc = SCENARIOS[_scenario];
+    const sc = SCENARIOS[_state.scenario];
     const ziggyCharEl = document.getElementById('ql-ziggy-char');
     const ziggyChar = ziggyCharEl ? ziggyCharEl.value : 'Wayne Riley';
     UI.setDisabled('ql-leek-btn', true);
     UI.show('ql-thinking');
     const sys = `You are the Quntum Leeks system. The user has called a word as the leek. Assess whether it matches a word meaning leek or leak that appeared in the current scene. Scenario: ${sc.name} (${sc.period}). Return ONLY valid JSON: {"correct": boolean, "response": "<If correct: Al sees it, blue light begins, voiced through ${ziggyChar}. One crisp sentence from Al. If incorrect: Al silences the handlink once. One terse sentence. The scene continues.>"}`;
-    const histSnippet = _history.slice(-4).map(h => h.role.toUpperCase() + ': ' + h.text.substring(0, 200)).join('\n');
-    const userMsg = `Called word: "${word}". Current leap probability: ${_probability.toFixed(1)}%.\nRecent history:\n${histSnippet}`;
+    const histSnippet = _state.history.slice(-4).map(h => h.role.toUpperCase() + ': ' + h.text.substring(0, 200)).join('\n');
+    const userMsg = `Called word: "${word}". Current leap probability: ${_state.probability.toFixed(1)}%.\nRecent history:\n${histSnippet}`;
     try {
       const raw  = await API.call(sys, userMsg, 300, 'qleeks/leek-call');
       const json = raw.match(/\{[\s\S]*\}/);
@@ -14568,7 +14380,7 @@ RESPONSE FORMAT — return ONLY valid JSON, no text outside it:
       const leekInput = document.getElementById('ql-leek-input');
       if (leekInput) leekInput.value = '';
       if (data.correct) {
-        _leaped = true;
+        _state.leaped = true;
         _append(`<div style="background:#001a1a;border:1px solid var(--cyan);border-radius:6px;padding:12px 14px;font-size:13px;color:var(--text);line-height:1.7;">${_esc(data.response)}</div>`);
         _appendLeaped();
         UI.hide('ql-reply-area');
@@ -14586,7 +14398,7 @@ RESPONSE FORMAT — return ONLY valid JSON, no text outside it:
   }
 
   function _updateProb(p) {
-    _probability = p;
+    _state.probability = p;
     const pctEl  = document.getElementById('ql-prob-pct');
     const fillEl = document.getElementById('ql-prob-fill');
     if (pctEl)  pctEl.textContent = p.toFixed(1) + '%';
@@ -14668,33 +14480,33 @@ RESPONSE FORMAT — return ONLY valid JSON, no text outside it:
   }
 
   async function _runTurn(userText, isFirst) {
-    _turnCount++;
-    const sc  = SCENARIOS[_scenario];
+    _state.turnCount++;
+    const sc  = SCENARIOS[_state.scenario];
     const ziggyCharEl = document.getElementById('ql-ziggy-char');
     const ziggyChar = ziggyCharEl ? ziggyCharEl.value : 'Wayne Riley';
     const sys = _SYSTEM(sc, ziggyChar) + _buildModifiers();
 
-    const histSnippet = _history.length
-      ? '\n\nHistory so far:\n' + _history.slice(-6).map(h => h.role.toUpperCase() + ': ' + h.text.substring(0, 300)).join('\n---\n')
+    const histSnippet = _state.history.length
+      ? '\n\nHistory so far:\n' + _state.history.slice(-6).map(h => h.role.toUpperCase() + ': ' + h.text.substring(0, 300)).join('\n---\n')
       : '';
 
     const userMsg = isFirst
       ? `Sam has just leapt in. First moment. Generate ONLY: the mirror moment, the opening scene, Sam's initial state, and Ziggy's first probability output. Do NOT generate Al's dialogue — the user plays Al. Wait for Al's first move. Starting leap probability around 45-55%.`
-      : `Al\'s move: "${userText}"\n\nProbability going into this turn: ${_probability.toFixed(1)}%. Sam and the scene react to what Al just told Sam — or withheld, or lied about. Generate Sam\'s response, scene reaction, and Ziggy\'s commentary on Al\'s moral choice.${histSnippet}\n\nSAM TRUST RULES: If Al\'s last move was truthful — Sam acts on it directly, usually correctly. If Al withheld — Sam flounders and improvises, makes it worse in a characteristically Sam way. If Al lied — Sam believes it completely, acts with full moral earnestness, disaster follows. After 2+ lies Sam starts giving Al a look. Doesn\'t say anything. Just the look. Then quietly: \'Al...\' Sam occasionally ignores Al regardless — Swiss-cheesed mid-briefing, or already committed to the wrong thing, or a woman walked past and Al stopped paying attention.`;
+      : `Al\'s move: "${userText}"\n\nProbability going into this turn: ${_state.probability.toFixed(1)}%. Sam and the scene react to what Al just told Sam — or withheld, or lied about. Generate Sam\'s response, scene reaction, and Ziggy\'s commentary on Al\'s moral choice.${histSnippet}\n\nSAM TRUST RULES: If Al\'s last move was truthful — Sam acts on it directly, usually correctly. If Al withheld — Sam flounders and improvises, makes it worse in a characteristically Sam way. If Al lied — Sam believes it completely, acts with full moral earnestness, disaster follows. After 2+ lies Sam starts giving Al a look. Doesn\'t say anything. Just the look. Then quietly: \'Al...\' Sam occasionally ignores Al regardless — Swiss-cheesed mid-briefing, or already committed to the wrong thing, or a woman walked past and Al stopped paying attention.`;
 
     const raw  = await API.call(sys, userMsg, 1200, 'qleeks/turn');
     const json = raw.match(/\{[\s\S]*\}/);
     if (!json) throw new Error('Could not parse leap response.');
     const data = JSON.parse(json[0]);
 
-    _history.push({ role:'sam',   text: isFirst ? '[leapt in]' : userText });
-    _history.push({ role:'scene', text: (data.al || '') + ' ' + (data.ziggy || '') });
+    _state.history.push({ role:'sam',   text: isFirst ? '[leapt in]' : userText });
+    _state.history.push({ role:'scene', text: (data.al || '') + ' ' + (data.ziggy || '') });
 
     _processTurnEffects(data, isFirst);
-    _updateProb(typeof data.probability === 'number' ? data.probability : _probability);
+    _updateProb(typeof data.probability === 'number' ? data.probability : _state.probability);
     _append(_renderTurn(data));
-    if (!isFirst && _samDamage >= 6 && !_leaped) {
-      _leaped = true;
+    if (!isFirst && _state.samDamage >= 6 && !_state.leaped) {
+      _state.leaped = true;
       _appendDeath();
       UI.hide('ql-reply-area');
     }
@@ -14703,19 +14515,8 @@ RESPONSE FORMAT — return ONLY valid JSON, no text outside it:
 
   async function leap() {
     const keys = Object.keys(SCENARIOS);
-    _scenario    = keys[Math.floor(Math.random() * keys.length)];
-    _history          = [];
-    _turnCount        = 0;
-    _leaped           = false;
-    _probability      = 50;
-    _prevProbability  = 50;
-    _samStats         = { truthiness: 70, bottiness: 60, leekiness: 3, swissCheeseLevel: 20 };
-    _samDamage        = 0;
-    _leekinessSpend   = false;
-    _leekinessBet     = 0;
-    _ziggyOptions     = [];
-    _selectedZiggyOpt = -1;
-    _deathcapActive   = false;
+    _state.scenario    = keys[Math.floor(Math.random() * keys.length)];
+    _state = QuntumLeeksEngine.initState();
 
     const thread = document.getElementById('ql-thread');
     if (thread) thread.innerHTML = '';
@@ -14728,7 +14529,7 @@ RESPONSE FORMAT — return ONLY valid JSON, no text outside it:
     UI.setDisabled('ql-leap-btn', true);
     UI.show('ql-thinking');
 
-    const sc = SCENARIOS[_scenario];
+    const sc = SCENARIOS[_state.scenario];
     _append(`<div style="text-align:center;padding:24px;font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--accent);letter-spacing:2px;">
       ${sc.name}<br>
       <span style="font-size:13px;color:var(--muted);font-family:sans-serif;letter-spacing:1px;">${sc.period}</span>
@@ -14737,7 +14538,7 @@ RESPONSE FORMAT — return ONLY valid JSON, no text outside it:
     try {
       const data = await _runTurn('', true);
       if (data.leaped) {
-        _leaped = true;
+        _state.leaped = true;
         _appendLeaped();
       } else {
         UI.show('ql-reply-area');
@@ -14750,10 +14551,10 @@ RESPONSE FORMAT — return ONLY valid JSON, no text outside it:
   }
 
   async function act() {
-    if (_leaped) return;
+    if (_state.leaped) return;
     const freeText = ((document.getElementById('ql-act-input') || {}).value || '').trim();
     const combineChecked = !!(document.getElementById('ql-combine-cb') || {}).checked;
-    const ziggyText = _selectedZiggyOpt >= 0 ? (_ziggyOptions[_selectedZiggyOpt] || '') : '';
+    const ziggyText = _state.selectedZiggyOpt >= 0 ? (_state.ziggyOptions[_state.selectedZiggyOpt] || '') : '';
     let input = freeText;
     if (ziggyText && combineChecked && freeText) {
       input = ziggyText + ' / ' + freeText;
@@ -14771,7 +14572,7 @@ RESPONSE FORMAT — return ONLY valid JSON, no text outside it:
     try {
       const data = await _runTurn(input.trim(), false);
       if (data.leaped) {
-        _leaped = true;
+        _state.leaped = true;
         UI.hide('ql-reply-area');
         _appendLeaped();
       }

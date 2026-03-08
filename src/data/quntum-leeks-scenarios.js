@@ -161,5 +161,8 @@ const QUNTUM_LEEKS_SCENARIOS = {
   },
 };
 
+// Browser: expose as global so the QuantumLeeks IIFE and engine file can reach it
+if (typeof window !== 'undefined') window.QUNTUM_LEEKS_SCENARIOS = QUNTUM_LEEKS_SCENARIOS;
+
 // Node (pipeline) export
 if (typeof module !== 'undefined') module.exports = { QUNTUM_LEEKS_SCENARIOS };

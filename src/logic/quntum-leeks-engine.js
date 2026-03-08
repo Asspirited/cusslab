@@ -67,6 +67,7 @@ function betLeekiness(state, n) {
 function spendLeekiness(state) {
   if (state.samStats.leekiness <= 0) return;
   state.leekinessSpend = true;
+  state.samStats.leekiness--;
 }
 
 /**
@@ -127,15 +128,18 @@ function buildModifiers(state) {
   return mods.length ? '\n\nACTIVE MODIFIERS THIS TURN:\n' + mods.join('\n') : '';
 }
 
+const _qlEngineExports = {
+  QUNTUM_LEEKS_SCENARIOS,
+  initState,
+  pickRandomScenario,
+  betLeekiness,
+  spendLeekiness,
+  processTurnEffects,
+  buildModifiers,
+};
+
+// Browser: expose as QuntumLeeksEngine global
+if (typeof window !== 'undefined') window.QuntumLeeksEngine = _qlEngineExports;
+
 // Node (pipeline) export
-if (typeof module !== 'undefined') {
-  module.exports = {
-    QUNTUM_LEEKS_SCENARIOS,
-    initState,
-    pickRandomScenario,
-    betLeekiness,
-    spendLeekiness,
-    processTurnEffects,
-    buildModifiers,
-  };
-}
+if (typeof module !== 'undefined') module.exports = _qlEngineExports;
