@@ -824,3 +824,33 @@ Status: CLOSED
 
 **Root cause:** Incomplete fix scope. When fixing a symptom in one function, sibling functions accessing the same element were not audited.
 **Corrective action:** When fixing a DOM element visibility bug, grep for all reads/writes to that element ID before closing the fix.
+
+## WL-053
+- Item: Phantom file names in memory (blofeld.md, blofeld-switch.feature)
+- Symptom: Session queue item pointing to files that never existed
+- Suspected cause: Memory entry written from incomplete session summary
+- Session: 2026-03-08
+- Time lost: ~5 min
+- Cost impact: Low
+- Tags: memory, phantom
+- Status: Closed — grep confirmed, memory corrected
+
+## WL-054
+- Item: Large WSL output requested as paste instead of file upload
+- Symptom: Rod asked to manually copy large terminal block into chat
+- Suspected cause: Large output rule not yet in memory
+- Session: 2026-03-08
+- Time lost: ~10 min
+- Cost impact: Low
+- Tags: process, output, tooling
+- Status: Closed — rule added to memory #4
+
+## WL-055
+- Item: Step def file generated in claude.ai filesystem, unreachable by Claude Code
+- Symptom: Extra round-trip to deliver insertion — node script approach needed
+- Suspected cause: claude.ai outputs/ dir not mounted in WSL
+- Session: 2026-03-08
+- Time lost: ~15 min
+- Cost impact: Medium
+- Tags: tooling, filesystem, step-defs
+- Status: Closed — use node -e insertion script directly next time
