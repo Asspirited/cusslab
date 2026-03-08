@@ -61,15 +61,22 @@ All others (WL-068 through WL-072) closed. Recurring: auth failures (WL-060, 066
 
 ---
 
-### 4. BACKLOG (top 3 by CD3 — agree focus before any code)
+### 4. BACKLOG + OUTER LOOP CHECK (top 3 by CD3 — agree focus before any code)
 
 Read `.claude/practices/backlog.md` — report top 3 open items by CD3 score.
 
+For each open product-bet item, ask:
+- Does it have a hypothesis card? If not, flag it.
+- Which AARRR stage does it target? Are we working on the right stage?
+- Is there a falsifier — something that would tell us we were wrong?
+Full outer loop: `.claude/practices/hypothesis-driven.md`
+
 Current top 3 as of 2026-03-08:
-- BL-016 Golf Adventure: tournament category split (CD3=9.0) — OPEN
 - BL-008 RIA: ACC label fix (CD3=8.0) — OPEN (RIA project, not Cusslab)
-- BL-017 Golf Adventure: more historic tournaments (CD3=7.2) — CLOSED 2026-03-08
-- Souness's Cat wiring: character files done, IIFE not yet wired into index.html — PENDING
+- BL-009 Mode 2 moment type expansion: Football, Golf, LongRoom — OPEN
+- BL-016 Golf Adventure: tournament category split (CD3=9.0) — CLOSED 2026-03-08
+- BL-017 Golf Adventure: more historic tournaments — CLOSED 2026-03-08
+- Souness's Cat: wired at 8c088ab — DONE
 
 Agree with Rod which item is being worked this session BEFORE opening any code file.
 
@@ -143,6 +150,7 @@ Read when needed — not all at session start. Reference library:
 | `.claude/principles/lean.md` | When deciding what to build, scope questions, waste |
 | `.claude/principles/systems-thinking.md` | Before refactoring, when something has side effects |
 | `.claude/principles/ux.md` | Before UI changes, new interactions, jobs-to-be-done |
+| `.claude/practices/hypothesis-driven.md` | New feature scoping — outer product feedback loop |
 
 ---
 

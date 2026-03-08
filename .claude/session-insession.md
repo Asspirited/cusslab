@@ -65,18 +65,22 @@ Failure to check this before asking Rod to paste = WL-071 pattern, waste log ent
 
 ---
 
-## THE THREE LOOPS — how they nest
+## THE LOOPS — how they nest
 
-Lean and Systems Thinking are the outer philosophical frame. They are not steps in a
-sequence — they are the lens through which all activity is evaluated, at every stage,
-before and after every decision. They ask:
+Four levels. Each asks a different question at a different timescale.
+
+PRODUCT FEEDBACK LOOP (outermost — weeks to months)
+  Did what we built produce the intended outcome? Should we keep going in this direction?
+  Tools: Impact Mapping → Hypothesis Card → CD3 → AARRR → Pivot/Persevere
+  Sources: Adzic, Reinertsen, McClure, Ries, Gilb, Hubbard
+  Read: .claude/practices/hypothesis-driven.md when scoping any new feature
+
+Inside that, Lean and Systems Thinking are the session-level philosophical frame.
+They are not steps — they are the lens through which all activity is evaluated:
   LEAN:             Is value flowing? Is this the highest-value thing we can do?
                     Does this eliminate waste or create it? Quality built in or inspected in?
   SYSTEMS THINKING: What stocks are at risk? What feedback loops are active?
                     What will this make impossible? What second-order effects will it create?
-
-These questions apply at session start, mid-feature, mid-implementation, and at close.
-They are not a checklist. They are the frame everything else sits inside.
 Sources: Poppendieck/Womack — Lean Software Development / Lean Thinking
          Meadows — Thinking in Systems; Senge — The Fifth Discipline
 
@@ -107,12 +111,23 @@ DDD CLEAN fires after BDD CLOSE — harvest new concepts into domain model.
 ## SEQUENCES
 
 ### FEATURE SEQUENCE — DDD RED + BDD first gate
-0. LEAN CHECK — before anything else:
-   - Is this the highest-value thing we can do right now? (CD3 score says so?)
-   - What is the constraint today — is this feature on the critical path or adjacent to it?
-   - What waste would working on this create? (partially done work, task switching, over-engineering)
-   - Does Rod have a job to be done that this directly serves, or is it a solution looking for a job?
-   - Source: Poppendieck — Lean Software Development; Christensen — Jobs to Be Done
+0. OUTER LOOP CHECK — before anything else:
+
+   PRODUCT HYPOTHESIS (read hypothesis-driven.md in full if new feature):
+   - Does this item have a hypothesis card? If not — write one before proceeding.
+   - Which AARRR stage does this target? Are we fixing the right stage?
+   - What would falsify this hypothesis? Is that falsifier observable?
+   - Source: Ries — Lean Startup; McClure — AARRR; Adzic — Impact Mapping
+
+   LEAN CHECK:
+   - Is this the highest-value thing we can do right now? (CD3 score confirms?)
+   - What is the constraint today — is this on the critical path or adjacent to it?
+   - What waste would working on this create? (partially done work, task switching, gold plating)
+   - Source: Poppendieck — Lean Software Development; Reinertsen — Product Development Flow
+
+   JOBS TO BE DONE:
+   - What job is Rod hiring this feature to do? Does the design serve that job directly?
+   - Source: Christensen — Jobs to Be Done; Norman — Design of Everyday Things
 1. Confirm scope — what behaviour are we specifying?
 2. DDD RED — run before writing a single line of Gherkin:
    - Fetch and read domain-model.md if not read this session
@@ -312,6 +327,18 @@ Security: no keys client-side, ever — OWASP
 
 ---
 
+## OUTER LOOP PRINCIPLES SUMMARY — one-line per framework
+
+Product Feedback Loop: did it work? pivot or persevere — Ries / Lean Startup
+Impact Mapping: who changes behaviour → what impact → what to build — Adzic
+Hypothesis-Driven Dev: write the falsifier before writing the code — O'Reilly / Fichtner
+AARRR: locate where value is leaking in the funnel — McClure
+CD3 + Cost of Delay: weekly cost of not shipping this, now — Reinertsen
+Measurement: if you can't define the scale, you can't test the hypothesis — Gilb / Hubbard
+DORA: delivery health is the prerequisite for a fast outer loop — Forsgren / Kim / Humble
+
+---
+
 ## REFERENCE FILES — fetch when trigger fires, not before
 .claude/practices/domain-model.md  — character/panel work + ubiquitous language
 .claude/CLAUDE.md                  — ways of working, BDD quality gate
@@ -322,3 +349,4 @@ docs/                              — all character files live here
 pipeline/unit-runner.js            — all unit tests (403 assertions)
 pipeline/logic.js                  — pure functions under test
 pipeline/gherkin-runner.js         — Gherkin step definitions
+.claude/practices/hypothesis-driven.md — outer loop: hypothesis card, AARRR, pivot/persevere

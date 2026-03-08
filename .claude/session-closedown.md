@@ -40,6 +40,22 @@ For every scope idea, tech debt item, bug, or enhancement that came up this sess
 
 ---
 
+### 3b. HYPOTHESIS REVIEW (outer loop — 60 seconds)
+
+For any feature shipped this session that has a hypothesis card:
+- Did the falsifier condition become testable? If yes — when will we check the signal?
+- If the hypothesis window has passed — assess: confirmed, falsified, or inconclusive?
+  Record the outcome on the BL item. Update domain model and BDD specs if learning warrants it.
+- If no hypothesis card exists for a shipped product bet — add one now for next assessment.
+
+For measurement gaps surfaced this session:
+- Add a BL item for any instrumentation needed before a hypothesis can be tested.
+
+Nothing to review? Write one line confirming that. Do not skip the step.
+Source: .claude/practices/hypothesis-driven.md
+
+---
+
 ### 4. DECISIONS REVIEW (nothing left floating)
 
 Check: were any design decisions made this session that are not yet in a file?

@@ -15,6 +15,16 @@ Every open item is scored when possible:
 
 Items are sorted by CD3 within each section. Rescore when scope changes.
 
+## Hypothesis Card (optional — for product bets, not pure tech debt)
+
+For items that represent a product hypothesis, add after the CD3 line:
+- **Actor:** who must change behaviour
+- **AARRR:** Acquisition / Activation / Retention / Referral / Revenue
+- **Signal:** what moves — specific and observable
+- **Falsifier:** what result means we were wrong
+- **Window:** sessions or days before assessment
+- Full format: see `.claude/practices/hypothesis-driven.md`
+
 ---
 
 ## OPEN — Sorted by CD3
@@ -47,6 +57,16 @@ Items are sorted by CD3 within each section. Rescore when scope changes.
 - Depends on BL-016 (category split) being done first — new type=historic needed for Prestwick etc
 - CD3: UBV=7 TC=3 RR=2 → CoD=12, Dur=5, **CD3=2.4**
 - Status: CLOSED 2026-03-08 — 7 tournaments added; prestwick_1868 lands correctly in Other Historic
+
+### BL-018 — Make HCSession.logPanelRun() data observable
+- HCSession.logPanelRun() is called on every panel run but data is not retrievable outside the session
+- Prerequisite for all AARRR measurement — without this, no outer loop hypothesis is testable
+- Minimum: expose per-panel run counts and avg discussion depth (responses per run) via a lightweight
+  read endpoint or localStorage summary accessible to pipeline checks
+- Enables: Activation measurement (sc vs fb avg turns), Retention (return sessions), panel popularity
+- CD3: UBV=6 TC=7 RR=8 → CoD=21, Dur=3, **CD3=7.0**
+- Hypothesis: [prerequisite — no product hypothesis; this is measurement infrastructure]
+- Status: OPEN
 
 ### BL-008 — ACC framework label fix in RIA
 - ACC = Attributes, Components, Capabilities (James Whittaker / Google) — not "Assumptions..."
