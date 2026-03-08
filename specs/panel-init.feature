@@ -39,3 +39,10 @@ Feature: Application initialisation — modules load and key status renders
     And the "football" tab is not hidden
     And the "golf" tab is not hidden
     And the "darts" tab is not hidden
+
+  Scenario: IntellectualAttempts module is safe when the engine script is absent
+    Given IntellectualAttemptsEngine is not available
+    When the IntellectualAttempts module is created with the defensive guard
+    Then no initialisation error is thrown
+    And detect returns null for any input
+    And inject returns the original system prompt unchanged
