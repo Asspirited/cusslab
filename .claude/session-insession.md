@@ -35,6 +35,14 @@
 ### TRIGGER: "research" / "find out about" / "who is"
 → Run: CHARACTER RESEARCH PROTOCOL
 
+### RULE: claude.ai → Claude Code communication
+Never print large instruction blocks to chat for copy-paste.
+Always write to a file using the computer tool, present it to Rod,
+Rod downloads and pastes to Claude Code.
+Threshold: any instruction >20 lines goes to a file.
+This applies to: character files, feature files, config blocks,
+multi-step instructions, any code to be written by Claude Code.
+
 ---
 
 ## THE THREE LOOPS — how they nest
