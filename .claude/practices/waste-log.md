@@ -1045,3 +1045,13 @@ Status: CLOSED
 - **Cost impact:** Low — but will recur every time a tournament is added
 - **Tags:** test-design, magic-number, tdd-clean-candidate
 - **Status:** Open — refactor step to derive count from TOURNAMENTS.length not a hardcoded number
+
+## WL-071
+- **Item:** Claude Code told user it couldn't access /mnt/c/Users/roden/Downloads/ — it can
+- **Symptom:** Said "nothing has been pasted" when file was available at Windows path via /mnt/c/
+- **Root cause:** Failed to check /mnt/c/ WSL mount before asking user to paste manually
+- **Session date:** 2026-03-08
+- **Time lost:** ~5 min (user had to clarify)
+- **Cost impact:** Low but avoidable friction
+- **Tags:** wsl-mount, /mnt/c, windows-path, claude-code-error
+- **Status:** Closed — rule added to session-insession.md

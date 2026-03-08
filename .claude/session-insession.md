@@ -43,6 +43,13 @@ Threshold: any instruction >20 lines goes to a file.
 This applies to: character files, feature files, config blocks,
 multi-step instructions, any code to be written by Claude Code.
 
+### RULE: Windows Downloads folder is accessible
+Rod's Downloads folder is always available at /mnt/c/Users/roden/Downloads/
+NEVER ask Rod to paste file contents — always read directly:
+  cat "/mnt/c/Users/roden/Downloads/<filename>" > /tmp/out.txt && cat /tmp/out.txt
+If Rod provides a Windows path (C:\Users\roden\...) convert to /mnt/c/Users/roden/...
+Failure to check this before asking Rod to paste = WL-071 pattern, waste log entry.
+
 ---
 
 ## THE THREE LOOPS — how they nest
