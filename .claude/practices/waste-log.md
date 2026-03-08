@@ -854,3 +854,13 @@ Status: CLOSED
 - Cost impact: Medium
 - Tags: tooling, filesystem, step-defs
 - Status: Closed — use node -e insertion script directly next time
+
+## WL-056
+- Item: Step def regex serving two roles — dice validation vs outcome setter
+- Symptom: `the shot outcome is "GREAT"` fired the dice map check in commentator scenarios where ctx._gaRiskLevel was undefined; also missing unquoted variant for POOR/DISASTER
+- Suspected cause: Same natural-language step used in two different scenario contexts (dice-roll and commentator-reaction); should have checked both usages before writing
+- Session: 2026-03-08
+- Time lost: ~5 min
+- Cost impact: Low
+- Tags: step-defs, gherkin, regex
+- Status: Closed — added guard (only validate when riskLevel+diceValue both set), added unquoted variant
