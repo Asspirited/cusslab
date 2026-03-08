@@ -1291,6 +1291,8 @@ body::after {
 <script src="golf-data/tournaments.js"></script>
 <script src="golf-data/events.js"></script>
 <script src="golf-data/shots.js"></script>
+<script src="golf-engine/game-engine.js"></script>
+<script src="golf-service/commentary-service.js"></script>
 
 <script>
 // ═══════════════════════════════════════════
@@ -1650,46 +1652,21 @@ function processRoll(roll) {
   const shot=G.currentShot;
   const hole=G.tournament.holes[G.holeIdx];
   const mod=hole.modifiers||{};
-  const pen=G.composure<=3?2:G.composure<=6?1:0;
-  let eff=shot.thresh+pen+(mod.thresholdAdd||0);
-
-  // Temp threshold modifier (from item outcomes)
-  if (G.tempThresholdMod !== 0) eff += G.tempThresholdMod;
-
-  // Anger state
-  if (G.angerActive) {
-    if (shot.risk <= 2) eff += 2;   // can't play safe when furious
-    if (shot.risk >= 3) eff -= 1;   // fury focuses the reckless
-  }
-
-  // Illness penalty
-  if (G.illnessActive) eff += 1;
-
-  // Fortune: temp skill bonus
-  if (G.tempSkillBonus) eff -= 1;
-
-  // Clamp
-  eff = Math.max(1, Math.min(6, eff));
 
   // Composure zero — cardiac arrest before shot resolves
-  if (G.composure <= 0 && !G.isDead) {
-    triggerDeath('cardiac');
-    return;
-  }
+  if (G.composure <= 0 && !G.isDead) { triggerDeath('cardiac'); return; }
 
   // Risk 4 death check
   const catastrophicDeathChance = G.composure <= 3 ? 1.0 : G.composure <= 6 ? 0.5 : 0.0;
   if (shot.risk === 4 && roll === 1 && Math.random() < catastrophicDeathChance && !G.isDead) {
     const ambientDeaths = ['lightning','bunker_rake','spectator_flask_object','flagstick','scoreboard','arrow','golf_ball'];
-    const deathType = ambientDeaths[Math.floor(Math.random() * ambientDeaths.length)];
-    triggerDeath(deathType);
+    triggerDeath(ambientDeaths[Math.floor(Math.random() * ambientDeaths.length)]);
     return;
   }
 
-  const success=roll>=eff;
-  const catastrophic=roll===1&&shot.risk>=3;
-  const great=roll===6&&shot.risk<=3;
-  const quality=catastrophic?'disaster':!success?'trouble':great?'miracle':'solid';
+  // Delegate to GameEngine — pure roll resolution
+  const {quality, eff, pen} = GameEngine.processRoll(roll, shot, G);
+
   if (quality === 'disaster' && G.panelState) {
     G.panelState.atmosphere_escalation = Math.min(5, (G.panelState.atmosphere_escalation || 0) + 1);
   }
@@ -1782,49 +1759,16 @@ async function getCommentary(desc,quality,roll,shot) {
   const feed=document.getElementById('commentary');
   feed.innerHTML=`<div class="loading-bar"><div class="dots"><span></span><span></span><span></span></div><span>The commentary box...</span></div>`;
 
-  const t=G.tournament; const p=G.player; const hole=t.holes[G.holeIdx];
-  const histScore=p.historicalScores[G.day]||0;
-  const diff=G.yourScore-histScore;
-  const diffStr=diff===0?`tracking history exactly`:diff<0?`${Math.abs(diff)} shot(s) AHEAD of what ${p.name} actually did`:`${diff} shot(s) BEHIND what ${p.name} actually did`;
-  const atmoMap={NORMAL:"Normal professional atmosphere.",SIMMERING:"Suppressed tension — small digs beginning.",POWDER_KEG:"Volatile. Professional restraint barely holding.",CHAOS_MODE:"All pretence dissolved.",DEEP_WOUNDS:"Old wounds surfacing — commentary barely professional.",FUNNY_PECULIAR:"Strange day — comedy and reality have blurred."};
-  const compNote=G.composure<=3?"Player is visibly crumbling.":G.composure<=6?"Composure strain showing.":"Player appears composed.";
-
-  const commentatorBlocks = G.selectedPanel.map(buildCommentatorBlock).join('\n\n');
-  const speakerList = G.selectedPanel.map(id=>{const ch=CHARACTERS.find(c=>c.id===id); return `{"speaker":"${ch.name}","initials":"${ch.initials}","text":"commentary here"}`;}).join(',\n  ');
-
-  const prompt=`You are generating live TV golf commentary for GOLF ADVENTURE — a historic tournament simulation.
-
-TOURNAMENT: ${t.name} (${t.year}) — ${t.course}
-PLAYER: ${p.name} — ${p.desc}
-PLAYER WOUND: ${p.wound}
-DAY: ${G.day+1} of ${t.days} · HOLE: ${hole.name} — Par ${hole.par}, ${hole.yards}y
-HAZARD: ${hole.hazard}
-HISTORICAL SIGNIFICANCE:
-${hole.incidents?.length ? hole.incidents.map((inc,i)=>`${i+1}. ${inc}`).join('\n') : 'Famous hole.'}
-
-SHOT: ${shot.label} (risk ${shot.risk}/4) · DICE: ${roll} · QUALITY: ${quality.toUpperCase()}
-DESCRIPTION: ${desc}
-SCORE: ${G.yourScore===0?'Even':G.yourScore>0?'+'+G.yourScore:G.yourScore} vs par · ${diffStr}
-${compNote}
-ATMOSPHERE: ${atmoMap[G.atmosphere]}${hole.modifiers?.atmosphereNote?`\nHOLE CONTEXT: ${hole.modifiers.atmosphereNote}`:''}
-
-YOUR COMMENTARY PANEL THIS SESSION:
-${commentatorBlocks}
-
-RULES:
-- Each commentator speaks in their authentic voice
-- Reference historical significance of the hole where genuine
-- Non-golf characters MUST filter everything through their sport/domain — this is the joke
-- Characters with no golf knowledge should misread or misunderstand what just happened technically, but may accidentally be right
-- Characters with wounds should have those wounds influence their commentary
-- If DISASTER: relish the horror
-- If MIRACLE: grudging admiration or find fault anyway
-${buildPanelEngagementContext()}
-
-Return ONLY a JSON array with one entry per commentator, no preamble:
-[
-  ${speakerList}
-]`;
+  // Build prompt via CommentaryService — no duplicate logic here
+  const ctx={
+    tournament:G.tournament, player:G.player, hole:G.tournament.holes[G.holeIdx],
+    shot, quality, roll, desc,
+    yourScore:G.yourScore, day:G.day, composure:G.composure,
+    atmosphere:G.atmosphere, selectedPanel:G.selectedPanel,
+    panelState:G.panelState, history:G.history,
+    characterFiles:G.characterFiles||{}, characters:CHARACTERS,
+  };
+  const prompt = CommentaryService.buildShotPrompt(ctx);
 
   const messages=[...G.history,{role:"user",content:prompt}];
   try {
@@ -1834,7 +1778,7 @@ Return ONLY a JSON array with one entry per commentator, no preamble:
     });
     const data=await resp.json();
     const raw=(data.content?.[0]?.text||'[]').replace(/```json|```/g,'').trim();
-    const lines=JSON.parse(raw);
+    const lines=CommentaryService.parseShotResponse(raw);
 
     G.history.push({role:"user",content:prompt});
     G.history.push({role:"assistant",content:raw});
@@ -1854,7 +1798,6 @@ Return ONLY a JSON array with one entry per commentator, no preamble:
     feed.innerHTML=`<div class="loading-bar" style="color:var(--danger-hi)">Commentary signal lost.</div>`;
   }
   G.isRolling=false;
-  // Generate player nickname after hole 2 commentary
   if (G.holeIdx >= 1) generatePlayerNickname();
   setTimeout(()=>advancePhase(quality),600);
 }
@@ -2013,48 +1956,22 @@ async function getDaySummary() {
   const ce=document.getElementById('de-commentary');
   loading.classList.remove('hidden'); ce.innerHTML='';
 
-  const t=G.tournament; const p=G.player;
-  const hs=p.historicalScores[G.day]||0; const diff=G.yourScore-hs;
-  const diffNote=diff===0?`exactly matching history`:diff<0?`${Math.abs(diff)} ahead of where ${p.name} was historically`:`${diff} behind where ${p.name} was historically`;
-  const commentatorBlocks=G.selectedPanel.map(buildCommentatorBlock).join('\n\n');
-  const speakerList=G.selectedPanel.map(id=>{const ch=CHARACTERS.find(c=>c.id===id); return `{"speaker":"${ch.name}","text":"end-of-day summary here"}`;}).join(',\n  ');
-
-  const absDiff=Math.abs(diff);
-  const divergenceDrama=absDiff>=3
-    ? diff<0
-      ? `DIVERGENCE ALERT — ${absDiff} shots AHEAD of history. The panel must explicitly address the rewrite potential: ${p.name} is on course to beat what actually happened. Frame this as the central drama of the day.`
-      : `DIVERGENCE ALERT — ${absDiff} shots BEHIND history. The panel must explicitly address the collapse narrative: ${p.name} is falling further from the legend. Frame this as a deterioration, not just a bad day.`
-    : '';
-
-  const prompt=`End-of-day panel summary for GOLF ADVENTURE.
-
-TOURNAMENT: ${t.name} (${t.year}) · Day ${G.day+1} of ${t.days}
-PLAYER: ${p.name} · Score: ${G.yourScore===0?'Even':G.yourScore>0?'+'+G.yourScore:G.yourScore} vs par
-VS HISTORY: ${diffNote}
-COMPOSURE: ${G.composure}/10
-${divergenceDrama?`\n${divergenceDrama}\n`:''}
-HOLES PLAYED:
-${t.holes.slice(0,G.holesPerDay).map((h,i)=>{
-  const r=G.holeResults.find(hr=>hr.holeId===h.id&&hr.day===G.day);
-  const incidentList=h.incidents?.length?`\n   Historical: ${h.incidents.map((inc,j)=>`${j+1}. ${inc}`).join(' ')}`:'' ;
-  return `${h.name}: ${r?['−3 Albatross','−2 Eagle','−1 Birdie','Par','+1 Bogey','+2 Double'][r.diff+3]||`+${r.diff}`:'not played'}${incidentList}`;
-}).join('\n')}
-
-YOUR PANEL:
-${commentatorBlocks}
-
-Each panellist gives a 2-3 sentence end-of-day take: what today revealed, what tomorrow holds. Non-golf characters relate it to their own domain as always. Reference the historical context — are they ahead or behind the legend?${divergenceDrama?' The divergence must be the centrepiece of at least one panellist\'s contribution.':''}
-
-Return ONLY a JSON array:
-[
-  ${speakerList}
-]`;
+  // Build prompt via CommentaryService — no duplicate logic here
+  const ctx={
+    tournament:G.tournament, player:G.player,
+    day:G.day, yourScore:G.yourScore,
+    composure:G.composure, holeResults:G.holeResults,
+    holesPerDay:G.holesPerDay, selectedPanel:G.selectedPanel,
+    panelState:G.panelState, history:G.history,
+    characterFiles:G.characterFiles||{}, characters:CHARACTERS,
+  };
+  const prompt = CommentaryService.buildDayPrompt(ctx);
 
   try {
     const resp=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:900,messages:[...G.history,{role:"user",content:prompt}]})});
     const data=await resp.json();
     const raw=(data.content?.[0]?.text||'[]').replace(/```json|```/g,'').trim();
-    const lines=JSON.parse(raw);
+    const lines=CommentaryService.parseShotResponse(raw);
     G.history.push({role:"user",content:prompt});G.history.push({role:"assistant",content:raw});
     loading.classList.add('hidden');
     lines.forEach((l,i)=>{

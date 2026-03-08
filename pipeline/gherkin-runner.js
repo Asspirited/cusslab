@@ -4690,6 +4690,22 @@ function makeSteps(ctx) {
         throw new Error(`Expected length ≤ ${n}, got ${ctx._gacsExtracted.length}`);
     }],
 
+    // ── Golf Adventure Wiring (specs/golf-adventure-wiring.feature) ──────────
+
+    [/^golf-adventure\.html is parsed as text$/, () => {
+      const fs   = require('fs');
+      const path = require('path');
+      ctx._gawHtml = fs.readFileSync(path.join(__dirname, '../golf-adventure.html'), 'utf8');
+    }],
+    [/^it has a script tag for "([^"]+)"$/, (src) => {
+      if (!ctx._gawHtml.includes(`src="${src}"`))
+        throw new Error(`golf-adventure.html missing <script src="${src}">`);
+    }],
+    [/^the inline script does not contain "([^"]+)"$/, (text) => {
+      if (ctx._gawHtml.includes(text))
+        throw new Error(`golf-adventure.html still contains duplicate: "${text}"`);
+    }],
+
   ];
 }
 
