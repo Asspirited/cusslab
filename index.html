@@ -1164,6 +1164,12 @@
   .gf-anchor-who.dougherty { color:rgba(255,215,0,0.7); }
   .gf-anchor-text { font-style:italic; color:var(--text); font-size:14px; line-height:1.6; }
   .gf-anchor-text strong { font-style:normal; font-weight:600; color:var(--accent); }
+  .fb-anchor-inner { border-left-color: rgba(204,51,51,0.6); }
+  .fb-anchor-who   { color: rgba(220,80,80,0.85); }
+  .dt-anchor-inner { border-left-color: rgba(255,102,51,0.6); }
+  .dt-anchor-who   { color: rgba(255,130,80,0.85); }
+  .lr-anchor-inner { border-left-color: rgba(0,229,255,0.4); }
+  .lr-anchor-who   { color: rgba(0,229,255,0.65); }
 
   /* ── GOLF ATMOSPHERE SELECTOR ─────────────────────────────── */
   .gf-atmo-card { display:inline-flex; flex-direction:column; gap:2px; padding:6px 10px; border-radius:3px; border:1px solid var(--border); background:var(--card); cursor:pointer; transition:border-color 0.15s, background 0.15s; }
@@ -2060,11 +2066,22 @@
 
   <!-- Q&A mode -->
   <div id="fb-qanda-view">
+    <div class="gf-name-strip" id="fb-name-strip">
+      <span class="gf-name-strip__label">You are</span>
+      <input type="text" id="fb-username" class="gf-name-strip__input" placeholder="your name" maxlength="40" autocomplete="off" spellcheck="false" oninput="fbNameInput()" onkeydown="if(event.key==='Enter')this.blur()">
+      <span class="gf-name-strip__hint" id="fb-name-hint">— Gary Lineker will read your question</span>
+    </div>
     <div style="margin-bottom:20px;">
       <label>The match. The incident. The player. The decision. Whatever it is.</label>
       <textarea id="fb-input" rows="3" placeholder="e.g. Was that a red card? Should he have been dropped? Is modern football too soft? Was it a penalty?"></textarea>
     </div>
     <button class="btn" onclick="Football.discuss()" id="fb-btn">TO THE PUB ⚽</button>
+    <div class="gf-anchor-readback" id="fb-anchor-readback">
+      <div class="gf-anchor-inner fb-anchor-inner" id="fb-anchor-inner">
+        <div class="gf-anchor-who fb-anchor-who" id="fb-anchor-who">GARY LINEKER</div>
+        <div class="gf-anchor-text" id="fb-anchor-text"></div>
+      </div>
+    </div>
   </div>
 
   <!-- In-Game mode (Desk by the Cornerflag) -->
@@ -2196,12 +2213,23 @@
 
   <!-- Q&A mode -->
   <div id="dt-qanda-view">
+    <div class="gf-name-strip" id="dt-name-strip" style="background:rgba(255,102,51,0.04);border-color:rgba(255,102,51,0.12);">
+      <span class="gf-name-strip__label">You are</span>
+      <input type="text" id="dt-username" class="gf-name-strip__input" placeholder="your name" maxlength="40" autocomplete="off" spellcheck="false" style="border-bottom-color:rgba(255,102,51,0.2);color:#ff6633;" oninput="dtNameInput()" onkeydown="if(event.key==='Enter')this.blur()">
+      <span class="gf-name-strip__hint" id="dt-name-hint">— Sid Waddell will herald your question</span>
+    </div>
     <div style="margin-bottom:20px;">
       <div id="dt-crowd-indicator" style="display:none;margin-bottom:12px;padding:8px 14px;border-radius:6px;background:rgba(255,102,51,0.08);border:1px solid rgba(255,102,51,0.2);font-size:13px;font-weight:600;letter-spacing:0.05em;color:#ff6633;"></div>
       <label>The throw. The player. The finish. The match. The moment.</label>
       <textarea id="dt-input" rows="3" placeholder="e.g. Was that the right double to go for? Can he win from here? Was the nine-darter the greatest moment in darts history?"></textarea>
     </div>
     <button class="btn" onclick="Darts.discuss()" id="dt-btn">TO THE OCHE 🎯</button>
+    <div class="gf-anchor-readback" id="dt-anchor-readback">
+      <div class="gf-anchor-inner dt-anchor-inner" id="dt-anchor-inner">
+        <div class="gf-anchor-who dt-anchor-who" id="dt-anchor-who">SID WADDELL</div>
+        <div class="gf-anchor-text" id="dt-anchor-text"></div>
+      </div>
+    </div>
   </div>
 
   <!-- In-Game mode (Watching the Oche) — 3-step match engine -->
@@ -2285,12 +2313,23 @@
 
   <!-- Q&A mode -->
   <div id="lr-qanda-view">
+    <div class="gf-name-strip" id="lr-name-strip" style="background:rgba(0,229,255,0.03);border-color:rgba(0,229,255,0.1);">
+      <span class="gf-name-strip__label">You are</span>
+      <input type="text" id="lr-username" class="gf-name-strip__input" placeholder="your name" maxlength="40" autocomplete="off" spellcheck="false" style="border-bottom-color:rgba(0,229,255,0.2);color:#00e5ff;" oninput="lrNameInput()" onkeydown="if(event.key==='Enter')this.blur()">
+      <span class="gf-name-strip__hint" id="lr-name-hint">— Blowers will receive your question</span>
+    </div>
     <div style="margin-bottom:20px;">
       <div id="lr-round-indicator" style="display:none;margin-bottom:12px;padding:8px 14px;border-radius:6px;background:rgba(0,229,255,0.06);border:1px solid rgba(0,229,255,0.2);font-size:13px;font-weight:600;letter-spacing:0.05em;color:#00e5ff;"></div>
       <label>The match. The player. The shot. The selection. The era.</label>
       <textarea id="lr-input" rows="3" placeholder="e.g. Was that the right declaration? Should England have picked him? What does that technique tell you?"></textarea>
     </div>
     <button class="btn" onclick="LongRoom.discuss()" id="lr-btn">INTO THE LONG ROOM 🏏</button>
+    <div class="gf-anchor-readback" id="lr-anchor-readback">
+      <div class="gf-anchor-inner lr-anchor-inner" id="lr-anchor-inner">
+        <div class="gf-anchor-who lr-anchor-who" id="lr-anchor-who">HENRY BLOFELD</div>
+        <div class="gf-anchor-text" id="lr-anchor-text"></div>
+      </div>
+    </div>
   </div>
 
   <!-- In-Game mode (At the Crease) -->
@@ -10907,10 +10946,14 @@ INTER-PANEL: Ron — the gold is the portal to everything Cox wants to say; trea
     const input = (document.getElementById('fb-input')?.value || '').trim();
     if (!input) { UI.toast('Give them something to discuss.', 'warn'); return; }
 
+    const fbName = (document.getElementById('fb-username')?.value || '').trim();
+
     const container = document.getElementById('fb-responses');
     if (container) container.innerHTML = '';
     document.getElementById('fb-output').style.display = 'block';
     UI.setDisabled('fb-btn', true);
+
+    if (fbName) fbShowAnchorReadback(fbName, input);
 
     const TURN_RULES = `RULE 1 — TURN LENGTH:\nA turn can be one word, a fragment, one sentence, or two sentences. One word is a complete turn. Two sentences is the maximum — never more. Length is earned only by being directly challenged, provoked, or explicitly given the floor. The default is the shortest response that lands. A single word lands. Silence lands. Two sentences is already long.\n\nRULE 2 — REACTIVITY OBLIGATION:\nEvery response must open by reacting to the previous speaker's last sentence — not the topic generally. You are listening, not queuing.\n\nRULE 3 — CROSS-REFERENCE:\nYou may use anything said earlier in this conversation as ammunition. Wounds, indiscretions, failures, warmth — all fair game. You were there. You remember.\n\nRULE 4 — REACTIVE MOVES:\nYour reactive move is structural guidance — what you DO, not words you SAY. Seven moves available:\n(1) Agree and build — add something true that makes it worse\n(2) Agree but undermine — confirm surface, destroy substance\n(3) Contradict — name what was wrong and why\n(4) Flat refusal — one sentence, refusal is the content\n(5) Light-hearted pisstake — puncture with affection\n(6) Full-blooded insult — strongest language, lands on real wound\n(7) Mimic — three types, each distinct. Never name the type. Never signal you're doing it:\n\nType A — ECHO (affectionate): repeat their phrase in your own voice, meaning it approximately sincerely. Micah doing Ron: "the fella" used completely naturally. Ron may not notice. Micah definitely doesn't.\n\nType B — SUBSTITUTION (weaponized or comic): keep the verbal structure, replace the payload. "BRILLIANT." — Souness, one word, one syllable of contempt. "I've watched this back and—" — Carragher, then disagreeing with everything Neville watched back. "The United suffering—" — Neville doing Carragher's credential mechanic; Carragher: "You didn't suffer enough."\n\nType C — SUSTAINED IMPRESSION (satirical): briefly become them — full register, voice — until the impression loses thread mid-sentence and you re-emerge in your own voice without acknowledgement. Use once. Lands once.\n\nTARGET PATTERNS:\nRON: "the fella" / "Clive" / any Ronglish — affectionate echoes available to all. Too warm to weaponise.\nSOUNESS: "Soft." / "In my day—" — Micah gets one syllable in and loses it to laughter. Neville's version: analytical, almost works, Souness ignores it.\nMICAH: "BRILLIANT" — Souness: flat, contemptuous, somehow doesn't land as contempt. Carragher uses it genuinely once by accident; never acknowledged.\nNEVILLE: "I've watched this back—" — Carragher's standard move; what Carragher watched always contradicts Neville.\nCOX: the neutron star preamble — Ron nods along, slightly lost, somehow arrives at the right place; Souness does not attempt this.\n\nNever name the move. Never open with the label.`;
 
@@ -10969,8 +11012,9 @@ INTER-PANEL: Ron — the gold is the portal to everything Cox wants to say; trea
       const fbWoundLive = fbRelState.characters[member.id]?.woundActivated || false;
       const fbLieBlock  = LieEngine.buildBlock(member.id, FB_LIE_PROFILES, fbLieState, fbWoundLive);
 
+      const fbNameBlock = fbName ? `\nThe question was brought by ${fbName}. Address ${fbName} by name at least once in your response.\n` : '';
       const fbIaType = IntellectualAttempts.detect(input);
-      const fbBaseSystem = TURN_RULES + '\n\n' + fbIntensityBlock + fbYourState + fbFoodBlock + fbMarmiteBlock + fbHypoBlock + fbPremBlock + fbLieBlock + member.prompt + _iceBreakBlock(member.id) + mechanics + (i > 0
+      const fbBaseSystem = TURN_RULES + '\n\n' + fbIntensityBlock + fbYourState + fbNameBlock + fbFoodBlock + fbMarmiteBlock + fbHypoBlock + fbPremBlock + fbLieBlock + member.prompt + _iceBreakBlock(member.id) + mechanics + (i > 0
         ? `\n\nPrevious:\n${prev}`
         : '');
       const system = fbIaType
@@ -11074,6 +11118,157 @@ INTER-PANEL: Ron — the gold is the portal to everything Cox wants to say; trea
 
   return { discuss, callMoment, switchMode, nextRound };
 })();
+
+// ============================================================
+// ── FOOTBALL ANCHOR READBACK ──────────────────────────────────────────────────
+
+const FB_NAME_KEY = 'hc_fb_username';
+
+const FB_ANCHOR_LINEKER = [
+  '{name}, good evening. The panel has your question: <strong>"{question}"</strong>',
+  'From {name}: <strong>"{question}"</strong> — and it\'s a fair one.',
+  '{name} wants to know — and so do the rest of us: <strong>"{question}"</strong>',
+  'Ladies and gentlemen, {name}. The question: <strong>"{question}"</strong>',
+  'The question tonight, from {name}: <strong>"{question}"</strong>',
+];
+
+function fbLoadName() {
+  const saved = localStorage.getItem(FB_NAME_KEY) || '';
+  const el = document.getElementById('fb-username');
+  if (el) { el.value = saved; fbUpdateNameHint(saved); }
+}
+
+function fbNameInput() {
+  const val = (document.getElementById('fb-username')?.value || '').trim();
+  localStorage.setItem(FB_NAME_KEY, val);
+  fbUpdateNameHint(val);
+}
+
+function fbUpdateNameHint(name) {
+  const hint = document.getElementById('fb-name-hint');
+  if (hint) hint.style.display = name ? 'none' : '';
+}
+
+function fbShowAnchorReadback(name, question) {
+  const readback = document.getElementById('fb-anchor-readback');
+  const textEl   = document.getElementById('fb-anchor-text');
+  if (!readback || !textEl) return;
+  const template = FB_ANCHOR_LINEKER[Math.floor(Math.random() * FB_ANCHOR_LINEKER.length)];
+  const safeQ    = question.replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const safeName = name.replace(/</g,'&lt;');
+  const html     = template.replace('{name}', `<strong>${safeName}</strong>`).replace('{question}', safeQ);
+  textEl.innerHTML = '';
+  readback.style.display = 'block';
+  readback.style.opacity = '0';
+  setTimeout(() => {
+    readback.classList.add('visible');
+    textEl.style.clipPath = 'inset(0 100% 0 0)';
+    textEl.innerHTML = html;
+    const dur = Math.min(600, html.replace(/<[^>]+>/g,'').length * 16);
+    textEl.style.transition = `clip-path ${dur}ms ease-out`;
+    requestAnimationFrame(() => requestAnimationFrame(() => { textEl.style.clipPath = 'inset(0 0% 0 0)'; }));
+  }, 80);
+}
+
+// ── DARTS ANCHOR READBACK ─────────────────────────────────────────────────────
+
+const DT_NAME_KEY = 'hc_dt_username';
+
+const DT_ANCHOR_WADDELL = [
+  'As {name} cried out across the ages: <strong>"{question}"</strong> — and the gods of Alexandra Palace have heard!',
+  'Like Nelson at Trafalgar, {name} demands to know: <strong>"{question}"</strong>',
+  'In the annals of Alexandra Palace, {name}\'s cry echoes for eternity: <strong>"{question}"</strong>',
+  '{name}! Like a comet blazing across the night sky — the question burns: <strong>"{question}"</strong>',
+  'Alexander the Great never threw a dart, but {name} knows what matters: <strong>"{question}"</strong>',
+];
+
+function dtLoadName() {
+  const saved = localStorage.getItem(DT_NAME_KEY) || '';
+  const el = document.getElementById('dt-username');
+  if (el) { el.value = saved; dtUpdateNameHint(saved); }
+}
+
+function dtNameInput() {
+  const val = (document.getElementById('dt-username')?.value || '').trim();
+  localStorage.setItem(DT_NAME_KEY, val);
+  dtUpdateNameHint(val);
+}
+
+function dtUpdateNameHint(name) {
+  const hint = document.getElementById('dt-name-hint');
+  if (hint) hint.style.display = name ? 'none' : '';
+}
+
+function dtShowAnchorReadback(name, question) {
+  const readback = document.getElementById('dt-anchor-readback');
+  const textEl   = document.getElementById('dt-anchor-text');
+  if (!readback || !textEl) return;
+  const template = DT_ANCHOR_WADDELL[Math.floor(Math.random() * DT_ANCHOR_WADDELL.length)];
+  const safeQ    = question.replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const safeName = name.replace(/</g,'&lt;');
+  const html     = template.replace('{name}', `<strong>${safeName}</strong>`).replace('{question}', safeQ);
+  textEl.innerHTML = '';
+  readback.style.display = 'block';
+  readback.style.opacity = '0';
+  setTimeout(() => {
+    readback.classList.add('visible');
+    textEl.style.clipPath = 'inset(0 100% 0 0)';
+    textEl.innerHTML = html;
+    const dur = Math.min(600, html.replace(/<[^>]+>/g,'').length * 16);
+    textEl.style.transition = `clip-path ${dur}ms ease-out`;
+    requestAnimationFrame(() => requestAnimationFrame(() => { textEl.style.clipPath = 'inset(0 0% 0 0)'; }));
+  }, 80);
+}
+
+// ── LONGROOM ANCHOR READBACK ──────────────────────────────────────────────────
+
+const LR_NAME_KEY = 'hc_lr_username';
+
+const LR_ANCHOR_BLOFELD = [
+  'A pigeon arrived this morning — from {name}, apparently — asking: <strong>"{question}"</strong>',
+  '{name} has written in, and I must say, rather a good question: <strong>"{question}"</strong>',
+  'By most extraordinary means, {name} has managed to enquire: <strong>"{question}"</strong>',
+  'A note, on rather fine paper, from {name}: <strong>"{question}"</strong> — quite right too, my dear.',
+  'Good morning, my dear. {name} asks, and rightly so: <strong>"{question}"</strong>',
+];
+
+function lrLoadName() {
+  const saved = localStorage.getItem(LR_NAME_KEY) || '';
+  const el = document.getElementById('lr-username');
+  if (el) { el.value = saved; lrUpdateNameHint(saved); }
+}
+
+function lrNameInput() {
+  const val = (document.getElementById('lr-username')?.value || '').trim();
+  localStorage.setItem(LR_NAME_KEY, val);
+  lrUpdateNameHint(val);
+}
+
+function lrUpdateNameHint(name) {
+  const hint = document.getElementById('lr-name-hint');
+  if (hint) hint.style.display = name ? 'none' : '';
+}
+
+function lrShowAnchorReadback(name, question) {
+  const readback = document.getElementById('lr-anchor-readback');
+  const textEl   = document.getElementById('lr-anchor-text');
+  if (!readback || !textEl) return;
+  const template = LR_ANCHOR_BLOFELD[Math.floor(Math.random() * LR_ANCHOR_BLOFELD.length)];
+  const safeQ    = question.replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const safeName = name.replace(/</g,'&lt;');
+  const html     = template.replace('{name}', `<strong>${safeName}</strong>`).replace('{question}', safeQ);
+  textEl.innerHTML = '';
+  readback.style.display = 'block';
+  readback.style.opacity = '0';
+  setTimeout(() => {
+    readback.classList.add('visible');
+    textEl.style.clipPath = 'inset(0 100% 0 0)';
+    textEl.innerHTML = html;
+    const dur = Math.min(600, html.replace(/<[^>]+>/g,'').length * 16);
+    textEl.style.transition = `clip-path ${dur}ms ease-out`;
+    requestAnimationFrame(() => requestAnimationFrame(() => { textEl.style.clipPath = 'inset(0 0% 0 0)'; }));
+  }, 80);
+}
 
 // ============================================================
 // ── GOLF MODE 1 HELPERS ──────────────────────────────────────────────────────
@@ -13126,10 +13321,14 @@ PYKE-ISMS — phrases that recur in your speech. Use them naturally. Other panel
     const input = (document.getElementById('dt-input')?.value || '').trim();
     if (!input) { UI.toast('Give them something to discuss.', 'warn'); return; }
 
+    const dtName = (document.getElementById('dt-username')?.value || '').trim();
+
     const container = document.getElementById('dt-responses');
     if (container) container.innerHTML = '';
     document.getElementById('dt-output').style.display = 'block';
     UI.setDisabled('dt-btn', true);
+
+    if (dtName) dtShowAnchorReadback(dtName, input);
 
     const crowdIndicator = document.getElementById('dt-crowd-indicator');
     if (crowdIndicator) {
@@ -13195,7 +13394,8 @@ PYKE-ISMS — phrases that recur in your speech. Use them naturally. Other panel
         const dtWoundLive = dtRelState.characters[member.id]?.woundActivated || false;
         const dtLieBlock  = LieEngine.buildBlock(member.id, DT_LIE_PROFILES, dtLieState, dtWoundLive);
         const dtIaType = IntellectualAttempts.detect(input);
-        const dtBaseSystem = TURN_RULES + '\n\n' + dtIntensityBlock + dtYourState + dtFoodBlock + dtMarmiteBlock + dtHypoBlock + dtLieBlock + member.prompt + _iceBreakBlock(member.id) + crowdBlock + frankensteinBlock + (i > 0 ? `\n\nPrevious:\n${prev}` : '');
+        const dtNameBlock = dtName ? `\nThe question was brought by ${dtName}. Address ${dtName} by name at least once in your response.\n` : '';
+        const dtBaseSystem = TURN_RULES + '\n\n' + dtIntensityBlock + dtYourState + dtNameBlock + dtFoodBlock + dtMarmiteBlock + dtHypoBlock + dtLieBlock + member.prompt + _iceBreakBlock(member.id) + crowdBlock + frankensteinBlock + (i > 0 ? `\n\nPrevious:\n${prev}` : '');
         const system = dtIaType
           ? IntellectualAttempts.inject('darts', member.id, dtBaseSystem, dtIaType)
           : dtBaseSystem;
@@ -13903,10 +14103,14 @@ Never name the move.`;
     const input = (document.getElementById('lr-input')?.value || '').trim();
     if (!input) { UI.toast('Give them something to discuss.', 'warn'); return; }
 
+    const lrName = (document.getElementById('lr-username')?.value || '').trim();
+
     const container = document.getElementById('lr-responses');
     if (container) container.innerHTML = '';
     document.getElementById('lr-output').style.display = 'block';
     UI.setDisabled('lr-btn', true);
+
+    if (lrName) lrShowAnchorReadback(lrName, input);
 
     // Rotating ORDER — no character opens or closes twice running
       const ALL_IDS = ['boycott', 'bumble', 'warne', 'holding', 'botham', 'gower', 'kp', 'blofeld', 'tufnell'];
@@ -14025,7 +14229,8 @@ Never name the move.`;
       const lrHypoBlock = FoodWeather.hypoBlock(member.id, lrHypoPool, lrRelState, responses, lrAliases);
       const lrPremBlock = _lrPremCtx ? PremonitionEngine.buildBlock(member.id, _lrPremCtx.ledger, LR_PREM_CONFIG) : '';
       const lrLieBlock  = LieEngine.buildBlock(member.id, LR_LIE_PROFILES, lrLieState, _woundLive);
-      const lrBaseSystem = TURN_RULES + '\n\n' + lrIntensityBlock + lrYourState + lrFoodBlock + lrMarmiteBlock + lrHypoBlock + lrPremBlock + lrLieBlock + mechanicBlock + member.prompt + _iceBreakBlock(member.id) + roundNote
+      const lrNameBlock = lrName ? `\nThe question was brought by ${lrName}. Address ${lrName} by name at least once in your response.\n` : '';
+      const lrBaseSystem = TURN_RULES + '\n\n' + lrIntensityBlock + lrYourState + lrNameBlock + lrFoodBlock + lrMarmiteBlock + lrHypoBlock + lrPremBlock + lrLieBlock + mechanicBlock + member.prompt + _iceBreakBlock(member.id) + roundNote
         + (i > 0 ? `\n\nPrevious:\n${prev}` : '');
       const system = lrIaType
         ? IntellectualAttempts.inject('cricket', member.id, lrBaseSystem, lrIaType)
@@ -14641,6 +14846,9 @@ RESPONSE FORMAT — return ONLY valid JSON, no text outside it:
 App.init();
 golfLoadName();
 golfBuildSuggestions();
+fbLoadName();
+dtLoadName();
+lrLoadName();
 dtInitMatchEngine();
 
 // Settings panel accessible via URL hash — e.g. asspirited.cusslab.io/#settings
