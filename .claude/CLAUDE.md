@@ -5,12 +5,13 @@
 
 ## Session Start (mandatory, before any code)
 
-1. Read ALL files in .claude/principles/ and .claude/practices/
-2. Run `cd /home/rodent/cusslab && node pipeline/metrics-report.js && npm test` — report DORA stats and coverage numbers before doing anything else
-3. Report last retrospective findings
-4. Read .claude/practices/waste-log.md and report any open items
-5. Read .claude/practices/backlog.md — report top 3 items by CD3 score
-6. Only then: work
+1. Read `.claude/practices/auth-ops.md` — FIRST, before anything else. Auth ops are session-blocking.
+2. Read ALL files in .claude/principles/ and .claude/practices/
+3. Run `cd /home/rodent/cusslab && npm run pipeline` — report scorecard. If Worker canary is RED, stop and fix before proceeding.
+4. Report last retrospective findings
+5. Read .claude/practices/waste-log.md and report any open items
+6. Read .claude/practices/backlog.md — report top 3 items by CD3 score
+7. Only then: work
 
 ---
 
@@ -60,6 +61,7 @@ These files govern HOW to think before designing or implementing anything.
 
 These files govern HOW to do the work at each step of the cycle.
 
+- .claude/practices/auth-ops.md — Worker URL, Cloudflare account ID, key rotation procedure, canary diagnosis
 - .claude/practices/bdd.md — Gherkin gate, Given-When-Then, done conditions
 - .claude/practices/tdd.md — 7-step cycle, four isolation levels, state factories
 - .claude/practices/solid.md — SOLID applied to our codebase, clean code rules, refactoring triggers
