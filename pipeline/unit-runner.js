@@ -537,6 +537,147 @@ assert('INTELLECTUAL_ATTEMPTS_CONFIG: golf panel exists',
     typeof (cfg && cfg.default_delivery), 'string');
 });
 
+// ── Quntum Leeks engine ──────────────────────────────────────────────────────
+
+const {
+  QUNTUM_LEEKS_SCENARIOS,
+  initState,
+  pickRandomScenario,
+  betLeekiness,
+  spendLeekiness,
+  processTurnEffects,
+  buildModifiers,
+} = require('../src/logic/quntum-leeks-engine.js');
+
+// Group A: data structure
+const REQUIRED_FIELDS = ['name', 'period', 'host', 'mirror', 'situation', 'al_note', 'object', 'leap_questions', 'characters'];
+const scenarioKeys = Object.keys(QUNTUM_LEEKS_SCENARIOS);
+
+assert('QUNTUM_LEEKS_SCENARIOS: at least 10 scenarios', scenarioKeys.length >= 10, true);
+
+scenarioKeys.forEach(key => {
+  REQUIRED_FIELDS.forEach(field => {
+    assert(`QUNTUM_LEEKS_SCENARIOS.${key}: has field "${field}"`,
+      typeof QUNTUM_LEEKS_SCENARIOS[key][field], 'string');
+  });
+});
+
+// Group A: random selection
+for (let i = 0; i < 20; i++) {
+  const picked = pickRandomScenario();
+  assert(`pickRandomScenario: result "${picked}" is a valid key`,
+    scenarioKeys.includes(picked), true);
+}
+
+// Group B: initState defaults
+const s0 = initState();
+assert('initState: history is empty array', Array.isArray(s0.history) && s0.history.length === 0, true);
+assert('initState: turnCount is 0', s0.turnCount, 0);
+assert('initState: leaped is false', s0.leaped, false);
+assert('initState: probability is 50', s0.probability, 50);
+assert('initState: samDamage is 0', s0.samDamage, 0);
+assert('initState: samStats.truthiness is 70', s0.samStats.truthiness, 70);
+assert('initState: samStats.bottiness is 60', s0.samStats.bottiness, 60);
+assert('initState: samStats.leekiness is 3', s0.samStats.leekiness, 3);
+assert('initState: samStats.swissCheeseLevel is 20', s0.samStats.swissCheeseLevel, 20);
+assert('initState: leekinessSpend is false', s0.leekinessSpend, false);
+assert('initState: leekinessBet is 0', s0.leekinessBet, 0);
+assert('initState: selectedZiggyOpt is -1', s0.selectedZiggyOpt, -1);
+
+// Group C: betLeekiness
+const sb1 = initState();
+sb1.samStats.leekiness = 3;
+const r1 = betLeekiness(sb1, 2);
+assert('betLeekiness: returns true when accepted', r1, true);
+assert('betLeekiness: deducts leekiness', sb1.samStats.leekiness, 1);
+assert('betLeekiness: sets leekinessBet', sb1.leekinessBet, 2);
+
+const sb2 = initState();
+sb2.samStats.leekiness = 3;
+betLeekiness(sb2, 5);
+assert('betLeekiness: capped at 3', sb2.leekinessBet, 3);
+
+const sb3 = initState();
+sb3.samStats.leekiness = 1;
+const r3 = betLeekiness(sb3, 2);
+assert('betLeekiness: rejected when insufficient — returns false', r3, false);
+assert('betLeekiness: rejected — leekinessBet stays 0', sb3.leekinessBet, 0);
+assert('betLeekiness: rejected — leekiness unchanged', sb3.samStats.leekiness, 1);
+
+const ss1 = initState();
+ss1.samStats.leekiness = 2;
+spendLeekiness(ss1);
+assert('spendLeekiness: sets flag when leekiness > 0', ss1.leekinessSpend, true);
+
+const ss2 = initState();
+ss2.samStats.leekiness = 0;
+spendLeekiness(ss2);
+assert('spendLeekiness: no-op when leekiness is 0', ss2.leekinessSpend, false);
+
+// Group D: processTurnEffects
+const pt1 = initState();
+pt1.probability = 50; pt1.prevProbability = 50; pt1.samStats.leekiness = 3;
+processTurnEffects(pt1, { probability: 60 }, false);
+assert('processTurnEffects: prob increase awards leekiness', pt1.samStats.leekiness, 4);
+
+const pt2 = initState();
+pt2.probability = 70; pt2.prevProbability = 70; pt2.samDamage = 0;
+processTurnEffects(pt2, { probability: 55 }, false);
+assert('processTurnEffects: drop >10 increases samDamage', pt2.samDamage, 1);
+
+const pt3 = initState();
+pt3.probability = 70; pt3.prevProbability = 70; pt3.samDamage = 0;
+processTurnEffects(pt3, { probability: 60 }, false);
+assert('processTurnEffects: drop of exactly 10 does not increase samDamage', pt3.samDamage, 0);
+
+const pt4 = initState();
+pt4.samStats.swissCheeseLevel = 40; pt4.samStats.truthiness = 70; pt4.selectedZiggyOpt = 0;
+pt4.prevProbability = 50;
+processTurnEffects(pt4, { probability: 50 }, false);
+assert('processTurnEffects: accurate Ziggy advice reduces swissCheeseLevel by 2', pt4.samStats.swissCheeseLevel, 38);
+
+const pt5 = initState();
+pt5.samStats.swissCheeseLevel = 80; pt5.prevProbability = 50;
+processTurnEffects(pt5, { probability: 50 }, false);
+assert('processTurnEffects: swissCheese>=80 activates deathcap', pt5.deathcapActive, true);
+
+const pt6 = initState();
+pt6.leekinessSpend = true; pt6.leekinessBet = 2; pt6.selectedZiggyOpt = 1; pt6.prevProbability = 50;
+processTurnEffects(pt6, { probability: 50 }, false);
+assert('processTurnEffects: resets leekinessSpend', pt6.leekinessSpend, false);
+assert('processTurnEffects: resets leekinessBet', pt6.leekinessBet, 0);
+assert('processTurnEffects: resets selectedZiggyOpt', pt6.selectedZiggyOpt, -1);
+
+assert('processTurnEffects: no-op on first turn (isFirst=true)', (() => {
+  const st = initState(); st.samDamage = 0; st.prevProbability = 70;
+  processTurnEffects(st, { probability: 10 }, true);
+  return st.samDamage;
+})(), 0);
+
+// Group E: buildModifiers
+const bm0 = initState();
+assert('buildModifiers: clean state returns empty string', buildModifiers(bm0), '');
+
+const bm1 = initState();
+bm1.leekinessSpend = true;
+assert('buildModifiers: leekinessSpend includes "pushing his luck"',
+  buildModifiers(bm1).includes('pushing his luck'), true);
+
+const bm2 = initState();
+bm2.leekinessBet = 2;
+assert('buildModifiers: leekinessBet includes "2 Leekiness points"',
+  buildModifiers(bm2).includes('2 Leekiness points'), true);
+
+const bm3 = initState();
+bm3.samStats.swissCheeseLevel = 85;
+assert('buildModifiers: swissCheese>=80 includes "DEATHCAP MODE ACTIVE"',
+  buildModifiers(bm3).includes('DEATHCAP MODE ACTIVE'), true);
+
+const bm4 = initState();
+bm4.samDamage = 4;
+assert('buildModifiers: samDamage>=4 includes "4 damage events"',
+  buildModifiers(bm4).includes('4 damage events'), true);
+
 // ── Results ──────────────────────────────────────────────────────────────────
 
 const total = passed + failed;

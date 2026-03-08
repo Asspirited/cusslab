@@ -4,6 +4,7 @@
 const fs   = require('fs');
 const path = require('path');
 const { Temperature, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetector, DartsVoiceFmt, dartsBuildBlock, DARTS_PREMONITION_AFFINITIES, COLLECTIVE_CALL_MINIMUM, premonitionEligible, blankPremonitionLedger, assignPremonitionRC, resolvePremonitionCommits, isPremonitionTruthTeller, detectIntellectualAttempt, buildAttemptInstruction, INTELLECTUAL_ATTEMPTS_CONFIG } = require('./logic.js');
+const { QUNTUM_LEEKS_SCENARIOS, initState, pickRandomScenario, betLeekiness, spendLeekiness, processTurnEffects, buildModifiers } = require('../src/logic/quntum-leeks-engine.js');
 
 // ── Mock state (simulates browser localStorage + DOM) ────────────────────────
 
@@ -4829,6 +4830,211 @@ function makeSteps(ctx) {
     [/^another character fires ATTEMPT_ERUDITION with degree "([^"]+)"$/, () => { /* @claude fixture */ }],
     [/^Prof Cox's response addresses the misused concept$/, () => { /* @claude */ }],
     [/^Prof Cox's correction contains its own error$/, () => { /* @claude */ }],
+
+    // ── Quntum Leeks engine ────────────────────────────────────────────────
+
+    [/^the quntum-leeks scenarios are loaded$/, () => {
+      if (!QUNTUM_LEEKS_SCENARIOS || typeof QUNTUM_LEEKS_SCENARIOS !== 'object')
+        throw new Error('QUNTUM_LEEKS_SCENARIOS not loaded');
+    }],
+    [/^the quntum-leeks engine is loaded$/, () => {
+      if (typeof initState !== 'function') throw new Error('quntum-leeks-engine not loaded');
+    }],
+
+    // Group A: data structure
+    [/^each scenario has a name$/, () => {
+      Object.entries(QUNTUM_LEEKS_SCENARIOS).forEach(([k, s]) => {
+        if (typeof s.name !== 'string') throw new Error(`Scenario "${k}" missing name`);
+      });
+    }],
+    [/^each scenario has a period$/, () => {
+      Object.entries(QUNTUM_LEEKS_SCENARIOS).forEach(([k, s]) => {
+        if (typeof s.period !== 'string') throw new Error(`Scenario "${k}" missing period`);
+      });
+    }],
+    [/^each scenario has a host$/, () => {
+      Object.entries(QUNTUM_LEEKS_SCENARIOS).forEach(([k, s]) => {
+        if (typeof s.host !== 'string') throw new Error(`Scenario "${k}" missing host`);
+      });
+    }],
+    [/^each scenario has a mirror$/, () => {
+      Object.entries(QUNTUM_LEEKS_SCENARIOS).forEach(([k, s]) => {
+        if (typeof s.mirror !== 'string') throw new Error(`Scenario "${k}" missing mirror`);
+      });
+    }],
+    [/^each scenario has a situation$/, () => {
+      Object.entries(QUNTUM_LEEKS_SCENARIOS).forEach(([k, s]) => {
+        if (typeof s.situation !== 'string') throw new Error(`Scenario "${k}" missing situation`);
+      });
+    }],
+    [/^each scenario has an al_note$/, () => {
+      Object.entries(QUNTUM_LEEKS_SCENARIOS).forEach(([k, s]) => {
+        if (typeof s.al_note !== 'string') throw new Error(`Scenario "${k}" missing al_note`);
+      });
+    }],
+    [/^each scenario has an object$/, () => {
+      Object.entries(QUNTUM_LEEKS_SCENARIOS).forEach(([k, s]) => {
+        if (typeof s.object !== 'string') throw new Error(`Scenario "${k}" missing object`);
+      });
+    }],
+    [/^each scenario has leap_questions$/, () => {
+      Object.entries(QUNTUM_LEEKS_SCENARIOS).forEach(([k, s]) => {
+        if (typeof s.leap_questions !== 'string') throw new Error(`Scenario "${k}" missing leap_questions`);
+      });
+    }],
+    [/^each scenario has characters$/, () => {
+      Object.entries(QUNTUM_LEEKS_SCENARIOS).forEach(([k, s]) => {
+        if (typeof s.characters !== 'string') throw new Error(`Scenario "${k}" missing characters`);
+      });
+    }],
+    [/^the scenario count is at least (\d+)$/, (n) => {
+      const count = Object.keys(QUNTUM_LEEKS_SCENARIOS).length;
+      if (count < parseInt(n)) throw new Error(`Expected at least ${n} scenarios, got ${count}`);
+    }],
+    [/^a random scenario is selected (\d+) times$/, (n) => {
+      ctx._qlSelections = [];
+      for (let i = 0; i < parseInt(n); i++) ctx._qlSelections.push(pickRandomScenario());
+    }],
+    [/^every selection is a valid scenario key$/, () => {
+      const keys = Object.keys(QUNTUM_LEEKS_SCENARIOS);
+      for (const sel of ctx._qlSelections) {
+        if (!keys.includes(sel)) throw new Error(`Invalid scenario key: "${sel}"`);
+      }
+    }],
+
+    // Group B: initState
+    [/^initState is called$/, () => { ctx._qlState = initState(); }],
+    [/^state\.history is empty$/, () => {
+      if (!Array.isArray(ctx._qlState.history) || ctx._qlState.history.length !== 0)
+        throw new Error('state.history should be empty array');
+    }],
+    [/^state\.turnCount is (\d+)$/, (n) => {
+      if (ctx._qlState.turnCount !== parseInt(n))
+        throw new Error(`state.turnCount: expected ${n}, got ${ctx._qlState.turnCount}`);
+    }],
+    [/^state\.leaped is (true|false)$/, (v) => {
+      const expected = v === 'true';
+      if (ctx._qlState.leaped !== expected)
+        throw new Error(`state.leaped: expected ${expected}, got ${ctx._qlState.leaped}`);
+    }],
+    [/^state\.probability is (\d+)$/, (n) => {
+      if (ctx._qlState.probability !== parseInt(n))
+        throw new Error(`state.probability: expected ${n}, got ${ctx._qlState.probability}`);
+    }],
+    [/^state\.samDamage is (\d+)$/, (n) => {
+      if (ctx._qlState.samDamage !== parseInt(n))
+        throw new Error(`state.samDamage: expected ${n}, got ${ctx._qlState.samDamage}`);
+    }],
+    [/^state\.samStats\.truthiness is (\d+)$/, (n) => {
+      if (ctx._qlState.samStats.truthiness !== parseInt(n))
+        throw new Error(`samStats.truthiness: expected ${n}, got ${ctx._qlState.samStats.truthiness}`);
+    }],
+    [/^state\.samStats\.bottiness is (\d+)$/, (n) => {
+      if (ctx._qlState.samStats.bottiness !== parseInt(n))
+        throw new Error(`samStats.bottiness: expected ${n}, got ${ctx._qlState.samStats.bottiness}`);
+    }],
+    [/^state\.samStats\.leekiness is (\d+)$/, (n) => {
+      if (ctx._qlState.samStats.leekiness !== parseInt(n))
+        throw new Error(`samStats.leekiness: expected ${n}, got ${ctx._qlState.samStats.leekiness}`);
+    }],
+    [/^state\.samStats\.swissCheeseLevel is (\d+)$/, (n) => {
+      if (ctx._qlState.samStats.swissCheeseLevel !== parseInt(n))
+        throw new Error(`samStats.swissCheeseLevel: expected ${n}, got ${ctx._qlState.samStats.swissCheeseLevel}`);
+    }],
+    [/^state\.leekinessSpend is (true|false)$/, (v) => {
+      const expected = v === 'true';
+      if (ctx._qlState.leekinessSpend !== expected)
+        throw new Error(`state.leekinessSpend: expected ${expected}, got ${ctx._qlState.leekinessSpend}`);
+    }],
+    [/^state\.leekinessBet is (\d+)$/, (n) => {
+      if (ctx._qlState.leekinessBet !== parseInt(n))
+        throw new Error(`state.leekinessBet: expected ${n}, got ${ctx._qlState.leekinessBet}`);
+    }],
+    [/^state\.selectedZiggyOpt is (-?\d+)$/, (n) => {
+      if (ctx._qlState.selectedZiggyOpt !== parseInt(n))
+        throw new Error(`state.selectedZiggyOpt: expected ${n}, got ${ctx._qlState.selectedZiggyOpt}`);
+    }],
+
+    // Group C: bet and spend
+    [/^state with leekiness (\d+)$/, (n) => {
+      ctx._qlState = initState();
+      ctx._qlState.samStats.leekiness = parseInt(n);
+      ctx._qlBetRejected = false;
+    }],
+    [/^betLeekiness is called with (\d+)$/, (n) => {
+      ctx._qlBetRejected = !betLeekiness(ctx._qlState, parseInt(n));
+    }],
+    [/^the bet is rejected$/, () => {
+      if (!ctx._qlBetRejected) throw new Error('Expected bet to be rejected but was accepted');
+    }],
+    [/^spendLeekiness is called$/, () => { spendLeekiness(ctx._qlState); }],
+
+    // Group D: processTurnEffects — set-up steps
+    [/^a state with probability (\d+) and leekiness (\d+)$/, (p, l) => {
+      ctx._qlState = initState();
+      ctx._qlState.probability     = parseInt(p);
+      ctx._qlState.prevProbability = parseInt(p);
+      ctx._qlState.samStats.leekiness = parseInt(l);
+    }],
+    [/^a state with probability (\d+) and samDamage (\d+)$/, (p, d) => {
+      ctx._qlState = initState();
+      ctx._qlState.probability     = parseInt(p);
+      ctx._qlState.prevProbability = parseInt(p);
+      ctx._qlState.samDamage       = parseInt(d);
+    }],
+    [/^a state with swissCheeseLevel (\d+) and truthiness (\d+) and selectedZiggyOpt (\d+)$/, (sc, tr, zo) => {
+      ctx._qlState = initState();
+      ctx._qlState.samStats.swissCheeseLevel = parseInt(sc);
+      ctx._qlState.samStats.truthiness       = parseInt(tr);
+      ctx._qlState.selectedZiggyOpt          = parseInt(zo);
+      ctx._qlState.prevProbability           = 50;
+    }],
+    [/^a state with swissCheeseLevel (\d+)$/, (sc) => {
+      ctx._qlState = initState();
+      ctx._qlState.samStats.swissCheeseLevel = parseInt(sc);
+      ctx._qlState.prevProbability           = 50;
+    }],
+    [/^a state with leekinessSpend true and leekinessBet (\d+) and selectedZiggyOpt (\d+)$/, (bet, zo) => {
+      ctx._qlState = initState();
+      ctx._qlState.leekinessSpend   = true;
+      ctx._qlState.leekinessBet     = parseInt(bet);
+      ctx._qlState.selectedZiggyOpt = parseInt(zo);
+      ctx._qlState.prevProbability  = 50;
+    }],
+    [/^processTurnEffects is called with probability (\d+)$/, (p) => {
+      processTurnEffects(ctx._qlState, { probability: parseInt(p) }, false);
+    }],
+    [/^processTurnEffects is called with any probability$/, () => {
+      processTurnEffects(ctx._qlState, { probability: ctx._qlState.prevProbability }, false);
+    }],
+    [/^state\.deathcapActive is (true|false)$/, (v) => {
+      const expected = v === 'true';
+      if (ctx._qlState.deathcapActive !== expected)
+        throw new Error(`state.deathcapActive: expected ${expected}, got ${ctx._qlState.deathcapActive}`);
+    }],
+
+    // Group E: buildModifiers
+    [/^a clean state with no active modifiers$/, () => { ctx._qlState = initState(); }],
+    [/^a state with leekinessSpend true$/, () => {
+      ctx._qlState = initState();
+      ctx._qlState.leekinessSpend = true;
+    }],
+    [/^a state with leekinessBet (\d+)$/, (n) => {
+      ctx._qlState = initState();
+      ctx._qlState.leekinessBet = parseInt(n);
+    }],
+    [/^a state with samDamage (\d+)$/, (n) => {
+      ctx._qlState = initState();
+      ctx._qlState.samDamage = parseInt(n);
+    }],
+    [/^buildModifiers is called$/, () => { ctx._qlModResult = buildModifiers(ctx._qlState); }],
+    [/^the modifiers result is empty$/, () => {
+      if (ctx._qlModResult !== '') throw new Error(`Expected empty string, got "${ctx._qlModResult}"`);
+    }],
+    [/^the modifiers result contains "([^"]+)"$/, (text) => {
+      if (!ctx._qlModResult.includes(text))
+        throw new Error(`buildModifiers result does not contain "${text}"`);
+    }],
 
   ];
 }
