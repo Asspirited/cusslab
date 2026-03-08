@@ -101,14 +101,14 @@ Feature: Golf Adventure Game Engine
   @engine-score
   Scenario: Birdie is scored correctly
     Given a game state with yourScore 0 on a par 4 hole with 3 strokes taken
-    When the hole ends
+    When endHole is called
     Then the hole score diff is -1
     And yourScore is -1
 
   @engine-score
   Scenario: Bogey is scored correctly
     Given a game state with yourScore 0 on a par 4 hole with 5 strokes taken
-    When the hole ends
+    When endHole is called
     Then the hole score diff is 1
     And yourScore is 1
 
