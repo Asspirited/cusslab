@@ -2066,6 +2066,10 @@
 
   <!-- Q&A mode -->
   <div id="fb-qanda-view">
+    <div id="fb-atmo-selector" style="margin-bottom:16px;">
+      <div style="font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:8px;">Session atmosphere</div>
+      <div id="fb-atmo-cards" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
+    </div>
     <div class="gf-name-strip" id="fb-name-strip">
       <span class="gf-name-strip__label">You are</span>
       <input type="text" id="fb-username" class="gf-name-strip__input" placeholder="your name" maxlength="40" autocomplete="off" spellcheck="false" oninput="fbNameInput()" onkeydown="if(event.key==='Enter')this.blur()">
@@ -2213,6 +2217,10 @@
 
   <!-- Q&A mode -->
   <div id="dt-qanda-view">
+    <div id="dt-atmo-selector" style="margin-bottom:16px;">
+      <div style="font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:8px;">Session atmosphere</div>
+      <div id="dt-atmo-cards" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
+    </div>
     <div class="gf-name-strip" id="dt-name-strip" style="background:rgba(255,102,51,0.04);border-color:rgba(255,102,51,0.12);">
       <span class="gf-name-strip__label">You are</span>
       <input type="text" id="dt-username" class="gf-name-strip__input" placeholder="your name" maxlength="40" autocomplete="off" spellcheck="false" style="border-bottom-color:rgba(255,102,51,0.2);color:#ff6633;" oninput="dtNameInput()" onkeydown="if(event.key==='Enter')this.blur()">
@@ -2313,6 +2321,10 @@
 
   <!-- Q&A mode -->
   <div id="lr-qanda-view">
+    <div id="lr-atmo-selector" style="margin-bottom:16px;">
+      <div style="font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:8px;">Session atmosphere</div>
+      <div id="lr-atmo-cards" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
+    </div>
     <div class="gf-name-strip" id="lr-name-strip" style="background:rgba(0,229,255,0.03);border-color:rgba(0,229,255,0.1);">
       <span class="gf-name-strip__label">You are</span>
       <input type="text" id="lr-username" class="gf-name-strip__input" placeholder="your name" maxlength="40" autocomplete="off" spellcheck="false" style="border-bottom-color:rgba(0,229,255,0.2);color:#00e5ff;" oninput="lrNameInput()" onkeydown="if(event.key==='Enter')this.blur()">
@@ -11042,7 +11054,11 @@ INTER-PANEL: Ron — the gold is the portal to everything Cox wants to say; trea
       const fbArcInstructions = ConspireEngine.getArcInstructions(member.id, fbRelState, ORDER);
       const fbNameBlock = fbName ? `\nThe question was brought by ${fbName}. Address ${fbName} by name at least once in your response.\n` : '';
       const fbIaType = IntellectualAttempts.detect(input);
-      const fbBaseSystem = TURN_RULES + '\n\n' + fbIntensityBlock + fbYourState + fbNameBlock + fbFoodBlock + fbMarmiteBlock + fbHypoBlock + fbPremBlock + fbLieBlock + member.prompt + _iceBreakBlock(member.id) + mechanics + fbArcInstructions + (i > 0
+      const fbAtmoRaw = sessionStorage.getItem('hc_atmosphere');
+      const fbAtmo = fbAtmoRaw ? JSON.parse(fbAtmoRaw) : PANEL_SCHEMAS.NORMAL;
+      const fbAtmoSchema = fbAtmo.schema || 'NORMAL';
+      const roundNote = `\n\nSession atmosphere: schema=${fbAtmoSchema} tension=${fbAtmo.tension ?? 20} hostility=${fbAtmo.hostility ?? 20} chaos=${fbAtmo.chaos ?? 30} bathos=${fbAtmo.bathos ?? 20} premonition=${fbAtmo.premonition ?? 20} bleed=${fbAtmo.bleed ?? 20}. Calibrate accordingly.`;
+      const fbBaseSystem = TURN_RULES + '\n\n' + fbIntensityBlock + fbYourState + fbNameBlock + fbFoodBlock + fbMarmiteBlock + fbHypoBlock + fbPremBlock + fbLieBlock + member.prompt + _iceBreakBlock(member.id) + roundNote + mechanics + fbArcInstructions + (i > 0
         ? `\n\nPrevious:\n${prev}`
         : '');
       const system = fbIaType
@@ -12387,8 +12403,9 @@ NEVER SAYS: Anything bitter about the career ending. Anything suggesting comment
   return { discuss, callMoment, switchMode, nextRound };
 })();
 
-// ── Golf atmosphere selector ──────────────────────────────────────────────────
-Golf.SCHEMAS = {
+// ── Session atmosphere — shared across all panels ─────────────────────────────
+
+const PANEL_SCHEMAS = {
   NORMAL:         { schema:'NORMAL',         label:'Normal',         desc:'Engine defaults.',                        color:'#3a6a4a', tension:20,  hostility:20,  chaos:30,  bathos:20, premonition:20, bleed:20 },
   SIMMERING:      { schema:'SIMMERING',      label:'Simmering',      desc:'Room already loaded.',                    color:'#7a5a20', tension:55,  hostility:40,  chaos:25,  bathos:35, premonition:35, bleed:30 },
   POWDER_KEG:     { schema:'POWDER_KEG',     label:'Powder Keg',     desc:'Everyone at passive-aggressive.',         color:'#8a3a10', tension:85,  hostility:65,  chaos:35,  bathos:55, premonition:60, bleed:40 },
@@ -12398,30 +12415,41 @@ Golf.SCHEMAS = {
   DEEP_WOUNDS:    { schema:'DEEP_WOUNDS',    label:'Deep Wounds',    desc:'Wounds pre-exposed.',                     color:'#5a2a5a', tension:40,  hostility:60,  chaos:20,  bathos:50, premonition:20, bleed:70 },
 };
 
-Golf.renderAtmoSelector = function() {
-  const el = document.getElementById('gf-atmo-cards');
-  if (!el) return;
-  const current = (() => { try { return JSON.parse(sessionStorage.getItem('hc_atmosphere') || '{}').schema || 'NORMAL'; } catch(e) { return 'NORMAL'; } })();
-  el.innerHTML = Object.values(Golf.SCHEMAS).map(s => `
-    <div class="gf-atmo-card${s.schema === current ? ' active' : ''}" data-schema="${s.schema}" style="--gf-atmo-color:${s.color}" onclick="Golf.selectAtmo('${s.schema}')">
-      <div class="gf-atmo-card__name">${s.label}</div>
-      <div class="gf-atmo-card__desc">${s.desc}</div>
-    </div>`).join('');
-};
+// Keep Golf.SCHEMAS as alias for any legacy references
+Golf.SCHEMAS = PANEL_SCHEMAS;
 
-Golf.selectAtmo = function(schema) {
-  const s = Golf.SCHEMAS[schema];
+const ATMO_CONTAINER_IDS = ['gf-atmo-cards', 'fb-atmo-cards', 'dt-atmo-cards', 'lr-atmo-cards'];
+
+function renderAllAtmoSelectors() {
+  const current = (() => { try { return JSON.parse(sessionStorage.getItem('hc_atmosphere') || '{}').schema || 'NORMAL'; } catch(e) { return 'NORMAL'; } })();
+  ATMO_CONTAINER_IDS.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.innerHTML = Object.values(PANEL_SCHEMAS).map(s => `
+      <div class="gf-atmo-card${s.schema === current ? ' active' : ''}" data-schema="${s.schema}" style="--gf-atmo-color:${s.color}" onclick="selectAtmo('${s.schema}')">
+        <div class="gf-atmo-card__name">${s.label}</div>
+        <div class="gf-atmo-card__desc">${s.desc}</div>
+      </div>`).join('');
+  });
+}
+
+function selectAtmo(schema) {
+  const s = PANEL_SCHEMAS[schema];
   if (!s) return;
   sessionStorage.setItem('hc_atmosphere', JSON.stringify(s));
-  Golf.renderAtmoSelector();
-};
+  renderAllAtmoSelectors();
+}
 
-// Initialise selector on load
+// Keep Golf.selectAtmo as alias
+Golf.selectAtmo = selectAtmo;
+Golf.renderAtmoSelector = renderAllAtmoSelectors;
+
+// Initialise on load
 (function() {
   if (!sessionStorage.getItem('hc_atmosphere')) {
-    sessionStorage.setItem('hc_atmosphere', JSON.stringify(Golf.SCHEMAS.NORMAL));
+    sessionStorage.setItem('hc_atmosphere', JSON.stringify(PANEL_SCHEMAS.NORMAL));
   }
-  document.addEventListener('DOMContentLoaded', Golf.renderAtmoSelector);
+  document.addEventListener('DOMContentLoaded', renderAllAtmoSelectors);
 })();
 
 // ============================================================
@@ -13425,7 +13453,11 @@ PYKE-ISMS — phrases that recur in your speech. Use them naturally. Other panel
         const dtLieBlock  = LieEngine.buildBlock(member.id, DT_LIE_PROFILES, dtLieState, dtWoundLive);
         const dtIaType = IntellectualAttempts.detect(input);
         const dtNameBlock = dtName ? `\nThe question was brought by ${dtName}. Address ${dtName} by name at least once in your response.\n` : '';
-        const dtBaseSystem = TURN_RULES + '\n\n' + dtIntensityBlock + dtYourState + dtNameBlock + dtFoodBlock + dtMarmiteBlock + dtHypoBlock + dtLieBlock + member.prompt + _iceBreakBlock(member.id) + crowdBlock + frankensteinBlock + (i > 0 ? `\n\nPrevious:\n${prev}` : '');
+        const dtAtmoRaw = sessionStorage.getItem('hc_atmosphere');
+        const dtAtmo = dtAtmoRaw ? JSON.parse(dtAtmoRaw) : PANEL_SCHEMAS.NORMAL;
+        const dtAtmoSchema = dtAtmo.schema || 'NORMAL';
+        const roundNote = `\n\nSession atmosphere: schema=${dtAtmoSchema} tension=${dtAtmo.tension ?? 20} hostility=${dtAtmo.hostility ?? 20} chaos=${dtAtmo.chaos ?? 30} bathos=${dtAtmo.bathos ?? 20} premonition=${dtAtmo.premonition ?? 20} bleed=${dtAtmo.bleed ?? 20}. Calibrate accordingly.`;
+        const dtBaseSystem = TURN_RULES + '\n\n' + dtIntensityBlock + dtYourState + dtNameBlock + dtFoodBlock + dtMarmiteBlock + dtHypoBlock + dtLieBlock + member.prompt + _iceBreakBlock(member.id) + roundNote + crowdBlock + frankensteinBlock + (i > 0 ? `\n\nPrevious:\n${prev}` : '');
         const system = dtIaType
           ? IntellectualAttempts.inject('darts', member.id, dtBaseSystem, dtIaType)
           : dtBaseSystem;
@@ -14175,6 +14207,10 @@ Never name the move.`;
       roundIndicator.style.display = 'block';
     }
     const roundNote = `\n\nThis is round ${lrRound} of 5: "${roundLabel}". Round 1 = restrained, minimal, accurate. Round 5 = full escalation, all characteristic behaviours completely present.`;
+    const lrAtmoRaw = sessionStorage.getItem('hc_atmosphere');
+    const lrAtmo = lrAtmoRaw ? JSON.parse(lrAtmoRaw) : PANEL_SCHEMAS.NORMAL;
+    const lrAtmoSchema = lrAtmo.schema || 'NORMAL';
+    const lrAtmoNote = `\n\nSession atmosphere: schema=${lrAtmoSchema} tension=${lrAtmo.tension ?? 20} hostility=${lrAtmo.hostility ?? 20} chaos=${lrAtmo.chaos ?? 30} bathos=${lrAtmo.bathos ?? 20} premonition=${lrAtmo.premonition ?? 20} bleed=${lrAtmo.bleed ?? 20}. Calibrate accordingly.`;
 
     const lrRelState = RelationshipState.init(ORDER, LR_PRE_EXISTING, {});
     const lrCharStates = {};
@@ -14260,7 +14296,7 @@ Never name the move.`;
       const lrPremBlock = _lrPremCtx ? PremonitionEngine.buildBlock(member.id, _lrPremCtx.ledger, LR_PREM_CONFIG) : '';
       const lrLieBlock  = LieEngine.buildBlock(member.id, LR_LIE_PROFILES, lrLieState, _woundLive);
       const lrNameBlock = lrName ? `\nThe question was brought by ${lrName}. Address ${lrName} by name at least once in your response.\n` : '';
-      const lrBaseSystem = TURN_RULES + '\n\n' + lrIntensityBlock + lrYourState + lrNameBlock + lrFoodBlock + lrMarmiteBlock + lrHypoBlock + lrPremBlock + lrLieBlock + mechanicBlock + member.prompt + _iceBreakBlock(member.id) + roundNote
+      const lrBaseSystem = TURN_RULES + '\n\n' + lrIntensityBlock + lrYourState + lrNameBlock + lrFoodBlock + lrMarmiteBlock + lrHypoBlock + lrPremBlock + lrLieBlock + mechanicBlock + member.prompt + _iceBreakBlock(member.id) + roundNote + lrAtmoNote
         + (i > 0 ? `\n\nPrevious:\n${prev}` : '');
       const system = lrIaType
         ? IntellectualAttempts.inject('cricket', member.id, lrBaseSystem, lrIaType)

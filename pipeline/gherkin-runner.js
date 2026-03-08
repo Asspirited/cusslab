@@ -5066,6 +5066,41 @@ function makeSteps(ctx) {
         throw new Error(`buildModifiers result does not contain "${text}"`);
     }],
 
+    // ── Session Atmosphere — shared across panels ──────────────────────────────
+    [/^index\.html is parsed$/, () => {
+      const fs   = require('fs');
+      const path = require('path');
+      ctx._indexHtml = fs.readFileSync(path.join(__dirname, '../index.html'), 'utf8');
+    }],
+    [/^index\.html contains "([^"]+)"$/, (text) => {
+      if (!ctx._indexHtml) throw new Error('index.html not parsed — call "index.html is parsed" first');
+      if (!ctx._indexHtml.includes(text))
+        throw new Error(`index.html does not contain: ${text}`);
+    }],
+    [/^the Football IIFE contains "([^"]+)"$/, (text) => {
+      if (!ctx._indexHtml) throw new Error('index.html not parsed');
+      const start = ctx._indexHtml.indexOf('const Football');
+      const end   = ctx._indexHtml.indexOf('const Darts', start);
+      const slice = start >= 0 && end > start ? ctx._indexHtml.slice(start, end) : ctx._indexHtml;
+      if (!slice.includes(text))
+        throw new Error(`Football IIFE does not contain: ${text}`);
+    }],
+    [/^the Darts IIFE contains "([^"]+)"$/, (text) => {
+      if (!ctx._indexHtml) throw new Error('index.html not parsed');
+      const start = ctx._indexHtml.indexOf('const Darts');
+      const end   = ctx._indexHtml.indexOf('const LongRoom', start);
+      const slice = start >= 0 && end > start ? ctx._indexHtml.slice(start, end) : ctx._indexHtml;
+      if (!slice.includes(text))
+        throw new Error(`Darts IIFE does not contain: ${text}`);
+    }],
+    [/^the LongRoom IIFE contains "([^"]+)"$/, (text) => {
+      if (!ctx._indexHtml) throw new Error('index.html not parsed');
+      const start = ctx._indexHtml.indexOf('const LongRoom');
+      const slice = start >= 0 ? ctx._indexHtml.slice(start) : ctx._indexHtml;
+      if (!slice.includes(text))
+        throw new Error(`LongRoom IIFE does not contain: ${text}`);
+    }],
+
   ];
 }
 
@@ -5093,15 +5128,18 @@ function parseFeature(text) {
     }
   }
 
+  let pendingTags = [];
   for (const line of lines) {
     if (line.startsWith('Feature:') || line.startsWith('Rule:')) continue;
-    if (line.startsWith('Background:')) { current = { name: 'Background', steps: [], isBackground: true }; continue; }
+    if (line.startsWith('@')) { pendingTags = line.split(/\s+/).filter(t => t.startsWith('@')); continue; }
+    if (line.startsWith('Background:')) { current = { name: 'Background', steps: [], isBackground: true }; pendingTags = []; continue; }
 
     if (line.startsWith('Scenario Outline:')) {
       if (outline) _expandOutline(outline);
-      outline    = { name: line.replace('Scenario Outline:', '').trim(), steps: [], examples: [] };
+      outline    = { name: line.replace('Scenario Outline:', '').trim(), steps: [], examples: [], tags: pendingTags };
       current    = null;
       inExamples = false;
+      pendingTags = [];
       continue;
     }
 
@@ -5124,7 +5162,8 @@ function parseFeature(text) {
 
     if (line.startsWith('Scenario:')) {
       if (outline) { _expandOutline(outline); outline = null; inExamples = false; }
-      current = { name: line.replace('Scenario:', '').trim(), steps: [] };
+      current = { name: line.replace('Scenario:', '').trim(), steps: [], tags: pendingTags };
+      pendingTags = [];
       scenarios.push(current);
       continue;
     }
@@ -5193,6 +5232,12 @@ for (const file of files) {
   console.log(`\n  ${file}`);
 
   for (const scenario of scenarios) {
+    if (scenario.isBackground) continue;
+    if (scenario.tags && scenario.tags.includes('@claude')) {
+      totalSkip++;
+      continue;
+    }
+
     const ctx   = createContext();
     const steps = makeSteps(ctx);
     let   ok    = true;

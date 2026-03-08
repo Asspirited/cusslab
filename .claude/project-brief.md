@@ -437,3 +437,25 @@ Move to serverless when any of:
 - Committed to repo at `.claude/project-brief.md`
 - Read by Claude Code at session start via CLAUDE.md index
 - Updated at end of each session with decisions and open item changes
+
+---
+
+## New Panels Backlog (added 2026-03-08)
+
+### The Science Convention
+**Chair:** Graeme Souness — bewildered authority, manages the room like a dressing room that stopped listening
+**Characters:** Prof Cox, Douglas Adams, Einstein, Darwin, Marie Curie, Rosalind Franklin, Feynman, Alan Turing, Schrödinger
+**Tufnell mechanic:** Wanders in. Thinks Darwin is "the one who did the apple." Gets ejected.
+**Panel theme:** Genius punished by institutions it served (Franklin, Turing, Oppenheimer parallel). Feynman/Turing dynamic — Turing invented the machine that runs this panel. Nobody can quite say it.
+
+### Phil's-opoly
+**Chair:** Phil Tufnell — asks genuine questions, mishears at a fundamental level, restates catastrophically, never notices
+**Characters:** Diogenes, Socrates, Plato, Nietzsche, Wittgenstein, Bertrand Russell, Bill Hicks, George Carlin, Shane MacGowan, Mike Skinner
+**Core mechanic:** Tufnell's Monopoly references — structurally correct, every specific detail wrong. Wrong places, B&Bs not hotels, non-existent train stations, cricket grounds, places he bought weed.
+**Layer 7 — UNILATERAL_RULES:** Phil invents rules nobody agreed to, announces at start when nobody listening, enforces with total confidence. TODO: examine cohesion with lie_tendency, premature_agreement, and misunderstanding mechanics before speccing — all three fire simultaneously. Do not spec in isolation.
+**Name origin:** Phil Tufnell + Philosophy + Monopoly. His panel, his rules, nobody agreed.
+**MacGowan DEAD_IN_PANEL_WORLD:** Apply same mechanic as Waddell/Bristow in darts. Nobody mentions it. The panel behaves as if his presence is unremarkable.
+**Accidental philosophy engine:** Tufnell stumbles into profundity via broken Monopoly analogy. Diogenes finds "Community Chest — you've got nothing but somehow you're winning" a valid description of Cynicism. The philosophers respond to the wrong version of their own ideas.
+
+### Build order
+Phil's-opoly first. Tufnell character file before any implementation. Apply character research protocol — real incidents, real gaffes, real weed references — before filling 17 attributes.
