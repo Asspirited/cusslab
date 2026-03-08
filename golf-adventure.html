@@ -1179,7 +1179,7 @@ body {
     </div>
     <div class="hud-center">
       <div class="hud-score" id="hud-score">E</div>
-      <div class="hud-score-lbl">YOUR SCORE</div>
+      <div class="hud-score-lbl" id="hud-score-lbl">YOUR SCORE</div>
     </div>
     <div class="hud-right">
       <div class="hud-day" id="hud-day">Day 1</div>
@@ -1294,7 +1294,7 @@ let G = {
   tournament:null, player:null, atmosphere:"NORMAL",
   selectedPanel:[], // array of character ids
   day:0, holeIdx:0, holesPerDay:3,
-  yourScore:0, holeResults:[],
+  yourScore:0, holeResults:[], matchPlayScore:0,
   phase:"tee", holeStrokes:0, currentShot:null, isRolling:false,
   composure:10, fieldScores:{}, history:[],
   panelState: {
@@ -1427,7 +1427,7 @@ function startGame() {
   if (!G.tournament || !G.player || G.selectedPanel.length < 2) return;
   applyEraTheme(G.tournament);
 
-  G.day=0; G.holeIdx=0; G.yourScore=0; G.holeResults=[];
+  G.day=0; G.holeIdx=0; G.yourScore=0; G.holeResults=[]; G.matchPlayScore=0;
   G.composure=10; G.history=[]; G.fieldScores={}; G.characterFiles={};
   G.fortuneActive=false; G.angerActive=false; G.angerShots=0; G.illnessActive=false; G.illnessHoles=0;
   G.tempThresholdMod=0; G.tempThresholdHoles=0; G.tempSkillBonus=false; G.tempSkillHoles=0;
@@ -1499,11 +1499,23 @@ function loadHole() {
 
 function buildSituation(hole) {
   const dayWords = ['first','second','third','fourth'];
+  const atmoAdd = {SIMMERING:" Something is building between the group.",POWDER_KEG:" The atmosphere is incendiary.",CHAOS_MODE:" Nothing today has gone as planned.",DEEP_WOUNDS:" Old wounds are bleeding into the present.",FUNNY_PECULIAR:" Things have taken a strange turn."}[G.atmosphere]||'';
+
+  if (G.tournament.type === 'ryder') {
+    const mpDay = G.player.matchPlayDays?.[G.day];
+    const opp = mpDay ? mpDay.opponent : 'your opponent';
+    const mp = G.matchPlayScore;
+    const mpStr = mp === 0 ? 'all square' : mp > 0 ? `${mp} up` : `${Math.abs(mp)} down`;
+    const holesPlayed = G.holeResults.filter(r => r.day === G.day).length;
+    const holesLeft = G.holesPerDay - holesPlayed;
+    const holesNote = holesLeft > 0 ? ` with ${holesLeft} to play` : '';
+    return `${G.player.name}. ${dayWords[G.day]||'Day '+G.day+1} of The Miracle at Medinah — match play singles against ${opp}. You are ${mpStr}${holesNote}. Europe needs every point.${atmoAdd}`;
+  }
+
   const scoreStr = G.yourScore===0?'level par':G.yourScore<0?`${G.yourScore} under par`:`+${G.yourScore} over par`;
   const histScore = G.player.historicalScores[G.day]||0;
   const diff = G.yourScore - histScore;
   const histNote = diff===0?'tracking history exactly':diff<0?`${Math.abs(diff)} ahead of history`:`${diff} behind history`;
-  const atmoAdd = {SIMMERING:" Something is building between the group.",POWDER_KEG:" The atmosphere is incendiary.",CHAOS_MODE:" Nothing today has gone as planned.",DEEP_WOUNDS:" Old wounds are bleeding into the present.",FUNNY_PECULIAR:" Things have taken a strange turn."}[G.atmosphere]||'';
   return `${G.player.name}. ${dayWords[G.day]||'Day '+G.day+1} round of the ${G.tournament.name}. You are ${scoreStr} — ${histNote}.${atmoAdd}`;
 }
 
@@ -1857,6 +1869,18 @@ function endHole() {
   const diff=G.holeStrokes-hole.par;
   G.yourScore+=diff;
   G.holeResults.push({day:G.day,holeId:hole.id,score:G.holeStrokes,par:hole.par,diff});
+
+  // Match play update — Ryder Cup only
+  if (G.tournament.type === 'ryder' && G.player.matchPlayDays) {
+    const mpDay = G.player.matchPlayDays[G.day];
+    if (mpDay) {
+      const oppScore = mpDay.opponentHoleScores[G.holeIdx];
+      if (G.holeStrokes < oppScore)      G.matchPlayScore++;  // win hole
+      else if (G.holeStrokes > oppScore) G.matchPlayScore--;  // lose hole
+      // equal = halved, no change
+    }
+  }
+
   updateHUD();
 
   const lbls={'-3':'ALBATROSS','-2':'EAGLE','-1':'BIRDIE','0':'PAR','1':'BOGEY','2':'DOUBLE BOGEY'};
@@ -1978,6 +2002,7 @@ async function getDaySummary() {
 function continueTournament() {
   G.day++;
   G.holeIdx=0;
+  G.matchPlayScore=0; // reset match play score for new day's match
   if(G.day>=G.tournament.days){showFinal();return;}
   showScreen('game');loadHole();
 }
@@ -1986,13 +2011,29 @@ function continueTournament() {
 // HUD + COMPOSURE
 // ═══════════════════════════════════════════
 function updateHUD() {
-  const s=G.yourScore;
   const el=document.getElementById('hud-score');
-  el.textContent=s===0?'E':s>0?`+${s}`:`${s}`;
-  el.className='hud-score'+(s<0?' neg':s>0?' pos':'');
+  const lbl=document.getElementById('hud-score-lbl');
+  const isRyder = G.tournament?.type === 'ryder';
+
+  if (isRyder) {
+    const mp = G.matchPlayScore;
+    const mpText = mp === 0 ? 'AS' : mp > 0 ? `${mp} UP` : `${Math.abs(mp)} DN`;
+    el.textContent = mpText;
+    el.className = 'hud-score' + (mp > 0 ? ' neg' : mp < 0 ? ' pos' : '');
+    const mpDay = G.player.matchPlayDays?.[G.day];
+    if (lbl) lbl.textContent = mpDay ? `VS ${mpDay.opponent.toUpperCase()}` : 'MATCH PLAY';
+    const hs=G.player.historicalScores[G.day]||0;
+    document.getElementById('hud-ghost').textContent=`Historical: ${hs===0?'E':hs>0?'+'+hs:hs}`;
+  } else {
+    const s=G.yourScore;
+    el.textContent=s===0?'E':s>0?`+${s}`:`${s}`;
+    el.className='hud-score'+(s<0?' neg':s>0?' pos':'');
+    if (lbl) lbl.textContent = 'YOUR SCORE';
+    const hs=G.player.historicalScores[G.day]||0;
+    document.getElementById('hud-ghost').textContent=`Historical: ${hs===0?'E':hs>0?'+'+hs:hs}`;
+  }
+
   document.getElementById('hud-day').textContent=`Day ${G.day+1} of ${G.tournament.days}`;
-  const hs=G.player.historicalScores[G.day]||0;
-  document.getElementById('hud-ghost').textContent=`Historical: ${hs===0?'E':hs>0?'+'+hs:hs}`;
   document.getElementById('hud-hole-n').textContent=`Hole ${G.holeIdx+1} of ${G.holesPerDay}`;
   updateComposure();
 }

@@ -11047,9 +11047,13 @@ INTER-PANEL: Ron — the gold is the portal to everything Cox wants to say; trea
       const fbAliases = [member.id, member.name.toLowerCase()];
       const fbHypoBlock = FoodWeather.hypoBlock(member.id, hypoPool, null, responses, fbAliases);
 
-      const system = TURN_RULES + '\n\n' + fbFoodBlock + fbMarmiteBlock + fbHypoBlock + member.prompt + _iceBreakBlock(member.id) + mechanics + (i > 0
+      const fbIaType = IntellectualAttempts.detect(input);
+      const fbBaseSystem = TURN_RULES + '\n\n' + fbFoodBlock + fbMarmiteBlock + fbHypoBlock + member.prompt + _iceBreakBlock(member.id) + mechanics + (i > 0
         ? `\n\nPrevious:\n${prev}`
         : '');
+      const system = fbIaType
+        ? IntellectualAttempts.inject('football', member.id, fbBaseSystem, fbIaType)
+        : fbBaseSystem;
 
       const prevName = i > 0 ? MEMBERS.find(m => m.id === ORDER[i-1]).name : '';
       const prompt = i === 0
@@ -13176,7 +13180,11 @@ PYKE-ISMS — phrases that recur in your speech. Use them naturally. Other panel
         const dtHypoBlock = FoodWeather.hypoBlock(member.id, hypoPool, dtRelState, responses, dtAliases);
         const dtYourState = RelationshipState.buildBlock(dtRelState, member.id, draw, DARTS_NAMEMAP, DARTS_VOICE_FMT);
 
-        const system = TURN_RULES + '\n\n' + dtIntensityBlock + dtYourState + dtFoodBlock + dtMarmiteBlock + dtHypoBlock + member.prompt + _iceBreakBlock(member.id) + crowdBlock + frankensteinBlock + (i > 0 ? `\n\nPrevious:\n${prev}` : '');
+        const dtIaType = IntellectualAttempts.detect(input);
+        const dtBaseSystem = TURN_RULES + '\n\n' + dtIntensityBlock + dtYourState + dtFoodBlock + dtMarmiteBlock + dtHypoBlock + member.prompt + _iceBreakBlock(member.id) + crowdBlock + frankensteinBlock + (i > 0 ? `\n\nPrevious:\n${prev}` : '');
+        const system = dtIaType
+          ? IntellectualAttempts.inject('darts', member.id, dtBaseSystem, dtIaType)
+          : dtBaseSystem;
 
         const prompt = i === 0
           ? `Topic: "${input}"\n\nOpen the panel. 2 sentences.`
@@ -13879,6 +13887,8 @@ Never name the move.`;
     const lrRelState = RelationshipState.init(ORDER, LR_PRE_EXISTING, {});
     const lrCharStates = {};
     for (const id of ORDER) lrCharStates[id] = CharacterState.create(5);
+    const lrHypoPool = FoodWeather.createPool();
+    const lrIaType = IntellectualAttempts.detect(input);
 
     // Session-scoped mechanic flags
     let mortBoycottFired = !!sessionStorage.getItem('lr-mortality-boycott');
@@ -13944,8 +13954,16 @@ Never name the move.`;
       const _interruptRate = { hostile: 0.40, wounded: 0.25, simmering: 0.15, cooling: 0.06, neutral: 0.03, warm: 0.02, reverent: 0.01 };
       const interruptFired = i > 0 && Math.random() < (_interruptRate[_tempToPrev] || 0.03) + (_woundLive ? 0.12 : 0);
 
-      const system = TURN_RULES + '\n\n' + lrIntensityBlock + lrYourState + mechanicBlock + member.prompt + _iceBreakBlock(member.id) + roundNote
+      const lrAliases = CRICKET_NAMEMAP[member.id] || [member.id];
+      const lrFoodCtx = (input + ' ' + responses.join(' ')).toLowerCase();
+      const lrFoodBlock = FoodWeather.foodBlock(lrFoodCtx);
+      const lrMarmiteBlock = FoodWeather.marmiteBlock(member.id, lrFoodCtx);
+      const lrHypoBlock = FoodWeather.hypoBlock(member.id, lrHypoPool, lrRelState, responses, lrAliases);
+      const lrBaseSystem = TURN_RULES + '\n\n' + lrIntensityBlock + lrYourState + lrFoodBlock + lrMarmiteBlock + lrHypoBlock + mechanicBlock + member.prompt + _iceBreakBlock(member.id) + roundNote
         + (i > 0 ? `\n\nPrevious:\n${prev}` : '');
+      const system = lrIaType
+        ? IntellectualAttempts.inject('cricket', member.id, lrBaseSystem, lrIaType)
+        : lrBaseSystem;
 
       const prompt = i === 0
         ? `Topic: "${input}"\n\nOpen the panel. 2 sentences.`
