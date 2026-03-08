@@ -108,7 +108,7 @@ Report final commit hash.
 
 ---
 
-### 8. DORA METRICS (30 seconds — run it)
+### 8. DORA METRICS + SESSION LOG (run both)
 
 ```bash
 export NVM_DIR="/home/rodent/.nvm" && \. "/home/rodent/.nvm/nvm.sh" && cd /home/rodent/cusslab && node pipeline/metrics-report.js > /tmp/out.txt 2>&1 && cat /tmp/out.txt
@@ -116,6 +116,15 @@ export NVM_DIR="/home/rodent/.nvm" && \. "/home/rodent/.nvm/nvm.sh" && cd /home/
 
 Report: deployment frequency, lead time, pipeline failure rate vs last session.
 If failure rate went up: note why in waste log.
+
+Then append session record and regenerate dashboard:
+
+```bash
+cd /home/rodent/cusslab && bash .claude/scripts/write-session-log.sh && node pipeline/generate-session-report.js && cp .claude/reports/session-report.html /mnt/c/Users/roden/Downloads/session-report.html && echo "Dashboard ready: Downloads/session-report.html"
+```
+
+This appends one line to `.claude/reports/session-log.jsonl` (append-only, never overwritten)
+and regenerates the HTML trend dashboard in Downloads.
 
 ---
 

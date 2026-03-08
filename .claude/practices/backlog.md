@@ -58,6 +58,17 @@ For items that represent a product hypothesis, add after the CD3 line:
 - CD3: UBV=7 TC=3 RR=2 → CoD=12, Dur=5, **CD3=2.4**
 - Status: CLOSED 2026-03-08 — 7 tournaments added; prestwick_1868 lands correctly in Other Historic
 
+### BL-019 — Session log + HTML dashboard (process trend analysis)
+- Append-only `.claude/reports/session-log.jsonl` — one record per session close, never overwritten
+- Each record: session_date, commit, pipeline (unit/gherkin/canary), dora (failure_rate, sessions), backlog (open count, top item), shipped[], loops (tdd/bdd/ddd/hdd status)
+- `session-report.html` — dashboard reading the log, served via GitHub Pages, renders trends in colour
+- `write-session-log.sh` — same pattern as append-section.sh, called from session-closedown.md step 8
+- Enables: failure rate trend, Ivan metric over time, Gherkin growth, DORA delta, HDD loop health
+- Without this: flying blind — no way to close the HDD loop on process improvement itself
+- Three artefacts ship together: jsonl store, html view, write script. Gherkin covers all three.
+- CD3: UBV=7 TC=5 RR=8 → CoD=20, Dur=3, **CD3=6.7**
+- Status: OPEN — design agreed, Gherkin not yet written (next session)
+
 ### BL-018 — Make HCSession.logPanelRun() data observable
 - HCSession.logPanelRun() is called on every panel run but data is not retrievable outside the session
 - Prerequisite for all AARRR measurement — without this, no outer loop hypothesis is testable

@@ -1,0 +1,1 @@
+{"session_date":"2026-03-08","session":1067,"commit":"593981d","pipeline":{"unit":403,"gherkin":1135,"canary":"OK","status":"GREEN"},"dora":{"failure_rate":0.26,"sessions":1067},"backlog":{"open":10},"loops":{"tdd":"green","bdd":"green","ddd":"review-needed","hdd":"open"}}

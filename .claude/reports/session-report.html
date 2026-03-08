@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Heckler and Cox — Session Dashboard</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0d1117; color: #e6edf3; padding: 24px; }
+  h1 { font-size: 1.4rem; font-weight: 600; margin-bottom: 4px; }
+  .sub { color: #8b949e; font-size: 0.85rem; margin-bottom: 24px; }
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 32px; }
+  .card { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 16px; }
+  .card .label { font-size: 0.75rem; color: #8b949e; text-transform: uppercase; letter-spacing: .05em; margin-bottom: 6px; }
+  .card .value { font-size: 1.8rem; font-weight: 700; }
+  .card .spark { margin-top: 8px; }
+  .green  { color: #3fb950; }
+  .red    { color: #f85149; }
+  .amber  { color: #d29922; }
+  .dot    { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 4px; vertical-align: middle; }
+  .dot.green { background: #3fb950; }
+  .dot.red   { background: #f85149; }
+  .dot.amber { background: #d29922; }
+  h2 { font-size: 1rem; margin-bottom: 12px; color: #8b949e; text-transform: uppercase; letter-spacing: .05em; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  th { text-align: left; padding: 8px 12px; border-bottom: 1px solid #30363d; color: #8b949e; font-weight: 500; }
+  td { padding: 8px 12px; border-bottom: 1px solid #21262d; font-family: 'Courier New', monospace; }
+  tr:last-child td { border-bottom: none; }
+  .loops { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 32px; }
+  .loop  { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 14px; text-align: center; }
+  .loop .name { font-size: 0.7rem; text-transform: uppercase; letter-spacing: .1em; color: #8b949e; margin-bottom: 6px; }
+  .loop .status { font-size: 1rem; font-weight: 700; }
+  section { margin-bottom: 32px; }
+</style>
+</head>
+<body>
+<h1>Heckler and Cox — Session Dashboard</h1>
+<div class="sub">Latest: 2026-03-08 · commit 593981d · session 1067 · 1 sessions logged</div>
+
+<section>
+<h2>Four Loops — Latest Session</h2>
+<div class="loops">
+  <div class="loop"><div class="name">TDD</div><div class="status green">GREEN</div></div>
+  <div class="loop"><div class="name">BDD</div><div class="status green">GREEN</div></div>
+  <div class="loop"><div class="name">DDD</div><div class="status amber">REVIEW-NEEDED</div></div>
+  <div class="loop"><div class="name">HDD</div><div class="status amber">OPEN</div></div>
+</div>
+</section>
+
+<section>
+<h2>Trend Cards</h2>
+<div class="cards">
+  <div class="card">
+    <div class="label">Unit Tests</div>
+    <div class="value green">403</div>
+    <div class="spark"></div>
+  </div>
+  <div class="card">
+    <div class="label">Gherkin Scenarios</div>
+    <div class="value green">1135</div>
+    <div class="spark"></div>
+  </div>
+  <div class="card">
+    <div class="label">Pipeline Failure Rate</div>
+    <div class="value red">26%</div>
+    <div class="spark"></div>
+  </div>
+  <div class="card">
+    <div class="label">Backlog Open</div>
+    <div class="value amber">10</div>
+    <div class="spark"></div>
+  </div>
+</div>
+</section>
+
+<section>
+<h2>Last 10 Sessions</h2>
+<table>
+  <thead><tr>
+    <th>Date</th><th>Session</th><th>Commit</th><th>Pipeline</th>
+    <th>Unit</th><th>Gherkin</th><th>Canary</th><th>Fail%</th><th>Backlog</th>
+  </tr></thead>
+  <tbody>
+  <tr>
+    <td>2026-03-08</td>
+    <td>1067</td>
+    <td>593981d</td>
+    <td><span class="dot green"></span> GREEN</td>
+    <td>403</td>
+    <td>1135</td>
+    <td><span class="dot green"></span> OK</td>
+    <td>26%</td>
+    <td>10</td>
+  </tr></tbody>
+</table>
+</section>
+
+</body>
+</html>
