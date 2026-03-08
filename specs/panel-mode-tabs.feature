@@ -46,3 +46,17 @@ Feature: Panel mode tabs
     And I switch back to the "darts" panel
     Then the name field is empty
     And no previous responses are visible
+
+  @claude
+  Scenario Outline: Mode 2 ingame submit button is disabled during API call and re-enabled after
+    Given the user has selected the "<panel>" panel
+    And the user is in ingame mode
+    When the user triggers an ingame moment
+    Then the ingame submit button is disabled during the API call
+    And the ingame submit button is re-enabled after the call completes
+
+    Examples:
+      | panel    |
+      | football |
+      | golf     |
+      | cricket  |
