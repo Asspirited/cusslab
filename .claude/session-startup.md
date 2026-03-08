@@ -36,7 +36,7 @@ Key facts (detail in auth-ops.md):
 ### 2. PIPELINE (confirm green before any work)
 
 ```bash
-export NVM_DIR="/home/rodent/.nvm" && \. "/home/rodent/.nvm/nvm.sh" && cd /home/rodent/cusslab && npm run pipeline > /tmp/out.txt 2>&1 && cat /tmp/out.txt
+bash .claude/scripts/pipeline-report.sh > /tmp/out.txt && cat /tmp/out.txt
 ```
 
 Report the scorecard:

@@ -195,7 +195,7 @@ Run after BDD CLOSE. Closes the DDD outer loop. Only when something real has eme
 - Source: Evans — Domain-Driven Design, strategic and tactical patterns
 
 ### COMMIT SEQUENCE — never skip
-1. Run pipeline — must be green
+1. Run pipeline — must be green: `bash .claude/scripts/pipeline-report.sh > /tmp/out.txt && cat /tmp/out.txt`
 2. Write to file if any output > 20 lines — never paste to chat
 3. git add → git commit (descriptive message) → git push
 4. Confirm origin/main updated — report hash

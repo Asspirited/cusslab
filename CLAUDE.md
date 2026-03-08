@@ -109,3 +109,36 @@ Never assume npm, node, or correct working directory are available without this.
 - DynamoDB for ratings (replace window.storage)
 - GitHub Actions CI/CD pipeline
 - Jest unit tests for scoring engine
+
+---
+
+## Pre-agreed acceptance envelopes
+
+Work in these categories ships on green without session re-approval.
+This is the standing contract — renegotiate only on spec deviation or explicit flag from Rod.
+
+| Category | Ships when |
+|---|---|
+| `.claude/scripts/*` | Passes its own Gherkin spec and pipeline green |
+| Waste log entries | Format matches WL-NNN template, append-only confirmed |
+| Backlog CD3 updates | Score recalculated correctly, no item deleted |
+
+Gherkin for each envelope lives in `specs/`. Approval of the spec = approval of all future
+work inside that envelope. This is BDD applied at the process level, not just the code level.
+Source: .claude/practices/ci-cd.md; DORA metrics (lead time minimisation).
+
+## BASH OUTPUT RULE (WL-021 — HIGH COST)
+
+Claude Code collapses long output into non-readable blocks. Every command that produces output
+the user needs to read MUST be piped to /tmp/out.txt and catted:
+
+  some-command > /tmp/out.txt && cat /tmp/out.txt
+
+NEVER use bare grep/find/cat for output the user needs to see.
+NEVER use the Grep/Glob tools when the user needs to see raw output — use Bash with pipe-to-file.
+
+## FEATURE BRANCH RULE
+
+Keep feature branches small and short-lived. Merge to main as soon as work is complete
+and pipeline is green. Do not let feature branches sit unmerged.
+Trunk-based development is the target state.
