@@ -45,7 +45,7 @@ Feature: Golf Adventure Commentary Service
 
   @commentary-prompt
   Scenario: Day summary prompt contains score vs history when behind
-    Given a day summary context for tournament "duel_sun", player "watson", day 0, score -2, historical -1
+    Given a day summary context for tournament "duel_sun", player "watson", day 0, score 0, historical -1
     When the day prompt is built
     Then the commentary prompt contains "1 shot(s) BEHIND"
 
