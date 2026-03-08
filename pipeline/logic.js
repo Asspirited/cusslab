@@ -212,8 +212,10 @@ const DARTS_PREMONITION_AFFINITIES = {
   george:  { premonition: 0.60, prediction: 0.30, running_commentary: 0.50, retrospective_call: 0.70, collective_call: 0.60 },
   waddell: { premonition: 0.80, prediction: 0.20, running_commentary: 0.70, retrospective_call: 0.50, collective_call: 0.60 },
   part:    { premonition: 0.20, prediction: 0.80, running_commentary: 0.30, retrospective_call: 0.10, collective_call: 0.20, truth_teller: true },
-  studd:   { premonition: 0.40, prediction: 0.70, running_commentary: 0.60, retrospective_call: 0.20, collective_call: 0.40, truth_teller: true },
-  pyke:    { premonition: 0.50, prediction: 0.50, running_commentary: 0.50, retrospective_call: 0.30, collective_call: 0.30 },
+  studd:   { premonition: 0.40, prediction: 0.70, running_commentary: 0.60, retrospective_call: 0.20, collective_call: 0.45, truth_teller: true },
+  pyke:       { premonition: 0.60, prediction: 0.50, running_commentary: 0.50, retrospective_call: 0.30, collective_call: 0.30 },
+  harrington: { premonition: 0.30, prediction: 0.75, running_commentary: 0.40, retrospective_call: 0.20, collective_call: 0.20 },
+  wilson:     { premonition: 0.75, prediction: 0.20, running_commentary: 0.60, retrospective_call: 0.50, collective_call: 0.50 },
 };
 
 // A character is "eligible" for a mode if affinity > 0.5.

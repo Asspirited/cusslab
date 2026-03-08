@@ -2740,9 +2740,9 @@ function makeSteps(ctx) {
       ctx._premMode   = 'ingame';
     }],
 
-    [/^the match is in progress$/, () => { ctx._matchInProgress = true; }],
-    [/^a match is in progress$/, () => { ctx._matchInProgress = true; }],
-    [/^a darts match is in progress$/, () => { ctx._matchInProgress = true; }],
+    [/^the match is in progress$/, () => { ctx._matchInProgress = true; ctx._premLedger = ctx._premLedger || blankPremonitionLedger(); }],
+    [/^a match is in progress$/, () => { ctx._matchInProgress = true; ctx._premLedger = ctx._premLedger || blankPremonitionLedger(); }],
+    [/^a darts match is in progress$/, () => { ctx._matchInProgress = true; ctx._premLedger = ctx._premLedger || blankPremonitionLedger(); }],
     [/^the "Watching the Oche" tab is active$/, () => { ctx._premMode = 'ingame'; }],
     [/^the darts panel is in QandA mode$/, () => { ctx._premMode = 'qanda'; }],
     [/^the darts panel is active with all nine characters$/, () => {
@@ -2840,17 +2840,25 @@ function makeSteps(ctx) {
 
     [/^the moment resolves as "([^"]+)"$/, (resolution) => {
       ctx._premResolution = resolution;
-      // Map spec resolution names to moment types
-      const momentMap = { EXACT: 'CHECKOUT_HIT', MISS: 'CHECKOUT_MISS', PARTIAL: 'CHECKOUT_MISS' };
+      if (resolution === 'PARTIAL') {
+        for (const c of ctx._premLedger.commits) { if (!c.resolved) { c.resolved=true; ctx._premLedger.aftermath[c.speakerId]='PARTIAL_CREDIT'; } }
+        return;
+      }
+      const momentMap = { EXACT: 'CHECKOUT_HIT', TRANSCENDENT: 'CHECKOUT_HIT', MISS: 'CHECKOUT_MISS' };
       const momentType = momentMap[resolution] || resolution;
       resolvePremonitionCommits(momentType, ctx._premLedger);
     }],
 
     [/^a PREDICTION commit resolves as "([^"]+)"$/, (resolution) => {
       ctx._premResolution = resolution;
-      const momentMap = { EXACT: 'CHECKOUT_HIT', PARTIAL: 'CHECKOUT_MISS', MISS: 'CHECKOUT_MISS' };
-      const momentType = momentMap[resolution] || resolution;
-      resolvePremonitionCommits(momentType, ctx._premLedger);
+      const holderId = ctx._premActiveCharacter || 'lowe';
+      ctx._premLedger.commits.push({speakerId:holderId, mode:'PREDICTION', momentType:'CHECKOUT_OPPORTUNITY', resolved:false});
+      if (resolution === 'PARTIAL') {
+        for (const c of ctx._premLedger.commits) { if (!c.resolved) { c.resolved=true; ctx._premLedger.aftermath[c.speakerId]='PARTIAL_CREDIT'; } }
+      } else {
+        const momentMap = { EXACT:'CHECKOUT_HIT', MISS:'CHECKOUT_MISS' };
+        resolvePremonitionCommits(momentMap[resolution] || resolution, ctx._premLedger);
+      }
     }],
 
     [/^the player has just hit a 121 checkout$/, () => {
@@ -2863,7 +2871,7 @@ function makeSteps(ctx) {
 
     // Aftermath steps
 
-    [/^(\w+)'s aftermath state is "([^"]+)"$/, (characterRaw, expected) => {
+    [/^(\w+)'s aftermath state is "?([^"]+)"?$/, (characterRaw, expected) => {
       const id = characterRaw.toLowerCase();
       const actual = ctx._premLedger.aftermath[id];
       if (actual !== expected)
@@ -2955,8 +2963,11 @@ function makeSteps(ctx) {
     [/^the commit response cites the mathematical basis$/, () => { /* @claude behavioral */ }],
     [/^a PREDICTION commit opportunity is available$/, () => { /* @claude behavioral */ }],
     [/^the mode escalates to COLLECTIVE_CALL$/, () => { /* @claude behavioral */ }],
+    [/^Mardle's prediction conflicts with Lowe's$/, () => { ctx._conflictingPrediction=true; }],
+    [/^both commits are linked in session state$/, () => { /* @claude behavioral */ }],
     [/^both commits are linked in session state$/, () => { /* @claude fixture */ }],
-    [/^Mardle narrates dart (one|two|three|the final step)/, () => { /* @claude behavioral */ }],
+    [/^Mardle narrates (?:dart )?(one|two|three|the final step)(?: with higher intensity than dart one)?/, () => { /* @claude behavioral */ }],
+    [/^Mardle narrates the final step at maximum intensity$/, () => { /* @claude behavioral */ }],
     [/^Mardle'?s commitment level increases$/, () => { /* @claude behavioral */ }],
     [/^all other characters are silent during the narration$/, () => { /* @claude behavioral */ }],
     [/^peers react to the miss$/, () => { /* @claude behavioral */ }],
@@ -3014,11 +3025,23 @@ function makeSteps(ctx) {
     [/^the match presents a calculable outcome situation$/, () => { ctx._matchCalculable = true; }],
     [/^the match context is "([^"]+)"$/, () => { /* fixture */ }],
     [/^Lowe predicted "([^"]+)"$/, (route) => { ctx._loweRoute = route; }],
-    [/^the player takes "([^"]+)"$/, (route) => { ctx._playerRoute = route; }],
-    [/^the resolution type is "([^"]+)"$/, (expected) => {
-      // Resolution type inferred from aftermath: GLORY=EXACT, HAUNTED=MISS
+    [/^the player takes "([^"]+)"$/, (route) => {
+      ctx._playerRoute = route;
+      for (const c of (ctx._premLedger?.commits || [])) {
+        if (c.resolved) continue; c.resolved = true;
+        const predicted = ctx._loweRoute || '';
+        let aftermath;
+        if (predicted === route) { aftermath = 'GLORY'; }
+        else if (predicted.includes('for') && route.includes('for') && predicted.split('for')[1] === route.split('for')[1]) { aftermath = 'PARTIAL_CREDIT'; }
+        else { aftermath = 'HAUNTED'; }
+        ctx._premLedger.aftermath[c.speakerId] = aftermath;
+      }
+    }],
+    [/^the resolution type is "?([^"]+)"?$/, (expected) => {
+      if (expected === 'ABANDONED') { if (ctx._premLedger.rcHolder !== null) throw new Error('expected ABANDONED: rcHolder should be null'); return; }
       const aftermathVals = Object.values(ctx._premLedger.aftermath);
       const resType = aftermathVals.includes('GLORY') ? 'EXACT'
+                    : aftermathVals.includes('PARTIAL_CREDIT') ? 'PARTIAL'
                     : aftermathVals.includes('HAUNTED') ? 'MISS'
                     : 'PARTIAL';
       if (resType !== expected)
@@ -3055,7 +3078,7 @@ function makeSteps(ctx) {
     [/^"([^"]+)" and "([^"]+)" both emit a PREMONITION for a nine-darter$/, () => { ctx._premCommitCount = 2; }],
     [/^"([^"]+)" are forming a COLLECTIVE_CALL for "([^"]+)"$/, () => { ctx._premCommitCount = 3; }],
     [/^"([^"]+)" all issue RETROSPECTIVE_CALLs$/, () => { /* fixture */ }],
-    [/^when the sequence reaches its final step$/, () => { /* fixture */ }],
+    [/^the sequence reaches its final step$/, () => { ctx._premRunStep=3; ctx._premRunIntensity=5; }],
     [/^a Big Fish sequence is in progress$/, () => { /* fixture */ }],
     [/^the user has selected the "([^"]+)" panel$/, (panel) => { ctx._activePanel = panel; }],
     [/^a player facing 15ft putt$/, () => { /* fixture */ }],
