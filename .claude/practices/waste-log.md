@@ -928,3 +928,29 @@ Status: CLOSED
 - Cost impact: Low
 - Tags: #knowledge-loss #phantom
 - Status: Closed — entries removed from CLAUDE.md, worker.feature confirmed complete (10/10 passing)
+
+---
+
+## WL-062
+- Item: Worker ANTHROPIC_API_KEY secret invalid again — live site returning 401 "API key rejected"
+- Symptom: Rod opens live site, all panel calls return 401. "Fixed for good" claim from previous session was wrong — process fix (API token auth flow) was confused with root cause fix.
+- Suspected cause: Architecture flaw — Rod was relying on the worker secret as primary auth for his own use. Worker secrets are ephemeral (revocable, expirable). Design intention was always: worker secret = unauthenticated demo fallback only; Settings key = Rod's normal operating mode. Mental model was never corrected.
+- Session: 2026-03-08
+- Time lost: ~30 min this session + 60 min across 5 prior sessions (WL-060)
+- Cost impact: High (recurring live-site breakage)
+- Delay: None to features — but recurring trust damage
+- Tags: #api-friction #recurring #architecture-flaw #live-site #high-cost
+- Status: Mitigated — Rod saving own key in Settings (bypasses worker secret entirely). Worker canary added to pipeline to warn on stale secret at session start. Worker secret remains as demo fallback only.
+- **5 Whys root cause:** The architecture assumes a worker secret is permanent. It isn't. True fix is not rotating the secret faster — it is not depending on it for Rod's own use.
+
+---
+
+## WL-063
+- Item: Settings & API Key tab hidden in sidebar on live site — `display:none` hardcoded, `settings` missing from `SKIN_CONFIGS.consultant.tabs`
+- Symptom: Rod could not find the Settings tab to enter his API key — tab not visible in sidebar
+- Suspected cause: Tab was deliberately hidden at some point (possibly when UI was being restructured). `display:none` was never removed. `settings` was omitted from `consultant.tabs` so the skin system never unhid it. The pipeline audit passes because it only checks that tabs *in* the skin array have panel elements — it does not check that `settings` is *in* the skin array.
+- Session: 2026-03-08
+- Time lost: ~10 min
+- Cost impact: Low
+- Tags: #live-site #ui #hidden-tab #regression
+- Status: Closed — `settings` added to `SKIN_CONFIGS.consultant.tabs`; `display:none` removed from sidebar tab element

@@ -34,6 +34,7 @@ fs.writeFileSync(COUNTER_FILE, String(session));
 // ── Pipeline steps ────────────────────────────────────────────────────────────
 
 const STEPS = [
+  { key: 'workerCanary', label: 'Worker Canary', script: 'pipeline/worker-canary.js', warnOnly: true },
   { key: 'uiAudit',    label: 'UI Audit',    script: 'pipeline/ui-audit.js'    },
   { key: 'browserSim', label: 'Browser Sim', script: 'pipeline/browser-sim.js' },
   { key: 'unitTests',  label: 'Unit Tests',  script: 'pipeline/unit-runner.js' },
@@ -110,7 +111,7 @@ for (const step of STEPS) {
   const extra = parseStepOutput(step.key, proc.stdout || '');
   stepResults[step.key] = { durationMs, status: ok ? 'pass' : 'fail', ...extra };
 
-  if (!ok) {
+  if (!ok && !step.warnOnly) {
     overallPass = false;
     break; // fail fast — still write the build record below
   }

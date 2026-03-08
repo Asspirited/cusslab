@@ -143,3 +143,29 @@ Every single bug has the same Why 5:
 > Implementation was written before behaviour was specified. Tests confirmed code rather than defined contracts.
 
 The fix is behavioural, not technical. Write the test first. Always.
+
+---
+
+## Bug 8 — Worker ANTHROPIC_API_KEY secret invalid (WL-062, recurring from WL-060)
+
+**What Rod saw:** Live site returning 401 "API key rejected." Claude had previously said "fixed for good."
+
+**Why 1:** The sk-ant-... key stored as Cloudflare Worker secret was revoked or expired.
+
+**Why 2:** Anthropic API keys are not permanent. They can be revoked, expired by policy, or deactivated on billing events.
+
+**Why 3:** There was no detection — the only way to discover the key had expired was when the live site broke and Rod noticed.
+
+**Why 4:** Rod was relying on the worker secret as primary auth for his own use of the live site. The Settings panel exists precisely so users can supply their own key and bypass the worker secret entirely — but Rod had not been using it.
+
+**Why 5:** "Fixed for good" (WL-060) fixed the process — how to push a new key. It did not fix the architecture — Rod depending on an ephemeral secret as primary auth. Process fix was confused with root cause fix.
+
+**Root cause:** Architectural dependency on an ephemeral secret for primary use. The correct operating mode (Rod's key in Settings) was never established.
+
+**Fix applied:**
+1. Rod saves own sk-ant-... key in Settings panel — site now works regardless of worker secret state
+2. Worker canary added to pipeline — warns at session start if worker secret is stale
+3. Worker secret demoted to demo fallback only in mental model and CLAUDE.md
+4. "Fixed for good" language banned — process fixes are not root cause fixes
+
+**Test added at:** Why 3 — worker-canary.js runs at pipeline start, warns on 401/403/500
