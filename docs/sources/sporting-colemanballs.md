@@ -486,16 +486,16 @@ These are seeds. Claude should generate variations informed by the pattern, not 
 
 | Character | Preferred types | Typical degree | Typical delivery |
 |---|---|---|---|
-| Sebastian | ATTEMPT_IRONY, ATTEMPT_PARADOX | plausible_miss | confident_wrongness |
-| Partridge | ATTEMPT_OXYMORON, ATTEMPT_LITERALLY | catastrophic_miss | ridiculous |
-| Roy | ATTEMPT_TAUTOLOGY | catastrophic_miss | completely_sincere |
-| Prof Cox | ATTEMPT_METAPHOR, ATTEMPT_PARADOX | almost_correct | accidental_profundity |
-| Mystic | ATTEMPT_IRONY, ATTEMPT_PARADOX | catastrophic_miss + correct (both, simultaneously) | ridiculous |
-| Pint of Harold | ATTEMPT_LITERALLY | catastrophic_miss | confident_wrongness |
-| Faldo | ATTEMPT_TAUTOLOGY, ATTEMPT_IRONY | plausible_miss | lying |
-| Radar | ATTEMPT_LITERALLY, ATTEMPT_OXYMORON | catastrophic_miss | ridiculous |
-| Dougherty | ATTEMPT_PARADOX | almost_correct | accidental_profundity |
-| Partridge (sports) | ATTEMPT_METAPHOR | catastrophic_miss | ridiculous |
+| Sebastian | ATTEMPT_IRONY, ATTEMPT_ERUDITION, ATTEMPT_PARADOX | plausible_miss | confident_wrongness |
+| Partridge | ATTEMPT_OXYMORON, ATTEMPT_LITERALLY, ATTEMPT_ERUDITION | catastrophic_miss | ridiculous |
+| Roy | ATTEMPT_TAUTOLOGY, ATTEMPT_ERUDITION (simple concepts) | catastrophic_miss | completely_sincere |
+| Prof Cox | ATTEMPT_ERUDITION (knows it, still wrong), ATTEMPT_METAPHOR, ATTEMPT_PARADOX | almost_correct → despair | accidental_profundity |
+| Mystic | ATTEMPT_IRONY, ATTEMPT_PARADOX, ATTEMPT_ERUDITION (quantum) | catastrophic_miss + correct (both, simultaneously) | ridiculous |
+| Pint of Harold | ATTEMPT_LITERALLY, ATTEMPT_ERUDITION (pub-level concepts) | catastrophic_miss | confident_wrongness |
+| Faldo | ATTEMPT_TAUTOLOGY, ATTEMPT_IRONY, ATTEMPT_ERUDITION (biomechanics) | plausible_miss | lying |
+| Radar | ATTEMPT_LITERALLY, ATTEMPT_OXYMORON, ATTEMPT_ERUDITION (physics of sport) | catastrophic_miss | ridiculous |
+| Dougherty | ATTEMPT_PARADOX, ATTEMPT_ERUDITION (quietly) | almost_correct | accidental_profundity |
+| Partridge (sports) | ATTEMPT_METAPHOR, ATTEMPT_ERUDITION (Sun Tzu) | catastrophic_miss | ridiculous |
 
 ### The Alanis Rule
 If a character ATTEMPT_IRONYs and the user points out it wasn't ironic, the character
