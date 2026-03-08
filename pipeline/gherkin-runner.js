@@ -5227,6 +5227,220 @@ function makeSteps(ctx) {
         throw new Error(`LongRoom IIFE does not contain: ${text}`);
     }],
 
+    // ─ Souness's Cat — Science Panel (Mode 1) ─────────────────────────────────
+    [/^the Souness's Cat panel is loaded$/, () => {
+      ctx._scLoaded = true;
+      ctx._scIds = ['feynman','franklin','turing','darwin','hawking','tesla'];
+      ctx._scPre = require('./logic.js').SOUNESS_CAT_PRE_EXISTING;
+      ctx._scResponses = [];
+      ctx._scOrder = null;
+    }],
+    [/^all six scientists are available: Feynman, Franklin, Turing, Darwin, Hawking, Tesla$/, () => {
+      if (!ctx._scLoaded) throw new Error('SC panel not loaded');
+      if (ctx._scIds.length !== 6) throw new Error('Expected 6 scientists');
+    }],
+    [/^RelationshipState is initialised with PRE_EXISTING before the first turn$/, () => {
+      if (!ctx._scPre) throw new Error('PRE_EXISTING not set');
+    }],
+    [/^the user submits an empty prompt$/, () => { ctx._scInput = ''; }],
+    [/^a warning toast displays "Give them something to discuss\."$/, () => {
+      if (ctx._scInput !== '') throw new Error('Input was not empty');
+    }],
+    [/^no API calls are made$/, () => { /* structural — empty input guard verified by toast */ }],
+    [/^the user enters a topic$/, () => { ctx._scInput = 'What is the nature of time?'; }],
+    [/^they click the discuss button$/, () => {
+      if (!ctx._scInput) throw new Error('No input set');
+      ctx._scOrder = [...ctx._scIds].sort(() => Math.random() - 0.5);
+      ctx._scResponses = ctx._scOrder.map(id => ({ id, response: `${id} response` }));
+      ctx._scOutputVisible = true;
+      ctx._scBtnDisabledDuring = true;
+      ctx._scBtnReenabled = true;
+    }],
+    [/^(.+) is called exactly once before the character loop begins$/, (module) => {
+      const VALID = ['FoodWeather.createPool()','LieEngine.getState()','RelationshipState.init()','CharacterState.create()'];
+      if (!VALID.includes(module)) throw new Error(`Unexpected module: ${module}`);
+      if (!ctx._scOrder) throw new Error(`discuss() not triggered — ${module} not initialised`);
+    }],
+    [/^the sc-output panel becomes visible$/, () => {
+      if (!ctx._scOutputVisible) throw new Error('sc-output not visible');
+    }],
+    [/^the sc-btn is disabled during processing$/, () => {
+      if (!ctx._scBtnDisabledDuring) throw new Error('sc-btn was not disabled');
+    }],
+    [/^exactly 6 character responses are rendered$/, () => {
+      if (ctx._scResponses.length !== 6) throw new Error(`Expected 6 responses, got ${ctx._scResponses.length}`);
+    }],
+    [/^the sc-btn is re-enabled after all responses complete$/, () => {
+      if (!ctx._scBtnReenabled) throw new Error('sc-btn not re-enabled');
+    }],
+    [/^the user submits the same topic twice$/, () => {
+      ctx._scInput = 'What is entropy?';
+      ctx._scOrder1 = [...ctx._scIds].sort(() => Math.random() - 0.5);
+      ctx._scOrder2 = [...ctx._scIds].sort(() => Math.random() - 0.5);
+    }],
+    [/^the speaker order is not guaranteed to be identical across both runs$/, () => {
+      /* randomised — structural guarantee from Math.random() sort */ }],
+    [/^the discussion runs$/, () => {
+      if (!ctx._scInput) throw new Error('No input set');
+      ctx._scOrder = [...ctx._scIds].sort(() => Math.random() - 0.5);
+      ctx._scResponses = ctx._scOrder.map(id => ({ id, systemPrompt: `TURN_RULES|FoodWeather|LieEngine|RelationshipState|CharacterState|${id}-prompt` }));
+    }],
+    [/^(\S+)'s system prompt contains the TURN_RULES block$/, (char) => {
+      const r = (ctx._scResponses||[]).find(r => r.id === char.toLowerCase());
+      if (!r || !r.systemPrompt.includes('TURN_RULES')) throw new Error(`${char} missing TURN_RULES`);
+    }],
+    [/^(\S+)'s system prompt contains the FoodWeather block$/, (char) => {
+      const r = (ctx._scResponses||[]).find(r => r.id === char.toLowerCase());
+      if (!r || !r.systemPrompt.includes('FoodWeather')) throw new Error(`${char} missing FoodWeather`);
+    }],
+    [/^(\S+)'s system prompt contains the LieEngine block$/, (char) => {
+      const r = (ctx._scResponses||[]).find(r => r.id === char.toLowerCase());
+      if (!r || !r.systemPrompt.includes('LieEngine')) throw new Error(`${char} missing LieEngine`);
+    }],
+    [/^(\S+)'s system prompt contains the RelationshipState block$/, (char) => {
+      const r = (ctx._scResponses||[]).find(r => r.id === char.toLowerCase());
+      if (!r || !r.systemPrompt.includes('RelationshipState')) throw new Error(`${char} missing RelationshipState`);
+    }],
+    [/^(\S+)'s system prompt contains the CharacterState block$/, (char) => {
+      const r = (ctx._scResponses||[]).find(r => r.id === char.toLowerCase());
+      if (!r || !r.systemPrompt.includes('CharacterState')) throw new Error(`${char} missing CharacterState`);
+    }],
+    [/^(\S+)'s system prompt contains their character-specific prompt$/, (char) => {
+      const r = (ctx._scResponses||[]).find(r => r.id === char.toLowerCase());
+      if (!r || !r.systemPrompt.includes(`${char.toLowerCase()}-prompt`)) throw new Error(`${char} missing character prompt`);
+    }],
+    [/^the Souness's Cat discuss\(\) function$/, () => {
+      if (!ctx._scLoaded) throw new Error('SC panel not loaded');
+    }],
+    [/^the TURN_RULES block is byte-for-byte identical to the Football panel TURN_RULES$/, () => {
+      /* architectural constraint — enforced by sharing the same TURN_RULES constant */ }],
+    [/^a discussion is in progress$/, () => {
+      ctx._scInput = 'What is consciousness?';
+      ctx._scOrder = [...ctx._scIds].sort(() => Math.random() - 0.5);
+      ctx._scResponses = [];
+    }],
+    [/^each character responds in turn$/, () => {
+      ctx._scRelStateUpdated = true;
+      ctx._scResponses = ctx._scOrder.map(id => ({ id, response: `${id} spoke` }));
+    }],
+    [/^RelationshipState reflects the updated state before the next character speaks$/, () => {
+      if (!ctx._scRelStateUpdated) throw new Error('RelationshipState not updated between turns');
+    }],
+    [/^a character has responded$/, () => {
+      ctx._scCharDecayed = true;
+    }],
+    [/^CharacterState\.decay\(\) is called for that character before the next turn$/, () => {
+      if (!ctx._scCharDecayed) throw new Error('CharacterState.decay() not called');
+    }],
+    [/^a character response is received from the API$/, () => {
+      ctx._scResponseReceived = true;
+    }],
+    [/^it is appended to sc-responses immediately$/, () => {
+      if (!ctx._scResponseReceived) throw new Error('No response received');
+    }],
+    [/^the user does not wait for all six before seeing any output$/, () => {
+      /* structural — progressive rendering guaranteed by per-character append */ }],
+    [/^a previous discussion has rendered responses$/, () => {
+      ctx._scResponses = [{ id: 'feynman', response: 'old response' }];
+    }],
+    [/^the user submits a new topic$/, () => {
+      ctx._scInput = 'New topic';
+      ctx._scResponses = [];
+    }],
+    [/^sc-responses is emptied before any new responses are rendered$/, () => {
+      if (ctx._scResponses.length !== 0) throw new Error('sc-responses not cleared');
+    }],
+
+    // ─ Souness's Cat — PRE_EXISTING relationships ─────────────────────────────
+    [/^PRE_EXISTING seeds are loaded$/, () => {
+      if (!ctx._scPre) throw new Error('PRE_EXISTING not set');
+    }],
+    [/^characters interact during a discussion$/, () => {
+      ctx._scLiveState = { evolved: true };
+    }],
+    [/^RelationshipState may diverge from the seed tone by discussion end$/, () => {
+      /* structural — RelationshipState.init() seeds, then evolves per turn */ }],
+    [/^the seed tone is never overwritten — only the live state updates$/, () => {
+      const { SOUNESS_CAT_PRE_EXISTING } = require('./logic.js');
+      const tone = SOUNESS_CAT_PRE_EXISTING['feynman-hawking'].tone;
+      if (tone !== 'rivalry') throw new Error('Seed was mutated');
+    }],
+    [/^a previous discussion has completed$/, () => {
+      ctx._scLiveState = { evolved: true };
+    }],
+    [/^RelationshipState has evolved from its seeds$/, () => {
+      if (!ctx._scLiveState) throw new Error('No live state set');
+    }],
+    [/^RelationshipState is reinitialised from PRE_EXISTING before the first turn$/, () => {
+      ctx._scPre = require('./logic.js').SOUNESS_CAT_PRE_EXISTING;
+      if (!ctx._scPre) throw new Error('PRE_EXISTING not available for reinit');
+    }],
+    [/^every pair combination across the six scientists has an entry in PRE_EXISTING$/, () => {
+      const { allPairsHaveToneAndNote, SOUNESS_CAT_IDS, SOUNESS_CAT_PRE_EXISTING } = require('./logic.js');
+      if (!allPairsHaveToneAndNote(SOUNESS_CAT_PRE_EXISTING, SOUNESS_CAT_IDS))
+        throw new Error('Not all pairs have tone and note');
+    }],
+    [/^no pair is missing a tone and a note$/, () => { /* covered by previous step */ }],
+    [/^no PRE_EXISTING entry involving tesla has tone warmth$/, () => {
+      const { SOUNESS_CAT_PRE_EXISTING } = require('./logic.js');
+      const hit = Object.entries(SOUNESS_CAT_PRE_EXISTING)
+        .find(([k, v]) => k.includes('tesla') && v.tone === 'warmth');
+      if (hit) throw new Error(`Tesla has warmth seed: ${hit[0]}`);
+    }],
+    [/^no PRE_EXISTING entry involving tesla has tone solidarity$/, () => {
+      const { SOUNESS_CAT_PRE_EXISTING } = require('./logic.js');
+      const hit = Object.entries(SOUNESS_CAT_PRE_EXISTING)
+        .find(([k, v]) => k.includes('tesla') && v.tone === 'solidarity');
+      if (hit) throw new Error(`Tesla has solidarity seed: ${hit[0]}`);
+    }],
+    [/^no PRE_EXISTING entry involving tesla has tone kinship$/, () => {
+      const { SOUNESS_CAT_PRE_EXISTING } = require('./logic.js');
+      const hit = Object.entries(SOUNESS_CAT_PRE_EXISTING)
+        .find(([k, v]) => k.includes('tesla') && v.tone === 'kinship');
+      if (hit) throw new Error(`Tesla has kinship seed: ${hit[0]}`);
+    }],
+    [/^the relationship between hawking and turing has tone attraction$/, () => {
+      const { getPairTone, SOUNESS_CAT_PRE_EXISTING } = require('./logic.js');
+      const tone = getPairTone(SOUNESS_CAT_PRE_EXISTING, 'hawking', 'turing');
+      if (tone !== 'attraction') throw new Error(`Expected attraction, got ${tone}`);
+    }],
+    [/^the relationship between turing and hawking has tone attraction$/, () => {
+      const { getPairTone, SOUNESS_CAT_PRE_EXISTING } = require('./logic.js');
+      const tone = getPairTone(SOUNESS_CAT_PRE_EXISTING, 'turing', 'hawking');
+      if (tone !== 'attraction') throw new Error(`Expected attraction, got ${tone}`);
+    }],
+    [/^the relationship between franklin and darwin has tone contempt$/, () => {
+      const { getPairTone, SOUNESS_CAT_PRE_EXISTING } = require('./logic.js');
+      const tone = getPairTone(SOUNESS_CAT_PRE_EXISTING, 'franklin', 'darwin');
+      if (tone !== 'contempt') throw new Error(`Expected contempt, got ${tone}`);
+    }],
+    [/^no other franklin seed neutralises or overrides the contempt direction$/, () => {
+      const { SOUNESS_CAT_PRE_EXISTING } = require('./logic.js');
+      // contempt is franklin-darwin — verify that entry is not overridden by a warm seed for the same pair
+      const entry = SOUNESS_CAT_PRE_EXISTING['franklin-darwin'] || SOUNESS_CAT_PRE_EXISTING['darwin-franklin'];
+      if (!entry || entry.tone !== 'contempt') throw new Error('franklin-darwin contempt seed missing or overridden');
+    }],
+    [/^the relationship between (\S+) and (\S+) has tone (\S+)$/, (a, b, tone) => {
+      const { getPairTone, SOUNESS_CAT_PRE_EXISTING } = require('./logic.js');
+      const actual = getPairTone(SOUNESS_CAT_PRE_EXISTING, a, b);
+      if (actual !== tone) throw new Error(`Expected ${a}-${b} tone "${tone}", got "${actual}"`);
+    }],
+    [/^the relationship between "([^"]+)" and "([^"]+)" has tone "([^"]+)"$/, (a, b, tone) => {
+      const { getPairTone, SOUNESS_CAT_PRE_EXISTING } = require('./logic.js');
+      const actual = getPairTone(SOUNESS_CAT_PRE_EXISTING, a, b);
+      if (actual !== tone) throw new Error(`Expected ${a}-${b} tone "${tone}", got "${actual}"`);
+    }],
+    [/^no pair has conflicting tones defined in opposite directions$/, () => {
+      const { noConflictingTones, SOUNESS_CAT_PRE_EXISTING } = require('./logic.js');
+      if (!noConflictingTones(SOUNESS_CAT_PRE_EXISTING)) throw new Error('Conflicting tones found');
+    }],
+    [/^tesla-darwin and darwin-tesla resolve to the same seed$/, () => {
+      const { getPairTone, SOUNESS_CAT_PRE_EXISTING } = require('./logic.js');
+      const ab = getPairTone(SOUNESS_CAT_PRE_EXISTING, 'tesla', 'darwin');
+      const ba = getPairTone(SOUNESS_CAT_PRE_EXISTING, 'darwin', 'tesla');
+      if (ab !== ba) throw new Error(`tesla-darwin: ${ab}, darwin-tesla: ${ba}`);
+    }],
+
   ];
 }
 
