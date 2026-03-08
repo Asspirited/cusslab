@@ -4539,6 +4539,157 @@ function makeSteps(ctx) {
       }
     }],
 
+    // ── Golf Adventure Commentary (specs/golf-adventure-commentary.feature) ──
+
+    [/^the commentary service is loaded$/, () => {
+      const { TOURNAMENTS }        = require('../golf-data/tournaments.js');
+      const { CHARACTERS }         = require('../golf-data/characters.js');
+      const { CommentaryService }  = require('../golf-service/commentary-service.js');
+      ctx._gacs = { TOURNAMENTS, CHARACTERS, CommentaryService };
+    }],
+
+    // Shot context helpers
+    [/^a shot context for tournament "([^"]+)", player "([^"]+)", quality "([^"]+)", roll (\d+)$/, (tid, pid, quality, roll) => {
+      const tournament = ctx._gacs.TOURNAMENTS.find(t => t.id === tid);
+      const player     = tournament.players.find(p => p.id === pid);
+      const hole       = tournament.holes[0];
+      const shot       = { risk: 2, thresh: 3, label: 'safe iron' };
+      ctx._gacsCtx = {
+        tournament, player, hole, shot,
+        quality, roll: Number(roll),
+        desc: 'found the fairway',
+        yourScore: 0, day: 0, composure: 10,
+        atmosphere: 'NORMAL',
+        selectedPanel: ['faldo', 'mcginley'],
+        panelState: { playerNickname: null, runningJokes: [], atmosphere_escalation: 0, panelFeuds: {} },
+        history: [],
+        characterFiles: {},
+        characters: ctx._gacs.CHARACTERS,
+      };
+    }],
+    [/^the panelState has playerNickname "([^"]+)"$/, (nick) => {
+      ctx._gacsCtx.panelState.playerNickname = nick;
+    }],
+
+    // Shot prompt
+    [/^the shot prompt is built$/, () => {
+      ctx._gacsPrompt = ctx._gacs.CommentaryService.buildShotPrompt(ctx._gacsCtx);
+    }],
+    [/^the commentary prompt contains the tournament name "([^"]+)"$/, (name) => {
+      if (!ctx._gacsPrompt.includes(name))
+        throw new Error(`Prompt missing tournament name "${name}"`);
+    }],
+    [/^the commentary prompt contains the player name "([^"]+)"$/, (name) => {
+      if (!ctx._gacsPrompt.includes(name))
+        throw new Error(`Prompt missing player name "${name}"`);
+    }],
+    [/^the commentary prompt contains "([^"]+)"$/, (text) => {
+      if (!ctx._gacsPrompt.includes(text))
+        throw new Error(`Prompt missing "${text}"`);
+    }],
+    [/^the commentary prompt does not contain "([^"]+)"$/, (text) => {
+      if (ctx._gacsPrompt.includes(text))
+        throw new Error(`Prompt should not contain "${text}"`);
+    }],
+
+    // Day summary context helpers
+    [/^a day summary context for tournament "([^"]+)", player "([^"]+)", day (\d+), score (-?\d+), historical (-?\d+)$/, (tid, pid, day, score, hist) => {
+      const tournament = ctx._gacs.TOURNAMENTS.find(t => t.id === tid);
+      const player     = tournament.players.find(p => p.id === pid);
+      ctx._gacsCtx = {
+        tournament, player,
+        day: Number(day), yourScore: Number(score),
+        historicalScore: Number(hist),
+        composure: 10, holeResults: [],
+        holesPerDay: 3,
+        selectedPanel: ['faldo', 'mcginley'],
+        panelState: { playerNickname: null, runningJokes: [], atmosphere_escalation: 0, panelFeuds: {} },
+        history: [],
+        characterFiles: {},
+        characters: ctx._gacs.CHARACTERS,
+      };
+    }],
+    [/^the day prompt is built$/, () => {
+      ctx._gacsPrompt = ctx._gacs.CommentaryService.buildDayPrompt(ctx._gacsCtx);
+    }],
+
+    // Response parsing
+    [/^a raw API response of '([^']*)'$/, (raw) => {
+      ctx._gacsRaw = raw.replace(/\\n/g, '\n');
+    }],
+    [/^the shot response is parsed$/, () => {
+      ctx._gacsLines = ctx._gacs.CommentaryService.parseShotResponse(ctx._gacsRaw);
+    }],
+    [/^the result has (\d+) lines?$/, (n) => {
+      if (ctx._gacsLines.length !== Number(n))
+        throw new Error(`Expected ${n} lines, got ${ctx._gacsLines.length}`);
+    }],
+    [/^line (\d+) has speaker "([^"]+)"$/, (i, speaker) => {
+      if (ctx._gacsLines[Number(i)]?.speaker !== speaker)
+        throw new Error(`Line ${i} speaker: expected "${speaker}", got "${ctx._gacsLines[Number(i)]?.speaker}"`);
+    }],
+    [/^line (\d+) has text "([^"]+)"$/, (i, text) => {
+      if (ctx._gacsLines[Number(i)]?.text !== text)
+        throw new Error(`Line ${i} text: expected "${text}", got "${ctx._gacsLines[Number(i)]?.text}"`);
+    }],
+
+    // API contract — stub client
+    [/^a stub apiClient that records its call$/, () => {
+      ctx._gacsStubCall = null;
+      ctx._gacsApiClient = {
+        call: async (req) => {
+          ctx._gacsStubCall = req;
+          return { content: [{ text: '[{"speaker":"Faldo","text":"Adequate."}]' }] };
+        }
+      };
+    }],
+    [/^a stub apiClient that throws$/, () => {
+      ctx._gacsApiClient = {
+        call: async () => { throw new Error('Network failure'); }
+      };
+    }],
+    [/^CommentaryService\.shot is called$/, async () => {
+      ctx._gacsLines = await ctx._gacs.CommentaryService.shot(ctx._gacsCtx, ctx._gacsApiClient);
+    }],
+    [/^the apiClient received model "([^"]+)"$/, (model) => {
+      if (ctx._gacsStubCall?.model !== model)
+        throw new Error(`Expected model "${model}", got "${ctx._gacsStubCall?.model}"`);
+    }],
+    [/^the apiClient received max_tokens (\d+)$/, (n) => {
+      if (ctx._gacsStubCall?.max_tokens !== Number(n))
+        throw new Error(`Expected max_tokens ${n}, got ${ctx._gacsStubCall?.max_tokens}`);
+    }],
+
+    // Pure helpers
+    [/^a character markdown with sections P1 wound, P2 mask, P3 voice, P4 escalation, P5 comic$/, () => {
+      ctx._gacsMd = [
+        '## P1 wound\nDeep wound content here.',
+        '## P2 mask\nMask content here.',
+        '## P3 voice\nVoice content here.',
+        '## P4 escalation\nEscalation content here.',
+        '## P5 comic\nComic content here.',
+      ].join('\n');
+    }],
+    [/^a character markdown with 10000 characters of content$/, () => {
+      const section = '## P1 wound\n' + 'x'.repeat(9980);
+      ctx._gacsMd = section;
+    }],
+    [/^extractCharacterContext is called$/, () => {
+      ctx._gacsExtracted = ctx._gacs.CommentaryService.extractCharacterContext(ctx._gacsMd);
+    }],
+    [/^the result contains section "([^"]+)"$/, (sec) => {
+      if (!ctx._gacsExtracted.includes(`## ${sec}`))
+        throw new Error(`Expected section "## ${sec}" in extracted context`);
+    }],
+    [/^the result does not contain section "([^"]+)"$/, (sec) => {
+      if (ctx._gacsExtracted.includes(`## ${sec}`))
+        throw new Error(`Section "## ${sec}" should not be in extracted context`);
+    }],
+    [/^the result length is at most (\d+)$/, (n) => {
+      if (ctx._gacsExtracted.length > Number(n))
+        throw new Error(`Expected length ≤ ${n}, got ${ctx._gacsExtracted.length}`);
+    }],
+
   ];
 }
 
