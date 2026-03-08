@@ -226,6 +226,357 @@ const TOURNAMENTS = [
        modifiers:{thresholdAdd:1,compCost:2,atmosphereNote:"Muirfield 17 — Trevino's chip-in for par happened on this green. Jacklin three-putted watching it. The Open Championship changed hands here. The hole remembers this."}},
     ]
   }
+  ,
+  // ── Added BL-017 ──────────────────────────────────────────────────────────
+
+  {
+    id:"seve_1984", year:1984, eraClass:"era-1984", lbClass:"lb-1984",
+    name:"Seve's St Andrews",
+    course:"St Andrews — Old Course", country:"Fife, Scotland",
+    type:"major", badge:"badge-major", days:4,
+    lore:"Seve Ballesteros needed Tom Watson to bogey the Road Hole to win. Watson bogeyed the Road Hole. Seve walked up the 18th with his fist raised, a hundred thousand people moving with him. He was 27 years old and this was the peak of everything.",
+    players:[
+      { id:"seve", name:"Seve Ballesteros", abbr:"SBL",
+        desc:"Shot 69-68-70-69. Waited in the scorer's hut while Watson played 17. Watson bogeyed. The fist pump became the defining image of Open Championship golf.",
+        wound:"The weight of Spain. The weight of romance. The whole game watching him walk.",
+        historicalScores:[-3,-6,-10,-15] },
+      { id:"watson_84", name:"Tom Watson", abbr:"TWN",
+        desc:"Needed to birdie the last two holes to win. Bogeyed 17. Never won another major.",
+        wound:"The Road Hole is on the course every year. It was there in 1984.",
+        historicalScores:[-2,-5,-9,-13] }
+    ],
+    field:[
+      {name:"Bernhard Langer",    scores:[-1,-4,-7,-11]},
+      {name:"Fred Couples",       scores:[0,-2,-5,-9]},
+      {name:"Greg Norman",        scores:[1,-1,-4,-8]},
+      {name:"Mark O'Meara",       scores:[2,0,-2,-6]},
+    ],
+    holes:[
+      {id:"sa1",  name:"1st — Burn",        par:4,yards:376, hazard:"Swilcan Burn front of green",
+       lore:"The widest fairway in championship golf and the Swilcan Burn to catch the short shot. Seve birdied in Round 4, sensing the day.",
+       incidents:["Seve birdied the 1st in Round 4 and never looked back.","The Swilcan Burn is only a problem for those who don't commit. Seve committed."],
+       events:["gallery_enormous","first_tee_announce"], pressureRating:1},
+      {id:"sa17", name:"17th — Road Hole",  par:4,yards:461, hazard:"Road Hole bunker, road and wall behind",
+       lore:"The most difficult par 4 in links golf. The Road Hole bunker is a one-way street. Tom Watson needed birdie here in 1984 to catch Seve. He bogeyed.",
+       incidents:[
+         "In 1984, Watson needed birdie here to force a playoff with Seve. He bogeyed instead.",
+         "The Road Hole bunker has ended more Open Championships than any other single hazard. The only escape is straight up — and the ball rolls back.",
+         "Seve watched Watson play this hole from the scorer's hut. The hut was completely silent."
+       ],
+       events:["road_hole_bunker"], pressureRating:4,
+       modifiers:{thresholdAdd:2,compCost:1,atmosphereNote:"The Road Hole bunker is a one-way journey. Watson needed birdie here in 1984 to catch Seve. He bogeyed. Seve heard the gallery's reaction from the scorer's hut."}},
+      {id:"sa18", name:"18th — Tom Morris", par:4,yards:357, hazard:"Valley of Sin, Swilcan Bridge, the watching world",
+       lore:"The most famous walk in golf. Seve crossed the Swilcan Bridge, raised his fist, and the gallery roared. It lasted ninety seconds. He later said he had never heard anything like it.",
+       incidents:[
+         "Seve's fist pump on the 18th fairway at St Andrews in 1984 is one of the most reproduced images in golf history.",
+         "The Valley of Sin catches anyone who goes timid. Seve did not go timid.",
+         "The walk from Swilcan Bridge to the green is 200 yards. Every step was history in 1984."
+       ],
+       events:["historic_moment","gallery_enormous"], pressureRating:3,
+       modifiers:{atmosphereNote:"The 18th at St Andrews is golf's cathedral. In 1984 it belonged entirely to Seve. The fist pump was real. The gallery made a noise he remembered until he died."}},
+    ]
+  },
+  {
+    id:"faldo_1996", year:1996, eraClass:"era-1996", lbClass:"lb-1996",
+    name:"Norman's Collapse — Augusta 1996",
+    course:"Augusta National", country:"Georgia, USA",
+    type:"collapse", badge:"badge-collapse", days:4,
+    lore:"Greg Norman led by six shots going into the final round of The Masters. He shot 78. Nick Faldo shot 67 and won his third green jacket. Norman was gracious in defeat, which made it worse to watch.",
+    players:[
+      { id:"norman", name:"Greg Norman", abbr:"GRN",
+        desc:"Led by six shots entering Sunday. Bogeyed 9, 10, 11. Doubled 12. Dropped seven shots in eleven holes. Shot 78. Lost by five.",
+        wound:"Six shots was not enough. Nothing is ever quite enough.",
+        historicalScores:[-5,-11,-13,-7] },
+      { id:"faldo_96", name:"Nick Faldo", abbr:"NFA",
+        desc:"Was six behind. Shot 67 on Sunday. Closed with birdies on 15, 16, 17. Won by five.",
+        wound:"Beating a man who is already falling is still winning. He knew that.",
+        historicalScores:[-1,-5,-9,-14] }
+    ],
+    field:[
+      {name:"Phil Mickelson",  scores:[-2,-6,-9,-11]},
+      {name:"Frank Nobilo",    scores:[-1,-4,-8,-10]},
+      {name:"Duffy Waldorf",   scores:[0,-3,-7,-10]},
+      {name:"Scott Hoch",      scores:[1,-2,-6,-9]},
+    ],
+    holes:[
+      {id:"a9",  name:"9th — Carolina Cherry", par:4,yards:460, hazard:"downhill green, slope runs away",
+       lore:"Norman bogeyed 9. The first crack. The crowd sensed something without knowing what.",
+       incidents:["Norman's lead going into 9 was still enormous. The bogey was the first sound.","Faldo birdied 9. Two shots swung in one hole. The leaderboard began to move."],
+       events:["first_crack","leaderboard_shift"], pressureRating:2,
+       modifiers:{atmosphereNote:"Augusta 9 in 1996 is where the first crack appeared. Norman's bogey. Faldo's birdie. Two shots in one hole. Nobody said it yet but everyone felt it."}},
+      {id:"a12", name:"12th — Golden Bell",    par:3,yards:155, hazard:"Rae's Creek, swirling wind",
+       lore:"Norman found Rae's Creek. Double bogey. The Masters was over, though he did not know it yet.",
+       incidents:[
+         "Norman's tee shot at 12 found Rae's Creek. Double bogey. His lead was gone.",
+         "The Golden Bell has a specific cruelty: the wind cannot be read and you still have to hit the shot.",
+         "Faldo made par. He was fully in the tournament. Norman was leaving it."
+       ],
+       events:["creek_shot","collapse_moment"], pressureRating:5,
+       modifiers:{thresholdAdd:2,compCost:2,atmosphereNote:"Augusta 12 in 1996 — the wind swirled, Norman found the water, doubled the hole, and the Masters changed hands. The gallery went very quiet. Everyone understood what was happening."}},
+      {id:"a18", name:"18th — Holly",          par:4,yards:465, hazard:"bunkers, gallery, the walk",
+       lore:"Faldo and Norman walked up 18 together. Faldo won by five. On the green, Faldo put his arm around Norman and said something quietly. Nobody heard what it was.",
+       incidents:[
+         "Norman shot 78 from six shots clear — one of only two final-round six-stroke collapses in major history.",
+         "Faldo said to Norman at the 18th: 'Don't let the bastards get you down.' He later disputed this account.",
+         "Norman cried during the green jacket ceremony. He said: 'I gave it my best shot. Sometimes it's not enough.'"
+       ],
+       events:["graceful_collapse"], pressureRating:3,
+       modifiers:{atmosphereNote:"Augusta 18 in 1996 — two men walking together, one winning the Masters, one completing the most watched collapse in the tournament's history. The gallery was respectful. Golf does that sometimes."}},
+    ]
+  },
+  {
+    id:"tiger_1997", year:1997, eraClass:"era-1997", lbClass:"lb-1997",
+    name:"Tiger's First Masters",
+    course:"Augusta National", country:"Georgia, USA",
+    type:"major", badge:"badge-major", days:4,
+    lore:"Tiger Woods was 21. He won by 12 shots. 18-under. The lowest winning score in Masters history. He was nine shots clear entering Sunday. Jack Nicklaus said: 'I don't think there's any question he's the most powerful player in the world at this young age.'",
+    players:[
+      { id:"tiger_97", name:"Tiger Woods", abbr:"TWD",
+        desc:"Shot 40 on his first nine holes as a professional at Augusta. Then shot 30. Then went -27 over the next 63 holes. Won by 12.",
+        wound:"21 years old. The expectations are already impossible. He intends to meet every one.",
+        historicalScores:[-3,-9,-15,-18] },
+      { id:"kite_97", name:"Tom Kite", abbr:"TKT",
+        desc:"Finished second. Shot 282 — a score that would have won any other Masters in history. Lost by 12.",
+        wound:"Shot the round of his life. Lost by twelve shots. To a 21-year-old.",
+        historicalScores:[-1,-3,-6,-6] }
+    ],
+    field:[
+      {name:"Tommy Tolles",     scores:[-2,-4,-7,-7]},
+      {name:"Tom Watson",       scores:[0,-2,-4,-4]},
+      {name:"Costantino Rocca", scores:[1,0,-2,-3]},
+      {name:"Paul Stankowski",  scores:[2,1,0,-2]},
+    ],
+    holes:[
+      {id:"a8",  name:"8th — Yellow Jasmine", par:5,yards:570, hazard:"bunker left, severely sloped green",
+       lore:"Tiger eagled this hole three times during the week. Augusta's par-5s were playing as par-4s for him.",
+       incidents:["Tiger's distance meant par-5s were birdie holes at minimum. His eagle on 8 in Round 3 extended the lead to seven.","Players described watching Tiger's distances and thinking the course had been reconfigured."],
+       events:["eagle_opportunity","dominant_state"], pressureRating:1},
+      {id:"a13", name:"13th — Azalea",        par:5,yards:510, hazard:"Rae's Creek in front",
+       lore:"By Sunday, Tiger was making birdies on Augusta's par-5s without anxiety. They were formalities. The question was not whether he would win but by how much.",
+       incidents:["Tiger reached 13 in two shots in all four rounds. The rest of the field was laying up.","By Sunday afternoon, 13 was the hole where the record books were recalculated."],
+       events:["eagle_opportunity","dominant_state"], pressureRating:1,
+       modifiers:{atmosphereNote:"Augusta 13 in 1997 with Tiger nine shots clear — the question is not the shot. The question is which record falls first."}},
+      {id:"a18", name:"18th — Holly",          par:4,yards:465, hazard:"bunkers, the gallery, the moment",
+       lore:"Tiger was in tears before he reached the green. He embraced his father Earl on the 18th green. Both were crying. The gallery of 40,000 stood the entire time.",
+       incidents:[
+         "Tiger won by 12 shots — the largest winning margin in Masters history.",
+         "His total of 270 (-18) was the lowest score in Masters history at that time.",
+         "He became the youngest Masters champion at 21.",
+         "He embraced his father Earl on the 18th green. Earl said something nobody heard.",
+         "He put on the green jacket as if it had always been waiting."
+       ],
+       events:["historic_moment","gallery_enormous"], pressureRating:2,
+       modifiers:{atmosphereNote:"Augusta 18 in 1997 — 21 years old, 12 shots clear, the most dominant Masters in history. The gallery standing. The moment already mythology before it was over."}},
+    ]
+  },
+  {
+    id:"kiawah_1991", year:1991, eraClass:"era-1991", lbClass:"lb-1991",
+    name:"War on the Shore",
+    course:"Ocean Course, Kiawah Island", country:"South Carolina, USA",
+    type:"ryder", badge:"badge-ryder", days:3,
+    lore:"The most hostile Ryder Cup in history. USA won 14.5-13.5. Bernhard Langer had a six-foot putt on the 18th hole of the last match to halve and save the Cup for Europe. He missed. Dave Stockton sat down on the grass.",
+    players:[
+      { id:"langer_91", name:"Bernhard Langer", abbr:"BLG",
+        desc:"Won his foursomes, halved his fourballs. Then faced the six-foot putt on 18 to save the Cup. Two decades of preparation. One missed putt.",
+        wound:"The putt. Six feet. Everything else in his career happened before and after it.",
+        historicalScores:[0,-2,-4],
+        matchPlayDays:[
+          { format:"FOURSOMES", partner:"Mark James",          opponent:"Lanny Wadkins / Hale Irwin",        opponentHoleScores:[3,4,4] },
+          { format:"FOURBALLS", partner:"Colin Montgomerie",   opponent:"Corey Pavin / Steve Pate",          opponentHoleScores:[4,3,4] },
+          { format:"SINGLES",                                  opponent:"Hale Irwin",                        opponentHoleScores:[3,4,5] },
+        ]},
+      { id:"irwin_91", name:"Hale Irwin", abbr:"HIR",
+        desc:"The USA's unshowy anchor. Won three of his four points. Watched Langer miss the final putt from four feet away.",
+        wound:"Winning means the other man has to lose. Irwin understood this completely.",
+        historicalScores:[-1,-3,-5],
+        matchPlayDays:[
+          { format:"FOURSOMES", partner:"Lanny Wadkins",       opponent:"Bernhard Langer / Mark James",      opponentHoleScores:[4,3,5] },
+          { format:"FOURBALLS", partner:"Mark O'Meara",        opponent:"Seve Ballesteros / Jose Olazabal",  opponentHoleScores:[3,4,4] },
+          { format:"SINGLES",                                  opponent:"Bernhard Langer",                   opponentHoleScores:[4,3,4] },
+        ]},
+    ],
+    field:[
+      {name:"Corey Pavin",        scores:[0,-1,-3]},
+      {name:"Nick Faldo",         scores:[0,-1,-2]},
+      {name:"Seve Ballesteros",   scores:[1,0,-1]},
+      {name:"Steve Pate",         scores:[1,0,-2]},
+    ],
+    holes:[
+      {id:"k10", name:"10th — Ocean View",  par:4,yards:439, hazard:"Atlantic wind, exposed rough",
+       lore:"The back nine at Kiawah runs along the Atlantic. The wind is structural — not a hazard, a co-author. Every shot on the inward half is negotiated with the weather.",
+       incidents:["The back nine at Kiawah played differently every session. No two holes played the same twice.","European players reported the crowd as continuous noise — no courtesy windows, no silence."],
+       events:["wind_gusts","crowd_hostile"], pressureRating:2,
+       modifiers:{atmosphereNote:"The back nine at Kiawah Island faces the Atlantic. The wind is a third player in every match. The crowd in 1991 was 40,000 Americans, the most partisan Ryder Cup audience in history."}},
+      {id:"k17", name:"17th — Marsh View", par:3,yards:197, hazard:"marsh right and long, Atlantic wind",
+       lore:"By Sunday, the scoreboard was changing every hole. Three matches still live at 17. The marsh on the right was swallowing European approaches.",
+       incidents:["Several matches turned at 17 on Sunday. The marsh swallowed European hopes at least twice.","Seve Ballesteros described the crowd noise as the most hostile atmosphere he had ever played in — including Brookline."],
+       events:["scoreboard_drama","crowd_hostile"], pressureRating:3,
+       modifiers:{thresholdAdd:1,compCost:1,atmosphereNote:"Kiawah 17 on Sunday singles — the scoreboard is moving every minute. The crowd is 40,000 Americans and none of them want you to make this shot."}},
+      {id:"k18", name:"18th — Home",        par:4,yards:439, hazard:"bunkers, Atlantic wind, history",
+       lore:"Bernhard Langer. Six feet. To halve and save the Cup. He missed right. He did not move for eight seconds. He then spent the rest of the evening comforting his teammates.",
+       incidents:[
+         "Langer's putt was six feet, slightly left-to-right, on a firm green with the Atlantic wind moving.",
+         "He had made an almost identical putt on the same green in the practice round on Tuesday.",
+         "He missed right. The USA had won the Ryder Cup. Langer stood motionless for approximately eight seconds.",
+         "His teammates were inconsolable. Langer put his arm around several of them. He was the one comforting others.",
+         "Dave Stockton, watching from inside the ropes, sat down on the grass when the ball slid past.",
+         "Langer's subsequent speech was described as one of the most dignified things witnessed in professional golf."
+       ],
+       events:["ryder_climax","langer_putt"], pressureRating:5, collapseSequence:true,
+       modifiers:{thresholdAdd:2,compCost:2,atmosphereNote:"Kiawah 18 — the most watched six-foot putt in Ryder Cup history. Langer's miss handed the USA the Cup. The green was silent for one extraordinary moment before everything erupted. Langer did not move."}},
+    ]
+  },
+  {
+    id:"brookline_1999", year:1999, eraClass:"era-1999-rc", lbClass:"lb-1999",
+    name:"The Battle of Brookline",
+    course:"The Country Club, Brookline", country:"Massachusetts, USA",
+    type:"ryder", badge:"badge-ryder", days:3,
+    lore:"Europe led 10-6 after two days. USA needed 8.5 from 12 Sunday singles. They got them. Justin Leonard holed a 45-foot putt on 17. The American team rushed the green before Olazabal had putted. European golf did not forget this for a decade.",
+    players:[
+      { id:"leonard", name:"Justin Leonard", abbr:"JLD",
+        desc:"Holed a 45-foot putt across the 17th green. The USA team erupted. Olazabal still had a putt to halve. He missed.",
+        wound:"The putt was real. The celebration on the green while Olazabal stood there — also real.",
+        historicalScores:[0,-2,-4],
+        matchPlayDays:[
+          { format:"FOURSOMES", partner:"Hal Sutton",           opponent:"Lee Westwood / Darren Clarke",          opponentHoleScores:[4,4,3] },
+          { format:"FOURBALLS", partner:"David Duval",          opponent:"Padraig Harrington / Paul McGinley",    opponentHoleScores:[3,3,4] },
+          { format:"SINGLES",                                   opponent:"Jose Maria Olazabal",                   opponentHoleScores:[3,4,4] },
+        ]},
+      { id:"olazabal_99", name:"José Maria Olazabal", abbr:"JMO",
+        desc:"Level with Leonard going to 17. Leonard holed from 45 feet. Americans stormed the green. Olazabal waited. He then putted and missed.",
+        wound:"Standing on the green while a celebration happens around you. Not having yet missed.",
+        historicalScores:[-1,-3,-5],
+        matchPlayDays:[
+          { format:"FOURSOMES", partner:"Miguel Angel Jimenez", opponent:"Phil Mickelson / Tom Lehman",           opponentHoleScores:[4,3,4] },
+          { format:"FOURBALLS", partner:"Sergio Garcia",        opponent:"Davis Love III / Jeff Maggert",         opponentHoleScores:[3,4,5] },
+          { format:"SINGLES",                                   opponent:"Justin Leonard",                        opponentHoleScores:[4,4,3] },
+        ]},
+    ],
+    field:[
+      {name:"Sergio Garcia",    scores:[0,-1,-2]},
+      {name:"Lee Westwood",     scores:[1,0,-1]},
+      {name:"Phil Mickelson",   scores:[0,-1,-3]},
+      {name:"Davis Love III",   scores:[1,0,-2]},
+    ],
+    holes:[
+      {id:"b10", name:"10th — The Hollow",  par:4,yards:442, hazard:"tree-lined, downhill approach",
+       lore:"Sunday. USA had won five of the first six singles by lunchtime. The European lead of four points was gone before anyone fully registered it.",
+       incidents:["USA won five of the first six singles on Sunday morning. The European four-point overnight lead evaporated before lunch.","European players reported the crowd was unlike anything they had experienced — continuous noise, no courtesy."],
+       events:["momentum_usa","crowd_hostile"], pressureRating:2,
+       modifiers:{atmosphereNote:"Brookline on Sunday had a crowd that had identified the scoreboard at first light. By the time you reach 10, you know exactly where the Cup stands."}},
+      {id:"b15", name:"15th — Himalaya",    par:3,yards:183, hazard:"large green, severe front-to-back slope",
+       lore:"By 15 the crowd was in a state normally associated with football. USA needed three more points. Europe needed three halves. Every hole felt like the last hole.",
+       incidents:["Every hole on Sunday at Brookline carried the weight of the whole match.","European players described the crowd noise as a physical force — a wall of sound on every shot."],
+       events:["crowd_hostile","pressure_mounting"], pressureRating:3,
+       modifiers:{thresholdAdd:1,atmosphereNote:"Brookline 15 on Sunday — the crowd is 20,000 Americans and they know exactly what is happening. The hospitality of Saturday is over."}},
+      {id:"b17", name:"17th — Bogey",       par:3,yards:188, hazard:"pond right, slope, history",
+       lore:"Leonard holed from 45 feet. Americans stormed the green. Olazabal had a putt to halve the match and save the Cup. He waited several minutes while the green was cleared. He missed.",
+       incidents:[
+         "Justin Leonard's 45-foot putt at Brookline 17 is one of the most famous shots in Ryder Cup history.",
+         "Before Olazabal could putt, approximately 30 American players, caddies, and officials ran across the green in celebration.",
+         "Mark James, Europe's captain, called it 'the most disgraceful scenes I have witnessed in golf.'",
+         "Olazabal waited for several minutes while the green was cleared. He then putted and missed.",
+         "The Ryder Cup went to USA. The scenes on 17 were discussed throughout European golf for years.",
+         "Several European players refused to acknowledge certain American players at the closing ceremony."
+       ],
+       events:["ryder_climax","leonard_putt"], pressureRating:5,
+       modifiers:{thresholdAdd:2,compCost:1,atmosphereNote:"Brookline 17 — Leonard's 45-footer drops before you can process it. The green fills with people. Olazabal is still standing there. He has a putt. He waits. He putts. He misses. The Cup is over."}},
+    ]
+  },
+  {
+    id:"prestwick_1868", year:1868, eraClass:"era-1868", lbClass:"lb-1868",
+    name:"Young Tom — Prestwick 1868",
+    course:"Prestwick — 12-hole Links", country:"Ayrshire, Scotland",
+    type:"historic", badge:"badge-historic", days:1,
+    lore:"Tom Morris Jr. was 17 years old. He shot 157 over 36 holes (three rounds of the 12-hole course) to win the first of four consecutive Opens. The other competitors included his father, who had dominated the decade before. The son was simply better. He died at 24.",
+    players:[
+      { id:"young_tom", name:"Tom Morris Jr.", abbr:"YTM",
+        desc:"Seventeen years old. Three rounds of twelve holes on a course played with gutta-percha balls and hickory shafts. Won by two shots. Led from the first round.",
+        wound:"Father is watching. The rest of them have twenty years' experience. You are seventeen.",
+        historicalScores:[-2,-5,-9] },
+      { id:"old_tom", name:"Tom Morris Sr.", abbr:"OTM",
+        desc:"The greatest player of his generation. His son is measurably better. He knows this. He taught him.",
+        wound:"Your son is outplaying you on the same course you mastered. This is correct. It still stings.",
+        historicalScores:[0,-2,-6] }
+    ],
+    field:[
+      {name:"Robert Andrew",    scores:[1,-1,-3]},
+      {name:"Willie Park Sr.",  scores:[2,0,-2]},
+      {name:"Bob Kirk",         scores:[3,1,0]},
+      {name:"Tom Cosgrove",     scores:[3,2,1]},
+    ],
+    holes:[
+      {id:"p1",  name:"1st — Hole o' Cross", par:6,yards:578, hazard:"cross burn, no defined fairway",
+       lore:"Prestwick's first hole in 1868 — 578 yards, no defined fairway, no rough management, no gallery barriers. Spectators walked alongside the players for all twelve holes.",
+       incidents:["Young Tom's opening hole in Round 1 set the tone — long and accurate with a gutta-percha ball that was still relatively new technology in 1868.","There were no spectator ropes. Onlookers walked alongside for all 12 holes and talked among themselves."],
+       events:["era_1860s","gallery_close"], pressureRating:1,
+       modifiers:{atmosphereNote:"Prestwick in 1868 — no scoreboards, no crowd barriers. The gallery walks with you. The ball is gutta-percha. The clubs are hickory. This is golf before it had rules about itself."}},
+      {id:"p8",  name:"8th — Station",       par:3,yards:166, hazard:"burn crossing, station wall",
+       lore:"The 8th runs alongside the railway line. A ball hit left finishes against the station wall and in 1868 was played where it lay. The train may or may not be running. This is not considered a distraction.",
+       incidents:["The station wall cost several competitors shots in both rounds. Young Tom avoided it both times.","In 1868, the wall was simply a feature of the course. Played as it lies, no relief."],
+       events:["era_1860s"], pressureRating:2,
+       modifiers:{atmosphereNote:"The station wall at Prestwick's 8th is not a metaphor. It is an actual wall. In 1868 you played where it lay. The train schedule is not your concern."}},
+      {id:"p12", name:"12th — Home",          par:6,yards:572, hazard:"Cardinal bunker complex, burn",
+       lore:"The closing hole. The Cardinal bunker complex — large sod-faced bunkers — is the central hazard. In 1868, landing in the Cardinal was a lost hole. Young Tom avoided it. Old Tom did not.",
+       incidents:[
+         "Young Tom parred the 12th in each of the three rounds — consistency unheard of at the time on a hole this length.",
+         "Old Tom Morris dropped two shots to the Cardinal in Round 2, conceding the championship to his son.",
+         "Young Tom won his first Open Belt at 17. He won it three more consecutive times and retired it outright at 19.",
+         "He died at 24. His wife Margaret died in childbirth. Tom Morris Jr. followed her within months.",
+         "His father outlived him by 34 years."
+       ],
+       events:["historic_moment","cardinal_bunker"], pressureRating:3,
+       modifiers:{thresholdAdd:1,atmosphereNote:"Prestwick 12 in 1868 — Young Tom has been the best player all day. His father cannot close the gap. The gallery walks alongside and says nothing. There is no applause in 1868. They simply watch."}},
+    ]
+  },
+  {
+    id:"payne_1999", year:1999, eraClass:"era-1999-us", lbClass:"lb-1999",
+    name:"Payne Stewart — Pinehurst 1999",
+    course:"Pinehurst No. 2", country:"North Carolina, USA",
+    type:"major", badge:"badge-major", days:4,
+    lore:"Payne Stewart holed a 15-foot putt on the last hole to win the US Open by one. He pointed at Phil Mickelson — who was about to become a father — and held the gesture. It was the last major Payne Stewart ever played. He died four months later in a plane crash. He was 42.",
+    players:[
+      { id:"payne_stewart", name:"Payne Stewart", abbr:"PST",
+        desc:"Shot 70-69-72-70. Won on the last putt of the tournament. Pointed at Mickelson. Four months later was gone.",
+        wound:"He won it on the last hole. He pointed at Phil. He is gone four months later.",
+        historicalScores:[-2,-5,-7,-10] },
+      { id:"mickelson_99", name:"Phil Mickelson", abbr:"PMK",
+        desc:"Led entering Round 4. Bogeyed 18. Lost by one. His wife Amy was nine months pregnant.",
+        wound:"The baby, the major, the last hole. He knew Payne's gesture was about the baby. He cried.",
+        historicalScores:[-1,-4,-8,-9] }
+    ],
+    field:[
+      {name:"Tiger Woods",     scores:[-2,-5,-7,-8]},
+      {name:"Vijay Singh",     scores:[-1,-3,-5,-7]},
+      {name:"Steve Stricker",  scores:[0,-2,-4,-7]},
+      {name:"Tim Herron",      scores:[1,-1,-3,-6]},
+    ],
+    holes:[
+      {id:"pn16", name:"16th — Straight",    par:4,yards:431, hazard:"crowned turtleback greens, run-offs everywhere",
+       lore:"Pinehurst No. 2's crowned greens are the defining hazard. Miss the crown by three feet and the ball runs forty yards off the putting surface. Sunday — nothing is safe.",
+       incidents:["Pinehurst greens in 1999 were described as the firmest surfaces ever used at a US Open.","Players described putting from off-crown as 'hoping rather than aiming'."],
+       events:["crowned_greens"], pressureRating:2,
+       modifiers:{thresholdAdd:1,atmosphereNote:"Pinehurst 16 — the crowned greens don't forgive the slightly offline shot. Running at 13 on the Stimpmeter on Sunday. Every putt from off-centre is a negotiation."}},
+      {id:"pn17", name:"17th — The Dogleg",  par:4,yards:461, hazard:"trees, rough, the closing gallery",
+       lore:"By 17 in the final round, Stewart and Mickelson were level. One hole to play. Stewart had not won a major since 1991.",
+       incidents:["Both players parred 17. Everything — eight years of near-misses for Stewart — came down to 18.","Phil Mickelson had attempted the US Open six times. He was level with Stewart. One hole."],
+       events:["level_pegging"], pressureRating:3,
+       modifiers:{atmosphereNote:"Pinehurst 17 — level pegging, one hole remaining. Eight years for Stewart since his last major. Six attempts for Mickelson. One hole each."}},
+      {id:"pn18", name:"18th — Home",        par:4,yards:444, hazard:"rough, crowned final green, gallery",
+       lore:"Stewart holed from 15 feet. He raised his fist. He pointed at Mickelson — whose wife was nine months pregnant — and held the gesture. He said something. Mickelson cried. Four months later Payne Stewart was dead.",
+       incidents:[
+         "Payne Stewart's 15-foot putt on the last hole of the 1999 US Open is one of the most replayed shots in major history.",
+         "He pointed at Mickelson and said: 'You're going to be a great father.' This account has been confirmed.",
+         "Phil Mickelson cried at the ceremony and cited Stewart's gesture when asked about it.",
+         "On 25 October 1999, Payne Stewart's plane depressurised over South Dakota. He and five others died.",
+         "Players at the following week's tournament wore knickerbockers in tribute.",
+         "His last act in professional golf was pointing at Phil Mickelson and saying something kind."
+       ],
+       events:["historic_moment","payne_moment"], pressureRating:4,
+       modifiers:{atmosphereNote:"Pinehurst 18 in 1999 — Stewart's putt is tracking. The gallery knows before it drops. He raises his fist. He points at Mickelson. He wins the US Open. It is the last major he ever plays."}},
+    ]
+  }
+
 ];
 
 if (typeof module !== 'undefined') module.exports = { TOURNAMENTS };

@@ -179,6 +179,6 @@ Feature: Golf Adventure Data Integrity
   Scenario: Extracting data to separate files does not change observable game behaviour
     Given the data modules are loaded from external files
     When the golf adventure setup screen renders
-    Then the tournament grid shows 5 selectable tournaments
+    Then the tournament grid shows 12 selectable tournaments
     And the character panel shows 10 selectable commentators
     And the atmosphere options are unchanged
