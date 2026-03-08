@@ -193,6 +193,28 @@ body::after {
   opacity: var(--scanline-opacity);
 }
 
+/* ── BACK LINK ── */
+.back-link {
+  position: absolute;
+  top: 14px; left: 18px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: rgba(201,168,76,0.7);
+  text-decoration: none;
+  text-transform: uppercase;
+  border: 1px solid rgba(201,168,76,0.25);
+  padding: 5px 10px;
+  border-radius: 2px;
+  transition: all 0.18s;
+  z-index: 10;
+}
+.back-link:hover {
+  color: #c9a84c;
+  border-color: rgba(201,168,76,0.6);
+  background: rgba(201,168,76,0.07);
+}
+
 /* ── MASTHEAD — Masters broadcast title card ── */
 .masthead {
   background: #0c1f0e;
@@ -1099,6 +1121,7 @@ body::after {
 <body>
 
 <div class="masthead">
+  <a href="index.html" class="back-link" title="Back to Heckler's">&#8592; Heckler's</a>
   <div class="masthead-inner">
     <h1>GOLF ADVENTURE</h1>
     <div class="masthead-right">
