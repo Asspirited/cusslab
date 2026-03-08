@@ -4302,7 +4302,7 @@ const App = (() => {
       title: 'HECKLER\'S',
       pageTitle: 'Heckler\'s — The Comedy Panel',
       slogans: CONSULTANT_SLOGANS,
-      tabs: ['comedyroom','boardroom','football','golf','darts',
+      tabs: ['golfadventure','comedyroom','boardroom','football','golf','darts',
              'bills','joketest','clash','roulette','professionals','ironic',
              'comscience','evolution','blend','experiment',
              'roastbattle','dinner','topcnuts','comedylab','trumps','qleeks',
@@ -4325,7 +4325,7 @@ const App = (() => {
 
   function init() {
     _startSlogans('consultant');
-    API.initKeyUI(); switchTab({currentTarget:document.querySelector('[onclick*=\'comedyroom\']')}, 'comedyroom');
+    API.initKeyUI(); switchTab({currentTarget:document.querySelector('[onclick*=\'golfadventure\']')}, 'golfadventure');
     RoastBattle.initScenarios();
     TopCnuts.init();
     Polls.load(0);
