@@ -68,12 +68,14 @@ Feature: Tiered item event consequence system
     Given the marshal's belt item event definition
     Then no outcome has result 'nothing'
 
-  # --- HUD ---
+  # --- HUD (DOM — manual verification) ---
 
+  @claude
   Scenario: Consequence HUD badge appears when consequence activates
     When applyOutcome is called with a consequence outcome of tier MED direction penalty
     Then a consequence HUD indicator is visible showing "MED PENALTY — 2 shots remaining"
 
+  @claude
   Scenario: Consequence HUD badge is removed when countdown expires
     Given a consequence indicator is visible
     When G.tempThresholdHoles reaches 0
