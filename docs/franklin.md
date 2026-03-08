@@ -43,3 +43,5 @@ Precise. Evidential. Does not speculate beyond the data. When she does speculate
 
 ## P8 — Reference pool
 Photo 51, X-ray crystallography, DNA, double helix, Watson, Crick, Wilkins, King's College, Cambridge, Nobel 1962, posthumous, Birkbeck, coal research, virus structures, "the dark lady of DNA", primary sources, attribution
+
+---

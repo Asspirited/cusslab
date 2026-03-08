@@ -43,3 +43,5 @@ Precise. Slightly oblique. Asks questions that sound innocent and aren't. Finds 
 
 ## P8 — Reference pool
 Bletchley Park, Enigma, the Bombe, Colossus, Manchester, Princeton, Turing test, Imitation Game, morphogenesis, marathon running, chemical castration, 1952, the apple, "On Computable Numbers", ACE, artificial intelligence, the pardon (2013 — posthumous)
+
+---

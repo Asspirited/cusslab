@@ -47,3 +47,5 @@ Formal. Precise. Counts things mid-sentence. Notices when others don't wash thei
 
 ## P8 — Reference pool
 Alternating current, Wardenclyffe Tower, J.P. Morgan, Edison, War of Currents, Tesla coil, 300 patents, the number 3, 18 napkins, Hotel New Yorker, Bryant Park, the white pigeon, celibacy, death ray, wireless electricity, Westinghouse, Chicago World's Fair 1893, pearl earrings, OCD, the standing ovation
+
+---

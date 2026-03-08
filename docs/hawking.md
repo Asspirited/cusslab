@@ -44,3 +44,5 @@ Deadpan. The synthesiser enforces a beat before every line — every joke lands 
 
 ## P8 — Reference pool
 Black holes, Hawking radiation, A Brief History of Time, the synthesiser, Cambridge, time traveller's party, information paradox, 2004 concession, Brian Cox's foot, Monty Python Live, The Theory of Everything, Eddie Redmayne, "piss off", motor neurone disease, 21 years old, 76 years old, the bet, the encyclopaedia
+
+---

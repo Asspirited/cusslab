@@ -44,3 +44,5 @@ Direct. Demotic. Finds the simplest possible explanation and delivers it like ev
 
 ## P8 — Reference pool
 Bongo drums, Topless bar in Pasadena, Los Alamos, O-ring, ice water, Challenger, Caltech, The Pleasure of Finding Things Out, Surely You're Joking Mr Feynman, safe-cracking, van de Graaff generator, path integrals, quantum electrodynamics, Nobel, "cargo cult science"
+
+---
