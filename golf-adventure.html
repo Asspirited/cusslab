@@ -1515,12 +1515,18 @@ function buildSituation(hole) {
   if (G.tournament.type === 'ryder') {
     const mpDay = G.player.matchPlayDays?.[G.day];
     const opp = mpDay ? mpDay.opponent : 'your opponent';
+    const fmt = mpDay?.format || 'SINGLES';
+    const partner = mpDay?.partner;
     const mp = G.matchPlayScore;
     const mpStr = mp === 0 ? 'all square' : mp > 0 ? `${mp} up` : `${Math.abs(mp)} down`;
     const holesPlayed = G.holeResults.filter(r => r.day === G.day).length;
     const holesLeft = G.holesPerDay - holesPlayed;
     const holesNote = holesLeft > 0 ? ` with ${holesLeft} to play` : '';
-    return `${G.player.name}. ${dayWords[G.day]||'Day '+G.day+1} of The Miracle at Medinah — match play singles against ${opp}. You are ${mpStr}${holesNote}. Europe needs every point.${atmoAdd}`;
+    const fmtLabel = fmt === 'FOURSOMES' ? 'foursomes (alternate shot)'
+                   : fmt === 'FOURBALLS' ? 'fourballs (best ball)'
+                   : 'singles';
+    const partnerNote = (fmt !== 'SINGLES' && partner) ? ` alongside ${partner}` : '';
+    return `${G.player.name}. ${dayWords[G.day]||'Day '+G.day+1} of The Miracle at Medinah — ${fmtLabel}${partnerNote} against ${opp}. You are ${mpStr}${holesNote}. Europe needs every point.${atmoAdd}`;
   }
 
   const scoreStr = G.yourScore===0?'level par':G.yourScore<0?`${G.yourScore} under par`:`+${G.yourScore} over par`;
@@ -1888,6 +1894,7 @@ async function endHole() {
       if (G.holeStrokes < oppScore)      G.matchPlayScore++;
       else if (G.holeStrokes > oppScore) G.matchPlayScore--;
       mpCtx = { oppScore, holeResult, opponent: mpDay.opponent,
+                format: mpDay.format || 'SINGLES', partner: mpDay.partner || null,
                 holesRemaining: G.holesPerDay - G.holeIdx - 1 };
     }
   }
@@ -1940,11 +1947,16 @@ async function getMatchPlayCommentary(yourScore, holePar, mpCtx) {
     return `{"speaker":"${ch.name}","text":"one line here"}`;
   }).join(',\n  ');
 
+  const fmtLabel = mpCtx.format === 'FOURSOMES' ? 'foursomes (alternate shot)'
+                 : mpCtx.format === 'FOURBALLS' ? 'fourballs (best ball)' : 'singles';
+  const partnerNote = (mpCtx.format !== 'SINGLES' && mpCtx.partner) ? ` (${G.player.name} partnered with ${mpCtx.partner})` : '';
+
   const prompt = `Golf Adventure — Ryder Cup hole end. The panel reacts.
 
-HOLE RESULT: ${G.player.name} made ${yourLabel} (${yourScore} shots, Par ${holePar}). Opponent (${mpCtx.opponent}) made ${oppLabel} (${mpCtx.oppScore} shots).
+FORMAT: ${fmtLabel}${partnerNote}.
+HOLE RESULT: ${G.player.name} made ${yourLabel} (${yourScore} shots, Par ${holePar}). Opponent${mpCtx.format !== 'SINGLES' ? 's' : ''} (${mpCtx.opponent}) made ${oppLabel} (${mpCtx.oppScore} shots).
 HOLE ${mpCtx.holeResult === 'won' ? 'WON by ' + G.player.name : mpCtx.holeResult === 'lost' ? 'LOST by ' + G.player.name : 'HALVED — neither side budges'}.
-MATCH STANDING: ${G.player.name} is now ${standing}${isLast ? ' — match complete' : ` with ${holesLeft} hole${holesLeft !== 1 ? 's' : ''} to play`}.
+MATCH STANDING: ${mpCtx.format !== 'SINGLES' ? G.player.name + ' & ' + (mpCtx.partner?.split(' ').pop() || 'partner') : G.player.name} is now ${standing}${isLast ? ' — match complete' : ` with ${holesLeft} hole${holesLeft !== 1 ? 's' : ''} to play`}.
 TOURNAMENT: The Miracle at Medinah. Europe needs every point. This is match play — every hole is its own drama.
 
 Each panellist speaks ONE LINE reacting to this hole and the match position. React to each other where possible. No waffle. Pure reaction.
@@ -2100,7 +2112,21 @@ function updateHUD() {
     el.textContent = mpText;
     el.className = 'hud-score' + (mp > 0 ? ' neg' : mp < 0 ? ' pos' : '');
     const mpDay = G.player.matchPlayDays?.[G.day];
-    if (lbl) lbl.textContent = mpDay ? `VS ${mpDay.opponent.toUpperCase()}` : 'MATCH PLAY';
+    if (lbl && mpDay) {
+      const fmt = mpDay.format || 'SINGLES';
+      const oppShort = mpDay.opponent.replace(' / ', '/');
+      lbl.textContent = fmt === 'SINGLES' ? `SINGLES · VS ${oppShort.toUpperCase()}` : `${fmt} · VS ${oppShort.toUpperCase()}`;
+    } else if (lbl) {
+      lbl.textContent = 'MATCH PLAY';
+    }
+    // Show partner in player name for foursomes/fourballs
+    const playerEl = document.getElementById('hud-player');
+    if (playerEl && mpDay) {
+      const fmt = mpDay.format || 'SINGLES';
+      playerEl.textContent = (fmt !== 'SINGLES' && mpDay.partner)
+        ? `${G.player.name} & ${mpDay.partner.split(' ').pop()}`
+        : G.player.name;
+    }
     const hs=G.player.historicalScores[G.day]||0;
     document.getElementById('hud-ghost').textContent=`Historical: ${hs===0?'E':hs>0?'+'+hs:hs}`;
   } else {
