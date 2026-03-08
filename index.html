@@ -1278,14 +1278,25 @@
 
 <nav id="sidebar">
 
+  <!-- ── GOLF ADVENTURE ── -->
+  <div class="nav-group active" id="ng-golfadventure">
+    <div class="nav-group-header" onclick="toggleNavGroup('golfadventure')">
+      <span class="nav-group-icon">⛳</span> GOLF ADVENTURE
+      <span class="nav-group-count">1</span>
+    </div>
+    <div class="nav-items" id="ni-golfadventure">
+      <div class="tab active" onclick="switchTab(event,'golfadventure')"><span class="tab-icon">🏌️</span>Play Golf Adventure</div>
+    </div>
+  </div>
+
   <!-- ── COMEDY ROOM ── -->
-  <div class="nav-group active" id="ng-comedy">
+  <div class="nav-group" id="ng-comedy">
     <div class="nav-group-header" onclick="toggleNavGroup('comedy')">
       <span class="nav-group-icon">🎭</span> COMEDY ROOM
       <span class="nav-group-count">1</span>
     </div>
     <div class="nav-items" id="ni-comedy">
-      <div class="tab active" onclick="switchTab(event,'comedyroom')"><span class="tab-icon">🎤</span>The Comedy Room</div>
+      <div class="tab" onclick="switchTab(event,'comedyroom')"><span class="tab-icon">🎤</span>The Comedy Room</div>
     </div>
   </div>
 
@@ -1985,7 +1996,17 @@
 </div>
 
 <!-- ============ THE COMEDY ROOM ============ -->
-<div class="panel active" id="panel-comedyroom">
+<div class="panel active" id="panel-golfadventure">
+  <div style="text-align:center;padding:60px 24px 40px;">
+    <div style="font-size:56px;margin-bottom:16px;">⛳</div>
+    <h2 style="font-size:2.2rem;font-weight:900;letter-spacing:0.06em;margin-bottom:12px;">GOLF ADVENTURE</h2>
+    <p style="color:var(--muted);font-size:1rem;line-height:1.6;max-width:500px;margin:0 auto 16px;">Historic tournament simulation with live commentary from your 19th Hole panel. Pick your era. Watson vs Nicklaus. Tiger at Augusta. Van de Velde's collapse. Build your panel. See if you can rewrite history — or make it worse.</p>
+    <p style="color:var(--muted);font-size:0.85rem;margin-bottom:36px;opacity:0.7;">Faldo. McGinley. Radar. Roe. Henni. Butch. Cox. Souness. Pietersen. Pick four.</p>
+    <button class="btn btn-accent" onclick="window.location.href='golf-adventure.html'" style="font-size:22px;padding:16px 52px;letter-spacing:0.05em;">TEE IT UP</button>
+  </div>
+</div>
+
+<div class="panel" id="panel-comedyroom">
   <div class="panel-title">🎭 The Comedy Room</div>
   <div class="panel-desc">Not the stage. Not the boardroom. The room where the real conversation happens. Eight comedians, philosophers, and one cosmologist who has mostly made peace with the keyboards. You say something. They take it apart. Then they take each other apart. Then someone says something true.</div>
 
@@ -4325,6 +4346,8 @@ const App = (() => {
   // Nav group that contains a given tab name
   const _NAV_GROUP_MAP = {
     settings:'personas',
+    // GOLF ADVENTURE
+    golfadventure:'golfadventure',
     // BOARDROOM
     boardroom:'boardroom',
     // COMEDY ROOM
