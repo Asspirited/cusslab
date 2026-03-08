@@ -954,3 +954,16 @@ Status: CLOSED
 - Cost impact: Low
 - Tags: #live-site #ui #hidden-tab #regression
 - Status: Closed — `settings` added to `SKIN_CONFIGS.consultant.tabs`; `display:none` removed from sidebar tab element
+
+---
+
+## WL-064
+- Item: golf-adventure.html calling api.anthropic.com directly — 7 raw fetch calls, no API key, no CORS routing
+- Symptom: Pundits silent during Golf Adventure game — commentary box showed nothing (or "Commentary signal lost."). Game advanced but all API calls failed silently.
+- Suspected cause: golf-adventure.html was built as a standalone prototype without access to the main app's API client module (`src/integration/api-client.js`). Fetch calls were written directly to api.anthropic.com with no auth headers. CORS blocks browser-initiated requests to api.anthropic.com. The `claude-sonnet-4-20250514` model ID also needed updating to `claude-sonnet-4-6`.
+- Session: 2026-03-08
+- Time lost: User sessions of Golf Adventure broken for all users without the issue diagnosed — likely multiple sessions of confusion
+- Cost impact: Medium (game fundamentally non-functional until fixed)
+- Tags: #golf-adventure #api-routing #cors #architecture-gap #bl-015
+- Fix: Added `golfFetch()` helper — routes through worker (`cusslab-api.cusslab.workers.dev`), picks up `hecklers_api_key` from localStorage if present (same key as main app). All 7 fetch calls replaced. Model updated to `claude-sonnet-4-6`.
+- Status: Closed — 2026-03-08

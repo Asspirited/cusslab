@@ -1288,6 +1288,17 @@ body {
 
 <script>
 // ═══════════════════════════════════════════
+// API — route through Cloudflare worker
+// ═══════════════════════════════════════════
+const GOLF_WORKER = 'https://cusslab-api.cusslab.workers.dev';
+function golfFetch(body) {
+  const key = localStorage.getItem('hecklers_api_key') || '';
+  const headers = { 'Content-Type': 'application/json', 'anthropic-version': '2023-06-01' };
+  if (key) headers['x-api-key'] = key;
+  return fetch(GOLF_WORKER, { method: 'POST', headers, body: JSON.stringify(body) });
+}
+
+// ═══════════════════════════════════════════
 // GAME STATE
 // ═══════════════════════════════════════════
 let G = {
@@ -1776,10 +1787,7 @@ async function getCommentary(desc,quality,roll,shot) {
 
   const messages=[...G.history,{role:"user",content:prompt}];
   try {
-    const resp=await fetch("https://api.anthropic.com/v1/messages",{
-      method:"POST",headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1200,messages})
-    });
+    const resp=await golfFetch({model:"claude-sonnet-4-6",max_tokens:1200,messages});
     const data=await resp.json();
     const raw=(data.content?.[0]?.text||'[]').replace(/```json|```/g,'').trim();
     const lines=CommentaryService.parseShotResponse(raw);
@@ -1984,7 +1992,7 @@ async function getDaySummary() {
   const prompt = CommentaryService.buildDayPrompt(ctx);
 
   try {
-    const resp=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:900,messages:[...G.history,{role:"user",content:prompt}]})});
+    const resp=await golfFetch({model:"claude-sonnet-4-6",max_tokens:900,messages:[...G.history,{role:"user",content:prompt}]});
     const data=await resp.json();
     const raw=(data.content?.[0]?.text||'[]').replace(/```json|```/g,'').trim();
     const lines=CommentaryService.parseShotResponse(raw);
@@ -2358,11 +2366,8 @@ Return ONLY a JSON array:
   ${speakerList}
 ]`;
   try {
-    const resp = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ model: "claude-sonnet-4-20250514", max_tokens: 900,
-        messages: [{ role: "user", content: prompt }] })
-    });
+    const resp = await golfFetch({ model: "claude-sonnet-4-6", max_tokens: 900,
+      messages: [{ role: "user", content: prompt }] });
     const data = await resp.json();
     const raw = (data.content?.[0]?.text || '[]').replace(/```json|```/g, '').trim();
     const lines = JSON.parse(raw);
@@ -2848,10 +2853,7 @@ Return ONLY a JSON array:
   loading.innerHTML = '<div class="dots"><span></span><span></span><span></span></div><span>The commentary box...</span>';
   feed.appendChild(loading);
   try {
-    const resp = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ model: "claude-sonnet-4-20250514", max_tokens: 900, messages: [...G.history, { role: "user", content: prompt }] })
-    });
+    const resp = await golfFetch({ model: "claude-sonnet-4-6", max_tokens: 900, messages: [...G.history, { role: "user", content: prompt }] });
     const data = await resp.json();
     const raw = (data.content?.[0]?.text || '[]').replace(/```json|```/g, '').trim();
     const lines = JSON.parse(raw);
@@ -3029,11 +3031,8 @@ Return ONLY a JSON array — one sentence per panellist:
 ]`;
 
   try {
-    const resp = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ model: "claude-sonnet-4-20250514", max_tokens: 500,
-        messages: [{ role: "user", content: prompt }] })
-    });
+    const resp = await golfFetch({ model: "claude-sonnet-4-6", max_tokens: 500,
+      messages: [{ role: "user", content: prompt }] });
     const data = await resp.json();
     const raw = (data.content?.[0]?.text || '[]').replace(/```json|```/g, '').trim();
     const lines = JSON.parse(raw);
@@ -3091,14 +3090,11 @@ async function fetchEventImage(eventId) {
   const query = buildImageQuery(eventId, imageType);
 
   try {
-    const resp = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        model: "claude-sonnet-4-20250514",
-        max_tokens: 200,
-        tools: [{ type: "web_search_20250305", name: "web_search" }],
-        messages: [{ role: "user", content: `Find one image for: ${query}. Return only the direct image URL, nothing else.` }]
-      })
+    const resp = await golfFetch({
+      model: "claude-sonnet-4-6",
+      max_tokens: 200,
+      tools: [{ type: "web_search_20250305", name: "web_search" }],
+      messages: [{ role: "user", content: `Find one image for: ${query}. Return only the direct image URL, nothing else.` }]
     });
     const data = await resp.json();
     const toolResult = data.content?.find(b => b.type === 'tool_result' || b.type === 'text');
@@ -3225,11 +3221,8 @@ Generate ONE nickname. It should be:
 Return ONLY the nickname as a plain string, no quotes, no explanation.`;
 
   try {
-    const resp = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ model: "claude-sonnet-4-20250514", max_tokens: 30,
-        messages: [{ role: "user", content: prompt }] })
-    });
+    const resp = await golfFetch({ model: "claude-sonnet-4-6", max_tokens: 30,
+      messages: [{ role: "user", content: prompt }] });
     const data = await resp.json();
     const nickname = data.content?.[0]?.text?.trim();
     if (nickname && nickname.length < 40) {
