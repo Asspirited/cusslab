@@ -290,6 +290,71 @@ const {
   buildAttemptInstruction,
 } = require('../src/logic/intellectual-attempts.js');
 
+// ─── Souness's Cat — PRE_EXISTING relationship seeds ───────────────────────
+
+const SOUNESS_CAT_PRE_EXISTING = {
+  'feynman-hawking':  { tone: 'rivalry',    note: 'Feynman privately dismissive of Hawking pop-science celebrity. Hawking aware. Neither says it directly.' },
+  'feynman-franklin': { tone: 'respect',    note: 'Feynman had a record with women in science. Franklin clocks it immediately. He tries harder than usual.' },
+  'feynman-turing':   { tone: 'kinship',    note: 'Both persecuted in different ways by institutions that needed them. Unspoken recognition.' },
+  'feynman-darwin':   { tone: 'warmth',     note: 'Feynman loves a naturalist who actually went and looked. Darwin is charmed despite himself. Easy company.' },
+  'franklin-turing':  { tone: 'solidarity', note: 'Both destroyed by the establishment they served. Neither performs it. It sits underneath everything.' },
+  'franklin-darwin':  { tone: 'contempt',   note: 'Darwin hand-wringing about publishing reads to Franklin as cowardice. She had no such luxury.' },
+  'franklin-tesla':   { tone: 'irritation', note: 'Tesla rituals and the earring thing. Franklin has zero patience for it.' },
+  'franklin-hawking': { tone: 'neutral',    note: 'Mutual respect at distance. No wound between them, no warmth either.' },
+  'darwin-hawking':   { tone: 'kinship',    note: 'Both sat on their biggest idea longer than they should have. Different reasons, same paralysis.' },
+  'darwin-turing':    { tone: 'empathy',    note: 'Darwin recognises persecution anxiety. Doesn\'t know what to do with it but feels it.' },
+  'darwin-tesla':     { tone: 'unease',     note: 'Tesla precision unnerves Darwin. Darwin chaos unnerves Tesla. Polite distance.' },
+  'hawking-turing':   { tone: 'attraction', note: 'Mutual. Each finds the other\'s mind the most interesting in the room. Neither says so.' },
+  'hawking-tesla':    { tone: 'cool',       note: 'Hawking finds Tesla mysticism irritating. Tesla finds Hawking celebrity vulgar. Cordial.' },
+  'tesla-feynman':    { tone: 'friction',   note: 'Feynman finds Tesla rituals performative. Tesla finds Feynman showmanship vulgar.' },
+  'tesla-turing':     { tone: 'isolation',  note: 'Tesla alone with everyone, but most alone with Turing — who sees the isolation clearly and says nothing.' },
+};
+
+const SOUNESS_CAT_IDS = ['feynman', 'franklin', 'turing', 'darwin', 'hawking', 'tesla'];
+
+function getAllPairs(ids) {
+  const pairs = [];
+  for (let i = 0; i < ids.length; i++) {
+    for (let j = i + 1; j < ids.length; j++) {
+      pairs.push([ids[i], ids[j]]);
+    }
+  }
+  return pairs;
+}
+
+function getPairTone(pre_existing, idA, idB) {
+  const key = `${idA}-${idB}`;
+  const reverseKey = `${idB}-${idA}`;
+  const entry = pre_existing[key] || pre_existing[reverseKey];
+  return entry ? entry.tone : null;
+}
+
+function allPairsHaveToneAndNote(pre_existing, ids) {
+  const pairs = getAllPairs(ids);
+  return pairs.every(([a, b]) => {
+    const key = `${a}-${b}`;
+    const reverseKey = `${b}-${a}`;
+    const entry = pre_existing[key] || pre_existing[reverseKey];
+    return entry && entry.tone && entry.note && entry.note.length > 0;
+  });
+}
+
+function teslaHasNoWarmOrSolidary(pre_existing) {
+  const forbidden = ['warmth', 'solidarity', 'kinship'];
+  return Object.entries(pre_existing)
+    .filter(([key]) => key.includes('tesla'))
+    .every(([, val]) => !forbidden.includes(val.tone));
+}
+
+function pairToneIsSymmetrical(pre_existing, idA, idB) {
+  return getPairTone(pre_existing, idA, idB) === getPairTone(pre_existing, idB, idA);
+}
+
+function noConflictingTones(pre_existing) {
+  const pairs = getAllPairs(SOUNESS_CAT_IDS);
+  return pairs.every(([a, b]) => pairToneIsSymmetrical(pre_existing, a, b));
+}
+
 module.exports = {
   maskKey, isValidKey, shouldUpdateInput,
   Temperature,
@@ -299,4 +364,7 @@ module.exports = {
   premonitionEligible, blankPremonitionLedger, assignPremonitionRC,
   resolvePremonitionCommits, isPremonitionTruthTeller,
   detectIntellectualAttempt, buildAttemptInstruction, INTELLECTUAL_ATTEMPTS_CONFIG,
+  SOUNESS_CAT_PRE_EXISTING, SOUNESS_CAT_IDS,
+  getAllPairs, getPairTone, allPairsHaveToneAndNote,
+  teslaHasNoWarmOrSolidary, pairToneIsSymmetrical, noConflictingTones,
 };

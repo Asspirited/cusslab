@@ -1,7 +1,7 @@
 // Unit test runner — tests pure functions in pipeline/logic.js
 // Run: node pipeline/unit-runner.js
 
-const { maskKey, isValidKey, shouldUpdateInput, Temperature, makeWoundDetector, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetector, DartsVoiceFmt, dartsBuildBlock, DARTS_PREMONITION_AFFINITIES, COLLECTIVE_CALL_MINIMUM, premonitionEligible, blankPremonitionLedger, assignPremonitionRC, resolvePremonitionCommits, isPremonitionTruthTeller, detectIntellectualAttempt, buildAttemptInstruction, INTELLECTUAL_ATTEMPTS_CONFIG } = require('./logic.js');
+const { maskKey, isValidKey, shouldUpdateInput, Temperature, makeWoundDetector, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetector, DartsVoiceFmt, dartsBuildBlock, DARTS_PREMONITION_AFFINITIES, COLLECTIVE_CALL_MINIMUM, premonitionEligible, blankPremonitionLedger, assignPremonitionRC, resolvePremonitionCommits, isPremonitionTruthTeller, detectIntellectualAttempt, buildAttemptInstruction, INTELLECTUAL_ATTEMPTS_CONFIG, SOUNESS_CAT_PRE_EXISTING, SOUNESS_CAT_IDS, getAllPairs, getPairTone, allPairsHaveToneAndNote, teslaHasNoWarmOrSolidary, pairToneIsSymmetrical, noConflictingTones } = require('./logic.js');
 
 let passed = 0;
 let failed = 0;
@@ -704,6 +704,56 @@ assert('IA guard: inject delegates to engine when present',
   _makeIAModule({ detectIntellectualAttempt: () => null, inject: (_p, _id, s) => s + '[INJECTED]' })
     .inject('golf', 'faldo', 'prompt'),
   'prompt[INJECTED]');
+
+// ─── Souness's Cat — PRE_EXISTING relationship seeds ───────────────────────
+
+assert('SC PRE_EXISTING: all 15 pairs present',
+  Object.keys(SOUNESS_CAT_PRE_EXISTING).length, 15);
+
+assert('SC PRE_EXISTING: all pairs have tone and note',
+  allPairsHaveToneAndNote(SOUNESS_CAT_PRE_EXISTING, SOUNESS_CAT_IDS), true);
+
+assert('SC PRE_EXISTING: feynman-hawking tone is rivalry',
+  getPairTone(SOUNESS_CAT_PRE_EXISTING, 'feynman', 'hawking'), 'rivalry');
+
+assert('SC PRE_EXISTING: feynman-franklin tone is respect',
+  getPairTone(SOUNESS_CAT_PRE_EXISTING, 'feynman', 'franklin'), 'respect');
+
+assert('SC PRE_EXISTING: feynman-turing tone is kinship',
+  getPairTone(SOUNESS_CAT_PRE_EXISTING, 'feynman', 'turing'), 'kinship');
+
+assert('SC PRE_EXISTING: feynman-darwin tone is warmth',
+  getPairTone(SOUNESS_CAT_PRE_EXISTING, 'feynman', 'darwin'), 'warmth');
+
+assert('SC PRE_EXISTING: franklin-turing tone is solidarity',
+  getPairTone(SOUNESS_CAT_PRE_EXISTING, 'franklin', 'turing'), 'solidarity');
+
+assert('SC PRE_EXISTING: franklin-darwin tone is contempt',
+  getPairTone(SOUNESS_CAT_PRE_EXISTING, 'franklin', 'darwin'), 'contempt');
+
+assert('SC PRE_EXISTING: darwin-hawking tone is kinship',
+  getPairTone(SOUNESS_CAT_PRE_EXISTING, 'darwin', 'hawking'), 'kinship');
+
+assert('SC PRE_EXISTING: hawking-turing tone is attraction',
+  getPairTone(SOUNESS_CAT_PRE_EXISTING, 'hawking', 'turing'), 'attraction');
+
+assert('SC PRE_EXISTING: hawking-turing attraction is symmetrical',
+  pairToneIsSymmetrical(SOUNESS_CAT_PRE_EXISTING, 'hawking', 'turing'), true);
+
+assert('SC PRE_EXISTING: tesla has no warmth solidarity or kinship seeds',
+  teslaHasNoWarmOrSolidary(SOUNESS_CAT_PRE_EXISTING), true);
+
+assert('SC PRE_EXISTING: no conflicting directional tones',
+  noConflictingTones(SOUNESS_CAT_PRE_EXISTING), true);
+
+assert('SC PRE_EXISTING: SOUNESS_CAT_IDS contains exactly 6 members',
+  SOUNESS_CAT_IDS.length, 6);
+
+assert('SC PRE_EXISTING: getAllPairs returns 15 pairs for 6 members',
+  getAllPairs(SOUNESS_CAT_IDS).length, 15);
+
+assert('SC PRE_EXISTING: getPairTone is direction-agnostic',
+  getPairTone(SOUNESS_CAT_PRE_EXISTING, 'turing', 'hawking'), 'attraction');
 
 // ── Results ──────────────────────────────────────────────────────────────────
 
