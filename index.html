@@ -13136,6 +13136,15 @@ PYKE-ISMS — phrases that recur in your speech. Use them naturally. Other panel
     document.getElementById('dt-output').style.display = 'block';
     UI.setDisabled('dt-moment-btn', true);
 
+    // Mode 2: reflow — move score panel below responses so pundits inform next score choice.
+    if (matchCtx) {
+      const scorePanel = document.getElementById('dt-step-score');
+      const outEl = document.getElementById('dt-output');
+      if (scorePanel && outEl && outEl.nextSibling !== scorePanel) {
+        outEl.parentNode.insertBefore(scorePanel, outEl.nextSibling);
+      }
+    }
+
     const crowdBlock = `\n\nCROWD PRESSURE STATE: ${crowdState}. Alexandra Palace. The crowd noise bleeds through the studio walls.\n`;
 
     const frankenstein = draw.includes('bristow') && draw.includes('taylor');
@@ -13224,13 +13233,15 @@ PYKE-ISMS — phrases that recur in your speech. Use them naturally. Other panel
     _resolveCommits(momentType, ledger);
     _setLedger(ledger);
 
-    // Update premonition status indicator.
-    const statusEl = document.getElementById('dt-premonition-status');
-    if (statusEl) {
-      const statusText = _buildPremonitionStatus(draw, ledger);
-      if (statusText) {
-        statusEl.textContent = `Premonition: ${statusText}`;
-        statusEl.style.display = 'block';
+    // Update premonition status indicator (Q&A mode only — hidden in match engine mode 2).
+    if (!matchCtx) {
+      const statusEl = document.getElementById('dt-premonition-status');
+      if (statusEl) {
+        const statusText = _buildPremonitionStatus(draw, ledger);
+        if (statusText) {
+          statusEl.textContent = `Premonition: ${statusText}`;
+          statusEl.style.display = 'block';
+        }
       }
     }
 
@@ -13250,6 +13261,13 @@ PYKE-ISMS — phrases that recur in your speech. Use them naturally. Other panel
     // Reset output when switching modes.
     const out = document.getElementById('dt-output');
     if (out) out.style.display = 'none';
+    // Restore score panel to ingame-view if it was reflowed below responses.
+    const scorePanel = document.getElementById('dt-step-score');
+    const ingameView = document.getElementById('dt-ingame-view');
+    if (scorePanel && ingameView && !ingameView.contains(scorePanel)) {
+      ingameView.appendChild(scorePanel);
+      if (!isIngame) scorePanel.style.display = 'none';
+    }
   }
 
   function nextRound() {
