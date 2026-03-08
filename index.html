@@ -10963,6 +10963,33 @@ INTER-PANEL: Ron — the gold is the portal to everything Cox wants to say; trea
     const fbCharStates = {};
     for (const id of ORDER) fbCharStates[id] = CharacterState.create(5);
 
+    ConspireEngine.reset();
+
+    // Souness/Neville — analytical contempt spiral; both process-driven,
+    // unite against softness. Break into coordinated open contempt.
+    ConspireEngine.addPairProfile('souness', 'neville', {
+      breakType: 'contempt',
+      breakTrigger: 'Both name the same specific failure in the target simultaneously',
+      validationSpiralLength: 2,
+      escalationTone: 'Souness names it bluntly; Neville provides the process failure. They speak over each other. The target has no opening.',
+      defaultResetValve: 'cox',
+      collapseStyle: 'Cox brings physics — the room has no idea what just happened'
+    });
+
+    // Carragher/Cox — unlikely epistemological alliance; Liverpool suffering
+    // as empirical credential meets actual science. Cox finds it genuinely
+    // interesting. Breaks into laughter when the overlap becomes undeniable.
+    ConspireEngine.addPairProfile('carragher', 'cox', {
+      breakType: 'laughter',
+      breakTrigger: 'Cox validates the suffering-credential as a legitimate epistemological method; Carragher cannot fully resist this',
+      validationSpiralLength: 3,
+      escalationTone: 'Carragher deploys the credential; Cox provides the scientific basis. The target is undermined on two fronts simultaneously.',
+      defaultResetValve: 'micah',
+      collapseStyle: 'Micah finds the whole thing brilliant — breaks the tension instantly'
+    });
+
+    const FOOTBALL_RESET_VALVE_PRIORITY = ['micah', 'cox', 'bigron'];
+
     // Premonition — seed commits for all panel members before any character speaks
     if (_fbPremCtx) {
       for (const id of ORDER) PremonitionEngine.maybeCommit(id, _fbPremCtx.momentType, _fbPremCtx.ledger, FB_PREM_CONFIG);
@@ -11012,9 +11039,10 @@ INTER-PANEL: Ron — the gold is the portal to everything Cox wants to say; trea
       const fbWoundLive = fbRelState.characters[member.id]?.woundActivated || false;
       const fbLieBlock  = LieEngine.buildBlock(member.id, FB_LIE_PROFILES, fbLieState, fbWoundLive);
 
+      const fbArcInstructions = ConspireEngine.getArcInstructions(member.id, fbRelState, ORDER);
       const fbNameBlock = fbName ? `\nThe question was brought by ${fbName}. Address ${fbName} by name at least once in your response.\n` : '';
       const fbIaType = IntellectualAttempts.detect(input);
-      const fbBaseSystem = TURN_RULES + '\n\n' + fbIntensityBlock + fbYourState + fbNameBlock + fbFoodBlock + fbMarmiteBlock + fbHypoBlock + fbPremBlock + fbLieBlock + member.prompt + _iceBreakBlock(member.id) + mechanics + (i > 0
+      const fbBaseSystem = TURN_RULES + '\n\n' + fbIntensityBlock + fbYourState + fbNameBlock + fbFoodBlock + fbMarmiteBlock + fbHypoBlock + fbPremBlock + fbLieBlock + member.prompt + _iceBreakBlock(member.id) + mechanics + fbArcInstructions + (i > 0
         ? `\n\nPrevious:\n${prev}`
         : '');
       const system = fbIaType
@@ -11036,6 +11064,8 @@ INTER-PANEL: Ron — the gold is the portal to everything Cox wants to say; trea
         const resp = await API.call(system, prompt, 250, 'football/' + member.id);
         responses.push(resp);
         RelationshipState.update(fbRelState, member.id, resp, ORDER, FOOTBALL_WOUNDS, FOOTBALL_NAMEMAP);
+        ConspireEngine.check(fbRelState, ORDER);
+        ConspireEngine.advanceStage(FOOTBALL_RESET_VALVE_PRIORITY);
         _fill(pid, member, resp);
       } catch (e) {
         _fill(pid, member, e.userMessage || 'Request failed.');
