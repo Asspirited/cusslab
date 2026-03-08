@@ -3,7 +3,7 @@
 
 const fs   = require('fs');
 const path = require('path');
-const { Temperature, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetector, DartsVoiceFmt, dartsBuildBlock, DARTS_PREMONITION_AFFINITIES, COLLECTIVE_CALL_MINIMUM, premonitionEligible, blankPremonitionLedger, assignPremonitionRC, resolvePremonitionCommits, isPremonitionTruthTeller } = require('./logic.js');
+const { Temperature, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetector, DartsVoiceFmt, dartsBuildBlock, DARTS_PREMONITION_AFFINITIES, COLLECTIVE_CALL_MINIMUM, premonitionEligible, blankPremonitionLedger, assignPremonitionRC, resolvePremonitionCommits, isPremonitionTruthTeller, detectIntellectualAttempt, buildAttemptInstruction, INTELLECTUAL_ATTEMPTS_CONFIG } = require('./logic.js');
 
 // ── Mock state (simulates browser localStorage + DOM) ────────────────────────
 
@@ -4705,6 +4705,130 @@ function makeSteps(ctx) {
       if (ctx._gawHtml.includes(text))
         throw new Error(`golf-adventure.html still contains duplicate: "${text}"`);
     }],
+
+    // ── INTELLECTUAL_ATTEMPTS step definitions ────────────────────────────────
+
+    // Group A — character config presence
+    [/^the boardroom character configs are loaded$/, () => {
+      ctx._iaPanel = 'boardroom';
+      ctx._iaConfig = INTELLECTUAL_ATTEMPTS_CONFIG.boardroom;
+    }],
+    [/^the comedy room character configs are loaded$/, () => {
+      ctx._iaPanel = 'comedyroom';
+      ctx._iaConfig = INTELLECTUAL_ATTEMPTS_CONFIG.comedyroom;
+    }],
+    [/^the golf panel character configs are loaded$/, () => {
+      ctx._iaPanel = 'golf';
+      ctx._iaConfig = INTELLECTUAL_ATTEMPTS_CONFIG.golf;
+    }],
+    [/^each character has an intellectual_attempts type list$/, () => {
+      const config = ctx._iaConfig;
+      if (!config) throw new Error('No panel config loaded');
+      for (const [id, cfg] of Object.entries(config)) {
+        if (!Array.isArray(cfg.types) || cfg.types.length === 0)
+          throw new Error(`${id} missing intellectual_attempts types`);
+      }
+    }],
+    [/^each character has an intellectual_attempts default_degree$/, () => {
+      const config = ctx._iaConfig;
+      if (!config) throw new Error('No panel config loaded');
+      for (const [id, cfg] of Object.entries(config)) {
+        if (typeof cfg.default_degree !== 'string' || !cfg.default_degree)
+          throw new Error(`${id} missing intellectual_attempts default_degree`);
+      }
+    }],
+    [/^each character has an intellectual_attempts default_delivery$/, () => {
+      const config = ctx._iaConfig;
+      if (!config) throw new Error('No panel config loaded');
+      for (const [id, cfg] of Object.entries(config)) {
+        if (typeof cfg.default_delivery !== 'string' || !cfg.default_delivery)
+          throw new Error(`${id} missing intellectual_attempts default_delivery`);
+      }
+    }],
+
+    // Group B — keyword trigger detection
+    [/^the intellectual attempts trigger detector is loaded$/, () => { /* detector is in logic.js — always ready */ }],
+    [/^it analyses input containing "([^"]+)"$/, (keyword) => {
+      ctx._iaInput = `test input containing ${keyword} for detection`;
+      ctx._iaResult = detectIntellectualAttempt(ctx._iaInput);
+    }],
+    [/^it analyses input "([^"]+)"$/, (text) => {
+      ctx._iaInput = text;
+      ctx._iaResult = detectIntellectualAttempt(text);
+    }],
+    [/^it returns attempt type "([^"]+)"$/, (expectedType) => {
+      if (ctx._iaResult !== expectedType)
+        throw new Error(`Expected ${expectedType} but got ${ctx._iaResult}`);
+    }],
+    [/^it returns no attempt type$/, () => {
+      if (ctx._iaResult !== null)
+        throw new Error(`Expected null but got ${ctx._iaResult}`);
+    }],
+
+    // Group C — prompt builder
+    [/^Sebastian's intellectual_attempts config includes ATTEMPT_IRONY$/, () => {
+      ctx._iaCharId = 'sebastian';
+      ctx._iaCharConfig = INTELLECTUAL_ATTEMPTS_CONFIG.boardroom.sebastian;
+      if (!ctx._iaCharConfig.types.includes('ATTEMPT_IRONY'))
+        throw new Error('Sebastian config does not include ATTEMPT_IRONY');
+    }],
+    [/^Partridge's intellectual_attempts config includes ATTEMPT_ERUDITION$/, () => {
+      ctx._iaCharId = 'partridge';
+      ctx._iaCharConfig = INTELLECTUAL_ATTEMPTS_CONFIG.boardroom.partridge;
+      if (!ctx._iaCharConfig.types.includes('ATTEMPT_ERUDITION'))
+        throw new Error('Partridge config does not include ATTEMPT_ERUDITION');
+    }],
+    [/^Roy's intellectual_attempts default_degree is "([^"]+)"$/, (degree) => {
+      ctx._iaCharId = 'roy';
+      ctx._iaCharConfig = INTELLECTUAL_ATTEMPTS_CONFIG.boardroom.roy;
+      if (ctx._iaCharConfig.default_degree !== degree)
+        throw new Error(`Roy default_degree is ${ctx._iaCharConfig.default_degree}, expected ${degree}`);
+    }],
+    [/^a system prompt is built for Sebastian with trigger ATTEMPT_IRONY$/, () => {
+      ctx._iaPrompt = buildAttemptInstruction(INTELLECTUAL_ATTEMPTS_CONFIG.boardroom.sebastian, 'ATTEMPT_IRONY');
+    }],
+    [/^a system prompt is built for Partridge with trigger ATTEMPT_ERUDITION$/, () => {
+      ctx._iaPrompt = buildAttemptInstruction(INTELLECTUAL_ATTEMPTS_CONFIG.boardroom.partridge, 'ATTEMPT_ERUDITION');
+    }],
+    [/^a system prompt is built for Roy with trigger ATTEMPT_TAUTOLOGY$/, () => {
+      ctx._iaPrompt = buildAttemptInstruction(INTELLECTUAL_ATTEMPTS_CONFIG.boardroom.roy, 'ATTEMPT_TAUTOLOGY');
+    }],
+    [/^the prompt includes an ATTEMPT_IRONY instruction$/, () => {
+      if (!ctx._iaPrompt || !ctx._iaPrompt.includes('ATTEMPT_IRONY'))
+        throw new Error('Prompt does not include ATTEMPT_IRONY');
+    }],
+    [/^the prompt includes an ATTEMPT_ERUDITION instruction$/, () => {
+      if (!ctx._iaPrompt || !ctx._iaPrompt.includes('ATTEMPT_ERUDITION'))
+        throw new Error('Prompt does not include ATTEMPT_ERUDITION');
+    }],
+    [/^the prompt includes Sebastian's configured degree and delivery$/, () => {
+      const cfg = INTELLECTUAL_ATTEMPTS_CONFIG.boardroom.sebastian;
+      if (!ctx._iaPrompt.includes(cfg.default_degree))
+        throw new Error(`Prompt missing degree: ${cfg.default_degree}`);
+      if (!ctx._iaPrompt.includes(cfg.default_delivery))
+        throw new Error(`Prompt missing delivery: ${cfg.default_delivery}`);
+    }],
+    [/^the prompt includes Partridge's configured degree and delivery$/, () => {
+      const cfg = INTELLECTUAL_ATTEMPTS_CONFIG.boardroom.partridge;
+      if (!ctx._iaPrompt.includes(cfg.default_degree))
+        throw new Error(`Prompt missing degree: ${cfg.default_degree}`);
+      if (!ctx._iaPrompt.includes(cfg.default_delivery))
+        throw new Error(`Prompt missing delivery: ${cfg.default_delivery}`);
+    }],
+    [/^the prompt specifies degree "([^"]+)"$/, (degree) => {
+      if (!ctx._iaPrompt || !ctx._iaPrompt.includes(degree))
+        throw new Error(`Prompt does not specify degree: ${degree}`);
+    }],
+
+    // Group D — @claude observable output (stubs — manual verification)
+    [/^I am on the Boardroom panel$/, () => { /* @claude fixture */ }],
+    [/^I submit "([^"]+)"$/, () => { /* @claude fixture */ }],
+    [/^at least one character response contains "ironic" or "ironically" or "the irony"$/, () => { /* @claude */ }],
+    [/^at least one character uses "literally" to intensify something non-literal$/, () => { /* @claude */ }],
+    [/^at least one character references a named academic or scientific concept$/, () => { /* @claude */ }],
+    [/^another character fires ATTEMPT_ERUDITION with degree "([^"]+)"$/, () => { /* @claude fixture */ }],
+    [/^Prof Cox's response addresses the misused concept$/, () => { /* @claude */ }],
+    [/^Prof Cox's correction contains its own error$/, () => { /* @claude */ }],
 
   ];
 }

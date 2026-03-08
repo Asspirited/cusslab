@@ -1,7 +1,7 @@
 // Unit test runner — tests pure functions in pipeline/logic.js
 // Run: node pipeline/unit-runner.js
 
-const { maskKey, isValidKey, shouldUpdateInput, Temperature, makeWoundDetector, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetector, DartsVoiceFmt, dartsBuildBlock, DARTS_PREMONITION_AFFINITIES, COLLECTIVE_CALL_MINIMUM, premonitionEligible, blankPremonitionLedger, assignPremonitionRC, resolvePremonitionCommits, isPremonitionTruthTeller } = require('./logic.js');
+const { maskKey, isValidKey, shouldUpdateInput, Temperature, makeWoundDetector, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetector, DartsVoiceFmt, dartsBuildBlock, DARTS_PREMONITION_AFFINITIES, COLLECTIVE_CALL_MINIMUM, premonitionEligible, blankPremonitionLedger, assignPremonitionRC, resolvePremonitionCommits, isPremonitionTruthTeller, detectIntellectualAttempt, buildAttemptInstruction, INTELLECTUAL_ATTEMPTS_CONFIG } = require('./logic.js');
 
 let passed = 0;
 let failed = 0;
@@ -446,6 +446,96 @@ assert('isPremonitionTruthTeller: mardle → false',  isPremonitionTruthTeller('
   assert('blankPremonitionLedger: aftermath is empty object', typeof l.aftermath,                   'object');
   assert('blankPremonitionLedger: rcHolder is null',          l.rcHolder,                           null);
 })();
+
+// ── detectIntellectualAttempt ─────────────────────────────────────────────────
+
+assert('detectIntellectualAttempt: "irony" → ATTEMPT_IRONY',
+  detectIntellectualAttempt('the irony of this is remarkable'), 'ATTEMPT_IRONY');
+
+assert('detectIntellectualAttempt: "ironic" → ATTEMPT_IRONY',
+  detectIntellectualAttempt('that is quite ironic'), 'ATTEMPT_IRONY');
+
+assert('detectIntellectualAttempt: "ironically" → ATTEMPT_IRONY',
+  detectIntellectualAttempt('ironically, it worked'), 'ATTEMPT_IRONY');
+
+assert('detectIntellectualAttempt: "literally" → ATTEMPT_LITERALLY',
+  detectIntellectualAttempt('he literally flew down the wing'), 'ATTEMPT_LITERALLY');
+
+assert('detectIntellectualAttempt: "tautology" → ATTEMPT_TAUTOLOGY',
+  detectIntellectualAttempt('that is a tautology'), 'ATTEMPT_TAUTOLOGY');
+
+assert('detectIntellectualAttempt: "oxymoron" → ATTEMPT_OXYMORON',
+  detectIntellectualAttempt('bit of an oxymoron'), 'ATTEMPT_OXYMORON');
+
+assert('detectIntellectualAttempt: "metaphor" → ATTEMPT_METAPHOR',
+  detectIntellectualAttempt('to use a metaphor'), 'ATTEMPT_METAPHOR');
+
+assert('detectIntellectualAttempt: "paradox" → ATTEMPT_PARADOX',
+  detectIntellectualAttempt('there is a paradox here'), 'ATTEMPT_PARADOX');
+
+assert('detectIntellectualAttempt: "quantum" → ATTEMPT_ERUDITION',
+  detectIntellectualAttempt('very quantum this'), 'ATTEMPT_ERUDITION');
+
+assert('detectIntellectualAttempt: "Schrödinger" → ATTEMPT_ERUDITION',
+  detectIntellectualAttempt("it's Schrödinger's situation"), 'ATTEMPT_ERUDITION');
+
+assert('detectIntellectualAttempt: "Heisenberg" → ATTEMPT_ERUDITION',
+  detectIntellectualAttempt('Heisenberg would have something to say'), 'ATTEMPT_ERUDITION');
+
+assert('detectIntellectualAttempt: "Occam" → ATTEMPT_ERUDITION',
+  detectIntellectualAttempt("Occam's razor applies here"), 'ATTEMPT_ERUDITION');
+
+assert('detectIntellectualAttempt: no keyword → null',
+  detectIntellectualAttempt('he played well in the second half'), null);
+
+assert('detectIntellectualAttempt: empty string → null',
+  detectIntellectualAttempt(''), null);
+
+assert('detectIntellectualAttempt: case-insensitive — "LITERALLY" → ATTEMPT_LITERALLY',
+  detectIntellectualAttempt('he LITERALLY cannot stop'), 'ATTEMPT_LITERALLY');
+
+// ── buildAttemptInstruction ───────────────────────────────────────────────────
+
+(function() {
+  const sebastianConfig = INTELLECTUAL_ATTEMPTS_CONFIG.boardroom.sebastian;
+  const instruction = buildAttemptInstruction(sebastianConfig, 'ATTEMPT_IRONY');
+  assert('buildAttemptInstruction: returns a non-empty string',
+    typeof instruction === 'string' && instruction.length > 0, true);
+  assert('buildAttemptInstruction: includes the attempt type',
+    instruction.includes('ATTEMPT_IRONY'), true);
+  assert('buildAttemptInstruction: includes the degree',
+    instruction.includes(sebastianConfig.default_degree), true);
+  assert('buildAttemptInstruction: includes the delivery',
+    instruction.includes(sebastianConfig.default_delivery), true);
+})();
+
+(function() {
+  const royConfig = INTELLECTUAL_ATTEMPTS_CONFIG.boardroom.roy;
+  const instruction = buildAttemptInstruction(royConfig, 'ATTEMPT_TAUTOLOGY');
+  assert('buildAttemptInstruction: Roy tautology includes catastrophic_miss',
+    instruction.includes('catastrophic_miss'), true);
+})();
+
+// ── INTELLECTUAL_ATTEMPTS_CONFIG structure ────────────────────────────────────
+
+assert('INTELLECTUAL_ATTEMPTS_CONFIG: boardroom panel exists',
+  typeof INTELLECTUAL_ATTEMPTS_CONFIG.boardroom, 'object');
+
+assert('INTELLECTUAL_ATTEMPTS_CONFIG: comedyroom panel exists',
+  typeof INTELLECTUAL_ATTEMPTS_CONFIG.comedyroom, 'object');
+
+assert('INTELLECTUAL_ATTEMPTS_CONFIG: golf panel exists',
+  typeof INTELLECTUAL_ATTEMPTS_CONFIG.golf, 'object');
+
+['sebastian', 'roy', 'partridge', 'cox', 'mystic', 'harold'].forEach(id => {
+  const cfg = INTELLECTUAL_ATTEMPTS_CONFIG.boardroom[id];
+  assert(`INTELLECTUAL_ATTEMPTS_CONFIG: boardroom.${id} has types array`,
+    Array.isArray(cfg && cfg.types), true);
+  assert(`INTELLECTUAL_ATTEMPTS_CONFIG: boardroom.${id} has default_degree`,
+    typeof (cfg && cfg.default_degree), 'string');
+  assert(`INTELLECTUAL_ATTEMPTS_CONFIG: boardroom.${id} has default_delivery`,
+    typeof (cfg && cfg.default_delivery), 'string');
+});
 
 // ── Results ──────────────────────────────────────────────────────────────────
 
