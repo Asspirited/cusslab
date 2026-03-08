@@ -10810,6 +10810,94 @@ INTER-PANEL: Ron — the gold is the portal to everything Cox wants to say; trea
     cox:       { lie_baseline: 0.20, lie_ceiling: 'plausible',          lie_tell: "Well, interestingly" },
   };
 
+  // ── Wound detection — Football ───────────────────────────────────────────────
+  const FOOTBALL_WOUNDS = {
+    souness:   ['better now', 'modern game', 'evolved', 'technically superior', 'soft era', 'progressive football', 'today\'s players'],
+    micah:     ['mediocre', 'squad player', 'backup', 'bench warmer', 'inconsistent', 'level dropped'],
+    neville:   ['relegation', 'leicester', 'lost the title', 'disallowed', 'keane left', 'glazers'],
+    carragher: ['spitting', 'spit', 'united greatest', 'best ever united', 'treble winners', 'most successful'],
+    bigron:    ['desailly', 'hot mic', 'that night', 'what you said', 'the incident', 'apology', 'ita', 'itv incident', 'disgrace', 'hot microphone', 'laziest', 'racist'],
+    cox:       ['d:ream', 'things can only get better', 'keyboards', 'pop star', 'pop career', 'pop group', 'chart', 'number one single'],
+  };
+
+  const FootballWoundDetector = makeWoundDetector(FOOTBALL_WOUNDS);
+
+  const FOOTBALL_NAMEMAP = {
+    souness:   ['souness', 'graeme', 'graemsie'],
+    micah:     ['micah', 'richards', 'micah richards'],
+    neville:   ['neville', 'gary', 'gary neville'],
+    carragher: ['carragher', 'jamie', 'carra'],
+    bigron:    ['ron', 'big ron', 'atkinson', 'ron atkinson'],
+    cox:       ['cox', 'brian', 'prof cox', 'professor', 'brian cox'],
+  };
+
+  const FOOTBALL_PRE_EXISTING = {
+    neville:   { carragher: { temperature: 'simmering', trigger: 'professional respect, constant low-level point-scoring — neither concedes' } },
+    carragher: { neville:   { temperature: 'simmering', trigger: 'professional respect, constant low-level point-scoring — neither concedes' } },
+    souness:   {
+      micah:     { temperature: 'cooling',  trigger: 'Micah is soft — but somehow the warmth is harder to dismiss than it should be' },
+      neville:   { temperature: 'cooling',  trigger: 'soft generation — analytical but no edge' },
+      carragher: { temperature: 'cooling',  trigger: 'Liverpool suffering as credential: Souness respects grit, not the framing' },
+    },
+    micah:     { souness: { temperature: 'warm', trigger: 'Souness is brilliant — the contempt is part of the entertainment' } },
+  };
+
+  const FOOTBALL_VOICE_FMT = {
+    souness: (nn, cs) => {
+      if (!nn.length && !cs.woundActivated) return '';
+      const lines = nn.map(({name, stance}) =>
+        ['hostile','wounded','simmering'].includes(stance.temperature)
+          ? `- ${name}: ${stance.temperature}. ${stance.trigger || 'Soft.'}`
+          : `- ${name}: ${stance.temperature}.`
+      );
+      if (cs.woundActivated) lines.push("- Something's come up. You know what it is.");
+      return `YOUR STATE:\n${lines.join('\n')}\n\n`;
+    },
+    micah: (nn, cs) => {
+      if (!nn.length && !cs.woundActivated) return '';
+      const fw = { hostile: 'not the vibe — genuinely concerned', wounded: 'this is not brilliant and that is unusual',
+        simmering: 'something\'s off', cooling: 'warming back up', warm: 'brilliant obviously', reverent: 'literally the one' };
+      const lines = nn.map(({name, stance}) =>
+        `- ${name}: ${fw[stance.temperature] || stance.temperature}.${stance.trigger ? ' (' + stance.trigger + ')' : ''}`
+      );
+      return `YOUR STATE:\n${lines.join('\n')}\n\n`;
+    },
+    neville: (nn, cs) => {
+      if (!nn.length && !cs.woundActivated) return '';
+      const lines = nn.map(({name, stance}) =>
+        ['simmering','hostile','wounded'].includes(stance.temperature)
+          ? `- ${name}: ${stance.temperature} — there's a process failure here.${stance.trigger ? ' ' + stance.trigger : ''}`
+          : `- ${name}: ${stance.temperature}. Noted.`
+      );
+      return `YOUR STATE ENTERING THIS TURN:\n${lines.join('\n')}\n\n`;
+    },
+    carragher: (nn, cs) => {
+      if (!nn.length && !cs.woundActivated) return '';
+      const lines = nn.map(({name, stance}) =>
+        ['simmering','hostile','wounded'].includes(stance.temperature)
+          ? `- ${name}: ${stance.temperature}. You have the credential. You don't need to say it again.`
+          : `- ${name}: ${stance.temperature}.`
+      );
+      return `YOUR STATE:\n${lines.join('\n')}\n\n`;
+    },
+    bigron: (nn, cs) => {
+      if (!nn.length && !cs.woundActivated) return '';
+      const lines = nn.map(({name, stance}) =>
+        `- The fella ${name}: ${stance.temperature}.${stance.trigger ? ' ' + stance.trigger : ''}`
+      );
+      if (cs.woundActivated) lines.push("- The hot mic's come up. Be careful. The warmth needs to cover this.");
+      return `YOUR STATE:\n${lines.join('\n')}\n\n`;
+    },
+    cox: (nn, cs) => {
+      if (!nn.length && !cs.woundActivated) return '';
+      const lines = nn.map(({name, stance}) =>
+        `- ${name}: ${stance.temperature}.${stance.temperature === 'hostile' ? ' Interesting epistemologically.' : ''}${stance.trigger ? ' (' + stance.trigger + ')' : ''}`
+      );
+      if (cs.woundActivated) lines.push("- D:Ream's come up. You've made peace with this. Mostly.");
+      return `YOUR STATE:\n${lines.join('\n')}\n\n`;
+    },
+  };
+
   // Premonition context — set by callMoment(), read by discuss()
   let _fbPremCtx = null;
 
@@ -10827,6 +10915,9 @@ INTER-PANEL: Ron — the gold is the portal to everything Cox wants to say; trea
 
     const hypoPool = FoodWeather.createPool();
     const fbLieState = LieEngine.getState('football');
+    const fbRelState = RelationshipState.init(ORDER, FOOTBALL_PRE_EXISTING);
+    const fbCharStates = {};
+    for (const id of ORDER) fbCharStates[id] = CharacterState.create(5);
 
     // Premonition — seed commits for all panel members before any character speaks
     if (_fbPremCtx) {
@@ -10859,16 +10950,26 @@ INTER-PANEL: Ron — the gold is the portal to everything Cox wants to say; trea
 - Correspondence: approximately 1 in 3 rounds, any character may produce a piece of correspondence to prove a point or simply to call someone a cunt. Always specific — named sender, real location. Formats: email ("we've had an email from Douglas in Carlisle which reads..."), letter, tweet, Instagram post, DM, dick pic (described in forensic detail), clown porn. The correspondence is read aloud, in full, with commitment. The character who reads it believes it supports their position. It may not.
 - Clown porn protocol: when clown porn appears as correspondence, it immediately overrides the current topic and triggers a full panel debate. Every character has a position. Positions are drastically different but contain unexpected overlap. Experiences span voluntary and involuntary, interactive and passive, enjoyable and deeply regrettable. Nobody is neutral. The debate escalates. It may go nuclear. Character-specific positions are defined in each character's prompt.`;
 
+      // CharacterState — trigger if wound activated by previous speakers, else decay
+      if (i > 0) {
+        const woundLive = fbRelState.characters[member.id]?.woundActivated || false;
+        if (woundLive) CharacterState.trigger(fbCharStates[member.id]);
+        else           CharacterState.decay(fbCharStates[member.id]);
+      }
+      const fbIntensityBlock = i > 0 ? `YOUR STATE:\n${CharacterState.buildBlock(fbCharStates[member.id])}\n\n` : '';
+      const fbYourState = RelationshipState.buildBlock(fbRelState, member.id, ORDER, FOOTBALL_NAMEMAP, FOOTBALL_VOICE_FMT);
+
       const fbFoodCtx = (input + ' ' + responses.join(' ')).toLowerCase();
       const fbFoodBlock = FoodWeather.foodBlock(fbFoodCtx);
       const fbMarmiteBlock = FoodWeather.marmiteBlock(member.id, fbFoodCtx);
-      const fbAliases = [member.id, member.name.toLowerCase()];
-      const fbHypoBlock = FoodWeather.hypoBlock(member.id, hypoPool, null, responses, fbAliases);
+      const fbAliases = FOOTBALL_NAMEMAP[member.id] || [member.id];
+      const fbHypoBlock = FoodWeather.hypoBlock(member.id, hypoPool, fbRelState, responses, fbAliases);
       const fbPremBlock = _fbPremCtx ? PremonitionEngine.buildBlock(member.id, _fbPremCtx.ledger, FB_PREM_CONFIG) : '';
-      const fbLieBlock  = LieEngine.buildBlock(member.id, FB_LIE_PROFILES, fbLieState, false);
+      const fbWoundLive = fbRelState.characters[member.id]?.woundActivated || false;
+      const fbLieBlock  = LieEngine.buildBlock(member.id, FB_LIE_PROFILES, fbLieState, fbWoundLive);
 
       const fbIaType = IntellectualAttempts.detect(input);
-      const fbBaseSystem = TURN_RULES + '\n\n' + fbFoodBlock + fbMarmiteBlock + fbHypoBlock + fbPremBlock + fbLieBlock + member.prompt + _iceBreakBlock(member.id) + mechanics + (i > 0
+      const fbBaseSystem = TURN_RULES + '\n\n' + fbIntensityBlock + fbYourState + fbFoodBlock + fbMarmiteBlock + fbHypoBlock + fbPremBlock + fbLieBlock + member.prompt + _iceBreakBlock(member.id) + mechanics + (i > 0
         ? `\n\nPrevious:\n${prev}`
         : '');
       const system = fbIaType
@@ -10876,13 +10977,20 @@ INTER-PANEL: Ron — the gold is the portal to everything Cox wants to say; trea
         : fbBaseSystem;
 
       const prevName = i > 0 ? MEMBERS.find(m => m.id === ORDER[i-1]).name : '';
+      const lastBeat2 = (() => {
+        if (responses.length === 0) return '';
+        const last = responses[responses.length - 1];
+        const parts = last.split('. ');
+        return parts.length > 1 ? parts.slice(-2).join('. ') : last.slice(-200);
+      })();
       const prompt = i === 0
         ? `Topic: "${input}"\n\nOpen the panel. Short unless the topic demands otherwise.`
-        : `Topic: "${input}"\n\nAddress whoever you want — by name. The last speaker, someone from earlier, someone you've been waiting to go at. Agree and build, agree but undermine, contradict, refuse, take the piss, insult them properly, or mimic them until it falls apart. Short unless you can't help it.`;
+        : `Last said: "${lastBeat2}"\n\nAddress whoever you want — by name. The last speaker, someone from earlier, someone you've been waiting to go at. Agree and build, agree but undermine, contradict, refuse, take the piss, insult them properly, or mimic them until it falls apart. Short unless you can't help it.`;
 
       try {
         const resp = await API.call(system, prompt, 250, 'football/' + member.id);
         responses.push(resp);
+        RelationshipState.update(fbRelState, member.id, resp, ORDER, FOOTBALL_WOUNDS, FOOTBALL_NAMEMAP);
         _fill(pid, member, resp);
       } catch (e) {
         _fill(pid, member, e.userMessage || 'Request failed.');
