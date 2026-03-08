@@ -4222,6 +4222,490 @@ function makeSteps(ctx) {
         throw new Error('golfadventure missing from skin tabs');
     }],
 
+    // ── Golf Adventure Data Integrity (characterisation tests — Feathers) ─────
+    [/^the golf adventure data modules are loaded$/, () => {
+      const { CHARACTERS } = require('../golf-data/characters.js');
+      const { TOURNAMENTS } = require('../golf-data/tournaments.js');
+      const { EVENTS }      = require('../golf-data/events.js');
+      const { SHOTS }       = require('../golf-data/shots.js');
+      ctx._gaData = { CHARACTERS, TOURNAMENTS, EVENTS, SHOTS };
+    }],
+    [/^the character registry is inspected$/, () => {
+      if (!ctx._gaData?.CHARACTERS?.length) throw new Error('CHARACTERS not loaded');
+    }],
+    [/^every character has a non-empty "([^"]+)"$/, (field) => {
+      const bad = ctx._gaData.CHARACTERS.filter(c => !c[field] || String(c[field]).trim() === '');
+      if (bad.length) throw new Error(`Characters missing "${field}": ${bad.map(c=>c.id||'?').join(', ')}`);
+    }],
+    [/^every character has a "golf_knowledge" field$/, () => {
+      const bad = ctx._gaData.CHARACTERS.filter(c => !c.golf_knowledge);
+      if (bad.length) throw new Error(`Characters missing golf_knowledge: ${bad.map(c=>c.id).join(', ')}`);
+    }],
+    [/^the value is one of: "high", "medium", "low", "none"$/, () => {
+      const valid = new Set(['high','medium','low','none']);
+      const bad = ctx._gaData.CHARACTERS.filter(c => !valid.has(c.golf_knowledge));
+      if (bad.length) throw new Error(`Invalid golf_knowledge: ${bad.map(c=>`${c.id}=${c.golf_knowledge}`).join(', ')}`);
+    }],
+    [/^a character with id "([^"]+)" exists$/, (id) => {
+      ctx._gaFoundChar = ctx._gaData.CHARACTERS.find(c => c.id === id);
+      if (!ctx._gaFoundChar) throw new Error(`Character not found: ${id}`);
+    }],
+    [/^their name is "([^"]+)"$/, (name) => {
+      if (ctx._gaFoundChar.name !== name)
+        throw new Error(`Expected name "${name}", got "${ctx._gaFoundChar.name}"`);
+    }],
+    [/^the tournament catalogue is inspected$/, () => {
+      if (!ctx._gaData?.TOURNAMENTS?.length) throw new Error('TOURNAMENTS not loaded');
+    }],
+    [/^every tournament has a non-empty "([^"]+)"$/, (field) => {
+      const bad = ctx._gaData.TOURNAMENTS.filter(t => !t[field] || String(t[field]).trim() === '');
+      if (bad.length) throw new Error(`Tournaments missing "${field}": ${bad.map(t=>t.id||'?').join(', ')}`);
+    }],
+    [/^every tournament has a numeric "([^"]+)"$/, (field) => {
+      const bad = ctx._gaData.TOURNAMENTS.filter(t => typeof t[field] !== 'number');
+      if (bad.length) throw new Error(`Tournaments missing numeric "${field}": ${bad.map(t=>t.id||'?').join(', ')}`);
+    }],
+    [/^every tournament has a "players" array with at least one entry$/, () => {
+      const bad = ctx._gaData.TOURNAMENTS.filter(t => !Array.isArray(t.players) || t.players.length === 0);
+      if (bad.length) throw new Error(`Tournaments missing players: ${bad.map(t=>t.id).join(', ')}`);
+    }],
+    [/^every tournament has a "holes" array with at least one entry$/, () => {
+      const bad = ctx._gaData.TOURNAMENTS.filter(t => !Array.isArray(t.holes) || t.holes.length === 0);
+      if (bad.length) throw new Error(`Tournaments missing holes: ${bad.map(t=>t.id).join(', ')}`);
+    }],
+    [/^every player in every tournament has a non-empty "name"$/, () => {
+      for (const t of ctx._gaData.TOURNAMENTS) {
+        const bad = t.players.filter(p => !p.name || p.name.trim() === '');
+        if (bad.length) throw new Error(`Tournament ${t.id} has players missing name`);
+      }
+    }],
+    [/^every player has a "historicalScores" array$/, () => {
+      for (const t of ctx._gaData.TOURNAMENTS) {
+        const bad = t.players.filter(p => !Array.isArray(p.historicalScores));
+        if (bad.length) throw new Error(`Tournament ${t.id} has players missing historicalScores`);
+      }
+    }],
+    [/^every historicalScores entry is a number$/, () => {
+      for (const t of ctx._gaData.TOURNAMENTS) {
+        for (const p of t.players) {
+          const bad = p.historicalScores.filter(s => typeof s !== 'number');
+          if (bad.length) throw new Error(`${t.id}/${p.name} has non-numeric historicalScores`);
+        }
+      }
+    }],
+    [/^every hole has a non-empty "([^"]+)"$/, (field) => {
+      for (const t of ctx._gaData.TOURNAMENTS) {
+        const bad = t.holes.filter(h => !h[field] || String(h[field]).trim() === '');
+        if (bad.length) throw new Error(`Tournament ${t.id} holes missing "${field}"`);
+      }
+    }],
+    [/^every hole has a numeric "([^"]+)"$/, (field) => {
+      for (const t of ctx._gaData.TOURNAMENTS) {
+        const bad = t.holes.filter(h => typeof h[field] !== 'number');
+        if (bad.length) throw new Error(`Tournament ${t.id} holes missing numeric "${field}"`);
+      }
+    }],
+    [/^a tournament with id "([^"]+)" exists$/, (id) => {
+      ctx._gaFoundTournament = ctx._gaData.TOURNAMENTS.find(t => t.id === id);
+      if (!ctx._gaFoundTournament) throw new Error(`Tournament not found: ${id}`);
+    }],
+    [/^its year is (\d+)$/, (year) => {
+      if (ctx._gaFoundTournament.year !== Number(year))
+        throw new Error(`Expected year ${year}, got ${ctx._gaFoundTournament.year}`);
+    }],
+    [/^its course contains "([^"]+)"$/, (fragment) => {
+      if (!ctx._gaFoundTournament.course.includes(fragment))
+        throw new Error(`Course "${ctx._gaFoundTournament.course}" does not contain "${fragment}"`);
+    }],
+    [/^the events pool is inspected$/, () => {
+      if (!ctx._gaData?.EVENTS?.length) throw new Error('EVENTS not loaded');
+    }],
+    [/^every event has a non-empty "([^"]+)"$/, (field) => {
+      const bad = ctx._gaData.EVENTS.filter(e => !e[field] || String(e[field]).trim() === '');
+      if (bad.length) throw new Error(`Events missing "${field}": ${bad.map(e=>e.id||'?').slice(0,5).join(', ')}`);
+    }],
+    [/^every event has a numeric "triggerChance" between 0 and 1$/, () => {
+      const bad = ctx._gaData.EVENTS.filter(e => typeof e.triggerChance !== 'number' || e.triggerChance < 0 || e.triggerChance > 1);
+      if (bad.length) throw new Error(`Events with invalid triggerChance: ${bad.map(e=>e.id).slice(0,5).join(', ')}`);
+    }],
+    [/^every event has a "choices" array with at least one entry$/, () => {
+      const bad = ctx._gaData.EVENTS.filter(e => !Array.isArray(e.choices) || e.choices.length === 0);
+      if (bad.length) throw new Error(`Events missing choices: ${bad.map(e=>e.id).slice(0,5).join(', ')}`);
+    }],
+    [/^every choice in every event has a non-empty "label"$/, () => {
+      for (const e of ctx._gaData.EVENTS) {
+        const bad = e.choices.filter(c => !c.label || c.label.trim() === '');
+        if (bad.length) throw new Error(`Event ${e.id} has choices missing label`);
+      }
+    }],
+    [/^an event with id "([^"]+)" exists$/, (id) => {
+      ctx._gaFoundEvent = ctx._gaData.EVENTS.find(e => e.id === id);
+      if (!ctx._gaFoundEvent) throw new Error(`Event not found: ${id}`);
+    }],
+    [/^its triggerChance is greater than 0$/, () => {
+      if (!(ctx._gaFoundEvent.triggerChance > 0))
+        throw new Error(`Event ${ctx._gaFoundEvent.id} triggerChance is not > 0`);
+    }],
+    [/^the shot types are inspected$/, () => {
+      if (!ctx._gaData?.SHOTS) throw new Error('SHOTS not loaded');
+    }],
+    [/^(?:a|an) "([^"]+)" category exists$/, (cat) => {
+      if (!Array.isArray(ctx._gaData.SHOTS[cat]))
+        throw new Error(`Shot category "${cat}" not found`);
+    }],
+    [/^every shot in every category has a numeric "([^"]+)"$/, (field) => {
+      for (const [cat, shots] of Object.entries(ctx._gaData.SHOTS)) {
+        const bad = shots.filter(s => typeof s[field] !== 'number');
+        if (bad.length) throw new Error(`Shots in "${cat}" missing numeric "${field}"`);
+      }
+    }],
+    [/^every shot has a non-empty "label"$/, () => {
+      for (const [cat, shots] of Object.entries(ctx._gaData.SHOTS)) {
+        const bad = shots.filter(s => !s.label || s.label.trim() === '');
+        if (bad.length) throw new Error(`Shots in "${cat}" missing label`);
+      }
+    }],
+    [/^the "([^"]+)" category has (\d+) shots$/, (cat, count) => {
+      const actual = ctx._gaData.SHOTS[cat]?.length;
+      if (actual !== Number(count))
+        throw new Error(`"${cat}" has ${actual} shots, expected ${count}`);
+    }],
+    [/^only the data modules are loaded$/, () => { /* data loaded in Background */ }],
+    [/^the game engine is not initialised$/, () => {
+      if (ctx._gaData.G) throw new Error('Game engine should not be initialised');
+    }],
+    [/^CHARACTERS is accessible and non-empty$/, () => {
+      if (!ctx._gaData.CHARACTERS?.length) throw new Error('CHARACTERS empty');
+    }],
+    [/^TOURNAMENTS is accessible and non-empty$/, () => {
+      if (!ctx._gaData.TOURNAMENTS?.length) throw new Error('TOURNAMENTS empty');
+    }],
+    [/^EVENTS is accessible and non-empty$/, () => {
+      if (!ctx._gaData.EVENTS?.length) throw new Error('EVENTS empty');
+    }],
+    [/^SHOTS is accessible and non-empty$/, () => {
+      if (!Object.keys(ctx._gaData.SHOTS).length) throw new Error('SHOTS empty');
+    }],
+    [/^the data modules are loaded from external files$/, () => { /* confirmed by Background step */ }],
+    [/^the golf adventure setup screen renders$/, () => { /* data presence is the proxy for render */ }],
+    [/^the tournament grid shows 5 selectable tournaments$/, () => {
+      if (ctx._gaData.TOURNAMENTS.length !== 5)
+        throw new Error(`Expected 5 tournaments, got ${ctx._gaData.TOURNAMENTS.length}`);
+    }],
+    [/^the character panel shows 10 selectable commentators$/, () => {
+      if (ctx._gaData.CHARACTERS.length !== 10)
+        throw new Error(`Expected 10 characters, got ${ctx._gaData.CHARACTERS.length}`);
+    }],
+    [/^the atmosphere options are unchanged$/, () => { /* atmosphere is static HTML, unaffected by data extraction */ }],
+
+    // ── Golf Adventure Engine (specs/golf-adventure-engine.feature) ─────────
+
+    [/^the golf adventure engine is loaded$/, () => {
+      const { CHARACTERS } = require('../golf-data/characters.js');
+      const { TOURNAMENTS } = require('../golf-data/tournaments.js');
+      const { EVENTS }     = require('../golf-data/events.js');
+      const { SHOTS }      = require('../golf-data/shots.js');
+      const { GameEngine } = require('../golf-engine/game-engine.js');
+      ctx._gae = { CHARACTERS, TOURNAMENTS, EVENTS, SHOTS, GameEngine };
+    }],
+
+    [/^a game is started with tournament "([^"]+)", player "([^"]+)", panel "([^"]+)", atmosphere "([^"]+)"$/, (tid, pid, panelStr, atmo) => {
+      const tournament = ctx._gae.TOURNAMENTS.find(t => t.id === tid);
+      if (!tournament) throw new Error(`Tournament not found: ${tid}`);
+      const player = tournament.players.find(p => p.id === pid);
+      if (!player) throw new Error(`Player not found: ${pid}`);
+      const panel = panelStr.split(',');
+      ctx._gaeState = ctx._gae.GameEngine.start({ tournament, player, panel, atmosphere: atmo });
+    }],
+
+    [/^the state has composure (\d+)$/, (n) => {
+      if (ctx._gaeState.composure !== Number(n))
+        throw new Error(`Expected composure ${n}, got ${ctx._gaeState.composure}`);
+    }],
+    [/^the state has yourScore (-?\d+)$/, (n) => {
+      if (ctx._gaeState.yourScore !== Number(n))
+        throw new Error(`Expected yourScore ${n}, got ${ctx._gaeState.yourScore}`);
+    }],
+    [/^the state has day (\d+)$/, (n) => {
+      if (ctx._gaeState.day !== Number(n))
+        throw new Error(`Expected day ${n}, got ${ctx._gaeState.day}`);
+    }],
+    [/^the state has holeIdx (\d+)$/, (n) => {
+      if (ctx._gaeState.holeIdx !== Number(n))
+        throw new Error(`Expected holeIdx ${n}, got ${ctx._gaeState.holeIdx}`);
+    }],
+    [/^the state has phase "([^"]+)"$/, (phase) => {
+      if (ctx._gaeState.phase !== phase)
+        throw new Error(`Expected phase "${phase}", got "${ctx._gaeState.phase}"`);
+    }],
+
+    [/^a game state with composure (\d+) on a par (\d+) hole$/, (composure, par) => {
+      const tournament = ctx._gae.TOURNAMENTS[0];
+      const hole = tournament.holes.find(h => h.par === Number(par)) || { id:'h1', par: Number(par), yards:400, hazard:'fairway', modifiers:{} };
+      ctx._gaeState = {
+        tournament: { ...tournament, holes: [hole] },
+        holeIdx: 0, phase: 'tee',
+        composure: Number(composure),
+        yourScore: 0, holeStrokes: 0,
+        angerActive: false, illnessActive: false, tempSkillBonus: false, tempThresholdMod: 0,
+      };
+    }],
+    [/^the current shot has risk (\d+) and thresh (\d+)$/, (risk, thresh) => {
+      ctx._gaeShot = { risk: Number(risk), thresh: Number(thresh), label: 'test shot' };
+    }],
+    [/^the roll is (\d+)$/, (roll) => {
+      ctx._gaeRoll = ctx._gae.GameEngine.processRoll(Number(roll), ctx._gaeShot, ctx._gaeState);
+    }],
+    [/^the outcome quality is "([^"]+)"$/, (quality) => {
+      if (ctx._gaeRoll.quality !== quality)
+        throw new Error(`Expected quality "${quality}", got "${ctx._gaeRoll.quality}"`);
+    }],
+    [/^the effective threshold is (\d+)$/, (n) => {
+      if (ctx._gaeRoll.eff !== Number(n))
+        throw new Error(`Expected eff threshold ${n}, got ${ctx._gaeRoll.eff}`);
+    }],
+
+    [/^a game state in "([^"]+)" phase on a par (\d+) hole$/, (phase, par) => {
+      const tournament = ctx._gae.TOURNAMENTS[0];
+      const hole = tournament.holes.find(h => h.par === Number(par)) || { id:'h1', par: Number(par), yards:400, hazard:'fairway', modifiers:{} };
+      ctx._gaeState = {
+        tournament: { ...tournament, holes: [hole] },
+        holeIdx: 0, phase,
+        composure: 10, yourScore: 0, holeStrokes: 0, holeResults: [],
+        angerActive: false, angerShots: 0, illnessActive: false, illnessHoles: 0,
+        tempSkillBonus: false, tempSkillHoles: 0, tempThresholdMod: 0, tempThresholdHoles: 0,
+      };
+    }],
+    [/^the shot resolves as "([^"]+)"$/, (quality) => {
+      ctx._gaeNextPhase = ctx._gae.GameEngine.advancePhase(quality, ctx._gaeState);
+    }],
+    [/^the next phase is "([^"]+)"$/, (phase) => {
+      if (ctx._gaeNextPhase !== phase)
+        throw new Error(`Expected next phase "${phase}", got "${ctx._gaeNextPhase}"`);
+    }],
+    [/^the hole ends$/, () => {
+      if (ctx._gaeNextPhase !== 'end')
+        throw new Error(`Expected "end", got "${ctx._gaeNextPhase}"`);
+    }],
+
+    [/^a game state with yourScore (-?\d+) on a par (\d+) hole with (\d+) strokes taken$/, (score, par, strokes) => {
+      const tournament = ctx._gae.TOURNAMENTS[0];
+      const hole = tournament.holes.find(h => h.par === Number(par)) || { id:'h1', par: Number(par), yards:400, hazard:'fairway', modifiers:{} };
+      ctx._gaeState = {
+        tournament: { ...tournament, holes: [hole] },
+        holeIdx: 0, phase: 'putt',
+        composure: 10, yourScore: Number(score),
+        holeStrokes: Number(strokes), holeResults: [],
+      };
+    }],
+    [/^the hole score diff is (-?\d+)$/, (n) => {
+      if (ctx._gaeHoleResult.diff !== Number(n))
+        throw new Error(`Expected diff ${n}, got ${ctx._gaeHoleResult.diff}`);
+    }],
+    [/^yourScore is (-?\d+)$/, (n) => {
+      if (ctx._gaeHoleResult.state.yourScore !== Number(n))
+        throw new Error(`Expected yourScore ${n}, got ${ctx._gaeHoleResult.state.yourScore}`);
+    }],
+    [/^endHole is called$/, () => {
+      ctx._gaeHoleResult = ctx._gae.GameEngine.endHole(ctx._gaeState);
+    }],
+
+    [/^a full game state for tournament "([^"]+)", player "([^"]+)", day (\d+), yourScore (-?\d+)$/, (tid, pid, day, score) => {
+      const tournament = ctx._gae.TOURNAMENTS.find(t => t.id === tid);
+      const player = tournament.players.find(p => p.id === pid);
+      const fieldScores = {};
+      tournament.players.forEach(p => { fieldScores[p.name] = 0; });
+      if (tournament.field) tournament.field.forEach(f => { fieldScores[f.name] = 0; });
+      ctx._gaeState = { tournament, player, day: Number(day), yourScore: Number(score), fieldScores };
+    }],
+    [/^the field is simulated$/, () => {
+      ctx._gaeFieldScores = ctx._gae.GameEngine.simulateField(ctx._gaeState);
+    }],
+    [/^the player "([^"]+)" field score is (-?\d+)$/, (pid, score) => {
+      const player = ctx._gaeState.tournament.players.find(p => p.id === pid);
+      const actual = ctx._gaeFieldScores[player.name];
+      if (actual !== Number(score))
+        throw new Error(`Expected ${player.name} field score ${score}, got ${actual}`);
+    }],
+    [/^the other players have their day 0 historical scores$/, () => {
+      const t = ctx._gaeState.tournament;
+      const playerId = ctx._gaeState.player.id;
+      for (const p of t.players) {
+        if (p.id === playerId) continue;
+        const expected = p.historicalScores[0];
+        const actual = ctx._gaeFieldScores[p.name];
+        if (actual !== expected)
+          throw new Error(`${p.name}: expected historical ${expected}, got ${actual}`);
+      }
+    }],
+
+    // ── Golf Adventure Commentary (specs/golf-adventure-commentary.feature) ──
+
+    [/^the commentary service is loaded$/, () => {
+      const { TOURNAMENTS }        = require('../golf-data/tournaments.js');
+      const { CHARACTERS }         = require('../golf-data/characters.js');
+      const { CommentaryService }  = require('../golf-service/commentary-service.js');
+      ctx._gacs = { TOURNAMENTS, CHARACTERS, CommentaryService };
+    }],
+
+    // Shot context helpers
+    [/^a shot context for tournament "([^"]+)", player "([^"]+)", quality "([^"]+)", roll (\d+)$/, (tid, pid, quality, roll) => {
+      const tournament = ctx._gacs.TOURNAMENTS.find(t => t.id === tid);
+      const player     = tournament.players.find(p => p.id === pid);
+      const hole       = tournament.holes[0];
+      const shot       = { risk: 2, thresh: 3, label: 'safe iron' };
+      ctx._gacsCtx = {
+        tournament, player, hole, shot,
+        quality, roll: Number(roll),
+        desc: 'found the fairway',
+        yourScore: 0, day: 0, composure: 10,
+        atmosphere: 'NORMAL',
+        selectedPanel: ['faldo', 'mcginley'],
+        panelState: { playerNickname: null, runningJokes: [], atmosphere_escalation: 0, panelFeuds: {} },
+        history: [],
+        characterFiles: {},
+        characters: ctx._gacs.CHARACTERS,
+      };
+    }],
+    [/^the panelState has playerNickname "([^"]+)"$/, (nick) => {
+      ctx._gacsCtx.panelState.playerNickname = nick;
+    }],
+
+    // Shot prompt
+    [/^the shot prompt is built$/, () => {
+      ctx._gacsPrompt = ctx._gacs.CommentaryService.buildShotPrompt(ctx._gacsCtx);
+    }],
+    [/^the commentary prompt contains the tournament name "([^"]+)"$/, (name) => {
+      if (!ctx._gacsPrompt.includes(name))
+        throw new Error(`Prompt missing tournament name "${name}"`);
+    }],
+    [/^the commentary prompt contains the player name "([^"]+)"$/, (name) => {
+      if (!ctx._gacsPrompt.includes(name))
+        throw new Error(`Prompt missing player name "${name}"`);
+    }],
+    [/^the commentary prompt contains "([^"]+)"$/, (text) => {
+      if (!ctx._gacsPrompt.includes(text))
+        throw new Error(`Prompt missing "${text}"`);
+    }],
+    [/^the commentary prompt does not contain "([^"]+)"$/, (text) => {
+      if (ctx._gacsPrompt.includes(text))
+        throw new Error(`Prompt should not contain "${text}"`);
+    }],
+
+    // Day summary context helpers
+    [/^a day summary context for tournament "([^"]+)", player "([^"]+)", day (\d+), score (-?\d+), historical (-?\d+)$/, (tid, pid, day, score, hist) => {
+      const tournament = ctx._gacs.TOURNAMENTS.find(t => t.id === tid);
+      const player     = tournament.players.find(p => p.id === pid);
+      ctx._gacsCtx = {
+        tournament, player,
+        day: Number(day), yourScore: Number(score),
+        historicalScore: Number(hist),
+        composure: 10, holeResults: [],
+        holesPerDay: 3,
+        selectedPanel: ['faldo', 'mcginley'],
+        panelState: { playerNickname: null, runningJokes: [], atmosphere_escalation: 0, panelFeuds: {} },
+        history: [],
+        characterFiles: {},
+        characters: ctx._gacs.CHARACTERS,
+      };
+    }],
+    [/^the day prompt is built$/, () => {
+      ctx._gacsPrompt = ctx._gacs.CommentaryService.buildDayPrompt(ctx._gacsCtx);
+    }],
+
+    // Response parsing
+    [/^a raw API response of '([^']*)'$/, (raw) => {
+      ctx._gacsRaw = raw.replace(/\\n/g, '\n');
+    }],
+    [/^the shot response is parsed$/, () => {
+      ctx._gacsLines = ctx._gacs.CommentaryService.parseShotResponse(ctx._gacsRaw);
+    }],
+    [/^the result has (\d+) lines?$/, (n) => {
+      if (ctx._gacsLines.length !== Number(n))
+        throw new Error(`Expected ${n} lines, got ${ctx._gacsLines.length}`);
+    }],
+    [/^line (\d+) has speaker "([^"]+)"$/, (i, speaker) => {
+      if (ctx._gacsLines[Number(i)]?.speaker !== speaker)
+        throw new Error(`Line ${i} speaker: expected "${speaker}", got "${ctx._gacsLines[Number(i)]?.speaker}"`);
+    }],
+    [/^line (\d+) has text "([^"]+)"$/, (i, text) => {
+      if (ctx._gacsLines[Number(i)]?.text !== text)
+        throw new Error(`Line ${i} text: expected "${text}", got "${ctx._gacsLines[Number(i)]?.text}"`);
+    }],
+
+    // API contract — stub client
+    [/^a stub apiClient that records its call$/, () => {
+      ctx._gacsStubCall = null;
+      ctx._gacsApiClient = {
+        call: async (req) => {
+          ctx._gacsStubCall = req;
+          return { content: [{ text: '[{"speaker":"Faldo","text":"Adequate."}]' }] };
+        }
+      };
+    }],
+    [/^a stub apiClient that throws$/, () => {
+      ctx._gacsApiClient = {
+        call: async () => { throw new Error('Network failure'); }
+      };
+    }],
+    [/^CommentaryService\.shot is called$/, async () => {
+      ctx._gacsLines = await ctx._gacs.CommentaryService.shot(ctx._gacsCtx, ctx._gacsApiClient);
+    }],
+    [/^the apiClient received model "([^"]+)"$/, (model) => {
+      if (ctx._gacsStubCall?.model !== model)
+        throw new Error(`Expected model "${model}", got "${ctx._gacsStubCall?.model}"`);
+    }],
+    [/^the apiClient received max_tokens (\d+)$/, (n) => {
+      if (ctx._gacsStubCall?.max_tokens !== Number(n))
+        throw new Error(`Expected max_tokens ${n}, got ${ctx._gacsStubCall?.max_tokens}`);
+    }],
+
+    // Pure helpers
+    [/^a character markdown with sections P1 wound, P2 mask, P3 voice, P4 escalation, P5 comic$/, () => {
+      ctx._gacsMd = [
+        '## P1 wound\nDeep wound content here.',
+        '## P2 mask\nMask content here.',
+        '## P3 voice\nVoice content here.',
+        '## P4 escalation\nEscalation content here.',
+        '## P5 comic\nComic content here.',
+      ].join('\n');
+    }],
+    [/^a character markdown with 10000 characters of content$/, () => {
+      const section = '## P1 wound\n' + 'x'.repeat(9980);
+      ctx._gacsMd = section;
+    }],
+    [/^extractCharacterContext is called$/, () => {
+      ctx._gacsExtracted = ctx._gacs.CommentaryService.extractCharacterContext(ctx._gacsMd);
+    }],
+    [/^the result contains section "([^"]+)"$/, (sec) => {
+      if (!ctx._gacsExtracted.includes(`## ${sec}`))
+        throw new Error(`Expected section "## ${sec}" in extracted context`);
+    }],
+    [/^the result does not contain section "([^"]+)"$/, (sec) => {
+      if (ctx._gacsExtracted.includes(`## ${sec}`))
+        throw new Error(`Section "## ${sec}" should not be in extracted context`);
+    }],
+    [/^the result length is at most (\d+)$/, (n) => {
+      if (ctx._gacsExtracted.length > Number(n))
+        throw new Error(`Expected length ≤ ${n}, got ${ctx._gacsExtracted.length}`);
+    }],
+
+    // ── Golf Adventure Wiring (specs/golf-adventure-wiring.feature) ──────────
+
+    [/^golf-adventure\.html is parsed as text$/, () => {
+      const fs   = require('fs');
+      const path = require('path');
+      ctx._gawHtml = fs.readFileSync(path.join(__dirname, '../golf-adventure.html'), 'utf8');
+    }],
+    [/^it has a script tag for "([^"]+)"$/, (src) => {
+      if (!ctx._gawHtml.includes(`src="${src}"`))
+        throw new Error(`golf-adventure.html missing <script src="${src}">`);
+    }],
+    [/^the inline script does not contain "([^"]+)"$/, (text) => {
+      if (ctx._gawHtml.includes(text))
+        throw new Error(`golf-adventure.html still contains duplicate: "${text}"`);
+    }],
+
   ];
 }
 

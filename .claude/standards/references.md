@@ -12,6 +12,7 @@
 ## TDD
 - Kent Beck — Test Driven Development: By Example (2002)
 - Robert C. Martin — Clean Code, Chapter 9: Unit Tests (2008)
+- Steve Freeman & Nat Pryce — Growing Object-Oriented Software, Guided by Tests (2009)
 
 ## Extreme Programming
 - Kent Beck — Extreme Programming Explained: Embrace Change (2nd ed, 2004)
@@ -21,6 +22,15 @@
 - Robert C. Martin — Clean Code (2008)
 - Robert C. Martin — Clean Architecture (2017)
 - Robert C. Martin — Agile Software Development: Principles, Patterns, and Practices (2002)
+- Michael Feathers — Working Effectively with Legacy Code (2004)
+- Martin Fowler — Refactoring: Improving the Design of Existing Code (1999, 2nd ed 2018)
+
+## Architecture & Microservices
+- Sam Newman — Building Microservices (2015, 2nd ed 2021)
+- Contract testing: Pact — https://pact.io
+
+## Testing
+- Gojko Adzic, David Evans, Tom Roden — Fifty Quick Ideas to Improve Your Tests (2015)
 
 ## Lean
 - Mary Poppendieck & Tom Poppendieck — Lean Software Development: An Agile Toolkit (2003)

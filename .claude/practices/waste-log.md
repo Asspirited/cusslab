@@ -864,3 +864,14 @@ Status: CLOSED
 - Cost impact: Low
 - Tags: step-defs, gherkin, regex
 - Status: Closed — added guard (only validate when riskLevel+diceValue both set), added unquoted variant
+
+## WL-057
+- Item: CSS font stripe fix required 3 attempts — wrong root cause each time
+- Symptom: "darker lines running through font text" — initially diagnosed as CRT scanline overlay, then as opacity not being applied, finally identified as Playfair Display weight-900 thick/thin stroke contrast rendering on Windows
+- Root cause: No visual diagnostic before fixing. Assumed CSS overlay was the cause without ruling out font rendering. Should have asked "what does the text look like" and identified the font's inherent stroke contrast as the likely culprit on first pass.
+- Prevention rule: When a visual rendering complaint arrives, identify the element and its font-family FIRST before touching overlays or opacity. High-contrast serif fonts (Playfair Display, Didot, Bodoni) at heavy weights produce visible stripe artefacts on Windows ClearType rendering — this is a known failure mode.
+- Session: 2026-03-08
+- Time lost: ~15 min
+- Cost impact: Low-medium (3 deploy cycles)
+- Tags: css, typography, font-rendering, diagnosis
+- Status: Closed — Bebas Neue (uniform stroke) replaces Playfair Display in masthead h1
