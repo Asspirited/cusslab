@@ -215,3 +215,20 @@ Full scenario text: retrospectives/session-retro-2026-02-28.md
 ## Yak Shaving Rule
 Current task drifted from original goal? Name it. 20-minute limit.
 Not resolved in 20 minutes: revert, ask a better question.
+
+## BASH OUTPUT RULE (WL-021) — mandatory in Claude Code
+Never produce collapsible output. Always pipe to file and cat:
+  some-command > /tmp/out.txt && cat /tmp/out.txt
+Never use bare grep/find/cat for output the user needs to read.
+Never use Grep/Glob tools when user needs raw output — use Bash with
+pipe-to-file instead. Prefix all commands with "Run this as a bash
+command, not a search."
+Every paste ending in a commit MUST include git push and confirm
+origin/main updated. Violations logged as waste.
+
+## FEATURE BRANCH RULE
+Keep feature branches as small and short-lived as possible.
+Merge to main as soon as work is complete and pipeline is green.
+Never let feature branches sit unmerged.
+Prefer trunk-based delivery — small frequent commits to main.
+Source: DORA metrics — batch size and lead time for changes.

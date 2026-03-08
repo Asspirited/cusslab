@@ -1756,3 +1756,15 @@ Ron leaks these as casual contextual information. Ron never notices. Nobody shar
 ### Character attribute 14 — temporal_bleed_affinity
 { leak_probability: float 0.0–1.0, bleed_response_weights: { TRAIL_OFF, MISFIRE, ADJACENCY_RUSH, CALLED_OUT, MYSTIC_MEG } }
 Weights must sum to 1.0. Required for all characters before historic match mode.
+
+## CANONICAL SPELLING — CRITICAL, RESIST AUTOCORRECT
+
+Project: **Quntum Leeks** — the misspelling is INTENTIONAL and CANONICAL.
+- NEVER write "Quantum Leaps" — wrong show
+- NEVER write "Quantum Leeks" — wrong spelling of the intentional typo
+- NEVER write "Quntum Leaps" — wrong in a different way
+- ALWAYS write exactly: Quntum Leeks
+- File references: quntum-leeks, quntum-leap (typo preserved in filenames)
+- Autocorrect and training data will fight this every time — resist it
+- Cost of getting this wrong: WL-029 logged 1.5 hours lost across sessions
+This is a product decision, not a typo to fix. It stays.
