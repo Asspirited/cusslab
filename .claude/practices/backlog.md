@@ -34,7 +34,7 @@ Items are sorted by CD3 within each section. Rescore when scope changes.
 - Examples per section in UI: Majors → Duel in the Sun, Tiger at Augusta, Trevino/Jacklin, Van de Velde; Ryder Cup → Medinah 2012; Other Historic → empty until BL-017 adds content
 - Do before BL-017 — BL-017 content needs the category to land in
 - CD3: UBV=8 TC=6 RR=4 → CoD=18, Dur=2, **CD3=9.0**
-- Status: OPEN
+- Status: CLOSED 2026-03-08 — implemented alongside BL-017; CSS + rendering + Gherkin all passing
 
 ### BL-017 — Golf Adventure: more historic tournaments
 - Add at least 3 new tournaments to fill the Other Historic category and expand Majors
@@ -46,7 +46,7 @@ Items are sorted by CD3 within each section. Rescore when scope changes.
 - Each needs: players[], field[], holes[], lore, matchPlayDays if Ryder
 - Depends on BL-016 (category split) being done first — new type=historic needed for Prestwick etc
 - CD3: UBV=7 TC=3 RR=2 → CoD=12, Dur=5, **CD3=2.4**
-- Status: OPEN — blocked on BL-016
+- Status: CLOSED 2026-03-08 — 7 tournaments added; prestwick_1868 lands correctly in Other Historic
 
 ### BL-008 — ACC framework label fix in RIA
 - ACC = Attributes, Components, Capabilities (James Whittaker / Google) — not "Assumptions..."
