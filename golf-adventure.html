@@ -1872,20 +1872,23 @@ function advancePhase(quality) {
   }
 }
 
-function endHole() {
+async function endHole() {
   const hole=G.tournament.holes[G.holeIdx];
   const diff=G.holeStrokes-hole.par;
   G.yourScore+=diff;
   G.holeResults.push({day:G.day,holeId:hole.id,score:G.holeStrokes,par:hole.par,diff});
 
-  // Match play update — Ryder Cup only
+  // Match play update — capture before mutating for commentary
+  let mpCtx = null;
   if (G.tournament.type === 'ryder' && G.player.matchPlayDays) {
     const mpDay = G.player.matchPlayDays[G.day];
     if (mpDay) {
       const oppScore = mpDay.opponentHoleScores[G.holeIdx];
-      if (G.holeStrokes < oppScore)      G.matchPlayScore++;  // win hole
-      else if (G.holeStrokes > oppScore) G.matchPlayScore--;  // lose hole
-      // equal = halved, no change
+      const holeResult = G.holeStrokes < oppScore ? 'won' : G.holeStrokes > oppScore ? 'lost' : 'halved';
+      if (G.holeStrokes < oppScore)      G.matchPlayScore++;
+      else if (G.holeStrokes > oppScore) G.matchPlayScore--;
+      mpCtx = { oppScore, holeResult, opponent: mpDay.opponent,
+                holesRemaining: G.holesPerDay - G.holeIdx - 1 };
     }
   }
 
@@ -1906,7 +1909,75 @@ function endHole() {
   const isLastDay=G.day+1>=G.tournament.days;
   const nxt=document.getElementById('next-btn');
   nxt.textContent=isLastHole?(isLastDay?'Final Results →':`End of Day ${G.day+1} →`):'Next Hole →';
+
+  // Ryder Cup: panel reacts to the hole result before Next Hole button appears
+  if (mpCtx) {
+    await getMatchPlayCommentary(G.holeStrokes, hole.par, mpCtx);
+  }
+
   document.getElementById('next-wrap').classList.remove('hidden');
+}
+
+async function getMatchPlayCommentary(yourScore, holePar, mpCtx) {
+  const feed = document.getElementById('commentary');
+  if (!feed) return;
+
+  feed.innerHTML = `<div class="loading-bar"><div class="dots"><span></span><span></span><span></span></div><span>The commentary box...</span></div>`;
+
+  const holeLabels = {'-3':'albatross','-2':'eagle','-1':'birdie','0':'par','1':'bogey','2':'double bogey'};
+  const yourDiff  = yourScore - holePar;
+  const oppDiff   = mpCtx.oppScore - holePar;
+  const yourLabel = holeLabels[String(yourDiff)]  || (yourDiff  > 0 ? `+${yourDiff}`  : `${yourDiff}`);
+  const oppLabel  = holeLabels[String(oppDiff)]   || (oppDiff   > 0 ? `+${oppDiff}`   : `${oppDiff}`);
+
+  const standing  = G.matchPlayScore === 0 ? 'All Square'
+    : G.matchPlayScore > 0 ? `${G.matchPlayScore}UP` : `${Math.abs(G.matchPlayScore)}DOWN`;
+  const holesLeft = mpCtx.holesRemaining;
+  const isLast    = holesLeft === 0;
+
+  const speakerList = G.selectedPanel.map(id => {
+    const ch = CHARACTERS.find(c => c.id === id);
+    return `{"speaker":"${ch.name}","text":"one line here"}`;
+  }).join(',\n  ');
+
+  const prompt = `Golf Adventure — Ryder Cup hole end. The panel reacts.
+
+HOLE RESULT: ${G.player.name} made ${yourLabel} (${yourScore} shots, Par ${holePar}). Opponent (${mpCtx.opponent}) made ${oppLabel} (${mpCtx.oppScore} shots).
+HOLE ${mpCtx.holeResult === 'won' ? 'WON by ' + G.player.name : mpCtx.holeResult === 'lost' ? 'LOST by ' + G.player.name : 'HALVED — neither side budges'}.
+MATCH STANDING: ${G.player.name} is now ${standing}${isLast ? ' — match complete' : ` with ${holesLeft} hole${holesLeft !== 1 ? 's' : ''} to play`}.
+TOURNAMENT: The Miracle at Medinah. Europe needs every point. This is match play — every hole is its own drama.
+
+Each panellist speaks ONE LINE reacting to this hole and the match position. React to each other where possible. No waffle. Pure reaction.
+Return ONLY valid JSON:
+[
+  ${speakerList}
+]`;
+
+  try {
+    const resp = await golfFetch({ model: "claude-sonnet-4-6", max_tokens: 400,
+      messages: [...G.history, { role: "user", content: prompt }] });
+    const data = await resp.json();
+    const raw  = (data.content?.[0]?.text || '[]').replace(/```json|```/g, '').trim();
+    const lines = CommentaryService.parseShotResponse(raw);
+
+    G.history.push({ role: "user",      content: prompt });
+    G.history.push({ role: "assistant", content: raw });
+    if (G.history.length > 20) G.history = G.history.slice(-16);
+
+    feed.innerHTML = '';
+    lines.forEach((l, i) => {
+      const ch   = CHARACTERS.find(c => c.name === l.speaker)
+                || CHARACTERS.find(c => G.selectedPanel.includes(c.id) && i === G.selectedPanel.indexOf(c.id));
+      const init = l.initials || (ch ? ch.initials : '??');
+      const el   = document.createElement('div');
+      el.className = 'bubble';
+      el.style.animationDelay = `${i * 0.12}s`;
+      el.innerHTML = `<div class="bav">${init}</div><div class="bbody"><div class="bname">${l.speaker}</div><div class="btext">${l.text}</div></div>`;
+      feed.appendChild(el);
+    });
+  } catch(e) {
+    feed.innerHTML = '';
+  }
 }
 
 function advanceGame() {
