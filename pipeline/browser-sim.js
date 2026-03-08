@@ -6,6 +6,11 @@ const path = require('path');
 
 const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
 
+// Load external src/ scripts referenced in index.html (in order they appear)
+const srcScripts = [...html.matchAll(/src="(src\/[^"]+\.js)"/g)]
+  .map(m => { try { return fs.readFileSync(path.join(__dirname, '..', m[1]), 'utf8'); } catch { return ''; } })
+  .join('\n');
+
 let passed = 0;
 let failed = 0;
 
@@ -21,12 +26,13 @@ function check(description, ok, detail) {
 
 // Extract all <script> blocks
 const scripts = [...html.matchAll(/<script[^>]*>([\s\S]*?)<\/script>/gi)].map(m => m[1]);
-const allJs   = scripts.join('\n');
+const allJs   = srcScripts + '\n' + scripts.join('\n');
 
-// Module declaration positions
+// Module declaration positions — search HTML + src/ combined
 function declPos(name) {
-  const m = html.match(new RegExp(`const ${name}\\s*=\\s*\\(\\s*\\(\\s*\\)\\s*=>`));
-  return m ? html.indexOf(m[0]) : -1;
+  const combined = srcScripts + '\n' + html;
+  const m = combined.match(new RegExp(`const ${name}\\s*=\\s*\\(\\s*\\(\\s*\\)\\s*=>`));
+  return m ? combined.indexOf(m[0]) : -1;
 }
 
 // ── Checks ────────────────────────────────────────────────────────────────────
@@ -52,7 +58,15 @@ check('localStorage.setItem wrapped in try/catch',
   /try\s*\{[^}]*localStorage\.setItem/.test(allJs));
 
 // 6. No raw fetch() calls outside API module
+// API module may be inline or in src/integration/api-client.js
 const apiBlockForFetch = (() => {
+  // Try external file first
+  const extStart = srcScripts.indexOf('const API = (()');
+  if (extStart !== -1) {
+    const extEnd = srcScripts.indexOf('\n})();', extStart) + 6;
+    return srcScripts.slice(extStart, extEnd);
+  }
+  // Fall back to inline
   const start = html.indexOf('const API = (()');
   const end   = html.indexOf('\n})();', start) + 6;
   return start !== -1 ? html.slice(start, end) : '';

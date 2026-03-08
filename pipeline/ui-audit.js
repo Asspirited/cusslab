@@ -77,9 +77,11 @@ check('settings-save-msg element exists',
 check('Save Key button exists in settings panel',
   html.includes('id="settings-save-btn"'));
 
-// 7. API module declared
+// 7. API module declared (inline or loaded via src/integration/api-client.js)
+const apiClientSrc = (() => { try { return require('fs').readFileSync(require('path').join(__dirname, '../src/integration/api-client.js'), 'utf8'); } catch { return ''; } })();
 check('API module is declared (const API)',
-  /const API\s*=\s*\(\s*\(\s*\)\s*=>/.test(html));
+  /const API\s*=\s*\(\s*\(\s*\)\s*=>/.test(html) ||
+  /const API\s*=\s*\(\s*\(\s*\)\s*=>/.test(apiClientSrc));
 
 // 8. switchTab global function exists
 check('switchTab global function exists',
