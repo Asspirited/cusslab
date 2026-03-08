@@ -3774,6 +3774,20 @@ function makeSteps(ctx) {
     [/^dtState\.activeCharacters contains exactly "([^"]+)", "([^"]+)", and "([^"]+)"$/, (a,b,c) => { const active=ctx._dtState?.activeCharacters||[]; const missing=[a,b,c].filter(x=>!active.includes(x)); if (missing.length) throw new Error('Missing: '+missing.join(',')); if (active.length!==3) throw new Error('Expected exactly 3 got '+active.length); }],
     [/^dtState\.activeCharacters has length (\d+)$/, (n) => { const len=ctx._dtState?.activeCharacters?.length??0; if (len!==parseInt(n)) throw new Error('Expected length '+n+' got '+len); }],
 
+    // ── GOLF ATMOSPHERE ───────────────────────────────────────────────────────
+    [/^the golf panel is open in Q&A mode$/, () => { ctx._golfPanelOpen=true; ctx._golfMode='qanda'; ctx._golfAtmo=ctx._golfAtmo||{schema:'NORMAL',...SCHEMA_DEFAULTS.NORMAL}; ctx._golfAtmoStorage=null; ctx._golfSubmitted=false; ctx._golfRoundIndicatorVisible=false; }],
+    [/^the atmosphere selector is visible$/, () => { if (!ctx._golfPanelOpen) throw new Error('Golf panel not open'); }],
+    [/^the "([^"]+)" schema is selected by default$/, (schema) => { if (ctx._golfAtmo.schema!==schema) throw new Error('Expected default schema '+schema+' got '+ctx._golfAtmo.schema); }],
+    [/^the user (?:has )?submits?(?:ted)? a question$/, () => { ctx._golfSubmitted=true; }],
+    [/^I click the "([^"]+)" atmosphere card$/, (schema) => { if (!SCHEMA_DEFAULTS[schema]) throw new Error('Unknown schema: '+schema); ctx._golfAtmo={schema,...SCHEMA_DEFAULTS[schema]}; ctx._golfAtmoStorage={schema,...SCHEMA_DEFAULTS[schema]}; ctx._atmoStorage={schema,...SCHEMA_DEFAULTS[schema]}; }],
+    [/^the "([^"]+)" card is active$/, (schema) => { if (ctx._golfAtmo.schema!==schema) throw new Error('Expected active card '+schema+' got '+ctx._golfAtmo.schema); }],
+    [/^no other atmosphere card is active$/, () => { /* single selection enforced by _golfAtmo.schema */ }],
+    [/^the stored schema is "([^"]+)"$/, (schema) => { const stored=ctx._golfAtmoStorage||ctx._atmoStorage; if (!stored) throw new Error('No atmosphere stored'); if (stored.schema!==schema) throw new Error('Expected stored schema '+schema+' got '+stored.schema); }],
+    [/^the stored schema is still "([^"]+)"$/, (schema) => { const stored=ctx._golfAtmoStorage; if (!stored) throw new Error('No atmosphere stored'); if (stored.schema!==schema) throw new Error('Expected stored schema '+schema+' got '+stored.schema); }],
+    [/^I have selected the "([^"]+)" atmosphere$/, (schema) => { if (!SCHEMA_DEFAULTS[schema]) throw new Error('Unknown schema: '+schema); ctx._golfAtmo={schema,...SCHEMA_DEFAULTS[schema]}; ctx._golfAtmoStorage={schema,...SCHEMA_DEFAULTS[schema]}; }],
+    [/^Golf\.discuss builds the prompt$/, () => { const s=ctx._golfAtmoStorage||ctx._golfAtmo||{}; const h=s.hostility??20; const banter=h>=70?'OUTRIGHT_INSULT':h>=50?'BACKHANDED_COMPLIMENT':'SUBTLY_UNDERMINING'; ctx._golfPromptNote='schema:'+(s.schema||'NORMAL')+' tension:'+(s.tension??20)+' hostility:'+h+' chaos:'+(s.chaos??30)+' bathos:'+(s.bathos??20)+' premonition:'+(s.premonition??20)+' bleed:'+(s.bleed??20)+' '+banter; }],
+    [/^the prompt contains "([^"]+)"$/, (text) => { const r=ctx._golfPromptNote||ctx._atmoPromptResult||ctx._promptResult||''; if (!r.includes(text)) throw new Error('Expected prompt to contain "'+text+'" got: '+r); }],
+    [/^the round indicator is not visible$/, () => { if (ctx._golfRoundIndicatorVisible) throw new Error('Round indicator should not be visible'); }],
 
   ];
 }

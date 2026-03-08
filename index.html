@@ -1165,6 +1165,14 @@
   .gf-anchor-text { font-style:italic; color:var(--text); font-size:14px; line-height:1.6; }
   .gf-anchor-text strong { font-style:normal; font-weight:600; color:var(--accent); }
 
+  /* ── GOLF ATMOSPHERE SELECTOR ─────────────────────────────── */
+  .gf-atmo-card { display:inline-flex; flex-direction:column; gap:2px; padding:6px 10px; border-radius:3px; border:1px solid var(--border); background:var(--card); cursor:pointer; transition:border-color 0.15s, background 0.15s; }
+  .gf-atmo-card:hover { border-color:rgba(255,255,255,0.15); }
+  .gf-atmo-card.active { border-color:var(--gf-atmo-color, var(--accent)); background:rgba(255,255,255,0.06); }
+  .gf-atmo-card__name { font-size:10px; font-weight:600; letter-spacing:1px; text-transform:uppercase; color:var(--text); }
+  .gf-atmo-card.active .gf-atmo-card__name { color:var(--gf-atmo-color, var(--accent)); }
+  .gf-atmo-card__desc { font-size:9px; color:var(--muted); line-height:1.3; }
+
   /* ── DARTS MODE 2 — MATCH ENGINE UI ────────────────────────── */
   .dt-era-toggle { display:flex; align-items:center; gap:10px; margin-bottom:14px; }
   .dt-era-label { font-family:'Bebas Neue',sans-serif; font-size:11px; letter-spacing:2px; color:var(--muted); }
@@ -2098,8 +2106,12 @@
     <div class="gf-suggestion-tray">
       <div class="gf-suggestion-scroll" id="gf-suggestion-scroll"></div>
     </div>
+    <!-- Atmosphere selector -->
+    <div id="gf-atmo-selector" style="margin-bottom:16px;">
+      <div style="font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:8px;">Session atmosphere</div>
+      <div id="gf-atmo-cards" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
+    </div>
     <div style="margin-bottom:20px;">
-      <div id="gf-round-indicator" style="display:none;margin-bottom:12px;padding:8px 14px;border-radius:6px;background:rgba(255,215,0,0.08);border:1px solid rgba(255,215,0,0.2);font-size:13px;font-weight:600;letter-spacing:0.05em;color:#ffd700;"></div>
       <label>The shot. The player. The hole. The round. The decision.</label>
       <textarea id="gf-input" rows="3" placeholder="e.g. Was that the right club selection? Can he win from here? What does that swing tell you?"></textarea>
     </div>
@@ -11898,23 +11910,13 @@ NEVER SAYS: Anything bitter about the career ending. Anything suggesting comment
       ? [baseOrder[0], 'alliss', ...baseOrder.slice(1)]
       : baseOrder;
 
-    // Round escalation — increments each discuss() call this session, capped at 5
-    const ROUND_LABELS = [
-      'Sober and Watching',
-      'First Drink. Hat Tilting.',
-      'Properly On It',
-      'The Hat Is Now A Statement',
-      'Wayne. Full Corruption.'
-    ];
-    const gfRound = Math.min(parseInt(sessionStorage.getItem('golf-round') || '0') + 1, 5);
-    sessionStorage.setItem('golf-round', gfRound.toString());
-    const roundLabel = ROUND_LABELS[gfRound - 1];
-    const roundIndicator = document.getElementById('gf-round-indicator');
-    if (roundIndicator) {
-      roundIndicator.textContent = `ROUND ${gfRound} OF 5 — ${roundLabel}`;
-      roundIndicator.style.display = 'block';
-    }
-    const roundNote = `\n\nThis is round ${gfRound} of 5: "${roundLabel}". Calibrate your intensity accordingly. Round 1 = restrained, accurate, minimal. Round 5 = full escalation, characteristic behaviours completely present, no restraint.`;
+    // Atmosphere — read from sessionStorage, default NORMAL
+    const gfAtmoRaw = sessionStorage.getItem('hc_atmosphere');
+    const gfAtmo = gfAtmoRaw ? JSON.parse(gfAtmoRaw) : Golf.SCHEMAS.NORMAL;
+    const gfAtmoSchema = gfAtmo.schema || 'NORMAL';
+    const gfH = gfAtmo.hostility ?? 20;
+    const gfBanter = gfH >= 70 ? 'OUTRIGHT_INSULT' : gfH >= 50 ? 'BACKHANDED_COMPLIMENT' : 'SUBTLY_UNDERMINING';
+    const roundNote = `\n\nSession atmosphere: schema=${gfAtmoSchema} tension=${gfAtmo.tension ?? 20} hostility=${gfH} chaos=${gfAtmo.chaos ?? 30} bathos=${gfAtmo.bathos ?? 20} premonition=${gfAtmo.premonition ?? 20} bleed=${gfAtmo.bleed ?? 20} banter=${gfBanter}. Calibrate accordingly.`;
 
     // Roe return mechanic — sessionStorage flag tracks first vs return visit
     const roeFirstVisit = !sessionStorage.getItem('roe-visited');
@@ -12101,6 +12103,43 @@ NEVER SAYS: Anything bitter about the career ending. Anything suggesting comment
   }
 
   return { discuss, callMoment, switchMode, nextRound };
+})();
+
+// ── Golf atmosphere selector ──────────────────────────────────────────────────
+Golf.SCHEMAS = {
+  NORMAL:         { schema:'NORMAL',         label:'Normal',         desc:'Engine defaults.',                        color:'#3a6a4a', tension:20,  hostility:20,  chaos:30,  bathos:20, premonition:20, bleed:20 },
+  SIMMERING:      { schema:'SIMMERING',      label:'Simmering',      desc:'Room already loaded.',                    color:'#7a5a20', tension:55,  hostility:40,  chaos:25,  bathos:35, premonition:35, bleed:30 },
+  POWDER_KEG:     { schema:'POWDER_KEG',     label:'Powder Keg',     desc:'Everyone at passive-aggressive.',         color:'#8a3a10', tension:85,  hostility:65,  chaos:35,  bathos:55, premonition:60, bleed:40 },
+  CHAOS_MODE:     { schema:'CHAOS_MODE',     label:'Chaos Mode',     desc:'Ambient mechanics at max.',               color:'#7a1a7a', tension:50,  hostility:50,  chaos:100, bathos:60, premonition:80, bleed:50 },
+  BLOODBATH:      { schema:'BLOODBATH',      label:'Bloodbath',      desc:'Full crack from the start.',              color:'#8a1010', tension:100, hostility:100, chaos:40,  bathos:90, premonition:40, bleed:60 },
+  FUNNY_PECULIAR: { schema:'FUNNY_PECULIAR', label:'Funny Peculiar', desc:'Pressure redirected sideways.',           color:'#3a5a8a', tension:20,  hostility:10,  chaos:80,  bathos:85, premonition:50, bleed:30 },
+  DEEP_WOUNDS:    { schema:'DEEP_WOUNDS',    label:'Deep Wounds',    desc:'Wounds pre-exposed.',                     color:'#5a2a5a', tension:40,  hostility:60,  chaos:20,  bathos:50, premonition:20, bleed:70 },
+};
+
+Golf.renderAtmoSelector = function() {
+  const el = document.getElementById('gf-atmo-cards');
+  if (!el) return;
+  const current = (() => { try { return JSON.parse(sessionStorage.getItem('hc_atmosphere') || '{}').schema || 'NORMAL'; } catch(e) { return 'NORMAL'; } })();
+  el.innerHTML = Object.values(Golf.SCHEMAS).map(s => `
+    <div class="gf-atmo-card${s.schema === current ? ' active' : ''}" data-schema="${s.schema}" style="--gf-atmo-color:${s.color}" onclick="Golf.selectAtmo('${s.schema}')">
+      <div class="gf-atmo-card__name">${s.label}</div>
+      <div class="gf-atmo-card__desc">${s.desc}</div>
+    </div>`).join('');
+};
+
+Golf.selectAtmo = function(schema) {
+  const s = Golf.SCHEMAS[schema];
+  if (!s) return;
+  sessionStorage.setItem('hc_atmosphere', JSON.stringify(s));
+  Golf.renderAtmoSelector();
+};
+
+// Initialise selector on load
+(function() {
+  if (!sessionStorage.getItem('hc_atmosphere')) {
+    sessionStorage.setItem('hc_atmosphere', JSON.stringify(Golf.SCHEMAS.NORMAL));
+  }
+  document.addEventListener('DOMContentLoaded', Golf.renderAtmoSelector);
 })();
 
 // ============================================================
