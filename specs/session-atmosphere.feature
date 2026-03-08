@@ -1,4 +1,4 @@
-@claude
+
 Feature: Session atmosphere — pre-session and mid-session pressure control
   As a user running a sports panel session
   I want to set and adjust the session atmosphere before and during play

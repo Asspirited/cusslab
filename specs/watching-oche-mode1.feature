@@ -1,4 +1,4 @@
-@claude
+
 Feature: Watching the Oche — Mode 1, Ask the Panel
   As a user of the Watching the Oche darts panel
   I want to submit questions to the commentary panel

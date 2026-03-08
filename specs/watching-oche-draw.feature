@@ -1,4 +1,4 @@
-@claude
+
 Feature: Watching the Oche — character draw
   As a user of the Watching the Oche darts panel
   I want to select which commentators appear in my session
