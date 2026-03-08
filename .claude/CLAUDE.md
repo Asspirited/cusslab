@@ -5,13 +5,10 @@
 
 ## Session Start (mandatory, before any code)
 
-1. Read `.claude/practices/auth-ops.md` — FIRST, before anything else. Auth ops are session-blocking.
-2. Read ALL files in .claude/principles/ and .claude/practices/
-3. Run `cd /home/rodent/cusslab && npm run pipeline` — report scorecard. If Worker canary is RED, stop and fix before proceeding.
-4. Report last retrospective findings
-5. Read .claude/practices/waste-log.md and report any open items
-6. Read .claude/practices/backlog.md — report top 3 items by CD3 score
-7. Only then: work
+Read `.claude/session-startup.md` — follow its sequence in full before doing anything else.
+It covers: auth check, pipeline, recent waste, backlog, retro findings, product context,
+character rules, ways of working, principles, practices, and project separation.
+Do not skip steps. Do not reorder. Do not start work until the sequence is complete.
 
 ---
 
