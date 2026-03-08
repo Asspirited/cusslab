@@ -193,49 +193,53 @@ body::after {
   opacity: var(--scanline-opacity);
 }
 
-/* ── MASTHEAD ── */
+/* ── MASTHEAD — Masters broadcast title card ── */
 .masthead {
-  background: var(--surface);
-  border-bottom: 2px solid var(--accent-dim);
-  padding: 24px 20px 18px;
+  background: #0c1f0e;
+  border-bottom: 3px solid #c9a84c;
+  padding: 40px 20px 32px;
   position: relative;
   overflow: hidden;
+  text-align: center;
 }
 .masthead::before {
   content: '';
   position: absolute; inset: 0;
-  background: radial-gradient(ellipse at 50% -30%, rgba(255,255,255,0.04) 0%, transparent 70%);
+  background: radial-gradient(ellipse at 50% 0%, rgba(201,168,76,0.07) 0%, transparent 65%);
   pointer-events: none;
 }
-.masthead-inner { max-width: 980px; margin: 0 auto; display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.masthead-inner { max-width: 980px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 8px; }
 
 .masthead h1 {
-  font-family: var(--font-display);
-  font-size: clamp(44px,8vw,88px);
-  letter-spacing: 0.1em;
-  color: var(--accent-bright);
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(38px,7vw,80px);
+  font-weight: 900;
+  letter-spacing: 0.18em;
+  color: #f5eed8;
   line-height: 1;
-  text-shadow: 0 0 40px rgba(255,255,255,0.1);
+  text-shadow: 0 2px 32px rgba(0,0,0,0.7);
 }
-.masthead-right { text-align: right; }
+.masthead-right { text-align: center; }
 .masthead-sub {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.3em;
-  color: var(--muted);
-  text-transform: uppercase;
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(13px,2vw,17px);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  color: #c9a84c;
   display: block;
-  margin-bottom: 4px;
+  margin-bottom: 2px;
 }
 .masthead-byline {
   font-family: var(--font-mono);
-  font-size: 12px;
-  color: var(--accent-dim);
-  letter-spacing: 0.12em;
+  font-size: 11px;
+  color: rgba(245,238,216,0.45);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
 }
 
 /* ── APP LAYOUT ── */
-.app { max-width: 980px; margin: 0 auto; padding: 24px 16px 80px; }
+.app { max-width: 980px; margin: 0 auto; padding: 20px 16px 60px; }
 .screen { display: none; }
 .screen.active { display: block; }
 
@@ -244,18 +248,18 @@ body::after {
 ═══════════════════════════════════════════ */
 .setup-intro {
   font-family: var(--font-body);
-  font-size: 17px;
+  font-size: 16px;
   font-style: italic;
   color: var(--text);
-  line-height: 1.75;
+  line-height: 1.7;
   max-width: 640px;
-  margin: 22px 0 28px;
+  margin: 14px 0 18px;
   padding-left: 14px;
   border-left: 2px solid var(--accent-dim);
 }
 
 /* Tournament cards */
-.tournament-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap: 12px; margin-bottom: 32px; }
+.tournament-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap: 8px; margin-bottom: 18px; }
 
 .tc {
   background: var(--card);
@@ -323,19 +327,21 @@ body::after {
 .badge-ryder   { background: rgba(48,184,48,0.12); color: var(--positive-hi); border: 1px solid var(--positive); }
 .badge-collapse{ background: rgba(176,48,32,0.12); color: var(--danger-hi); border: 1px solid var(--danger); }
 
-/* ── SECTION TITLE ── */
+/* ── SECTION TITLE — broadcast lower-third style ── */
 .section-title {
-  font-family: var(--font-display);
-  font-size: 20px;
-  letter-spacing: 0.15em;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.35em;
   color: var(--accent);
-  margin-bottom: 12px;
-  padding-bottom: 6px;
-  border-bottom: 1px solid var(--border);
+  margin-bottom: 8px;
+  padding-left: 10px;
+  border-left: 2px solid var(--accent);
+  text-transform: uppercase;
+  line-height: 1;
 }
 
 /* ── PLAYER GRID ── */
-.player-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px,1fr)); gap: 10px; margin-bottom: 28px; }
+.player-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px,1fr)); gap: 8px; margin-bottom: 16px; }
 .player-btn {
   background: var(--card);
   border: 1px solid var(--border);
@@ -466,7 +472,7 @@ body::after {
 .golf-none   { color: var(--danger-hi); border-color: var(--danger); }
 
 /* Atmosphere chips */
-.atmo-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 32px; }
+.atmo-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 20px; }
 .atmo-chip {
   background: var(--card);
   border: 1px solid var(--border);
@@ -510,8 +516,8 @@ body::after {
   background: var(--surface);
   border: 1px solid var(--border);
   border-top: 2px solid var(--accent-dim);
-  padding: 14px 18px;
-  margin-bottom: 14px;
+  padding: 12px 18px;
+  margin-bottom: 8px;
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   gap: 12px;
@@ -529,7 +535,7 @@ body::after {
 .hud-ghost { font-family: var(--font-mono); font-size: 11px; color: var(--ghost); letter-spacing: 0.15em; margin-top: 3px; }
 
 /* Composure */
-.comp-bar { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.comp-bar { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
 .comp-lbl { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; color: var(--muted); text-transform: uppercase; white-space: nowrap; }
 .comp-track { flex: 1; height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
 .comp-fill { height: 100%; background: var(--positive-hi); border-radius: 2px; transition: width 0.5s, background 0.5s; }
@@ -685,8 +691,8 @@ body::after {
 
 /* Result banner */
 .result-banner {
-  margin: 14px 0;
-  padding: 18px;
+  margin: 8px 0;
+  padding: 14px 18px;
   text-align: center;
   border-radius: 2px;
   animation: pop 0.4s cubic-bezier(.17,.67,.35,1.2);
@@ -706,7 +712,7 @@ body::after {
 .result-meta { font-family: var(--font-mono); font-size: 11px; color: var(--muted); letter-spacing: 0.18em; margin-top: 7px; }
 
 /* Commentary */
-.commentary { margin-top: 16px; display: flex; flex-direction: column; gap: 10px; }
+.commentary { margin-top: 10px; display: flex; flex-direction: column; gap: 6px; }
 .bubble { display: flex; gap: 10px; align-items: flex-start; animation: sup 0.35s ease-out both; }
 @keyframes sup { from{opacity:0;transform:translateY(9px)} to{opacity:1;transform:translateY(0)} }
 .bubble:nth-child(2){animation-delay:0.1s}
@@ -735,7 +741,7 @@ body::after {
 .dots span:nth-child(2){animation-delay:0.15s} .dots span:nth-child(3){animation-delay:0.3s}
 @keyframes dot { 0%,80%,100%{transform:scale(0.5);opacity:0.3} 40%{transform:scale(1);opacity:1} }
 
-.next-wrap { text-align: center; margin-top: 20px; }
+.next-wrap { text-align: center; margin-top: 12px; }
 
 /* ═══════════════════════════════════════════
    LEADERBOARD — era-aware
@@ -957,7 +963,7 @@ body::after {
 /* Utils */
 .hidden { display: none !important; }
 .mt16 { margin-top: 16px; }
-.mt24 { margin-top: 24px; }
+.mt24 { margin-top: 14px; }
 .center { text-align: center; }
 
 /* ── DEATH SCREEN ── */
