@@ -967,3 +967,14 @@ Status: CLOSED
 - Tags: #golf-adventure #api-routing #cors #architecture-gap #bl-015
 - Fix: Added `golfFetch()` helper — routes through worker (`cusslab-api.cusslab.workers.dev`), picks up `hecklers_api_key` from localStorage if present (same key as main app). All 7 fetch calls replaced. Model updated to `claude-sonnet-4-6`.
 - Status: Closed — 2026-03-08
+
+## WL-028
+- **Item:** grep redirect produced wrong file content
+- **Symptom:** Command to grep index.html for atmosphere terms returned golf-adventure.html CSS content instead
+- **Suspected cause:** Shell redirect or command construction error — grep may have failed silently and a previous file remained in out.txt
+- **Session:** 2026-03-08
+- **Time lost:** ~5 min
+- **Cost impact:** Low
+- **Delay:** Atmosphere schema replication blocked briefly
+- **Tags:** bash, redirect, grep, shell
+- **Status:** CLOSED — workaround was Claude Code honest read instead
