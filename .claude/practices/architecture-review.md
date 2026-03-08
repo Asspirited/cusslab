@@ -321,3 +321,95 @@ Before adding a boundary, ask: what does this make impossible? What second-order
 7. **Gherkin gate applies.** Even for refactoring. The scenario describes the behaviour that must survive.
 8. **UX check before each extraction.** Does the new interface afford correct use? Would Krug's law pass?
 9. **Systems second-order check.** What does this extraction make impossible? Name it before proceeding.
+
+---
+
+## index.html Layer Taxonomy — Agreed 2026-03-08
+
+index.html is ~14,000 lines. The agreed taxonomy for extraction is 4 layers (not 6 — "engine" and "orchestration" collapsed):
+
+```
+src/
+├── data/          — static objects only (no functions, no DOM, no API)
+├── logic/         — pure functions (absorbs pipeline/logic.js)
+├── integration/   — API client, Worker calls, Cloudflare fetch
+└── ui/            — DOM manipulation only (no business logic)
+index.html         — orchestration shell (wires layers, owns no logic)
+pipeline/logic.js  — thin shim re-exporting from src/logic/ (do not delete, node test runner imports it)
+```
+
+**Dependency rule (Clean Architecture applied):**
+```
+data/ ← logic/ ← integration/ ← ui/ ← index.html (orchestration)
+```
+Inner layers know nothing of outer layers. Ever.
+
+**Load order (no bundler — static `<script src>` tags):**
+```html
+<script src="src/data/..."></script>      <!-- loaded first, no deps -->
+<script src="src/logic/..."></script>     <!-- depends on data only -->
+<script src="src/integration/..."></script> <!-- depends on logic -->
+<script src="src/ui/..."></script>        <!-- depends on logic, integration -->
+<!-- index.html inline script block last — orchestration only -->
+```
+
+**Extraction order (risk-ordered, lowest first):**
+1. **data/** — pure objects, no side effects. Near-zero risk. Do first.
+2. **logic/** — pure functions. Risk: load order only. Do second.
+3. **integration/** — API client. Risk: async, error handling. Do third.
+4. **ui/** — DOM. Risk: event wiring, JSDOM tests needed. Do last.
+
+---
+
+## The Seam Inventory — index.html
+
+Natural extraction points already present in index.html (Feathers: seams before touching anything):
+
+| Seam | Type | Layer | Extraction target |
+|------|------|-------|-------------------|
+| `const SCENARIOS = [...]` (Quntum Leeks) | Object seam | data/ | `src/data/quntum-leeks-scenarios.js` |
+| `INTELLECTUAL_ATTEMPTS_CONFIG` | Object seam | data/ | `src/data/intellectual-attempts-config.js` |
+| `ATTEMPT_KEYWORDS` | Object seam | data/ | `src/data/intellectual-attempts-config.js` |
+| `detectIntellectualAttempt()` | Method seam | logic/ | `src/logic/intellectual-attempts.js` |
+| `buildAttemptInstruction()` | Method seam | logic/ | `src/logic/intellectual-attempts.js` |
+| Quntum Leeks game mechanics (roll, pick, advance) | Method seam | logic/ | `src/logic/quntum-leeks-engine.js` |
+| `API.call()` / fetch to Worker | Abstraction seam | integration/ | `src/integration/api-client.js` |
+| FoodWeather state | Object seam | logic/ | `src/logic/food-weather.js` (shared darts+golf) |
+| CharacterState | Object seam | logic/ | `src/logic/character-state.js` (shared darts+golf) |
+| RelationshipState | Object seam | logic/ | `src/logic/relationship-state.js` (shared darts+golf) |
+| Panel DOM render functions (boardroom, comedy, etc.) | Method seam | ui/ | `src/ui/<panel>-ui.js` per panel |
+| `_runRound()` (boardroom orchestration) | Method seam | index.html shell | stays in orchestration shell |
+
+**Note on shared code:** FoodWeather, CharacterState, RelationshipState, TURN_RULES are shared between darts and golf panels. Do not duplicate when extracting — extract once to logic/, import from both panels. Deduplication is a separate job; flag but do not block current extraction.
+
+---
+
+## Proof-of-Concept Extraction — Quntum Leeks
+
+**Quntum Leeks chosen first** because:
+- Self-contained: SCENARIOS data + game mechanics logic, no panel state, no API calls
+- Low coupling: used only by Quntum Leeks panel, not shared
+- Low risk: extracting data first, logic second, proven pattern from golf-adventure.html
+- Canonical spelling: **Quntum Leeks** — the typo is intentional, canonical, and funnier. Files: `quntum-leeks-scenarios.js`, `quntum-leeks-engine.js`. Never "Quantum".
+
+**Extraction slice:**
+```
+src/data/quntum-leeks-scenarios.js   — SCENARIOS array (currently inline in index.html)
+src/logic/quntum-leeks-engine.js     — pick scenario, evaluate answer, advance round
+```
+
+**Gherkin gate (mandatory before any extraction code):**
+Write Gherkin scenarios for Quntum Leeks mechanics. Three Amigos complete. Scenarios approved. Pipeline green. Only then: extract.
+
+**pipeline/logic.js shim strategy:**
+When src/logic/ exists, pipeline/logic.js becomes:
+```js
+// pipeline/logic.js — shim only. Do not add logic here.
+module.exports = require('../src/logic/index.js');
+```
+Unit runner imports from pipeline/logic.js. No unit runner changes needed.
+
+**Second-order check (Meadows):**
+- What does extracting SCENARIOS make impossible? Nothing — `<script src>` is already how the page loads things.
+- What does it make harder? Load order errors if script tag appears after inline code that uses it. Mitigation: load order enforced by convention and checked in pipeline.
+- What coupling does this create at the boundary? index.html now imports from src/data/ — that is the intended direction. No inversion.
