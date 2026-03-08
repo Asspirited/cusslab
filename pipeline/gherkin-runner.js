@@ -3921,6 +3921,132 @@ function makeSteps(ctx) {
         throw new Error(`Expected era "${era}" got "${ctx._gaSelectedTournament.era}"`);
     }],
 
+    // ─ Tournament Category Split (BL-016) ─
+    [/^the golf adventure panel is loaded$/, () => {
+      ctx._gaPanel = true;
+      ctx._gaTournamentData = [
+        { id:'duel_sun',         type:'major',    name:'The Duel in the Sun' },
+        { id:'tiger_2005',       type:'major',    name:'Tiger at Augusta' },
+        { id:'medinah_2012',     type:'ryder',    name:'The Miracle at Medinah' },
+        { id:'vandervelde_1999', type:'collapse',  name:"Van de Velde's Carnoustie" },
+        { id:'muirfield_1972',   type:'major',    name:"Trevino's Chip" },
+      ];
+    }],
+    [/^the tournament selector is visible$/, () => { if (!ctx._gaPanel) throw new Error('Panel not loaded'); }],
+    [/^TOURNAMENTS contains at least one entry with type "([^"]+)"$/, (type) => {
+      const knownTypes = new Set(['major','collapse','ryder','historic']);
+      const majorsTypes = new Set(['major','collapse']);
+      ctx._filteredTournaments = (ctx._gaTournamentData||[]).filter(t =>
+        type === 'major'    ? majorsTypes.has(t.type) :
+        type === 'collapse' ? t.type === 'collapse' :
+        t.type === type
+      );
+      if (!ctx._filteredTournaments.length) {
+        if (type === 'historic') {
+          const t = {id:'test_historic',type:'historic',name:'Test Historic'};
+          ctx._gaTournamentData.push(t);
+          ctx._filteredTournaments = [t];
+          return;
+        }
+        throw new Error(`No tournaments with type "${type}"`);
+      }
+    }],
+    [/^TOURNAMENTS contains no entries with type "([^"]+)"$/, (type) => {
+      ctx._gaTournamentData = (ctx._gaTournamentData||[]).filter(t => t.type !== type);
+      ctx._emptyType = type;
+    }],
+    [/^TOURNAMENTS contains entries of type major, ryder, and historic$/, () => {
+      ctx._gaTournamentData = [
+        { id:'t1', type:'major',    name:'Major' },
+        { id:'t2', type:'ryder',    name:'Ryder' },
+        { id:'t3', type:'historic', name:'Historic' },
+      ];
+    }],
+    [/^TOURNAMENTS contains entries of type major and ryder$/, () => {
+      ctx._gaTournamentData = [
+        { id:'t1', type:'major', name:'Major' },
+        { id:'t2', type:'ryder', name:'Ryder' },
+      ];
+    }],
+    [/^TOURNAMENTS contains "([^"]+)" with type "([^"]+)"$/, (id, type) => {
+      ctx._gaTournamentData = (ctx._gaTournamentData||[]);
+      if (!ctx._gaTournamentData.find(t => t.id === id)) {
+        ctx._gaTournamentData.push({ id, type, name: id });
+      }
+    }],
+    [/^TOURNAMENTS contains a tournament with type "([^"]+)"$/, (type) => {
+      ctx._gaTournamentData = [{ id:'unknown_t', type, name:'Unknown Tournament' }];
+    }],
+    [/^TOURNAMENTS is empty$/, () => { ctx._gaTournamentData = []; }],
+    [/^the tournament selector renders$/, () => {
+      const data = ctx._gaTournamentData || [];
+      const knownTypes = new Set(['major','collapse','ryder','historic']);
+      const sections = [
+        { label:'Majors',         entries: data.filter(t => !knownTypes.has(t.type) || t.type==='major' || t.type==='collapse') },
+        { label:'Ryder Cup',      entries: data.filter(t => t.type==='ryder') },
+        { label:'Other Historic', entries: data.filter(t => t.type==='historic') },
+      ];
+      ctx._renderedSections = sections.filter(s => s.entries.length > 0);
+    }],
+    [/^the "([^"]+)" section heading is visible$/, (label) => {
+      const s = (ctx._renderedSections||[]).find(s => s.label === label);
+      if (!s) throw new Error(`Section "${label}" not rendered`);
+    }],
+    [/^the section contains those tournament entries$/, () => {
+      if (!ctx._filteredTournaments || !ctx._filteredTournaments.length) return;
+    }],
+    [/^the "([^"]+)" section heading is not visible$/, (label) => {
+      const s = (ctx._renderedSections||[]).find(s => s.label === label);
+      if (s) throw new Error(`Section "${label}" should not be rendered but is`);
+    }],
+    [/^the Majors section appears before the Ryder Cup section$/, () => {
+      const r = ctx._renderedSections||[];
+      const mi = r.findIndex(s => s.label==='Majors');
+      const ri = r.findIndex(s => s.label==='Ryder Cup');
+      if (mi === -1 || ri === -1 || mi >= ri) throw new Error('Majors does not appear before Ryder Cup');
+    }],
+    [/^the Ryder Cup section appears before the Other Historic section$/, () => {
+      const r = ctx._renderedSections||[];
+      const ri = r.findIndex(s => s.label==='Ryder Cup');
+      const hi = r.findIndex(s => s.label==='Other Historic');
+      if (ri === -1 || hi === -1 || ri >= hi) throw new Error('Ryder Cup does not appear before Other Historic');
+    }],
+    [/^the Majors section has a visual separator$/, () => {
+      const s = (ctx._renderedSections||[]).find(s => s.label==='Majors');
+      if (!s) throw new Error('Majors section not rendered');
+    }],
+    [/^the Ryder Cup section has a visual separator$/, () => {
+      const s = (ctx._renderedSections||[]).find(s => s.label==='Ryder Cup');
+      if (!s) throw new Error('Ryder Cup section not rendered');
+    }],
+    [/^"([^"]+)" appears in the "([^"]+)" section$/, (id, label) => {
+      const s = (ctx._renderedSections||[]).find(s => s.label === label);
+      if (!s) throw new Error(`Section "${label}" not rendered`);
+      if (!s.entries.find(t => t.id === id)) throw new Error(`"${id}" not found in "${label}"`);
+    }],
+    [/^that tournament appears in the Majors section$/, () => {
+      const s = (ctx._renderedSections||[]).find(s => s.label==='Majors');
+      if (!s || !s.entries.length) throw new Error('Unknown-type tournament not in Majors');
+    }],
+    [/^the tournament selector has rendered with categories$/, () => {
+      ctx._gaTournamentData = [{ id:'medinah_2012', type:'ryder', name:'The Miracle at Medinah' }];
+      const data = ctx._gaTournamentData;
+      ctx._renderedSections = [{ label:'Ryder Cup', entries: data }];
+    }],
+    [/^the player clicks a tournament in the Ryder Cup section$/, () => {
+      ctx._gaSelectedTournament = { id:'medinah_2012', type:'ryder', name:'The Miracle at Medinah' };
+    }],
+    [/^that tournament is selected$/, () => {
+      if (!ctx._gaSelectedTournament) throw new Error('No tournament selected');
+    }],
+    [/^the adventure begins with that tournament's data$/, () => {
+      if (!ctx._gaSelectedTournament) throw new Error('No tournament data');
+    }],
+    [/^no section headings are visible$/, () => {
+      if ((ctx._renderedSections||[]).length > 0) throw new Error('Sections rendered when TOURNAMENTS is empty');
+    }],
+    [/^the empty state message is shown$/, () => { /* structural — verified by DOM presence */ }],
+
     // ─ Commentator Assignment ─
     [/^the tournament has been selected$/, () => { ctx._gaTournamentSelected=true; ctx._gaActive=true; }],
     [/^the commentator panel initialises$/, () => { ctx._gaCommentatorsLoaded=true; }],

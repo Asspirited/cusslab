@@ -273,7 +273,10 @@ body {
 }
 
 /* Tournament cards */
-.tournament-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap: 8px; margin-bottom: 18px; }
+.tournament-grid { margin-bottom: 18px; }
+.tc-section { margin-bottom: 20px; }
+.tc-section-header { font-family: var(--font-display); font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); border-top: 1px solid var(--border); padding-top: 12px; margin-bottom: 10px; }
+.tc-section-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap: 8px; }
 
 .tc {
   background: var(--card);
@@ -1320,17 +1323,39 @@ let G = {
 function buildSetup() {
   // Tournaments
   const tg = document.getElementById('tournament-grid');
-  TOURNAMENTS.forEach(t => {
-    const c = document.createElement('div');
-    c.className = 'tc';
-    c.innerHTML = `<div class="tc-era-strip"></div>
-      <div class="tc-year">${t.year}</div>
-      <div class="tc-name">${t.name}</div>
-      <div class="tc-course">${t.course}</div>
-      <div class="tc-lore">${t.lore}</div>
-      <span class="tc-badge ${t.badge}">${t.type==='ryder'?'Ryder Cup':t.type==='collapse'?'Historic Collapse':'Major'}</span>`;
-    c.onclick = () => selectTournament(c, t);
-    tg.appendChild(c);
+  const SECTIONS = [
+    { label: 'Majors',         types: ['major', 'collapse', null, undefined] },
+    { label: 'Ryder Cup',      types: ['ryder'] },
+    { label: 'Other Historic', types: ['historic'] },
+  ];
+  const knownTypes = new Set(['major', 'collapse', 'ryder', 'historic']);
+  SECTIONS.forEach(section => {
+    const entries = section.label === 'Majors'
+      ? TOURNAMENTS.filter(t => !knownTypes.has(t.type) || t.type === 'major' || t.type === 'collapse')
+      : TOURNAMENTS.filter(t => section.types.includes(t.type));
+    if (!entries.length) return;
+    const sec = document.createElement('div');
+    sec.className = 'tc-section';
+    const hdr = document.createElement('div');
+    hdr.className = 'tc-section-header';
+    hdr.textContent = section.label;
+    const grid = document.createElement('div');
+    grid.className = 'tc-section-grid';
+    entries.forEach(t => {
+      const c = document.createElement('div');
+      c.className = 'tc';
+      c.innerHTML = `<div class="tc-era-strip"></div>
+        <div class="tc-year">${t.year}</div>
+        <div class="tc-name">${t.name}</div>
+        <div class="tc-course">${t.course}</div>
+        <div class="tc-lore">${t.lore}</div>
+        <span class="tc-badge ${t.badge}">${t.type==='ryder'?'Ryder Cup':t.type==='collapse'?'Historic Collapse':'Major'}</span>`;
+      c.onclick = () => selectTournament(c, t);
+      grid.appendChild(c);
+    });
+    sec.appendChild(hdr);
+    sec.appendChild(grid);
+    tg.appendChild(sec);
   });
 
   // Characters
