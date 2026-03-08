@@ -572,6 +572,36 @@ function makeSteps(ctx) {
           throw new Error(`Tab "${tabId}" is missing from current skin tabs — _applySkin() would hide it`);
       }],
 
+    // ── IntellectualAttempts defensive guard steps ───────────────────────────
+    [/^IntellectualAttemptsEngine is not available$/,
+      () => { ctx._iaEngine = null; }],
+
+    [/^the IntellectualAttempts module is created with the defensive guard$/,
+      () => {
+        const eng = ctx._iaEngine;
+        ctx._iaModule = {
+          detect: eng ? eng.detectIntellectualAttempt : () => null,
+          inject: eng ? eng.inject : (_panel, _id, systemPrompt) => systemPrompt,
+        };
+        ctx._iaInitError = null;
+      }],
+
+    [/^no initialisation error is thrown$/,
+      () => { if (ctx._iaInitError) throw new Error('IA init threw: ' + ctx._iaInitError); }],
+
+    [/^detect returns null for any input$/,
+      () => {
+        const result = ctx._iaModule.detect('some ironic text');
+        if (result !== null) throw new Error('Expected null but got: ' + result);
+      }],
+
+    [/^inject returns the original system prompt unchanged$/,
+      () => {
+        const prompt = 'You are Faldo.';
+        const result = ctx._iaModule.inject('golf', 'faldo', prompt);
+        if (result !== prompt) throw new Error('Expected prompt unchanged but got: ' + result);
+      }],
+
     [/^the app is loaded$/,
       () => { /* nothing needed */ }],
 

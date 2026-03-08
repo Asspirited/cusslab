@@ -680,6 +680,31 @@ bm4.samDamage = 4;
 assert('buildModifiers: samDamage>=4 includes "4 damage events"',
   buildModifiers(bm4).includes('4 damage events'), true);
 
+// ── IntellectualAttempts defensive guard ─────────────────────────────────────
+
+function _makeIAModule(engine) {
+  const eng = (engine !== null && engine !== undefined) ? engine : null;
+  return {
+    detect: eng ? eng.detectIntellectualAttempt : () => null,
+    inject: eng ? eng.inject : (_panel, _id, systemPrompt) => systemPrompt,
+  };
+}
+
+assert('IA guard: detect returns null when engine is absent',
+  _makeIAModule(null).detect('something ironic'), null);
+
+assert('IA guard: inject returns prompt unchanged when engine is absent',
+  _makeIAModule(null).inject('golf', 'faldo', 'You are Faldo.'), 'You are Faldo.');
+
+assert('IA guard: detect delegates to engine when present',
+  _makeIAModule({ detectIntellectualAttempt: () => 'ATTEMPT_IRONY', inject: () => {} }).detect('test'),
+  'ATTEMPT_IRONY');
+
+assert('IA guard: inject delegates to engine when present',
+  _makeIAModule({ detectIntellectualAttempt: () => null, inject: (_p, _id, s) => s + '[INJECTED]' })
+    .inject('golf', 'faldo', 'prompt'),
+  'prompt[INJECTED]');
+
 // ── Results ──────────────────────────────────────────────────────────────────
 
 const total = passed + failed;
