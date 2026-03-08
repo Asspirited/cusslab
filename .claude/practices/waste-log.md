@@ -905,6 +905,20 @@ Status: CLOSED
 - Status: OPEN — RECURRING. Root cause never fixed. Next session: must resolve once and record the permanent fix here before doing anything else.
 - **PERMANENT FIX REQUIRED:** Use Cloudflare API token (not browser OAuth). Steps: dash.cloudflare.com (leanspirited@gmail.com) → My Profile → API Tokens → Create Token → "Edit Cloudflare Workers" template. Store token. Use: `CLOUDFLARE_API_TOKEN=<token> wrangler secret put ANTHROPIC_API_KEY`. Record token location here when done.
 
+## WL-061
+- Item: IntellectualAttempts extraction caused total live-site JS failure — all sports panel buttons broken
+- Symptom: After extracting IntellectualAttempts to src/ layer, `const IntellectualAttempts = { detect: IntellectualAttemptsEngine.detectIntellectualAttempt, ... }` evaluated at module load time. If external script fails to load for any reason, throws TypeError and kills ALL subsequent JS — Football, Golf, Darts, LongRoom all undefined, all buttons broken.
+- Suspected cause: Eager property access on external global at module-load time. No defensive guard. If the src/ script 404s or throws, the whole page dies silently.
+- Secondary bug: Football, Golf, LongRoom `callMoment()` routed through `discuss()` which disables the mode 1 button only — mode 2 button (fb-moment-btn, gf-moment-btn, lr-moment-btn) never disabled, allowing double-clicks during API calls.
+- Root cause: No test verifies that (a) the page survives an external script failure, (b) mode 2 buttons are disabled during API calls.
+- Prevention rule: Any global accessed at module load time (not inside a function) MUST be guarded: `typeof X !== 'undefined'`. Eager access to externally-loaded globals is always a live-site kill risk.
+- Test gap: Need Gherkin: "if an external script fails, the panel still loads" and "mode 2 button is disabled during API call".
+- Session: 2026-03-08
+- Time lost: ~45 min diagnosis
+- Cost impact: Medium — live site broken, multiple rounds of investigation
+- Tags: #live-site #js-fatal #external-script #button-enablement #retest-fail
+- Status: Closed — IntellectualAttempts made defensive (lazy IIFE with typeof guard); callMoment() async + disable/enable own button for Football, Golf, LongRoom
+
 ## WL-059
 - Item: Phantom scenario descriptions in CLAUDE.md — "Magnus loading state" and "brand error messages" referenced as 9 approved Cloudflare Worker scenarios
 - Symptom: Neither Rod nor Claude can source these descriptions. Not in any .feature file, retro, or session transcript.

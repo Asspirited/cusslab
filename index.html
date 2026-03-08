@@ -9636,11 +9636,15 @@ function _iceBreakBlock(memberId) {
 
 // ============================================================
 // MODULE: IntellectualAttempts — loaded from src/logic/intellectual-attempts.js
+// Defensive: if the external script fails to load, methods are no-ops so the rest of JS survives.
 // ============================================================
-const IntellectualAttempts = {
-  detect: IntellectualAttemptsEngine.detectIntellectualAttempt,
-  inject: IntellectualAttemptsEngine.inject,
-};
+const IntellectualAttempts = (() => {
+  const eng = (typeof IntellectualAttemptsEngine !== 'undefined') ? IntellectualAttemptsEngine : null;
+  return {
+    detect: eng ? eng.detectIntellectualAttempt : () => null,
+    inject: eng ? eng.inject : (_panel, _id, systemPrompt) => systemPrompt,
+  };
+})();
 
 // ============================================================
 // MODULE: Boardroom — Present to the Boardroom
@@ -11096,7 +11100,7 @@ INTER-PANEL: Ron — the gold is the portal to everything Cox wants to say; trea
     INJURY:       'Player down / injury',
   };
 
-  function callMoment() {
+  async function callMoment() {
     const momentType = (document.getElementById('fb-moment') || {}).value;
     if (!momentType) { alert('Select a moment first.'); return; }
     const situation = ((document.getElementById('fb-situation') || {}).value || '').trim();
@@ -11104,7 +11108,9 @@ INTER-PANEL: Ron — the gold is the portal to everything Cox wants to say; trea
     const prompt = situation ? `${label} — ${situation}` : label;
     const inp = document.getElementById('fb-input');
     if (inp) inp.value = prompt;
-    discuss();
+    UI.setDisabled('fb-moment-btn', true);
+    await discuss();
+    UI.setDisabled('fb-moment-btn', false);
   }
 
   function switchMode(mode) {
@@ -12122,7 +12128,7 @@ NEVER SAYS: Anything bitter about the career ending. Anything suggesting comment
     ROUND_COMPLETE: 'Round complete',
   };
 
-  function callMoment() {
+  async function callMoment() {
     const momentType = (document.getElementById('gf-moment') || {}).value;
     if (!momentType) { alert('Select a moment first.'); return; }
     const situation = ((document.getElementById('gf-situation') || {}).value || '').trim();
@@ -12130,7 +12136,9 @@ NEVER SAYS: Anything bitter about the career ending. Anything suggesting comment
     const prompt = situation ? `${label} — ${situation}` : label;
     const inp = document.getElementById('gf-input');
     if (inp) inp.value = prompt;
-    discuss();
+    UI.setDisabled('gf-moment-btn', true);
+    await discuss();
+    UI.setDisabled('gf-moment-btn', false);
   }
 
   function switchMode(mode) {
@@ -13991,7 +13999,7 @@ Never name the move.`;
     INNINGS_COMPLETE: 'Innings complete',
   };
 
-  function callMoment() {
+  async function callMoment() {
     const momentType = (document.getElementById('lr-moment') || {}).value;
     if (!momentType) { alert('Select a moment first.'); return; }
     const situation = ((document.getElementById('lr-situation') || {}).value || '').trim();
@@ -13999,7 +14007,9 @@ Never name the move.`;
     const prompt = situation ? `${label} — ${situation}` : label;
     const inp = document.getElementById('lr-input');
     if (inp) inp.value = prompt;
-    discuss();
+    UI.setDisabled('lr-moment-btn', true);
+    await discuss();
+    UI.setDisabled('lr-moment-btn', false);
   }
 
   function switchMode(mode) {
