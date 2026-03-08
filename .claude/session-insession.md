@@ -43,7 +43,8 @@
 
 ### TDD SEQUENCE — red before green
 1. Identify unit assertions from approved Gherkin
-2. Write unit tests to test/ — red, do not implement yet
+2. Write unit tests to pipeline/unit-runner.js — red, do not implement yet
+   (logic lives in pipeline/logic.js — tests assert against it)
 3. Run pipeline — confirm tests are failing for the right reason
 4. Report which tests are red and why
 5. On Rod's go → IMPLEMENTATION SEQUENCE
@@ -129,4 +130,7 @@ Read: .claude/principles/ux.md before any UI change or new interaction.
 .claude/practices/waste-log.md     — append after mistakes
 .claude/practices/auth-ops.md      — auth/deploy work
 specs/                             — all Gherkin lives here
-docs/characters/                   — all character files live here
+docs/                              — all character files live here (not docs/characters/)
+pipeline/unit-runner.js            — all unit tests live here (387 assertions)
+pipeline/logic.js                  — pure functions under test
+pipeline/gherkin-runner.js         — Gherkin step definitions
