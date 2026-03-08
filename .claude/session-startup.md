@@ -8,6 +8,19 @@
 
 ---
 
+### 0. PRE-FLIGHT — prime Downloads for Claude.ai (run first, no exceptions)
+
+```bash
+export NVM_DIR="/home/rodent/.nvm" && \. "/home/rodent/.nvm/nvm.sh" && cd /home/rodent/cusslab && cat .claude/session-startup.md .claude/practices/domain-model.md .claude/practices/backlog.md .claude/practices/waste-log.md > /mnt/c/Users/roden/Downloads/session-ref.md && echo "session-ref.md ready"
+```
+
+This creates `/mnt/c/Users/roden/Downloads/session-ref.md` — one file Claude.ai uploads to get
+full context (startup sequence, domain model, backlog, waste log) without needing to run commands.
+If Claude.ai asks you to "run a command and upload out.txt" — this file is the answer.
+Update the cat list above if new reference files are added.
+
+---
+
 ### 1. AUTH CHECK (immediate — before pipeline, before anything)
 
 Read `.claude/practices/auth-ops.md` in full.
