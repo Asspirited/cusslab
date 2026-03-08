@@ -9629,6 +9629,82 @@ function _iceBreakBlock(memberId) {
 }
 
 // ============================================================
+// MODULE: IntellectualAttempts — keyword detection + prompt injection
+// Mirrors pipeline/logic.js — keep in sync
+// ============================================================
+const IntellectualAttempts = (() => {
+  const KEYWORDS = {
+    'irony':        'ATTEMPT_IRONY',
+    'ironic':       'ATTEMPT_IRONY',
+    'ironically':   'ATTEMPT_IRONY',
+    'literally':    'ATTEMPT_LITERALLY',
+    'tautology':    'ATTEMPT_TAUTOLOGY',
+    'oxymoron':     'ATTEMPT_OXYMORON',
+    'metaphor':     'ATTEMPT_METAPHOR',
+    'paradox':      'ATTEMPT_PARADOX',
+    'quantum':      'ATTEMPT_ERUDITION',
+    'schrödinger':  'ATTEMPT_ERUDITION',
+    'schrodinger':  'ATTEMPT_ERUDITION',
+    'heisenberg':   'ATTEMPT_ERUDITION',
+    'occam':        'ATTEMPT_ERUDITION',
+  };
+
+  const CONFIG = {
+    boardroom: {
+      sebastian: { types: ['ATTEMPT_IRONY', 'ATTEMPT_ERUDITION', 'ATTEMPT_PARADOX'],    default_degree: 'plausible_miss',      default_delivery: 'confident_wrongness'   },
+      roy:       { types: ['ATTEMPT_TAUTOLOGY'],                                          default_degree: 'catastrophic_miss',   default_delivery: 'completely_sincere'    },
+      partridge: { types: ['ATTEMPT_OXYMORON', 'ATTEMPT_LITERALLY', 'ATTEMPT_ERUDITION'], default_degree: 'catastrophic_miss',  default_delivery: 'ridiculous'            },
+      cox:       { types: ['ATTEMPT_ERUDITION', 'ATTEMPT_METAPHOR', 'ATTEMPT_PARADOX'],  default_degree: 'almost_correct',      default_delivery: 'accidental_profundity' },
+      mystic:    { types: ['ATTEMPT_IRONY', 'ATTEMPT_PARADOX', 'ATTEMPT_ERUDITION'],     default_degree: 'catastrophic_miss',   default_delivery: 'ridiculous'            },
+      harold:    { types: ['ATTEMPT_LITERALLY'],                                          default_degree: 'catastrophic_miss',   default_delivery: 'confident_wrongness'   },
+    },
+    comedyroom: {
+      hicks:     { types: ['ATTEMPT_IRONY', 'ATTEMPT_PARADOX'],                          default_degree: 'almost_correct',      default_delivery: 'confident_wrongness'   },
+      partridge: { types: ['ATTEMPT_OXYMORON', 'ATTEMPT_LITERALLY', 'ATTEMPT_ERUDITION'], default_degree: 'catastrophic_miss',  default_delivery: 'ridiculous'            },
+      carlin:    { types: ['ATTEMPT_IRONY', 'ATTEMPT_PARADOX'],                          default_degree: 'correct',             default_delivery: 'confident_wrongness'   },
+      gervais:   { types: ['ATTEMPT_IRONY', 'ATTEMPT_OXYMORON'],                         default_degree: 'plausible_miss',      default_delivery: 'plausible'             },
+      cox:       { types: ['ATTEMPT_ERUDITION', 'ATTEMPT_METAPHOR'],                     default_degree: 'almost_correct',      default_delivery: 'accidental_profundity' },
+      eccles:    { types: ['ATTEMPT_PARADOX', 'ATTEMPT_TAUTOLOGY'],                      default_degree: 'catastrophic_miss',   default_delivery: 'ridiculous'            },
+    },
+    golf: {
+      faldo:     { types: ['ATTEMPT_TAUTOLOGY', 'ATTEMPT_IRONY', 'ATTEMPT_ERUDITION'],   default_degree: 'plausible_miss',      default_delivery: 'lying'                 },
+      radar:     { types: ['ATTEMPT_LITERALLY', 'ATTEMPT_OXYMORON', 'ATTEMPT_ERUDITION'], default_degree: 'catastrophic_miss',  default_delivery: 'ridiculous'            },
+      dougherty: { types: ['ATTEMPT_PARADOX', 'ATTEMPT_ERUDITION'],                      default_degree: 'almost_correct',      default_delivery: 'accidental_profundity' },
+      mcginley:  { types: ['ATTEMPT_METAPHOR', 'ATTEMPT_IRONY'],                         default_degree: 'plausible_miss',      default_delivery: 'confident_wrongness'   },
+      coltart:   { types: ['ATTEMPT_TAUTOLOGY', 'ATTEMPT_LITERALLY'],                    default_degree: 'catastrophic_miss',   default_delivery: 'completely_sincere'    },
+      harmon:    { types: ['ATTEMPT_METAPHOR', 'ATTEMPT_ERUDITION'],                     default_degree: 'plausible_miss',      default_delivery: 'plausible'             },
+      nick:      { types: ['ATTEMPT_IRONY', 'ATTEMPT_TAUTOLOGY'],                        default_degree: 'plausible_miss',      default_delivery: 'confident_wrongness'   },
+      cox:       { types: ['ATTEMPT_ERUDITION', 'ATTEMPT_PARADOX'],                      default_degree: 'almost_correct',      default_delivery: 'accidental_profundity' },
+    },
+  };
+
+  function detect(inputText) {
+    const lower = (inputText || '').toLowerCase();
+    for (const keyword of Object.keys(KEYWORDS)) {
+      if (lower.includes(keyword)) return KEYWORDS[keyword];
+    }
+    return null;
+  }
+
+  function buildInstruction(characterConfig, attemptType) {
+    const degree   = characterConfig.default_degree;
+    const delivery = characterConfig.default_delivery;
+    return `\n\nINTELLECTUAL_ATTEMPT: In this response, use ${attemptType}. Degree of success: ${degree}. Delivery mode: ${delivery}. Weave it naturally into your voice — do not announce it. Misuse the concept in a way consistent with your character. Reference the sporting-colemanballs patterns: tautology, irony-as-coincidence, literally-as-intensifier, named concept dropped wrongly.`;
+  }
+
+  function inject(panelId, characterId, systemPrompt, attemptType) {
+    const panelConfig = CONFIG[panelId];
+    if (!panelConfig) return systemPrompt;
+    const charConfig = panelConfig[characterId];
+    if (!charConfig) return systemPrompt;
+    if (!charConfig.types.includes(attemptType)) return systemPrompt;
+    return systemPrompt + buildInstruction(charConfig, attemptType);
+  }
+
+  return { detect, inject };
+})();
+
+// ============================================================
 // MODULE: Boardroom — Present to the Boardroom
 // ============================================================
 const Boardroom = (() => {
@@ -10203,12 +10279,16 @@ How to behave:
       const brIntensityBlock = _charStates[member.id]
         ? `YOUR STATE:\n${CharacterState.buildBlock(_charStates[member.id])}\n\n`
         : '';
-      const system = brIntensityBlock + yourState + member.prompt + _iceBreakBlock(member.id)
+      const iaType = IntellectualAttempts.detect(questMessage);
+      const baseSystem = brIntensityBlock + yourState + member.prompt + _iceBreakBlock(member.id)
         + _chargeNote(member.id)
         + '\n\nFull conversation so far:\n' + hist
         + thisRoundPrev
         + interactionModel
         + closingInstruction;
+      const system = iaType
+        ? IntellectualAttempts.inject('boardroom', member.id, baseSystem, iaType)
+        : baseSystem;
 
       const prompt = `The questioner ${isFirstTurn ? 'has presented' : 'replied'}: "${questMessage}"\n\nRespond.`;
 
@@ -10578,9 +10658,13 @@ HYPOCHONDRIA RESPONSE: Default silence. You have been feeling like this for year
       const crAliases = [member.id, member.name.toLowerCase()];
       const crHypoBlock = FoodWeather.hypoBlock(member.id, hypoPool, null, responses, crAliases);
 
-      const system = TURN_RULES + '\n\n' + crFoodBlock + crMarmiteBlock + crHypoBlock + member.prompt + _iceBreakBlock(member.id) + roundNote + crMechanics + (i > 0
+      const crIaType = IntellectualAttempts.detect(input);
+      const crBaseSystem = TURN_RULES + '\n\n' + crFoodBlock + crMarmiteBlock + crHypoBlock + member.prompt + _iceBreakBlock(member.id) + roundNote + crMechanics + (i > 0
         ? `\n\nPrevious:\n${prev}`
         : '');
+      const system = crIaType
+        ? IntellectualAttempts.inject('comedyroom', member.id, crBaseSystem, crIaType)
+        : crBaseSystem;
 
       const crPrevName = i > 0 ? MEMBERS.find(m => m.id === ORDER[i-1]).name : '';
       const prompt = i === 0
@@ -12027,9 +12111,13 @@ NEVER SAYS: Anything bitter about the career ending. Anything suggesting comment
       const gfIntensityBlock = i > 0 ? `YOUR STATE:\n${CharacterState.buildBlock(gfCharStates[member.id])}\n\n` : '';
       const golfNameBlock = golfName ? `\nThe question was brought by ${golfName}. Address ${golfName} by name at least once in your response.\n` : '';
 
-      const system = TURN_RULES + '\n\n' + gfIntensityBlock + gfYourState + tourCardBlock + roeIntroBlock + golfNameBlock + gfFoodBlock + gfMarmiteBlock + gfHypoBlock + member.prompt + _iceBreakBlock(member.id) + roundNote + mechanics + arcInstructions + (i > 0
+      const gfIaType = IntellectualAttempts.detect(panelInput);
+      const gfBaseSystem = TURN_RULES + '\n\n' + gfIntensityBlock + gfYourState + tourCardBlock + roeIntroBlock + golfNameBlock + gfFoodBlock + gfMarmiteBlock + gfHypoBlock + member.prompt + _iceBreakBlock(member.id) + roundNote + mechanics + arcInstructions + (i > 0
         ? `\n\nPrevious:\n${prev}`
         : '');
+      const system = gfIaType
+        ? IntellectualAttempts.inject('golf', member.id, gfBaseSystem, gfIaType)
+        : gfBaseSystem;
 
       const prevName = i > 0 ? MEMBERS.find(m => m.id === ORDER[i-1]).name : '';
       const prevId   = i > 0 ? ORDER[i - 1] : null;
