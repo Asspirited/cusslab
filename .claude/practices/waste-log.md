@@ -875,3 +875,20 @@ Status: CLOSED
 - Cost impact: Low-medium (3 deploy cycles)
 - Tags: css, typography, font-rendering, diagnosis
 - Status: Closed — Bebas Neue (uniform stroke) replaces Playfair Display in masthead h1
+
+## WL-058
+- Item: Visual bug fix applied 3 times to feature branch while live site served main
+- Symptom: Rod reported "still exactly the same" after each fix — because none reached the live site
+- 5 Whys:
+  1. Opacity set to 0 but body::after still composited → should have removed element
+  2. Font change deployed to feature branch → live site serves main, not feature branch
+  3. No deploy-chain check before starting visual fixes
+  4. When Rod said "still broken", went straight to next fix instead of asking "did this reach the live site?"
+  5. No 5 Whys triggered on second failure — rule not applied
+- Root cause: Missing pre-fix check — "which branch is live?" must be answered before any visual fix
+- Prevention rule: Before fixing any live-site visual bug, verify: (1) which branch GitHub Pages deploys from, (2) confirm fix is committed to THAT branch. If working on a feature branch, either merge first or cherry-pick the fix to main.
+- Session: 2026-03-08
+- Time lost: ~20 min
+- Cost impact: Medium (5 deploy cycles, 3 wrong fix attempts)
+- Tags: deployment, branch, live-site, 5-whys, process
+- Status: Closed — merged feature branch to main; prevention rule added
