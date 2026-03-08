@@ -5,7 +5,15 @@
 #          Meszaros (xUnit Patterns), Smart (BDD in Action),
 #          Adzic/Evans (Fifty Quick Ideas to Improve Your Tests),
 #          Nielsen (10 Usability Heuristics), SUS, WCAG 2.1 AA,
-#          DORA metrics, OWASP
+#          DORA metrics, OWASP,
+#          Beck — Extreme Programming Explained (2nd ed, 2004),
+#          Poppendieck & Poppendieck — Lean Software Development (2003),
+#          Womack & Jones — Lean Thinking (1996),
+#          Meadows — Thinking in Systems (2008),
+#          Senge — The Fifth Discipline (1990),
+#          Norman — The Design of Everyday Things (2013),
+#          Krug — Don't Make Me Think (2014),
+#          Christensen — Jobs to Be Done
 
 ## TRIGGER MAP
 
@@ -35,6 +43,11 @@
 ### TRIGGER: "research" / "find out about" / "who is"
 → Run: CHARACTER RESEARCH PROTOCOL
 
+### TRIGGER: "something just went wrong" / "that's broken" / "wtf" / pipeline RED
+→ Waste log entry IMMEDIATELY — not at session end.
+→ 5 Whys before any fix. Root cause first. See .claude/practices/5-whys.md
+→ Source: Poppendieck — build quality in, not inspect in after the fact
+
 ### RULE: claude.ai → Claude Code communication
 Never print large instruction blocks to chat for copy-paste.
 Always write to a file using the computer tool, present it to Rod,
@@ -54,16 +67,36 @@ Failure to check this before asking Rod to paste = WL-071 pattern, waste log ent
 
 ## THE THREE LOOPS — how they nest
 
-DDD is the outer loop (design coherence, outside-in).
+Lean and Systems Thinking are the outer philosophical frame. They are not steps in a
+sequence — they are the lens through which all activity is evaluated, at every stage,
+before and after every decision. They ask:
+  LEAN:             Is value flowing? Is this the highest-value thing we can do?
+                    Does this eliminate waste or create it? Quality built in or inspected in?
+  SYSTEMS THINKING: What stocks are at risk? What feedback loops are active?
+                    What will this make impossible? What second-order effects will it create?
+
+These questions apply at session start, mid-feature, mid-implementation, and at close.
+They are not a checklist. They are the frame everything else sits inside.
+Sources: Poppendieck/Womack — Lean Software Development / Lean Thinking
+         Meadows — Thinking in Systems; Senge — The Fifth Discipline
+
+Inside that frame, three delivery loops nest:
+
+DDD is the design loop (domain coherence, outside-in).
 BDD is the contract loop (behaviour specification).
 TDD is the inner loop (implementation discipline).
-DDD RED ──────────────────────────────────────────────────► DDD CLEAN
-│                                                               ▲
-▼                                                               │
-BDD (Gherkin written + approved)                      BDD CLOSE ─┘
-│                                                       ▲
-▼                                                       │
-TDD RED → TDD GREEN → TDD CLEAN ───────────────────────►─┘
+
+LEAN / SYSTEMS THINKING ─────────────────────────────────────────────────────────────
+│                                                                                     │
+│  DDD RED ──────────────────────────────────────────────────► DDD CLEAN             │
+│  │                                                               ▲                 │
+│  ▼                                                               │                 │
+│  BDD (Gherkin written + approved)                      BDD CLOSE ─┘                │
+│  │                                                       ▲                         │
+│  ▼                                                       │                         │
+│  TDD RED → TDD GREEN → TDD CLEAN ───────────────────────►─┘                       │
+│                                                                                     │
+LEAN / SYSTEMS THINKING ─────────────────────────────────────────────────────────────
 
 DDD RED fires before Gherkin and before implementation.
 BDD CLOSE fires after TDD CLEAN — Gherkin retrospective against real implementation.
@@ -74,6 +107,12 @@ DDD CLEAN fires after BDD CLOSE — harvest new concepts into domain model.
 ## SEQUENCES
 
 ### FEATURE SEQUENCE — DDD RED + BDD first gate
+0. LEAN CHECK — before anything else:
+   - Is this the highest-value thing we can do right now? (CD3 score says so?)
+   - What is the constraint today — is this feature on the critical path or adjacent to it?
+   - What waste would working on this create? (partially done work, task switching, over-engineering)
+   - Does Rod have a job to be done that this directly serves, or is it a solution looking for a job?
+   - Source: Poppendieck — Lean Software Development; Christensen — Jobs to Be Done
 1. Confirm scope — what behaviour are we specifying?
 2. DDD RED — run before writing a single line of Gherkin:
    - Fetch and read domain-model.md if not read this session
@@ -134,6 +173,27 @@ Run before any implementation. Report findings. Propose design. Await Rod approv
 - [ ] Performance: no synchronous blocking in UI thread
 - [ ] Source: WCAG 2.1 AA; OWASP; .claude/STANDARDS.md
 
+**XP — Simple Design (Beck/Jeffries — in priority order):**
+- [ ] Passes all tests — this is always rule 1, never traded for anything below it
+- [ ] Reveals intention — can Rod read this function name and know immediately what it does?
+- [ ] No duplication — single source of truth; if it appears twice, it belongs in one place
+- [ ] Fewest elements — is there a simpler design that passes the same tests?
+- Source: Beck — XP Explained; Jeffries — Four Rules of Simple Design
+
+**Systems Thinking — Consequences (Meadows/Senge):**
+- [ ] What does this change make impossible that is currently possible?
+- [ ] What feedback loops does this affect — reinforcing or balancing?
+- [ ] What does this incentivise that we don't want? (e.g. mock-based tests → false greens)
+- [ ] What is the second-order effect in 3 sessions' time?
+- Source: Meadows — Thinking in Systems; Senge — The Fifth Discipline
+
+**Norman/Krug — Usability at the seam:**
+- [ ] Does this UI element do what it looks like it does? (Norman Door test)
+- [ ] Does the user need to remember anything, or can they recognise? (recognition over recall)
+- [ ] What is the job the user is hiring this feature to do? Does the design serve that job?
+- Source: Norman — The Design of Everyday Things; Krug — Don't Make Me Think;
+          Christensen — Jobs to Be Done
+
 ### TDD SEQUENCE — red → green → clean
 1. Identify unit assertions from approved Gherkin
 2. Write unit tests to pipeline/unit-runner.js — red, do not implement yet
@@ -163,8 +223,11 @@ something real needs changing — forced refactor every cycle is noise.
 - [ ] Does the gold standard pattern still apply? If we've drifted — align.
 - [ ] Are tests testing behaviour or implementation? If implementation — rewrite.
 - [ ] Are all new exports in logic.js pure functions? If not — extract.
+- [ ] LEAN: Does this refactor eliminate waste (duplication, obscurity, complexity) or create it?
+      If the refactor exists only to satisfy a checklist — it is waste. Only write when real.
 - Source: Fowler — Refactoring (2nd ed); Martin — Clean Code
 - Source: Meszaros — xUnit Patterns (behaviour not implementation)
+- Source: Poppendieck — build quality in, not inspect in after
 
 ### BDD CLOSE — Gherkin retrospective
 Run after TDD CLEAN. Closes the BDD loop against real implementation.
@@ -191,8 +254,12 @@ Run after BDD CLOSE. Closes the DDD outer loop. Only when something real has eme
 4. Are any new functions candidates for single-responsibility extraction? Flag.
 5. Raise backlog items for any generalisation opportunities identified
 6. Update domain-model.md — ubiquitous language section first, then model
-7. → COMMIT SEQUENCE
+7. SYSTEMS THINKING: did any second-order effects emerge during this cycle?
+   New coupling introduced? Feedback loop affected? Stock changed (trust, quality, debt)?
+   Flag now — do not carry unexamined consequences into the next cycle.
+8. → COMMIT SEQUENCE
 - Source: Evans — Domain-Driven Design, strategic and tactical patterns
+- Source: Meadows — Thinking in Systems (stocks, flows, unintended consequences)
 
 ### COMMIT SEQUENCE — never skip
 1. Run pipeline — must be green: `bash .claude/scripts/pipeline-report.sh > /tmp/out.txt && cat /tmp/out.txt`
@@ -224,15 +291,24 @@ Source: .claude/practices/domain-model.md — character builder section
 
 ## DESIGN PRINCIPLES SUMMARY — one-line per principle
 
+OUTER PHILOSOPHICAL FRAME — applies at every stage, not just pre-implementation:
+Lean: value flows or it doesn't — eliminate what blocks it — Poppendieck / Womack
+Systems Thinking: systems produce the results they're designed for — fix the system, not the symptom — Meadows / Senge
+
+DELIVERY LOOPS:
 DDD: domain model is the bounded context — Evans
 SOLID: single responsibility first, always — Martin
 Clean Code: names reveal intent, functions do one thing — Martin
 Refactoring: improve structure without changing behaviour — Fowler
+XP: simplest thing that passes all tests, reveals intention, no duplication — Beck / Jeffries
 Test design: test behaviour not implementation — Meszaros / Smart / Adzic
+DevOps: small changes, pipeline green, trunk-based — DORA
+
+USER / PRODUCT LAYER:
 Usability: recognition over recall, consistency, visibility — Nielsen / SUS
 Accessibility: WCAG 2.1 AA minimum — every new UI element
+Jobs to be done: users hire products; design serves the job, not the feature — Christensen / Norman / Krug
 Security: no keys client-side, ever — OWASP
-DevOps: small changes, pipeline green, trunk-based — DORA
 
 ---
 
