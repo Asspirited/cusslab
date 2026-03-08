@@ -1044,7 +1044,7 @@ Status: CLOSED
 - **Time lost:** ~10 min
 - **Cost impact:** Low — but will recur every time a tournament is added
 - **Tags:** test-design, magic-number, tdd-clean-candidate
-- **Status:** Open — refactor step to derive count from TOURNAMENTS.length not a hardcoded number
+- **Status:** Closed — refactored step to assert non-empty (`!ctx._gaData.TOURNAMENTS.length`) 2026-03-08
 
 ## WL-071
 - **Item:** Claude Code told user it couldn't access /mnt/c/Users/roden/Downloads/ — it can
@@ -1055,3 +1055,13 @@ Status: CLOSED
 - **Cost impact:** Low but avoidable friction
 - **Tags:** wsl-mount, /mnt/c, windows-path, claude-code-error
 - **Status:** Closed — rule added to session-insession.md
+
+## WL-072
+- **Item:** Missing Background step definitions caused 5 Gherkin failures on pipeline-report.feature
+- **Symptom:** "No step definition for: the NVM environment is available at..." — 5 scenarios RED
+- **Root cause:** Background steps written in Gherkin but not implemented in gherkin-runner.js before running pipeline
+- **Session date:** 2026-03-08
+- **Time lost:** ~5 min
+- **Cost impact:** Low
+- **Tags:** gherkin, step-definitions, background, pipeline-report
+- **Status:** Closed — Background step defs added for NVM path and repo path checks

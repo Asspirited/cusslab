@@ -56,8 +56,8 @@ If any other check fails: root cause before proceeding.
 
 Read `.claude/practices/waste-log.md` — last 5 entries only, report any with Status: OPEN.
 
-Current open items as of 2026-03-08: none (WL-063 through WL-067 all closed).
-Recurring pattern to watch: auth failures (WL-060, 066) — if auth waste recurs, escalate to retro.
+Current open items as of 2026-03-08: WL-069 (Python patch scripts — pattern to avoid).
+All others (WL-068 through WL-072) closed. Recurring: auth failures (WL-060, 066).
 
 ---
 
@@ -68,7 +68,8 @@ Read `.claude/practices/backlog.md` — report top 3 open items by CD3 score.
 Current top 3 as of 2026-03-08:
 - BL-016 Golf Adventure: tournament category split (CD3=9.0) — OPEN
 - BL-008 RIA: ACC label fix (CD3=8.0) — OPEN (RIA project, not Cusslab)
-- BL-015 Golf Adventure: worker fetch routing (CD3=8.0) — CLOSED 2026-03-08
+- BL-017 Golf Adventure: more historic tournaments (CD3=7.2) — CLOSED 2026-03-08
+- Souness's Cat wiring: character files done, IIFE not yet wired into index.html — PENDING
 
 Agree with Rod which item is being worked this session BEFORE opening any code file.
 
