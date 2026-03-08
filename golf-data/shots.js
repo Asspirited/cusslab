@@ -25,13 +25,16 @@ const SHOTS = {
   ]
 };
 
+// DFACES — 3×3 grid, 9 cells per face. Positions: TL TC TR / ML MC MR / BL BC BR
+// Dots (●) marked per standard d6 layout. Empty cells use <span>.
+const _ = '<span></span>', D = '<div class="d"></div>';
 const DFACES = {
-  1:`<div class="df f1"><div class="d"></div></div>`,
-  2:`<div class="df f2"><div class="d da"></div><div class="d db"></div></div>`,
-  3:`<div class="df f3"><div class="d da"></div><div class="d db"></div><div class="d dc"></div></div>`,
-  4:`<div class="df f4"><div class="d"></div><div class="d"></div><div class="d"></div><div class="d"></div></div>`,
-  5:`<div class="df f5"><div class="d"></div><div class="d"></div><div class="d dc"></div><div class="d"></div><div class="d"></div></div>`,
-  6:`<div class="df f6"><div class="d"></div><div class="d"></div><div class="d"></div><div class="d"></div><div class="d"></div><div class="d"></div></div>`,
+  1:`<div class="df">${_}${_}${_}${_}${D}${_}${_}${_}${_}</div>`,
+  2:`<div class="df">${_}${_}${D}${_}${_}${_}${D}${_}${_}</div>`,
+  3:`<div class="df">${_}${_}${D}${_}${D}${_}${D}${_}${_}</div>`,
+  4:`<div class="df">${D}${_}${D}${_}${_}${_}${D}${_}${D}</div>`,
+  5:`<div class="df">${D}${_}${D}${_}${D}${_}${D}${_}${D}</div>`,
+  6:`<div class="df">${D}${_}${D}${D}${_}${D}${D}${_}${D}</div>`,
 };
 
 if (typeof module !== 'undefined') module.exports = { SHOTS, DFACES };

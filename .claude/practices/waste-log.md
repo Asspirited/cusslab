@@ -1065,3 +1065,82 @@ Status: CLOSED
 - **Cost impact:** Low
 - **Tags:** gherkin, step-definitions, background, pipeline-report
 - **Status:** Closed — Background step defs added for NVM path and repo path checks
+
+## WL-073
+- **Item:** Panel perceived-latency — sequential API calls per member
+- **Symptom:** Boardroom/Comedy/Football/Golf panels take 6–12 seconds to respond — users perceive as broken
+- **Suspected cause:** Sequential `for await` loop: each member awaits previous before starting, so they can read prior responses in the same round
+- **Root cause:** Intentional design for inter-character reactivity, but no expectation-setting UI (no per-member streaming or progressive rendering)
+- **Session date:** 2026-03-08
+- **Time lost:** 0 (design cost, not a bug) — but user friction ongoing
+- **Cost impact:** Medium — user perception of breakage even when working
+- **Tags:** latency, panel, sequential-calls, ux, progressive-rendering
+- **Status:** Open — consider streaming per-member placeholder reveal; structural change out of scope today
+
+## WL-074
+- **Item:** Die face dots in wrong positions in Golf Adventure
+- **Symptom:** DFACES CSS grid places dots incorrectly — face 2 diagonal wrong, face 3 off-centre, face 5 centre dot not centred
+- **Suspected cause:** Grid template areas used without a proper 3×3 reference to standard d6 dot positions
+- **Root cause:** No visual regression test or screenshot comparison on die rendering; built by feel, not verified against real d6 specification
+- **Session date:** 2026-03-08
+- **Time lost:** Unknown (unreported until now)
+- **Cost impact:** Low (cosmetic) but player trust in the die mechanic undermined
+- **Tags:** golf-adventure, die, css-grid, dot-positions, cosmetic
+- **Status:** Open — fix CSS this session
+
+## WL-075
+- **Item:** Commentary silently disappears after hole 1 in Golf Adventure
+- **Symptom:** Loading spinner shows, then commentary area goes blank — no error, no "signal lost" message
+- **Suspected cause:** API error response (`data.error` present, `data.content` absent) falls through `data.content?.[0]?.text || '[]'` → raw = `'[]'` → `parseShotResponse` returns `[]` → `feed.innerHTML=''` with nothing appended
+- **Root cause:** Error-path not checked before treating response as content. Silent failure design: the fallback `|| '[]'` was meant to handle missing content, not API errors
+- **Session date:** 2026-03-08
+- **Time lost:** Unknown (unreported; player would just assume nothing happened)
+- **Cost impact:** Medium — core game loop feedback broken from hole 2 onwards
+- **Tags:** golf-adventure, commentary, silent-failure, api-error, error-handling
+- **Status:** Open — add `data.error` guard this session
+
+## WL-076
+- **Item:** Golf Adventure commentary bubbles unstyled — all identical, no gaps
+- **Symptom:** All panel commentary lines render in the same colour/style — no per-character visual identity. Mode 1 panels have character accent colours; Golf Adventure does not.
+- **Suspected cause:** `bubble` CSS class applied uniformly with no character colour attribute injected
+- **Root cause:** Golf Adventure commentary renderer was written independently of Mode 1 panel renderer, without inheriting the character colour system
+- **Session date:** 2026-03-08
+- **Time lost:** Unknown
+- **Cost impact:** Medium — character distinctiveness lost; user can't tell who said what without reading names
+- **Tags:** golf-adventure, commentary, bubble-styling, character-colours, consistency
+- **Status:** Open — align with Mode 1 colour system this session
+
+## WL-077
+- **Item:** Fortune reroll offer shown but clicking Reroll does nothing
+- **Symptom:** After a fortune event, "FORTUNE — REROLL?" UI appears. Clicking "Reroll" removes the offer but nothing happens — dice does not roll again
+- **Suspected cause:** `acceptReroll()` calls `rollDice()` but after the first roll, `dice.className='dice off'`. `rollDice()` checks `if (dice.classList.contains('off')) return` — early exit
+- **Root cause:** Reroll path added after the `off`-class guard was written; the guard was not relaxed in the reroll path
+- **Session date:** 2026-03-08
+- **Time lost:** Unknown — feature has shipped broken
+- **Cost impact:** High — fortune mechanic completely non-functional
+- **Tags:** golf-adventure, reroll, fortune, off-class, guard-order
+- **Additional:** When reroll is accepted, shot-wrap should be restored so user can change risk type before re-rolling; dice should not auto-roll — user clicks when ready
+- **Status:** Open — fix this session: restore shot-wrap and dice state in `acceptReroll()` without auto-rolling
+
+## WL-078
+- **Item:** Dice perceived as biased toward low numbers
+- **Symptom:** Player reports getting "way more 1s and 2s than is probabilistic." RNG audit confirms `Math.ceil(Math.random()*6)` is uniform (60,000 sample: each face 16.4–16.9%). Dice are fair.
+- **Root cause:** Three contributing perception effects:
+  1. Animation anchoring: 12 random frames shown during spin (55ms each) prime the player visually with the numbers they see — even though these frames don't affect the final result
+  2. Composure feedback loop: composure degradation raises effective thresholds (+1 at ≤6, +2 at ≤3), so more failures occur at the same dice values as the round progresses
+  3. Risk selection: hero shots (thresh 6) succeed only on a 6, so 5/6 outcomes "feel like a low roll" failing
+- **Session date:** 2026-03-08
+- **Time lost:** Low — investigation only
+- **Cost impact:** Medium — trust in core mechanic undermined even though mechanic is fair
+- **Tags:** golf-adventure, dice, rng, perception-bias, animation, composure-loop
+- **Status:** Open — fix animation anchoring (show only high faces during spin, or blur/CSS only); consider showing roll history; add composure explanation to UI
+
+## WL-079
+- **Item:** Death screen doesn't clearly explain why the player died or what choice caused it
+- **Symptom:** Player chose "Stand your ground" with the flagstick event, was killed, but could not tell from the death screen that their choice caused the death. Death banner ("THE FLAGSTICK") is evocative but not causally explicit.
+- **Root cause:** Death screen shows flavor text (dtype.description) and pallbearers but no "what you chose → what happened" link. The choice label is discarded after resolveEvent() and not threaded to triggerDeath(). Nielsen heuristics violated: #1 (system status visibility), #6 (recognition over recall — user must infer causation from flavor text), #9 (error diagnosis).
+- **Session date:** 2026-03-08
+- **Time lost:** 0 — reported by user
+- **Cost impact:** Medium — player confusion about game state; death feels arbitrary, not consequential
+- **Tags:** golf-adventure, death-screen, usability, Nielsen, causation, choice-label
+- **Status:** Open — thread choice label to triggerDeath(); add "YOU CHOSE:" block to death screen

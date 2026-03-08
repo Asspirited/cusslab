@@ -58,6 +58,18 @@ For items that represent a product hypothesis, add after the CD3 line:
 - CD3: UBV=7 TC=3 RR=2 → CoD=12, Dur=5, **CD3=2.4**
 - Status: CLOSED 2026-03-08 — 7 tournaments added; prestwick_1868 lands correctly in Other Historic
 
+### BL-020 — Tiered item event consequence system (Golf Adventure)
+- Replace hollow `nothing` outcomes in item events with tiered mechanical consequences: LOW / MED / HIGH / NUTS
+- Both penalty (threshold +N for N holes) and bonus (threshold −N, fortune, composure) directions — equal distribution within each event
+- New outcome type: `consequence` with `{tier, direction, amount, holes}` properties
+- `applyOutcome` reads amount from outcome object (extend existing threshold_up/down)
+- HUD indicator showing tier badge + countdown (alongside fortune/anger indicators)
+- Marshal's belt specific: `nothing` (40%) → LOW PENALTY (threshold +1 for 1 shot)
+- All `nothing` outcomes retire — minimum Low consequence in either direction
+- Gherkin approved 2026-03-08
+- CD3: UBV=7 TC=6 RR=3 → CoD=16, Dur=3, **CD3=5.3**
+- Status: OPEN — Gherkin approved, outside-in design next
+
 ### BL-019 — Session log + HTML dashboard (process trend analysis)
 - Append-only `.claude/reports/session-log.jsonl` — one record per session close, never overwritten
 - Each record: session_date, commit, pipeline (unit/gherkin/canary), dora (failure_rate, sessions), backlog (open count, top item), shipped[], loops (tdd/bdd/ddd/hdd status)

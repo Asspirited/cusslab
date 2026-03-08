@@ -691,20 +691,9 @@ body {
   80% { transform: rotate(-5deg) scale(1.04); }
   100% { transform: rotate(0) scale(1); }
 }
-.df { display: grid; width: 52px; height: 52px; padding: 6px; }
-.d  { width: 9px; height: 9px; background: #1a1208; border-radius: 50%; margin: auto; }
-.f1 { place-items: center; }
-.f2 { grid-template: 'a .' 'b .' / 1fr 1fr; }
-.f2 .da { grid-area:a; align-self:start; justify-self:end; }
-.f2 .db { grid-area:b; align-self:end; justify-self:start; }
-.f3 { grid-template: 'a .' '. c' '. b' / 1fr 1fr; }
-.f3 .da { grid-area:a; justify-self:end; align-self:start; }
-.f3 .db { grid-area:b; justify-self:start; align-self:end; }
-.f3 .dc { grid-area:c; justify-self:start; align-self:start; }
-.f4 { grid-template: 'a b' 'c d' / 1fr 1fr; }
-.f5 { grid-template: 'a b' '. c' 'd e' / 1fr 1fr; }
-.f5 .dc { place-self:center; }
-.f6 { grid-template: 'a b' 'c d' 'e f' / 1fr 1fr; }
+.df { display: grid; grid-template-columns: repeat(3,1fr); grid-template-rows: repeat(3,1fr); width: 52px; height: 52px; padding: 6px; }
+.df > * { display:flex; align-items:center; justify-content:center; }
+.d  { width: 9px; height: 9px; background: #1a1208; border-radius: 50%; }
 
 /* Result banner */
 .result-banner {
@@ -1199,6 +1188,7 @@ body {
 
   <div class="hole-mast" id="hole-mast">
     <div>
+      <div id="hole-ordinal" style="font-family:var(--font-mono);font-size:11px;letter-spacing:0.2em;color:var(--muted);text-transform:uppercase;margin-bottom:4px"></div>
       <div class="hl" id="hole-title">—</div>
       <div class="hm" id="hole-meta">—</div>
       <div class="hlore" id="hole-lore"></div>
@@ -1229,8 +1219,12 @@ body {
     <div class="dice-row">
       <div class="dice-hint" id="dice-hint">Select a shot — then roll</div>
       <div class="dice off" id="the-dice" onclick="rollDice()">
-        <div class="df f1"><div class="d"></div></div>
+        <div class="df"><span></span><span></span><span></span><span></span><div class="d"></div><span></span><span></span><span></span><span></span></div>
       </div>
+    </div>
+    <div style="margin-top:8px;text-align:center">
+      <button onclick="toggleRollHistory()" style="font-family:var(--font-mono);font-size:10px;color:var(--muted);background:none;border:none;cursor:pointer;letter-spacing:0.1em;padding:2px 6px;">▸ ROLL HISTORY</button>
+      <div id="roll-history-body" style="display:none;padding:8px 0;text-align:left;display:inline-block"></div>
     </div>
   </div>
 
@@ -1311,6 +1305,8 @@ let G = {
   yourScore:0, holeResults:[], matchPlayScore:0,
   phase:"tee", holeStrokes:0, currentShot:null, isRolling:false,
   composure:10, fieldScores:{}, history:[],
+  rollHistory:{1:0,2:0,3:0,4:0,5:0,6:0},
+  lastChoiceLabel: null,
   panelState: {
     runningJokes: [], playerNickname: null, lastInsult: null,
     atmosphere_escalation: 0, panelFeuds: {}, momentsMentioned: []
@@ -1492,7 +1488,9 @@ function loadHole() {
   if (hole.collapseSequence) {
     G.phase='tee'; G.holeStrokes=0; G.currentShot=null; G.isRolling=false;
     updateHUD();
-    document.getElementById('hole-title').textContent = `${G.tournament.year} · Day ${G.day+1} · ${hole.name}`;
+    const ordC=n=>[,'1st','2nd','3rd'][n]||(n+'th');
+    document.getElementById('hole-ordinal').textContent=`${G.tournament.year} · Day ${G.day+1} · Your ${ordC(G.holeIdx+1)} hole`;
+    document.getElementById('hole-title').textContent=hole.name;
     document.getElementById('hole-meta').textContent = `${G.tournament.course} · ${hole.hazard}`;
     document.getElementById('hole-lore').textContent = hole.lore || '';
     document.getElementById('hole-par').textContent = `Par ${hole.par}`;
@@ -1510,7 +1508,9 @@ function loadHole() {
   G.phase="tee"; G.holeStrokes=0; G.currentShot=null; G.isRolling=false;
   updateHUD();
 
-  document.getElementById('hole-title').textContent = `${G.tournament.year} · Day ${G.day+1} · Hole ${G.holeIdx+1} — ${hole.name}`;
+  const ordinal=n=>[,'1st','2nd','3rd'][n]||(n+'th');
+  document.getElementById('hole-ordinal').textContent=`${G.tournament.year} · Day ${G.day+1} · Your ${ordinal(G.holeIdx+1)} hole`;
+  document.getElementById('hole-title').textContent=hole.name;
   document.getElementById('hole-meta').textContent = `${G.tournament.course} · ${hole.hazard}`;
   document.getElementById('hole-lore').textContent = hole.lore || '';
   document.getElementById('hole-par').textContent = `Par ${hole.par}`;
@@ -1598,6 +1598,7 @@ function maybeShowEvent(hole) {
 }
 
 function resolveEvent(choice) {
+  G.lastChoiceLabel = choice.label || null;
   document.getElementById('event-card').classList.add('hidden');
 
   // Special handling
@@ -1669,7 +1670,7 @@ function rollDice() {
   dice.className='dice rolling off';
   let n=0;
   const iv=setInterval(()=>{
-    dice.innerHTML=DFACES[Math.ceil(Math.random()*6)];
+    dice.innerHTML=DFACES[(n%6)+1]; // cycle 1-6 deterministically — no anchoring bias
     if(++n>=12){
       clearInterval(iv);
       const roll=Math.ceil(Math.random()*6);
@@ -1694,10 +1695,14 @@ function rollDice() {
   },55);
 }
 
-function processRoll(roll) {
+function processRoll(roll, isReroll = false) {
   const shot=G.currentShot;
   const hole=G.tournament.holes[G.holeIdx];
   const mod=hole.modifiers||{};
+
+  // Track roll history (session only)
+  G.rollHistory[roll] = (G.rollHistory[roll] || 0) + 1;
+  updateRollHistory();
 
   // Composure zero — cardiac arrest before shot resolves
   if (G.composure <= 0 && !G.isDead) { triggerDeath('cardiac'); return; }
@@ -1707,6 +1712,23 @@ function processRoll(roll) {
   if (shot.risk === 4 && roll === 1 && Math.random() < catastrophicDeathChance && !G.isDead) {
     const ambientDeaths = ['lightning','bunker_rake','spectator_flask_object','flagstick','scoreboard','arrow','golf_ball'];
     triggerDeath(ambientDeaths[Math.floor(Math.random() * ambientDeaths.length)]);
+    return;
+  }
+
+  // Hero shot 5 — auto-reroll once (not on a reroll)
+  if (!isReroll && shot.risk === 4 && roll === 5) {
+    document.getElementById('result-area').innerHTML=`
+      <div class="result-banner trouble">
+        <div class="result-word">⚡ AGONISINGLY CLOSE</div>
+        <div class="result-desc">5 on a hero shot — automatic reroll</div>
+      </div>`;
+    document.getElementById('shot-wrap').style.display='none';
+    setTimeout(()=>{
+      const reroll=Math.ceil(Math.random()*6);
+      const dice=document.getElementById('the-dice');
+      if(dice) dice.innerHTML=DFACES[reroll];
+      processRoll(reroll, true);
+    }, 900);
     return;
   }
 
@@ -1820,6 +1842,12 @@ async function getCommentary(desc,quality,roll,shot) {
   try {
     const resp=await golfFetch({model:"claude-sonnet-4-6",max_tokens:1200,messages});
     const data=await resp.json();
+    if(data.error){
+      feed.innerHTML=`<div class="loading-bar" style="color:var(--danger-hi)">Commentary signal lost.</div>`;
+      G.isRolling=false;
+      setTimeout(()=>advancePhase(quality),600);
+      return;
+    }
     const raw=(data.content?.[0]?.text||'[]').replace(/```json|```/g,'').trim();
     const lines=CommentaryService.parseShotResponse(raw);
 
@@ -1834,7 +1862,8 @@ async function getCommentary(desc,quality,roll,shot) {
       const div=document.createElement('div');
       div.className=`bubble${quality==='disaster'?' carnage':''}`;
       div.style.animationDelay=`${i*0.12}s`;
-      div.innerHTML=`<div class="bav">${init}</div><div class="bbody"><div class="bname">${l.speaker}</div><div class="btext">${l.text}</div></div>`;
+      if(ch?.colour) div.style.borderLeft=`3px solid ${ch.colour}`;
+      div.innerHTML=`<div class="bav" style="${ch?.colour?`background:${ch.colour};color:#000`:''}'">${init}</div><div class="bbody"><div class="bname" style="${ch?.colour?`color:${ch.colour}`:''}'">${l.speaker}</div><div class="btext">${l.text}</div></div>`;
       feed.appendChild(div);
     });
   } catch(e) {
@@ -2175,6 +2204,29 @@ function updateComposure() {
   document.getElementById('comp-val').textContent=c;
 }
 
+function updateRollHistory() {
+  const el=document.getElementById('roll-history-body');
+  if(!el) return;
+  const total=Object.values(G.rollHistory).reduce((a,b)=>a+b,0);
+  if(!total){el.textContent='No rolls yet.';return;}
+  el.innerHTML=[1,2,3,4,5,6].map(f=>{
+    const n=G.rollHistory[f]||0;
+    const pct=total?Math.round((n/total)*100):0;
+    const bar='█'.repeat(Math.round(pct/5));
+    return `<div style="display:flex;gap:6px;align-items:center;font-size:11px;font-family:var(--font-mono)">
+      <span style="width:10px;text-align:right">${f}</span>
+      <span style="color:var(--accent);min-width:60px">${bar||'·'}</span>
+      <span style="color:var(--muted)">${n}×</span>
+      <span style="color:var(--muted);min-width:30px">${pct}%</span>
+    </div>`;
+  }).join('');
+}
+function toggleRollHistory() {
+  const body=document.getElementById('roll-history-body');
+  if(!body) return;
+  body.style.display=body.style.display==='none'?'block':'none';
+}
+
 // ═══════════════════════════════════════════
 // FINAL
 // ═══════════════════════════════════════════
@@ -2225,7 +2277,7 @@ function showScreen(name) {
 function resetGame() {
   const savedPanel=[...G.selectedPanel]; // persist panel across sessions
   document.body.className='';
-  G={tournament:null,player:null,atmosphere:"NORMAL",selectedPanel:savedPanel,day:0,holeIdx:0,holesPerDay:3,yourScore:0,holeResults:[],phase:"tee",holeStrokes:0,currentShot:null,isRolling:false,composure:10,fieldScores:{},history:[],characterFiles:{},fortuneActive:false,angerActive:false,angerShots:0,illnessActive:false,illnessHoles:0,tempThresholdMod:0,tempThresholdHoles:0,tempSkillBonus:false,tempSkillHoles:0,isDead:false,causeOfDeath:null,collapseNode:null,collapseChipOutAvailable:true,clothing:{trousers:true,glove:true,shoes:true,hat:true,shirt:true},panelState:{runningJokes:[],playerNickname:null,lastInsult:null,atmosphere_escalation:0,panelFeuds:{},momentsMentioned:[]}};
+  G={tournament:null,player:null,atmosphere:"NORMAL",selectedPanel:savedPanel,day:0,holeIdx:0,holesPerDay:3,yourScore:0,holeResults:[],phase:"tee",holeStrokes:0,currentShot:null,isRolling:false,composure:10,fieldScores:{},history:[],rollHistory:{1:0,2:0,3:0,4:0,5:0,6:0},lastChoiceLabel:null,characterFiles:{},fortuneActive:false,angerActive:false,angerShots:0,illnessActive:false,illnessHoles:0,tempThresholdMod:0,tempThresholdHoles:0,tempSkillBonus:false,tempSkillHoles:0,isDead:false,causeOfDeath:null,collapseNode:null,collapseChipOutAvailable:true,clothing:{trousers:true,glove:true,shoes:true,hat:true,shirt:true},panelState:{runningJokes:[],playerNickname:null,lastInsult:null,atmosphere_escalation:0,panelFeuds:{},momentsMentioned:[]}};
   document.querySelectorAll('.tc').forEach(c=>c.classList.remove('selected'));
   document.querySelectorAll('.player-btn').forEach(b=>b.classList.remove('selected'));
   document.getElementById('player-area').classList.add('hidden');
@@ -2429,10 +2481,14 @@ async function triggerDeath(deathType, context = {}) {
   document.getElementById('next-wrap').classList.add('hidden');
   G.causeOfDeath = deathType;
   G.isDead = true;
+  const choiceBlock = G.lastChoiceLabel
+    ? `<div style="font-family:var(--font-mono);font-size:12px;letter-spacing:0.15em;color:var(--danger-hi);text-transform:uppercase;margin-bottom:12px;border:1px solid var(--danger);padding:8px 16px;display:inline-block">YOU CHOSE: "${G.lastChoiceLabel}"</div>`
+    : '';
   const ra = document.getElementById('result-area');
   ra.innerHTML = `
     <div class="death-screen" id="death-screen">
       <div class="death-banner">${dtype.banner}</div>
+      ${choiceBlock}
       <div class="death-desc">${dtype.description(ctx)}</div>
       <div class="death-pallbearers">Carried from the course by: <em>${dtype.pallbearers}</em></div>
       <div class="death-commentary" id="death-commentary">
@@ -2674,8 +2730,11 @@ function triggerDQ() {
 
 function acceptReroll() {
   document.getElementById('reroll-offer')?.remove();
+  document.getElementById('shot-wrap').style.display = 'block';
+  const dice = document.getElementById('the-dice');
+  if (dice) dice.className = 'dice'; // remove 'off' — makes it clickable again
   G.isRolling = false;
-  rollDice();
+  // Player clicks dice when ready (can change shot first)
 }
 function keepRoll(roll) {
   document.getElementById('reroll-offer')?.remove();
