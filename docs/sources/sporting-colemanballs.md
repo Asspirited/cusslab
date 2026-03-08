@@ -18,7 +18,7 @@ This is the single funniest thing sports pundits and boardroom types actually do
 ```
 INTELLECTUAL_ATTEMPT = {
   type:     ATTEMPT_IRONY | ATTEMPT_LITERALLY | ATTEMPT_TAUTOLOGY |
-            ATTEMPT_OXYMORON | ATTEMPT_METAPHOR | ATTEMPT_PARADOX,
+            ATTEMPT_OXYMORON | ATTEMPT_METAPHOR | ATTEMPT_PARADOX | ATTEMPT_ERUDITION,
   degree:   catastrophic_miss | plausible_miss | almost_correct | correct (rare, funny),
   delivery: ridiculous | lying | plausible | confident_wrongness | accidental_profundity
 }
