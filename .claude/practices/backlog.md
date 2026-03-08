@@ -27,6 +27,27 @@ Items are sorted by CD3 within each section. Rescore when scope changes.
 - CD3: UBV=9 TC=8 RR=7 → CoD=24, Dur=3, **CD3=8.0**
 - Status: OPEN — pipeline warns; golf-adventure broken for users without their own key
 
+### BL-016 — Golf Adventure: split tournament selector into categories
+- Tournament grid currently shows all tournaments in a flat list; grows unmanageable as content increases
+- Split into three sections with headers: **Majors** (type=major, type=collapse) | **Ryder Cup** (type=ryder) | **Other Historic** (new type=historic)
+- Each section gets a label and visual separator; only shown if the section has entries
+- Examples per section in UI: Majors → Duel in the Sun, Tiger at Augusta, Trevino/Jacklin, Van de Velde; Ryder Cup → Medinah 2012; Other Historic → empty until BL-017 adds content
+- Do before BL-017 — BL-017 content needs the category to land in
+- CD3: UBV=8 TC=6 RR=4 → CoD=18, Dur=2, **CD3=9.0**
+- Status: OPEN
+
+### BL-017 — Golf Adventure: more historic tournaments
+- Add at least 3 new tournaments to fill the Other Historic category and expand Majors
+- **Ryder Cup** (most wanted): Brookline 1999 (USA comeback, crowd invasion, Crenshaw crying); Belfry 2002 (Torrance, 9/11 delay, Curtis Strange); Valderrama 1997 (Seve as captain, rain, Olazabal); Kiawah 1991 (War on the Shore, Hoch/Irwin, Ballesteros sidelined)
+- **The Open** (lots wanted): Prestwick 1860 — first Open (Young Tom Morris / Old Tom Morris, hickory shafts, no scorecards, 12-hole course, field of 8); Seve at St Andrews 1984 (fist pump, dominant wire-to-wire); Muirfield 1966 Nicklaus first Open; Turnberry 1994 Jesper Parnevik; Carnoustie 1953 Hogan only Open; St Andrews 2000 Tiger (no bunkers, 19-under)
+- **Masters** (some): Seve 1980 first Masters; Faldo 1996 Norman collapse; Tiger 1997 (12-under, 18 years old)
+- **US Open** (fewer): Pebble Beach 2000 Tiger (15-shot win); Medinah 1999 Payne Stewart (last putt, died weeks later)
+- **US PGA** (fewer): Valhalla 2000 Tiger (Tiger Slam year)
+- Each needs: players[], field[], holes[], lore, matchPlayDays if Ryder
+- Depends on BL-016 (category split) being done first — new type=historic needed for Prestwick etc
+- CD3: UBV=7 TC=3 RR=2 → CoD=12, Dur=5, **CD3=2.4**
+- Status: OPEN — blocked on BL-016
+
 ### BL-008 — ACC framework label fix in RIA
 - ACC = Attributes, Components, Capabilities (James Whittaker / Google) — not "Assumptions..."
 - Wrong label still in RIA UI
