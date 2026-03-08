@@ -174,3 +174,25 @@ When a panel session reveals something new about how Henry works in practice, ad
 **Character implication:** [what it means for the profile]
 
 ---
+
+---
+
+## PHANTOM FILES — DO NOT REFERENCE
+
+The following filenames DO NOT EXIST. They were generated as phantom memory
+entries and have never been created. Do not reference them in step definitions,
+specs, or implementation:
+
+- `docs/characters/blofeld.md` — does not exist. Blofeld lives in `docs/references/blofeld-reference.md`
+- `specs/blofeld-switch.feature` — does not exist. Design Gherkin lives in docs/features/
+- Any path containing `blofeld.md` as a standalone character file
+
+## DESIGN GHERKIN (not in pipeline)
+These exist in `docs/features/` — they are design documents, not pipeline scenarios:
+- `docs/features/shadow-register.feature`
+- `docs/features/lie-engine.feature`
+- `docs/features/panel-slots.feature`
+
+## IMPLEMENTATION LOCATION
+Blofeld is implemented inline in `index.html` — Long Room module.
+Last known line reference: ~13461 (will drift — search for `blofeld` in index.html).
