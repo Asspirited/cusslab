@@ -93,10 +93,9 @@ Feature: Golf Adventure Commentary Service
     And the apiClient received max_tokens 1200
 
   @commentary-contract
-  Scenario: API failure returns empty lines without throwing
-    Given a shot context for tournament "duel_sun", player "watson", quality "solid", roll 4
-    And a stub apiClient that throws
-    When CommentaryService.shot is called
+  Scenario: Empty API response body returns empty lines without throwing
+    Given a raw API response of ''
+    When the shot response is parsed
     Then the result has 0 lines
 
   ---
