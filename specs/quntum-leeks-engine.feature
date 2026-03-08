@@ -110,24 +110,24 @@ Feature: QUNTUM_LEEKS_ENGINE — data and pure logic layer
   Scenario: buildModifiers returns empty string for clean state
     Given a clean state with no active modifiers
     When buildModifiers is called
-    Then it returns an empty string
+    Then the modifiers result is empty
 
   Scenario: buildModifiers includes leekinessSpend modifier
     Given a state with leekinessSpend true
     When buildModifiers is called
-    Then the result contains "pushing his luck"
+    Then the modifiers result contains "pushing his luck"
 
   Scenario: buildModifiers includes bet amount when leekinessBet is set
     Given a state with leekinessBet 2
     When buildModifiers is called
-    Then the result contains "2 Leekiness points"
+    Then the modifiers result contains "2 Leekiness points"
 
   Scenario: buildModifiers includes DEATHCAP when swissCheeseLevel is 80 or above
     Given a state with swissCheeseLevel 85
     When buildModifiers is called
-    Then the result contains "DEATHCAP MODE ACTIVE"
+    Then the modifiers result contains "DEATHCAP MODE ACTIVE"
 
   Scenario: buildModifiers includes damage warning when samDamage is 4 or above
     Given a state with samDamage 4
     When buildModifiers is called
-    Then the result contains "4 damage events"
+    Then the modifiers result contains "4 damage events"
