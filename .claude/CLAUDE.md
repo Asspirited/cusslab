@@ -108,6 +108,9 @@ Previous session approval does not count.
 
 Self-review against this checklist before printing "WAITING FOR ROD'S APPROVAL". Never skip.
 
+**OUTPUT SIZE RULE — non-negotiable**
+Never print large blocks of text (code, feature files, character files, config) to the chat for copy-paste. Always write directly to file then commit. If output would exceed ~20 lines, it goes to a file. This applies in both Claude Code and Claude.ai sessions.
+
 ### Step 3 — Outside-In Design (SOLID)
 Read: principles/ddd.md, practices/solid.md, principles/systems-thinking.md
 Design the public interface before writing any code or test.
