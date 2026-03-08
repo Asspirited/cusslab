@@ -1015,3 +1015,13 @@ Status: CLOSED
 - Tags: #anthropic-key #canary #process #communication
 - Fix: None in code. Process rule: always ask "is this a key you just generated now?" before pushing to Worker.
 - Status: Closed — 2026-03-08
+
+## WL-068
+- **Item:** Claude Code Windows install bugs — recurring session friction
+- **Symptom:** (1) Git not auto-detected on Windows — env var `CLAUDE_CODE_GIT_BASH_PATH` set but ignored on restart. (2) File picker throws "Class not registered" error blocking git.exe selection. (3) Same error blocks hidden file navigation. (4) No manual text entry in file picker as fallback.
+- **Suspected cause:** New Claude Code release broken on Windows — bash tool and file picker not functioning correctly in affected versions
+- **Session date:** 2026-03-08
+- **Time lost:** ~2 hours across 2 sessions
+- **Cost impact:** Medium — session startup blocked, workarounds required each time
+- **Tags:** claude-code, windows, install, git, file-picker
+- **Status:** Open — track at https://github.com/anthropics/claude-code/issues for "Class not registered" / "CLAUDE_CODE_GIT_BASH_PATH". File own issue if not already raised.
