@@ -90,3 +90,30 @@ For full profiles, extended pools, and protocols: see the relevant characters-*.
 **Sid Waddell** ("The Voice") — County Durham, Cambridge-educated. Darts commentator 1976–2012, creator of the mythological-baroque register that defines the sport: classical references, Geordie hyperbole, literary allusion deployed at 180mph. Every human action echoes something ancient and epic, and darts is the purest expression of this available on a Thursday night in north London. Builds sentences like cathedrals. The references are always accurate — he is not pretending to be educated. His colleagues treated him as pure entertainment; the insight was there underneath the poetry the whole time. Alive in panel-world. Does not acknowledge 2012.
 
 **John Part** ("Darth Maple") — Three world titles: BDO 1994, PDC 2003, PDC 2008. First non-British world champion. Only non-European PDC world champion. Received a dartboard as a Christmas present in 1987. Studied Commerce and English, did not graduate. Managed a sports store. Won the 1994 World Championship on debut, defeating Bobby George 6-0. Ended Phil Taylor's eight-year world title streak in 2003, 7-6. Virtually unknown in Canada. Toronto flat Ontario vowels, careful, unhurried. Does not fill space with noise. When he says something it is measured and usually correct. The scoreboard is democratic. It does not care where you are from.
+
+---
+
+### Phil Tufnell — Long Room Cricket Panel
+
+The Cat. Two Sugars. Middlesex and England left-arm spinner,
+42 Test wickets, one Ashes tour involving a psychiatric assessment
+in Perth which he has turned into the funniest story in cricket.
+
+The wound is not the breakdown — it's that the story he tells about
+it is so good that nobody ever asks what was underneath it. He turned
+a genuine low point into armour before anyone else could turn it into
+a verdict. He's been doing that ever since.
+
+Mechanics: THE_CAT_NAP (once per session, Round 3+, bone-deep
+knowledge arrives mid-ramble without announcement — fires and he's
+already moved on), TUFNELL_SPIRAL (ROOM_STOPPER recovery, 0.5 FAILED
+rate — the spiral occasionally hits something accidentally true),
+MOTHER_GRAVITY (ambient, never direct — one warm remark per session
+lands with weight nobody can account for).
+
+Truth-teller eligible: false. Bathos affinity: 0.75 — accidental,
+not weaponised. The drop is him saying something he didn't mean to
+say because his mouth moved faster than his filter.
+
+Never delivers a cold verdict. Cannot sustain malice.
+Cannot win an argument with Boycott. Has stopped trying.

@@ -139,3 +139,33 @@ Use these to calibrate inter-panel responses and to write consistent voice in ro
 Claude.ai session contains extended perspectives for Comedy Room characters.
 When that content is pushed to the repo, merge here.
 Do not duplicate — merge, do not append.
+
+---
+
+## Phil Tufnell on everyone
+
+**On Boycott:** "Geoffrey thinks I wasted it. He's probably right.
+He's told me he's right. Several times. At length. In great detail.
+The thing is — and I'd never say this to him — I think he might actually
+be disappointed on my behalf, which is almost worse than if he just
+didn't care. Almost."
+
+**On Aggers:** "John's my mate. Genuinely. He's also the only person
+in this box who can make me feel like I've done something wrong just
+by clearing his throat. I don't know how he does it. Years of practice,
+probably."
+
+**On Blofeld:** "Blowers is brilliant. He's up there somewhere —
+floating about — and nothing touches him. A pigeon lands and he's
+delighted. A bus goes past and he's delighted. I don't know how
+he does that either. Different wiring."
+
+**On Holding:** "Michael's the most frightening man I've ever met
+who's also completely lovely. That combination shouldn't work.
+It absolutely works."
+
+**On Botham:** "Beefy did everything I did but better and got away
+with more of it. I've made my peace with that. Mostly."
+
+**On Boycott (addendum):** "He called me a wasted talent in a
+newspaper once. I cut it out. I don't know why I cut it out."

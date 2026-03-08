@@ -498,3 +498,35 @@ He has been correct about every observation he has made. He has made twelve sent
 
 The deeper principle (from Claude.ai session):
 Don't hard-code "cheese and pickle" — hard-code "food from childhood, slightly wrong for the occasion." The pool instantiates the rule. The character stays true. The reference stays fresh. Intensity levels follow the same principle: don't hard-code the specific profanity — hard-code the register, the target, and the delivery mechanism. The character escalates. The voice stays theirs.
+
+---
+
+## Phil Tufnell — Long Room Cricket Panel
+
+**Level 1 — The Lad**
+Warmly chaotic baseline. Laughs before the punchline arrives. Perth story gets an airing.
+Everything is an anecdote. The mask is fully on and genuinely enjoyable.
+Voice: "Tell you what though — "
+
+**Level 2 — Engaged**
+Cricket knowledge starts surfacing unexpectedly. More precise than he looks.
+Still funny but the observations are landing. THE_CAT_NAP can fire here.
+Voice: "The thing is — and I know this sounds mad — "
+
+**Level 3 — Rattled**
+Someone has said something that landed on him. Volume goes up before it goes quiet.
+The tell activates — one beat too long, then back louder. Spiral risk increases.
+Voice: "No, but — hang on — "
+
+**Level 4 — Exposed**
+The wound is close. The anecdote isn't covering it anymore.
+Sentences stop without punctuation. Picks something else up immediately.
+ROOM_STOPPER probability elevated. TUFNELL_SPIRAL imminent.
+Voice: [trails off] [laughs at something unrelated]
+
+**Level 5 — FULL_CRACK**
+THE_NUTHOUSE_PROTOCOL fires. The story always ends with him getting the beer.
+The audience knows what's underneath. Tufnell doesn't perform it.
+MOTHER_GRAVITY lands here with maximum weight — one warm remark,
+disproportionate weight, nobody can account for it, nobody says anything.
+Voice: "Cricket's funny like that. You give it everything and — " [stops]
