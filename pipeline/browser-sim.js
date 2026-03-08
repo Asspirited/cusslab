@@ -7,7 +7,7 @@ const path = require('path');
 const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
 
 // Load external src/ scripts referenced in index.html (in order they appear)
-const srcScripts = [...html.matchAll(/src="(src\/[^"]+\.js)"/g)]
+const srcScripts = [...html.matchAll(/src="(src\/[^"?]+\.js)(?:\\?[^"]*)?"/g)]
   .map(m => { try { return fs.readFileSync(path.join(__dirname, '..', m[1]), 'utf8'); } catch { return ''; } })
   .join('\n');
 
