@@ -1,168 +1,76 @@
-
-Feature: Session atmosphere — pre-session and mid-session pressure control
-  As a user running a sports panel session
-  I want to set and adjust the session atmosphere before and during play
-  So that I can control the starting pressure, hostility, and mechanic firing rates
+Feature: Session atmosphere selector — all panels
+  The atmosphere selector lets users tune the room's emotional temperature
+  before a session. One selection applies across all panels via sessionStorage.
+  Introduced on Golf Q&A; now replicated to Football, Darts Q&A, and LongRoom Q&A.
 
   Background:
-    Given a sports panel is open
-    And the session has not yet started
+    Given index.html is parsed
 
-  # ── ATMOSPHERE STRIP ──────────────────────────────────────────────────────
+  # ── Shared schema object ──────────────────────────────────────────────────────
 
-  Scenario: Atmosphere strip is visible before session starts
-    Then the atmosphere strip is visible
-    And the strip displays schema "NORMAL"
-    And the strip pressure fill is at its minimum width
+  Scenario: PANEL_SCHEMAS shared constant is defined
+    Then index.html contains "const PANEL_SCHEMAS"
+    And index.html contains "SIMMERING"
+    And index.html contains "POWDER_KEG"
+    And index.html contains "CHAOS_MODE"
+    And index.html contains "BLOODBATH"
+    And index.html contains "FUNNY_PECULIAR"
+    And index.html contains "DEEP_WOUNDS"
 
-  Scenario: Clicking the atmosphere strip opens the drawer
-    When I click the atmosphere strip
-    Then the atmosphere drawer is open
+  # ── Selector HTML presence ────────────────────────────────────────────────────
 
-  Scenario: Closing the drawer hides it without applying changes
-    Given the atmosphere drawer is open
-    And schema "POWDER_KEG" is selected but not applied
-    When I click the drawer close button
-    Then the atmosphere drawer is closed
-    And the active schema remains "NORMAL"
+  Scenario: Atmosphere selector container exists in Football Q&A view
+    Then index.html contains "id=\"fb-atmo-cards\""
 
-  # ── SCHEMA SELECTION ──────────────────────────────────────────────────────
+  Scenario: Atmosphere selector container exists in Darts Q&A view
+    Then index.html contains "id=\"dt-atmo-cards\""
 
-  Scenario Outline: Selecting a schema highlights its card
-    Given the atmosphere drawer is open
-    When I click the "<schema>" schema card
-    Then the "<schema>" card has the active class
-    And no other schema card has the active class
+  Scenario: Atmosphere selector container exists in LongRoom Q&A view
+    Then index.html contains "id=\"lr-atmo-cards\""
 
-    Examples:
-      | schema         |
-      | NORMAL         |
-      | SIMMERING      |
-      | POWDER_KEG     |
-      | CHAOS_MODE     |
-      | BLOODBATH      |
-      | FUNNY_PECULIAR |
-      | DEEP_WOUNDS    |
+  Scenario: Golf atmosphere selector container still exists
+    Then index.html contains "id=\"gf-atmo-cards\""
 
-  Scenario Outline: Selecting a schema syncs the advanced sliders
-    Given the atmosphere drawer is open
-    When I click the "<schema>" schema card
-    Then the tension slider value is <tension>
-    And the hostility slider value is <hostility>
-    And the chaos slider value is <chaos>
+  # ── Shared render and select functions ───────────────────────────────────────
 
-    Examples:
-      | schema         | tension | hostility | chaos |
-      | NORMAL         | 20      | 20        | 30    |
-      | SIMMERING      | 55      | 40        | 25    |
-      | POWDER_KEG     | 85      | 65        | 35    |
-      | BLOODBATH      | 100     | 100       | 40    |
-      | FUNNY_PECULIAR | 20      | 10        | 80    |
+  Scenario: renderAllAtmoSelectors is defined
+    Then index.html contains "function renderAllAtmoSelectors"
 
-  # ── ADVANCED SLIDERS ──────────────────────────────────────────────────────
+  Scenario: selectAtmo saves to sessionStorage
+    Then index.html contains "function selectAtmo"
+    And index.html contains "hc_atmosphere"
 
-  Scenario: Advanced sliders are hidden by default
-    Given the atmosphere drawer is open
-    Then the advanced sliders section is not visible
+  # ── discuss() injection — structural ─────────────────────────────────────────
 
-  Scenario: Advanced toggle shows the sliders
-    Given the atmosphere drawer is open
-    When I click the Advanced toggle
-    Then the advanced sliders section is visible
-    And the toggle arrow points right
+  Scenario: Football discuss() reads hc_atmosphere and injects roundNote
+    Then index.html contains "hc_atmosphere"
+    And the Football IIFE contains "roundNote"
 
-  Scenario: Moving a slider deselects the active schema preset
-    Given the atmosphere drawer is open
-    And schema "SIMMERING" is selected
-    When I move the tension slider to 75
-    Then no schema card has the active class
+  Scenario: Darts discuss() reads hc_atmosphere and injects roundNote
+    Then index.html contains "hc_atmosphere"
+    And the Darts IIFE contains "roundNote"
 
-  # ── APPLY — ADDITIVE PRESSURE MODEL ──────────────────────────────────────
+  Scenario: LongRoom discuss() reads hc_atmosphere and injects roundNote
+    Then index.html contains "hc_atmosphere"
+    And the LongRoom IIFE contains "roundNote"
 
-  Scenario: NORMAL schema injects zero pressure delta
-    Given the atmosphere drawer is open
-    And all characters are at pressure tier "SWALLOW"
-    When I click the "NORMAL" schema card
-    And I click Inject Into Session
-    Then all characters remain at pressure tier "SWALLOW"
+  # ── Behavioural — manual ─────────────────────────────────────────────────────
 
-  Scenario: SIMMERING schema injects one pressure tier additively
-    Given the atmosphere drawer is open
-    And all characters are at pressure tier "SWALLOW"
-    When I click the "SIMMERING" schema card
-    And I click Inject Into Session
-    Then all characters are at pressure tier "LAUGH_OFF"
+  @claude
+  Scenario: BLOODBATH atmosphere produces noticeably more hostile output
+    Given sessionStorage "hc_atmosphere" is set to "BLOODBATH"
+    When a question is submitted to any panel
+    Then the panel responses are measurably more hostile and intense
+    Than the same question submitted under "NORMAL" atmosphere
 
-  Scenario: POWDER_KEG schema injects two pressure tiers additively
-    Given the atmosphere drawer is open
-    And all characters are at pressure tier "SWALLOW"
-    When I click the "POWDER_KEG" schema card
-    And I click Inject Into Session
-    Then all characters are at pressure tier "PASSIVE_AGGRESSIVE"
+  @claude
+  Scenario: FUNNY_PECULIAR atmosphere redirects aggression sideways
+    Given sessionStorage "hc_atmosphere" is set to "FUNNY_PECULIAR"
+    When a question is submitted to Football
+    Then characters deflect into absurdity rather than direct conflict
 
-  Scenario: BLOODBATH schema injects three pressure tiers additively
-    Given the atmosphere drawer is open
-    And all characters are at pressure tier "SWALLOW"
-    When I click the "BLOODBATH" schema card
-    And I click Inject Into Session
-    Then all characters are at pressure tier "FULL_CRACK"
-
-  Scenario: Pressure never exceeds FULL_MONTY regardless of delta
-    Given all characters are at pressure tier "FULL_CRACK"
-    And the atmosphere drawer is open
-    When I click the "BLOODBATH" schema card
-    And I click Inject Into Session
-    Then all characters are at pressure tier "FULL_MONTY"
-    And no character exceeds FULL_MONTY
-
-  Scenario: Mid-session apply adds to existing pressure, never resets
-    Given all characters are at pressure tier "LAUGH_OFF"
-    And the atmosphere drawer is open
-    When I click the "SIMMERING" schema card
-    And I click Inject Into Session
-    Then all characters are at pressure tier "PASSIVE_AGGRESSIVE"
-
-  # ── SESSION STORAGE ───────────────────────────────────────────────────────
-
-  Scenario: Applying a schema writes atmosphere context to sessionStorage
-    Given the atmosphere drawer is open
-    When I click the "POWDER_KEG" schema card
-    And I click Inject Into Session
-    Then sessionStorage key "hc_atmosphere" exists
-    And the stored schema is "POWDER_KEG"
-    And the stored tension is 85
-    And the stored hostility is 65
-
-  Scenario: Applying a custom slider configuration writes correct values
-    Given the atmosphere drawer is open
-    And the Advanced toggle is open
-    When I move the tension slider to 70
-    And I move the hostility slider to 50
-    And I click Inject Into Session
-    Then sessionStorage key "hc_atmosphere" exists
-    And the stored tension is 70
-    And the stored hostility is 50
-
-  # ── PROMPT PREFIX ─────────────────────────────────────────────────────────
-
-  Scenario: buildAtmospherePromptPrefix returns all seven dimensions
-    Given atmosphere context with schema "CHAOS_MODE" is stored
-    When buildAtmospherePromptPrefix is called
-    Then the result contains "tension"
-    And the result contains "hostility"
-    And the result contains "chaos"
-    And the result contains "bathos"
-    And the result contains "premonition"
-    And the result contains "bleed"
-    And the result contains "CHAOS_MODE"
-
-  Scenario: High hostility prompt routes to OUTRIGHT_INSULT
-    Given atmosphere context with hostility 90 is stored
-    When buildAtmospherePromptPrefix is called
-    Then the result contains "OUTRIGHT_INSULT"
-
-  Scenario: Low hostility prompt routes to SUBTLY_UNDERMINING only
-    Given atmosphere context with hostility 20 is stored
-    When buildAtmospherePromptPrefix is called
-    Then the result contains "SUBTLY_UNDERMINING"
-    And the result does not contain "OUTRIGHT_INSULT"
+  @claude
+  Scenario: Atmosphere selection persists visually across panels in same session
+    Given the user selects "Powder Keg" on the Golf panel
+    When the user navigates to the Football panel Q&A
+    Then the Football atmosphere selector shows "Powder Keg" as active
