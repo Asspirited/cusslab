@@ -9,7 +9,26 @@
 2. Run `cd /home/rodent/cusslab && node pipeline/metrics-report.js && npm test` — report DORA stats and coverage numbers before doing anything else
 3. Report last retrospective findings
 4. Read .claude/practices/waste-log.md and report any open items
-5. Only then: work
+5. Read .claude/practices/backlog.md — report top 3 items by CD3 score
+6. Only then: work
+
+---
+
+## Backlog — Auto-Capture Rule (MANDATORY)
+
+Whenever a scope enhancement, tech debt fix, bug, or idea surfaces — in conversation, in code review, in pipeline output — add it to `.claude/practices/backlog.md` immediately. Do not wait until session end. Do not batch them up.
+
+Schema for new items:
+```
+### BL-NNN — Short title
+- Description: what and why
+- CD3: UBV=N TC=N RR=N → CoD=N, Dur=N, **CD3=N.N**
+- Status: OPEN
+```
+
+CD3 = (User Business Value + Time Criticality + Risk Reduction) / Duration.
+Scores 1–10 each. Sort open items by CD3 descending after adding.
+Reference: Black Swan Farming / Reinertsen approach. RIA has working implementation.
 
 ---
 
@@ -20,8 +39,8 @@
 3. Review for any decisions made but not yet implemented
 4. Review for any regression or unexpected behaviour observed
 5. Review for any friction that cost tokens or time
-6. Commit any new entries to .claude/practices/waste-log.md
-7. Push — no session ends without waste-log committed and pushed
+6. Commit any new entries to .claude/practices/waste-log.md and backlog.md
+7. Push — no session ends without waste-log and backlog committed and pushed
 
 ---
 
