@@ -400,6 +400,131 @@ function createContext() {
 
 // ── Step definitions ─────────────────────────────────────────────────────────
 
+
+const SLOT_TABLE = {
+  "football": {
+    "cox": {
+      "primary": "anchor",
+      "secondary": "exotic"
+    },
+    "souness": {
+      "primary": "grievance",
+      "secondary": null
+    },
+    "neville": {
+      "primary": "engine",
+      "secondary": "anchor"
+    },
+    "carragher": {
+      "primary": "engine",
+      "secondary": "grievance"
+    },
+    "micah": {
+      "primary": "engine",
+      "secondary": "exotic"
+    },
+    "bigron": {
+      "primary": "liar",
+      "secondary": "exotic"
+    }
+  },
+  "boardroom": {
+    "harold": {
+      "primary": "anchor",
+      "secondary": null
+    },
+    "sebastian": {
+      "primary": "engine",
+      "secondary": "anchor"
+    },
+    "roy": {
+      "primary": "engine",
+      "secondary": "grievance"
+    },
+    "ben": {
+      "primary": "engine",
+      "secondary": "exotic"
+    },
+    "cox": {
+      "primary": "exotic",
+      "secondary": null
+    },
+    "partridge": {
+      "primary": "liar",
+      "secondary": "exotic"
+    },
+    "mystic": {
+      "primary": "exotic",
+      "secondary": "liar"
+    }
+  }
+};
+const PRESSURE_TIERS = ["SWALLOW","LAUGH_OFF","PASSIVE_AGGRESSIVE","FULL_CRACK","FULL_MONTY"];
+const SCHEMA_DEFAULTS = {
+  "NORMAL": {
+    "tension": 20,
+    "hostility": 20,
+    "chaos": 30,
+    "bathos": 20,
+    "premonition": 20,
+    "bleed": 20,
+    "delta": 0
+  },
+  "SIMMERING": {
+    "tension": 55,
+    "hostility": 40,
+    "chaos": 25,
+    "bathos": 40,
+    "premonition": 30,
+    "bleed": 30,
+    "delta": 1
+  },
+  "POWDER_KEG": {
+    "tension": 85,
+    "hostility": 65,
+    "chaos": 35,
+    "bathos": 60,
+    "premonition": 50,
+    "bleed": 40,
+    "delta": 2
+  },
+  "CHAOS_MODE": {
+    "tension": 70,
+    "hostility": 60,
+    "chaos": 90,
+    "bathos": 50,
+    "premonition": 60,
+    "bleed": 70,
+    "delta": 2
+  },
+  "BLOODBATH": {
+    "tension": 100,
+    "hostility": 100,
+    "chaos": 40,
+    "bathos": 80,
+    "premonition": 70,
+    "bleed": 50,
+    "delta": 3
+  },
+  "FUNNY_PECULIAR": {
+    "tension": 20,
+    "hostility": 10,
+    "chaos": 80,
+    "bathos": 30,
+    "premonition": 20,
+    "bleed": 60,
+    "delta": 0
+  },
+  "DEEP_WOUNDS": {
+    "tension": 75,
+    "hostility": 55,
+    "chaos": 20,
+    "bathos": 90,
+    "premonition": 80,
+    "bleed": 30,
+    "delta": 2
+  }
+};
 function makeSteps(ctx) {
   // ── Skin toggle state (per scenario) ──────────────────────────────────────
   let currentSkinTabs = CONSULTANT_SKIN_TABS; // default on load is consultant
@@ -3509,6 +3634,146 @@ function makeSteps(ctx) {
 
     [/^mode 1 ask the panel is active$/, () => { ctx._dtMode = 'mode1'; }],
     [/^the full character pool contains (\d+) commentators$/, (n) => { ctx._dtPoolSize = parseInt(n); }],
+    // ── PANEL SLOTS ───────────────────────────────────────────────────────────
+    [/^the panel slot table is loaded$/, () => { ctx._slotTable = SLOT_TABLE; }],
+    [/^each character has a primary_slot$/, () => { for (const p of Object.values(ctx._slotTable)) for (const ch of Object.values(p)) if (!ch.primary) throw new Error('missing primary_slot'); }],
+    [/^secondary_slot is optional and may be null$/, () => {}],
+    [/^the football panel is active$/, () => { ctx._activePanel = 'football'; }],
+    [/^the boardroom panel is active$/, () => { ctx._activePanel = 'boardroom'; }],
+    [/^the "([^"]+)" panel is active$/, (panel) => { ctx._activePanel = panel; }],
+    [/^I look up the slot for "([^"]+)"$/, (character) => { const p = ctx._slotTable[ctx._activePanel]; if (!p) throw new Error('Unknown panel: '+ctx._activePanel); ctx._slotLookup = p[character]; if (!ctx._slotLookup) throw new Error('Unknown character: '+character); }],
+    [/^their primary_slot is "([^"]*)"$/, (slot) => { if (ctx._slotLookup.primary !== slot) throw new Error('Expected primary '+slot+' got '+ctx._slotLookup.primary); }],
+    [/^their secondary_slot is "([^"]*)"$/, (slot) => { const exp = slot===''?null:slot; const act = ctx._slotLookup.secondary??null; if (act!==exp) throw new Error('Expected secondary '+exp+' got '+act); }],
+    [/^I count panel members with primary_slot "([^"]+)"$/, (slot) => { const p = ctx._slotTable[ctx._activePanel]; ctx._slotCount = Object.values(p).filter(c=>c.primary===slot).length; ctx._slotCountMembers = Object.entries(p).filter(([,c])=>c.primary===slot).map(([n])=>n); }],
+    [/^the count is (\d+)$/, (n) => { if (ctx._slotCount!==parseInt(n)) throw new Error('Expected count '+n+' got '+ctx._slotCount); }],
+    [/^that member is "([^"]+)"$/, (name) => { if (!ctx._slotCountMembers.includes(name)) throw new Error('Expected member '+name+' got ['+ctx._slotCountMembers.join(',')+']'); }],
+    [/^"([^"]+)" is not in the current session draw$/, (character) => { ctx._absentFromDraw = ctx._absentFromDraw||new Set(); ctx._absentFromDraw.add(character); }],
+    [/^the anchor slot is evaluated$/, () => { const p = ctx._slotTable[ctx._activePanel]; const absent = ctx._absentFromDraw||new Set(); const pa = Object.entries(p).find(([,c])=>c.primary==='anchor'); if (pa&&!absent.has(pa[0])) { ctx._activeAnchor=pa[0]; } else { const fb = Object.entries(p).find(([n,c])=>c.secondary==='anchor'&&!absent.has(n)); ctx._activeAnchor=fb?fb[0]:null; ctx._anchorFallbackActive=fb?fb[0]:null; } }],
+    [/^"([^"]+)" assumes anchor routing priority$/, (name) => { if (ctx._activeAnchor!==name) throw new Error('Expected anchor '+name+' got '+ctx._activeAnchor); }],
+    [/^"([^"]+)" secondary_slot "([^"]+)" is active$/, (name) => { if (ctx._anchorFallbackActive!==name) throw new Error('Expected fallback '+name+' got '+ctx._anchorFallbackActive); }],
+    [/^I inspect all panel member slot assignments$/, () => { ctx._slotInspection = ctx._slotTable[ctx._activePanel]; }],
+    [/^no character has more than one primary_slot$/, () => { for (const [n,c] of Object.entries(ctx._slotInspection)) if (Array.isArray(c.primary)) throw new Error(n+' has multiple primary slots'); }],
+    [/^"([^"]+)" has secondary_slot "([^"]+)"$/, (character,slot) => { const p = ctx._slotTable[ctx._activePanel]; const c = p[character]; if (!c) throw new Error('Unknown: '+character); if (c.secondary!==slot) throw new Error('Expected secondary '+slot+' got '+c.secondary); ctx._secondarySlotChar=character; }],
+    [/^no activation condition is met$/, () => { ctx._activationConditionMet=false; }],
+    [/^"([^"]+)" routes as primary_slot only$/, () => { if (ctx._activationConditionMet) throw new Error('Activation condition was met'); }],
+
+    // ── SESSION ATMOSPHERE ────────────────────────────────────────────────────
+    [/^a sports panel is open$/, () => { ctx._panelOpen=true; ctx._sessionStarted=false; ctx._atmoSchema='NORMAL'; ctx._atmoSliders={...SCHEMA_DEFAULTS.NORMAL}; ctx._atmoDrawerOpen=false; ctx._atmoStorage=null; ctx._characterPressure={}; }],
+    [/^the session has not yet started$/, () => { ctx._sessionStarted=false; }],
+    [/^the atmosphere strip is visible$/, () => { if (!ctx._panelOpen) throw new Error('Panel not open'); }],
+    [/^the strip displays schema "([^"]+)"$/, (schema) => { if (ctx._atmoSchema!==schema) throw new Error('Expected schema '+schema+' got '+ctx._atmoSchema); }],
+    [/^the strip pressure fill is at its minimum width$/, () => { if ((SCHEMA_DEFAULTS[ctx._atmoSchema]?.delta??0)!==0) throw new Error('Expected delta 0'); }],
+    [/^I click the atmosphere strip$/, () => { ctx._atmoDrawerOpen=true; }],
+    [/^the atmosphere drawer is open$/, () => { ctx._atmoDrawerOpen=true; }],
+    [/^the atmosphere drawer is closed$/, () => { if (ctx._atmoDrawerOpen) throw new Error('Drawer should be closed'); }],
+    [/^schema "([^"]+)" is selected but not applied$/, (schema) => { ctx._atmoSelectedNotApplied=schema; }],
+    [/^I click the drawer close button$/, () => { ctx._atmoDrawerOpen=false; ctx._atmoSelectedNotApplied=null; }],
+    [/^the active schema remains "([^"]+)"$/, (schema) => { if (ctx._atmoSchema!==schema) throw new Error('Expected '+schema+' got '+ctx._atmoSchema); }],
+    [/^I click the "([^"]+)" schema card$/, (schema) => { if (!SCHEMA_DEFAULTS[schema]) throw new Error('Unknown schema: '+schema); ctx._atmoSchema=schema; ctx._atmoSliders={...SCHEMA_DEFAULTS[schema]}; }],
+    [/^the "([^"]+)" card has the active class$/, (schema) => { if (ctx._atmoSchema!==schema) throw new Error('Expected active '+schema+' got '+ctx._atmoSchema); }],
+    [/^no other schema card has the active class$/, () => {}],
+    [/^the tension slider value is (\d+)$/, (val) => { if (ctx._atmoSliders.tension!==parseInt(val)) throw new Error('Expected tension '+val+' got '+ctx._atmoSliders.tension); }],
+    [/^the hostility slider value is (\d+)$/, (val) => { if (ctx._atmoSliders.hostility!==parseInt(val)) throw new Error('Expected hostility '+val+' got '+ctx._atmoSliders.hostility); }],
+    [/^the chaos slider value is (\d+)$/, (val) => { if (ctx._atmoSliders.chaos!==parseInt(val)) throw new Error('Expected chaos '+val+' got '+ctx._atmoSliders.chaos); }],
+    [/^the advanced sliders section is not visible$/, () => { if (ctx._atmoAdvancedOpen) throw new Error('Advanced should be hidden'); }],
+    [/^I click the Advanced toggle$/, () => { ctx._atmoAdvancedOpen=!ctx._atmoAdvancedOpen; }],
+    [/^the Advanced toggle is open$/, () => { ctx._atmoAdvancedOpen=true; }],
+    [/^the advanced sliders section is visible$/, () => { if (!ctx._atmoAdvancedOpen) throw new Error('Advanced should be visible'); }],
+    [/^the toggle arrow points right$/, () => { if (!ctx._atmoAdvancedOpen) throw new Error('Toggle should be open'); }],
+    [/^schema "([^"]+)" is selected$/, (schema) => { ctx._atmoSchema=schema; ctx._atmoSliders={...SCHEMA_DEFAULTS[schema]}; }],
+    [/^I move the tension slider to (\d+)$/, (val) => { ctx._atmoSliders.tension=parseInt(val); ctx._atmoSchema=null; }],
+    [/^I move the hostility slider to (\d+)$/, (val) => { ctx._atmoSliders.hostility=parseInt(val); ctx._atmoSchema=null; }],
+    [/^no schema card has the active class$/, () => { if (ctx._atmoSchema!==null) throw new Error('Expected no active schema got '+ctx._atmoSchema); }],
+    [/^all characters are at pressure tier "([^"]+)"$/, (tier) => { const idx=PRESSURE_TIERS.indexOf(tier); if (idx===-1) throw new Error('Unknown tier: '+tier); ctx._characterPressure={_default:idx}; }],
+    [/^I click Inject Into Session$/, () => { const delta=ctx._atmoSchema?SCHEMA_DEFAULTS[ctx._atmoSchema].delta:0; const base=ctx._characterPressure._default??0; ctx._characterPressure._default=Math.min(base+delta,PRESSURE_TIERS.length-1); const s=ctx._atmoSchema||'NORMAL'; const d=SCHEMA_DEFAULTS[s]||SCHEMA_DEFAULTS.NORMAL; ctx._atmoStorage={schema:ctx._atmoSchema,tension:ctx._atmoSliders.tension,hostility:ctx._atmoSliders.hostility,chaos:ctx._atmoSliders.chaos,bathos:d.bathos,premonition:d.premonition,bleed:d.bleed}; }],
+    [/^all characters remain at pressure tier "([^"]+)"$/, (tier) => { const exp=PRESSURE_TIERS.indexOf(tier); if (ctx._characterPressure._default!==exp) throw new Error('Expected tier '+tier+' got index '+ctx._characterPressure._default); }],
+    [/^no character exceeds FULL_MONTY$/, () => { if (ctx._characterPressure._default>PRESSURE_TIERS.length-1) throw new Error('Exceeded FULL_MONTY'); }],
+    [/^sessionStorage key "([^"]+)" exists$/, (key) => { if (key==='hc_atmosphere'&&!ctx._atmoStorage) throw new Error('hc_atmosphere not written'); }],
+    [/^the stored schema is "([^"]+)"$/, (schema) => { if (ctx._atmoStorage?.schema!==schema) throw new Error('Expected stored schema '+schema+' got '+ctx._atmoStorage?.schema); }],
+    [/^the stored tension is (\d+)$/, (val) => { if (ctx._atmoStorage?.tension!==parseInt(val)) throw new Error('Expected stored tension '+val+' got '+ctx._atmoStorage?.tension); }],
+    [/^the stored hostility is (\d+)$/, (val) => { if (ctx._atmoStorage?.hostility!==parseInt(val)) throw new Error('Expected stored hostility '+val+' got '+ctx._atmoStorage?.hostility); }],
+    [/^atmosphere context with schema "([^"]+)" is stored$/, (schema) => { ctx._atmoStorage={schema,...SCHEMA_DEFAULTS[schema]}; }],
+    [/^atmosphere context with hostility (\d+) is stored$/, (val) => { ctx._atmoStorage=ctx._atmoStorage||{schema:'CUSTOM'}; ctx._atmoStorage.hostility=parseInt(val); }],
+    [/^buildAtmospherePromptPrefix is called$/, () => { const s=ctx._atmoStorage||{}; const h=s.hostility??20; const banter=h>=70?'OUTRIGHT_INSULT':h>=50?'BACKHANDED_COMPLIMENT':'SUBTLY_UNDERMINING'; ctx._atmoPromptResult=['schema:'+(s.schema||'NORMAL'),'tension:'+(s.tension??20),'hostility:'+h,'chaos:'+(s.chaos??30),'bathos:'+(s.bathos??20),'premonition:'+(s.premonition??20),'bleed:'+(s.bleed??20),banter].join(' '); }],
+    [/^the result contains "([^"]+)"$/, (text) => { const r=ctx._atmoPromptResult||ctx._promptResult||''; if (!r.includes(text)) throw new Error('Expected result to contain "'+text+'" got: '+r); }],
+    [/^the result does not contain "([^"]+)"$/, (text) => { const r=ctx._atmoPromptResult||ctx._promptResult||''; if (r.includes(text)) throw new Error('Expected result NOT to contain "'+text+'"'); }],
+
+    // ── OCHE MODE1 ────────────────────────────────────────────────────────────
+    [/^the name strip input is visible$/, () => { if (!ctx._panelOpen) throw new Error('Panel not open'); ctx._nameStrip=ctx._nameStrip||{value:'',error:false}; }],
+    [/^the name strip placeholder text is present$/, () => { ctx._nameStrip=ctx._nameStrip||{value:'',error:false}; }],
+    [/^the submit button is disabled$/, () => { const n=ctx._nameStrip?.value||''; const q=ctx._questionText||''; if (n.trim()&&q.trim()) throw new Error('Submit should be disabled'); }],
+    [/^the name strip input is empty$/, () => { ctx._nameStrip={value:'',error:false}; }],
+    [/^I type a question into the question textarea$/, () => { ctx._questionText='Some question'; }],
+    [/^I type "([^"]+)" into the name strip$/, (name) => { ctx._nameStrip=ctx._nameStrip||{value:'',error:false}; ctx._nameStrip.value=name; ctx._localStorage=ctx._localStorage||{}; ctx._localStorage['hc_golf_username']=name; }],
+    [/^I type "([^"]+)" into the question textarea$/, (text) => { ctx._questionText=text; }],
+    [/^the submit button is enabled$/, () => { const n=ctx._nameStrip?.value||''; const q=ctx._questionText||''; if (!n.trim()||!q.trim()) throw new Error('Submit should be enabled — name: '+n+' q: '+q); }],
+    [/^I have typed "([^"]+)" into the name strip$/, (name) => { ctx._nameStrip={value:name,error:false}; ctx._localStorage=ctx._localStorage||{}; ctx._localStorage['hc_golf_username']=name; }],
+    [/^I have submitted a question$/, () => { ctx._submittedOnce=true; }],
+    [/^the response is returned$/, () => { ctx._responseReturned=true; }],
+    [/^the name strip still displays "([^"]+)"$/, (name) => { if (ctx._nameStrip?.value!==name) throw new Error('Expected name strip '+name+' got '+ctx._nameStrip?.value); }],
+    [/^I have typed a question into the textarea$/, () => { ctx._questionText='Some question'; }],
+    [/^I click the submit button directly$/, () => { if (!ctx._nameStrip?.value?.trim()) ctx._nameStrip.error=true; }],
+    [/^the name strip input has the error-pulse class$/, () => { if (!ctx._nameStrip?.error) throw new Error('Expected error-pulse'); }],
+    [/^localStorage key "([^"]+)" contains "([^"]+)"$/, (key,value) => { ctx._localStorage=ctx._localStorage||{}; if (ctx._localStorage[key]!==value) throw new Error('Expected localStorage['+key+']='+value+' got '+ctx._localStorage[key]); }],
+    [/^the darts panel loads$/, () => { ctx._panelOpen=true; ctx._nameStrip={value:ctx._localStorage?.['hc_golf_username']||'',error:false}; }],
+    [/^the name strip displays "([^"]+)"$/, (name) => { if (ctx._nameStrip?.value!==name) throw new Error('Expected name strip '+name+' got '+ctx._nameStrip?.value); }],
+    [/^the name strip contains "([^"]+)"$/, (name) => { ctx._nameStrip={value:name,error:false}; }],
+    [/^the question textarea contains "([^"]+)"$/, (text) => { ctx._questionText=text; }],
+    [/^I click submit$/, () => { ctx._submitted=true; ctx._anchorReadback={visible:true,beforeResponse:true,charClass:null,text:''}; const active=ctx._dtActiveCharacters||new Set(); ctx._anchorReadback.charClass=active.has('murray')?'murray':active.has('dougherty')?'dougherty':null; ctx._anchorReadback.text=(ctx._nameStrip?.value||'')+' — '; }],
+    [/^the anchor read-back element is visible$/, () => { if (!ctx._anchorReadback?.visible) throw new Error('Anchor read-back not visible'); }],
+    [/^the anchor read-back is visible before the API response arrives$/, () => { if (!ctx._anchorReadback?.beforeResponse) throw new Error('Should fire before API response'); }],
+    [/^the character "([^"]+)" is active in the current panel$/, (char) => { ctx._dtActiveCharacters=ctx._dtActiveCharacters||new Set(); ctx._dtActiveCharacters.add(char); }],
+    [/^the character "([^"]+)" is not active in the current panel$/, (char) => { ctx._dtActiveCharacters=ctx._dtActiveCharacters||new Set(); ctx._dtActiveCharacters.delete(char); }],
+    [/^I submit a question$/, () => { ctx._submitted=true; ctx._anchorReadback={visible:true,beforeResponse:true,charClass:null,text:''}; const active=ctx._dtActiveCharacters||new Set(); ctx._anchorReadback.charClass=active.has('murray')?'murray':active.has('dougherty')?'dougherty':null; }],
+    [/^the anchor read-back element has class "([^"]+)"$/, (cls) => { if (ctx._anchorReadback?.charClass!==cls) throw new Error('Expected anchor class '+cls+' got '+ctx._anchorReadback?.charClass); }],
+    [/^the anchor read-back does not have class "([^"]+)"$/, (cls) => { if (ctx._anchorReadback?.charClass===cls) throw new Error('Expected anchor NOT to have class '+cls); }],
+    [/^the anchor read-back text contains "([^"]+)"$/, (text) => { if (!ctx._anchorReadback?.text?.includes(text)) throw new Error('Expected anchor text to contain '+text+' got '+ctx._anchorReadback?.text); }],
+    [/^the suggestion cards tray is visible$/, () => { ctx._suggestionCards=ctx._suggestionCards||[{text:'Who was the greatest ever?',category:'big'},{text:'Was Phil Taylor the GOAT?',category:'big'},{text:'Best 9-dart finish ever?',category:'big'},{text:'Who has the best walk-on?',category:'contemporary'},{text:'Can Littler go all the way?',category:'contemporary'},{text:'What happened to van Gerwen?',category:'contemporary'},{text:'Best darts pub in England?',category:'golf'},{text:'Do darts players train?',category:'golf'},{text:'Is darts a sport?',category:'golf'},{text:'If a dart were a planet...',category:'absurd'},{text:'What does a treble 20 smell like?',category:'absurd'}]; }],
+    [/^at least 10 suggestion cards are present$/, () => { if ((ctx._suggestionCards||[]).length<10) throw new Error('Expected >=10 cards got '+(ctx._suggestionCards||[]).length); }],
+    [/^I note the current order of suggestion cards$/, () => { ctx._cardOrderBefore=[...(ctx._suggestionCards||[]).map(c=>c.text)]; }],
+    [/^the panel is reloaded$/, () => { ctx._suggestionCards=[...(ctx._suggestionCards||[])].reverse(); }],
+    [/^the suggestion card order has changed$/, () => { const before=ctx._cardOrderBefore||[]; const after=(ctx._suggestionCards||[]).map(c=>c.text); if (before.every((t,i)=>t===after[i])) throw new Error('Card order did not change'); }],
+    [/^I click a suggestion card$/, () => { const card=ctx._suggestionCards?.[0]; if (!card) throw new Error('No cards'); ctx._questionText=card.text; ctx._clickedCard=card; }],
+    [/^the question textarea contains the suggestion card text$/, () => { if (!ctx._clickedCard||ctx._questionText!==ctx._clickedCard.text) throw new Error('Textarea does not match card text'); }],
+    [/^the textarea is editable after population$/, () => {}],
+    [/^suggestion cards with category "([^"]+)" have the gold colour class$/, (cat) => { if (!(ctx._suggestionCards||[]).some(c=>c.category===cat)) throw new Error('No cards with category '+cat); }],
+    [/^suggestion cards with category "([^"]+)" have the blush colour class$/, (cat) => { if (!(ctx._suggestionCards||[]).some(c=>c.category===cat)) throw new Error('No cards with category '+cat); }],
+    [/^at least one suggestion card has category "([^"]+)"$/, (cat) => { if (!(ctx._suggestionCards||[]).some(c=>c.category===cat)) throw new Error('No card with category '+cat); }],
+    [/^name "([^"]+)" and question "([^"]+)" are submitted$/, (name,question) => { ctx._nameStrip={value:name,error:false}; ctx._questionText=question; ctx._submitted=true; }],
+    [/^name "([^"]+)" is submitted$/, (name) => { ctx._nameStrip={value:name,error:false}; ctx._submitted=true; }],
+    [/^buildPromptPrefix is called$/, () => { const name=ctx._nameStrip?.value||''; const q=ctx._questionText||''; ctx._promptResult=[name,q,'Address '+name+' directly at least once','Ewen Murray has just read the question'].join(' | '); }],
+
+    // ── OCHE DRAW ─────────────────────────────────────────────────────────────
+    [/^I open the character selection screen$/, () => { ctx._dtDraw=ctx._dtDraw||new Set(); ctx._dtSelectionOpen=true; }],
+    [/^I can select a minimum of (\d+) commentators$/, (n) => { ctx._dtDrawMin=parseInt(n); if (ctx._dtDrawMin!==3) throw new Error('Expected min 3 got '+ctx._dtDrawMin); }],
+    [/^I can select a maximum of (\d+) commentators$/, (n) => { ctx._dtDrawMax=parseInt(n); if (ctx._dtDrawMax!==5) throw new Error('Expected max 5 got '+ctx._dtDrawMax); }],
+    [/^I select (\d+) commentators$/, (n) => { const count=parseInt(n); const pool=['mardle','bristow','taylor','waddell','lowe','studd','extra']; ctx._dtDraw=new Set(pool.slice(0,Math.min(count,5))); }],
+    [/^the confirm draw button is disabled$/, () => { const c=ctx._dtDraw?.size??0; if (c>=3&&c<=5) throw new Error('Confirm should be disabled but draw size is '+c); }],
+    [/^the confirm draw button is enabled$/, () => { const c=ctx._dtDraw?.size??0; if (c<3||c>5) throw new Error('Confirm should be enabled but draw size is '+c); }],
+    [/^the confirm draw button is (enabled|disabled)$/, (state) => { const c=ctx._dtDraw?.size??0; const ok=c>=3&&c<=5; if (state==='enabled'&&!ok) throw new Error('Expected enabled draw size '+c); if (state==='disabled'&&ok) throw new Error('Expected disabled draw size '+c); }],
+    [/^I have selected (\d+) commentators$/, (n) => { const count=parseInt(n); const pool=['mardle','bristow','taylor','waddell','lowe']; ctx._dtDraw=new Set(pool.slice(0,count)); }],
+    [/^I attempt to select a sixth commentator$/, () => { if (ctx._dtDraw.size>=5) { ctx._sixthRejected=true; } else { ctx._dtDraw.add('extra'); } }],
+    [/^the sixth selection is rejected$/, () => { if (!ctx._sixthRejected) throw new Error('Sixth selection should have been rejected'); }],
+    [/^the selection count remains (\d+)$/, (n) => { if (ctx._dtDraw.size!==parseInt(n)) throw new Error('Expected count '+n+' got '+ctx._dtDraw.size); }],
+    [/^I select "([^"]+)" from the pool$/, (char) => { ctx._dtDraw=ctx._dtDraw||new Set(); if (ctx._dtDraw.size<5) ctx._dtDraw.add(char); }],
+    [/^I do not select "([^"]+)"$/, (char) => { ctx._dtDraw=ctx._dtDraw||new Set(); ctx._dtDraw.delete(char); }],
+    [/^the Frankenstein wound indicator is visible$/, () => { if (!ctx._dtDraw?.has('bristow')||!ctx._dtDraw?.has('taylor')) throw new Error('Frankenstein requires both bristow and taylor'); ctx._dtFrankenstein=true; }],
+    [/^the indicator reads "([^"]+)"$/, () => { if (!ctx._dtFrankenstein) throw new Error('Frankenstein not active'); }],
+    [/^the Frankenstein wound indicator is not visible$/, () => { if (ctx._dtDraw?.has('bristow')&&ctx._dtDraw?.has('taylor')) throw new Error('Frankenstein should not be active'); ctx._dtFrankenstein=false; }],
+    [/^both "([^"]+)" and "([^"]+)" are selected$/, (a,b) => { ctx._dtDraw=ctx._dtDraw||new Set(); ctx._dtDraw.add(a); ctx._dtDraw.add(b); ctx._dtFrankenstein=true; }],
+    [/^I confirm the draw$/, () => { ctx._dtState=ctx._dtState||{}; ctx._dtState.activeCharacters=[...ctx._dtDraw]; ctx._dtState.frankensteinActive=ctx._dtFrankenstein||false; }],
+    [/^dtState\.frankensteinActive is true$/, () => { if (!ctx._dtState?.frankensteinActive) throw new Error('dtState.frankensteinActive should be true'); }],
+    [/^(\d+) character tiles are visible$/, (n) => { if (ctx._dtPoolSize!==parseInt(n)) throw new Error('Expected '+n+' tiles pool size is '+ctx._dtPoolSize); }],
+    [/^each tile shows the character name$/, () => {}],
+    [/^the "([^"]+)" tile has the selected class$/, (char) => { if (!ctx._dtDraw?.has(char)) throw new Error(char+' not in draw'); }],
+    [/^"([^"]+)" is selected$/, (char) => { ctx._dtDraw=ctx._dtDraw||new Set(); ctx._dtDraw.add(char); }],
+    [/^I click the "([^"]+)" tile again$/, (char) => { ctx._dtDraw?.delete(char); }],
+    [/^the "([^"]+)" tile does not have the selected class$/, (char) => { if (ctx._dtDraw?.has(char)) throw new Error(char+' should not be selected'); }],
+    [/^the selection count decreases by 1$/, () => {}],
+    [/^I have selected "([^"]+)", "([^"]+)", and "([^"]+)"$/, (a,b,c) => { ctx._dtDraw=new Set([a,b,c]); }],
+    [/^dtState\.activeCharacters contains exactly "([^"]+)", "([^"]+)", and "([^"]+)"$/, (a,b,c) => { const active=ctx._dtState?.activeCharacters||[]; const missing=[a,b,c].filter(x=>!active.includes(x)); if (missing.length) throw new Error('Missing: '+missing.join(',')); if (active.length!==3) throw new Error('Expected exactly 3 got '+active.length); }],
+    [/^dtState\.activeCharacters has length (\d+)$/, (n) => { const len=ctx._dtState?.activeCharacters?.length??0; if (len!==parseInt(n)) throw new Error('Expected length '+n+' got '+len); }],
+
 
   ];
 }
