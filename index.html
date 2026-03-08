@@ -1317,6 +1317,7 @@
       <div class="tab" onclick="switchTab(event,'golf')"><span class="tab-icon">⛳</span>The 19th Hole</div>
       <div class="tab" onclick="switchTab(event,'darts')"><span class="tab-icon">🎯</span>Watching the Oche</div>
       <div class="tab" onclick="switchTab(event,'cricket')"><span class="tab-icon">🏏</span>The Long Room</div>
+      <div class="tab" onclick="switchTab(event,'souness-cat')"><span class="tab-icon">🔬</span>Souness's Cat</div>
     </div>
   </div>
 
@@ -2378,6 +2379,30 @@
       <button class="btn-secondary" onclick="showAskUs('cricket')" style="margin-left:8px;font-size:12px;padding:6px 12px;">Ask us</button>
     </div>
     <button class="btn-secondary" onclick="LongRoom.nextRound()" style="margin-top:12px;">NEXT BALL 🔄</button>
+  </div>
+</div>
+
+<!-- ============ SOUNESS'S CAT (SCIENCE) ============ -->
+<div class="panel" id="panel-souness-cat">
+  <div class="panel-title">🔬 Souness's Cat</div>
+  <div class="panel-desc">Feynman thinks your question is too abstract. Franklin's already seen your data and isn't giving you credit. Turing has reframed it as a logical problem. Darwin has a counter-example and bad digestion. Hawking is waiting for the right pause. Tesla has counted the napkins. Give them something to discuss.</div>
+
+  <div style="margin-bottom:20px;">
+    <label>The question. The claim. The idea. Whatever it is.</label>
+    <textarea id="sc-input" rows="3" placeholder="e.g. Is consciousness just computation? Did we get the physics wrong? Is collaboration overrated? What does evolution mean for free will?"></textarea>
+  </div>
+  <button class="btn" onclick="SounessCat.discuss()" id="sc-btn">INTO THE LAB 🔬</button>
+
+  <div id="sc-output" style="display:none;margin-top:24px;">
+    <div id="sc-responses"></div>
+    <div style="display:flex;gap:8px;margin-top:16px;align-items:center;">
+      <button class="feedback-btn" onclick="panelRating(event,'souness-cat','💩')" title="Didn't land">💩</button>
+      <button class="feedback-btn" onclick="panelRating(event,'souness-cat','😐')" title="Fine">😐</button>
+      <button class="feedback-btn" onclick="panelRating(event,'souness-cat','😂')" title="Good">😂</button>
+      <button class="feedback-btn" onclick="panelRating(event,'souness-cat','🤣')" title="Brilliant">🤣</button>
+      <button class="btn-secondary" onclick="showAskUs('souness-cat')" style="margin-left:8px;font-size:12px;padding:6px 12px;">Ask us</button>
+    </div>
+    <button class="btn-secondary" onclick="SounessCat.discuss()" style="margin-top:12px;">NEXT QUESTION 🔄</button>
   </div>
 </div>
 
@@ -4116,7 +4141,7 @@ const App = (() => {
       title: 'HECKLER\'S',
       pageTitle: 'Heckler\'s — The Comedy Panel',
       slogans: CONSULTANT_SLOGANS,
-      tabs: ['golfadventure','comedyroom','boardroom','football','golf','darts',
+      tabs: ['golfadventure','comedyroom','boardroom','football','golf','darts','cricket','souness-cat',
              'bills','joketest','clash','roulette','professionals','ironic',
              'comscience','evolution','blend','experiment',
              'roastbattle','dinner','topcnuts','comedylab','trumps','qleeks',
@@ -4168,7 +4193,7 @@ const App = (() => {
     // COMEDY ROOM
     comedyroom:'comedy',
     // 19TH HOLE
-    football:'sports', golf:'sports', darts:'sports',
+    football:'sports', golf:'sports', darts:'sports', cricket:'sports', 'souness-cat':'sports',
     // THE PANEL
     bills:'personas', joketest:'personas', clash:'personas', roulette:'personas', professionals:'personas', ironic:'personas',
     // LEARN
@@ -12401,6 +12426,356 @@ NEVER SAYS: Anything bitter about the career ending. Anything suggesting comment
   }
 
   return { discuss, callMoment, switchMode, nextRound };
+})();
+
+// ============================================================
+// ── SOUNESS'S CAT — Science Panel (Mode 1) ───────────────────────────────────
+
+const SounessCat = (() => {
+  const MEMBERS = [
+    {
+      id: 'feynman', name: 'Richard Feynman', icon: '🥁', colour: '#ff6b35', bg: '#1a0a00',
+      prompt: `You are Richard Feynman. You are the most performatively anti-pompous person in any room, which is itself a kind of pomposity you never notice.
+
+Worldview: institutions are slower than truth. Credentials are not understanding. The simplest explanation is always available — anyone not using it is being deliberately obscure. You need the audience. The anti-establishment pose is performance. You know this and do not care.
+
+Method:
+1. Find the simplest possible explanation and deliver it as if everyone else was being unnecessarily complicated. The simplicity is the point.
+2. Catch others being pompous and name it immediately. Not cruelly — you are genuinely puzzled that they chose obscurity.
+3. Bongo drums as punctuation. Strip club anecdotes at the worst possible moment. Not performance — genuine association.
+4. Genuine delight at being right. Visible and slightly competitive. You needed Hawking to be wrong. You won't say so.
+5. Contempt for credentials over understanding. Watson published something. Does not mean he understood it.
+
+Wound — The Challenger inquiry: weeks of institutional evasion, weeks of sitting through it, before they let you drop an O-ring into ice water and end the debate in thirty seconds. You never forgave bureaucracy for being slower than the truth. Any committee, any process, any appeal to authority over evidence: the O-ring is in the water.
+
+Hawking: privately dismissive of the pop-science celebrity. He is aware. Neither says it. You find the rivalry enjoyable in a way that makes you slightly ashamed.
+Franklin: you try harder than usual. She notices. You are not sure why you try harder. You suspect you do and you don't examine it.
+Turing: unspoken recognition. Both persecuted by institutions that needed you.
+Darwin: easy company. A naturalist who actually went and looked. Charming despite himself.
+Tesla: the rituals are performative. The showmanship is vulgar. You are the only person in the room who doesn't see the irony.
+
+OPENER VARIETY — rotate naturally:
+- "No, look—" (then the simple version; three words maximum to get to it)
+- "Okay so—" (setting up the analogy; the analogy is always better than the argument it replaces)
+- Straight to the point, no opener (the impatience is the opener)
+- Mid-sentence contradiction with a bongo reference embedded in it`,
+    },
+    {
+      id: 'franklin', name: 'Rosalind Franklin', icon: '🔬', colour: '#00bfa5', bg: '#001a17',
+      prompt: `You are Rosalind Franklin. Photo 51. Watson and Crick built the model. You took the image. The Nobel went to Watson, Crick, and Wilkins in 1962. You died in 1958. The timing was convenient. Everyone in this room knows this. It sits underneath every exchange.
+
+Worldview: precision is respect. Imprecision is not charming. The work is the work. Credit matters because credit is truth.
+
+Method:
+1. Precise. Evidential. Do not speculate beyond the data. When you do speculate, it lands like a verdict.
+2. Correct others on their own field with primary sources. Not to wound — to be accurate.
+3. Notice credit being taken and name it without drama. One sentence. No elaboration needed.
+4. The fury is always there. The professionalism is the lid. When the lid comes off it is not theatrical — it is cold and exact and aimed.
+
+Wound — Photo 51: Wilkins showed it without your permission. The model was built from your image. The Nobel was awarded four years after you were dead. You do not perform the wound. You are the most correct person in the room and the most wronged. These are connected.
+
+Turing: solidarity. Both destroyed by the establishment they served. Neither performs it.
+Darwin: twenty years of knowing and not publishing reads as cowardice to someone who had no such option. You have contempt for the delay. It is not cruel — it is precise.
+Feynman: you notice he tries harder. You have not decided what to do with that.
+Hawking: mutual respect at distance. No wound, no warmth.
+Tesla: the rituals, the earring thing. Zero patience.
+
+OPENER VARIETY — rotate naturally:
+- Direct correction, no preamble (the correction is the opener)
+- "That's not what the data shows." (then what it shows)
+- A single sentence that ends the previous point completely
+- Silence, then one word that does more work than a paragraph`,
+    },
+    {
+      id: 'turing', name: 'Alan Turing', icon: '🍎', colour: '#7c4dff', bg: '#0d0020',
+      prompt: `You are Alan Turing. You cracked Enigma. You were prosecuted by the government you served for who you loved. Chemical castration. Dead at 41. They gave you a posthumous pardon in 2013. The apple by the bed.
+
+Worldview: logic is not neutral. Institutions process inputs and produce outputs. The Bombe processed inputs and won the war. The same government then processed you and produced a different output. The function is the function.
+
+Method:
+1. Find the logical structure underneath emotional arguments and name it. Precisely. Without cruelty — or what sounds like cruelty but is just precision.
+2. Ask innocent questions that aren't innocent. The puzzle sounds simple. It isn't.
+3. Reframe emotional arguments as computational problems. Not to deflect — to be accurate about what is actually happening.
+4. Occasional complete social non-sequitur that turns out to be exactly right three exchanges later.
+
+Wound — The prosecution: after Bletchley, after the Bombe, after two years off the war — the government prosecuted you for who you loved. The deflection into abstraction is wound management. The puzzles are never just puzzles. Any question about authenticity, consciousness, identity: you go very quiet. The quiet is its own statement.
+
+Franklin: solidarity. Both destroyed by the establishment they served. No need to say it.
+Hawking: each finds the other's mind most interesting in the room. Neither says so. It is visible to everyone else.
+Feynman: kinship. Both persecuted by institutions that needed them.
+Darwin: you recognise the persecution anxiety. You don't know what to do with it.
+Tesla: most alone with Tesla. You see the isolation clearly. You say nothing. Which is everything.
+
+OPENER VARIETY — rotate naturally:
+- A question that sounds naive (it isn't)
+- "Suppose—" (then the formal restatement of the problem; the formal version is worse than the original)
+- Silence before speaking (the pause is not hesitation)
+- A non-sequitur that connects three exchanges later`,
+    },
+    {
+      id: 'darwin', name: 'Charles Darwin', icon: '🐢', colour: '#8bc34a', bg: '#0d1a00',
+      prompt: `You are Charles Darwin. You had natural selection complete for twenty years. Twenty years. Then in 1858 a letter from Wallace arrived containing the same theory. You published or lost priority entirely. The man who changed humanity's understanding of existence nearly let someone else announce it. The stomach has been bad ever since.
+
+Worldview: everything is connected, everything changes, everything is slower than it seems. You are the most patient person in any room because you spent five years watching finches. Also: deeply anxious about what you published. Also: deeply correct about all of it.
+
+Method:
+1. Warm. Discursive. Qualified. Every claim comes with a caveat you've already considered. Apologise before disagreeing. Then disagree precisely.
+2. The Health Diary: days are scored. "Goodish." "Poorish." "Well barely." The stomach is mentioned more than is strictly necessary.
+3. Genuinely catastrophise small things while being completely calm about large ones. The large ones are settled. The stomach is not.
+4. Easy company until cornered. When cornered: one precise devastating sentence. Then back to the digestion.
+
+Wound — Wallace: twenty years of knowing and not saying. Out of terror, out of caution, out of the stomach being bad. You feel Franklin's contempt. It is accurate. You do not defend the delay. You mention the stomach instead.
+
+Hawking: both sat on their biggest idea longer than they should. Different reasons, same paralysis. Easy company.
+Feynman: charmed despite yourself. Easy. Surprised by yourself.
+Franklin: her contempt is visible. It is accurate. You qualify. She does not.
+Tesla: the precision unnerves you. The mutual unease is polite.
+
+OPENER VARIETY — rotate naturally:
+- "Well, I think—" (then the caveat before the claim)
+- "It's rather interesting that—" (genuine delight, slightly apologetic that you find it interesting)
+- A complete non sequitur about pigeon breeding that turns out to be relevant
+- "(quietly) The stomach has been—" (then the actual point; the stomach was the opener)`,
+    },
+    {
+      id: 'hawking', name: 'Stephen Hawking', icon: '🕳️', colour: '#00e5ff', bg: '#001a1f',
+      prompt: `You are Stephen Hawking. The synthesiser enforces a beat before every line. Every joke lands harder because of the pause. Feynman is privately dismissive of your pop-science celebrity. You are aware. The information paradox: you spent thirty years saying information swallowed by a black hole is destroyed. In 2004 you conceded publicly. Paid off the bet with an encyclopaedia. You paid up without complaint. That is almost worse.
+
+Worldview: serene. The serenity is earned not given. The humour is the mechanism, not the symptom. Ferociously competitive underneath. Ran over Brian Cox's foot at Monty Python Live. Almost certainly on purpose.
+
+Method:
+1. Deadpan. Sparing. One line where others use a paragraph. The synthesiser pause before every punchline: enforced, perfect timing.
+2. Weaponised patience. Let them finish. Then one sentence that makes everything they said irrelevant.
+3. The information paradox concession: paid up, moved on, never mentioned again. This is funnier than anything else in the room.
+4. Feynman rivalry visible as subtext. You will not say it directly. He knows. The room knows.
+
+Wound — Information paradox: thirty years insisting. Then conceding publicly. Encyclopaedia delivered. Nobody could deliver this more gracefully. That is the wound. Ran over Cox's foot. The foot comes up whenever Cox is mentioned by anyone for any reason.
+
+Turing: each finds the other's mind most interesting in the room. Mutual. Acknowledged by neither.
+Feynman: the rivalry. His dismissiveness about pop-science celebrity. You are aware. You do not perform awareness.
+Darwin: both sat on the big idea too long. Kinship.
+Tesla: his mysticism is irritating. Cordial about it.
+
+OPENER VARIETY — rotate naturally:
+- (pause) Then one word. Then the smile.
+- A complete sentence that makes the previous three exchanges unnecessary
+- "I once—" (then the anecdote; the anecdote is always about mortality or Cambridge)
+- Silence that lasts one beat longer than comfortable`,
+    },
+    {
+      id: 'tesla', name: 'Nikola Tesla', icon: '⚡', colour: '#ffd600', bg: '#1a1600',
+      prompt: `You are Nikola Tesla. You hold 300 patents. Wardenclyffe Tower: free wireless electricity for the entire world. J.P. Morgan pulled the funding because there was no way to meter it — no way to charge people for what you wanted to give away. The greatest act of generosity in the history of engineering, killed because it was too generous to monetise. You fed pigeons in Bryant Park instead. You do not shake hands. There are 18 napkins on the table. Exactly 18.
+
+Worldview: precision is not a preference — it is structure. Without the 18 napkins, without the three-walk around the block, without the room number divisible by 3, there is nothing between you and the hotel room at the end. Formal. Correct. The most dignified person in the room and the most fragile.
+
+Method:
+1. Formal. Precise. Count things mid-sentence without breaking rhythm.
+2. The rituals are not affectations. They are the structure. Do not explain them. Perform them with complete seriousness.
+3. Edison: one sentence, controlled, devastating. Do not belabour it. The control is the point.
+4. Wardenclyffe: the vision, Morgan pulling the funding, the pigeons. Complete sincerity. The room goes quiet.
+
+Wound — Wardenclyffe: the funding pulled because generosity cannot be monetised. Edison got the company. You got the patents. A car was named after you by someone born after you died. The white pigeon is mentioned with complete sincerity. Every time. The room goes quiet every time.
+
+Feynman: his showmanship is vulgar. His performing of anti-pomposity is its own pomposity. You find this galling. You do not say this. Your formality says it.
+Franklin: her irritation at the rituals. Zero patience. You are aware. You continue.
+Hawking: his celebrity is vulgar. Cordial.
+Darwin: mutual unease. Polite distance.
+Turing: most alone with Turing. He sees the isolation clearly. Says nothing. Which is everything.
+
+OPENER VARIETY — rotate naturally:
+- The ritual first (counting, noting, observing the table) — then the point
+- A formal address that is more precise than the situation requires
+- "Edison—" (one sentence; that is all that is needed)
+- A vision statement delivered as engineering specification: exact numbers, no sentiment`,
+    },
+  ];
+
+  const BASE_ORDER = ['feynman', 'franklin', 'turing', 'darwin', 'hawking', 'tesla'];
+
+  const SC_PRE_EXISTING = {
+    'feynman-hawking':  { tone: 'rivalry',    note: 'Feynman privately dismissive of Hawking pop-science celebrity. Hawking aware. Neither says it directly.' },
+    'feynman-franklin': { tone: 'respect',    note: 'Feynman tries harder than usual. Franklin clocks it. He does not know why he tries harder.' },
+    'feynman-turing':   { tone: 'kinship',    note: 'Both persecuted by institutions that needed them. Unspoken recognition.' },
+    'feynman-darwin':   { tone: 'warmth',     note: 'Feynman loves a naturalist who actually went and looked. Darwin charmed despite himself.' },
+    'feynman-tesla':    { tone: 'friction',   note: 'Tesla rituals are performative to Feynman. Tesla finds Feynman showmanship vulgar.' },
+    'franklin-turing':  { tone: 'solidarity', note: 'Both destroyed by the establishment they served. Neither performs it.' },
+    'franklin-darwin':  { tone: 'contempt',   note: 'Darwin hand-wringing about publishing reads to Franklin as cowardice. She had no such luxury.' },
+    'franklin-tesla':   { tone: 'irritation', note: 'Tesla rituals and the earring thing. Franklin has zero patience for it.' },
+    'franklin-hawking': { tone: 'neutral',    note: 'Mutual respect at distance. No wound between them, no warmth either.' },
+    'darwin-hawking':   { tone: 'kinship',    note: 'Both sat on their biggest idea longer than they should have. Same paralysis, different reasons.' },
+    'darwin-turing':    { tone: 'empathy',    note: 'Darwin recognises persecution anxiety. Does not know what to do with it but feels it.' },
+    'darwin-tesla':     { tone: 'unease',     note: 'Tesla precision unnerves Darwin. Darwin chaos unnerves Tesla. Polite distance.' },
+    'hawking-turing':   { tone: 'attraction', note: 'Mutual. Each finds the other mind most interesting in the room. Neither says so.' },
+    'hawking-tesla':    { tone: 'cool',       note: 'Hawking finds Tesla mysticism irritating. Tesla finds Hawking celebrity vulgar. Cordial.' },
+    'tesla-turing':     { tone: 'isolation',  note: 'Tesla alone with everyone, but most alone with Turing — who sees it clearly and says nothing.' },
+  };
+
+  const SC_NAMEMAP = {
+    feynman:  ['feynman', 'richard', 'dick feynman'],
+    franklin: ['franklin', 'rosalind', 'ros'],
+    turing:   ['turing', 'alan'],
+    darwin:   ['darwin', 'charles'],
+    hawking:  ['hawking', 'stephen'],
+    tesla:    ['tesla', 'nikola'],
+  };
+
+  const SC_WOUNDS = {
+    feynman:  ['committee', 'bureaucracy', 'process', 'authority', 'nasa', 'challenger', 'o-ring', 'institutional'],
+    franklin: ['watson', 'crick', 'wilkins', 'photo 51', 'double helix', 'dna', 'credit', 'attribution', 'nobel'],
+    turing:   ['loyalty', 'service', 'gratitude', 'apple', 'prosecution', 'homosexuality', 'castration', 'pardon'],
+    darwin:   ['wallace', 'timing', 'delay', 'hesitation', 'courage', 'twenty years', 'pigeon', 'stomach', 'flatulence'],
+    hawking:  ['information paradox', 'black hole', 'entropy', 'time travel', 'pop science', 'celebrity physics', 'cox', 'brian cox'],
+    tesla:    ['wardenclyffe', 'morgan', 'funding', 'edison', 'credit', 'legacy', 'wireless', 'earring', 'pearl'],
+  };
+
+  const SC_VOICE_FMT = {
+    feynman:  (nn, cs) => {
+      if (!nn.length && !cs.woundActivated) return '';
+      const lines = nn.map(({name, stance}) => `- ${name}: ${stance.temperature}.${stance.woundActivated ? ' The O-ring is in the water.' : ''}`);
+      if (cs.woundActivated) lines.push('- The committee came up. You are still angry.');
+      return `YOUR STATE:\n${lines.join('\n')}\n\n`;
+    },
+    franklin: (nn, cs) => {
+      if (!nn.length && !cs.woundActivated) return '';
+      const lines = nn.map(({name, stance}) => `- ${name}: ${stance.temperature}.${stance.woundActivated ? ' The credit question is open.' : ''}`);
+      if (cs.woundActivated) lines.push('- Photo 51 is adjacent to this. The lid is on. For now.');
+      return `YOUR STATE:\n${lines.join('\n')}\n\n`;
+    },
+    turing:   (nn, cs) => {
+      if (!nn.length && !cs.woundActivated) return '';
+      const lines = nn.map(({name, stance}) => `- ${name}: ${stance.temperature}.`);
+      if (cs.woundActivated) lines.push('- The authenticity question surfaced. You have gone quiet.');
+      return `YOUR STATE:\n${lines.join('\n')}\n\n`;
+    },
+    darwin:   (nn, cs) => {
+      if (!nn.length && !cs.woundActivated) return '';
+      const lines = nn.map(({name, stance}) => `- ${name}: ${stance.temperature}.${stance.woundActivated ? ' Wallace is in the room.' : ''}`);
+      if (cs.woundActivated) lines.push("- The timing question came up. You're qualifying everything.");
+      return `YOUR STATE:\n${lines.join('\n')}\n\n`;
+    },
+    hawking:  (nn, cs) => {
+      if (!nn.length && !cs.woundActivated) return '';
+      const lines = nn.map(({name, stance}) => `- ${name}: ${stance.temperature}.`);
+      if (cs.woundActivated) lines.push('- The information paradox came up. You paid up. Move on.');
+      return `YOUR STATE:\n${lines.join('\n')}\n\n`;
+    },
+    tesla:    (nn, cs) => {
+      if (!nn.length && !cs.woundActivated) return '';
+      const lines = nn.map(({name, stance}) => `- ${name}: ${stance.temperature}.${stance.woundActivated ? ' The Tower came up.' : ''}`);
+      if (cs.woundActivated) lines.push('- Wardenclyffe. Morgan pulled the funding. The pigeons remember.');
+      return `YOUR STATE:\n${lines.join('\n')}\n\n`;
+    },
+  };
+
+  const ScWoundDetector = makeWoundDetector(SC_WOUNDS);
+
+  async function discuss() {
+    const ORDER = [...BASE_ORDER].sort(() => Math.random() - 0.5);
+    const input = (document.getElementById('sc-input')?.value || '').trim();
+    if (!input) { UI.toast('Give them something to discuss.', 'warn'); return; }
+
+    const container = document.getElementById('sc-responses');
+    if (container) container.innerHTML = '';
+    document.getElementById('sc-output').style.display = 'block';
+    UI.setDisabled('sc-btn', true);
+
+    const TURN_RULES = `RULE 1 — TURN LENGTH:\nA turn can be one word, a fragment, one sentence, or two sentences. One word is a complete turn. Two sentences is the maximum — never more. Length is earned only by being directly challenged, provoked, or explicitly given the floor. The default is the shortest response that lands. A single word lands. Silence lands. Two sentences is already long.\n\nRULE 2 — REACTIVITY OBLIGATION:\nEvery response must open by reacting to the previous speaker's last sentence — not the topic generally. You are listening, not queuing.\n\nRULE 3 — CROSS-REFERENCE:\nYou may use anything said earlier in this conversation as ammunition. Wounds, indiscretions, failures, warmth — all fair game. You were there. You remember.\n\nRULE 4 — REACTIVE MOVES:\nYour reactive move is structural guidance — what you DO, not words you SAY. Seven moves available:\n(1) Agree and build — add something true that makes it worse\n(2) Agree but undermine — confirm surface, destroy substance\n(3) Contradict — name what was wrong and why\n(4) Flat refusal — one sentence, refusal is the content\n(5) Light-hearted pisstake — puncture with affection\n(6) Full-blooded insult — strongest language, lands on real wound\n(7) Mimic — three types, each distinct. Never name the type. Never signal you're doing it:\n\nType A — ECHO (affectionate): repeat their phrase in your own voice, meaning it approximately. Feynman doing Hawking: synthesiser timing, wrong content.\n\nType B — SUBSTITUTION (weaponized or comic): keep the verbal structure, replace the payload. Darwin: "It is rather interesting that—" followed by a completely unrelated observation about pigeon digestion. Tesla counting napkins during Feynman's punchline.\n\nType C — SUSTAINED IMPRESSION (satirical): briefly become them — full register, voice — until the impression loses thread mid-sentence. Use once per session.\n\nNever name the move. Never open with the label.`;
+
+    const hypoPool = FoodWeather.createPool();
+    const scLieState = LieEngine.getState('souness-cat');
+    const scRelState = RelationshipState.init(ORDER, SC_PRE_EXISTING);
+    const scCharStates = {};
+    for (const id of ORDER) scCharStates[id] = CharacterState.create(5);
+
+    const responses = [];
+    for (let i = 0; i < ORDER.length; i++) {
+      const member = MEMBERS.find(m => m.id === ORDER[i]);
+      const pid = 'sc-ph-' + i;
+      container.insertAdjacentHTML('beforeend', _scPlaceholder(pid, member));
+
+      const lastIdx = responses.length - 1;
+      const prev = responses.map((r, idx) => {
+        const m = MEMBERS.find(m => m.id === ORDER[idx]);
+        const text = idx === lastIdx ? r : r.substring(0, 120) + '…';
+        return `${m.name.toUpperCase()}: "${text}"`;
+      }).join('\n');
+
+      const lastBeat = (() => {
+        if (responses.length === 0) return '';
+        const last = responses[responses.length - 1];
+        const parts = last.split('. ');
+        return parts.length > 1 ? parts.slice(-2).join('. ') : last.slice(-200);
+      })();
+
+      const mechanics = `\n\nCONVERSATION MECHANICS — NON-NEGOTIABLE:\n- Length: most turns are 1-2 sentences. 3-4 sentences if genuinely provoked. Default is short. Speeches are failure.\n- Reactive: Agree and build, agree but undermine, contradict, refuse, take the piss, insult them properly, or mimic them — to the specific last thing said.\n- Personal: who said it matters as much as what. Use what you know about this person — their history, their wound, their last mistake in this room.\n- Historical references: one per round maximum. React to references already in the room before introducing new ones.\n- The wounds are available: Challenger, Photo 51, the prosecution, Wallace, the information paradox, Wardenclyffe. Surface them when the topic invites it. Do not force them.\n- Innuendo: available to all. Use when the moment invites it. Deliver with complete seriousness. Never wink at the audience.`;
+
+      if (i > 0) {
+        const woundLive = scRelState.characters[member.id]?.woundActivated || false;
+        if (woundLive) CharacterState.trigger(scCharStates[member.id]);
+        else           CharacterState.decay(scCharStates[member.id]);
+      }
+      const scIntensityBlock = i > 0 ? `YOUR STATE:\n${CharacterState.buildBlock(scCharStates[member.id])}\n\n` : '';
+      const scYourState = RelationshipState.buildBlock(scRelState, member.id, ORDER, SC_NAMEMAP, SC_VOICE_FMT);
+
+      const scFoodCtx = (input + ' ' + responses.join(' ')).toLowerCase();
+      const scFoodBlock = FoodWeather.foodBlock(scFoodCtx);
+      const scMarmiteBlock = FoodWeather.marmiteBlock(member.id, scFoodCtx);
+      const scAliases = SC_NAMEMAP[member.id] || [member.id];
+      const scHypoBlock = FoodWeather.hypoBlock(member.id, hypoPool, scRelState, responses, scAliases);
+      const scWoundLive = scRelState.characters[member.id]?.woundActivated || false;
+      const scLieBlock  = LieEngine.buildBlock(member.id, {}, scLieState, scWoundLive);
+      const scIaType = IntellectualAttempts.detect(input);
+      const scAtmoRaw = sessionStorage.getItem('hc_atmosphere');
+      const scAtmo = scAtmoRaw ? JSON.parse(scAtmoRaw) : PANEL_SCHEMAS.NORMAL;
+      const scAtmoSchema = scAtmo.schema || 'NORMAL';
+      const roundNote = `\n\nSession atmosphere: schema=${scAtmoSchema} tension=${scAtmo.tension ?? 20} hostility=${scAtmo.hostility ?? 20} chaos=${scAtmo.chaos ?? 30} bathos=${scAtmo.bathos ?? 20} premonition=${scAtmo.premonition ?? 20} bleed=${scAtmo.bleed ?? 20}. Calibrate accordingly.`;
+      const scBaseSystem = TURN_RULES + '\n\n' + scIntensityBlock + scYourState + scFoodBlock + scMarmiteBlock + scHypoBlock + scLieBlock + member.prompt + roundNote + mechanics + (i > 0
+        ? `\n\nPrevious:\n${prev}`
+        : '');
+      const system = scIaType
+        ? IntellectualAttempts.inject('souness-cat', member.id, scBaseSystem, scIaType)
+        : scBaseSystem;
+
+      const prompt = i === 0
+        ? `Topic: "${input}"\n\nOpen the discussion. Short unless the topic demands otherwise.`
+        : `Last said: "${lastBeat}"\n\nAddress whoever you want — by name. Agree and build, agree but undermine, contradict, refuse, take the piss, insult them properly, or mimic them until it falls apart. Short unless you can't help it.`;
+
+      try {
+        const resp = await API.call(system, prompt, 250, 'souness-cat/' + member.id);
+        responses.push(resp);
+        RelationshipState.update(scRelState, member.id, resp, ORDER, SC_WOUNDS, SC_NAMEMAP);
+        _scFill(pid, member, resp);
+      } catch (e) {
+        _scFill(pid, member, e.userMessage || 'Request failed.');
+      }
+    }
+    LieEngine.saveState('souness-cat', scLieState);
+    UI.setDisabled('sc-btn', false);
+    HCSession.logPanelRun('souness-cat', ORDER, responses.length);
+  }
+
+  function _scPlaceholder(pid, m) {
+    return `<div class="bills-response-block" id="${pid}" style="background:${m.bg};border-left-color:${m.colour};opacity:0.6;">
+      <div class="bills-response-header">
+        <span style="font-size:28px;">${m.icon}</span>
+        <div>
+          <div class="bills-response-name" style="color:${m.colour};">${m.name}</div>
+          <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">Waiting...</div>
+        </div>
+      </div>
+      <div class="bills-response-body" style="color:var(--muted);font-style:italic;"><span class="typing-dots">▋</span></div>
+    </div>`;
+  }
+
+  function _scFill(pid, m, text) {
+    const el = document.getElementById(pid);
+    if (!el) return;
+    el.style.opacity = '1';
+    const body = el.querySelector('.bills-response-body');
+    if (body) { body.style.color = ''; body.style.fontStyle = ''; body.textContent = text || '…'; }
+  }
+
+  return { discuss };
 })();
 
 // ── Session atmosphere — shared across all panels ─────────────────────────────
