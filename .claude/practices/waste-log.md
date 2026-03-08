@@ -892,3 +892,13 @@ Status: CLOSED
 - Cost impact: Medium (5 deploy cycles, 3 wrong fix attempts)
 - Tags: deployment, branch, live-site, 5-whys, process
 - Status: Closed — merged feature branch to main; prevention rule added
+
+## WL-059
+- Item: Phantom scenario descriptions in CLAUDE.md — "Magnus loading state" and "brand error messages" referenced as 9 approved Cloudflare Worker scenarios
+- Symptom: Neither Rod nor Claude can source these descriptions. Not in any .feature file, retro, or session transcript.
+- Suspected cause: CLAUDE.md updated mid-session with descriptions that were never formalised into scenario text. Knowledge evaporated between sessions.
+- Session: 2026-03-08
+- Time lost: ~10 min
+- Cost impact: Low
+- Tags: #knowledge-loss #phantom
+- Status: Closed — entries removed from CLAUDE.md, worker.feature confirmed complete (10/10 passing)
