@@ -52,7 +52,7 @@ Feature: Golf Adventure Data Integrity
       | markroe   | Mark Roe            |
       | henni     | Henni Zuel          |
       | butch     | Butch Harmon        |
-      | brian_cox | Professor Brian Cox |
+      | brian_cox | Prof Brian Cox      |
       | souness   | Graeme Souness      |
       | pietersen | Kevin Pietersen     |
 
