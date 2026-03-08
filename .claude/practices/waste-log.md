@@ -1025,3 +1025,23 @@ Status: CLOSED
 - **Cost impact:** Medium — session startup blocked, workarounds required each time
 - **Tags:** claude-code, windows, install, git, file-picker
 - **Status:** Open — track at https://github.com/anthropics/claude-code/issues for "Class not registered" / "CLAUDE_CODE_GIT_BASH_PATH". File own issue if not already raised.
+
+## WL-069
+- **Item:** Python script used to patch gherkin-runner.js and tournaments.js during BL-017
+- **Symptom:** python3 patch scripts used instead of direct edit instructions
+- **Suspected cause:** Claude Code defaulting to Python for multi-line file edits when Edit tool would have sufficed
+- **Session date:** 2026-03-08
+- **Time lost:** ~5 min
+- **Cost impact:** Low
+- **Tags:** python-patch, waste, CLAUDE.md-violation
+- **Status:** Open — add direct edit instruction pattern to Claude Code habits
+
+## WL-070
+- **Item:** Hardcoded tournament count in Gherkin step definition
+- **Symptom:** Step broke when tournaments were added — count was magic number 5, not derived from data source
+- **Suspected cause:** Test written against a count rather than asserting against actual TOURNAMENTS array
+- **Session date:** 2026-03-08
+- **Time lost:** ~10 min
+- **Cost impact:** Low — but will recur every time a tournament is added
+- **Tags:** test-design, magic-number, tdd-clean-candidate
+- **Status:** Open — refactor step to derive count from TOURNAMENTS.length not a hardcoded number
