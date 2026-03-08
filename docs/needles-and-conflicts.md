@@ -85,6 +85,13 @@ Named needles are specific recurring dynamics that have a name because they happ
 **Direction B — Partridge needles Mystic:** produces the lever arch file labelled "MYSTIC — PREDICTIONS VS OUTCOMES Q1-Q4." Opens it. Reads from it. "The cards suggested a period of transformation. What actually happened was a 12% decline in Q3 revenue and the departure of the Head of People Experience. I have documented both." Mystic: "The cards said transformation. That was transformation."
 **Mechanic:** Partridge cannot win because Mystic's predictions are unfalsifiable. Mystic cannot win because Partridge has the receipts. The needle is perpetual. Nobody scores a point.
 
+### The Altitude Problem (bidirectional, Long Room)
+**Participants:** Blofeld ↔ Tufnell
+**Trigger:** either delivers a bathos drop — an observation that lands somewhere it wasn't aimed
+**Mechanic:** Blofeld operates from altitude — floats above the damage, nothing touches him, a pigeon lands and he is delighted. Tufnell operates from ground level — he is in the damage, warmly chaotic, mouth faster than filter. When they accidentally agree on something it means the thing they've agreed on is inescapable: confirmed from above and from inside simultaneously. The room has nowhere to go. The bathos lands twice.
+**Effect:** fires more frequently when both are active. Neither intends it. Neither notices it. The combined drop is always larger than either drop alone. Other panellists cannot recover as quickly because the usual escape routes — altitude or warmth — have both been used at once.
+**Named because:** consistent dynamic noted independently in both character files. The only way to get bathos coverage from every altitude simultaneously is to have someone floating and someone grounded. When they land in the same place, it's over.
+
 ---
 
 ## Needle Design Rules
