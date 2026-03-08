@@ -329,6 +329,123 @@ deliberate Zen but was entirely sincere. These are the model for the ATTEMPT_PAR
 
 ---
 
+## TYPE: ATTEMPT_ERUDITION
+
+### What it is
+
+The character name-drops a concept from science, philosophy, economics, psychology,
+history, or culture to sound intelligent — but either:
+- applies it to completely the wrong situation
+- slightly mis-names it (Heisenberg's Cat, Schrödinger's Principle)
+- gets the concept backwards
+- uses it correctly but with such a wrong example it cancels out
+- genuinely doesn't know what it means and hopes for the best
+
+This is Brian Cox's territory — but everybody does it. Cox is more likely to despair
+watching others do it. Sebastian does it to dominate. Partridge does it because he
+heard someone say it once. Roy does it with concepts two levels too simple.
+
+### The Schrödinger's Bat meme
+
+The key template: "[Famous Concept]'s [Sporting Object]" — applied to anything in sport.
+
+The original: "It's a bit like Schrödinger's Bat, isn't it — until the umpire raises
+his finger, it could be either in or out."
+
+(This is almost correct. Schrödinger's Cat is about superposition until observation
+collapses the state. The umpire's decision IS the observation. So this almost works.
+Which is why it's funny — it's the best possible wrong use of it.)
+
+### Fields, disciplines, walks of life — the full expansion
+
+**Physics / Quantum mechanics:**
+- Schrödinger's [anything uncertain until observed]
+  - Schrödinger's Putt (in until it isn't)
+  - Schrödinger's Offside (flag not raised yet — simultaneously on and off)
+  - Schrödinger's Transfer (both signed and not signed until announced)
+  - Schrödinger's Retirement (Faldo)
+- Heisenberg's Uncertainty Principle (the more precisely you measure his pace, the less
+  you know about where he is on the pitch — character thinks this is wise)
+- Quantum entanglement ("those two midfielders are quantum entangled — what one does,
+  the other does instantly, regardless of distance")
+- "It's basically a wave-particle duality situation — sometimes he's a striker,
+  sometimes he's not, and it depends entirely on who's watching"
+
+**Philosophy:**
+- Occam's Razor ("the simplest explanation is always the best explanation — and the
+  simplest explanation here is that he's rubbish, which I think proves my point")
+- Plato's Cave ("we're all watching shadows on the wall — we never see the real game,
+  only the television version of it" — this one is actually quite good)
+- Descartes ("I think therefore I am — and what he's thinking right now is, I am in
+  trouble") — character is very pleased with this
+- Nietzsche's Superman ("he is basically the Übermensch of the penalty area")
+- Occam's Razor confused with Hanlon's Razor ("never attribute to malice what can be
+  adequately explained by stupidity — and that referee, well")
+
+**Psychology / Cognitive science:**
+- Dunning-Kruger ("he has the Dunning-Kruger of the Premier League — the less he knows,
+  the more confident he is. Though to be fair that's most of them.")
+- Pavlov's Dog ("it's a classic Pavlovian response — every time the bell goes, he stops
+  running") — character thinks Pavlov was a football coach
+- Cognitive dissonance ("I'm experiencing cognitive dissonance right now — I know he's
+  a good player but I can't see any evidence of it")
+- Maslow's Hierarchy ("he's operating at the top of Maslow's triangle — once you've
+  won the Champions League, where do you go?") — actually not bad
+
+**Economics / Mathematics:**
+- Supply and demand ("pure supply and demand — they demand goals, he supplies excuses")
+- Compound interest ("his confidence has been compounding negatively for three seasons")
+- The Laffer Curve ("there's a Laffer Curve to defending — you can actually defend too
+  hard and it starts going wrong") — character has heard of this at a conference
+- Exponential growth (used to mean "very fast" or "a lot")
+- The law of averages ("he's missed twelve penalties this season — the law of averages
+  says the next one has to go in") — the law of averages doesn't say this
+
+**History / Military:**
+- "Even Hannibal had his Watergate." (Yogi Berra — but characters can do this too)
+- "It's his Waterloo" (correct use — character then explains it wrong)
+- "It's a Pyrrhic victory — named after Pyrex the Greek general"
+- "Napoleon said the army marches on its stomach. This team is marching on its ego."
+- "Sun Tzu — Art of War. Chapter one: if you turn up, you've already half won."
+  (Sun Tzu did not say this)
+
+**Medicine / Biology:**
+- Darwinian selection ("only the strong survive — and I'm not sure he's the fittest,
+  evolutionarily speaking")
+- Placebo effect ("it was a psychological substitution — a placebo sub. He was never
+  going to come on but the threat of it changed the game")
+- "It's a parasitic relationship — he takes from the team and gives nothing back.
+  Like a tapeworm. Which is what my mate Dave calls him."
+
+**Literature / Culture:**
+- "It's Kafkaesque" (means: mildly bureaucratic or frustrating, usually)
+- "Very Dickensian" (character means: old-fashioned)
+- "Shakespearean tragedy" applied to a 2-1 defeat at Sunderland
+- "It's like Chekhov's gun — they had a striker on the bench all game and never
+  used him" — this is actually a correct use of Chekhov's gun. Character doesn't know.
+- "Hemingwayesque — minimalist, understated... not many goals"
+
+**Sport-specific scientific misapplications:**
+- "Newton's Third Law — for every action there is an equal and opposite reaction.
+  So for every bad tackle, there should be a good tackle to balance it out."
+- "The Magnus Effect — and that's why the ball swerved. I've been saying that
+  for years. Magnus. Brilliant man."
+- "Bernoulli's Principle — that's what keeps the ball in the air." (wrong application)
+- "Aerodynamics, basically. Drag. Lift. Thrust. The full four."
+
+### Delivery notes
+
+- Characters drop the name confidently and immediately move on — never pausing to
+  explain, because explaining would reveal they don't know what it means
+- Prof Cox: hears someone misuse a concept, corrects them — but then applies the
+  corrected concept wrong himself
+- Sebastian: says "Schrödinger's [x]" as a full stop — as if that settles the point
+- Partridge: gets the name wrong ("It's like Heisenberg's Dog, you know — the one
+  with the box") — combined miss
+- Mystic: applies quantum concepts to something genuinely mystical by accident
+
+---
+
 ## Mixed Reference — Other Brilliant Real Gaffes (sorted by type)
 
 ### Self-contradiction / logical impossibility
