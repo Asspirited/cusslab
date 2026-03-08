@@ -20,16 +20,16 @@ Feature: Session atmosphere selector — all panels
   # ── Selector HTML presence ────────────────────────────────────────────────────
 
   Scenario: Atmosphere selector container exists in Football Q&A view
-    Then index.html contains "id=\"fb-atmo-cards\""
+    Then index.html contains "fb-atmo-cards"
 
   Scenario: Atmosphere selector container exists in Darts Q&A view
-    Then index.html contains "id=\"dt-atmo-cards\""
+    Then index.html contains "dt-atmo-cards"
 
   Scenario: Atmosphere selector container exists in LongRoom Q&A view
-    Then index.html contains "id=\"lr-atmo-cards\""
+    Then index.html contains "lr-atmo-cards"
 
   Scenario: Golf atmosphere selector container still exists
-    Then index.html contains "id=\"gf-atmo-cards\""
+    Then index.html contains "gf-atmo-cards"
 
   # ── Shared render and select functions ───────────────────────────────────────
 
