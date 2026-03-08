@@ -48,6 +48,9 @@
 → 5 Whys before any fix. Root cause first. See .claude/practices/5-whys.md
 → Source: Poppendieck — build quality in, not inspect in after the fact
 
+### TRIGGER: any new persistent artefact (code, config, script, doc, test, report)
+→ Run: DEVOPS DESIGN CHECK before writing it
+
 ### RULE: claude.ai → Claude Code communication
 Never print large instruction blocks to chat for copy-paste.
 Always write to a file using the computer tool, present it to Rod,
@@ -129,7 +132,11 @@ DDD CLEAN fires after BDD CLOSE — harvest new concepts into domain model.
    - What job is Rod hiring this feature to do? Does the design serve that job directly?
    - Source: Christensen — Jobs to Be Done; Norman — Design of Everyday Things
 1. Confirm scope — what behaviour are we specifying?
-2. DDD RED — run before writing a single line of Gherkin:
+2. DEVOPS DESIGN CHECK — for every new artefact this feature will create:
+   Run the check (see below). Single responsibility, bounded interface, detectable failure,
+   reuse over reinvention, small and deployable, right location.
+   Do not start DDD RED until the artefact design is settled.
+4. DDD RED — run before writing a single line of Gherkin:
    - Fetch and read domain-model.md if not read this session
    - Check: does this feature introduce new domain concepts?
    - Check: does anything conflict with existing bounded contexts?
@@ -137,10 +144,10 @@ DDD CLEAN fires after BDD CLOSE — harvest new concepts into domain model.
    - Flag: any ambiguity or conflict to Rod before proceeding
    - Flag: any business/product AND technical conflicts — they are the same thing
    - Source: Evans — Domain-Driven Design, bounded contexts + ubiquitous language
-3. PRE-IMPLEMENTATION REVIEW — run checklist (see below)
-4. Draft Gherkin to specs/ — apply 6-point BDD quality gate (see CLAUDE.md)
-5. Present for approval — do not proceed until Rod says yes
-6. On approval → TDD SEQUENCE
+5. PRE-IMPLEMENTATION REVIEW — run checklist (see below)
+6. Draft Gherkin to specs/ — apply 6-point BDD quality gate (see CLAUDE.md)
+7. Present for approval — do not proceed until Rod says yes
+8. On approval → TDD SEQUENCE
 
 ### PRE-IMPLEMENTATION REVIEW CHECKLIST
 Run before any implementation. Report findings. Propose design. Await Rod approval.
@@ -282,6 +289,44 @@ Run after BDD CLOSE. Closes the DDD outer loop. Only when something real has eme
 3. git add → git commit (descriptive message) → git push
 4. Confirm origin/main updated — report hash
 5. Append waste log entry if anything went wrong this session
+
+### DEVOPS DESIGN CHECK — for every new persistent artefact
+Run before writing any new file, script, module, doc, or report that will live in the repo.
+The question: does this artefact behave like a well-designed service?
+
+**Single Responsibility**
+- Does it do exactly one thing? Name it in one sentence. If you need "and", it does too much.
+- Source: Martin — Clean Code; SOLID
+
+**Well-bounded interface**
+- What goes in? What comes out? What are the failure modes?
+- Can it be called, tested, and replaced independently of everything else?
+- Source: Evans — DDD bounded contexts; Martin — Interface Segregation
+
+**Detectable failure**
+- What does failure look like? Does the failure signal exit code 1? Write to stderr? Throw?
+- Can the pipeline detect it? If not — add a pipeline check now, not later.
+- Example: pipeline-report.sh exits 1 on RED; browser-sim.js throws on stale URL.
+- Source: DORA — change failure rate; Fowler — Continuous Delivery
+
+**Reuse over reinvention**
+- Does something equivalent already exist? If yes — extend it, don't duplicate.
+- New script doing what an existing script already does = waste (Poppendieck).
+- Check: .claude/scripts/, pipeline/, src/ before creating anything new.
+
+**Small and deployable independently**
+- Can this artefact be shipped without depending on unreleased work elsewhere?
+- If not — what is the seam that decouples it?
+- Source: DORA — deployment frequency; Humble/Farley — Continuous Delivery
+
+**Persistence decision**
+- Where does this live? docs/ (character files), specs/ (Gherkin), pipeline/ (checks),
+  .claude/scripts/ (ops), src/ (app logic). Wrong location = motion waste later.
+- If it has no natural home — does it need to exist at all?
+
+Apply this check to: scripts, practice files, character files, pipeline checks,
+reports, docs, config blocks, any new directory. Not just code.
+Source: DORA metrics; Martin (SOLID); Evans (DDD); Poppendieck (Lean)
 
 ### CHARACTER SEQUENCE — research → Gherkin → file
 1. Run CHARACTER RESEARCH PROTOCOL
