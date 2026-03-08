@@ -3557,6 +3557,8 @@
 <!-- ── src/ layer: data first, then logic (dependency order) ── -->
 <script src="src/data/intellectual-attempts-config.js"></script>
 <script src="src/logic/intellectual-attempts.js"></script>
+<script src="src/logic/premonition-engine.js"></script>
+<script src="src/logic/lie-engine.js"></script>
 <script src="src/data/quntum-leeks-scenarios.js"></script>
 <script src="src/logic/quntum-leeks-engine.js"></script>
 
@@ -9647,6 +9649,31 @@ const IntellectualAttempts = (() => {
 })();
 
 // ============================================================
+// Defensive guards: PremonitionEngine and LieEngine
+// If external scripts fail to load, all calls become no-ops.
+// ============================================================
+if (typeof PremonitionEngine === 'undefined') {
+  window.PremonitionEngine = {
+    blank: () => ({ commits: [], aftermath: {}, rcHolder: null }),
+    load:  () => ({ commits: [], aftermath: {}, rcHolder: null }),
+    save:  () => {},
+    maybeCommit: () => {},
+    assignRC:    () => {},
+    resolveCommits: () => {},
+    buildBlock:  () => '',
+    buildStatus: () => '',
+  };
+}
+if (typeof LieEngine === 'undefined') {
+  window.LieEngine = {
+    getState:  () => ({}),
+    saveState: () => {},
+    applyWound: () => {},
+    buildBlock: () => '',
+  };
+}
+
+// ============================================================
 // MODULE: Boardroom — Present to the Boardroom
 // ============================================================
 const Boardroom = (() => {
@@ -11002,6 +11029,35 @@ INTER-PANEL: Ron — the gold is the portal to everything Cox wants to say; trea
 
   const BASE_ORDER = ['souness', 'micah', 'neville', 'carragher', 'bigron', 'cox'];
 
+  // ── Premonition Engine — Football ────────────────────────────────────────────
+  const FB_PREM_CONFIG = {
+    calculable: ['PENALTY'],
+    multiStep:  [],
+    affinities: {
+      souness:   { premonition: 0.60, prediction: 0.50, running_commentary: 0.30, retrospective_call: 0.70, collective_call: 0.30 },
+      micah:     { premonition: 0.70, prediction: 0.30, running_commentary: 0.70, retrospective_call: 0.40, collective_call: 0.60 },
+      neville:   { premonition: 0.30, prediction: 0.70, running_commentary: 0.50, retrospective_call: 0.40, collective_call: 0.30, truth_teller: true },
+      carragher: { premonition: 0.50, prediction: 0.50, running_commentary: 0.60, retrospective_call: 0.50, collective_call: 0.40 },
+      bigron:    { premonition: 0.80, prediction: 0.20, running_commentary: 0.80, retrospective_call: 0.50, collective_call: 0.70 },
+      cox:       { premonition: 0.30, prediction: 0.60, running_commentary: 0.40, retrospective_call: 0.20, collective_call: 0.20, truth_teller: true },
+    },
+  };
+  const FB_PREM_HIT_MAP  = { GOAL: ['PENALTY', 'GOAL'], FULL_TIME: ['GOAL'] };
+  const FB_PREM_MISS_MAP = { HALF_TIME: ['GOAL'], FULL_TIME: ['PENALTY'] };
+
+  // ── Lie Engine — Football ────────────────────────────────────────────────────
+  const FB_LIE_PROFILES = {
+    souness:   { lie_baseline: 0.50, lie_ceiling: 'whopper',            lie_tell: "I'll be brutally honest" },
+    micah:     { lie_baseline: 0.30, lie_ceiling: 'credible_stretch',   lie_tell: "I know for a fact" },
+    neville:   { lie_baseline: 0.40, lie_ceiling: 'credible_stretch',   lie_tell: "I've watched this back" },
+    carragher: { lie_baseline: 0.60, lie_ceiling: 'whopper',            lie_tell: "I'm telling you now" },
+    bigron:    { lie_baseline: 0.70, lie_ceiling: 'utterly_ridiculous', lie_tell: "Clive, let me tell you" },
+    cox:       { lie_baseline: 0.20, lie_ceiling: 'plausible',          lie_tell: "Well, interestingly" },
+  };
+
+  // Premonition context — set by callMoment(), read by discuss()
+  let _fbPremCtx = null;
+
   async function discuss() {
     const ORDER = [...BASE_ORDER].sort(() => Math.random() - 0.5);
     const input = (document.getElementById('fb-input')?.value || '').trim();
@@ -11015,6 +11071,13 @@ INTER-PANEL: Ron — the gold is the portal to everything Cox wants to say; trea
     const TURN_RULES = `RULE 1 — TURN LENGTH:\nA turn can be one word, a fragment, one sentence, or two sentences. One word is a complete turn. Two sentences is the maximum — never more. Length is earned only by being directly challenged, provoked, or explicitly given the floor. The default is the shortest response that lands. A single word lands. Silence lands. Two sentences is already long.\n\nRULE 2 — REACTIVITY OBLIGATION:\nEvery response must open by reacting to the previous speaker's last sentence — not the topic generally. You are listening, not queuing.\n\nRULE 3 — CROSS-REFERENCE:\nYou may use anything said earlier in this conversation as ammunition. Wounds, indiscretions, failures, warmth — all fair game. You were there. You remember.\n\nRULE 4 — REACTIVE MOVES:\nYour reactive move is structural guidance — what you DO, not words you SAY. Seven moves available:\n(1) Agree and build — add something true that makes it worse\n(2) Agree but undermine — confirm surface, destroy substance\n(3) Contradict — name what was wrong and why\n(4) Flat refusal — one sentence, refusal is the content\n(5) Light-hearted pisstake — puncture with affection\n(6) Full-blooded insult — strongest language, lands on real wound\n(7) Mimic — three types, each distinct. Never name the type. Never signal you're doing it:\n\nType A — ECHO (affectionate): repeat their phrase in your own voice, meaning it approximately sincerely. Micah doing Ron: "the fella" used completely naturally. Ron may not notice. Micah definitely doesn't.\n\nType B — SUBSTITUTION (weaponized or comic): keep the verbal structure, replace the payload. "BRILLIANT." — Souness, one word, one syllable of contempt. "I've watched this back and—" — Carragher, then disagreeing with everything Neville watched back. "The United suffering—" — Neville doing Carragher's credential mechanic; Carragher: "You didn't suffer enough."\n\nType C — SUSTAINED IMPRESSION (satirical): briefly become them — full register, voice — until the impression loses thread mid-sentence and you re-emerge in your own voice without acknowledgement. Use once. Lands once.\n\nTARGET PATTERNS:\nRON: "the fella" / "Clive" / any Ronglish — affectionate echoes available to all. Too warm to weaponise.\nSOUNESS: "Soft." / "In my day—" — Micah gets one syllable in and loses it to laughter. Neville's version: analytical, almost works, Souness ignores it.\nMICAH: "BRILLIANT" — Souness: flat, contemptuous, somehow doesn't land as contempt. Carragher uses it genuinely once by accident; never acknowledged.\nNEVILLE: "I've watched this back—" — Carragher's standard move; what Carragher watched always contradicts Neville.\nCOX: the neutron star preamble — Ron nods along, slightly lost, somehow arrives at the right place; Souness does not attempt this.\n\nNever name the move. Never open with the label.`;
 
     const hypoPool = FoodWeather.createPool();
+    const fbLieState = LieEngine.getState('football');
+
+    // Premonition — seed commits for all panel members before any character speaks
+    if (_fbPremCtx) {
+      for (const id of ORDER) PremonitionEngine.maybeCommit(id, _fbPremCtx.momentType, _fbPremCtx.ledger, FB_PREM_CONFIG);
+    }
+
     const responses = [];
     for (let i = 0; i < ORDER.length; i++) {
       const member = MEMBERS.find(m => m.id === ORDER[i]);
@@ -11046,9 +11109,11 @@ INTER-PANEL: Ron — the gold is the portal to everything Cox wants to say; trea
       const fbMarmiteBlock = FoodWeather.marmiteBlock(member.id, fbFoodCtx);
       const fbAliases = [member.id, member.name.toLowerCase()];
       const fbHypoBlock = FoodWeather.hypoBlock(member.id, hypoPool, null, responses, fbAliases);
+      const fbPremBlock = _fbPremCtx ? PremonitionEngine.buildBlock(member.id, _fbPremCtx.ledger, FB_PREM_CONFIG) : '';
+      const fbLieBlock  = LieEngine.buildBlock(member.id, FB_LIE_PROFILES, fbLieState, false);
 
       const fbIaType = IntellectualAttempts.detect(input);
-      const fbBaseSystem = TURN_RULES + '\n\n' + fbFoodBlock + fbMarmiteBlock + fbHypoBlock + member.prompt + _iceBreakBlock(member.id) + mechanics + (i > 0
+      const fbBaseSystem = TURN_RULES + '\n\n' + fbFoodBlock + fbMarmiteBlock + fbHypoBlock + fbPremBlock + fbLieBlock + member.prompt + _iceBreakBlock(member.id) + mechanics + (i > 0
         ? `\n\nPrevious:\n${prev}`
         : '');
       const system = fbIaType
@@ -11068,6 +11133,7 @@ INTER-PANEL: Ron — the gold is the portal to everything Cox wants to say; trea
         _fill(pid, member, e.userMessage || 'Request failed.');
       }
     }
+    LieEngine.saveState('football', fbLieState);
     UI.setDisabled('fb-btn', false);
     HCSession.logPanelRun('football', ORDER, responses.length);
   }
@@ -11112,8 +11178,15 @@ INTER-PANEL: Ron — the gold is the portal to everything Cox wants to say; trea
     const prompt = situation ? `${label} — ${situation}` : label;
     const inp = document.getElementById('fb-input');
     if (inp) inp.value = prompt;
+    // Premonition — load ledger, set context for discuss() to pick up
+    const ledger = PremonitionEngine.load('fb-premonition');
+    _fbPremCtx = { momentType, ledger };
     UI.setDisabled('fb-moment-btn', true);
     await discuss();
+    // Resolve commits after discuss() loop completes
+    PremonitionEngine.resolveCommits(momentType, _fbPremCtx.ledger, FB_PREM_HIT_MAP, FB_PREM_MISS_MAP);
+    PremonitionEngine.save('fb-premonition', _fbPremCtx.ledger);
+    _fbPremCtx = null;
     UI.setDisabled('fb-moment-btn', false);
   }
 
@@ -11927,6 +12000,47 @@ NEVER SAYS: Anything bitter about the career ending. Anything suggesting comment
     }
   };
 
+  // ── Premonition Engine — Golf ────────────────────────────────────────────────
+  const GF_PREM_CONFIG = {
+    calculable: ['PUTT', 'CHIP'],
+    multiStep:  [],
+    affinities: {
+      faldo:     { premonition: 0.30, prediction: 0.70, running_commentary: 0.20, retrospective_call: 0.40, collective_call: 0.20 },
+      murray:    { premonition: 0.20, prediction: 0.50, running_commentary: 0.60, retrospective_call: 0.30, collective_call: 0.30, truth_teller: true },
+      radar:     { premonition: 0.80, prediction: 0.40, running_commentary: 0.70, retrospective_call: 0.60, collective_call: 0.50 },
+      mcginley:  { premonition: 0.30, prediction: 0.60, running_commentary: 0.40, retrospective_call: 0.50, collective_call: 0.30 },
+      dougherty: { premonition: 0.50, prediction: 0.50, running_commentary: 0.40, retrospective_call: 0.40, collective_call: 0.40 },
+      coltart:   { premonition: 0.25, prediction: 0.45, running_commentary: 0.30, retrospective_call: 0.20, collective_call: 0.15 },
+      roe:       { premonition: 0.20, prediction: 0.75, running_commentary: 0.35, retrospective_call: 0.15, collective_call: 0.15, truth_teller: true },
+      henni:     { premonition: 0.15, prediction: 0.55, running_commentary: 0.50, retrospective_call: 0.20, collective_call: 0.20 },
+      butch:     { premonition: 0.15, prediction: 0.65, running_commentary: 0.30, retrospective_call: 0.25, collective_call: 0.15 },
+    },
+  };
+  const GF_PREM_HIT_MAP  = {
+    BIRDIE:        ['TEE_SHOT', 'APPROACH', 'CHIP', 'PUTT'],
+    EAGLE:         ['TEE_SHOT', 'APPROACH', 'CHIP', 'PUTT', 'BIRDIE'],
+    HOLE_COMPLETE: ['TEE_SHOT', 'APPROACH', 'CHIP', 'PUTT'],
+  };
+  const GF_PREM_MISS_MAP = {
+    BOGEY:         ['TEE_SHOT', 'APPROACH', 'CHIP', 'PUTT'],
+  };
+
+  // ── Lie Engine — Golf ────────────────────────────────────────────────────────
+  const GF_LIE_PROFILES = {
+    faldo:     { lie_baseline: 0.25, lie_ceiling: 'credible_stretch',   lie_tell: "I've cycled back on this" },
+    murray:    { lie_baseline: 0.10, lie_ceiling: 'plausible',           lie_tell: "I'm fairly certain" },
+    radar:     { lie_baseline: 0.60, lie_ceiling: 'whopper',             lie_tell: "I'll be honest with you" },
+    mcginley:  { lie_baseline: 0.50, lie_ceiling: 'whopper',             lie_tell: "In my professional assessment" },
+    dougherty: { lie_baseline: 0.30, lie_ceiling: 'credible_stretch',   lie_tell: "I genuinely believe" },
+    coltart:   { lie_baseline: 0.20, lie_ceiling: 'credible_stretch',   lie_tell: "As I recall" },
+    roe:       { lie_baseline: 0.40, lie_ceiling: 'credible_stretch',   lie_tell: "No, no, I was clear about this" },
+    henni:     { lie_baseline: 0.20, lie_ceiling: 'plausible',           lie_tell: "I just want to clarify" },
+    butch:     { lie_baseline: 0.30, lie_ceiling: 'credible_stretch',   lie_tell: "The fact of the matter is" },
+  };
+
+  // Premonition context — set by callMoment(), read by discuss()
+  let _gfPremCtx = null;
+
   async function discuss() {
     const input = (document.getElementById('gf-input')?.value || '').trim();
     if (!input) { UI.toast('Give them something to discuss.', 'warn'); return; }
@@ -11996,8 +12110,15 @@ NEVER SAYS: Anything bitter about the career ending. Anything suggesting comment
     const GOLF_RESET_VALVE_PRIORITY = ['dougherty', 'murray', 'mcginley', 'henni'];
 
     const hypoPool = FoodWeather.createPool();
+    const gfLieState = LieEngine.getState('golf');
     const gfCharStates = {};
     for (const id of ORDER) gfCharStates[id] = CharacterState.create(5);
+
+    // Premonition — seed commits for all panel members before any character speaks
+    if (_gfPremCtx) {
+      for (const id of ORDER) PremonitionEngine.maybeCommit(id, _gfPremCtx.momentType, _gfPremCtx.ledger, GF_PREM_CONFIG);
+    }
+
     const responses = [];
     for (let i = 0; i < ORDER.length; i++) {
       const member = MEMBERS.find(m => m.id === ORDER[i]);
@@ -12058,9 +12179,12 @@ NEVER SAYS: Anything bitter about the career ending. Anything suggesting comment
       }
       const gfIntensityBlock = i > 0 ? `YOUR STATE:\n${CharacterState.buildBlock(gfCharStates[member.id])}\n\n` : '';
       const golfNameBlock = golfName ? `\nThe question was brought by ${golfName}. Address ${golfName} by name at least once in your response.\n` : '';
+      const gfWoundLive = gfRelState.characters[member.id]?.woundActivated || false;
+      const gfPremBlock = _gfPremCtx ? PremonitionEngine.buildBlock(member.id, _gfPremCtx.ledger, GF_PREM_CONFIG) : '';
+      const gfLieBlock  = LieEngine.buildBlock(member.id, GF_LIE_PROFILES, gfLieState, gfWoundLive);
 
       const gfIaType = IntellectualAttempts.detect(panelInput);
-      const gfBaseSystem = TURN_RULES + '\n\n' + gfIntensityBlock + gfYourState + tourCardBlock + roeIntroBlock + golfNameBlock + gfFoodBlock + gfMarmiteBlock + gfHypoBlock + member.prompt + _iceBreakBlock(member.id) + roundNote + mechanics + arcInstructions + (i > 0
+      const gfBaseSystem = TURN_RULES + '\n\n' + gfIntensityBlock + gfYourState + tourCardBlock + roeIntroBlock + golfNameBlock + gfFoodBlock + gfMarmiteBlock + gfHypoBlock + gfPremBlock + gfLieBlock + member.prompt + _iceBreakBlock(member.id) + roundNote + mechanics + arcInstructions + (i > 0
         ? `\n\nPrevious:\n${prev}`
         : '');
       const system = gfIaType
@@ -12095,6 +12219,7 @@ NEVER SAYS: Anything bitter about the career ending. Anything suggesting comment
         _fill(pid, member, e.userMessage || 'Request failed.');
       }
     }
+    LieEngine.saveState('golf', gfLieState);
     UI.setDisabled('gf-btn', false);
     HCSession.logPanelRun('golf', ORDER, responses.length);
   }
@@ -12140,8 +12265,15 @@ NEVER SAYS: Anything bitter about the career ending. Anything suggesting comment
     const prompt = situation ? `${label} — ${situation}` : label;
     const inp = document.getElementById('gf-input');
     if (inp) inp.value = prompt;
+    // Premonition — load ledger, set context for discuss() to pick up
+    const ledger = PremonitionEngine.load('gf-premonition');
+    _gfPremCtx = { momentType, ledger };
     UI.setDisabled('gf-moment-btn', true);
     await discuss();
+    // Resolve commits after discuss() loop completes
+    PremonitionEngine.resolveCommits(momentType, _gfPremCtx.ledger, GF_PREM_HIT_MAP, GF_PREM_MISS_MAP);
+    PremonitionEngine.save('gf-premonition', _gfPremCtx.ledger);
+    _gfPremCtx = null;
     UI.setDisabled('gf-moment-btn', false);
   }
 
@@ -12956,6 +13088,21 @@ PYKE-ISMS — phrases that recur in your speech. Use them naturally. Other panel
     pyke:    { premonition: 0.50, prediction: 0.50, running_commentary: 0.50, retrospective_call: 0.30, collective_call: 0.30 },
   };
 
+  // ── Lie Engine — Darts ──────────────────────────────────────────────────────
+  const DT_LIE_PROFILES = {
+    mardle:  { lie_baseline: 0.55, lie_ceiling: 'whopper',            lie_tell: "I'll tell you what" },
+    bristow: { lie_baseline: 0.60, lie_ceiling: 'whopper',            lie_tell: "In my day" },
+    taylor:  { lie_baseline: 0.20, lie_ceiling: 'plausible',          lie_tell: "I'm not one to boast, but" },
+    lowe:    { lie_baseline: 0.15, lie_ceiling: 'plausible',          lie_tell: "I believe" },
+    george:  { lie_baseline: 0.50, lie_ceiling: 'credible_stretch',   lie_tell: "I remember when" },
+    waddell: { lie_baseline: 0.65, lie_ceiling: 'utterly_ridiculous', lie_tell: "As Achilles once said" },
+    part:    { lie_baseline: 0.10, lie_ceiling: 'plausible',          lie_tell: "As a matter of fact" },
+    studd:   { lie_baseline: 0.20, lie_ceiling: 'credible_stretch',   lie_tell: "I'm fairly certain" },
+    pyke:    { lie_baseline: 0.40, lie_ceiling: 'credible_stretch',   lie_tell: "Well, the thing is" },
+    harrington: { lie_baseline: 0.35, lie_ceiling: 'credible_stretch', lie_tell: "Statistically speaking" },
+    wilson:  { lie_baseline: 0.70, lie_ceiling: 'whopper',            lie_tell: "The way I see it" },
+  };
+
   // Ledger: { commits: [{speakerId, mode, momentType, resolved}], aftermath: {id: state}, rcHolder: id|null }
   const _BLANK_LEDGER = () => ({ commits: [], aftermath: {}, rcHolder: null });
 
@@ -13142,6 +13289,7 @@ PYKE-ISMS — phrases that recur in your speech. Use them naturally. Other panel
 
     const dtRelState = RelationshipState.init(draw, DARTS_PRE_EXISTING, {});
     const hypoPool = FoodWeather.createPool();
+    const dtLieState = LieEngine.getState('darts');
     const dtCharStates = {};
     for (const id of draw) dtCharStates[id] = CharacterState.create(5);
 
@@ -13180,8 +13328,10 @@ PYKE-ISMS — phrases that recur in your speech. Use them naturally. Other panel
         const dtHypoBlock = FoodWeather.hypoBlock(member.id, hypoPool, dtRelState, responses, dtAliases);
         const dtYourState = RelationshipState.buildBlock(dtRelState, member.id, draw, DARTS_NAMEMAP, DARTS_VOICE_FMT);
 
+        const dtWoundLive = dtRelState.characters[member.id]?.woundActivated || false;
+        const dtLieBlock  = LieEngine.buildBlock(member.id, DT_LIE_PROFILES, dtLieState, dtWoundLive);
         const dtIaType = IntellectualAttempts.detect(input);
-        const dtBaseSystem = TURN_RULES + '\n\n' + dtIntensityBlock + dtYourState + dtFoodBlock + dtMarmiteBlock + dtHypoBlock + member.prompt + _iceBreakBlock(member.id) + crowdBlock + frankensteinBlock + (i > 0 ? `\n\nPrevious:\n${prev}` : '');
+        const dtBaseSystem = TURN_RULES + '\n\n' + dtIntensityBlock + dtYourState + dtFoodBlock + dtMarmiteBlock + dtHypoBlock + dtLieBlock + member.prompt + _iceBreakBlock(member.id) + crowdBlock + frankensteinBlock + (i > 0 ? `\n\nPrevious:\n${prev}` : '');
         const system = dtIaType
           ? IntellectualAttempts.inject('darts', member.id, dtBaseSystem, dtIaType)
           : dtBaseSystem;
@@ -13198,6 +13348,7 @@ PYKE-ISMS — phrases that recur in your speech. Use them naturally. Other panel
         _fill(pid, member, e.userMessage || 'Request failed.');
       }
     }
+    LieEngine.saveState('darts', dtLieState);
     UI.setDisabled('dt-btn', false);
     HCSession.logPanelRun('darts', draw, responses.length);
   }
@@ -13841,6 +13992,49 @@ WARNE PATTERN: "Back yourself." — Botham echoes naturally. Bumble: shouts it. 
 TUFNELL PATTERN: mid-sentence collapse — sentence starts coherently and ends somewhere unreachable. Boycott: waits for it to finish, then responds to the first clause only. Blofeld: mishears the final fragment as something about a pigeon. Bumble: "Magnificent, Tuffers." Warne: "I know exactly what you mean." (He doesn't. Nobody does. Including Tufnell.)
 Never name the move.`;
 
+  // ── Premonition Engine — LongRoom (Cricket) ──────────────────────────────────
+  const LR_PREM_CONFIG = {
+    calculable: ['DELIVERY', 'DRS_REVIEW'],
+    multiStep:  [],
+    affinities: {
+      boycott: { premonition: 0.25, prediction: 0.70, running_commentary: 0.30, retrospective_call: 0.30, collective_call: 0.20, truth_teller: true },
+      bumble:  { premonition: 0.60, prediction: 0.40, running_commentary: 0.70, retrospective_call: 0.50, collective_call: 0.60 },
+      holding: { premonition: 0.20, prediction: 0.60, running_commentary: 0.35, retrospective_call: 0.25, collective_call: 0.20 },
+      botham:  { premonition: 0.70, prediction: 0.50, running_commentary: 0.60, retrospective_call: 0.65, collective_call: 0.50 },
+      gower:   { premonition: 0.40, prediction: 0.50, running_commentary: 0.45, retrospective_call: 0.35, collective_call: 0.30 },
+      kp:      { premonition: 0.65, prediction: 0.45, running_commentary: 0.55, retrospective_call: 0.50, collective_call: 0.45 },
+      blofeld: { premonition: 0.50, prediction: 0.35, running_commentary: 0.70, retrospective_call: 0.55, collective_call: 0.40 },
+      warne:   { premonition: 0.75, prediction: 0.55, running_commentary: 0.65, retrospective_call: 0.60, collective_call: 0.55 },
+      tufnell: { premonition: 0.45, prediction: 0.30, running_commentary: 0.50, retrospective_call: 0.40, collective_call: 0.35 },
+    },
+  };
+  const LR_PREM_HIT_MAP  = {
+    WICKET:           ['DELIVERY', 'DRS_REVIEW', 'OVER_COMPLETE'],
+    BOUNDARY_SIX:     ['DELIVERY', 'OVER_COMPLETE'],
+    BOUNDARY_FOUR:    ['DELIVERY'],
+    HUNDRED:          ['FIFTY', 'DELIVERY', 'BOUNDARY_FOUR', 'BOUNDARY_SIX'],
+  };
+  const LR_PREM_MISS_MAP = {
+    OVER_COMPLETE:    ['DELIVERY'],
+    INNINGS_COMPLETE: ['FIFTY', 'DELIVERY'],
+  };
+
+  // ── Lie Engine — LongRoom (Cricket) ──────────────────────────────────────────
+  const LR_LIE_PROFILES = {
+    boycott: { lie_baseline: 0.30, lie_ceiling: 'whopper',            lie_tell: "I were always very clear about this" },
+    bumble:  { lie_baseline: 0.50, lie_ceiling: 'whopper',            lie_tell: "I'll tell you what" },
+    holding: { lie_baseline: 0.10, lie_ceiling: 'credible_stretch',   lie_tell: "I think you will find" },
+    botham:  { lie_baseline: 0.70, lie_ceiling: 'utterly_ridiculous', lie_tell: "As a matter of fact" },
+    gower:   { lie_baseline: 0.40, lie_ceiling: 'credible_stretch',   lie_tell: "In point of fact" },
+    kp:      { lie_baseline: 0.50, lie_ceiling: 'whopper',            lie_tell: "What actually happened was" },
+    blofeld: { lie_baseline: 0.60, lie_ceiling: 'utterly_ridiculous', lie_tell: "If I recall correctly" },
+    warne:   { lie_baseline: 0.60, lie_ceiling: 'whopper',            lie_tell: "I'm telling you" },
+    tufnell: { lie_baseline: 0.45, lie_ceiling: 'whopper',            lie_tell: "No, no, listen" },
+  };
+
+  // Premonition context — set by callMoment(), read by discuss()
+  let _lrPremCtx = null;
+
   async function discuss() {
     const input = (document.getElementById('lr-input')?.value || '').trim();
     if (!input) { UI.toast('Give them something to discuss.', 'warn'); return; }
@@ -13888,7 +14082,13 @@ Never name the move.`;
     const lrCharStates = {};
     for (const id of ORDER) lrCharStates[id] = CharacterState.create(5);
     const lrHypoPool = FoodWeather.createPool();
+    const lrLieState = LieEngine.getState('cricket');
     const lrIaType = IntellectualAttempts.detect(input);
+
+    // Premonition — seed commits for all panel members before any character speaks
+    if (_lrPremCtx) {
+      for (const id of ORDER) PremonitionEngine.maybeCommit(id, _lrPremCtx.momentType, _lrPremCtx.ledger, LR_PREM_CONFIG);
+    }
 
     // Session-scoped mechanic flags
     let mortBoycottFired = !!sessionStorage.getItem('lr-mortality-boycott');
@@ -13959,7 +14159,9 @@ Never name the move.`;
       const lrFoodBlock = FoodWeather.foodBlock(lrFoodCtx);
       const lrMarmiteBlock = FoodWeather.marmiteBlock(member.id, lrFoodCtx);
       const lrHypoBlock = FoodWeather.hypoBlock(member.id, lrHypoPool, lrRelState, responses, lrAliases);
-      const lrBaseSystem = TURN_RULES + '\n\n' + lrIntensityBlock + lrYourState + lrFoodBlock + lrMarmiteBlock + lrHypoBlock + mechanicBlock + member.prompt + _iceBreakBlock(member.id) + roundNote
+      const lrPremBlock = _lrPremCtx ? PremonitionEngine.buildBlock(member.id, _lrPremCtx.ledger, LR_PREM_CONFIG) : '';
+      const lrLieBlock  = LieEngine.buildBlock(member.id, LR_LIE_PROFILES, lrLieState, _woundLive);
+      const lrBaseSystem = TURN_RULES + '\n\n' + lrIntensityBlock + lrYourState + lrFoodBlock + lrMarmiteBlock + lrHypoBlock + lrPremBlock + lrLieBlock + mechanicBlock + member.prompt + _iceBreakBlock(member.id) + roundNote
         + (i > 0 ? `\n\nPrevious:\n${prev}` : '');
       const system = lrIaType
         ? IntellectualAttempts.inject('cricket', member.id, lrBaseSystem, lrIaType)
@@ -13980,6 +14182,7 @@ Never name the move.`;
         _fill(pid, member, e.userMessage || 'Request failed.');
       }
     }
+    LieEngine.saveState('cricket', lrLieState);
     UI.setDisabled('lr-btn', false);
     HCSession.logPanelRun('cricket', ORDER, responses.length);
   }
@@ -14025,8 +14228,15 @@ Never name the move.`;
     const prompt = situation ? `${label} — ${situation}` : label;
     const inp = document.getElementById('lr-input');
     if (inp) inp.value = prompt;
+    // Premonition — load ledger, set context for discuss() to pick up
+    const ledger = PremonitionEngine.load('lr-premonition');
+    _lrPremCtx = { momentType, ledger };
     UI.setDisabled('lr-moment-btn', true);
     await discuss();
+    // Resolve commits after discuss() loop completes
+    PremonitionEngine.resolveCommits(momentType, _lrPremCtx.ledger, LR_PREM_HIT_MAP, LR_PREM_MISS_MAP);
+    PremonitionEngine.save('lr-premonition', _lrPremCtx.ledger);
+    _lrPremCtx = null;
     UI.setDisabled('lr-moment-btn', false);
   }
 
