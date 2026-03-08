@@ -282,66 +282,13 @@ function isPremonitionTruthTeller(speakerId, affinities) {
   return !!((affinities || DARTS_PREMONITION_AFFINITIES)[speakerId] || {}).truth_teller;
 }
 
-// ── INTELLECTUAL_ATTEMPTS ─────────────────────────────────────────────────────
-
-const ATTEMPT_KEYWORDS = {
-  'irony':        'ATTEMPT_IRONY',
-  'ironic':       'ATTEMPT_IRONY',
-  'ironically':   'ATTEMPT_IRONY',
-  'literally':    'ATTEMPT_LITERALLY',
-  'tautology':    'ATTEMPT_TAUTOLOGY',
-  'oxymoron':     'ATTEMPT_OXYMORON',
-  'metaphor':     'ATTEMPT_METAPHOR',
-  'paradox':      'ATTEMPT_PARADOX',
-  'quantum':      'ATTEMPT_ERUDITION',
-  'schrödinger':  'ATTEMPT_ERUDITION',
-  'schrodinger':  'ATTEMPT_ERUDITION',
-  'heisenberg':   'ATTEMPT_ERUDITION',
-  'occam':        'ATTEMPT_ERUDITION',
-};
-
-function detectIntellectualAttempt(inputText) {
-  const lower = (inputText || '').toLowerCase();
-  for (const keyword of Object.keys(ATTEMPT_KEYWORDS)) {
-    if (lower.includes(keyword)) return ATTEMPT_KEYWORDS[keyword];
-  }
-  return null;
-}
-
-function buildAttemptInstruction(characterConfig, attemptType) {
-  const degree   = characterConfig.default_degree;
-  const delivery = characterConfig.default_delivery;
-  return `INTELLECTUAL_ATTEMPT: use ${attemptType} in your response. Degree: ${degree}. Delivery: ${delivery}. Apply the attempt naturally — woven into your response, not announced. See docs/sources/sporting-colemanballs.md for pattern seeds.`;
-}
-
-const INTELLECTUAL_ATTEMPTS_CONFIG = {
-  boardroom: {
-    sebastian: { types: ['ATTEMPT_IRONY', 'ATTEMPT_ERUDITION', 'ATTEMPT_PARADOX'],    default_degree: 'plausible_miss',      default_delivery: 'confident_wrongness'   },
-    roy:       { types: ['ATTEMPT_TAUTOLOGY'],                                          default_degree: 'catastrophic_miss',   default_delivery: 'completely_sincere'    },
-    partridge: { types: ['ATTEMPT_OXYMORON', 'ATTEMPT_LITERALLY', 'ATTEMPT_ERUDITION'], default_degree: 'catastrophic_miss',  default_delivery: 'ridiculous'            },
-    cox:       { types: ['ATTEMPT_ERUDITION', 'ATTEMPT_METAPHOR', 'ATTEMPT_PARADOX'],  default_degree: 'almost_correct',      default_delivery: 'accidental_profundity' },
-    mystic:    { types: ['ATTEMPT_IRONY', 'ATTEMPT_PARADOX', 'ATTEMPT_ERUDITION'],     default_degree: 'catastrophic_miss',   default_delivery: 'ridiculous'            },
-    harold:    { types: ['ATTEMPT_LITERALLY'],                                          default_degree: 'catastrophic_miss',   default_delivery: 'confident_wrongness'   },
-  },
-  comedyroom: {
-    hicks:     { types: ['ATTEMPT_IRONY', 'ATTEMPT_PARADOX'],                          default_degree: 'almost_correct',      default_delivery: 'confident_wrongness'   },
-    partridge: { types: ['ATTEMPT_OXYMORON', 'ATTEMPT_LITERALLY', 'ATTEMPT_ERUDITION'], default_degree: 'catastrophic_miss',  default_delivery: 'ridiculous'            },
-    carlin:    { types: ['ATTEMPT_IRONY', 'ATTEMPT_PARADOX'],                          default_degree: 'correct',             default_delivery: 'confident_wrongness'   },
-    gervais:   { types: ['ATTEMPT_IRONY', 'ATTEMPT_OXYMORON'],                         default_degree: 'plausible_miss',      default_delivery: 'plausible'             },
-    cox:       { types: ['ATTEMPT_ERUDITION', 'ATTEMPT_METAPHOR'],                     default_degree: 'almost_correct',      default_delivery: 'accidental_profundity' },
-    eccles:    { types: ['ATTEMPT_PARADOX', 'ATTEMPT_TAUTOLOGY'],                      default_degree: 'catastrophic_miss',   default_delivery: 'ridiculous'            },
-  },
-  golf: {
-    faldo:     { types: ['ATTEMPT_TAUTOLOGY', 'ATTEMPT_IRONY', 'ATTEMPT_ERUDITION'],   default_degree: 'plausible_miss',      default_delivery: 'lying'                 },
-    radar:     { types: ['ATTEMPT_LITERALLY', 'ATTEMPT_OXYMORON', 'ATTEMPT_ERUDITION'], default_degree: 'catastrophic_miss',  default_delivery: 'ridiculous'            },
-    dougherty: { types: ['ATTEMPT_PARADOX', 'ATTEMPT_ERUDITION'],                      default_degree: 'almost_correct',      default_delivery: 'accidental_profundity' },
-    mcginley:  { types: ['ATTEMPT_METAPHOR', 'ATTEMPT_IRONY'],                         default_degree: 'plausible_miss',      default_delivery: 'confident_wrongness'   },
-    coltart:   { types: ['ATTEMPT_TAUTOLOGY', 'ATTEMPT_LITERALLY'],                    default_degree: 'catastrophic_miss',   default_delivery: 'completely_sincere'    },
-    harmon:    { types: ['ATTEMPT_METAPHOR', 'ATTEMPT_ERUDITION'],                     default_degree: 'plausible_miss',      default_delivery: 'plausible'             },
-    nick:      { types: ['ATTEMPT_IRONY', 'ATTEMPT_TAUTOLOGY'],                        default_degree: 'plausible_miss',      default_delivery: 'confident_wrongness'   },
-    cox:       { types: ['ATTEMPT_ERUDITION', 'ATTEMPT_PARADOX'],                      default_degree: 'almost_correct',      default_delivery: 'accidental_profundity' },
-  },
-};
+// ── INTELLECTUAL_ATTEMPTS — shim: canonical source is src/logic/intellectual-attempts.js
+const {
+  ATTEMPT_KEYWORDS,
+  INTELLECTUAL_ATTEMPTS_CONFIG,
+  detectIntellectualAttempt,
+  buildAttemptInstruction,
+} = require('../src/logic/intellectual-attempts.js');
 
 module.exports = {
   maskKey, isValidKey, shouldUpdateInput,
