@@ -901,9 +901,10 @@ Status: CLOSED
 - Time lost: ~30-60 min across 5-6 sessions (recurring)
 - Cost impact: High (blocking live site fixes, repeated session time)
 - Delay: Worker secret updates blocked every time
-- Tags: #cloudflare #auth #recurring #high-cost #unresolved
-- Status: OPEN — RECURRING. Root cause never fixed. Next session: must resolve once and record the permanent fix here before doing anything else.
-- **PERMANENT FIX REQUIRED:** Use Cloudflare API token (not browser OAuth). Steps: dash.cloudflare.com (leanspirited@gmail.com) → My Profile → API Tokens → Create Token → "Edit Cloudflare Workers" template. Store token. Use: `CLOUDFLARE_API_TOKEN=<token> wrangler secret put ANTHROPIC_API_KEY`. Record token location here when done.
+- Tags: #cloudflare #auth #recurring #high-cost
+- Status: CLOSED — 2026-03-08. Root cause identified and fix documented.
+- **ROOT CAUSE:** wrangler has a stale cached account ID (`7721964c...`) that differs from the real account (`ce5ebfc99d1b37a7537a039d0b09d0b6`). Every auth attempt hits the wrong account → auth error → wrangler suggests login → browser loop. Nothing to do with Google account switching — it's a local cache mismatch.
+- **PERMANENT FIX:** `echo "sk-ant-..." | CLOUDFLARE_API_TOKEN=<token> CLOUDFLARE_ACCOUNT_ID=ce5ebfc99d1b37a7537a039d0b09d0b6 npx wrangler secret put ANTHROPIC_API_KEY` — must pass CLOUDFLARE_ACCOUNT_ID explicitly every time. Token must use "Edit Cloudflare Workers" template (not custom — needs secrets write permission). See MEMORY.md for full command.
 
 ## WL-061
 - Item: IntellectualAttempts extraction caused total live-site JS failure — all sports panel buttons broken
