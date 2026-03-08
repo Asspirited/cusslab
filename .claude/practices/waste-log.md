@@ -1086,7 +1086,7 @@ Status: CLOSED
 - **Time lost:** Unknown (unreported until now)
 - **Cost impact:** Low (cosmetic) but player trust in the die mechanic undermined
 - **Tags:** golf-adventure, die, css-grid, dot-positions, cosmetic
-- **Status:** Open — fix CSS this session
+- **Status:** Closed — fixed 2026-03-08 (2fdb440): proper 3×3 CSS grid, standard d6 layout
 
 ## WL-075
 - **Item:** Commentary silently disappears after hole 1 in Golf Adventure
@@ -1097,7 +1097,7 @@ Status: CLOSED
 - **Time lost:** Unknown (unreported; player would just assume nothing happened)
 - **Cost impact:** Medium — core game loop feedback broken from hole 2 onwards
 - **Tags:** golf-adventure, commentary, silent-failure, api-error, error-handling
-- **Status:** Open — add `data.error` guard this session
+- **Status:** Closed — fixed 2026-03-08 (2fdb440): `data.error` guard added before treating response as content
 
 ## WL-076
 - **Item:** Golf Adventure commentary bubbles unstyled — all identical, no gaps
@@ -1108,7 +1108,7 @@ Status: CLOSED
 - **Time lost:** Unknown
 - **Cost impact:** Medium — character distinctiveness lost; user can't tell who said what without reading names
 - **Tags:** golf-adventure, commentary, bubble-styling, character-colours, consistency
-- **Status:** Open — align with Mode 1 colour system this session
+- **Status:** Closed — fixed 2026-03-08 (2fdb440): per-character colours added to commentary bubbles (border + avatar)
 
 ## WL-077
 - **Item:** Fortune reroll offer shown but clicking Reroll does nothing
@@ -1120,7 +1120,7 @@ Status: CLOSED
 - **Cost impact:** High — fortune mechanic completely non-functional
 - **Tags:** golf-adventure, reroll, fortune, off-class, guard-order
 - **Additional:** When reroll is accepted, shot-wrap should be restored so user can change risk type before re-rolling; dice should not auto-roll — user clicks when ready
-- **Status:** Open — fix this session: restore shot-wrap and dice state in `acceptReroll()` without auto-rolling
+- **Status:** Closed — fixed 2026-03-08 (2fdb440): `acceptReroll()` restores shot-wrap + dice state, no auto-roll
 
 ## WL-078
 - **Item:** Dice perceived as biased toward low numbers
@@ -1133,7 +1133,7 @@ Status: CLOSED
 - **Time lost:** Low — investigation only
 - **Cost impact:** Medium — trust in core mechanic undermined even though mechanic is fair
 - **Tags:** golf-adventure, dice, rng, perception-bias, animation, composure-loop
-- **Status:** Open — fix animation anchoring (show only high faces during spin, or blur/CSS only); consider showing roll history; add composure explanation to UI
+- **Status:** Closed — fixed 2026-03-08 (2fdb440): animation cycles faces 1-6 deterministically (no anchoring); roll history added (toggleable, tracks session distribution)
 
 ## WL-079
 - **Item:** Death screen doesn't clearly explain why the player died or what choice caused it
@@ -1143,4 +1143,4 @@ Status: CLOSED
 - **Time lost:** 0 — reported by user
 - **Cost impact:** Medium — player confusion about game state; death feels arbitrary, not consequential
 - **Tags:** golf-adventure, death-screen, usability, Nielsen, causation, choice-label
-- **Status:** Open — thread choice label to triggerDeath(); add "YOU CHOSE:" block to death screen
+- **Status:** Closed — fixed 2026-03-08 (2fdb440): choice label threaded via `G.lastChoiceLabel`; "YOU CHOSE:" block added to death screen

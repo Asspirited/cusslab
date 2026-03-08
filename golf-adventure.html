@@ -1045,6 +1045,20 @@ body {
   animation: blink 1.2s infinite;
 }
 
+/* Consequence indicator */
+.consequence-indicator {
+  background: rgba(100,60,160,0.12);
+  border: 1px solid #8060c0;
+  border-radius: 2px;
+  padding: 6px 14px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: #b090e0;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+
 /* Fortune indicator */
 .fortune-indicator {
   background: rgba(212,130,10,0.10);
@@ -1294,6 +1308,17 @@ function golfFetch(body) {
   if (key) headers['x-api-key'] = key;
   return fetch(GOLF_WORKER, { method: 'POST', headers, body: JSON.stringify(body) });
 }
+
+// ═══════════════════════════════════════════
+// CONSEQUENCE TIERS — BL-020
+// Mirror of CONSEQUENCE_TIERS in pipeline/logic.js — keep in sync.
+// ═══════════════════════════════════════════
+const CONSEQUENCE_TIERS = {
+  LOW:  { penalty: { thresholdMod: 1, holes: 1 }, bonus: { thresholdMod: -1, holes: 1 } },
+  MED:  { penalty: { thresholdMod: 2, holes: 2 }, bonus: { fortune: true } },
+  HIGH: { penalty: { thresholdMod: 3, holes: 3 }, bonus: { composure: 2 } },
+  NUTS: { penalty: { thresholdMod: 4, holes: 4 }, bonus: { composure: 2, fortune: true } },
+};
 
 // ═══════════════════════════════════════════
 // GAME STATE
@@ -1863,7 +1888,7 @@ async function getCommentary(desc,quality,roll,shot) {
       div.className=`bubble${quality==='disaster'?' carnage':''}`;
       div.style.animationDelay=`${i*0.12}s`;
       if(ch?.colour) div.style.borderLeft=`3px solid ${ch.colour}`;
-      div.innerHTML=`<div class="bav" style="${ch?.colour?`background:${ch.colour};color:#000`:''}'">${init}</div><div class="bbody"><div class="bname" style="${ch?.colour?`color:${ch.colour}`:''}'">${l.speaker}</div><div class="btext">${l.text}</div></div>`;
+      div.innerHTML=`<div class="bav" style="${ch?.colour?`background:${ch.colour};color:#000`:''}">${init}</div><div class="bbody"><div class="bname" style="${ch?.colour?`color:${ch.colour}`:''}">${l.speaker}</div><div class="btext">${l.text}</div></div>`;
       feed.appendChild(div);
     });
   } catch(e) {
@@ -1897,7 +1922,10 @@ function advancePhase(quality) {
   // Temp modifier countdown
   if (G.tempThresholdHoles > 0) {
     G.tempThresholdHoles--;
-    if (G.tempThresholdHoles === 0) G.tempThresholdMod = 0;
+    if (G.tempThresholdHoles === 0) {
+      G.tempThresholdMod = 0;
+      document.querySelector('.consequence-indicator')?.remove();
+    }
   }
   if (G.tempSkillHoles > 0) {
     G.tempSkillHoles--;
@@ -2670,8 +2698,22 @@ function applyOutcome(outcome) {
     case 'death':
       if (G.panelState) G.panelState.atmosphere_escalation = Math.min(5, (G.panelState.atmosphere_escalation || 0) + 2);
       setTimeout(() => triggerDeath(outcome.death_type || 'cardiac'), 800); break;
-    case 'nothing':
-      msg(outcome.desc || 'Nothing happens.'); break;
+    case 'consequence': {
+      const cfg = CONSEQUENCE_TIERS[outcome.tier];
+      if (!cfg) { msg('Unknown consequence tier.'); break; }
+      if (outcome.direction === 'penalty') {
+        G.tempThresholdMod = cfg.penalty.thresholdMod;
+        G.tempThresholdHoles = cfg.penalty.holes;
+      } else if (outcome.direction === 'bonus') {
+        const b = cfg.bonus;
+        if (b.thresholdMod !== undefined) { G.tempThresholdMod = b.thresholdMod; G.tempThresholdHoles = b.holes; }
+        if (b.fortune) { G.fortuneActive = true; showFortuneIndicator(); }
+        if (b.composure) { G.composure = Math.min(10, G.composure + b.composure); updateComposure(); }
+      }
+      if (G.tempThresholdHoles > 0) showConsequenceIndicator(outcome.tier, outcome.direction, G.tempThresholdHoles);
+      msg(outcome.desc || `${outcome.tier} ${outcome.direction}`);
+      break;
+    }
     default:
       msg(outcome.desc || '...');
   }
@@ -2685,6 +2727,17 @@ function showFortuneIndicator() {
   const div = document.createElement('div');
   div.className = 'fortune-indicator';
   div.textContent = '★ FORTUNE ACTIVE — You may reroll your next dice';
+  bar.after(div);
+}
+
+function showConsequenceIndicator(tier, direction, shots) {
+  document.querySelector('.consequence-indicator')?.remove();
+  const bar = document.querySelector('.comp-bar');
+  if (!bar) return;
+  const div = document.createElement('div');
+  div.className = 'consequence-indicator';
+  const dirLabel = direction === 'penalty' ? 'PENALTY' : 'BONUS';
+  div.textContent = `${tier} ${dirLabel} — ${shots} shot${shots !== 1 ? 's' : ''} remaining`;
   bar.after(div);
 }
 

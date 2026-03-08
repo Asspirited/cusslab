@@ -150,6 +150,22 @@ const EVENTS = [
     ], danger: false
   },
   {
+    id: "marshals_belt", triggerChance: 0.08,
+    header: "MARSHAL'S BELT",
+    text: "The marshal's belt has come free. It is in your possession. You are not sure how this happened. The marshal has noticed.",
+    isItemEvent: true,
+    danger: false,
+    choices: [
+      { label: "Return it immediately", outcomes: [
+        { result: 'consequence', tier: 'LOW', direction: 'bonus',   chance: 0.6, desc: "Sporting gesture. Threshold −1 for 1 shot." },
+        { result: 'consequence', tier: 'LOW', direction: 'penalty', chance: 0.4, desc: "Took longer than it should. Threshold +1 for 1 shot." },
+      ]},
+      { label: "Tuck it into your bag", outcomes: [
+        { result: 'consequence', tier: 'LOW', direction: 'penalty', chance: 1.0, desc: "Inadvisable. Threshold +1 for 1 shot." },
+      ]},
+    ]
+  },
+  {
     id: "found_glove", triggerChance: 0.10,
     hasImage: true,
     header: "YOU FIND A GLOVE IN THE ROUGH",

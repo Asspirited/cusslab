@@ -355,6 +355,56 @@ function noConflictingTones(pre_existing) {
   return pairs.every(([a, b]) => pairToneIsSymmetrical(pre_existing, a, b));
 }
 
+// ── BL-020 — Tiered item event consequence system ────────────────────────────
+// Mirror of CONSEQUENCE_TIERS in golf-adventure.html — keep in sync.
+
+const CONSEQUENCE_TIERS = {
+  LOW:  { penalty: { thresholdMod: 1, holes: 1 }, bonus: { thresholdMod: -1, holes: 1 } },
+  MED:  { penalty: { thresholdMod: 2, holes: 2 }, bonus: { fortune: true } },
+  HIGH: { penalty: { thresholdMod: 3, holes: 3 }, bonus: { composure: 2 } },
+  NUTS: { penalty: { thresholdMod: 4, holes: 4 }, bonus: { composure: 2, fortune: true } },
+};
+
+// Pure function. Does not mutate. Returns new state.
+// outcome: { result: 'consequence', tier: 'LOW'|'MED'|'HIGH'|'NUTS', direction: 'penalty'|'bonus' }
+// state:   { tempThresholdMod, tempThresholdHoles, fortuneActive, composure }
+function applyConsequence(outcome, state) {
+  const config = CONSEQUENCE_TIERS[outcome.tier];
+  if (!config) throw new Error(`Unknown consequence tier: ${outcome.tier}`);
+  const next = { ...state };
+  if (outcome.direction === 'penalty') {
+    next.tempThresholdMod = config.penalty.thresholdMod;
+    next.tempThresholdHoles = config.penalty.holes;
+    return next;
+  }
+  if (outcome.direction === 'bonus') {
+    const b = config.bonus;
+    if (b.thresholdMod !== undefined) { next.tempThresholdMod = b.thresholdMod; next.tempThresholdHoles = b.holes; }
+    if (b.fortune) next.fortuneActive = true;
+    if (b.composure) next.composure = Math.min(10, state.composure + b.composure);
+    return next;
+  }
+  throw new Error(`Unknown consequence direction: ${outcome.direction}`);
+}
+
+// Mirror of marshals_belt in golf-data/events.js — keep in sync.
+const MARSHALS_BELT_EVENT = {
+  id: 'marshals_belt',
+  triggerChance: 0.08,
+  header: "MARSHAL'S BELT",
+  text: "The marshal's belt has come free. It is in your possession. You are not sure how this happened. The marshal has noticed.",
+  danger: false,
+  choices: [
+    { label: "Return it immediately", outcomes: [
+      { result: 'consequence', tier: 'LOW', direction: 'bonus',   chance: 0.6, desc: "Sporting gesture. Threshold −1 for 1 shot." },
+      { result: 'consequence', tier: 'LOW', direction: 'penalty', chance: 0.4, desc: "Took longer than it should. Threshold +1 for 1 shot." },
+    ]},
+    { label: "Tuck it into your bag", outcomes: [
+      { result: 'consequence', tier: 'LOW', direction: 'penalty', chance: 1.0, desc: "Inadvisable. Threshold +1 for 1 shot." },
+    ]},
+  ],
+};
+
 module.exports = {
   maskKey, isValidKey, shouldUpdateInput,
   Temperature,
@@ -367,4 +417,5 @@ module.exports = {
   SOUNESS_CAT_PRE_EXISTING, SOUNESS_CAT_IDS,
   getAllPairs, getPairTone, allPairsHaveToneAndNote,
   teslaHasNoWarmOrSolidary, pairToneIsSymmetrical, noConflictingTones,
+  CONSEQUENCE_TIERS, applyConsequence, MARSHALS_BELT_EVENT,
 };

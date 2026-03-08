@@ -3,7 +3,7 @@
 
 const fs   = require('fs');
 const path = require('path');
-const { Temperature, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetector, DartsVoiceFmt, dartsBuildBlock, DARTS_PREMONITION_AFFINITIES, COLLECTIVE_CALL_MINIMUM, premonitionEligible, blankPremonitionLedger, assignPremonitionRC, resolvePremonitionCommits, isPremonitionTruthTeller, detectIntellectualAttempt, buildAttemptInstruction, INTELLECTUAL_ATTEMPTS_CONFIG } = require('./logic.js');
+const { Temperature, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetector, DartsVoiceFmt, dartsBuildBlock, DARTS_PREMONITION_AFFINITIES, COLLECTIVE_CALL_MINIMUM, premonitionEligible, blankPremonitionLedger, assignPremonitionRC, resolvePremonitionCommits, isPremonitionTruthTeller, detectIntellectualAttempt, buildAttemptInstruction, INTELLECTUAL_ATTEMPTS_CONFIG, CONSEQUENCE_TIERS, applyConsequence, MARSHALS_BELT_EVENT } = require('./logic.js');
 const { QUNTUM_LEEKS_SCENARIOS, initState, pickRandomScenario, betLeekiness, spendLeekiness, processTurnEffects, buildModifiers } = require('../src/logic/quntum-leeks-engine.js');
 
 // ── Mock state (simulates browser localStorage + DOM) ────────────────────────
@@ -4861,6 +4861,72 @@ function makeSteps(ctx) {
     [/^the inline script does not contain "([^"]+)"$/, (text) => {
       if (ctx._gawHtml.includes(text))
         throw new Error(`golf-adventure.html still contains duplicate: "${text}"`);
+    }],
+
+    // ── Golf Adventure Consequences (specs/golf-adventure-consequences.feature) ─
+
+    [/^a Golf Adventure game is in progress$/, () => {
+      ctx._gac = {
+        state: { tempThresholdMod: 0, tempThresholdHoles: 0, fortuneActive: false, composure: 7 },
+      };
+    }],
+
+    [/^applyOutcome is called with a consequence outcome of tier (LOW|MED|HIGH|NUTS) direction (penalty|bonus)$/, (tier, direction) => {
+      ctx._gac.outcome = { result: 'consequence', tier, direction };
+      ctx._gac.state = applyConsequence(ctx._gac.outcome, ctx._gac.state);
+    }],
+
+    [/^G\.tempThresholdMod is (-?\d+)$/, (n) => {
+      if (ctx._gac.state.tempThresholdMod !== Number(n))
+        throw new Error(`Expected tempThresholdMod ${n}, got ${ctx._gac.state.tempThresholdMod}`);
+    }],
+
+    [/^G\.tempThresholdHoles is (\d+)$/, (n) => {
+      if (ctx._gac.state.tempThresholdHoles !== Number(n))
+        throw new Error(`Expected tempThresholdHoles ${n}, got ${ctx._gac.state.tempThresholdHoles}`);
+    }],
+
+    [/^G\.fortuneActive is true$/, () => {
+      if (ctx._gac.state.fortuneActive !== true)
+        throw new Error(`Expected fortuneActive true, got ${ctx._gac.state.fortuneActive}`);
+    }],
+
+    [/^G\.composure increases by (\d+)$/, (n) => {
+      const expected = Math.min(10, 7 + Number(n));
+      if (ctx._gac.state.composure !== expected)
+        throw new Error(`Expected composure ${expected}, got ${ctx._gac.state.composure}`);
+    }],
+
+    [/^a (LOW|MED|HIGH|NUTS) penalty consequence is active with (\d+) shot(?:s)? remaining$/, (tier, shots) => {
+      const cfg = CONSEQUENCE_TIERS[tier];
+      ctx._gac.state = { tempThresholdMod: cfg.penalty.thresholdMod, tempThresholdHoles: Number(shots), fortuneActive: false, composure: 7 };
+    }],
+
+    [/^a shot is resolved$/, () => {
+      if (ctx._gac.state.tempThresholdHoles > 0) {
+        ctx._gac.state.tempThresholdHoles--;
+        if (ctx._gac.state.tempThresholdHoles === 0) ctx._gac.state.tempThresholdMod = 0;
+      }
+    }],
+
+    [/^the marshal's belt item event fires$/, () => {
+      ctx._gac.event = MARSHALS_BELT_EVENT;
+    }],
+
+    [/^the player selects an outcome that resolves as consequence LOW penalty$/, () => {
+      const choice = ctx._gac.event.choices[0];
+      const outcome = choice.outcomes.find(o => o.tier === 'LOW' && o.direction === 'penalty');
+      if (!outcome) throw new Error('No LOW penalty outcome found in first choice');
+      ctx._gac.state = applyConsequence(outcome, ctx._gac.state);
+    }],
+
+    [/^the marshal's belt item event definition$/, () => {
+      ctx._gac.event = MARSHALS_BELT_EVENT;
+    }],
+
+    [/^no outcome has result 'nothing'$/, () => {
+      const bad = ctx._gac.event.choices.flatMap(c => c.outcomes).filter(o => o.result === 'nothing');
+      if (bad.length > 0) throw new Error(`Found ${bad.length} 'nothing' outcome(s) in marshal's belt event`);
     }],
 
     // ── INTELLECTUAL_ATTEMPTS step definitions ────────────────────────────────

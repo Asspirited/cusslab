@@ -1,7 +1,7 @@
 // Unit test runner — tests pure functions in pipeline/logic.js
 // Run: node pipeline/unit-runner.js
 
-const { maskKey, isValidKey, shouldUpdateInput, Temperature, makeWoundDetector, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetector, DartsVoiceFmt, dartsBuildBlock, DARTS_PREMONITION_AFFINITIES, COLLECTIVE_CALL_MINIMUM, premonitionEligible, blankPremonitionLedger, assignPremonitionRC, resolvePremonitionCommits, isPremonitionTruthTeller, detectIntellectualAttempt, buildAttemptInstruction, INTELLECTUAL_ATTEMPTS_CONFIG, SOUNESS_CAT_PRE_EXISTING, SOUNESS_CAT_IDS, getAllPairs, getPairTone, allPairsHaveToneAndNote, teslaHasNoWarmOrSolidary, pairToneIsSymmetrical, noConflictingTones } = require('./logic.js');
+const { maskKey, isValidKey, shouldUpdateInput, Temperature, makeWoundDetector, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetector, DartsVoiceFmt, dartsBuildBlock, DARTS_PREMONITION_AFFINITIES, COLLECTIVE_CALL_MINIMUM, premonitionEligible, blankPremonitionLedger, assignPremonitionRC, resolvePremonitionCommits, isPremonitionTruthTeller, detectIntellectualAttempt, buildAttemptInstruction, INTELLECTUAL_ATTEMPTS_CONFIG, SOUNESS_CAT_PRE_EXISTING, SOUNESS_CAT_IDS, getAllPairs, getPairTone, allPairsHaveToneAndNote, teslaHasNoWarmOrSolidary, pairToneIsSymmetrical, noConflictingTones, CONSEQUENCE_TIERS, applyConsequence, MARSHALS_BELT_EVENT } = require('./logic.js');
 
 let passed = 0;
 let failed = 0;
@@ -754,6 +754,135 @@ assert('SC PRE_EXISTING: getAllPairs returns 15 pairs for 6 members',
 
 assert('SC PRE_EXISTING: getPairTone is direction-agnostic',
   getPairTone(SOUNESS_CAT_PRE_EXISTING, 'turing', 'hawking'), 'attraction');
+
+// ── CONSEQUENCE_TIERS ─────────────────────────────────────────────────────────
+
+assert('CONSEQUENCE_TIERS: has exactly 4 tiers',
+  Object.keys(CONSEQUENCE_TIERS).length, 4);
+
+assert('CONSEQUENCE_TIERS: LOW penalty thresholdMod is 1',
+  CONSEQUENCE_TIERS.LOW.penalty.thresholdMod, 1);
+
+assert('CONSEQUENCE_TIERS: LOW penalty holes is 1',
+  CONSEQUENCE_TIERS.LOW.penalty.holes, 1);
+
+assert('CONSEQUENCE_TIERS: MED penalty thresholdMod is 2',
+  CONSEQUENCE_TIERS.MED.penalty.thresholdMod, 2);
+
+assert('CONSEQUENCE_TIERS: MED penalty holes is 2',
+  CONSEQUENCE_TIERS.MED.penalty.holes, 2);
+
+assert('CONSEQUENCE_TIERS: HIGH penalty thresholdMod is 3',
+  CONSEQUENCE_TIERS.HIGH.penalty.thresholdMod, 3);
+
+assert('CONSEQUENCE_TIERS: HIGH penalty holes is 3',
+  CONSEQUENCE_TIERS.HIGH.penalty.holes, 3);
+
+assert('CONSEQUENCE_TIERS: NUTS penalty thresholdMod is 4',
+  CONSEQUENCE_TIERS.NUTS.penalty.thresholdMod, 4);
+
+assert('CONSEQUENCE_TIERS: NUTS penalty holes is 4',
+  CONSEQUENCE_TIERS.NUTS.penalty.holes, 4);
+
+assert('CONSEQUENCE_TIERS: LOW bonus thresholdMod is -1',
+  CONSEQUENCE_TIERS.LOW.bonus.thresholdMod, -1);
+
+assert('CONSEQUENCE_TIERS: LOW bonus holes is 1',
+  CONSEQUENCE_TIERS.LOW.bonus.holes, 1);
+
+assert('CONSEQUENCE_TIERS: MED bonus has fortune true',
+  CONSEQUENCE_TIERS.MED.bonus.fortune, true);
+
+assert('CONSEQUENCE_TIERS: HIGH bonus composure is 2',
+  CONSEQUENCE_TIERS.HIGH.bonus.composure, 2);
+
+assert('CONSEQUENCE_TIERS: NUTS bonus composure is 2',
+  CONSEQUENCE_TIERS.NUTS.bonus.composure, 2);
+
+assert('CONSEQUENCE_TIERS: NUTS bonus has fortune true',
+  CONSEQUENCE_TIERS.NUTS.bonus.fortune, true);
+
+// ── applyConsequence ──────────────────────────────────────────────────────────
+
+const baseState = () => ({ tempThresholdMod: 0, tempThresholdHoles: 0, fortuneActive: false, composure: 7 });
+
+assert('applyConsequence: LOW penalty sets thresholdMod to 1',
+  applyConsequence({ result: 'consequence', tier: 'LOW', direction: 'penalty' }, baseState()).tempThresholdMod, 1);
+
+assert('applyConsequence: LOW penalty sets thresholdHoles to 1',
+  applyConsequence({ result: 'consequence', tier: 'LOW', direction: 'penalty' }, baseState()).tempThresholdHoles, 1);
+
+assert('applyConsequence: MED penalty sets thresholdMod to 2',
+  applyConsequence({ result: 'consequence', tier: 'MED', direction: 'penalty' }, baseState()).tempThresholdMod, 2);
+
+assert('applyConsequence: MED penalty sets thresholdHoles to 2',
+  applyConsequence({ result: 'consequence', tier: 'MED', direction: 'penalty' }, baseState()).tempThresholdHoles, 2);
+
+assert('applyConsequence: HIGH penalty sets thresholdMod to 3',
+  applyConsequence({ result: 'consequence', tier: 'HIGH', direction: 'penalty' }, baseState()).tempThresholdMod, 3);
+
+assert('applyConsequence: HIGH penalty sets thresholdHoles to 3',
+  applyConsequence({ result: 'consequence', tier: 'HIGH', direction: 'penalty' }, baseState()).tempThresholdHoles, 3);
+
+assert('applyConsequence: NUTS penalty sets thresholdMod to 4',
+  applyConsequence({ result: 'consequence', tier: 'NUTS', direction: 'penalty' }, baseState()).tempThresholdMod, 4);
+
+assert('applyConsequence: NUTS penalty sets thresholdHoles to 4',
+  applyConsequence({ result: 'consequence', tier: 'NUTS', direction: 'penalty' }, baseState()).tempThresholdHoles, 4);
+
+assert('applyConsequence: LOW bonus sets thresholdMod to -1',
+  applyConsequence({ result: 'consequence', tier: 'LOW', direction: 'bonus' }, baseState()).tempThresholdMod, -1);
+
+assert('applyConsequence: LOW bonus sets thresholdHoles to 1',
+  applyConsequence({ result: 'consequence', tier: 'LOW', direction: 'bonus' }, baseState()).tempThresholdHoles, 1);
+
+assert('applyConsequence: MED bonus activates fortune',
+  applyConsequence({ result: 'consequence', tier: 'MED', direction: 'bonus' }, baseState()).fortuneActive, true);
+
+assert('applyConsequence: HIGH bonus raises composure by 2',
+  applyConsequence({ result: 'consequence', tier: 'HIGH', direction: 'bonus' }, baseState()).composure, 9);
+
+assert('applyConsequence: HIGH bonus does not exceed composure 10',
+  applyConsequence({ result: 'consequence', tier: 'HIGH', direction: 'bonus' }, { ...baseState(), composure: 10 }).composure, 10);
+
+assert('applyConsequence: NUTS bonus raises composure by 2',
+  applyConsequence({ result: 'consequence', tier: 'NUTS', direction: 'bonus' }, baseState()).composure, 9);
+
+assert('applyConsequence: NUTS bonus activates fortune',
+  applyConsequence({ result: 'consequence', tier: 'NUTS', direction: 'bonus' }, baseState()).fortuneActive, true);
+
+assert('applyConsequence: does not mutate original state object',
+  (() => { const s = baseState(); applyConsequence({ result: 'consequence', tier: 'LOW', direction: 'penalty' }, s); return s.tempThresholdMod; })(), 0);
+
+let threwOnBadTier = false;
+try { applyConsequence({ result: 'consequence', tier: 'EXTREME', direction: 'penalty' }, baseState()); }
+catch (e) { threwOnBadTier = true; }
+assert('applyConsequence: throws on unknown tier', threwOnBadTier, true);
+
+let threwOnBadDir = false;
+try { applyConsequence({ result: 'consequence', tier: 'LOW', direction: 'sideways' }, baseState()); }
+catch (e) { threwOnBadDir = true; }
+assert('applyConsequence: throws on unknown direction', threwOnBadDir, true);
+
+// ── MARSHALS_BELT_EVENT ───────────────────────────────────────────────────────
+
+assert('MARSHALS_BELT_EVENT: id is marshals_belt',
+  MARSHALS_BELT_EVENT.id, 'marshals_belt');
+
+assert('MARSHALS_BELT_EVENT: has at least 1 choice',
+  MARSHALS_BELT_EVENT.choices.length >= 1, true);
+
+assert('MARSHALS_BELT_EVENT: no outcome has result nothing',
+  MARSHALS_BELT_EVENT.choices.every(c => c.outcomes.every(o => o.result !== 'nothing')), true);
+
+assert('MARSHALS_BELT_EVENT: all outcomes have result consequence',
+  MARSHALS_BELT_EVENT.choices.every(c => c.outcomes.every(o => o.result === 'consequence')), true);
+
+assert('MARSHALS_BELT_EVENT: all consequence outcomes have a valid tier',
+  MARSHALS_BELT_EVENT.choices.every(c => c.outcomes.every(o => ['LOW','MED','HIGH','NUTS'].includes(o.tier))), true);
+
+assert('MARSHALS_BELT_EVENT: all consequence outcomes have a valid direction',
+  MARSHALS_BELT_EVENT.choices.every(c => c.outcomes.every(o => ['penalty','bonus'].includes(o.direction))), true);
 
 // ── Results ──────────────────────────────────────────────────────────────────
 
