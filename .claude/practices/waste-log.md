@@ -765,3 +765,62 @@ Time lost: 1 exchange
 Fix: Always grep for file location before referencing it
 Tags: path, assumption, save-rod-money
 Status: CLOSED
+
+---
+
+### WL-050 — mode2 commentaryMode derived after deduction, not at submit time
+**Item:** Step def for `the user submits a score band` applied the band deduction BEFORE deriving commentaryMode. Scenarios for remaining=171, 61, 60, 2 all failed — 4 scenarios.
+**Symptom:** Pipeline RED: "Expected commentaryMode MOMENTUM but got FINISH_TERRITORY" etc. Four failures in commentaryMode outline. The step also triggered a secondary bug: default band=100 reduced small remaining values to 0, which then fired the LEG_WON override and masked the actual error.
+**Suspected cause:** Step def logic written without running through the boundary cases mentally. The scenario name says "derived from remaining score at submit time" — the pre-deduction semantics were in the name and were still missed.
+**Session:** 2026-03-08
+**Time lost:** ~20 min (diagnosis + two fix attempts — first fix removed band deduction, second removed the LEG_WON override)
+**Cost impact:** Low-Medium
+**Delay:** None — fixed same session
+**Tags:** `#false-progress` `#repeated-work`
+**Status:** closed
+
+**5 Whys:**
+1. Why did 4 scenarios fail? → commentaryMode computed from post-deduction remaining, not pre-deduction.
+2. Why was deduction applied first? → Step def was written to simulate the full action rather than the isolated assertion.
+3. Why wasn't this caught on first write? → No mental walkthrough of boundary values (171, 61, 60, 2) before committing the step def.
+4. Why no walkthrough? → Step defs written in bulk to pass pipeline quickly; review discipline not applied.
+5. Why no review discipline on step defs? → Step defs treated as scaffolding, not production logic. Same rigour not applied as to app code.
+
+**Root cause:** Step defs written for speed, not correctness. Boundary value analysis not applied before writing.
+**Corrective action:** For any Scenario Outline with numeric boundary examples, walk the step def logic against the min/max/boundary rows before committing.
+
+---
+
+### WL-051 — mode2 step def missing patterns: "selected match" alias and "band again"
+**Item:** Two missing step def patterns caused 3 scenarios to fail: `the user has selected match "..."` (without "the") and `the user submits a "180" band again`. Both written in the feature file; neither handled in gherkin-runner.js.
+**Symptom:** Pipeline: "No step definition for: the user has selected match..." and "No step definition for: the user submits a '180' band again". AI scoring and NINE_DARTER scenarios failed.
+**Suspected cause:** Step def for `selected the match` was written with "the" in the regex; feature file uses both forms. "band again" was a natural-language variant not anticipated when writing the hot trigger scenarios.
+**Session:** 2026-03-08
+**Time lost:** ~10 min
+**Cost impact:** Low
+**Delay:** None — fixed same session
+**Tags:** `#false-progress`
+**Status:** closed
+
+---
+
+### WL-052 — premonition bar still visible in mode 2 after dtSubmitScore fix
+**Item:** Previous session fixed `dtSubmitScore()` to stop leaking internal match state into `dt-premonition-status`. But `callMoment()` also updates the same element (legitimate premonition mechanic for Q&A mode) — and this code ran unconditionally in mode 2, showing premonition state after every submission.
+**Symptom:** User reported "premonition bars at the top of the in-game darts match" after the fix was already in production. Fix was incomplete — one code path closed, sibling path not checked.
+**Suspected cause:** Fix was surgical on `dtSubmitScore()` only. `callMoment()` was not audited for the same element access. The element is shared between Q&A and mode 2 but the guard was only added in one place.
+**Session:** 2026-03-08
+**Time lost:** ~15 min (user report → audit → fix)
+**Cost impact:** Low
+**Delay:** None — fixed same session. But bug shipped to production.
+**Tags:** `#regression` `#false-progress`
+**Status:** closed
+
+**5 Whys:**
+1. Why was the premonition bar still showing? → `callMoment()` sets `statusEl.style.display = 'block'` unconditionally after every round.
+2. Why was this path not fixed in the previous session? → Previous fix targeted the explicit leak in `dtSubmitScore()`. `callMoment()`'s own premonition update was legitimate behaviour (for Q&A mode) and was not reviewed.
+3. Why wasn't `callMoment()` reviewed? → Fix was scoped to "remove the leak" — the implicit assumption was that only `dtSubmitScore()` was the source.
+4. Why was the assumption not tested? → No end-to-end mode 2 test exercises the full `callMoment()` response cycle. The fix was structural, not tested.
+5. Why no end-to-end test? → Mode 2 callMoment tests are `@claude` skipped — step defs not written.
+
+**Root cause:** Incomplete fix scope. When fixing a symptom in one function, sibling functions accessing the same element were not audited.
+**Corrective action:** When fixing a DOM element visibility bug, grep for all reads/writes to that element ID before closing the fix.
