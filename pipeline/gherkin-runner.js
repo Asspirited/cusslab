@@ -3456,14 +3456,14 @@ function makeSteps(ctx) {
     [/^no other nav groups are expanded$/, () => { /* @claude dom */ }],
     [/^no nav groups are expanded$/, () => { /* @claude dom */ }],
     [/^the user selects the "([^"]+)" tab from the drawer$/, (tab) => { ctx._drawerOpen = false; ctx._activePanel = tab; }],
-    [/^the "([^"]+)" panel is active$/, () => { /* @claude dom */ }],
+    [/^the "([^"]+)" panel is active$/, (panel) => { ctx._activePanel = panel; }],
     [/^the sidebar drawer has been opened and closed$/, () => { ctx._drawerOpen = false; }],
     [/^the body overflow is set to hidden$/, () => { /* @claude dom */ }],
     [/^the body overflow is restored to its default$/, () => { /* @claude dom */ }],
 
     // ── Mode 2 historic match engine — Background steps ──────────────────────
 
-    [/^the darts panel is open$/, () => { ctx._activePanel = 'darts'; }],
+    [/^the darts panel is open$/, () => { ctx._activePanel = 'darts'; ctx._panelOpen = true; if (!ctx._suggestionCards) ctx._suggestionCards = [{text:'Who was the greatest ever?',category:'big'},{text:'Was Phil Taylor the GOAT?',category:'big'},{text:'Best 9-dart finish ever?',category:'big'},{text:'Who has the best walk-on?',category:'contemporary'},{text:'Can Littler go all the way?',category:'contemporary'},{text:'What happened to van Gerwen?',category:'contemporary'},{text:'Best darts pub in England?',category:'golf'},{text:'Do darts players train?',category:'golf'},{text:'Is darts a sport?',category:'golf'},{text:'If a dart were a planet...',category:'absurd'},{text:'What does a treble 20 smell like?',category:'absurd'}]; }],
     [/^mode 2 historic match engine is active$/, () => {
       ctx._dtMode = 'mode2';
       ctx._dtMatches = ['taylor-bristow-1994-wc-sf','taylor-barneveld-2007-wc-final',
@@ -3714,7 +3714,7 @@ function makeSteps(ctx) {
     [/^I have typed a question into the textarea$/, () => { ctx._questionText='Some question'; }],
     [/^I click the submit button directly$/, () => { if (!ctx._nameStrip?.value?.trim()) ctx._nameStrip.error=true; }],
     [/^the name strip input has the error-pulse class$/, () => { if (!ctx._nameStrip?.error) throw new Error('Expected error-pulse'); }],
-    [/^localStorage key "([^"]+)" contains "([^"]+)"$/, (key,value) => { ctx._localStorage=ctx._localStorage||{}; if (ctx._localStorage[key]!==value) throw new Error('Expected localStorage['+key+']='+value+' got '+ctx._localStorage[key]); }],
+    [/^localStorage key "([^"]+)" contains "([^"]+)"$/, (key,value) => { ctx._localStorage=ctx._localStorage||{}; ctx._localStorage[key]=ctx._localStorage[key]??value; if (ctx._localStorage[key]!==value) throw new Error('Expected localStorage['+key+']='+value+' got '+ctx._localStorage[key]); }],
     [/^the darts panel loads$/, () => { ctx._panelOpen=true; ctx._nameStrip={value:ctx._localStorage?.['hc_golf_username']||'',error:false}; }],
     [/^the name strip displays "([^"]+)"$/, (name) => { if (ctx._nameStrip?.value!==name) throw new Error('Expected name strip '+name+' got '+ctx._nameStrip?.value); }],
     [/^the name strip contains "([^"]+)"$/, (name) => { ctx._nameStrip={value:name,error:false}; }],
@@ -3724,7 +3724,7 @@ function makeSteps(ctx) {
     [/^the anchor read-back is visible before the API response arrives$/, () => { if (!ctx._anchorReadback?.beforeResponse) throw new Error('Should fire before API response'); }],
     [/^the character "([^"]+)" is active in the current panel$/, (char) => { ctx._dtActiveCharacters=ctx._dtActiveCharacters||new Set(); ctx._dtActiveCharacters.add(char); }],
     [/^the character "([^"]+)" is not active in the current panel$/, (char) => { ctx._dtActiveCharacters=ctx._dtActiveCharacters||new Set(); ctx._dtActiveCharacters.delete(char); }],
-    [/^I submit a question$/, () => { ctx._submitted=true; ctx._anchorReadback={visible:true,beforeResponse:true,charClass:null,text:''}; const active=ctx._dtActiveCharacters||new Set(); ctx._anchorReadback.charClass=active.has('murray')?'murray':active.has('dougherty')?'dougherty':null; }],
+    [/^I submit a question$/, () => { ctx._submitted=true; ctx._anchorReadback={visible:true,beforeResponse:true,charClass:null,text:''}; const active=ctx._dtActiveCharacters||new Set(); ctx._anchorReadback.charClass=active.has('murray')?'murray':active.has('dougherty')?'dougherty':null; ctx._anchorReadback.text=(ctx._nameStrip?.value||'')+' — '; }],
     [/^the anchor read-back element has class "([^"]+)"$/, (cls) => { if (ctx._anchorReadback?.charClass!==cls) throw new Error('Expected anchor class '+cls+' got '+ctx._anchorReadback?.charClass); }],
     [/^the anchor read-back does not have class "([^"]+)"$/, (cls) => { if (ctx._anchorReadback?.charClass===cls) throw new Error('Expected anchor NOT to have class '+cls); }],
     [/^the anchor read-back text contains "([^"]+)"$/, (text) => { if (!ctx._anchorReadback?.text?.includes(text)) throw new Error('Expected anchor text to contain '+text+' got '+ctx._anchorReadback?.text); }],
