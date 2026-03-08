@@ -4,7 +4,7 @@
 // Exposes global: API
 
 const API = (() => {
-  const ENDPOINT           = 'https://cusslab-api.cusslab.workers.dev';
+  const ENDPOINT           = 'https://cusslab-api.leanspirited.workers.dev';
   const DEFAULT_MODEL      = 'claude-sonnet-4-6';
   const DEFAULT_MAX_TOKENS = 1000;
   const KEY_STORAGE        = 'hecklers_api_key';
