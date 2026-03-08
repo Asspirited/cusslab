@@ -50,6 +50,7 @@ These files govern HOW to do the work at each step of the cycle.
 - .claude/practices/retrospectives.md — triggers, format, lenses, anti-patterns
 - .claude/practices/domain-model.md — our domain model, bounded contexts, ubiquitous language
 - .claude/practices/ux-decisions.md — design decisions log, personas, UX review checklist
+- .claude/practices/architecture-review.md — extraction order, seam inventory, testing pyramid, SOLID/Feathers/Beck/Newman applied
 
 ---
 
