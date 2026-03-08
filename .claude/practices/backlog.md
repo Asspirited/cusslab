@@ -22,7 +22,7 @@ Items are sorted by CD3 within each section. Rescore when scope changes.
 ### BL-015 — golf-adventure.html: replace raw api.anthropic.com fetch with worker
 - getDaySummary() and other functions call fetch("https://api.anthropic.com/v1/messages") directly
 - CORS failure in browser — Anthropic blocks cross-origin browser requests
-- Fix: route through `https://cusslab-api.cusslab.workers.dev` (same as index.html)
+- Fix: route through `https://cusslab-api.leanspirited.workers.dev` (same as index.html)
 - 7 raw fetch calls flagged by golf-adventure-sim pipeline check
 - CD3: UBV=9 TC=8 RR=7 → CoD=24, Dur=3, **CD3=8.0**
 - Status: CLOSED — 2026-03-08. golfFetch() helper added; 9/9 pipeline checks passing

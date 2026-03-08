@@ -77,6 +77,19 @@ const fetchOutsideApi = allJs
 check('No raw fetch() calls outside API module', fetchOutsideApi.length === 0,
   fetchOutsideApi.length ? `${fetchOutsideApi.length} raw fetch call(s) found` : '');
 
+// 7. No stale Worker URL — cusslab.workers.dev is dead, must be leanspirited.workers.dev
+const STALE_WORKER_URL = 'cusslab-api.cusslab.workers.dev';
+const allSrcFiles = (() => {
+  const files = ['src/integration/api-client.js', 'golf-adventure.html', 'index.html'];
+  return files.map(f => {
+    try { return require('fs').readFileSync(require('path').join(__dirname, '..', f), 'utf8'); }
+    catch(e) { return ''; }
+  }).join('\n');
+})();
+check('No stale Worker URL (cusslab.workers.dev) in source files',
+  !allSrcFiles.includes(STALE_WORKER_URL),
+  allSrcFiles.includes(STALE_WORKER_URL) ? 'Found stale cusslab.workers.dev URL — update to leanspirited.workers.dev' : '');
+
 // ── Summary ───────────────────────────────────────────────────────────────────
 
 const total = passed + failed;
