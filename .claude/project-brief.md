@@ -459,3 +459,28 @@ Move to serverless when any of:
 
 ### Build order
 Phil's-opoly first. Tufnell character file before any implementation. Apply character research protocol — real incidents, real gaffes, real weed references — before filling 17 attributes.
+
+---
+
+## The Learning Loop — TDD-BDD-DDD-HDD
+
+This project operates four nested feedback loops at different wavelengths.
+Each loop catches a different class of problem.
+
+| Loop | Discipline | Core question | Wavelength |
+|---|---|---|---|
+| TDD | Test-Driven Development | Does the code do what I think it does? | Seconds |
+| BDD | Behaviour-Driven Development | Does the behaviour match what we agreed? | Minutes/session |
+| DDD | Domain-Driven Design | Does the model reflect the domain truthfully? | Session/ongoing |
+| HDD | Hypothesis-Driven Development | Are we building the right thing at all? | Retro/across sessions |
+
+HDD is grounded in Eric Ries's Build-Measure-Learn cycle:
+- **Build** — minimum implementation to test the hypothesis
+- **Measure** — Ivan metric, EXP-001, panel behaviour, DORA
+- **Learn** — retro findings, backlog reprioritisation, envelope evolution
+
+The loops nest. TDD is meaningless if BDD is wrong. BDD is meaningless if DDD
+is wrong. All three are meaningless if HDD says we're solving the wrong problem.
+
+The session protocol files are the mechanical expression of the third and fourth
+loops — making process improvement subject to the same discipline as code.
