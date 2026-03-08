@@ -979,3 +979,39 @@ Status: CLOSED
 - **Delay:** Atmosphere schema replication blocked briefly
 - **Tags:** bash, redirect, grep, shell
 - **Status:** CLOSED — workaround was Claude Code honest read instead
+
+## WL-065
+- Item: Worker canary flagged as WARN (non-blocking) when it is session-blocking
+- Symptom: Pipeline reported canary WARN, Claude said "not session-blocking" — session proceeded without fixing the Worker. Core product promise broken, users on shared key got nothing.
+- Suspected cause: `warnOnly: true` in run-all.js and `process.exit(0)` in worker-canary.js. Canary was designed as a warning from day one. Wrong design decision never challenged.
+- Root cause: Process failure — no standard that "canary WARN = stop everything". Claude reinforced the wrong behaviour by deprioritising it.
+- Session: 2026-03-08
+- Time lost: ~20 min + unknown time users spent with broken shared key
+- Cost impact: High (product non-functional for users without own key)
+- Tags: #canary #process-failure #pipeline #session-blocking
+- Fix: worker-canary.js now exits 1 on 401/403/500. run-all.js warnOnly removed. Pipeline blocks until canary is green.
+- Status: Closed — 2026-03-08
+
+## WL-066
+- Item: Wrong Worker URL in MEMORY.md and pipeline — recurring, previously seen and not fixed
+- Symptom: worker-canary.js and MEMORY.md pointed to `cusslab-api.cusslab.workers.dev`. Actual deployed URL is `cusslab-api.leanspirited.workers.dev`. Canary always hit the wrong endpoint.
+- Suspected cause: URL was set at initial deploy and never verified against wrangler deploy output. When URL was corrected previously it was not persisted to MEMORY.md or pipeline. Same error repeated multiple sessions.
+- Root cause: Fix was applied in session context but not committed to persistent memory. Recurrence = knowledge-loss failure.
+- Session: 2026-03-08
+- Time lost: ~15 min this session + unknown prior sessions
+- Cost impact: Medium (canary meaningless when hitting wrong URL)
+- Tags: #worker-url #knowledge-loss #recurring #canary #memory
+- Fix: ENDPOINT corrected in worker-canary.js. MEMORY.md updated with correct URL and note that cusslab.workers.dev is wrong.
+- Status: Closed — 2026-03-08
+
+## WL-067
+- Item: Stale Anthropic key passed as "fresh" — required second key generation
+- Symptom: User said "yep" to "do you have a fresh key?". Key pushed to Worker returned 401. Direct API test with same key also 401. User had to generate a second key.
+- Suspected cause: User still had the stale key in clipboard/memory and pasted it believing it was new. Claude did not warn that the key about to be pushed was likely the same stale one already on the Worker.
+- Root cause: Claude should have asked "is this a newly generated key or the one already on the Worker?" before pushing. Did not ask. Wasted a token rotation and a Cloudflare API token.
+- Session: 2026-03-08
+- Time lost: ~10 min
+- Cost impact: Low (one extra key generation)
+- Tags: #anthropic-key #canary #process #communication
+- Fix: None in code. Process rule: always ask "is this a key you just generated now?" before pushing to Worker.
+- Status: Closed — 2026-03-08

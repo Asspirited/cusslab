@@ -1,13 +1,13 @@
 // Worker Canary — pings cusslab-api worker at session start
 // Warns if ANTHROPIC_API_KEY secret is stale or missing.
-// Always exits 0 — this is a warning, not a pipeline failure.
+// Exits 1 on auth failure — this is session-blocking, not a warning.
 // Run: node pipeline/worker-canary.js
 
 'use strict';
 
 const https = require('https');
 
-const ENDPOINT    = 'cusslab-api.cusslab.workers.dev';
+const ENDPOINT    = 'cusslab-api.leanspirited.workers.dev';
 const TIMEOUT_MS  = 8000;
 
 function ping() {
@@ -42,13 +42,19 @@ function ping() {
     // 529 = Anthropic overloaded — worker auth is fine
     console.log(`  ✓ Worker canary: OK (HTTP ${status})`);
   } else if (status === 401 || status === 403) {
-    console.log(`  ⚠ Worker canary: WARN — HTTP ${status} — ANTHROPIC_API_KEY secret is stale or revoked`);
-    console.log(`    Fix: dash.cloudflare.com → My Profile → API Tokens → Edit Cloudflare Workers`);
-    console.log(`         CLOUDFLARE_API_TOKEN=<token> wrangler secret put ANTHROPIC_API_KEY`);
-    console.log(`    Note: if you have your own key in Settings, the live site still works.`);
+    console.log(`  ✘ Worker canary: RED — HTTP ${status} — ANTHROPIC_API_KEY secret is stale or revoked`);
+    console.log(`    Fix: dash.cloudflare.com → My Profile → API Tokens → Edit Cloudflare Workers template`);
+    console.log(`         echo "sk-ant-..." | CLOUDFLARE_API_TOKEN=<token> CLOUDFLARE_ACCOUNT_ID=ce5ebfc99d1b37a7537a039d0b09d0b6 npx wrangler secret put ANTHROPIC_API_KEY`);
+    console.log(`         Then: npx wrangler deploy (with same env vars)`);
+    console.log(`    SESSION BLOCKED — fix before any other work.`);
+    console.log(`\nWorker Canary: FAIL\n`);
+    process.exit(1);
   } else if (status === 500) {
-    console.log(`  ⚠ Worker canary: WARN — HTTP 500 — worker has no ANTHROPIC_API_KEY secret configured`);
-    console.log(`    Fix: CLOUDFLARE_API_TOKEN=<token> wrangler secret put ANTHROPIC_API_KEY`);
+    console.log(`  ✘ Worker canary: RED — HTTP 500 — worker has no ANTHROPIC_API_KEY secret configured`);
+    console.log(`    Fix: echo "sk-ant-..." | CLOUDFLARE_API_TOKEN=<token> CLOUDFLARE_ACCOUNT_ID=ce5ebfc99d1b37a7537a039d0b09d0b6 npx wrangler secret put ANTHROPIC_API_KEY`);
+    console.log(`    SESSION BLOCKED — fix before any other work.`);
+    console.log(`\nWorker Canary: FAIL\n`);
+    process.exit(1);
   } else if (status === 'timeout') {
     console.log(`  ⚠ Worker canary: WARN — request timed out (>${TIMEOUT_MS}ms) — worker may be down`);
   } else if (status === 'network') {
@@ -58,5 +64,5 @@ function ping() {
   }
 
   console.log(`\nWorker Canary: checked\n`);
-  process.exit(0); // always — warning only, never block pipeline
+  process.exit(0);
 })();
