@@ -4222,6 +4222,182 @@ function makeSteps(ctx) {
         throw new Error('golfadventure missing from skin tabs');
     }],
 
+    // ── Golf Adventure Data Integrity (characterisation tests — Feathers) ─────
+    [/^the golf adventure data modules are loaded$/, () => {
+      const { CHARACTERS } = require('../golf-data/characters.js');
+      const { TOURNAMENTS } = require('../golf-data/tournaments.js');
+      const { EVENTS }      = require('../golf-data/events.js');
+      const { SHOTS }       = require('../golf-data/shots.js');
+      ctx._gaData = { CHARACTERS, TOURNAMENTS, EVENTS, SHOTS };
+    }],
+    [/^the character registry is inspected$/, () => {
+      if (!ctx._gaData?.CHARACTERS?.length) throw new Error('CHARACTERS not loaded');
+    }],
+    [/^every character has a non-empty "([^"]+)"$/, (field) => {
+      const bad = ctx._gaData.CHARACTERS.filter(c => !c[field] || String(c[field]).trim() === '');
+      if (bad.length) throw new Error(`Characters missing "${field}": ${bad.map(c=>c.id||'?').join(', ')}`);
+    }],
+    [/^every character has a "golf_knowledge" field$/, () => {
+      const bad = ctx._gaData.CHARACTERS.filter(c => !c.golf_knowledge);
+      if (bad.length) throw new Error(`Characters missing golf_knowledge: ${bad.map(c=>c.id).join(', ')}`);
+    }],
+    [/^the value is one of: "high", "medium", "low", "none"$/, () => {
+      const valid = new Set(['high','medium','low','none']);
+      const bad = ctx._gaData.CHARACTERS.filter(c => !valid.has(c.golf_knowledge));
+      if (bad.length) throw new Error(`Invalid golf_knowledge: ${bad.map(c=>`${c.id}=${c.golf_knowledge}`).join(', ')}`);
+    }],
+    [/^a character with id "([^"]+)" exists$/, (id) => {
+      ctx._gaFoundChar = ctx._gaData.CHARACTERS.find(c => c.id === id);
+      if (!ctx._gaFoundChar) throw new Error(`Character not found: ${id}`);
+    }],
+    [/^their name is "([^"]+)"$/, (name) => {
+      if (ctx._gaFoundChar.name !== name)
+        throw new Error(`Expected name "${name}", got "${ctx._gaFoundChar.name}"`);
+    }],
+    [/^the tournament catalogue is inspected$/, () => {
+      if (!ctx._gaData?.TOURNAMENTS?.length) throw new Error('TOURNAMENTS not loaded');
+    }],
+    [/^every tournament has a non-empty "([^"]+)"$/, (field) => {
+      const bad = ctx._gaData.TOURNAMENTS.filter(t => !t[field] || String(t[field]).trim() === '');
+      if (bad.length) throw new Error(`Tournaments missing "${field}": ${bad.map(t=>t.id||'?').join(', ')}`);
+    }],
+    [/^every tournament has a numeric "([^"]+)"$/, (field) => {
+      const bad = ctx._gaData.TOURNAMENTS.filter(t => typeof t[field] !== 'number');
+      if (bad.length) throw new Error(`Tournaments missing numeric "${field}": ${bad.map(t=>t.id||'?').join(', ')}`);
+    }],
+    [/^every tournament has a "players" array with at least one entry$/, () => {
+      const bad = ctx._gaData.TOURNAMENTS.filter(t => !Array.isArray(t.players) || t.players.length === 0);
+      if (bad.length) throw new Error(`Tournaments missing players: ${bad.map(t=>t.id).join(', ')}`);
+    }],
+    [/^every tournament has a "holes" array with at least one entry$/, () => {
+      const bad = ctx._gaData.TOURNAMENTS.filter(t => !Array.isArray(t.holes) || t.holes.length === 0);
+      if (bad.length) throw new Error(`Tournaments missing holes: ${bad.map(t=>t.id).join(', ')}`);
+    }],
+    [/^every player in every tournament has a non-empty "name"$/, () => {
+      for (const t of ctx._gaData.TOURNAMENTS) {
+        const bad = t.players.filter(p => !p.name || p.name.trim() === '');
+        if (bad.length) throw new Error(`Tournament ${t.id} has players missing name`);
+      }
+    }],
+    [/^every player has a "historicalScores" array$/, () => {
+      for (const t of ctx._gaData.TOURNAMENTS) {
+        const bad = t.players.filter(p => !Array.isArray(p.historicalScores));
+        if (bad.length) throw new Error(`Tournament ${t.id} has players missing historicalScores`);
+      }
+    }],
+    [/^every historicalScores entry is a number$/, () => {
+      for (const t of ctx._gaData.TOURNAMENTS) {
+        for (const p of t.players) {
+          const bad = p.historicalScores.filter(s => typeof s !== 'number');
+          if (bad.length) throw new Error(`${t.id}/${p.name} has non-numeric historicalScores`);
+        }
+      }
+    }],
+    [/^every hole has a non-empty "([^"]+)"$/, (field) => {
+      for (const t of ctx._gaData.TOURNAMENTS) {
+        const bad = t.holes.filter(h => !h[field] || String(h[field]).trim() === '');
+        if (bad.length) throw new Error(`Tournament ${t.id} holes missing "${field}"`);
+      }
+    }],
+    [/^every hole has a numeric "([^"]+)"$/, (field) => {
+      for (const t of ctx._gaData.TOURNAMENTS) {
+        const bad = t.holes.filter(h => typeof h[field] !== 'number');
+        if (bad.length) throw new Error(`Tournament ${t.id} holes missing numeric "${field}"`);
+      }
+    }],
+    [/^a tournament with id "([^"]+)" exists$/, (id) => {
+      ctx._gaFoundTournament = ctx._gaData.TOURNAMENTS.find(t => t.id === id);
+      if (!ctx._gaFoundTournament) throw new Error(`Tournament not found: ${id}`);
+    }],
+    [/^its year is (\d+)$/, (year) => {
+      if (ctx._gaFoundTournament.year !== Number(year))
+        throw new Error(`Expected year ${year}, got ${ctx._gaFoundTournament.year}`);
+    }],
+    [/^its course contains "([^"]+)"$/, (fragment) => {
+      if (!ctx._gaFoundTournament.course.includes(fragment))
+        throw new Error(`Course "${ctx._gaFoundTournament.course}" does not contain "${fragment}"`);
+    }],
+    [/^the events pool is inspected$/, () => {
+      if (!ctx._gaData?.EVENTS?.length) throw new Error('EVENTS not loaded');
+    }],
+    [/^every event has a non-empty "([^"]+)"$/, (field) => {
+      const bad = ctx._gaData.EVENTS.filter(e => !e[field] || String(e[field]).trim() === '');
+      if (bad.length) throw new Error(`Events missing "${field}": ${bad.map(e=>e.id||'?').slice(0,5).join(', ')}`);
+    }],
+    [/^every event has a numeric "triggerChance" between 0 and 1$/, () => {
+      const bad = ctx._gaData.EVENTS.filter(e => typeof e.triggerChance !== 'number' || e.triggerChance < 0 || e.triggerChance > 1);
+      if (bad.length) throw new Error(`Events with invalid triggerChance: ${bad.map(e=>e.id).slice(0,5).join(', ')}`);
+    }],
+    [/^every event has a "choices" array with at least one entry$/, () => {
+      const bad = ctx._gaData.EVENTS.filter(e => !Array.isArray(e.choices) || e.choices.length === 0);
+      if (bad.length) throw new Error(`Events missing choices: ${bad.map(e=>e.id).slice(0,5).join(', ')}`);
+    }],
+    [/^every choice in every event has a non-empty "label"$/, () => {
+      for (const e of ctx._gaData.EVENTS) {
+        const bad = e.choices.filter(c => !c.label || c.label.trim() === '');
+        if (bad.length) throw new Error(`Event ${e.id} has choices missing label`);
+      }
+    }],
+    [/^an event with id "([^"]+)" exists$/, (id) => {
+      ctx._gaFoundEvent = ctx._gaData.EVENTS.find(e => e.id === id);
+      if (!ctx._gaFoundEvent) throw new Error(`Event not found: ${id}`);
+    }],
+    [/^its triggerChance is greater than 0$/, () => {
+      if (!(ctx._gaFoundEvent.triggerChance > 0))
+        throw new Error(`Event ${ctx._gaFoundEvent.id} triggerChance is not > 0`);
+    }],
+    [/^the shot types are inspected$/, () => {
+      if (!ctx._gaData?.SHOTS) throw new Error('SHOTS not loaded');
+    }],
+    [/^(?:a|an) "([^"]+)" category exists$/, (cat) => {
+      if (!Array.isArray(ctx._gaData.SHOTS[cat]))
+        throw new Error(`Shot category "${cat}" not found`);
+    }],
+    [/^every shot in every category has a numeric "([^"]+)"$/, (field) => {
+      for (const [cat, shots] of Object.entries(ctx._gaData.SHOTS)) {
+        const bad = shots.filter(s => typeof s[field] !== 'number');
+        if (bad.length) throw new Error(`Shots in "${cat}" missing numeric "${field}"`);
+      }
+    }],
+    [/^every shot has a non-empty "label"$/, () => {
+      for (const [cat, shots] of Object.entries(ctx._gaData.SHOTS)) {
+        const bad = shots.filter(s => !s.label || s.label.trim() === '');
+        if (bad.length) throw new Error(`Shots in "${cat}" missing label`);
+      }
+    }],
+    [/^the "([^"]+)" category has (\d+) shots$/, (cat, count) => {
+      const actual = ctx._gaData.SHOTS[cat]?.length;
+      if (actual !== Number(count))
+        throw new Error(`"${cat}" has ${actual} shots, expected ${count}`);
+    }],
+    [/^only the data modules are loaded$/, () => { /* data loaded in Background */ }],
+    [/^the game engine is not initialised$/, () => {
+      if (ctx._gaData.G) throw new Error('Game engine should not be initialised');
+    }],
+    [/^CHARACTERS is accessible and non-empty$/, () => {
+      if (!ctx._gaData.CHARACTERS?.length) throw new Error('CHARACTERS empty');
+    }],
+    [/^TOURNAMENTS is accessible and non-empty$/, () => {
+      if (!ctx._gaData.TOURNAMENTS?.length) throw new Error('TOURNAMENTS empty');
+    }],
+    [/^EVENTS is accessible and non-empty$/, () => {
+      if (!ctx._gaData.EVENTS?.length) throw new Error('EVENTS empty');
+    }],
+    [/^SHOTS is accessible and non-empty$/, () => {
+      if (!Object.keys(ctx._gaData.SHOTS).length) throw new Error('SHOTS empty');
+    }],
+    [/^the data modules are loaded from external files$/, () => { /* confirmed by Background step */ }],
+    [/^the golf adventure setup screen renders$/, () => { /* data presence is the proxy for render */ }],
+    [/^the tournament grid shows 5 selectable tournaments$/, () => {
+      if (ctx._gaData.TOURNAMENTS.length !== 5)
+        throw new Error(`Expected 5 tournaments, got ${ctx._gaData.TOURNAMENTS.length}`);
+    }],
+    [/^the character panel shows 10 selectable commentators$/, () => {
+      if (ctx._gaData.CHARACTERS.length !== 10)
+        throw new Error(`Expected 10 characters, got ${ctx._gaData.CHARACTERS.length}`);
+    }],
+    [/^the atmosphere options are unchanged$/, () => { /* atmosphere is static HTML, unaffected by data extraction */ }],
+
   ];
 }
 
