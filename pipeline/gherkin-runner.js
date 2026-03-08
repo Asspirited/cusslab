@@ -4398,6 +4398,147 @@ function makeSteps(ctx) {
     }],
     [/^the atmosphere options are unchanged$/, () => { /* atmosphere is static HTML, unaffected by data extraction */ }],
 
+    // ── Golf Adventure Engine (specs/golf-adventure-engine.feature) ─────────
+
+    [/^the golf adventure engine is loaded$/, () => {
+      const { CHARACTERS } = require('../golf-data/characters.js');
+      const { TOURNAMENTS } = require('../golf-data/tournaments.js');
+      const { EVENTS }     = require('../golf-data/events.js');
+      const { SHOTS }      = require('../golf-data/shots.js');
+      const { GameEngine } = require('../golf-engine/game-engine.js');
+      ctx._gae = { CHARACTERS, TOURNAMENTS, EVENTS, SHOTS, GameEngine };
+    }],
+
+    [/^a game is started with tournament "([^"]+)", player "([^"]+)", panel "([^"]+)", atmosphere "([^"]+)"$/, (tid, pid, panelStr, atmo) => {
+      const tournament = ctx._gae.TOURNAMENTS.find(t => t.id === tid);
+      if (!tournament) throw new Error(`Tournament not found: ${tid}`);
+      const player = tournament.players.find(p => p.id === pid);
+      if (!player) throw new Error(`Player not found: ${pid}`);
+      const panel = panelStr.split(',');
+      ctx._gaeState = ctx._gae.GameEngine.start({ tournament, player, panel, atmosphere: atmo });
+    }],
+
+    [/^the state has composure (\d+)$/, (n) => {
+      if (ctx._gaeState.composure !== Number(n))
+        throw new Error(`Expected composure ${n}, got ${ctx._gaeState.composure}`);
+    }],
+    [/^the state has yourScore (-?\d+)$/, (n) => {
+      if (ctx._gaeState.yourScore !== Number(n))
+        throw new Error(`Expected yourScore ${n}, got ${ctx._gaeState.yourScore}`);
+    }],
+    [/^the state has day (\d+)$/, (n) => {
+      if (ctx._gaeState.day !== Number(n))
+        throw new Error(`Expected day ${n}, got ${ctx._gaeState.day}`);
+    }],
+    [/^the state has holeIdx (\d+)$/, (n) => {
+      if (ctx._gaeState.holeIdx !== Number(n))
+        throw new Error(`Expected holeIdx ${n}, got ${ctx._gaeState.holeIdx}`);
+    }],
+    [/^the state has phase "([^"]+)"$/, (phase) => {
+      if (ctx._gaeState.phase !== phase)
+        throw new Error(`Expected phase "${phase}", got "${ctx._gaeState.phase}"`);
+    }],
+
+    [/^a game state with composure (\d+) on a par (\d+) hole$/, (composure, par) => {
+      const tournament = ctx._gae.TOURNAMENTS[0];
+      const hole = tournament.holes.find(h => h.par === Number(par)) || { id:'h1', par: Number(par), yards:400, hazard:'fairway', modifiers:{} };
+      ctx._gaeState = {
+        tournament: { ...tournament, holes: [hole] },
+        holeIdx: 0, phase: 'tee',
+        composure: Number(composure),
+        yourScore: 0, holeStrokes: 0,
+        angerActive: false, illnessActive: false, tempSkillBonus: false, tempThresholdMod: 0,
+      };
+    }],
+    [/^the current shot has risk (\d+) and thresh (\d+)$/, (risk, thresh) => {
+      ctx._gaeShot = { risk: Number(risk), thresh: Number(thresh), label: 'test shot' };
+    }],
+    [/^the roll is (\d+)$/, (roll) => {
+      ctx._gaeRoll = ctx._gae.GameEngine.processRoll(Number(roll), ctx._gaeShot, ctx._gaeState);
+    }],
+    [/^the outcome quality is "([^"]+)"$/, (quality) => {
+      if (ctx._gaeRoll.quality !== quality)
+        throw new Error(`Expected quality "${quality}", got "${ctx._gaeRoll.quality}"`);
+    }],
+    [/^the effective threshold is (\d+)$/, (n) => {
+      if (ctx._gaeRoll.eff !== Number(n))
+        throw new Error(`Expected eff threshold ${n}, got ${ctx._gaeRoll.eff}`);
+    }],
+
+    [/^a game state in "([^"]+)" phase on a par (\d+) hole$/, (phase, par) => {
+      const tournament = ctx._gae.TOURNAMENTS[0];
+      const hole = tournament.holes.find(h => h.par === Number(par)) || { id:'h1', par: Number(par), yards:400, hazard:'fairway', modifiers:{} };
+      ctx._gaeState = {
+        tournament: { ...tournament, holes: [hole] },
+        holeIdx: 0, phase,
+        composure: 10, yourScore: 0, holeStrokes: 0, holeResults: [],
+        angerActive: false, angerShots: 0, illnessActive: false, illnessHoles: 0,
+        tempSkillBonus: false, tempSkillHoles: 0, tempThresholdMod: 0, tempThresholdHoles: 0,
+      };
+    }],
+    [/^the shot resolves as "([^"]+)"$/, (quality) => {
+      ctx._gaeNextPhase = ctx._gae.GameEngine.advancePhase(quality, ctx._gaeState);
+    }],
+    [/^the next phase is "([^"]+)"$/, (phase) => {
+      if (ctx._gaeNextPhase !== phase)
+        throw new Error(`Expected next phase "${phase}", got "${ctx._gaeNextPhase}"`);
+    }],
+    [/^the hole ends$/, () => {
+      if (ctx._gaeNextPhase !== 'end')
+        throw new Error(`Expected "end", got "${ctx._gaeNextPhase}"`);
+    }],
+
+    [/^a game state with yourScore (-?\d+) on a par (\d+) hole with (\d+) strokes taken$/, (score, par, strokes) => {
+      const tournament = ctx._gae.TOURNAMENTS[0];
+      const hole = tournament.holes.find(h => h.par === Number(par)) || { id:'h1', par: Number(par), yards:400, hazard:'fairway', modifiers:{} };
+      ctx._gaeState = {
+        tournament: { ...tournament, holes: [hole] },
+        holeIdx: 0, phase: 'putt',
+        composure: 10, yourScore: Number(score),
+        holeStrokes: Number(strokes), holeResults: [],
+      };
+    }],
+    [/^the hole score diff is (-?\d+)$/, (n) => {
+      if (ctx._gaeHoleResult.diff !== Number(n))
+        throw new Error(`Expected diff ${n}, got ${ctx._gaeHoleResult.diff}`);
+    }],
+    [/^yourScore is (-?\d+)$/, (n) => {
+      if (ctx._gaeHoleResult.state.yourScore !== Number(n))
+        throw new Error(`Expected yourScore ${n}, got ${ctx._gaeHoleResult.state.yourScore}`);
+    }],
+    [/^endHole is called$/, () => {
+      ctx._gaeHoleResult = ctx._gae.GameEngine.endHole(ctx._gaeState);
+    }],
+
+    [/^a full game state for tournament "([^"]+)", player "([^"]+)", day (\d+), yourScore (-?\d+)$/, (tid, pid, day, score) => {
+      const tournament = ctx._gae.TOURNAMENTS.find(t => t.id === tid);
+      const player = tournament.players.find(p => p.id === pid);
+      const fieldScores = {};
+      tournament.players.forEach(p => { fieldScores[p.name] = 0; });
+      if (tournament.field) tournament.field.forEach(f => { fieldScores[f.name] = 0; });
+      ctx._gaeState = { tournament, player, day: Number(day), yourScore: Number(score), fieldScores };
+    }],
+    [/^the field is simulated$/, () => {
+      ctx._gaeFieldScores = ctx._gae.GameEngine.simulateField(ctx._gaeState);
+    }],
+    [/^the player "([^"]+)" field score is (-?\d+)$/, (pid, score) => {
+      const player = ctx._gaeState.tournament.players.find(p => p.id === pid);
+      const actual = ctx._gaeFieldScores[player.name];
+      if (actual !== Number(score))
+        throw new Error(`Expected ${player.name} field score ${score}, got ${actual}`);
+    }],
+    [/^the other players have their day 0 historical scores$/, () => {
+      const t = ctx._gaeState.tournament;
+      const playerId = ctx._gaeState.player.id;
+      for (const p of t.players) {
+        if (p.id === playerId) continue;
+        const expected = p.historicalScores[0];
+        const actual = ctx._gaeFieldScores[p.name];
+        if (actual !== expected)
+          throw new Error(`${p.name}: expected historical ${expected}, got ${actual}`);
+      }
+    }],
+
   ];
 }
 
