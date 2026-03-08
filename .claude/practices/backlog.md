@@ -25,7 +25,7 @@ Items are sorted by CD3 within each section. Rescore when scope changes.
 - Fix: route through `https://cusslab-api.cusslab.workers.dev` (same as index.html)
 - 7 raw fetch calls flagged by golf-adventure-sim pipeline check
 - CD3: UBV=9 TC=8 RR=7 → CoD=24, Dur=3, **CD3=8.0**
-- Status: OPEN — pipeline warns; golf-adventure broken for users without their own key
+- Status: CLOSED — 2026-03-08. golfFetch() helper added; 9/9 pipeline checks passing
 
 ### BL-016 — Golf Adventure: split tournament selector into categories
 - Tournament grid currently shows all tournaments in a flat list; grows unmanageable as content increases
