@@ -893,6 +893,18 @@ Status: CLOSED
 - Tags: deployment, branch, live-site, 5-whys, process
 - Status: Closed — merged feature branch to main; prevention rule added
 
+## WL-060
+- Item: Cloudflare wrangler login repeatedly sends user to browser OAuth which only shows the wrong Google account
+- Symptom: `wrangler login` opens browser, only leanspirited's other Google account appears, not leanspirited@gmail.com — cannot authenticate, cannot update Worker secret
+- Suspected cause: Browser is logged into wrong Google account; wrangler has no CLI-only token flow by default; no documented workaround ever retained between sessions; Claude keeps re-suggesting the same broken flows
+- Session: 2026-03-08
+- Time lost: ~30-60 min across 5-6 sessions (recurring)
+- Cost impact: High (blocking live site fixes, repeated session time)
+- Delay: Worker secret updates blocked every time
+- Tags: #cloudflare #auth #recurring #high-cost #unresolved
+- Status: OPEN — RECURRING. Root cause never fixed. Next session: must resolve once and record the permanent fix here before doing anything else.
+- **PERMANENT FIX REQUIRED:** Use Cloudflare API token (not browser OAuth). Steps: dash.cloudflare.com (leanspirited@gmail.com) → My Profile → API Tokens → Create Token → "Edit Cloudflare Workers" template. Store token. Use: `CLOUDFLARE_API_TOKEN=<token> wrangler secret put ANTHROPIC_API_KEY`. Record token location here when done.
+
 ## WL-059
 - Item: Phantom scenario descriptions in CLAUDE.md — "Magnus loading state" and "brand error messages" referenced as 9 approved Cloudflare Worker scenarios
 - Symptom: Neither Rod nor Claude can source these descriptions. Not in any .feature file, retro, or session transcript.

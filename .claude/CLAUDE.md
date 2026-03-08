@@ -150,6 +150,16 @@ See practices/ci-cd.md for full procedure.
 - No framework, no build step, no bundler
 - API calls via Cloudflare Worker only — never directly to api.anthropic.com
 - No API key ever in frontend code or browser storage
+
+## KNOWN RECURRING FAILURE — Cloudflare Worker secret update (WL-060)
+**DO NOT suggest `wrangler login` — it opens a browser that always shows the wrong Google account.**
+To update the Worker's ANTHROPIC_API_KEY secret, use an API token instead:
+1. Go to dash.cloudflare.com (logged in as leanspirited@gmail.com)
+2. My Profile → API Tokens → Create Token → "Edit Cloudflare Workers" template
+3. Copy the token
+4. Run: `cd /home/rodent/cusslab && CLOUDFLARE_API_TOKEN=<token> wrangler secret put ANTHROPIC_API_KEY`
+5. Paste the Anthropic key (sk-ant-...) when prompted
+This has wasted time across 5+ sessions. Never use browser OAuth flow for this.
 - summariseFromState() must be deterministic — same input, same output, always
 
 ---
