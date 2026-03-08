@@ -49,10 +49,10 @@ Feature: Golf Adventure Data Integrity
       | faldo     | Sir Nick Faldo      |
       | mcginley  | Paul McGinley       |
       | riley     | Wayne Riley         |
-      | roe       | Mark Roe            |
+      | markroe   | Mark Roe            |
       | henni     | Henni Zuel          |
       | butch     | Butch Harmon        |
-      | cox       | Professor Brian Cox |
+      | brian_cox | Professor Brian Cox |
       | souness   | Graeme Souness      |
       | pietersen | Kevin Pietersen     |
 
