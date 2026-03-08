@@ -56,6 +56,48 @@ Items here survive session resets. Each entry has a status and enough context to
 - First candidates: watching-oche-mode1 suggestion card shuffle (deterministic), panel-slots cross-panel invariants
 - Status: OPEN — ongoing
 
+### BL-009 — Mode 2 game examples expansion (all sports panels)
+- Football, Golf, LongRoom mode 2 (ingame) currently have basic moment types
+- Need: more named moment examples in the selector (more variety, more specific)
+- Football: add more granular moments (manager touchline reaction, injury substitution, captain decision, controversial tackle, post-goal celebration incident)
+- Golf: add (flag stick controversy, slow play warning, embedded ball ruling, eagle putt, 18th green ceremony)
+- LongRoom: add (DRS review, lunch interval, century milestone, caught behind appeal, last wicket partnership)
+- Darts: already richest (9-darter protocol, crowd escalation, era engine) — no immediate need
+- Status: OPEN — design direction confirmed, implementation not started
+
+### BL-010 — Football mode 1 RelationshipState + CharacterState + WoundDetector
+- Football discuss() still missing these vs Golf/Darts/LongRoom (all have them)
+- Needs: FOOTBALL_WOUNDS map, FOOTBALL_NAMEMAP, FOOTBALL_VOICE_FMT
+- Then: wire RelationshipState.init, CharacterState.create, WoundDetector into the loop
+- Characters: Souness, Neville, Carragher, Micah, Ron, Cox — inter-character wounds defined in docs/characters-sports.md
+- Status: OPEN — gap identified in session 2026-03-08
+
+### BL-011 — Anchor readback + user name for Football, Darts, LongRoom
+- Golf has: user name input (required), Murray/Dougherty anchor reads question back
+- Other sports panels have neither
+- Football anchor candidate: Gary Lineker reads the question (Match of the Day cadence)
+- Darts anchor candidate: Waddell narrates the question in heroic couplets
+- LongRoom anchor candidate: Blofeld introduces it as if it arrived by pigeon
+- Status: OPEN — Golf pattern exists as reference, needs adapting per panel
+
+### BL-012 — ConspireEngine for Football
+- Golf has ConspireEngine (Roe/Coltart pair profile)
+- Football has no ConspireEngine — Souness/Neville, Carragher/Cox, Ron/anyone are obvious pair candidates
+- Needs: pair profiles defined in needles-and-conflicts.md, then wired in
+- Status: OPEN
+
+### BL-013 — golf-adventure.html in pipeline
+- golf-adventure.html is entirely outside the pipeline (no Gherkin, no unit tests, no audit)
+- Minimum viable: add browser-sim check for state machine init (G.tournament, G.player, G.matchPlayScore)
+- Also: match play score calculation is logic — extract to src/ and unit-test
+- Status: OPEN
+
+### BL-014 — Match play leaderboard for Ryder Cup end-of-day
+- buildLeaderboard() currently shows stroke play table for Ryder Cup — wrong format
+- Should show: Europe vs USA match play points, individual match results (1UP, 2DN, halved)
+- Blocked on defining per-match outcomes for field (Molinari, McIlroy, Westwood, Donald)
+- Status: OPEN — HUD and buildSituation fixed in session 2026-03-08; leaderboard still pending
+
 ---
 
 ## RIA PROJECT (separate repo)
