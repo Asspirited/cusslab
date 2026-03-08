@@ -68,7 +68,7 @@ For items that represent a product hypothesis, add after the CD3 line:
 - All `nothing` outcomes retire — minimum Low consequence in either direction
 - Gherkin approved 2026-03-08
 - CD3: UBV=7 TC=6 RR=3 → CoD=16, Dur=3, **CD3=5.3**
-- Status: OPEN — Gherkin approved, outside-in design next
+- Status: CLOSED 2026-03-08 — 442/442 unit tests, 11/11 Gherkin passing (3352a7b)
 
 ### BL-019 — Session log + HTML dashboard (process trend analysis)
 - Append-only `.claude/reports/session-log.jsonl` — one record per session close, never overwritten
@@ -79,7 +79,7 @@ For items that represent a product hypothesis, add after the CD3 line:
 - Without this: flying blind — no way to close the HDD loop on process improvement itself
 - Three artefacts ship together: jsonl store, html view, write script. Gherkin covers all three.
 - CD3: UBV=7 TC=5 RR=8 → CoD=20, Dur=3, **CD3=6.7**
-- Status: OPEN — design agreed, Gherkin not yet written (next session)
+- Status: CLOSED 2026-03-08 — artefacts committed 7c6dc90; backlog entry was stale-open
 
 ### BL-018 — Make HCSession.logPanelRun() data observable
 - HCSession.logPanelRun() is called on every panel run but data is not retrievable outside the session
@@ -89,7 +89,7 @@ For items that represent a product hypothesis, add after the CD3 line:
 - Enables: Activation measurement (sc vs fb avg turns), Retention (return sessions), panel popularity
 - CD3: UBV=6 TC=7 RR=8 → CoD=21, Dur=3, **CD3=7.0**
 - Hypothesis: [prerequisite — no product hypothesis; this is measurement infrastructure]
-- Status: OPEN
+- Status: CLOSED 2026-03-08 — accumulatePanelStats/computeAvgDepth in logic.js, HC_PANEL_STATS key in HCSession, 454/454 unit tests, 7/7 Gherkin passing
 
 ### BL-008 — ACC framework label fix in RIA
 - ACC = Attributes, Components, Capabilities (James Whittaker / Google) — not "Assumptions..."

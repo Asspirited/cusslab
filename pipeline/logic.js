@@ -405,6 +405,27 @@ const MARSHALS_BELT_EVENT = {
   ],
 };
 
+// ── BL-018 — HCSession.logPanelRun() data observable ─────────────────────────
+// Pure functions. Mirrored in index.html HCSession — keep in sync.
+// existing: { [panelType]: { runs: N, totalDepth: N } } | null
+// Returns new object. Does not mutate.
+
+function accumulatePanelStats(existing, panelType, turnCount) {
+  const stats = existing ? JSON.parse(JSON.stringify(existing)) : {};
+  if (!stats[panelType]) stats[panelType] = { runs: 0, totalDepth: 0 };
+  stats[panelType].runs++;
+  stats[panelType].totalDepth += turnCount;
+  return stats;
+}
+
+// Returns avgDepth (1 decimal) for panelType, or 0.0 if no data.
+function computeAvgDepth(existing, panelType) {
+  if (!existing) return 0.0;
+  const s = existing[panelType];
+  if (!s || s.runs === 0) return 0.0;
+  return parseFloat((s.totalDepth / s.runs).toFixed(1));
+}
+
 module.exports = {
   maskKey, isValidKey, shouldUpdateInput,
   Temperature,
@@ -418,4 +439,5 @@ module.exports = {
   getAllPairs, getPairTone, allPairsHaveToneAndNote,
   teslaHasNoWarmOrSolidary, pairToneIsSymmetrical, noConflictingTones,
   CONSEQUENCE_TIERS, applyConsequence, MARSHALS_BELT_EVENT,
+  accumulatePanelStats, computeAvgDepth,
 };

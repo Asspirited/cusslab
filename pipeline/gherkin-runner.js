@@ -3,7 +3,7 @@
 
 const fs   = require('fs');
 const path = require('path');
-const { Temperature, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetector, DartsVoiceFmt, dartsBuildBlock, DARTS_PREMONITION_AFFINITIES, COLLECTIVE_CALL_MINIMUM, premonitionEligible, blankPremonitionLedger, assignPremonitionRC, resolvePremonitionCommits, isPremonitionTruthTeller, detectIntellectualAttempt, buildAttemptInstruction, INTELLECTUAL_ATTEMPTS_CONFIG, CONSEQUENCE_TIERS, applyConsequence, MARSHALS_BELT_EVENT } = require('./logic.js');
+const { Temperature, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetector, DartsVoiceFmt, dartsBuildBlock, DARTS_PREMONITION_AFFINITIES, COLLECTIVE_CALL_MINIMUM, premonitionEligible, blankPremonitionLedger, assignPremonitionRC, resolvePremonitionCommits, isPremonitionTruthTeller, detectIntellectualAttempt, buildAttemptInstruction, INTELLECTUAL_ATTEMPTS_CONFIG, CONSEQUENCE_TIERS, applyConsequence, MARSHALS_BELT_EVENT, accumulatePanelStats, computeAvgDepth } = require('./logic.js');
 const { QUNTUM_LEEKS_SCENARIOS, initState, pickRandomScenario, betLeekiness, spendLeekiness, processTurnEffects, buildModifiers } = require('../src/logic/quntum-leeks-engine.js');
 
 // ── Mock state (simulates browser localStorage + DOM) ────────────────────────
@@ -4861,6 +4861,40 @@ function makeSteps(ctx) {
     [/^the inline script does not contain "([^"]+)"$/, (text) => {
       if (ctx._gawHtml.includes(text))
         throw new Error(`golf-adventure.html still contains duplicate: "${text}"`);
+    }],
+
+    // ── HCSession panel stats (specs/hc-panel-stats.feature) ─────────────────
+
+    [/^no panel stats exist$/, () => {
+      ctx._hcStats = null;
+    }],
+
+    [/^boardroom stats with runs (\d+) and totalDepth (\d+)$/, (runs, depth) => {
+      ctx._hcStats = { boardroom: { runs: Number(runs), totalDepth: Number(depth) } };
+    }],
+
+    [/^panel stats are accumulated for (\w+) with turn count (\d+)$/, (panel, turns) => {
+      ctx._hcOriginalStats = ctx._hcStats;
+      ctx._hcStats = accumulatePanelStats(ctx._hcStats, panel, Number(turns));
+    }],
+
+    [/^the stats contain (\w+) with runs (\d+) and totalDepth (\d+)$/, (panel, runs, depth) => {
+      const s = ctx._hcStats && ctx._hcStats[panel];
+      if (!s) throw new Error(`No stats entry for ${panel}`);
+      if (s.runs !== Number(runs)) throw new Error(`Expected ${panel}.runs ${runs}, got ${s.runs}`);
+      if (s.totalDepth !== Number(depth)) throw new Error(`Expected ${panel}.totalDepth ${depth}, got ${s.totalDepth}`);
+    }],
+
+    [/^the average depth for (\w+) is (\d+\.\d+)$/, (panel, expected) => {
+      const got = computeAvgDepth(ctx._hcStats, panel);
+      if (got !== parseFloat(expected))
+        throw new Error(`Expected avgDepth ${expected} for ${panel}, got ${got}`);
+    }],
+
+    [/^the original stats object is unchanged$/, () => {
+      const orig = ctx._hcOriginalStats;
+      if (!orig || !orig.boardroom) throw new Error('No original stats reference captured');
+      if (orig.boardroom.runs !== 1) throw new Error(`Original was mutated: runs is now ${orig.boardroom.runs}`);
     }],
 
     // ── Golf Adventure Consequences (specs/golf-adventure-consequences.feature) ─

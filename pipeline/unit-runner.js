@@ -1,7 +1,7 @@
 // Unit test runner — tests pure functions in pipeline/logic.js
 // Run: node pipeline/unit-runner.js
 
-const { maskKey, isValidKey, shouldUpdateInput, Temperature, makeWoundDetector, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetector, DartsVoiceFmt, dartsBuildBlock, DARTS_PREMONITION_AFFINITIES, COLLECTIVE_CALL_MINIMUM, premonitionEligible, blankPremonitionLedger, assignPremonitionRC, resolvePremonitionCommits, isPremonitionTruthTeller, detectIntellectualAttempt, buildAttemptInstruction, INTELLECTUAL_ATTEMPTS_CONFIG, SOUNESS_CAT_PRE_EXISTING, SOUNESS_CAT_IDS, getAllPairs, getPairTone, allPairsHaveToneAndNote, teslaHasNoWarmOrSolidary, pairToneIsSymmetrical, noConflictingTones, CONSEQUENCE_TIERS, applyConsequence, MARSHALS_BELT_EVENT } = require('./logic.js');
+const { maskKey, isValidKey, shouldUpdateInput, Temperature, makeWoundDetector, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetector, DartsVoiceFmt, dartsBuildBlock, DARTS_PREMONITION_AFFINITIES, COLLECTIVE_CALL_MINIMUM, premonitionEligible, blankPremonitionLedger, assignPremonitionRC, resolvePremonitionCommits, isPremonitionTruthTeller, detectIntellectualAttempt, buildAttemptInstruction, INTELLECTUAL_ATTEMPTS_CONFIG, SOUNESS_CAT_PRE_EXISTING, SOUNESS_CAT_IDS, getAllPairs, getPairTone, allPairsHaveToneAndNote, teslaHasNoWarmOrSolidary, pairToneIsSymmetrical, noConflictingTones, CONSEQUENCE_TIERS, applyConsequence, MARSHALS_BELT_EVENT, accumulatePanelStats, computeAvgDepth } = require('./logic.js');
 
 let passed = 0;
 let failed = 0;
@@ -883,6 +883,44 @@ assert('MARSHALS_BELT_EVENT: all consequence outcomes have a valid tier',
 
 assert('MARSHALS_BELT_EVENT: all consequence outcomes have a valid direction',
   MARSHALS_BELT_EVENT.choices.every(c => c.outcomes.every(o => ['penalty','bonus'].includes(o.direction))), true);
+
+// ── accumulatePanelStats + computeAvgDepth ───────────────────────────────────
+
+assert('accumulatePanelStats: first run creates entry with runs 1',
+  accumulatePanelStats(null, 'boardroom', 4).boardroom.runs, 1);
+
+assert('accumulatePanelStats: first run sets totalDepth correctly',
+  accumulatePanelStats(null, 'boardroom', 4).boardroom.totalDepth, 4);
+
+assert('accumulatePanelStats: second run increments runs to 2',
+  accumulatePanelStats({ boardroom: { runs: 1, totalDepth: 4 } }, 'boardroom', 6).boardroom.runs, 2);
+
+assert('accumulatePanelStats: second run accumulates totalDepth',
+  accumulatePanelStats({ boardroom: { runs: 1, totalDepth: 4 } }, 'boardroom', 6).boardroom.totalDepth, 10);
+
+assert('accumulatePanelStats: different panels accumulate independently — boardroom',
+  accumulatePanelStats(accumulatePanelStats(null, 'boardroom', 4), 'comedy', 3).boardroom.runs, 1);
+
+assert('accumulatePanelStats: different panels accumulate independently — comedy',
+  accumulatePanelStats(accumulatePanelStats(null, 'boardroom', 4), 'comedy', 3).comedy.totalDepth, 3);
+
+assert('accumulatePanelStats: does not mutate input object',
+  (() => { const s = { boardroom: { runs: 1, totalDepth: 4 } }; accumulatePanelStats(s, 'boardroom', 2); return s.boardroom.runs; })(), 1);
+
+assert('accumulatePanelStats: accepts empty object as existing',
+  accumulatePanelStats({}, 'golf', 5).golf.runs, 1);
+
+assert('computeAvgDepth: computes average correctly',
+  computeAvgDepth({ boardroom: { runs: 2, totalDepth: 10 } }, 'boardroom'), 5.0);
+
+assert('computeAvgDepth: rounds to one decimal place',
+  computeAvgDepth({ boardroom: { runs: 3, totalDepth: 10 } }, 'boardroom'), 3.3);
+
+assert('computeAvgDepth: returns 0 for unknown panel',
+  computeAvgDepth({}, 'golf'), 0.0);
+
+assert('computeAvgDepth: returns 0 for null existing',
+  computeAvgDepth(null, 'boardroom'), 0.0);
 
 // ── Results ──────────────────────────────────────────────────────────────────
 

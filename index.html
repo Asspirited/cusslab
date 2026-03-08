@@ -3810,10 +3810,26 @@ const UI = (() => {
 // MODULE: HCSession — AARRR metrics instrumentation
 // ============================================================
 const HCSession = (() => {
-  const HC_FIRST_VISIT = 'hc-first-visit';
-  const HC_VISIT_COUNT = 'hc-visit-count';
-  const HC_SESSION_KEY = (id) => 'session:' + id;
-  const HC_FEEDBACK_KEY = (ts) => 'feedback:' + ts;
+  const HC_FIRST_VISIT   = 'hc-first-visit';
+  const HC_VISIT_COUNT   = 'hc-visit-count';
+  const HC_SESSION_KEY   = (id) => 'session:' + id;
+  const HC_FEEDBACK_KEY  = (ts) => 'feedback:' + ts;
+  const HC_PANEL_STATS   = 'hc-panel-stats';
+
+  // Pure helpers — mirror of accumulatePanelStats/computeAvgDepth in pipeline/logic.js — keep in sync.
+  function _accumulatePanelStats(existing, panelType, turnCount) {
+    const stats = existing ? JSON.parse(JSON.stringify(existing)) : {};
+    if (!stats[panelType]) stats[panelType] = { runs: 0, totalDepth: 0 };
+    stats[panelType].runs++;
+    stats[panelType].totalDepth += turnCount;
+    return stats;
+  }
+  function _computeAvgDepth(existing, panelType) {
+    if (!existing) return 0.0;
+    const s = existing[panelType];
+    if (!s || s.runs === 0) return 0.0;
+    return parseFloat((s.totalDepth / s.runs).toFixed(1));
+  }
 
   function _uuid() { return Math.random().toString(36).slice(2) + Date.now().toString(36); }
   function _now()  { return Date.now(); }
@@ -3847,7 +3863,26 @@ const HCSession = (() => {
     session.panelRuns.push({ panelType, charactersActive, turnCount, timestamp: ts });
     session.sessionDepth++;
     _plausible('panel_run', { panelType });
+    try {
+      const raw = localStorage.getItem(HC_PANEL_STATS);
+      const existing = raw ? JSON.parse(raw) : null;
+      const updated = _accumulatePanelStats(existing, panelType, turnCount);
+      localStorage.setItem(HC_PANEL_STATS, JSON.stringify(updated));
+    } catch(e) {}
     _save();
+  }
+
+  function getObservablePanelStats() {
+    try {
+      const raw = localStorage.getItem(HC_PANEL_STATS);
+      const existing = raw ? JSON.parse(raw) : null;
+      if (!existing) return {};
+      const result = {};
+      for (const panel of Object.keys(existing)) {
+        result[panel] = { runs: existing[panel].runs, avgDepth: _computeAvgDepth(existing, panel) };
+      }
+      return result;
+    } catch(e) { return {}; }
   }
 
   function logFeatureTouch(feature) {
@@ -3921,7 +3956,7 @@ const HCSession = (() => {
   // Save on page unload
   window.addEventListener('beforeunload', () => _save());
 
-  return { logPanelRun, logFeatureTouch, logTurdRating, logFeedback, getAARRRSnapshot, exportSession };
+  return { logPanelRun, logFeatureTouch, logTurdRating, logFeedback, getAARRRSnapshot, getObservablePanelStats, exportSession };
 })();
 
 // MODULE: State — single source of truth for all feature state

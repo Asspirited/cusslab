@@ -145,7 +145,14 @@ DDD CLEAN fires after BDD CLOSE — harvest new concepts into domain model.
    - Flag: any business/product AND technical conflicts — they are the same thing
    - Source: Evans — Domain-Driven Design, bounded contexts + ubiquitous language
 5. PRE-IMPLEMENTATION REVIEW — run checklist (see below)
-6. Draft Gherkin to specs/ — apply 6-point BDD quality gate (see CLAUDE.md)
+6. Draft Gherkin to specs/ — apply 6-point BDD quality gate (see CLAUDE.md):
+   - **Scenario vs Scenario Outline** — if two or more scenarios share the same step structure
+     with different data, use Scenario Outline + Examples table. Never write individual
+     scenarios for tabular data. This is rule 1 of the quality gate.
+   - **Merge check** — after drafting all outlines, ask: do any share the same Given/When
+     with only Examples data different? If yes, merge unless Then steps are materially different.
+   - **Background audit** — if 3+ scenarios share the same Given, it belongs in Background.
+   - **Count discipline** — if count >12, review for redundancy before adding more.
 7. Present for approval — do not proceed until Rod says yes
 8. On approval → TDD SEQUENCE
 
