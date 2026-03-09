@@ -128,6 +128,44 @@ and regenerates the HTML trend dashboard in Downloads.
 
 ---
 
+### 8b. SHARED SESSION STATE (cross-Claude sync — write before closing)
+
+Write `.claude/shared-session-state.md` so the other Claude (Code ↔ .ai) starts next session with full context.
+
+Format — overwrite the file completely each close:
+
+```
+# Shared Session State
+Last updated: [DATE] by Claude [Code|.ai]
+Last commit: [HASH] — [message]
+
+## What shipped this session
+- [brief list]
+
+## Open waste items (WL numbers)
+- WL-NNN: [one line] — Status: Open
+
+## Backlog top 3 by CD3
+- BL-NNN (CD3=N): [title]
+- BL-NNN (CD3=N): [title]
+- BL-NNN (CD3=N): [title]
+
+## Protocol status this session
+- Session startup: [followed / skipped steps N,N]
+- Gherkin gate: [followed / bypassed on: feature name]
+- TDD: [followed / bypassed on: feature name]
+- Pipeline: [GREEN / RED — reason]
+
+## Carry-forward notes
+- [anything the next Claude must know that isn't in a file yet]
+```
+
+Then add to session-ref.md pre-flight so Claude.ai gets it on upload:
+The session-startup.md pre-flight command already cats multiple files — ensure
+`.claude/shared-session-state.md` is included in that cat list.
+
+---
+
 ### 9. RETROSPECTIVE TRIGGER (check — do not skip)
 
 Read `.claude/practices/retrospectives.md` for trigger conditions.

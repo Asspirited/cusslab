@@ -102,7 +102,79 @@ For items that represent a product hypothesis, add after the CD3 line:
 - Should show: Europe vs USA match play points, individual match results (1UP, 2DN, halved)
 - Blocked on defining per-match outcomes for field (Molinari, McIlroy, Westwood, Donald)
 - CD3: UBV=8 TC=4 RR=5 → CoD=17, Dur=4, **CD3=4.25**
-- Status: OPEN — HUD and buildSituation fixed; leaderboard still pending
+- Status: OPEN — HUD and buildSituation fixed; in-flight leaderboard added 2026-03-09; end-of-day leaderboard (points table format) still pending
+
+### BL-021 — MatchPlayService: Gherkin + unit tests (tech debt, WL-080)
+- MatchPlayService (golf-service/matchplay-service.js) shipped 2026-03-09 with no pipeline coverage
+- Needs: unit tests in pipeline/unit-runner.js for formatLive, formatResult, buildContext, buildSituation, buildInflightLeaderboard, buildCommentaryAddendum
+- Needs: Gherkin in specs/ covering match situation text, score formatting, historical result injection
+- Prerequisite before any further MatchPlayService changes — see WL-080
+- CD3: UBV=3 TC=8 RR=9 → CoD=20, Dur=2, **CD3=10.0**
+- Status: OPEN
+
+### BL-022 — Golf Adventure: Ryder Cup "Be Any Player" mode
+- User picks any of the 24 players across all Ryder Cup tournaments and plays as them for all 3 days
+- Setup screen shows all players from the selected Ryder Cup tournament, with team, role, wound
+- Match schedule populates from player's actual matchPlayDays data — no new data required
+- Gherkin: player picker shows all players when Ryder Cup selected; match days are correct
+- CD3: UBV=8 TC=3 RR=2 → CoD=13, Dur=3, **CD3=4.3**
+- Status: OPEN
+
+### BL-023 — Golf Adventure: 1997 Valderrama Ryder Cup
+- id: valderrama_1997. Europe 14.5–13.5. Seve captains, does not play.
+- Player options: Andrew Coltart (Sunday singles only — never appeared Fri/Sat), Lee Westwood, Colin Montgomerie, Jesper Parnevik
+- Lore focus: Seve's interventionist captaincy (infamous 18th water hole interference), Coltart's peculiar selection, rain delays, Europe's narrow win
+- Era: Ceefax/late-90s BBC transitional — Alliss narrating, pre-Sky graphics
+- CD3: UBV=7 TC=2 RR=1 → CoD=10, Dur=4, **CD3=2.5**
+- Status: OPEN
+
+### BL-024 — Golf Adventure: Ryder Cup rollout — Tier 1 (Europe wins)
+- Add one at a time, in priority order. Each is a full tournament addition with holes, players, parallelMatches, historicalResult data.
+- Priority order (comedic + historic interest, Europe-wins weighted higher):
+  1. **1985 The Belfry** — Europe's first win in 28 years. Torrance on 18. Jacklin captains. Ballesteros/Woosnam/Langer.
+  2. **2006 K Club** — Europe 18.5–9.5. Darren Clarke plays days after Heather's death.
+  3. **1987 Muirfield Village** — Europe wins on US soil first time. Ballesteros/Olazabal pairing.
+  4. **2010 Celtic Manor** — first Welsh Ryder Cup, Monday finish, McDowell decisive point.
+  5. **1995 Oak Hill** — Faldo holes on 18 to beat Azinger. Gallacher's third attempt, first win.
+- Each needs own eraClass CSS (see era styling note below)
+- Era styling: pre-1970 monochrome BBC; 1970s–80s Ceefax/Alliss; 1991–99 ESPN/ABC; 2000s+ NBC/Sky
+- CD3: UBV=8 TC=2 RR=1 → CoD=11, Dur=5 per tournament, **CD3=2.2** (per tournament; do one at a time)
+- Status: OPEN
+
+### BL-025 — Golf Adventure: Ryder Cup rollout — Tier 2 (USA wins, rich incident)
+- After Tier 1. Lower priority — comedy engine weaker when player is losing cause.
+  1. **2016 Hazeltine** — USA 17–11. Europe collapse. Rory visibly furious throughout.
+  2. **2021 Whistling Straits** — USA 19–9. Biggest US win in 40 years. Patrick Reed/Rory dynamic.
+- Kiawah 1991 and Brookline 1999 already in.
+- CD3: UBV=6 TC=1 RR=1 → CoD=8, Dur=5 per tournament, **CD3=1.6**
+- Status: OPEN
+
+### BL-026 — Golf Adventure: Ryder Cup rollout — Tier 3 (GB&Ireland era)
+- Fewer of these. Framed as historical curiosity, not partisan drama.
+  1. **1969 Royal Birkdale** — Nicklaus concedes Jacklin's putt. Greatest gesture in golf. 16–16 halved.
+  2. **1953 Wentworth** — Hogan's only Ryder Cup. USA win but Hogan's presence is the story.
+  3. **1933 Southport & Ainsdale** — GB&I win (rare). Easterbrook holes on the last.
+- CD3: UBV=5 TC=1 RR=1 → CoD=7, Dur=5 per tournament, **CD3=1.4**
+- Status: OPEN
+
+### BL-027 — Golf Adventure: Ryder Cup rollout — Tier 4 (GB only era, curiosity)
+- Lowest priority. Treat as historical artefact, not competitive drama.
+  1. **1927 Worcester CC** — inaugural Ryder Cup. Hagen captains USA. Ted Ray captains GB.
+  2. **1929 Moortown** — GB win. Compston beats Hagen 6&4 in singles.
+- CD3: UBV=4 TC=1 RR=1 → CoD=6, Dur=5 per tournament, **CD3=1.2**
+- Status: OPEN
+
+### BL-028 — Golf Adventure: Other Historic category expansion (Pro-Ams, celebrity golf, TV formats)
+- Expand "Other Historic" beyond traditional tournament golf into televised oddities:
+  - **Shell's Wonderful World of Golf** (1960s–70s) — head-to-head matchplay at exotic locations. Self-contained episode format. Perfect for Golf Adventure.
+  - **A Round with Alliss** (BBC, 1980s–90s) — Alliss takes a celebrity around a course and narrates their suffering. Alliss as commentary character mechanic.
+  - **The Skins Game** — winner-takes-all, carries over. Trevino/Player/Watson/Nicklaus ideal.
+  - **Pro-Am formats** — celebrity + pro pairing. Quality gap is the comedy engine.
+  - **The Dunhill Links** — St Andrews/Carnoustie/Kingsbarns, celebrities playing real links.
+  - **TSL / modern exhibition formats** — big personalities, social media stakes.
+- Key design question to resolve before Gherkin: does player play as celebrity or as babysitting pro?
+- CD3: UBV=6 TC=1 RR=1 → CoD=8, Dur=6, **CD3=1.3**
+- Status: OPEN — design question unresolved
 
 ### BL-001 — Wayne Riley / Radar content merge
 - Claude.ai session has full Wayne Riley/Radar explanation not yet in repo

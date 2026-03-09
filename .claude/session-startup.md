@@ -11,12 +11,13 @@
 ### 0. PRE-FLIGHT — prime Downloads for Claude.ai (run first, no exceptions)
 
 ```bash
-export NVM_DIR="/home/rodent/.nvm" && \. "/home/rodent/.nvm/nvm.sh" && cd /home/rodent/cusslab && cat .claude/session-startup.md .claude/practices/domain-model.md .claude/practices/backlog.md .claude/practices/waste-log.md > /mnt/c/Users/roden/Downloads/session-ref.md && echo "session-ref.md ready"
+export NVM_DIR="/home/rodent/.nvm" && \. "/home/rodent/.nvm/nvm.sh" && cd /home/rodent/cusslab && cat .claude/session-startup.md .claude/shared-session-state.md .claude/practices/domain-model.md .claude/practices/backlog.md .claude/practices/waste-log.md > /mnt/c/Users/roden/Downloads/session-ref.md && echo "session-ref.md ready"
 ```
 
 This creates `/mnt/c/Users/roden/Downloads/session-ref.md` — one file Claude.ai uploads to get
-full context (startup sequence, domain model, backlog, waste log) without needing to run commands.
+full context (startup sequence, shared state from last session, domain model, backlog, waste log).
 If Claude.ai asks you to "run a command and upload out.txt" — this file is the answer.
+**shared-session-state.md is written by session-closedown.md step 8b — always present after first close.**
 Update the cat list above if new reference files are added.
 
 ---
@@ -52,12 +53,16 @@ If any other check fails: root cause before proceeding.
 
 ---
 
-### 3. RECENT WASTE (last 5 entries — read, report open items)
+### 3. SHARED STATE + RECENT WASTE (cross-Claude sync — read both)
 
-Read `.claude/practices/waste-log.md` — last 5 entries only, report any with Status: OPEN.
+**First:** Read `.claude/shared-session-state.md` — written by whichever Claude closed last.
+Report: what shipped, open WL items, protocol status, carry-forward notes.
+This is the handoff from the other Claude. If file doesn't exist: note it and continue.
 
-Current open items as of 2026-03-08: WL-069 (Python patch scripts — pattern to avoid).
-All others (WL-068 through WL-072) closed. Recurring: auth failures (WL-060, 066).
+**Then:** Read `.claude/practices/waste-log.md` — last 5 entries only, report any with Status: OPEN.
+
+Current open items as of 2026-03-09: WL-080 (session protocol bypassed — Gherkin owed for MatchPlayService).
+WL-081 closed (backlog migrated). Recurring: auth failures (WL-060, 066).
 
 ---
 
@@ -71,12 +76,10 @@ For each open product-bet item, ask:
 - Is there a falsifier — something that would tell us we were wrong?
 Full outer loop: `.claude/practices/hypothesis-driven.md`
 
-Current top 3 as of 2026-03-08:
+Current top 3 as of 2026-03-09:
+- BL-021 MatchPlayService Gherkin + unit tests (CD3=10.0) — OPEN (tech debt, WL-080)
 - BL-008 RIA: ACC label fix (CD3=8.0) — OPEN (RIA project, not Cusslab)
-- BL-009 Mode 2 moment type expansion: Football, Golf, LongRoom — OPEN
-- BL-016 Golf Adventure: tournament category split (CD3=9.0) — CLOSED 2026-03-08
-- BL-017 Golf Adventure: more historic tournaments — CLOSED 2026-03-08
-- Souness's Cat: wired at 8c088ab — DONE
+- BL-014 Ryder Cup end-of-day matchplay leaderboard (CD3=4.25) — OPEN (in-flight done; end-of-day pending)
 
 Agree with Rod which item is being worked this session BEFORE opening any code file.
 
