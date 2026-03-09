@@ -1177,3 +1177,13 @@ Status: CLOSED
 - **Tags:** session-protocol, auto-compact, context-window, claude-code, claude-ai, process
 - **Fix:** Rule added to session-insession.md — stop and start new session before auto-compact, not after
 - **Status:** Closed — rule added 2026-03-09
+
+## WL-083
+- **Item:** Golf panel Mode 1 "Next Round" fires Mode 2 "Select a moment first" alert
+- **Symptom:** Clicking NEXT ROUND in The 19th Hole (Mode 1) shows Chrome alert "Select a moment first." instead of calling discuss()
+- **Root cause:** `nextRound()` reads `sessionStorage.getItem('gf-mode')` to decide whether to call `discuss()` or `callMoment()`. If Mode 2 (ingame) was used earlier in the session, `gf-mode` is `'ingame'` in sessionStorage and persists — so returning to Mode 1 and clicking Next Round still routes to callMoment()
+- **Fix:** Check current DOM state (is `gf-ingame-view` visible?) instead of sessionStorage
+- **Session date:** 2026-03-09
+- **Time lost:** Reported by user — unknown play time lost
+- **Tags:** golf-panel, mode1, nextRound, sessionStorage, stale-state
+- **Status:** Closed — fixed 2026-03-09: nextRound() reads DOM visibility instead of sessionStorage

@@ -12456,8 +12456,8 @@ NEVER SAYS: Anything bitter about the career ending. Anything suggesting comment
   }
 
   function nextRound() {
-    const mode = sessionStorage.getItem('gf-mode') || 'qanda';
-    if (mode === 'ingame') callMoment(); else discuss();
+    const ingameVisible = (document.getElementById('gf-ingame-view') || {}).style.display !== 'none';
+    if (ingameVisible) callMoment(); else discuss();
   }
 
   return { discuss, callMoment, switchMode, nextRound };
