@@ -1002,6 +1002,111 @@ const TOURNAMENTS = [
        events:["crowd_partisan","seve_watching"], pressureRating:2,
        modifiers:{atmosphereNote:"Valderrama 3 — a Spanish crowd watching European golf in Spain, with Seve Ballesteros somewhere in the gallery being recognisable. The home atmosphere is as heavy as the cork oaks."}},
     ]
+  },
+
+  // ── 1985 Ryder Cup — The Belfry ──────────────────────────────────────────────
+  {
+    id:"belfry_1985", year:1985, eraClass:"era-1985", lbClass:"lb-1985",
+    name:"The Day Europe Woke Up",
+    course:"The Belfry — Brabazon Course", country:"Sutton Coldfield, England",
+    type:"ryder", badge:"badge-ryder", days:3,
+    lore:"Europe 16.5–11.5. Their first win in 28 years. Tony Jacklin had changed everything — the matching uniforms, the Concorde, the team rooms, the belief. Sam Torrance holed on the 18th and stood there with his arms raised and tears running down his face. It was the photograph that changed European golf.",
+    players:[
+      { id:"torrance_85", name:"Sam Torrance", abbr:"STR", team:"EUR",
+        temperamentProfile:"PEAKER",
+        bottle:8, ego:6, temperament:6, shame:7,
+        driving:7, irons:7, short_game:7, putting:8, recovery:7, bunkers:7, course_management:7, shot_variation:6,
+        desc:"Holed the winning putt on the 18th to beat Andy North and claim the Ryder Cup. Stood with his arms raised and tears streaming. The photograph ran on every front page.",
+        wound:"Twenty-eight years of waiting. Not his — the continent's. He felt every one of them on that putt.",
+        historicalScores:[0,0,-1],
+        matchPlayDays:[
+          { format:"FOURSOMES", partner:"Howard Clark",    opponent:"Tom Kite / Andy North",      opponentHoleScores:[4,4,4], historicalResult:"Torrance & Clark lost 1 DOWN" },
+          { format:"FOURBALLS", partner:"Sandy Lyle",      opponent:"Hubert Green / Fuzzy Zoeller", opponentHoleScores:[4,4,4], historicalResult:"Torrance & Lyle halved" },
+          { format:"SINGLES",                              opponent:"Andy North",                  opponentHoleScores:[4,4,5], historicalResult:"Torrance won 1 UP on 18 — the winning point, the photograph, the tears" },
+        ]},
+      { id:"seve_85", name:"Seve Ballesteros", abbr:"SBA", team:"EUR",
+        temperamentProfile:"COMBUSTIBLE",
+        bottle:9, ego:10, temperament:4, shame:2,
+        driving:9, irons:8, short_game:10, putting:8, recovery:10, bunkers:9, course_management:8, shot_variation:10,
+        desc:"Imperious all week. Drove the 10th green in foursomes. Won his singles. The most exciting golfer on earth and he knew it.",
+        wound:"There is no wound. There is only the next impossible shot, which he intends to make.",
+        historicalScores:[-1,-2,-3],
+        matchPlayDays:[
+          { format:"FOURSOMES", partner:"Manuel Piñero",   opponent:"Curtis Strange / Mark O'Meara", opponentHoleScores:[4,4,4], historicalResult:"Ballesteros & Piñero won 2&1" },
+          { format:"FOURBALLS", partner:"Manuel Piñero",   opponent:"Tom Kite / Andy North",         opponentHoleScores:[4,4,4], historicalResult:"Ballesteros & Piñero won 1 UP" },
+          { format:"SINGLES",                              opponent:"Tom Kite",                      opponentHoleScores:[4,4,5], historicalResult:"Ballesteros won 2&1" },
+        ]},
+      { id:"woosnam_85", name:"Ian Woosnam", abbr:"IWO", team:"EUR",
+        temperamentProfile:"COMBUSTIBLE",
+        bottle:7, ego:8, temperament:4, shame:5,
+        driving:8, irons:8, short_game:8, putting:7, recovery:8, bunkers:7, course_management:6, shot_variation:8,
+        desc:"Short, Welsh, utterly fearless. The American players had never heard of him. By Sunday afternoon they had.",
+        wound:"Everyone underestimates him based on his size. He has made a career out of proving that wrong.",
+        historicalScores:[0,-1,-2],
+        matchPlayDays:[
+          { format:"FOURSOMES", partner:"Nick Faldo",      opponent:"Hubert Green / Fuzzy Zoeller",  opponentHoleScores:[4,5,4], historicalResult:"Woosnam & Faldo lost 3&2" },
+          { format:"FOURBALLS", partner:"Ian Woosnam",     opponent:"Mark O'Meara / Lanny Wadkins",  opponentHoleScores:[4,4,5], historicalResult:"Woosnam & Faldo won 1 UP" },
+          { format:"SINGLES",                              opponent:"Fuzzy Zoeller",                 opponentHoleScores:[4,4,4], historicalResult:"Woosnam won 3&1" },
+        ]},
+      { id:"langer_85", name:"Bernhard Langer", abbr:"BLG", team:"EUR",
+        temperamentProfile:"ICEBERG",
+        bottle:9, ego:4, temperament:9, shame:3,
+        driving:7, irons:9, short_game:8, putting:7, recovery:7, bunkers:8, course_management:9, shot_variation:7,
+        desc:"Methodical, precise, relentless. Won his foursomes with Lyle by a considerable margin. Made nothing look easy and then produced it anyway.",
+        wound:"No theatrics. No fist pumps. Just the next shot, executed to specification.",
+        historicalScores:[0,-1,-2],
+        matchPlayDays:[
+          { format:"FOURSOMES", partner:"Sandy Lyle",      opponent:"Peter Jacobsen / Hal Sutton",   opponentHoleScores:[4,4,5], historicalResult:"Langer & Lyle won 5&4" },
+          { format:"FOURBALLS", partner:"Ken Brown",       opponent:"Ray Floyd / Lanny Wadkins",     opponentHoleScores:[4,4,4], historicalResult:"Langer & Brown halved" },
+          { format:"SINGLES",                              opponent:"Hal Sutton",                    opponentHoleScores:[4,4,4], historicalResult:"Langer won 5&4" },
+        ]},
+    ],
+    parallelMatches:[
+      // Day 0 — Foursomes
+      [
+        { match:"Ballesteros/Piñero vs Strange/O'Meara",   scores:[ 0, 1, 2], teamA:"EUR" },
+        { match:"Langer/Lyle vs Jacobsen/Sutton",          scores:[ 1, 2, 3], teamA:"EUR" },
+        { match:"Woosnam/Faldo vs Green/Zoeller",          scores:[-1,-2,-3], teamA:"EUR" },
+        { match:"Torrance/Clark vs Kite/North",            scores:[ 0,-1,-1], teamA:"EUR" },
+      ],
+      // Day 1 — Fourballs
+      [
+        { match:"Ballesteros/Piñero vs Kite/North",        scores:[ 0, 1, 1], teamA:"EUR" },
+        { match:"Woosnam/Faldo vs O'Meara/Wadkins",        scores:[ 0, 0, 1], teamA:"EUR" },
+        { match:"Torrance/Lyle vs Green/Zoeller",          scores:[ 0, 0, 0], teamA:"EUR" },
+        { match:"Langer/Brown vs Floyd/Wadkins",           scores:[ 0, 0, 0], teamA:"EUR" },
+      ],
+      // Day 2 — Singles
+      [
+        { match:"Ballesteros vs Kite",                     scores:[ 0, 1, 3], teamA:"EUR" },
+        { match:"Langer vs Sutton",                        scores:[ 1, 2, 4], teamA:"EUR" },
+        { match:"Woosnam vs Zoeller",                      scores:[ 0, 1, 3], teamA:"EUR" },
+        { match:"Torrance vs North",                       scores:[ 0, 0, 1], teamA:"EUR" },
+      ],
+    ],
+    field:[
+      {name:"Sandy Lyle",       scores:[0,-1,-2]},
+      {name:"Nick Faldo",       scores:[0,-1,-2]},
+      {name:"Manuel Piñero",    scores:[0,-1,-3]},
+      {name:"Howard Clark",     scores:[1, 0,-1]},
+    ],
+    holes:[
+      {id:"b10", name:"10th — The Drive",      par:4, yards:311, hazard:"lake fronts green — driveable for the brave",
+       lore:"The hole where legends are made and fools are drowned. Seve drove the green in the foursomes. The lake takes everything that isn't perfect.",
+       incidents:["Seve drove the 10th green in the foursomes to set up a birdie. The American team had been warned about him. It hadn't helped.","Several American players attempted the drive after watching Seve. The lake accepted their offerings."],
+       events:["drive_the_green","crowd_roar","lake_stare"], pressureRating:3,
+       modifiers:{thresholdAdd:1, compCost:1, atmosphereNote:"The Belfry 10th — 311 yards, lake in front of the green. Every gallery on the course migrates here when a hero is on the tee. The water is waiting."}},
+      {id:"b18", name:"18th — The Finish",     par:4, yards:473, hazard:"lake left, gallery everywhere, the weight of 28 years",
+       lore:"Sam Torrance stood over his putt on 18 with tears already forming. He holed it. He raised his arms. He wept openly. The photograph was on every front page. Europe had not won for 28 years.",
+       incidents:["Torrance's winning putt on 18 clinched the Ryder Cup for Europe. His arms went up. The tears were already there.","Tony Jacklin was somewhere near the 18th green. He had built this moment from nothing — the Concorde, the uniforms, the belief."],
+       events:["ryder_climax","torrance_moment","gallery_eruption"], pressureRating:5,
+       modifiers:{compCost:2, atmosphereNote:"Belfry 18 — the hole where Europe woke up. The gallery has been building since the 16th. By the time you reach the green, 28 years of waiting is standing behind you."}},
+      {id:"b17", name:"17th — The Long Par 3", par:3, yards:177, hazard:"bunkers left and right, tight green",
+       lore:"The setup hole for 18. Matches won and lost here in the afternoon wave determined who would face the closing pressure.",
+       incidents:["Multiple matches turned on the 17th on Sunday — players who had held their nerve here carried composure into the final hole; those who dropped shots arrived at 18 a shot behind their destiny."],
+       events:["crowd_swelling","match_tension"], pressureRating:2,
+       modifiers:{atmosphereNote:"Belfry 17 — you can hear the roars from 18 already. Whatever happens here follows you onto the closing tee."}},
+    ]
   }
 
 ];
