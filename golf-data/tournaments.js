@@ -1212,6 +1212,111 @@ const TOURNAMENTS = [
        events:["gallery_eruption","historic_margin"], pressureRating:3,
        modifiers:{atmosphereNote:"K Club 18 — by the time most matches reached this hole, the result was already settled. Europe won by a distance. The gallery had been celebrating since the 14th."}},
     ]
+  },
+
+  // ── 1987 Ryder Cup — Muirfield Village ───────────────────────────────────────
+  {
+    id:"muirfield_village_1987", year:1987, eraClass:"era-1987", lbClass:"lb-1987",
+    name:"First Blood on American Soil",
+    course:"Muirfield Village Golf Club", country:"Dublin, Ohio, USA",
+    type:"ryder", badge:"badge-ryder", days:3,
+    lore:"Europe 15–13. The first time Europe had ever won on American soil. Tony Jacklin captained again. Seve Ballesteros and José María Olazabal played together for the first time — they won every match they played as a pair. Jack Nicklaus designed the course. He captained the USA. He watched Europe win on it.",
+    players:[
+      { id:"seve_87", name:"Seve Ballesteros", abbr:"SBA", team:"EUR",
+        temperamentProfile:"COMBUSTIBLE",
+        bottle:9, ego:10, temperament:4, shame:2,
+        driving:9, irons:8, short_game:10, putting:8, recovery:10, bunkers:9, course_management:8, shot_variation:10,
+        desc:"Played with Olazabal in the foursomes and fourballs. They won every match together. On American soil. On Nicklaus's course. He found this amusing.",
+        wound:"The Americans doubted whether European golf was real. He has spent his career proving it is.",
+        historicalScores:[-1,-2,-3],
+        matchPlayDays:[
+          { format:"FOURSOMES", partner:"José María Olazabal", opponent:"Larry Mize / Lanny Wadkins",   opponentHoleScores:[4,4,4], historicalResult:"Ballesteros & Olazabal won 1 UP" },
+          { format:"FOURBALLS", partner:"José María Olazabal", opponent:"Curtis Strange / Tom Kite",    opponentHoleScores:[4,4,5], historicalResult:"Ballesteros & Olazabal won 2&1" },
+          { format:"SINGLES",                                  opponent:"Curtis Strange",               opponentHoleScores:[4,4,4], historicalResult:"Ballesteros won 2&1" },
+        ]},
+      { id:"olazabal_87", name:"José María Olazabal", abbr:"JMO", team:"EUR",
+        temperamentProfile:"ICEBERG",
+        bottle:8, ego:6, temperament:8, shame:4,
+        driving:8, irons:9, short_game:9, putting:8, recovery:8, bunkers:8, course_management:9, shot_variation:8,
+        desc:"Twenty-one years old. Seve's new partner. Won every team match alongside him. Quiet, precise, apparently unimpressed by anything.",
+        wound:"The youngest player in the European team. Seve treats him as an equal. He is trying to justify that assessment on a daily basis.",
+        historicalScores:[0,-1,-2],
+        matchPlayDays:[
+          { format:"FOURSOMES", partner:"Seve Ballesteros",    opponent:"Larry Mize / Lanny Wadkins",   opponentHoleScores:[4,4,4], historicalResult:"Ballesteros & Olazabal won 1 UP" },
+          { format:"FOURBALLS", partner:"Seve Ballesteros",    opponent:"Curtis Strange / Tom Kite",    opponentHoleScores:[4,4,5], historicalResult:"Ballesteros & Olazabal won 2&1" },
+          { format:"SINGLES",                                  opponent:"Payne Stewart",                opponentHoleScores:[4,4,4], historicalResult:"Olazabal won 2 UP" },
+        ]},
+      { id:"faldo_87", name:"Nick Faldo", abbr:"NFA", team:"EUR",
+        temperamentProfile:"ICEBERG",
+        bottle:9, ego:8, temperament:8, shame:3,
+        driving:8, irons:9, short_game:8, putting:8, recovery:8, bunkers:8, course_management:10, shot_variation:7,
+        desc:"Had just rebuilt his swing. Everything was more controlled than it had been. The American crowd thought he looked robotic. He preferred methodical.",
+        wound:"He changed everything about his game and won The Open with it. Nobody quite knows what to make of him now.",
+        historicalScores:[0,-1,-2],
+        matchPlayDays:[
+          { format:"FOURSOMES", partner:"Ian Woosnam",         opponent:"Tom Kite / Curtis Strange",    opponentHoleScores:[4,4,4], historicalResult:"Faldo & Woosnam won 2&1" },
+          { format:"FOURBALLS", partner:"Ian Woosnam",         opponent:"Hal Sutton / Larry Mize",      opponentHoleScores:[4,4,5], historicalResult:"Faldo & Woosnam won 2&1" },
+          { format:"SINGLES",                                  opponent:"Mark Calcavecchia",            opponentHoleScores:[4,4,4], historicalResult:"Faldo won 2 UP" },
+        ]},
+      { id:"woosnam_87", name:"Ian Woosnam", abbr:"IWO", team:"EUR",
+        temperamentProfile:"COMBUSTIBLE",
+        bottle:7, ego:8, temperament:4, shame:5,
+        driving:8, irons:8, short_game:8, putting:7, recovery:8, bunkers:7, course_management:6, shot_variation:8,
+        desc:"Paired with Faldo for the team matches. The combination of Faldo's system and Woosnam's chaos was more effective than anyone predicted.",
+        wound:"On an American course, in an American crowd. He plays better when nobody respects him.",
+        historicalScores:[0,-1,-2],
+        matchPlayDays:[
+          { format:"FOURSOMES", partner:"Nick Faldo",          opponent:"Tom Kite / Curtis Strange",    opponentHoleScores:[4,4,4], historicalResult:"Faldo & Woosnam won 2&1" },
+          { format:"FOURBALLS", partner:"Nick Faldo",          opponent:"Hal Sutton / Larry Mize",      opponentHoleScores:[4,4,5], historicalResult:"Faldo & Woosnam won 2&1" },
+          { format:"SINGLES",                                  opponent:"Andy Bean",                    opponentHoleScores:[4,4,4], historicalResult:"Woosnam won 1 UP" },
+        ]},
+    ],
+    parallelMatches:[
+      // Day 0 — Foursomes
+      [
+        { match:"Seve/Olazabal vs Mize/Wadkins",           scores:[ 0, 0, 1], teamA:"EUR" },
+        { match:"Faldo/Woosnam vs Kite/Strange",           scores:[ 0, 1, 2], teamA:"EUR" },
+        { match:"Langer/Brown vs Sutton/Pate",             scores:[-1,-1,-1], teamA:"EUR" },
+        { match:"Torrance/Clark vs Wadkins/Stadler",       scores:[ 0, 0, 1], teamA:"EUR" },
+      ],
+      // Day 1 — Fourballs
+      [
+        { match:"Seve/Olazabal vs Strange/Kite",           scores:[ 0, 1, 2], teamA:"EUR" },
+        { match:"Faldo/Woosnam vs Sutton/Mize",            scores:[ 0, 1, 2], teamA:"EUR" },
+        { match:"Langer/Lyle vs Nelson/Stewart",           scores:[-1,-1,-1], teamA:"EUR" },
+        { match:"Brand/Rivero vs Bean/Calcavecchia",       scores:[ 0, 1, 1], teamA:"EUR" },
+      ],
+      // Day 2 — Singles
+      [
+        { match:"Ballesteros vs Strange",                  scores:[ 0, 1, 2], teamA:"EUR" },
+        { match:"Olazabal vs Stewart",                     scores:[ 0, 1, 2], teamA:"EUR" },
+        { match:"Faldo vs Calcavecchia",                   scores:[ 0, 0, 2], teamA:"EUR" },
+        { match:"Woosnam vs Bean",                         scores:[ 0, 0, 1], teamA:"EUR" },
+      ],
+    ],
+    field:[
+      {name:"Sandy Lyle",        scores:[0,-1,-2]},
+      {name:"Bernhard Langer",   scores:[0, 0,-1]},
+      {name:"Sam Torrance",      scores:[0,-1,-1]},
+      {name:"Howard Clark",      scores:[0, 0,-1]},
+    ],
+    holes:[
+      {id:"mv11", name:"11th — The Pond",      par:5, yards:538, hazard:"pond short-right of green, gallery in amphitheatre",
+       lore:"Nicklaus designed the amphitheatre gallery at 11 to create noise. In 1987 it generated noise for Europe. He had not anticipated that.",
+       incidents:["The gallery at 11 in 1987 sat in Nicklaus's amphitheatre and watched European golf dismantle the best American team assembled. Nicklaus spent parts of the day standing at this hole looking thoughtful."],
+       events:["amphitheatre_gallery","nicklaus_watching"], pressureRating:2,
+       modifiers:{atmosphereNote:"Muirfield Village 11 — Nicklaus built this amphitheatre for American glory. The 1987 Ryder Cup used it for something else entirely."}},
+      {id:"mv16", name:"16th — The Water",     par:3, yards:204, hazard:"water left and short, green angled away",
+       lore:"The pivotal par 3. Several matches turned here over the three days. The water punishes any pull and the gallery provides no comfort.",
+       incidents:["Seve made par on 16 in Sunday singles to stay 2 UP on Strange. Strange had been the world number one. Seve was unmoved."],
+       events:["crowd_hostile","water_short"], pressureRating:3,
+       modifiers:{thresholdAdd:1, compCost:1, atmosphereNote:"Muirfield Village 16 — water left, hostile crowd, Strange watching. Par feels like birdie. Bogey feels like surrender."}},
+      {id:"mv18", name:"18th — The Close",     par:4, yards:444, hazard:"bunkers right, gallery complete",
+       lore:"Where Europe completed the historic win. The American crowd was generous in defeat. Nicklaus shook hands with Jacklin and told him Europe had deserved it. That, more than the result, was the moment.",
+       incidents:["Nicklaus's concession to Jacklin on 18 — 'Europe deserved this' — was the beginning of the end of American assumption of Ryder Cup dominance.","Europe 15-13. First win on American soil. Jacklin captaining. The players were in tears."],
+       events:["ryder_climax","nicklaus_concession","historic_first"], pressureRating:4,
+       modifiers:{compCost:1, atmosphereNote:"Muirfield Village 18 — Nicklaus designed this hole. He is standing near it. He has been standing near it all afternoon. He is about to shake Jacklin's hand and acknowledge that European golf has arrived."}},
+    ]
   }
 
 ];
