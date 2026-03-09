@@ -10,7 +10,7 @@ Feature: Golf Adventure — MatchPlayService
 
   Scenario Outline: formatLive renders match standing for mid-game HUD
     When formatLive is called with score <score>
-    Then the result is "<expected>"
+    Then the MPS result is "<expected>"
 
     Examples:
       | score | expected    |
@@ -22,7 +22,7 @@ Feature: Golf Adventure — MatchPlayService
 
   Scenario Outline: formatResult renders final match outcome
     When formatResult is called with score <score> and holesLeft <holesLeft>
-    Then the result is "<expected>"
+    Then the MPS result is "<expected>"
 
     Examples:
       | score | holesLeft | expected |
@@ -39,12 +39,12 @@ Feature: Golf Adventure — MatchPlayService
   Scenario: buildContext returns null for non-Ryder tournaments
     Given a game state with tournament type "major"
     When buildContext is called
-    Then the result is null
+    Then the MPS result is null
 
   Scenario: buildContext returns null when player has no matchPlayDays
     Given a Ryder Cup game state with a player with no matchPlayDays
     When buildContext is called
-    Then the result is null
+    Then the MPS result is null
 
   Scenario: buildContext returns full match context for Ryder Cup foursomes day
     Given a Ryder Cup game state on day 0 with matchPlayDays:
@@ -77,42 +77,42 @@ Feature: Golf Adventure — MatchPlayService
   Scenario: buildSituation returns null for non-Ryder tournaments
     Given a game state with tournament type "major"
     When buildSituation is called
-    Then the result is null
+    Then the MPS result is null
 
   Scenario: buildSituation includes tournament name not hardcoded string
     Given a Ryder Cup game state with tournament name "The Battle of Brookline"
     And the player is in SINGLES on day 2 against "Justin Leonard"
     When buildSituation is called
-    Then the result contains "The Battle of Brookline"
-    And the result does not contain "Miracle at Medinah"
+    Then the MPS result contains "The Battle of Brookline"
+    And the MPS result does not contain "Miracle at Medinah"
 
   Scenario: buildSituation includes format label for foursomes
     Given a Ryder Cup game state with format "FOURSOMES" and partner "Jimenez"
     When buildSituation is called
-    Then the result contains "foursomes (alternate shot)"
-    And the result contains "Jimenez"
+    Then the MPS result contains "foursomes (alternate shot)"
+    And the MPS result contains "Jimenez"
 
   Scenario: buildSituation includes historical result when present
     Given a Ryder Cup game state with historicalResult "Leonard won 1 UP on 17"
     When buildSituation is called
-    Then the result contains "Leonard won 1 UP on 17"
+    Then the MPS result contains "Leonard won 1 UP on 17"
 
   Scenario: buildSituation uses team to set team note for European player
     Given a Ryder Cup game state with player team "EUR"
     When buildSituation is called
-    Then the result contains "Europe needs every point"
+    Then the MPS result contains "Europe needs every point"
 
   Scenario: buildSituation uses team to set team note for USA player
     Given a Ryder Cup game state with player team "USA"
     When buildSituation is called
-    Then the result contains "USA needs every point"
+    Then the MPS result contains "USA needs every point"
 
   # ── In-flight leaderboard ─────────────────────────────────────────────────
 
   Scenario: buildInflightLeaderboard returns null when no parallelMatches defined
     Given a Ryder Cup tournament with no parallelMatches data
     When buildInflightLeaderboard is called for day 0 holeIdx 0
-    Then the result is null
+    Then the MPS result is null
 
   Scenario: buildInflightLeaderboard returns rows for each parallel match
     Given a Ryder Cup tournament with parallelMatches on day 2:
@@ -130,20 +130,20 @@ Feature: Golf Adventure — MatchPlayService
 
   Scenario: buildCommentaryAddendum returns empty string when mpCtx is null
     When buildCommentaryAddendum is called with null mpCtx
-    Then the result is ""
+    Then the MPS result is ""
 
   Scenario: buildCommentaryAddendum includes format and opponent
     Given an mpCtx with format "FOURBALLS" partner "Garcia" opponent "Love / Maggert" and score 1 holesLeft 2
     When buildCommentaryAddendum is called
-    Then the result contains "Fourballs"
-    And the result contains "Love / Maggert"
+    Then the MPS result contains "Fourballs"
+    And the MPS result contains "Love / Maggert"
 
   Scenario: buildCommentaryAddendum includes historical result when present
     Given an mpCtx with historicalResult "Leonard won 1 UP on 17"
     When buildCommentaryAddendum is called
-    Then the result contains "Leonard won 1 UP on 17"
+    Then the MPS result contains "Leonard won 1 UP on 17"
 
   Scenario: buildCommentaryAddendum omits historical result block when absent
     Given an mpCtx with no historicalResult
     When buildCommentaryAddendum is called
-    Then the result does not contain "HISTORICAL MATCH RESULT"
+    Then the MPS result does not contain "HISTORICAL MATCH RESULT"
