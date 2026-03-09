@@ -112,7 +112,7 @@ For items that represent a product hypothesis, add after the CD3 line:
 - Match schedule populates from player's actual matchPlayDays data — no new data required
 - Gherkin: player picker shows all players when Ryder Cup selected; match days are correct
 - CD3: UBV=8 TC=3 RR=2 → CoD=13, Dur=3, **CD3=4.3**
-- Status: OPEN
+- Status: CLOSED — 2026-03-09 (93472a7): player picker, attr HUD, temperamentProfile, 16 players added, 1224 Gherkin green
 
 ### BL-023 — Golf Adventure: 1997 Valderrama Ryder Cup
 - id: valderrama_1997. Europe 14.5–13.5. Seve captains, does not play.

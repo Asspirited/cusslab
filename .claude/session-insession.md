@@ -137,8 +137,15 @@ DDD CLEAN fires after BDD CLOSE — harvest new concepts into domain model.
    - What would falsify this hypothesis? Is that falsifier observable?
    - Source: Ries — Lean Startup; McClure — AARRR; Adzic — Impact Mapping
 
+   COMBINED CD3 TRIAGE — run at the start of each DDD outer loop (when selecting what to work on):
+   - Pull all OPEN items from backlog.md AND waste-log.md
+   - Rank by CD3 (backlog items) or urgency/blocker status (waste-log items)
+   - Waste-log OPEN items surface as blockers alongside backlog CD3 scores
+   - Present the ranked list before committing to a work item
+   - Source: Reinertsen — Product Development Flow (Cost of Delay, CD3)
+
    LEAN CHECK:
-   - Is this the highest-value thing we can do right now? (CD3 score confirms?)
+   - Is this the highest-value thing we can do right now? (Combined CD3 triage confirms?)
    - What is the constraint today — is this on the critical path or adjacent to it?
    - What waste would working on this create? (partially done work, task switching, gold plating)
    - Source: Poppendieck — Lean Software Development; Reinertsen — Product Development Flow
