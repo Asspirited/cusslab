@@ -224,14 +224,16 @@ For items that represent a product hypothesis, add after the CD3 line:
 - Status: OPEN — after BL-031
 
 ### BL-033 — Golf Adventure: Tournament picker decade-panel UI
-- Tournament selection screen currently flat list — grows unwieldy as BL-031/032 land
-- Replace with collapsible decade panels: 1970s, 1980s, 1990s, 2000s, 2010s, 2020s + Ryder Cup (always-visible separate section)
-- Collapsed by default; most recent decade open on load
-- Each panel header shows era name + year range + count of available tournaments
-- Era styling applies to panel headers (Ceefax BBC for 80s, ESPN/ABC for 90s, NBC/Sky for 2000s+)
-- Prerequisite: enough tournaments in each decade to justify panels — minimum 2 per decade
+- Scope: Golf Adventure tournament picker only — the main panel list grows unwieldy as BL-031/032 land
+- Replace flat tournament list with collapsible decade sections within Golf Adventure: 1970s, 1980s, 1990s, 2000s, 2010s + Ryder Cup (separate always-visible section, outside decades)
+- Most recent decade open by default; others collapsed
+- Each decade header shows era label + count e.g. "2000s (3)"
+- Era styling on decade headers mirrors tournament era classes (Ceefax for 80s, NBC/Sky for 2000s+)
+- Don't show decade header if count < 2 — list those solo tournaments flat
+- No cross-panel scope (Football Moment / Long Room unaffected — revisit separately if needed)
+- Prerequisite: at least one BL-031 tournament shipped so the volume justifies the change
 - CD3: UBV=7 TC=4 RR=3 → CoD=14, Dur=3, **CD3=4.7**
-- Status: OPEN — do after BL-031 lands first tournament (need volume to justify the UI)
+- Status: OPEN — do after BL-031 lands first tournament
 
 ### BL-001 — Wayne Riley / Radar content merge
 - Claude.ai session has full Wayne Riley/Radar explanation not yet in repo
