@@ -77,7 +77,6 @@ Before writing any change to `.claude/` files, `MEMORY.md`, `session-startup.md`
 | Lens | Question |
 |---|---|
 | **Lean / Muda** | Does this rule add value or add steps? Would the project be worse without it? |
-| **PDCA** | Is this Plan, Do, Check, or Act? Is it the right phase to write this? |
 | **SMART** | Is the rule Specific, Measurable, Achievable, Relevant, and observable? Vague reminders are not rules. |
 | **DDD / Ubiquitous language** | Does it use domain language correctly? Does it align with the domain model? |
 | **Clean code (Fowler / Beck)** | Is this the simplest version of the rule? Would it pass the four rules of simple design? |
@@ -202,14 +201,15 @@ The session-startup.md pre-flight command already cats multiple files — ensure
 
 ### 9. RETROSPECTIVE TRIGGER (check — do not skip)
 
-Read `.claude/practices/retrospectives.md` for trigger conditions.
+Read `.claude/practices/retrospectives.md` for trigger conditions and the Derby & Larsen 5-phase structure.
+
 Ask: does this session meet any retro trigger?
 - 3+ pipeline failures this session
 - Same mistake made twice
 - Significant time lost to process (not feature) work
 - Rod flagged something as "this keeps happening"
 
-If yes: run the retrospective now. Write to `retrospectives/session-retro-[date].md`. Commit.
+If yes: run the retrospective using the Derby & Larsen sequence (Set the Stage → Gather Data → Generate Insights → Decide What to Do → Close). Write to `retrospectives/session-retro-[date].md`. Commit.
 If no: state which triggers were checked and why none fired.
 
 ---
