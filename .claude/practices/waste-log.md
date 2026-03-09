@@ -1207,3 +1207,19 @@ Status: CLOSED
 - **Cost impact:** Medium — same pattern as WL-082; rule existed but lacked teeth
 - **Tags:** session-protocol, auto-compact, context-window, rule-without-constraint, process
 - **Status:** Closed — forcing functions added to session-insession.md 2026-03-09: stop after 3 BL items, after 5 pipeline runs, or on "pause"/"stop there"/"let's take stock"
+
+## WL-085
+- **Item:** Left nav scroll bleeds into right panel / nav gets stuck and can't scroll
+- **Symptom:** When scrolling the left sidebar nav, scroll events sometimes route to the right panel content even when the mouse is within the nav. Nav also gets stuck — cannot scroll up until the right panel is scrolled to its top first.
+- **Root cause (5 Whys):**
+  1. Why does left nav scroll affect the right panel? → When the nav scroll hits a boundary (top/bottom), the browser scroll-chains the remaining delta to the parent window, moving the page and the right panel.
+  2. Why does chaining happen? → `nav` has no `overscroll-behavior` set, so the default scroll-chain behaviour is active.
+  3. Why does it get stuck? → Once the page scrolls due to chaining, the nav's `position: sticky` desynchronises from the browser's scroll-event routing. Events then route to the wrong target.
+  4. Why does scrolling the right panel to the top fix it? → Resetting `window.scrollY` to 0 restores the nav's sticky origin, re-enabling correct event routing.
+  5. Root cause: Missing `overscroll-behavior: contain` on `nav` — scroll chain propagates to window, corrupting sticky/overflow scroll state.
+- **Fix:** Add `overscroll-behavior: contain;` to the `nav` CSS rule in index.html
+- **Session date:** 2026-03-09
+- **Time lost:** Reported by user — play time lost (friction in live use)
+- **Cost impact:** Medium — confusing UX, intermittent, hard to reproduce reliably
+- **Tags:** ui, nav, scroll, overscroll, sticky, scroll-chain, css
+- **Status:** Closed — fixed 2026-03-09
