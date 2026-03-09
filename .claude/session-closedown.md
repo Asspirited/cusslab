@@ -1,6 +1,6 @@
 # Session Closedown — Heckler and Cox
 # Run in full at every session end. No exceptions.
-# Last updated: 2026-03-08
+# Last updated: 2026-03-09
 
 ---
 
@@ -65,6 +65,40 @@ Check: were any design decisions made this session that are not yet in a file?
 - Character decisions → relevant `docs/` file
 
 If yes: write them now. Do not carry decisions in memory across sessions.
+
+---
+
+### 4b. STANDARDS REVIEW (before writing any update to process files)
+
+Before writing any change to `.claude/` files, `MEMORY.md`, `session-startup.md`, `session-closedown.md`, `CLAUDE.md`, `project-brief.md`, or any `practices/` or `principles/` doc — stop and run this review.
+
+**The lens checklist — apply to each proposed update:**
+
+| Lens | Question |
+|---|---|
+| **Lean / Muda** | Does this rule add value or add steps? Would the project be worse without it? |
+| **PDCA** | Is this Plan, Do, Check, or Act? Is it the right phase to write this? |
+| **SMART** | Is the rule Specific, Measurable, Achievable, Relevant, and observable? Vague reminders are not rules. |
+| **DDD / Ubiquitous language** | Does it use domain language correctly? Does it align with the domain model? |
+| **Clean code (Fowler / Beck)** | Is this the simplest version of the rule? Would it pass the four rules of simple design? |
+| **Tech debt (Fowler / Beck / Poppendiecks)** | Does it eliminate a class of future waste — or does it add queue and interrupt flow? |
+| **Reinertsen / Cost of Delay** | Does it reduce cycle time, shrink queue, or make CoD observable — or does it slow delivery? |
+| **Dev-Test maturity** | Does it add an observable checkpoint? Remove reliance on memory? Strengthen the pipeline? |
+| **Design Thinking (jobs-to-be-done)** | Who is served by this rule (Claude Code, Claude.ai, Rod)? Does it make their job clearer? |
+| **DORA metrics** | Does it improve Deployment Frequency, Lead Time, Change Failure Rate, or MTTR? Or does it introduce friction that degrades them? |
+| **DevOps principles (Accelerate)** | Does it support fast flow, fast feedback, or continuous learning? Does it reduce batch size or handoff? |
+| **Agile Manifesto** | Working software over process? Individuals and interactions over tools? Does this rule serve delivery or serve itself? |
+| **Removal of future WL items** | Would this rule have prevented a past WL entry? Is there evidence it will prevent a future one? |
+
+**Output required — one line per proposed change:**
+
+```
+[ ] <what the change is> — <lens that most strongly justifies or rejects it> — WRITE / SKIP
+```
+
+Only WRITE changes that pass the review. SKIP changes that are vague, add steps without removing waste, or lack an observable success condition.
+
+If no process changes were proposed: write one line confirming that. Do not skip the step.
 
 ---
 
