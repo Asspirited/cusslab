@@ -850,6 +850,56 @@ const TOURNAMENTS = [
     ]
   }
 
+,
+
+  // ── 2008 US Open — Torrey Pines ──────────────────────────────────────────────
+  {
+    id:"torrey_pines_2008", year:2008, eraClass:"era-2008", lbClass:"lb-2008",
+    name:"The Open on the Edge",
+    course:"Torrey Pines — South Course", country:"La Jolla, California",
+    type:"major", badge:"badge-major", days:4,
+    lore:"Tiger Woods played 91 holes on a broken leg and a torn ACL. Rocco Mediate was a 158-ranked journeyman who had spent the week of his life. Johnny Miller called it the greatest tournament he had ever seen. Tiger won on the 91st hole. Then he left and had surgery.",
+    players:[
+      { id:"tiger_woods", name:"Tiger Woods", abbr:"TIG",
+        temperamentProfile:"ICEBERG",
+        bottle:10, ego:10, temperament:9, shame:2,
+        driving:10, irons:10, short_game:10, putting:9, recovery:10, bunkers:9, course_management:10, shot_variation:8,
+        desc:"Playing on a stress fracture in his left tibia and a torn ACL. Winces visibly on every follow-through. Still the best player in the field by some distance.",
+        wound:"Physically broken. Won anyway. The leg is getting worse with every swing.",
+        historicalScores:[2,0,-2,-3] },
+      { id:"rocco_mediate", name:"Rocco Mediate", abbr:"ROC",
+        temperamentProfile:"LEVELHEADED",
+        bottle:7, ego:5, temperament:7, shame:4,
+        driving:6, irons:7, short_game:8, putting:8, recovery:7, bunkers:6, course_management:7, shot_variation:5,
+        desc:"World-ranked 158. A journeyman with a bad back and a big grin. The crowd fell in love with him because he seemed as surprised as they were.",
+        wound:"Nobody expected him to be here. He is trying to enjoy it and also desperately trying to win.",
+        historicalScores:[0,0,0,0] },
+    ],
+    field:[
+      {name:"Lee Westwood",    scores:[2,2,2,3]},
+      {name:"Geoff Ogilvy",    scores:[2,2,3,3]},
+      {name:"D.J. Trahan",     scores:[1,2,3,4]},
+      {name:"Phil Mickelson",  scores:[4,5,5,6]},
+    ],
+    holes:[
+      {id:"tp7",  name:"7th — The Cliff",       par:5, yards:573, hazard:"Pacific Ocean cliff — any mishit left is gone",
+       lore:"The most photographed hole on the South Course. A dogleg right over the coastal canyon. Tiger made eagle here on Sunday to begin his charge.",
+       incidents:["Tiger eagled 7 on Sunday to get within one of Rocco."],
+       events:["gallery_eruption","ocean_wind"], pressureRating:3,
+       modifiers:{atmosphereNote:"The Pacific is 200 feet below. The crowd rings the cliff edge. Tiger's eagle here on Sunday set the course for everything that followed."}},
+      {id:"tp13", name:"13th — The Ridge",      par:5, yards:614, hazard:"canyon right, rough both sides",
+       lore:"The longest hole on the course. Tiger birdied 13 in each of the final two rounds with a limp so pronounced the TV commentators discussed whether he could walk the rest of the week.",
+       incidents:["Tiger birdied 13 both Saturday and Sunday despite visible pain with every stride."],
+       events:["pain_moment","gallery_hushed"], pressureRating:3,
+       modifiers:{atmosphereNote:"By 13, the crowd is aware something extraordinary is happening. A man is playing through an injury that would hospitalise most people, and he is in the lead."}},
+      {id:"tp18", name:"18th — The Finish",     par:5, yards:570, hazard:"fairway bunkers, crowd three-deep",
+       lore:"Tiger's birdie putt on Sunday 18 to force the playoff. He limped off the green pumping his fist. Rocco watched from the scorer's tent and knew they were going to extra holes.",
+       incidents:["Tiger's 12-foot birdie putt on 18 on Sunday forced the playoff. His roar echoed off the grandstands."],
+       events:["final_hole","gallery_eruption","historic_moment"], pressureRating:5,
+       modifiers:{atmosphereNote:"Sunday 18 at Torrey Pines, 2008. Tiger needs birdie to stay alive. The leg is gone. He makes it. The roar is unlike anything NBC had broadcast in years."}},
+    ]
+  }
+
 ];
 
 if (typeof module !== 'undefined') module.exports = { TOURNAMENTS };
