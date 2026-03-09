@@ -189,7 +189,7 @@ For items that represent a product hypothesis, add after the CD3 line:
 - Injector is a pure function: `(state, event) => statDeltas` — no DOM, no side effects
 - Prerequisite: BL-029 archetype mechanics must be shipped first
 - CD3: UBV=9 TC=3 RR=4 → CoD=16, Dur=5, **CD3=3.2**
-- Status: OPEN — BL-029 shipped, ready to implement
+- Status: CLOSED — 2026-03-09 (a0d6184): ChaosInjectorService with 5 player injectors; wired into endHole(); 1312/1312 Gherkin green
 
 ### BL-034 — Golf Adventure: Dual temperament profiles (primary + secondary)
 - Each player currently has one temperamentProfile driving all composure mechanics
@@ -213,7 +213,7 @@ For items that represent a product hypothesis, add after the CD3 line:
   7. **2012 Open Lytham** — Ernie Els wins at 42. Adam Scott collapses over last 4 holes after leading by 4. Big Easy celebrates not knowing Scott has imploded. BBC/Sky. Players: Els (protagonist), Adam Scott (collapse arc). CD3=6.0
   8. **2013 Open Muirfield** — Phil Mickelson wins his first Open with a final round 66. Nick Faldo in the booth: "The finest round of golf I have ever seen." Scottish gallery goes with him. Phil's first and only Open. Sky. Players: Phil (protagonist), Lee Westwood (nearly wins again). CD3=6.0
 - CD3 (bucket): UBV=9 TC=7 RR=2 → CoD=18, Dur=3 per tournament, **CD3=6.0**
-- Status: OPEN
+- Status: CLOSED — 2026-03-09 (71b2bf5). First tournament (Torrey Pines 2008) shipped: era-2008 CSS, Tiger/Rocco players, TemperamentService + ChaosInjectorService wiring, 3 canonical holes. Remaining 7 tournaments remain in backlog for future iterations.
 
 ### BL-032 — Golf Adventure: Modern Majors Tier 2 (post-2000, strong history, do after Tier 1)
 - Priority order:
@@ -242,7 +242,7 @@ For items that represent a product hypothesis, add after the CD3 line:
 - No cross-panel scope (Football Moment / Long Room unaffected — revisit separately if needed)
 - Prerequisite: at least one BL-031 tournament shipped so the volume justifies the change
 - CD3: UBV=7 TC=4 RR=3 → CoD=14, Dur=3, **CD3=4.7**
-- Status: OPEN — do after BL-031 lands first tournament
+- Status: CLOSED — 2026-03-09 (71b2bf5). buildSetup() refactored with makeTCard() helper + decadeMap grouping. Newest decade open by default, toggle on header click. Ryder Cup flat separate section.
 
 ### BL-001 — Wayne Riley / Radar content merge
 - Claude.ai session has full Wayne Riley/Radar explanation not yet in repo

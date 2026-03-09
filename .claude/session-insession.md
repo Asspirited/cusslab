@@ -71,8 +71,16 @@ STOP. Do not wait for it to fire.
 1. Run session closedown (pipeline → waste log → backlog → shared-session-state → commit → push)
 2. Tell Rod: "Context filling — clean stop here, start a new session"
 3. New session picks up from shared-session-state.md — no context lost
-Letting auto-compact fire mid-task wastes 10-20 min re-establishing state every time (WL-082).
+Letting auto-compact fire mid-task wastes 10-20 min re-establishing state every time (WL-082, WL-084).
 Applies to both Claude Code and Claude.ai. Proactive stop > reactive compact.
+
+FORCING FUNCTIONS — observable checkpoints (WL-084: rule had no teeth without these):
+Do NOT wait to feel "context is long". Stop at whichever comes first:
+- After 3 BL items closed in a single session → clean stop
+- After 5 or more pipeline runs in a single session → clean stop
+- Any time Rod says "pause" / "stop there" / "let's take stock" → clean stop immediately
+These are observable and don't require monitoring opaque context size.
+If in doubt — stop. The cost of a clean stop is 2 min. The cost of a reactive compact is 15+ min.
 
 ### RULE: Windows Downloads folder is accessible
 Rod's Downloads folder is always available at /mnt/c/Users/roden/Downloads/

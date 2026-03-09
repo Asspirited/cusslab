@@ -1187,3 +1187,23 @@ Status: CLOSED
 - **Time lost:** Reported by user — unknown play time lost
 - **Tags:** golf-panel, mode1, nextRound, sessionStorage, stale-state
 - **Status:** Closed — fixed 2026-03-09: nextRound() reads DOM visibility instead of sessionStorage
+
+## WL-084
+- **Item:** Auto-compact fired mid-session despite WL-082 rule being written
+- **Symptom:** Session compacted mid-task (BL-031 + BL-033 pipeline not yet run, not committed). Conversation summary reconstructed from transcript. Time lost re-establishing state at session start.
+- **Root cause (5 Whys):**
+  1. Why did compact fire? Context window filled during a long BL-031/033/034 session.
+  2. Why didn't the rule prevent it? Claude Code didn't monitor context fill level proactively — no internal signal surfaces until compaction is imminent or already happening.
+  3. Why was there no proactive stop? Rule says "when context is getting long" — but "long" is not defined. No observable checkpoint triggers the stop. It's a judgement call with no forcing function.
+  4. Why is there no observable checkpoint? Rule was written as a heuristic, not tied to a measurable state (e.g. after N commits, or after N items closed in a session).
+  5. Root cause: The rule is a reminder, not a constraint. It requires self-awareness of an opaque internal metric (context size) that neither Claude Code nor Rod can easily observe in real time.
+- **Fix (strengthened rule):** Add concrete forcing functions to session-insession.md:
+  - After 3 BL items closed in a single session → clean stop checkpoint
+  - After any session lasting >90 min subjective time → clean stop checkpoint
+  - If pipeline run count ≥5 this session → clean stop checkpoint
+  - These are observable, not opaque — they don't require monitoring context size
+- **Session date:** 2026-03-09
+- **Time lost:** ~15 min (summary reconstruction + context re-read at session start)
+- **Cost impact:** Medium — same pattern as WL-082; rule existed but lacked teeth
+- **Tags:** session-protocol, auto-compact, context-window, rule-without-constraint, process
+- **Status:** Closed — forcing functions added to session-insession.md 2026-03-09: stop after 3 BL items, after 5 pipeline runs, or on "pause"/"stop there"/"let's take stock"
