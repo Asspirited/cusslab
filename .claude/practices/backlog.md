@@ -91,12 +91,6 @@ For items that represent a product hypothesis, add after the CD3 line:
 - Hypothesis: [prerequisite — no product hypothesis; this is measurement infrastructure]
 - Status: CLOSED 2026-03-08 — accumulatePanelStats/computeAvgDepth in logic.js, HC_PANEL_STATS key in HCSession, 454/454 unit tests, 7/7 Gherkin passing
 
-### BL-008 — ACC framework label fix in RIA
-- ACC = Attributes, Components, Capabilities (James Whittaker / Google) — not "Assumptions..."
-- Wrong label still in RIA UI
-- CD3: UBV=4 TC=2 RR=2 → CoD=8, Dur=1, **CD3=8.0**
-- Status: OPEN
-
 ### BL-014 — Match play leaderboard for Ryder Cup end-of-day
 - buildLeaderboard() shows stroke play table for Ryder Cup — wrong format
 - Should show: Europe vs USA match play points, individual match results (1UP, 2DN, halved)
@@ -181,7 +175,7 @@ For items that represent a product hypothesis, add after the CD3 line:
 - Target file: `docs/characters-sports.md`
 - Also: additional extended pools and needle definitions
 - CD3: UBV=6 TC=3 RR=2 → CoD=11, Dur=2, **CD3=5.5**
-- Status: OPEN
+- Status: CLOSED — characters/radar.md exists (139 lines, 2026-03-06); characters/roe.md also present. Content is in repo. Original concern was Claude.ai session context not persisted — resolved by character file system.
 
 ### BL-007 — Claude Code Windows install bugs (follow-up)
 - "Class not registered" blocks git.exe picker + hidden file access

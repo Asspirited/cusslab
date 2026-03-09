@@ -76,11 +76,11 @@ For each open product-bet item, ask:
 - Is there a falsifier — something that would tell us we were wrong?
 Full outer loop: `.claude/practices/hypothesis-driven.md`
 
-Current top 3 as of 2026-03-09 (end of session):
-- BL-008 RIA: ACC label fix (CD3=8.0) — OPEN (RIA project, not Cusslab)
-- BL-014 Ryder Cup end-of-day matchplay leaderboard (CD3=4.25) — OPEN
+Current top 3 as of 2026-03-09:
+- BL-001 Wayne Riley/Radar content merge (CD3=5.5) — check if already done (chars-sports.md exists)
 - BL-022 Ryder Cup "Be Any Player" mode (CD3=4.3) — OPEN
-- BL-021 MatchPlayService Gherkin — CLOSED 2026-03-09
+- BL-014 Ryder Cup end-of-day matchplay leaderboard (CD3=4.25) — OPEN
+- BL-008 moved to RIA backlog (/home/rodent/risk-and-impact-assessor/.claude/practices/backlog.md)
 
 Agree with Rod which item is being worked this session BEFORE opening any code file.
 
