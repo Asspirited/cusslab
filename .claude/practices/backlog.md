@@ -170,6 +170,27 @@ For items that represent a product hypothesis, add after the CD3 line:
 - CD3: UBV=6 TC=1 RR=1 → CoD=8, Dur=6, **CD3=1.3**
 - Status: OPEN — design question unresolved
 
+### BL-029 — Golf Adventure: Temperament profile archetype mechanics
+- Each `temperamentProfile` (ICEBERG, STREAKY, LEVELHEADED, PEAKER, DEFENSIVE, COMBUSTIBLE) has its own
+  rules for how stats change magnitude and direction in response to shot outcomes and events
+- Magnitude of TEMPERAMENT movement is not fixed (+1) — it varies by archetype
+  (e.g. STREAKY gets amplified runs, LEVELHEADED gets dampened swings)
+- EGO interaction by archetype: ICEBERG stays stable, STREAKY and COMBUSTIBLE amplify EGO on runs
+- Prerequisite: BL-022 player roster + `temperamentProfile` field must be shipped first
+- Gherkin: one scenario outline per profile type, covering positive and negative pressure events
+- CD3: UBV=8 TC=4 RR=5 → CoD=17, Dur=4, **CD3=4.25**
+- Status: OPEN — awaiting BL-022
+
+### BL-030 — Golf Adventure: Player-specific chaos injectors
+- A separate function (per player) that sits on top of the profile archetype
+- Archetype defines the base mechanic; chaos injector defines the player-specific deviation
+  (e.g. Poulter's STREAKY is more extreme than the generic STREAKY; Seve's recovery bonus fires
+  when composure is below 4; Garcia's EGO spikes on eagle then collapses on bogey)
+- Injector is a pure function: `(state, event) => statDeltas` — no DOM, no side effects
+- Prerequisite: BL-029 archetype mechanics must be shipped first
+- CD3: UBV=9 TC=3 RR=4 → CoD=16, Dur=5, **CD3=3.2**
+- Status: OPEN — awaiting BL-029
+
 ### BL-001 — Wayne Riley / Radar content merge
 - Claude.ai session has full Wayne Riley/Radar explanation not yet in repo
 - Target file: `docs/characters-sports.md`

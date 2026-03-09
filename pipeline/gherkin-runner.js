@@ -5889,6 +5889,125 @@ function makeSteps(ctx) {
       ctx._mpsResult = ctx._mps.buildCommentaryAddendum(ctx._mpsState, ctx._mpsMpCtx);
     }],
 
+    // ── Golf Adventure Players (specs/golf-adventure-players.feature) ───────────
+
+    [/^every player in every Ryder Cup tournament has a numeric "([^"]+)" between 1 and 10$/, (attr) => {
+      const ryders = ctx._gaData.TOURNAMENTS.filter(t => t.type === 'ryder');
+      for (const t of ryders) {
+        for (const p of t.players) {
+          const v = p[attr];
+          if (typeof v !== 'number' || v < 1 || v > 10)
+            throw new Error(`${t.id}/${p.id||p.name}: "${attr}" is ${v} (expected 1–10)`);
+        }
+      }
+    }],
+
+    [/^every player in every Ryder Cup tournament has a "temperamentProfile" field$/, () => {
+      const valid = new Set(['ICEBERG','STREAKY','LEVELHEADED','PEAKER','DEFENSIVE','COMBUSTIBLE']);
+      const ryders = ctx._gaData.TOURNAMENTS.filter(t => t.type === 'ryder');
+      for (const t of ryders) {
+        const bad = t.players.filter(p => !valid.has(p.temperamentProfile));
+        if (bad.length)
+          throw new Error(`${t.id} players with invalid temperamentProfile: ${bad.map(p=>p.id||p.name).join(', ')}`);
+      }
+    }],
+
+    [/^the value is one of: ICEBERG, STREAKY, LEVELHEADED, PEAKER, DEFENSIVE, COMBUSTIBLE$/, () => {
+      // validated by the temperamentProfile step above — no-op here
+    }],
+
+    [/^no player in any Ryder Cup tournament has a stored "skill" field$/, () => {
+      const ryders = ctx._gaData.TOURNAMENTS.filter(t => t.type === 'ryder');
+      for (const t of ryders) {
+        const bad = t.players.filter(p => 'skill' in p);
+        if (bad.length)
+          throw new Error(`${t.id} has players with stored "skill": ${bad.map(p=>p.id||p.name).join(', ')}`);
+      }
+    }],
+
+    [/^SKILL is computed for every player in every Ryder Cup tournament$/, () => {
+      const B_ATTRS = ['driving','irons','short_game','putting','recovery','bunkers','course_management','shot_variation'];
+      const ryders = ctx._gaData.TOURNAMENTS.filter(t => t.type === 'ryder');
+      ctx._computedSkills = [];
+      for (const t of ryders) {
+        for (const p of t.players) {
+          const sum = B_ATTRS.reduce((acc, a) => acc + (p[a] || 0), 0);
+          ctx._computedSkills.push({ id: p.id||p.name, skill: Math.round(sum / 80 * 100) });
+        }
+      }
+    }],
+
+    [/^every computed SKILL value is between 0 and 100$/, () => {
+      const bad = (ctx._computedSkills || []).filter(s => s.skill < 0 || s.skill > 100);
+      if (bad.length)
+        throw new Error(`SKILL out of range: ${bad.map(s=>`${s.id}=${s.skill}`).join(', ')}`);
+    }],
+
+    [/^every player in every Ryder Cup tournament has a "matchPlayDays" array with exactly 3 entries$/, () => {
+      const ryders = ctx._gaData.TOURNAMENTS.filter(t => t.type === 'ryder');
+      for (const t of ryders) {
+        for (const p of t.players) {
+          if (!Array.isArray(p.matchPlayDays) || p.matchPlayDays.length !== 3)
+            throw new Error(`${t.id}/${p.id||p.name}: matchPlayDays must have exactly 3 entries (got ${p.matchPlayDays?.length ?? 'none'})`);
+        }
+      }
+    }],
+
+    [/^every matchPlayDay has a non-empty "format"$/, () => {
+      const ryders = ctx._gaData.TOURNAMENTS.filter(t => t.type === 'ryder');
+      for (const t of ryders) {
+        for (const p of t.players) {
+          const bad = (p.matchPlayDays || []).filter(d => !d || !d.format || d.format.trim() === '');
+          if (bad.length)
+            throw new Error(`${t.id}/${p.id||p.name}: has matchPlayDay entries missing format`);
+        }
+      }
+    }],
+
+    [/^every matchPlayDay where format is not "ABSENT" has a non-empty "([^"]+)"$/, (field) => {
+      const ryders = ctx._gaData.TOURNAMENTS.filter(t => t.type === 'ryder');
+      for (const t of ryders) {
+        for (const p of t.players) {
+          const bad = (p.matchPlayDays || []).filter(d => d && d.format !== 'ABSENT' && (!d[field] || String(d[field]).trim() === ''));
+          if (bad.length)
+            throw new Error(`${t.id}/${p.id||p.name}: active matchPlayDay missing "${field}"`);
+        }
+      }
+    }],
+
+    [/^every player in every Ryder Cup tournament has a "team" of "EUR" or "USA"$/, () => {
+      const ryders = ctx._gaData.TOURNAMENTS.filter(t => t.type === 'ryder');
+      for (const t of ryders) {
+        const bad = t.players.filter(p => p.team !== 'EUR' && p.team !== 'USA');
+        if (bad.length)
+          throw new Error(`${t.id} players with invalid team: ${bad.map(p=>p.id||p.name).join(', ')}`);
+      }
+    }],
+
+    [/^tournament "([^"]+)" has at least (\d+) players with team "([^"]+)"$/, (id, min, team) => {
+      const t = ctx._gaData.TOURNAMENTS.find(t => t.id === id);
+      if (!t) throw new Error(`Tournament not found: ${id}`);
+      const count = t.players.filter(p => p.team === team).length;
+      if (count < Number(min))
+        throw new Error(`${id}: expected at least ${min} ${team} players, got ${count}`);
+    }],
+
+    [/^tournament "([^"]+)" contains a player with id "([^"]+)"$/, (tid, pid) => {
+      const t = ctx._gaData.TOURNAMENTS.find(t => t.id === tid);
+      if (!t) throw new Error(`Tournament not found: ${tid}`);
+      ctx._gaFoundPlayer = t.players.find(p => p.id === pid);
+      if (!ctx._gaFoundPlayer) throw new Error(`Player "${pid}" not found in ${tid}`);
+    }],
+
+    [/^that player has team "([^"]+)"$/, (team) => {
+      if (ctx._gaFoundPlayer.team !== team)
+        throw new Error(`Expected team "${team}", got "${ctx._gaFoundPlayer.team}"`);
+    }],
+
+    [/^matchPlayDays with format "ABSENT" do not require an opponent field$/, () => {
+      // structural rule — satisfied by schema design. No assertion needed.
+    }],
+
   ];
 }
 
@@ -5906,6 +6025,7 @@ function parseFeature(text) {
     for (const row of o.examples) {
       const expanded = {
         name: o.name + ' — ' + Object.values(row).join(', '),
+        tags: o.tags,
         steps: o.steps.map(s => {
           let r = s;
           for (const [k, v] of Object.entries(row)) r = r.split(`<${k}>`).join(v);

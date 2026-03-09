@@ -358,23 +358,58 @@ body {
 }
 
 /* ── PLAYER GRID ── */
-.player-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px,1fr)); gap: 8px; margin-bottom: 16px; }
+.player-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px,1fr)); gap: 8px; margin-bottom: 16px; }
+.player-team-section { margin-bottom: 14px; }
+.player-team-heading {
+  font-family: var(--font-display);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 4px;
+  margin-bottom: 8px;
+}
+.player-team-heading.eur { color: var(--positive-hi); border-color: var(--positive); }
+.player-team-heading.usa { color: var(--danger-hi); border-color: var(--danger); }
 .player-btn {
   background: var(--card);
   border: 1px solid var(--border);
   color: var(--text);
-  padding: 12px 14px;
+  padding: 10px 12px;
   font-family: var(--font-body);
-  font-size: 14px;
+  font-size: 13px;
   border-radius: 2px;
   cursor: pointer;
   text-align: left;
   transition: all 0.16s;
+  width: 100%;
 }
 .player-btn:hover { border-color: var(--border-hi); }
 .player-btn.selected { border-color: var(--accent); background: rgba(255,255,255,0.03); color: var(--accent-bright); }
-.player-btn .pn { font-weight: 700; display: block; margin-bottom: 3px; font-family: var(--font-display); font-size: 16px; letter-spacing: 0.05em; }
-.player-btn .pp { font-size: 12px; font-style: italic; color: var(--muted); line-height: 1.4; }
+.player-btn .pn { font-weight: 700; display: block; margin-bottom: 2px; font-family: var(--font-display); font-size: 15px; letter-spacing: 0.05em; }
+.player-btn .pp { font-size: 11px; font-style: italic; color: var(--muted); line-height: 1.3; margin-bottom: 8px; }
+.player-btn .p-team { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; padding: 1px 5px; border-radius: 2px; display: inline-block; margin-bottom: 6px; }
+.player-btn .p-team.eur { background: rgba(48,184,48,0.15); color: var(--positive-hi); border: 1px solid var(--positive); }
+.player-btn .p-team.usa { background: rgba(255,80,80,0.12); color: var(--danger-hi); border: 1px solid var(--danger); }
+.player-btn .p-attrs { display: grid; grid-template-columns: repeat(2,1fr); gap: 2px 8px; margin-top: 6px; border-top: 1px solid var(--border); padding-top: 6px; }
+.player-btn .p-attr { display: flex; justify-content: space-between; font-size: 10px; }
+.player-btn .p-attr-lbl { color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+.player-btn .p-attr-val { font-weight: 700; font-variant-numeric: tabular-nums; }
+.player-btn .p-skill { font-size: 10px; margin-top: 4px; display: flex; justify-content: space-between; }
+.player-btn .p-skill-lbl { color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+.player-btn .p-skill-val { font-weight: 700; color: var(--accent-bright); }
+
+/* ── ATTR HUD ── */
+#attr-hud { border-top: 1px solid var(--border); margin-top: 10px; padding-top: 8px; }
+.attr-hud-row { display: grid; grid-template-columns: repeat(4,1fr) repeat(4,1fr); gap: 4px 12px; }
+.attr-hud-section { margin-bottom: 6px; }
+.attr-hud-label { font-size: 9px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 3px; }
+.attr-cell { display: flex; justify-content: space-between; font-size: 10px; padding: 1px 0; }
+.attr-cell-lbl { color: var(--muted); text-transform: uppercase; font-size: 9px; letter-spacing: 0.06em; }
+.attr-cell-val { font-weight: 700; font-variant-numeric: tabular-nums; min-width: 24px; text-align: right; }
+.attr-cell-val.changed-up   { color: var(--positive-hi); }
+.attr-cell-val.changed-down { color: var(--danger-hi); }
 
 /* ── PANEL SELECTOR ── */
 .panel-selector-trigger {
@@ -1256,6 +1291,17 @@ body {
     <div class="comp-val" id="comp-val">10</div>
   </div>
 
+  <div id="attr-hud" style="display:none;">
+    <div class="attr-hud-section">
+      <div class="attr-hud-label">Character</div>
+      <div class="attr-hud-row" id="attr-row-a"></div>
+    </div>
+    <div class="attr-hud-section">
+      <div class="attr-hud-label">Golf</div>
+      <div class="attr-hud-row" id="attr-row-b"></div>
+    </div>
+  </div>
+
   <div class="hole-mast" id="hole-mast">
     <div>
       <div id="hole-ordinal" style="font-family:var(--font-mono);font-size:11px;letter-spacing:0.2em;color:var(--muted);text-transform:uppercase;margin-bottom:4px"></div>
@@ -1488,6 +1534,31 @@ function toggleCharacter(card, charId) {
   checkStartReady();
 }
 
+function computeSkill(p) {
+  const B = ['driving','irons','short_game','putting','recovery','bunkers','course_management','shot_variation'];
+  const sum = B.reduce((a, k) => a + (p[k] || 0), 0);
+  return Math.round(sum / 80 * 100);
+}
+
+function playerCardHTML(p) {
+  const isRyder = !!p.team;
+  const teamBadge = isRyder ? `<span class="p-team ${p.team.toLowerCase()}">${p.team}</span>` : '';
+  const attrsHTML = isRyder ? (() => {
+    const skill = computeSkill(p);
+    const aAttrs = [
+      ['BOTTLE', p.bottle], ['EGO', p.ego], ['TEMPER', p.temperament], ['SHAME', p.shame],
+    ];
+    const bAttrs = [
+      ['DRIVING', p.driving], ['IRONS', p.irons], ['SHORT', p.short_game], ['PUTT', p.putting],
+      ['RECOV', p.recovery], ['BUNKER', p.bunkers], ['MGMT', p.course_management], ['SHAPE', p.shot_variation],
+    ];
+    const aRows = aAttrs.map(([l,v]) => `<span class="p-attr"><span class="p-attr-lbl">${l}</span><span class="p-attr-val">${v}</span></span>`).join('');
+    const bRows = bAttrs.map(([l,v]) => `<span class="p-attr"><span class="p-attr-lbl">${l}</span><span class="p-attr-val">${v}</span></span>`).join('');
+    return `<div class="p-attrs">${aRows}${bRows}</div><div class="p-skill"><span class="p-skill-lbl">SKILL</span><span class="p-skill-val">${skill}/100</span></div>`;
+  })() : '';
+  return `${teamBadge}<span class="pn">${p.name}</span><span class="pp">${p.desc}</span>${attrsHTML}`;
+}
+
 function selectTournament(card, tournament) {
   document.querySelectorAll('.tc').forEach(c => c.classList.remove('selected'));
   card.classList.add('selected');
@@ -1498,13 +1569,40 @@ function selectTournament(card, tournament) {
   const grid = document.getElementById('player-grid');
   area.classList.remove('hidden');
   grid.innerHTML = '';
-  tournament.players.forEach(p => {
-    const btn = document.createElement('button');
-    btn.className = 'player-btn';
-    btn.innerHTML = `<span class="pn">${p.name}</span><span class="pp">${p.desc}</span>`;
-    btn.onclick = () => selectPlayer(btn, p);
-    grid.appendChild(btn);
-  });
+
+  const isRyder = tournament.type === 'ryder';
+  if (isRyder) {
+    const eurPlayers = tournament.players.filter(p => p.team === 'EUR');
+    const usaPlayers = tournament.players.filter(p => p.team === 'USA');
+    [['EUROPE', 'eur', eurPlayers], ['USA', 'usa', usaPlayers]].forEach(([label, cls, players]) => {
+      if (!players.length) return;
+      const section = document.createElement('div');
+      section.className = 'player-team-section';
+      const heading = document.createElement('div');
+      heading.className = `player-team-heading ${cls}`;
+      heading.textContent = label;
+      const teamGrid = document.createElement('div');
+      teamGrid.className = 'player-grid';
+      players.forEach(p => {
+        const btn = document.createElement('button');
+        btn.className = 'player-btn';
+        btn.innerHTML = playerCardHTML(p);
+        btn.onclick = () => selectPlayer(btn, p);
+        teamGrid.appendChild(btn);
+      });
+      section.appendChild(heading);
+      section.appendChild(teamGrid);
+      grid.appendChild(section);
+    });
+  } else {
+    tournament.players.forEach(p => {
+      const btn = document.createElement('button');
+      btn.className = 'player-btn';
+      btn.innerHTML = playerCardHTML(p);
+      btn.onclick = () => selectPlayer(btn, p);
+      grid.appendChild(btn);
+    });
+  }
   checkStartReady();
 }
 
@@ -1555,10 +1653,35 @@ function startGame() {
   document.getElementById('hud-player').textContent = G.player.name;
   document.getElementById('hud-tournament').textContent = `${G.tournament.name} · ${G.tournament.course}`;
 
+  // Initialise live attribute state from player base values (Ryder Cup only)
+  G.attrs = null;
+  if (G.player.team) {
+    const p = G.player;
+    G.attrs = {
+      bottle: p.bottle, ego: p.ego, temperament: p.temperament, shame: p.shame,
+      driving: p.driving, irons: p.irons, short_game: p.short_game, putting: p.putting,
+      recovery: p.recovery, bunkers: p.bunkers, course_management: p.course_management, shot_variation: p.shot_variation,
+    };
+    renderAttrHud();
+  }
+  document.getElementById('attr-hud').style.display = G.attrs ? '' : 'none';
+
   showScreen('game');
   // Fire-and-forget — files are small, will be ready before first shot lands
   loadCharacterFiles(G.selectedPanel);
   loadHole();
+}
+
+function renderAttrHud() {
+  if (!G.attrs) return;
+  const skill = computeSkill(G.attrs);
+  const aSpec = [['SKILL', skill+'/100', true],['BOTTLE',G.attrs.bottle],['EGO',G.attrs.ego],['TEMPERAMENT',G.attrs.temperament],['SHAME',G.attrs.shame]];
+  const bSpec = [['DRIVING',G.attrs.driving],['IRONS',G.attrs.irons],['SHORT GAME',G.attrs.short_game],['PUTTING',G.attrs.putting],
+                 ['RECOVERY',G.attrs.recovery],['BUNKERS',G.attrs.bunkers],['COURSE MGT',G.attrs.course_management],['SHOT VAR',G.attrs.shot_variation]];
+  document.getElementById('attr-row-a').innerHTML = aSpec.map(([l,v,composite]) =>
+    `<span class="attr-cell"><span class="attr-cell-lbl">${l}</span><span class="attr-cell-val${composite?' p-skill-val':''}">${v}</span></span>`).join('');
+  document.getElementById('attr-row-b').innerHTML = bSpec.map(([l,v]) =>
+    `<span class="attr-cell"><span class="attr-cell-lbl">${l}</span><span class="attr-cell-val">${v}</span></span>`).join('');
 }
 
 // ═══════════════════════════════════════════
