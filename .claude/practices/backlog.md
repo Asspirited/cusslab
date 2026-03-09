@@ -96,7 +96,7 @@ For items that represent a product hypothesis, add after the CD3 line:
 - Should show: Europe vs USA match play points, individual match results (1UP, 2DN, halved)
 - Blocked on defining per-match outcomes for field (Molinari, McIlroy, Westwood, Donald)
 - CD3: UBV=8 TC=4 RR=5 → CoD=17, Dur=4, **CD3=4.25**
-- Status: OPEN — HUD and buildSituation fixed; in-flight leaderboard added 2026-03-09; end-of-day leaderboard (points table format) still pending
+- Status: CLOSED — 2026-03-09 (51b51fc): parseHistoricalResult + buildEndOfDayLeaderboard in MatchPlayService; buildLeaderboard() dispatches; Ryder points table renders EUR/USA totals + match rows; 1241/1241 Gherkin green
 
 ### BL-021 — MatchPlayService: Gherkin + unit tests (tech debt, WL-080)
 - MatchPlayService (golf-service/matchplay-service.js) shipped 2026-03-09 with no pipeline coverage
