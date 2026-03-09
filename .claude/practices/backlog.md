@@ -179,7 +179,7 @@ For items that represent a product hypothesis, add after the CD3 line:
 - Prerequisite: BL-022 player roster + `temperamentProfile` field must be shipped first
 - Gherkin: one scenario outline per profile type, covering positive and negative pressure events
 - CD3: UBV=8 TC=4 RR=5 → CoD=17, Dur=4, **CD3=4.25**
-- Status: OPEN — awaiting BL-022
+- Status: CLOSED — 2026-03-09 (08370d1): TemperamentService.applyHoleResult, 6 profiles, streak tracking, EGO amplification; 1290/1290 Gherkin green
 
 ### BL-030 — Golf Adventure: Player-specific chaos injectors
 - A separate function (per player) that sits on top of the profile archetype
@@ -189,7 +189,16 @@ For items that represent a product hypothesis, add after the CD3 line:
 - Injector is a pure function: `(state, event) => statDeltas` — no DOM, no side effects
 - Prerequisite: BL-029 archetype mechanics must be shipped first
 - CD3: UBV=9 TC=3 RR=4 → CoD=16, Dur=5, **CD3=3.2**
-- Status: OPEN — awaiting BL-029
+- Status: OPEN — BL-029 shipped, ready to implement
+
+### BL-034 — Golf Adventure: Dual temperament profiles (primary + secondary)
+- Each player currently has one temperamentProfile driving all composure mechanics
+- Design: add `temperamentProfileSecondary` to player data — fires at half-magnitude (or with inverted counter-properties) under specific conditions (composure below threshold, or after 5+ holes played in a day)
+- Example: Poulter primary=STREAKY, secondary=PEAKER — when composure drops below 4, PEAKER behaviour kicks in (hard lows get harder, but eagle recovery is explosive)
+- Counter-property variant: secondary profile can invert one rule (e.g. COMBUSTIBLE secondary on a LEVELHEADED player means big shots break the dam in either direction)
+- Prerequisite: BL-029 archetype mechanics shipped; BL-030 chaos injectors for implementation context
+- CD3: UBV=7 TC=3 RR=5 → CoD=15, Dur=3, **CD3=5.0**
+- Status: OPEN — awaiting BL-030
 
 ### BL-031 — Golf Adventure: Modern Majors Tier 1 (post-2000, highest CD3 comedy + history)
 - Add one at a time in priority order. Each is a full tournament with holes, players, historicalResult data.
