@@ -133,7 +133,7 @@ For items that represent a product hypothesis, add after the CD3 line:
 - Each needs own eraClass CSS (see era styling note below)
 - Era styling: pre-1970 monochrome BBC; 1970s–80s Ceefax/Alliss; 1991–99 ESPN/ABC; 2000s+ NBC/Sky
 - CD3: UBV=8 TC=2 RR=1 → CoD=11, Dur=5 per tournament, **CD3=2.2** (per tournament; do one at a time)
-- Status: OPEN
+- Status: CLOSED — 2026-03-09 (5cecb88→9c23f7d): Belfry 1985, K Club 2006, Muirfield Village 1987, Celtic Manor 2010, Oak Hill 1995 all shipped
 
 ### BL-025 — Golf Adventure: Ryder Cup rollout — Tier 2 (USA wins, rich incident)
 - After Tier 1. Lower priority — comedy engine weaker when player is losing cause.

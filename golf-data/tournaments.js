@@ -1527,6 +1527,111 @@ const TOURNAMENTS = [
        events:["ryder_climax","faldo_precision","cup_won"], pressureRating:5,
        modifiers:{compCost:2, atmosphereNote:"Oak Hill 18 — Faldo is 12 feet from the hole. Strange missed. The Cup is already won but nobody has told Faldo. He is treating this putt as the only thing that exists."}},
     ]
+  },
+
+  // ── 2016 Ryder Cup — Hazeltine ───────────────────────────────────────────────
+  {
+    id:"hazeltine_2016", year:2016, eraClass:"era-2016", lbClass:"lb-2016",
+    name:"The Hazeltine Hammering",
+    course:"Hazeltine National Golf Club", country:"Chaska, Minnesota, USA",
+    type:"ryder", badge:"badge-ryder", days:3,
+    lore:"USA 17–11. A comprehensive American victory. Rory McIlroy was visibly furious for three days — on the course, off the course, in press conferences. Patrick Reed beat him in singles 1 UP in what felt like the match of the week. The American crowd was enormous and loud and very specifically aimed at Europe's best player.",
+    players:[
+      { id:"mcilroy_16", name:"Rory McIlroy", abbr:"RMC", team:"EUR",
+        temperamentProfile:"COMBUSTIBLE",
+        bottle:7, ego:9, temperament:4, shame:6,
+        driving:10, irons:9, short_game:8, putting:8, recovery:7, bunkers:7, course_management:7, shot_variation:9,
+        desc:"World number three. Furious from the first tee shot to the closing handshake. Won three from four but the one he lost — to Reed in singles — became the defining image of the week.",
+        wound:"He has won everything and is still losing Ryder Cups. The team format doesn't suit him and he knows it and it makes him furious.",
+        historicalScores:[0,-1,-2],
+        matchPlayDays:[
+          { format:"FOURBALLS", partner:"Andy Sullivan",  opponent:"Phil Mickelson / Rickie Fowler",  opponentHoleScores:[4,4,5], historicalResult:"McIlroy & Sullivan lost 1 DOWN" },
+          { format:"FOURSOMES", partner:"Thomas Pieters", opponent:"Dustin Johnson / Matt Kuchar",    opponentHoleScores:[4,5,4], historicalResult:"McIlroy & Pieters won 3&2" },
+          { format:"SINGLES",                             opponent:"Patrick Reed",                    opponentHoleScores:[4,4,4], historicalResult:"McIlroy lost 1 DOWN — Reed beat him in front of a very loud Minnesota crowd" },
+        ]},
+      { id:"rose_16", name:"Justin Rose", abbr:"JRO", team:"EUR",
+        temperamentProfile:"LEVELHEADED",
+        bottle:8, ego:6, temperament:9, shame:3,
+        driving:8, irons:9, short_game:8, putting:8, recovery:7, bunkers:8, course_management:9, shot_variation:8,
+        desc:"Went 3-2. One of the steadiest performers in the European team all week. The results didn't tell the story — Europe were losing everywhere and Rose was holding sections of the scoreboard together.",
+        wound:"Medinah 2012 produced one of the best moments of his career. This Ryder Cup is producing one of the worst weeks. He is the same player.",
+        historicalScores:[0,-1,-2],
+        matchPlayDays:[
+          { format:"FOURBALLS", partner:"Henrik Stenson", opponent:"Jordan Spieth / Patrick Reed",   opponentHoleScores:[4,4,4], historicalResult:"Rose & Stenson lost 3&2" },
+          { format:"FOURSOMES", partner:"Henrik Stenson", opponent:"Bubba Watson / J.B. Holmes",     opponentHoleScores:[4,5,4], historicalResult:"Rose & Stenson lost 1 DOWN" },
+          { format:"SINGLES",                             opponent:"Ryan Moore",                     opponentHoleScores:[4,4,5], historicalResult:"Rose won 1 UP" },
+        ]},
+      { id:"pieters_16", name:"Thomas Pieters", abbr:"TPT", team:"EUR",
+        temperamentProfile:"STREAKY",
+        bottle:8, ego:8, temperament:6, shame:3,
+        driving:9, irons:8, short_game:7, putting:7, recovery:7, bunkers:7, course_management:7, shot_variation:9,
+        desc:"Went 4-1. The best European performer statistically. Belgian rookie, 24 years old, apparently unaware that Hazeltine 2016 was supposed to be difficult.",
+        wound:"He is a rookie and the expectation is zero. He finds this liberating. Every hole he wins is a surprise. Even to him.",
+        historicalScores:[-1,-1,-2],
+        matchPlayDays:[
+          { format:"FOURBALLS", partner:"Lee Westwood",   opponent:"Rickie Fowler / Phil Mickelson", opponentHoleScores:[4,4,4], historicalResult:"Pieters & Westwood won 3&2" },
+          { format:"FOURSOMES", partner:"Rory McIlroy",   opponent:"Dustin Johnson / Matt Kuchar",   opponentHoleScores:[4,5,4], historicalResult:"McIlroy & Pieters won 3&2" },
+          { format:"SINGLES",                             opponent:"Zach Johnson",                   opponentHoleScores:[4,4,5], historicalResult:"Pieters won 3&2" },
+        ]},
+      { id:"garcia_16", name:"Sergio Garcia", abbr:"SGC", team:"EUR",
+        temperamentProfile:"COMBUSTIBLE",
+        bottle:7, ego:8, temperament:4, shame:6,
+        driving:8, irons:9, short_game:8, putting:6, recovery:8, bunkers:7, course_management:7, shot_variation:9,
+        desc:"Went 2-3. The week went as Garcia weeks tend to go — moments of extraordinary brilliance surrounded by the quiet suspicion that something will go wrong. Something did.",
+        wound:"The major. Still. Always. The Ryder Cup is the only format where he consistently outperforms his reputation. This week it wasn't enough.",
+        historicalScores:[0,-1,-2],
+        matchPlayDays:[
+          { format:"FOURBALLS", partner:"Rafael Cabrera-Bello", opponent:"Bubba Watson / J.B. Holmes",  opponentHoleScores:[4,4,5], historicalResult:"Garcia & Cabrera-Bello won 3&2" },
+          { format:"FOURSOMES", partner:"Martin Kaymer",        opponent:"Jordan Spieth / Patrick Reed", opponentHoleScores:[4,4,4], historicalResult:"Garcia & Kaymer lost 3&2" },
+          { format:"SINGLES",                                   opponent:"Rickie Fowler",               opponentHoleScores:[4,4,4], historicalResult:"Garcia lost 1 DOWN" },
+        ]},
+    ],
+    parallelMatches:[
+      // Day 0 — Fourballs
+      [
+        { match:"Pieters/Westwood vs Fowler/Mickelson",    scores:[ 0, 1, 3], teamA:"EUR" },
+        { match:"Garcia/Cabrera-Bello vs Watson/Holmes",   scores:[ 0, 1, 3], teamA:"EUR" },
+        { match:"McIlroy/Sullivan vs Mickelson/Fowler",    scores:[-1,-1,-1], teamA:"EUR" },
+        { match:"Rose/Stenson vs Spieth/Reed",             scores:[-1,-2,-3], teamA:"EUR" },
+      ],
+      // Day 1 — Foursomes
+      [
+        { match:"McIlroy/Pieters vs Johnson/Kuchar",       scores:[ 0, 1, 3], teamA:"EUR" },
+        { match:"Garcia/Kaymer vs Spieth/Reed",            scores:[-1,-2,-3], teamA:"EUR" },
+        { match:"Rose/Stenson vs Watson/Holmes",           scores:[-1,-1,-1], teamA:"EUR" },
+        { match:"Hatton/Sullivan vs Furyk/Koepka",         scores:[-1,-2,-3], teamA:"EUR" },
+      ],
+      // Day 2 — Singles
+      [
+        { match:"McIlroy vs Reed",                         scores:[-1,-1,-1], teamA:"EUR" },
+        { match:"Pieters vs Z.Johnson",                    scores:[ 0, 1, 3], teamA:"EUR" },
+        { match:"Rose vs Moore",                           scores:[ 0, 0, 1], teamA:"EUR" },
+        { match:"Garcia vs Fowler",                        scores:[-1,-1,-1], teamA:"EUR" },
+      ],
+    ],
+    field:[
+      {name:"Lee Westwood",      scores:[0,-1,-2]},
+      {name:"Henrik Stenson",    scores:[0,-1,-2]},
+      {name:"Martin Kaymer",     scores:[0,-1,-3]},
+      {name:"Chris Wood",        scores:[0,-1,-2]},
+    ],
+    holes:[
+      {id:"h5",  name:"5th — The Crucible",    par:4, yards:449, hazard:"rough both sides, gallery loud from first tee",
+       lore:"Hazeltine 5 was where the American crowd found its voice and kept it. The noise was not hostile in the traditional sense — it was simply enormous and unrelenting.",
+       incidents:["McIlroy birdied 5 in Saturday foursomes to keep Europe within range. The gallery didn't appreciate it and said so at some length."],
+       events:["crowd_hostile","gallery_wall"], pressureRating:2,
+       modifiers:{atmosphereNote:"Hazeltine 5 — Minnesota crowds in a Ryder Cup are a particular phenomenon. They are not merely loud. They are comprehensive."}},
+      {id:"h16", name:"16th — Reed's Hole",    par:3, yards:211, hazard:"water short, tight green",
+       lore:"Where Reed and McIlroy effectively decided their singles match. Reed made par. McIlroy didn't. The 1 DOWN deficit became permanent.",
+       incidents:["Patrick Reed played the 16th in singles and secured the hole that put him 1 UP with two to play. McIlroy, who had been aggressive all day, couldn't manufacture the birdie needed.","The crowd at 16 during Reed/McIlroy was among the loudest golf noise ever recorded in a match play context."],
+       events:["crowd_peak","reed_mcilroy","match_turning"], pressureRating:4,
+       modifiers:{thresholdAdd:1, compCost:1, atmosphereNote:"Hazeltine 16 — Reed is ahead. McIlroy needs this hole. The crowd wants Reed to win it. It is very loud. It has been this loud since the 1st tee."}},
+      {id:"h18", name:"18th — The Loss",       par:4, yards:444, hazard:"bunkers, gallery three-deep, result already decided",
+       lore:"USA 17-11. The scoreboard said it all by the time Sunday afternoon ended. Europe had played reasonably well in places and still lost by six.",
+       incidents:["The final score — USA 17, Europe 11 — was the largest American Ryder Cup win since 1981.","Rory McIlroy's post-match press conference established several new idioms for the word 'frustrated'."],
+       events:["ryder_loss","gallery_celebration","rory_press"], pressureRating:3,
+       modifiers:{atmosphereNote:"Hazeltine 18 — USA have won. The crowd has known this since the 14th. There is very little to add."}},
+    ]
   }
 
 ];
