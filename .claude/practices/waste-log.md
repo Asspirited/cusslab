@@ -1154,7 +1154,7 @@ Status: CLOSED
 - **Time lost:** ~0 additional (work done) but test debt incurred; Gherkin now owed before next touch
 - **Cost impact:** Medium — technical debt; any MatchPlayService regression will be invisible until manual play
 - **Tags:** golf-adventure, session-protocol, gherkin-gate, tdd, ddd-red, process
-- **Status:** Open — Gherkin and unit tests for MatchPlayService owed this session
+- **Status:** Closed — 2026-03-09 (7d0e35d): 28 Gherkin scenarios written and green; MEMORY.md hard stop rule added; cross-Claude sync mechanism shipped
 
 ## WL-081
 - **Item:** Backlog written to wrong file — `features/backlog.md` instead of `.claude/practices/backlog.md`

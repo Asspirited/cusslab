@@ -413,3 +413,46 @@ Unit runner imports from pipeline/logic.js. No unit runner changes needed.
 - What does extracting SCENARIOS make impossible? Nothing — `<script src>` is already how the page loads things.
 - What does it make harder? Load order errors if script tag appears after inline code that uses it. Mitigation: load order enforced by convention and checked in pipeline.
 - What coupling does this create at the boundary? index.html now imports from src/data/ — that is the intended direction. No inversion.
+
+---
+
+## 2026-03-09 — MatchPlayService extraction + cross-Claude sync
+
+### MatchPlayService (golf-service/matchplay-service.js)
+
+**Decision:** Extract all Ryder Cup match-play domain logic to a dedicated service.
+
+**Problem:** `golf-adventure.html` had `if (G.tournament.type === 'ryder')` branches scattered through `buildSituation()`, `endHole()`, `getMatchPlayCommentary()` — OCP violation. "Miracle at Medinah" was hardcoded. Match context was built inline.
+
+**Extracted to MatchPlayService:**
+- `formatLive(score)` — mid-game score display ("2 UP", "All Square")
+- `formatResult(score, holesLeft)` — final result ("2&1", "1 UP", "Halved")
+- `buildContext(state)` — full mpCtx from game state (null for non-Ryder)
+- `buildSituation(state)` — Ryder Cup situation string (replaces inline code)
+- `buildInflightLeaderboard(tournament, day, holeIdx, ...)` — live parallel match rows
+- `buildCommentaryAddendum(state, mpCtx)` — match context block for AI prompt
+
+**Pattern:** Same as GameEngine and CommentaryService — pure functions, no DOM, no API, injectable in tests. Browser loads via `<script src>`, Node requires via `module.exports`.
+
+**Load order:** `matchplay-service.js` must load before `golf-adventure.html` inline script. Added to `<head>` after `commentary-service.js`.
+
+**Second-order check:**
+- What does this make impossible? Nothing — `buildSituation` in `game-engine.js` remains for stroke play. Ryder Cup now routes through MatchPlayService.
+- What coupling is created? `golf-adventure.html` now depends on MatchPlayService. CommentaryService accepts `ctx.mpCtx` from MatchPlayService — no circular dependency.
+- What does this make harder? Any MatchPlayService change requires Gherkin update (enforced by pipeline).
+
+### Shared session state (cross-Claude sync)
+
+**Decision:** `.claude/shared-session-state.md` written on every close, included in `session-ref.md` pre-flight.
+
+**Problem:** Claude Code and Claude.ai start fresh each session. No handoff. Protocol violations invisible to the next Claude.
+
+**Mechanism:**
+- `session-closedown.md step 8b` writes the file (overwrite, not append)
+- `session-startup.md pre-flight` cats it into `session-ref.md` (before domain model and backlog)
+- Claude.ai gets it via file upload at session start
+- Claude Code reads it via `session-startup.md step 3`
+
+**Contents:** last commit, what shipped, open WL items, backlog top 3, protocol status, carry-forward notes.
+
+**Invariant:** If the file doesn't exist (first session after this decision), Claude notes it and continues — not an error.

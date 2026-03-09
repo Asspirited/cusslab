@@ -110,7 +110,7 @@ For items that represent a product hypothesis, add after the CD3 line:
 - Needs: Gherkin in specs/ covering match situation text, score formatting, historical result injection
 - Prerequisite before any further MatchPlayService changes — see WL-080
 - CD3: UBV=3 TC=8 RR=9 → CoD=20, Dur=2, **CD3=10.0**
-- Status: OPEN
+- Status: CLOSED — 2026-03-09 (7d0e35d): 28 Gherkin scenarios written and green, 1181/1181
 
 ### BL-022 — Golf Adventure: Ryder Cup "Be Any Player" mode
 - User picks any of the 24 players across all Ryder Cup tournaments and plays as them for all 3 days

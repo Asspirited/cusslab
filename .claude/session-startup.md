@@ -76,10 +76,11 @@ For each open product-bet item, ask:
 - Is there a falsifier — something that would tell us we were wrong?
 Full outer loop: `.claude/practices/hypothesis-driven.md`
 
-Current top 3 as of 2026-03-09:
-- BL-021 MatchPlayService Gherkin + unit tests (CD3=10.0) — OPEN (tech debt, WL-080)
+Current top 3 as of 2026-03-09 (end of session):
 - BL-008 RIA: ACC label fix (CD3=8.0) — OPEN (RIA project, not Cusslab)
-- BL-014 Ryder Cup end-of-day matchplay leaderboard (CD3=4.25) — OPEN (in-flight done; end-of-day pending)
+- BL-014 Ryder Cup end-of-day matchplay leaderboard (CD3=4.25) — OPEN
+- BL-022 Ryder Cup "Be Any Player" mode (CD3=4.3) — OPEN
+- BL-021 MatchPlayService Gherkin — CLOSED 2026-03-09
 
 Agree with Rod which item is being worked this session BEFORE opening any code file.
 
