@@ -85,6 +85,74 @@ const MatchPlayService = (() => {
     return rows;
   }
 
+  // Parse a historicalResult string to 'EUR' | 'USA' | 'HALVED'
+  // playerSurname: surname of the player whose matchPlayDay entry this string lives on
+  // playerTeam: 'EUR' or 'USA'
+  function parseHistoricalResult(str, playerSurname, playerTeam) {
+    if (!str) return 'HALVED';
+    if (/halved/i.test(str)) return 'HALVED';
+    const opposite = playerTeam === 'EUR' ? 'USA' : 'EUR';
+    if (/\blost\b/i.test(str)) return opposite;
+    // "won" — player's own surname in the winning subject means playerTeam won
+    if (playerSurname && new RegExp(playerSurname, 'i').test(str)) return playerTeam;
+    return opposite;
+  }
+
+  // Build end-of-day points table for a Ryder Cup day.
+  // Returns { eurTotal, usaTotal, matches: [{ pair, result, winner, isUser }] }
+  function buildEndOfDayLeaderboard(tournament, day, userMatchScore, holesLeft, playerName, playerTeam) {
+    if (!tournament || tournament.type !== 'ryder') return null;
+    const pm = tournament.parallelMatches?.[day];
+    if (!pm || !pm.length) return null;
+
+    const playerSurname = (playerName || '').split(' ').pop();
+    let eurTotal = 0, usaTotal = 0;
+
+    const matches = pm.map(m => {
+      const isUser = !!playerSurname && new RegExp(playerSurname, 'i').test(m.match);
+      let winner, result;
+
+      if (isUser) {
+        if (userMatchScore === 0 && holesLeft === 0) {
+          winner = 'HALVED'; result = 'Halved';
+        } else {
+          result = formatResult(userMatchScore, holesLeft);
+          winner = userMatchScore > 0 ? playerTeam : (playerTeam === 'EUR' ? 'USA' : 'EUR');
+        }
+      } else {
+        const allPlayers = tournament.players || [];
+        const matched = allPlayers.find(p => {
+          const mpd = p.matchPlayDays?.[day];
+          if (!mpd || mpd.format === 'ABSENT') return false;
+          const sur = p.name.split(' ').pop();
+          return new RegExp(sur, 'i').test(m.match);
+        });
+
+        if (matched) {
+          const mpd = matched.matchPlayDays[day];
+          const sur = matched.name.split(' ').pop();
+          winner = parseHistoricalResult(mpd.historicalResult, sur, matched.team || 'EUR');
+          result = mpd.historicalResult || 'Halved';
+        } else {
+          const lastScore = m.scores?.[m.scores.length - 1] ?? 0;
+          const teamA = m.teamA || 'EUR';
+          const teamB = teamA === 'EUR' ? 'USA' : 'EUR';
+          if (lastScore === 0) { winner = 'HALVED'; result = 'Halved'; }
+          else if (lastScore > 0) { winner = teamA; result = formatResult(lastScore, 0); }
+          else { winner = teamB; result = formatResult(Math.abs(lastScore), 0); }
+        }
+      }
+
+      if (winner === 'HALVED') { eurTotal += 0.5; usaTotal += 0.5; }
+      else if (winner === 'EUR') eurTotal += 1;
+      else usaTotal += 1;
+
+      return { pair: m.match, result, winner, isUser };
+    });
+
+    return { eurTotal, usaTotal, matches };
+  }
+
   // Build the commentary context extension for Ryder Cup shots
   function buildCommentaryAddendum(state, mpCtx) {
     if (!mpCtx) return '';
@@ -107,6 +175,8 @@ TEAM: ${mpCtx.team} — this point matters for the overall Cup.`;
     buildSituation,
     buildInflightLeaderboard,
     buildCommentaryAddendum,
+    parseHistoricalResult,
+    buildEndOfDayLeaderboard,
   };
 
 })();

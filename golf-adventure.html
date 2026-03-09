@@ -955,6 +955,15 @@ body {
    DAY END SCREEN
 ═══════════════════════════════════════════ */
 .day-end-wrap { margin: 20px 0; }
+/* Ryder Cup end-of-day points table */
+.ryd-totals { display:flex; justify-content:center; align-items:center; gap:24px; padding:14px 18px 12px; font-size:22px; font-weight:700; letter-spacing:0.08em; }
+.ryd-team { display:flex; align-items:baseline; gap:8px; }
+.ryd-team.eur { color:#6ab0ff; }
+.ryd-team.usa { color:#ffb060; }
+.ryd-team span.neg { color:#4dff9a; font-size:26px; }
+.ryd-team span.pos { color:#ff6060; font-size:26px; }
+.ryd-sep { color:var(--muted); font-size:18px; }
+
 .day-end-header {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -2353,6 +2362,7 @@ function simulateField() {
 }
 
 function buildLeaderboard() {
+  if (G.tournament.type === 'ryder') return buildRyderEndOfDayLeaderboard();
   const t=G.tournament; const p=G.player;
   let rows=[];
   t.players.forEach(pl=>{ if(pl.id!==p.id) rows.push({name:pl.name,score:G.fieldScores[pl.name]||0,hist:pl.historicalScores[G.day]||0,you:false}); });
@@ -2363,7 +2373,7 @@ function buildLeaderboard() {
   const cls=t.lbClass;
   const sf=s=>s===0?'E':s>0?`+${s}`:`${s}`;
   const sc=s=>s<0?'neg':s>0?'pos':'ev';
-  const day=G.day; const label=t.type==='ryder'?`Day ${day+1} Standings`:`Round ${day+1} Leaderboard`;
+  const day=G.day; const label=`Round ${day+1} Leaderboard`;
   const ghost=`Ghost (${p.name.split(' ')[1]||p.name})`;
 
   let html=`<div class="${cls}">
@@ -2385,6 +2395,44 @@ function buildLeaderboard() {
       <div class="lbr-score ${sc(r.score)}">${sf(r.score)}</div>
       <div class="lbr-ghost">${sf(r.hist)}</div>
       <div class="lbr-diff ${r.you?dc:'track'}">${r.you?ds:'—'}</div>
+    </div>`;
+  });
+  return html+'</div>';
+}
+
+function buildRyderEndOfDayLeaderboard() {
+  const t=G.tournament; const p=G.player;
+  const holesPlayed=G.holeResults.filter(r=>r.day===G.day).length;
+  const holesLeft=G.holesPerDay-holesPlayed;
+  const data=MatchPlayService.buildEndOfDayLeaderboard(t, G.day, G.matchPlayScore, holesLeft, p.name, p.team||'EUR');
+  if (!data) return '';
+
+  const cls=t.lbClass;
+  const eurPts=data.eurTotal%1===0?data.eurTotal:data.eurTotal.toFixed(1);
+  const usaPts=data.usaTotal%1===0?data.usaTotal:data.usaTotal.toFixed(1);
+  const wc=data.eurTotal>data.usaTotal?'neg':data.eurTotal<data.usaTotal?'pos':'ev';
+
+  let html=`<div class="${cls}">
+    <div class="lb-title-bar">
+      <div class="lbt">Day ${G.day+1} Points</div>
+      <div class="lbs">${t.name} · ${t.year}</div>
+    </div>
+    <div class="ryd-totals">
+      <div class="ryd-team eur">EUR <span class="${wc==='neg'?'neg':''}">${eurPts}</span></div>
+      <div class="ryd-sep">–</div>
+      <div class="ryd-team usa">USA <span class="${wc==='pos'?'pos':''}">${usaPts}</span></div>
+    </div>
+    <div class="lb-header-row" style="grid-template-columns:1fr 80px 52px">
+      <div>Match</div><div style="text-align:center">Result</div><div style="text-align:right">Pt</div>
+    </div>`;
+
+  data.matches.forEach(m=>{
+    const ptLabel=m.winner==='HALVED'?'½ · ½':m.winner==='EUR'?'EUR':'USA';
+    const ptCls=m.winner==='EUR'?'neg':m.winner==='USA'?'pos':'ev';
+    html+=`<div class="lb-row${m.isUser?' you':''}" style="grid-template-columns:1fr 80px 52px">
+      <div class="lbr-name">${m.pair}</div>
+      <div class="lbr-score" style="text-align:center;font-size:12px">${m.result}</div>
+      <div class="lbr-diff ${ptCls}" style="text-align:right">${ptLabel}</div>
     </div>`;
   });
   return html+'</div>';

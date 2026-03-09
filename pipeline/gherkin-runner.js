@@ -5889,6 +5889,251 @@ function makeSteps(ctx) {
       ctx._mpsResult = ctx._mps.buildCommentaryAddendum(ctx._mpsState, ctx._mpsMpCtx);
     }],
 
+    // ── End-of-day leaderboard (BL-014) ──────────────────────────────────────────
+
+    // parseHistoricalResult setup
+    [/^a player with surname "(.+)" on team "(.+)"$/, (surname, team) => {
+      ctx._mpsParsePlayer = { surname, team };
+    }],
+    [/^the player's historical result for the day is "(.+)"$/, (result) => {
+      ctx._mpsParseResult = result;
+    }],
+    [/^the end-of-day leaderboard computes the match outcome$/, () => {
+      ctx._mpsResult = ctx._mps.parseHistoricalResult(
+        ctx._mpsParseResult, ctx._mpsParsePlayer.surname, ctx._mpsParsePlayer.team
+      );
+    }],
+    [/^the match outcome is "(EUR|USA|HALVED)"$/, (outcome) => {
+      if (ctx._mpsResult !== outcome)
+        throw new Error(`Expected outcome "${outcome}" but got "${ctx._mpsResult}"`);
+    }],
+
+    // Shared mock tournament builders (used by multiple steps)
+    // Medinah Day 1: Poulter EUR won, Garcia halved, Rose EUR won → EUR=2.5 USA=0.5
+    // Medinah Day 0: Garcia EUR won, Rose USA won, McIlroy USA won → EUR=1 USA=2
+
+    [/^Medinah 2012 day 1 historical results:$/, () => {
+      ctx._mpsEodTournament = {
+        type: 'ryder', name: 'Miracle at Medinah', holes: [],
+        parallelMatches: [[], [
+          { match: 'Poulter/McIlroy vs Woods/Stricker',    scores: [1, 1, 1], teamA: 'EUR' },
+          { match: 'Garcia/Donald vs Dufner/Johnson',       scores: [0, 0, 0], teamA: 'EUR' },
+          { match: 'Rose/Molinari vs Dufner/Johnson',       scores: [1, 1, 2], teamA: 'EUR' },
+        ], []],
+        players: [
+          { name: 'Ian Poulter',    team: 'EUR', matchPlayDays: [null, { format: 'FOURBALLS', opponent: 'Tiger Woods / Steve Stricker',    historicalResult: 'Poulter & McIlroy won 1 UP'  }, null] },
+          { name: 'Sergio Garcia',  team: 'EUR', matchPlayDays: [null, { format: 'FOURBALLS', opponent: 'Jason Dufner / Zach Johnson',      historicalResult: 'Garcia & Donald halved'       }, null] },
+          { name: 'Justin Rose',    team: 'EUR', matchPlayDays: [null, { format: 'FOURBALLS', opponent: 'Jason Dufner / Zach Johnson',      historicalResult: 'Rose & Molinari won 3&2'      }, null] },
+        ],
+      };
+      ctx._mpsEodUser = null;
+    }],
+
+    [/^I am not playing as any of these players$/, () => {
+      ctx._mpsEodUser = { playerName: '__nobody__', playerTeam: 'EUR', userMatchScore: 0, holesLeft: 0, day: 1 };
+    }],
+
+    [/^buildEndOfDayLeaderboard is called for day (\d+)$/, (day) => {
+      const tournament = ctx._mpsEodTournament || ctx._mpsState?.tournament;
+      if (!tournament) throw new Error('No EOD tournament set');
+      const u = ctx._mpsEodUser || { playerName: '__nobody__', playerTeam: 'EUR', userMatchScore: 0, holesLeft: 0 };
+      ctx._mpsResult = ctx._mps.buildEndOfDayLeaderboard(
+        tournament, Number(day), u.userMatchScore || 0, u.holesLeft || 0, u.playerName || '__nobody__', u.playerTeam || 'EUR'
+      );
+    }],
+
+    [/^buildEndOfDayLeaderboard is called$/, () => {
+      if (!ctx._mpsEodTournament) throw new Error('No EOD tournament set');
+      const u = ctx._mpsEodUser || { playerName: '__nobody__', playerTeam: 'EUR', userMatchScore: 0, holesLeft: 0, day: 0 };
+      ctx._mpsResult = ctx._mps.buildEndOfDayLeaderboard(
+        ctx._mpsEodTournament, u.day || 0, u.userMatchScore || 0, u.holesLeft || 0, u.playerName || '__nobody__', u.playerTeam || 'EUR'
+      );
+    }],
+
+    [/^EUR total is (\d+\.?\d*)$/, (n) => {
+      if (!ctx._mpsResult) throw new Error('No EOD result');
+      if (ctx._mpsResult.eurTotal !== Number(n))
+        throw new Error(`Expected EUR total ${n} but got ${ctx._mpsResult.eurTotal}`);
+    }],
+    [/^USA total is (\d+\.?\d*)$/, (n) => {
+      if (!ctx._mpsResult) throw new Error('No EOD result');
+      if (ctx._mpsResult.usaTotal !== Number(n))
+        throw new Error(`Expected USA total ${n} but got ${ctx._mpsResult.usaTotal}`);
+    }],
+    [/^(\d+) match rows are returned$/, (n) => {
+      if (!ctx._mpsResult?.matches) throw new Error(`Expected matches array but got ${JSON.stringify(ctx._mpsResult)}`);
+      if (ctx._mpsResult.matches.length !== Number(n))
+        throw new Error(`Expected ${n} match rows but got ${ctx._mpsResult.matches.length}`);
+    }],
+
+    // User substitution scenarios
+    [/^Medinah 2012 day 1 with historical EUR total 2\.5 and USA total 0\.5$/, () => {
+      ctx._mpsEodTournament = {
+        type: 'ryder', name: 'Miracle at Medinah', holes: [],
+        parallelMatches: [[], [
+          { match: 'Poulter/McIlroy vs Woods/Stricker',    scores: [1, 1, 1], teamA: 'EUR' },
+          { match: 'Garcia/Donald vs Dufner/Johnson',       scores: [0, 0, 0], teamA: 'EUR' },
+          { match: 'Rose/Molinari vs Dufner/Johnson',       scores: [1, 1, 2], teamA: 'EUR' },
+        ], []],
+        players: [
+          { name: 'Ian Poulter',    team: 'EUR', matchPlayDays: [null, { format: 'FOURBALLS', opponent: 'Tiger Woods / Steve Stricker',  historicalResult: 'Poulter & McIlroy won 1 UP'  }, null] },
+          { name: 'Sergio Garcia',  team: 'EUR', matchPlayDays: [null, { format: 'FOURBALLS', opponent: 'Jason Dufner / Zach Johnson',    historicalResult: 'Garcia & Donald halved'       }, null] },
+          { name: 'Justin Rose',    team: 'EUR', matchPlayDays: [null, { format: 'FOURBALLS', opponent: 'Jason Dufner / Zach Johnson',    historicalResult: 'Rose & Molinari won 3&2'      }, null] },
+        ],
+      };
+      ctx._mpsHistoricalResult = { eurTotal: 2.5, usaTotal: 0.5 };
+    }],
+
+    [/^I am playing as (.+?) \((EUR|USA)\) whose historical result was ".+"$/, (name, team) => {
+      if (!ctx._mpsEodUser) ctx._mpsEodUser = {};
+      ctx._mpsEodUser = { ...ctx._mpsEodUser, playerName: name, playerTeam: team, day: 1 };
+    }],
+
+    [/^my actual match ended All Square \(matchPlayScore 0, holesLeft 0\)$/, () => {
+      if (ctx._mpsEodUser) { ctx._mpsEodUser.userMatchScore = 0; ctx._mpsEodUser.holesLeft = 0; }
+    }],
+
+    [/^my match result shows "(.+)"$/, (result) => {
+      if (!ctx._mpsResult) throw new Error('No EOD result');
+      const userRow = ctx._mpsResult.matches.find(m => m.isUser);
+      if (!userRow) throw new Error('No user row in matches');
+      if (userRow.result !== result)
+        throw new Error(`Expected result "${result}" but got "${userRow.result}"`);
+    }],
+
+    // User beats history (Day 0: Rose historical loss → user wins 2&1)
+    [/^Medinah 2012 day 0 where historically Rose & Kaymer lost 3&2 to USA$/, () => {
+      ctx._mpsEodTournament = {
+        type: 'ryder', name: 'Miracle at Medinah', holes: [],
+        parallelMatches: [[
+          { match: 'Garcia/Westwood vs Watson/Simpson',       scores: [1, 2, 4],    teamA: 'EUR' },
+          { match: 'Rose/Kaymer vs Mickelson/Bradley',        scores: [-1, -2, -3], teamA: 'EUR' },
+          { match: 'McIlroy/Poulter vs Bradley/Mickelson',    scores: [-1, -1, -1], teamA: 'EUR' },
+        ], [], []],
+        players: [
+          { name: 'Sergio Garcia', team: 'EUR', matchPlayDays: [{ format: 'FOURSOMES', opponent: 'Bubba Watson / Webb Simpson',        historicalResult: 'Garcia & Westwood won 4&3'    }, null, null] },
+          { name: 'Justin Rose',   team: 'EUR', matchPlayDays: [{ format: 'FOURSOMES', opponent: 'Phil Mickelson / Keegan Bradley',    historicalResult: 'Rose & Kaymer lost 3&2'       }, null, null] },
+          { name: 'Rory McIlroy',  team: 'EUR', matchPlayDays: [{ format: 'FOURSOMES', opponent: 'Keegan Bradley / Phil Mickelson',   historicalResult: 'McIlroy & Poulter lost 1 DOWN' }, null, null] },
+        ],
+      };
+      // Historical totals: Garcia EUR(1) + Rose USA(1) + McIlroy USA(1) = EUR=1 USA=2
+      ctx._mpsHistoricalResult = ctx._mps.buildEndOfDayLeaderboard(
+        ctx._mpsEodTournament, 0, 0, 0, '__nobody__', 'EUR'
+      );
+    }],
+
+    [/^I am playing as Justin Rose \(EUR\)$/, () => {
+      if (!ctx._mpsEodUser) ctx._mpsEodUser = {};
+      ctx._mpsEodUser = { ...ctx._mpsEodUser, playerName: 'Justin Rose', playerTeam: 'EUR', day: 0 };
+    }],
+
+    [/^my actual match ended matchPlayScore (-?\d+) holesLeft (\d+)$/, (score, holesLeft) => {
+      if (ctx._mpsEodUser) { ctx._mpsEodUser.userMatchScore = Number(score); ctx._mpsEodUser.holesLeft = Number(holesLeft); }
+    }],
+
+    [/^my match outcome is (EUR|USA|HALVED)$/, (outcome) => {
+      if (!ctx._mpsResult) throw new Error('No EOD result');
+      const userRow = ctx._mpsResult.matches.find(m => m.isUser);
+      if (!userRow) throw new Error('No user row in matches');
+      if (userRow.winner !== outcome)
+        throw new Error(`Expected outcome "${outcome}" but got "${userRow.winner}"`);
+    }],
+
+    [/^EUR total is 1 higher than the fully historical total for that day$/, () => {
+      const hist = ctx._mpsHistoricalResult;
+      const actual = ctx._mpsResult;
+      if (!hist || !actual) throw new Error('Missing historical or actual result');
+      if (actual.eurTotal !== hist.eurTotal + 1)
+        throw new Error(`Expected EUR ${hist.eurTotal + 1} but got ${actual.eurTotal}`);
+    }],
+    [/^USA total is 1 lower than the fully historical total for that day$/, () => {
+      const hist = ctx._mpsHistoricalResult;
+      const actual = ctx._mpsResult;
+      if (actual.usaTotal !== hist.usaTotal - 1)
+        throw new Error(`Expected USA ${hist.usaTotal - 1} but got ${actual.usaTotal}`);
+    }],
+
+    // User loses where history had a win (Day 1: Poulter win → user loses 2 DOWN)
+    [/^Medinah 2012 day 1 where historically Poulter & McIlroy won 1 UP for EUR$/, () => {
+      ctx._mpsEodTournament = {
+        type: 'ryder', name: 'Miracle at Medinah', holes: [],
+        parallelMatches: [[], [
+          { match: 'Poulter/McIlroy vs Woods/Stricker',    scores: [1, 1, 1], teamA: 'EUR' },
+          { match: 'Garcia/Donald vs Dufner/Johnson',       scores: [0, 0, 0], teamA: 'EUR' },
+          { match: 'Rose/Molinari vs Dufner/Johnson',       scores: [1, 1, 2], teamA: 'EUR' },
+        ], []],
+        players: [
+          { name: 'Ian Poulter',   team: 'EUR', matchPlayDays: [null, { format: 'FOURBALLS', opponent: 'Tiger Woods / Steve Stricker',  historicalResult: 'Poulter & McIlroy won 1 UP'  }, null] },
+          { name: 'Sergio Garcia', team: 'EUR', matchPlayDays: [null, { format: 'FOURBALLS', opponent: 'Jason Dufner / Zach Johnson',   historicalResult: 'Garcia & Donald halved'       }, null] },
+          { name: 'Justin Rose',   team: 'EUR', matchPlayDays: [null, { format: 'FOURBALLS', opponent: 'Jason Dufner / Zach Johnson',   historicalResult: 'Rose & Molinari won 3&2'      }, null] },
+        ],
+      };
+      ctx._mpsHistoricalResult = ctx._mps.buildEndOfDayLeaderboard(
+        ctx._mpsEodTournament, 1, 0, 0, '__nobody__', 'EUR'
+      );
+    }],
+
+    [/^I am playing as Ian Poulter \(EUR\)$/, () => {
+      if (!ctx._mpsEodUser) ctx._mpsEodUser = {};
+      ctx._mpsEodUser = { ...ctx._mpsEodUser, playerName: 'Ian Poulter', playerTeam: 'EUR', day: 1 };
+    }],
+
+    [/^EUR total is 1 lower than the fully historical total for that day$/, () => {
+      const hist = ctx._mpsHistoricalResult;
+      const actual = ctx._mpsResult;
+      if (!hist || !actual) throw new Error('Missing historical or actual result');
+      if (actual.eurTotal !== hist.eurTotal - 1)
+        throw new Error(`Expected EUR ${hist.eurTotal - 1} but got ${actual.eurTotal}`);
+    }],
+    [/^USA total is 1 higher than the fully historical total for that day$/, () => {
+      const hist = ctx._mpsHistoricalResult;
+      const actual = ctx._mpsResult;
+      if (actual.usaTotal !== hist.usaTotal + 1)
+        throw new Error(`Expected USA ${hist.usaTotal + 1} but got ${actual.usaTotal}`);
+    }],
+
+    // isUser flag scenarios
+    [/^any Ryder Cup day state where I am a named player$/, () => {
+      ctx._mpsEodTournament = {
+        type: 'ryder', name: 'Test Cup', holes: [],
+        parallelMatches: [[
+          { match: 'Faldo vs Couples',       scores: [1, 1, 1], teamA: 'EUR' },
+          { match: 'Montgomerie vs Watson',   scores: [-1,-1,-1], teamA: 'EUR' },
+          { match: 'Woosnam vs Azinger',      scores: [0, 0, 0], teamA: 'EUR' },
+        ], [], []],
+        players: [
+          { name: 'Nick Faldo',        team: 'EUR', matchPlayDays: [{ format: 'SINGLES', opponent: 'Fred Couples', historicalResult: 'Faldo won 1 UP'       }, null, null] },
+          { name: 'Colin Montgomerie', team: 'EUR', matchPlayDays: [{ format: 'SINGLES', opponent: 'Tom Watson',   historicalResult: 'Montgomerie lost 1 DOWN' }, null, null] },
+        ],
+      };
+      ctx._mpsEodUser = { playerName: 'Nick Faldo', playerTeam: 'EUR', userMatchScore: 1, holesLeft: 0, day: 0 };
+    }],
+
+    [/^exactly one match row has isUser true$/, () => {
+      if (!ctx._mpsResult?.matches) throw new Error('No matches');
+      const count = ctx._mpsResult.matches.filter(m => m.isUser).length;
+      if (count !== 1) throw new Error(`Expected 1 isUser row but got ${count}`);
+    }],
+    [/^all other rows have isUser false$/, () => {
+      if (!ctx._mpsResult?.matches) throw new Error('No matches');
+      const wrong = ctx._mpsResult.matches.filter(m => !m.isUser && m.isUser !== false);
+      if (wrong.length) throw new Error(`${wrong.length} non-user rows have isUser not false`);
+    }],
+
+    // formatResult via buildEndOfDayLeaderboard (Kaymer 3&2 scenario)
+    [/^I am playing as Martin Kaymer \(EUR\) on day 2$/, () => {
+      ctx._mpsEodTournament = {
+        type: 'ryder', name: 'Test Cup', holes: [],
+        parallelMatches: [[], [], [
+          { match: 'Kaymer vs Stricker', scores: [1, 1, 1], teamA: 'EUR' },
+        ]],
+        players: [
+          { name: 'Martin Kaymer', team: 'EUR', matchPlayDays: [null, null, { format: 'SINGLES', opponent: 'Steve Stricker', historicalResult: 'Kaymer won 1 UP — holed clinching putt' }] },
+        ],
+      };
+      ctx._mpsEodUser = { playerName: 'Martin Kaymer', playerTeam: 'EUR', day: 2 };
+    }],
+
     // ── Golf Adventure Players (specs/golf-adventure-players.feature) ───────────
 
     [/^every player in every Ryder Cup tournament has a numeric "([^"]+)" between 1 and 10$/, (attr) => {
