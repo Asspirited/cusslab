@@ -191,6 +191,48 @@ For items that represent a product hypothesis, add after the CD3 line:
 - CD3: UBV=9 TC=3 RR=4 → CoD=16, Dur=5, **CD3=3.2**
 - Status: OPEN — awaiting BL-029
 
+### BL-031 — Golf Adventure: Modern Majors Tier 1 (post-2000, highest CD3 comedy + history)
+- Add one at a time in priority order. Each is a full tournament with holes, players, historicalResult data.
+- All need era CSS (2000s: NBC/CBS clean; 2010s+: Sky/ESPN/social-media saturated).
+- Priority order by CD3 (comedy richness × historical weight):
+  1. **2008 US Open Torrey Pines** — Tiger on broken leg + torn ACL. 91-hole playoff vs Rocco Mediate. Rocco the everyman. Tiger's last major win. NBC. Comedy: Rocco's persona, Tiger grimacing, commentators losing it. Players: Tiger (protagonist), Rocco Mediate (foil). CD3=7.0
+  2. **2017 Masters** — Sergio Garcia finally wins a major. Augusta playoff vs Justin Rose. On what would have been Seve's 60th birthday. Garcia had missed 73 majors. CBS. Players: Garcia (protagonist, redemption arc), Rose (foil). CD3=6.7
+  3. **2019 Masters** — Tiger's comeback. 11 years since last major. Scandal, injury, public humiliation, back surgery. Roars on 16. CBS. Players: Tiger (protagonist), Francesco Molinari (collapses from lead). CD3=6.3
+  4. **2009 Open Turnberry** — Tom Watson at 59 nearly wins. Leads by 1 going to 18 in regulation, bogeys, loses to Cink in playoff. Cink as villain of history. BBC. Players: Watson (protagonist), Cink (foil), Westwood (also in contention). CD3=6.3
+  5. **2016 Open Troon** — Stenson vs Phil Mickelson. Both sub-65 every round. Stenson 63 in final round, Phil 65 and loses. Greatest Open head-to-head since Duel in the Sun. Sky. Players: Stenson (protagonist), Phil (loveable foil). CD3=6.0
+  6. **2016 Masters** — Jordan Spieth loses 5-shot lead. Quad bogey on 12 (water twice). Danny Willett wins from nowhere. CBS. Players: Willett (protagonist), Spieth (collapse arc), Sergio (bystander). CD3=6.0
+  7. **2012 Open Lytham** — Ernie Els wins at 42. Adam Scott collapses over last 4 holes after leading by 4. Big Easy celebrates not knowing Scott has imploded. BBC/Sky. Players: Els (protagonist), Adam Scott (collapse arc). CD3=6.0
+  8. **2013 Open Muirfield** — Phil Mickelson wins his first Open with a final round 66. Nick Faldo in the booth: "The finest round of golf I have ever seen." Scottish gallery goes with him. Phil's first and only Open. Sky. Players: Phil (protagonist), Lee Westwood (nearly wins again). CD3=6.0
+- CD3 (bucket): UBV=9 TC=7 RR=2 → CoD=18, Dur=3 per tournament, **CD3=6.0**
+- Status: OPEN
+
+### BL-032 — Golf Adventure: Modern Majors Tier 2 (post-2000, strong history, do after Tier 1)
+- Priority order:
+  1. **Monty at US Open (1994 Oakmont)** — pre-2000 but standalone iconic. Monty shoots 65 in final round to tie. 3-man playoff vs Els and Loren Roberts. Els wins. US crowd notoriously hostile to Monty throughout. Players: Monty (protagonist), Els (foil). CD3=5.7
+  2. **2005 Masters** — Tiger chip-in on 16. "In your life, have you seen anything like that?" — Verne Lundquist. Nike ad made that night. CBS. Players: Tiger (protagonist), Chris DiMarco (foil). CD3=5.7
+  3. **2006 US Open Winged Foot** — Phil Mickelson needs par on 18 to win. Makes double bogey. "I am such an idiot." Geoff Ogilvy wins by watching. NBC. Players: Phil (collapse), Ogilvy (accidental winner). CD3=5.3
+  4. **2000 US Open Pebble Beach** — Tiger wins by 15. Untouchable performance. Sets every US Open scoring record. NBC. Players: Tiger (protagonist), Ernie Els (distant second). CD3=5.3
+  5. **2000 Open St Andrews** — Tiger completes Career Grand Slam (never visited a bunker). 19-under. Monty as great Scottish foil with crowd. BBC. Players: Tiger (protagonist), Monty (crowd favourite). CD3=5.3
+  6. **2011 US Open Congressional** — Rory McIlroy 8-shot win at 22. After Masters collapse. Utterly dominant. NBC. Players: Rory (protagonist), Jason Day (distant second). CD3=5.3
+  7. **2002 Open Muirfield** — 4-man playoff (Els, Elkington, Levet, Appleby). Els wins. Thomas Levet falls over after hole-in-one celebrations. BBC. Players: Els (protagonist), Levet (comedy foil). CD3=5.3
+  8. **2011 Open Sandwich** — Darren Clarke wins three weeks after anniversary of wife Heather's death. Emotional. Sky. Players: Clarke (protagonist), Phil Mickelson / Dustin Johnson (foils). CD3=5.3
+  9. **2007 Open Carnoustie** — Harrington makes double bogey on 18, still wins. García ties, Harrington wins playoff. Players: Harrington (protagonist), García (near-miss again). CD3=5.0
+  10. **2012 PGA Kiawah** — Rory McIlroy dominant. 8-shot win. Ryder Cup backdrop (Ocean Course). Players: Rory (protagonist). CD3=5.0
+  11. **2004 Masters** — Phil Mickelson's first major after 0-for-46. Arms in air on 18. Ernie Els misses short putt on 18 to tie. CBS. CD3=4.7
+  12. **2012 Masters** — Bubba Watson punch hook from pine straw on 10 in playoff. Weeps at the hole. CBS. Players: Bubba (protagonist), Louis Oosthuizen (foil). CD3=4.7
+- CD3 (bucket): UBV=8 TC=6 RR=1 → CoD=15, Dur=3 per tournament, **CD3=5.0**
+- Status: OPEN — after BL-031
+
+### BL-033 — Golf Adventure: Tournament picker decade-panel UI
+- Tournament selection screen currently flat list — grows unwieldy as BL-031/032 land
+- Replace with collapsible decade panels: 1970s, 1980s, 1990s, 2000s, 2010s, 2020s + Ryder Cup (always-visible separate section)
+- Collapsed by default; most recent decade open on load
+- Each panel header shows era name + year range + count of available tournaments
+- Era styling applies to panel headers (Ceefax BBC for 80s, ESPN/ABC for 90s, NBC/Sky for 2000s+)
+- Prerequisite: enough tournaments in each decade to justify panels — minimum 2 per decade
+- CD3: UBV=7 TC=4 RR=3 → CoD=14, Dur=3, **CD3=4.7**
+- Status: OPEN — do after BL-031 lands first tournament (need volume to justify the UI)
+
 ### BL-001 — Wayne Riley / Radar content merge
 - Claude.ai session has full Wayne Riley/Radar explanation not yet in repo
 - Target file: `docs/characters-sports.md`
