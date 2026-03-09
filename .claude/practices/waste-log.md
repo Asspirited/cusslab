@@ -1166,3 +1166,14 @@ Status: CLOSED
 - **Cost impact:** Low (correctable) but systemic — split-brain backlog undermines the session protocol pre-flight
 - **Tags:** backlog, session-protocol, wrong-location, artefact-placement
 - **Status:** Closed — migrated to .claude/practices/backlog.md; features/backlog.md deleted
+
+## WL-082
+- **Item:** Auto-compact fires mid-session — context lost, time wasted re-establishing state
+- **Symptom:** Claude Code auto-compacts conversation when context fills. Both Claude Code and Claude.ai then spend significant time reconstructing where they were, re-reading files, re-running pipeline. Happens across both Claudes and wastes the same time every session it occurs.
+- **Root cause:** No rule existed to stop before auto-compact and start a fresh session proactively. The compact happens reactively (system-triggered) rather than at a clean stopping point chosen by the developer.
+- **Session date:** 2026-03-09
+- **Time lost:** Estimated 10-20 min per occurrence across both Claudes — re-reading session state, re-running pipeline, re-establishing context
+- **Cost impact:** Medium — recurring, predictable waste; compounds across every long session
+- **Tags:** session-protocol, auto-compact, context-window, claude-code, claude-ai, process
+- **Fix:** Rule added to session-insession.md — stop and start new session before auto-compact, not after
+- **Status:** Closed — rule added 2026-03-09

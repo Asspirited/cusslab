@@ -180,9 +180,18 @@ For items that represent a product hypothesis, add after the CD3 line:
 ### BL-007 — Claude Code Windows install bugs (follow-up)
 - "Class not registered" blocks git.exe picker + hidden file access
 - CLAUDE_CODE_GIT_BASH_PATH env var ignored on restart
-- Actions: check anthropics/claude-code issues, Anthropic Discord, file own issue
+- **Investigated 2026-03-09 (v2.1.71 — current latest):**
+  - Bug 1 ("Class not registered"): not tracked in anthropics/claude-code. No documented fix. May be
+    resolved by workaround for Bug 2 (system32 in PATH). No action needed unless it resurfaces.
+  - Bug 2 (CLAUDE_CODE_GIT_BASH_PATH ignored): confirmed open, 5+ months, issues #8674 and #27912.
+    Root cause: `SD6()` in extension.js calls `spawnSync('where.exe', ['git'])` without `shell:true` —
+    fails silently before env var is ever checked.
+  - **Best workaround (durable):** Add `C:\Windows\System32` to Windows system PATH so `where.exe`
+    resolves. Alternatively: set `CLAUDE_CODE_GIT_BASH_PATH` as a Windows system env var (not user,
+    not VS Code settings). Using Claude Code CLI in WSL directly avoids the issue entirely.
+  - No fix shipped; neither issue has a committed fix or milestone.
 - CD3: UBV=4 TC=3 RR=3 → CoD=10, Dur=2, **CD3=5.0**
-- Status: OPEN
+- Status: OPEN — no upstream fix; workarounds documented above. Revisit when fix ships.
 
 ### BL-009 — Mode 2 moment type expansion (Football, Golf, LongRoom)
 - More named moment examples in the selector per panel

@@ -59,6 +59,21 @@ Threshold: any instruction >20 lines goes to a file.
 This applies to: character files, feature files, config blocks,
 multi-step instructions, any code to be written by Claude Code.
 
+### RULE: Tool auto-approval — do not prompt for routine operations
+Most Bash operations (git, bash, node, cat, ls, grep, python3 etc.) are auto-approved
+via .claude/settings.local.json. If a prompt appears for a routine operation it means
+the allow list needs updating — add the pattern to settings.local.json and commit.
+Do NOT ask Rod to approve routine reads, writes, git commands, or pipeline runs.
+
+### RULE: Stop before auto-compact — never let it fire reactively
+When context is getting long and auto-compact is approaching:
+STOP. Do not wait for it to fire.
+1. Run session closedown (pipeline → waste log → backlog → shared-session-state → commit → push)
+2. Tell Rod: "Context filling — clean stop here, start a new session"
+3. New session picks up from shared-session-state.md — no context lost
+Letting auto-compact fire mid-task wastes 10-20 min re-establishing state every time (WL-082).
+Applies to both Claude Code and Claude.ai. Proactive stop > reactive compact.
+
 ### RULE: Windows Downloads folder is accessible
 Rod's Downloads folder is always available at /mnt/c/Users/roden/Downloads/
 NEVER ask Rod to paste file contents — always read directly:
