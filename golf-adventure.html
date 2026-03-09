@@ -302,6 +302,8 @@ body {
 .tournament-grid { margin-bottom: 18px; }
 .tc-section { margin-bottom: 20px; }
 .tc-section-header { font-family: var(--font-display); font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); border-top: 1px solid var(--border); padding-top: 12px; margin-bottom: 10px; }
+.tc-category-hdr { font-family: var(--font-display); font-size: 32px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text); border-bottom: 2px solid var(--accent); padding-bottom: 8px; margin: 32px 0 16px; }
+.tc-category-hdr:first-child { margin-top: 0; }
 .tc-decade-hdr { font-size: 16px; text-transform: none; letter-spacing: 0.06em; cursor: pointer; display: flex; align-items: center; justify-content: space-between; user-select: none; }
 .tc-section-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap: 8px; }
 
@@ -1530,6 +1532,10 @@ function buildSetup() {
 
   // Majors — grouped by decade, collapsible
   const majorEntries = TOURNAMENTS.filter(t => !knownTypes.has(t.type) || t.type === 'major' || t.type === 'collapse');
+  const majorCatHdr = document.createElement('div');
+  majorCatHdr.className = 'tc-category-hdr';
+  majorCatHdr.textContent = 'Majors';
+  tg.appendChild(majorCatHdr);
   const decadeMap = new Map();
   majorEntries.forEach(t => {
     const decade = Math.floor(t.year / 10) * 10;
@@ -1563,33 +1569,27 @@ function buildSetup() {
   // Ryder Cup — flat, no decade grouping
   const ryderEntries = TOURNAMENTS.filter(t => t.type === 'ryder');
   if (ryderEntries.length) {
-    const sec = document.createElement('div');
-    sec.className = 'tc-section';
-    const hdr = document.createElement('div');
-    hdr.className = 'tc-section-header';
-    hdr.textContent = 'Ryder Cup';
+    const ryderCatHdr = document.createElement('div');
+    ryderCatHdr.className = 'tc-category-hdr';
+    ryderCatHdr.textContent = 'Ryder Cup';
+    tg.appendChild(ryderCatHdr);
     const grid = document.createElement('div');
     grid.className = 'tc-section-grid';
     ryderEntries.forEach(t => grid.appendChild(makeTCard(t)));
-    sec.appendChild(hdr);
-    sec.appendChild(grid);
-    tg.appendChild(sec);
+    tg.appendChild(grid);
   }
 
   // Other Historic
   const historicEntries = TOURNAMENTS.filter(t => t.type === 'historic');
   if (historicEntries.length) {
-    const sec = document.createElement('div');
-    sec.className = 'tc-section';
-    const hdr = document.createElement('div');
-    hdr.className = 'tc-section-header';
-    hdr.textContent = 'Other Historic';
+    const historicCatHdr = document.createElement('div');
+    historicCatHdr.className = 'tc-category-hdr';
+    historicCatHdr.textContent = 'Special Games';
+    tg.appendChild(historicCatHdr);
     const grid = document.createElement('div');
     grid.className = 'tc-section-grid';
     historicEntries.forEach(t => grid.appendChild(makeTCard(t)));
-    sec.appendChild(hdr);
-    sec.appendChild(grid);
-    tg.appendChild(sec);
+    tg.appendChild(grid);
   }
 
   // Characters
