@@ -76,11 +76,15 @@ For each open product-bet item, ask:
 - Is there a falsifier — something that would tell us we were wrong?
 Full outer loop: `.claude/practices/hypothesis-driven.md`
 
-Current top 3 as of 2026-03-09:
-- BL-001 Wayne Riley/Radar content merge (CD3=5.5) — check if already done (chars-sports.md exists)
-- BL-022 Ryder Cup "Be Any Player" mode (CD3=4.3) — OPEN
-- BL-014 Ryder Cup end-of-day matchplay leaderboard (CD3=4.25) — OPEN
-- BL-008 moved to RIA backlog (/home/rodent/risk-and-impact-assessor/.claude/practices/backlog.md)
+Current top 3 as of 2026-03-09 (session 2):
+- BL-034 Dual temperament profiles (CD3=5.0) — OPEN — do next session
+- BL-032 Modern Majors Tier 2 — items 2 (2005 Masters), 3 (Winged Foot), 9 (Carnoustie 2007) — OPEN
+- BL-025 Ryder Cup Tier 2 — Whistling Straits 2021 remaining (Hazeltine done)
+
+Recently closed (this session):
+- BL-023 Valderrama 1997, BL-024 all 5 (Belfry/K Club/Muirfield Village/Celtic Manor/Oak Hill)
+- BL-025 #1 Hazeltine 2016 — pushed
+- BL-035 Watch Back mode — added to backlog, design Q open (strip vs modal)
 
 Agree with Rod which item is being worked this session BEFORE opening any code file.
 

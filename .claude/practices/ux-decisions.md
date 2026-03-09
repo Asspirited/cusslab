@@ -83,3 +83,15 @@ Job: "Show me something genuinely interesting about language."
 - [ ] Can a new user discover it in under 60 seconds without instruction?
 - [ ] Is the error state handled with a message in our voice?
 - [ ] Has the decision been logged in this file?
+
+## 2026-03-09 — Tournament chooser section headers
+
+**Decision:** Category headers (MAJORS / RYDER CUP / SPECIAL GAMES) use `.tc-category-hdr` — 32px Bebas Neue, accent underline, 32px top margin. Decade sub-headers use `.tc-decade-hdr` — 16px, no text-transform, flex row with arrow pinned right. Entry counts removed from decade headers.
+
+**Rationale:** Old 11px `.tc-section-header` was unreadable and "MAJORS" label was absent entirely. Section labels need to be dominant landmarks, not muted annotations.
+
+## 2026-03-09 — Era CSS naming convention
+
+**Decision:** Era classes named `era-YYYY` by year. Where two tournaments share a year but different broadcasters, use `era-YYYY-suffix` (e.g. `era-2006` = K Club Sky, `era-2006-us` = Winged Foot NBC). Do not reuse era classes across fundamentally different aesthetic contexts.
+
+**Rationale:** era-2005 (Augusta CBS) already existed and is appropriate for the 2005 Masters. era-2006-us is distinct (NBC greens/gold vs Sky blue). Suffix pattern avoids class name collisions without year duplication.
