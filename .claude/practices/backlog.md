@@ -120,7 +120,7 @@ For items that represent a product hypothesis, add after the CD3 line:
 - Lore focus: Seve's interventionist captaincy (infamous 18th water hole interference), Coltart's peculiar selection, rain delays, Europe's narrow win
 - Era: Ceefax/late-90s BBC transitional — Alliss narrating, pre-Sky graphics
 - CD3: UBV=7 TC=2 RR=1 → CoD=10, Dur=4, **CD3=2.5**
-- Status: OPEN
+- Status: CLOSED — 2026-03-09 (c8d090a): tournament data + era-1997/1991/1999-rc CSS added
 
 ### BL-024 — Golf Adventure: Ryder Cup rollout — Tier 1 (Europe wins)
 - Add one at a time, in priority order. Each is a full tournament addition with holes, players, parallelMatches, historicalResult data.
@@ -325,3 +325,14 @@ For items that represent a product hypothesis, add after the CD3 line:
 - Done: pipeline/golf-adventure-sim.js — 8/9 checks pass, warn-only
 - Flags raw anthropic.com fetch (tracked as BL-015)
 - Status: CLOSED — 2026-03-08
+
+### BL-035 — Golf Adventure: "Watch Back" mode — sofa commentary for tournaments with player-characters
+- When the user selects a tournament where one or more commentators (panel members) actually played (e.g. Westwood at Valderrama, Parnevik at Valderrama, Poulter at Medinah), those commentators appear in a "Watch Back" frame — sitting on a sofa watching the round together, like Sky Sports' Goals on Sunday or NBC's broadcast replays
+- They comment on the action as it unfolds, but they MUST describe events as if they happened at the time (the official, unchanged timeline) — even if the user has altered history mid-game
+- Comedy engine: the sofa commentator has to earnestly describe "yes that's exactly how I remember it" while the user may have just done something completely different
+- The sofa frame appears alongside (or above) the game UI — small persistent commentary strip or modal
+- Trigger: check if any player in `tournament.players[]` has `id` matching a panel commentator. If yes, show sofa mode
+- Phase 2: two sofa commentators react to each other if both match (e.g. Westwood AND Parnevik both at Valderrama)
+- Design question to resolve before Gherkin: sofa strip (persistent) vs modal (on key moments only)?
+- CD3: UBV=9 TC=2 RR=1 → CoD=12, Dur=5, **CD3=2.4**
+- Status: OPEN — design question unresolved (strip vs modal)
