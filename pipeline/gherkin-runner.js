@@ -6134,6 +6134,29 @@ function makeSteps(ctx) {
       ctx._mpsEodUser = { playerName: 'Martin Kaymer', playerTeam: 'EUR', day: 2 };
     }],
 
+    // ── TemperamentService (specs/golf-temperament-archetypes.feature) ───────────
+
+    [/^the TemperamentService module is loaded$/, () => {
+      const { TemperamentService } = require('../golf-service/temperament-service.js');
+      ctx._ts = TemperamentService;
+    }],
+
+    [/^applyHoleResult is called with profile "([^"]+)" diff (-?\d+) streak (-?\d+) ego (\d+)$/, (profile, diff, streak, ego) => {
+      ctx._tsResult = ctx._ts.applyHoleResult(profile, Number(diff), Number(streak), Number(ego));
+    }],
+
+    [/^the temperament composureDelta is (-?\d+)$/, (delta) => {
+      if (!ctx._tsResult) throw new Error('No temperament result');
+      if (ctx._tsResult.composureDelta !== Number(delta))
+        throw new Error(`Expected composureDelta ${delta} but got ${ctx._tsResult.composureDelta}`);
+    }],
+
+    [/^the temperament newStreak is (-?\d+)$/, (streak) => {
+      if (!ctx._tsResult) throw new Error('No temperament result');
+      if (ctx._tsResult.newStreak !== Number(streak))
+        throw new Error(`Expected newStreak ${streak} but got ${ctx._tsResult.newStreak}`);
+    }],
+
     // ── Golf Adventure Players (specs/golf-adventure-players.feature) ───────────
 
     [/^every player in every Ryder Cup tournament has a numeric "([^"]+)" between 1 and 10$/, (attr) => {

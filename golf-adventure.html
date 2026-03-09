@@ -1409,6 +1409,7 @@ body {
 <script src="golf-engine/game-engine.js"></script>
 <script src="golf-service/commentary-service.js"></script>
 <script src="golf-service/matchplay-service.js"></script>
+<script src="golf-service/temperament-service.js"></script>
 
 <script>
 // ═══════════════════════════════════════════
@@ -1442,7 +1443,7 @@ let G = {
   day:0, holeIdx:0, holesPerDay:3,
   yourScore:0, holeResults:[], matchPlayScore:0,
   phase:"tee", holeStrokes:0, currentShot:null, isRolling:false,
-  composure:10, fieldScores:{}, history:[],
+  composure:10, streak:0, fieldScores:{}, history:[],
   rollHistory:{1:0,2:0,3:0,4:0,5:0,6:0},
   lastChoiceLabel: null,
   panelState: {
@@ -2183,6 +2184,14 @@ async function endHole() {
   G.yourScore+=diff;
   G.holeResults.push({day:G.day,holeId:hole.id,score:G.holeStrokes,par:hole.par,diff});
 
+  // Temperament profile — composure delta based on hole result and current streak
+  const _tp = G.player.temperamentProfile || 'LEVELHEADED';
+  const _te = G.player.ego || 5;
+  const { composureDelta: _tcd, newStreak: _tns } = TemperamentService.applyHoleResult(_tp, diff, G.streak, _te);
+  G.streak = _tns;
+  G.composure = Math.max(0, Math.min(10, G.composure + _tcd));
+  updateComposure();
+
   // Match play update — capture before mutating for commentary
   let mpCtx = null;
   if (G.tournament.type === 'ryder' && G.player.matchPlayDays) {
@@ -2603,7 +2612,7 @@ function showScreen(name) {
 function resetGame() {
   const savedPanel=[...G.selectedPanel]; // persist panel across sessions
   document.body.className='';
-  G={tournament:null,player:null,atmosphere:"NORMAL",selectedPanel:savedPanel,day:0,holeIdx:0,holesPerDay:3,yourScore:0,holeResults:[],phase:"tee",holeStrokes:0,currentShot:null,isRolling:false,composure:10,fieldScores:{},history:[],rollHistory:{1:0,2:0,3:0,4:0,5:0,6:0},lastChoiceLabel:null,characterFiles:{},fortuneActive:false,angerActive:false,angerShots:0,illnessActive:false,illnessHoles:0,tempThresholdMod:0,tempThresholdHoles:0,tempSkillBonus:false,tempSkillHoles:0,isDead:false,causeOfDeath:null,collapseNode:null,collapseChipOutAvailable:true,clothing:{trousers:true,glove:true,shoes:true,hat:true,shirt:true},panelState:{runningJokes:[],playerNickname:null,lastInsult:null,atmosphere_escalation:0,panelFeuds:{},momentsMentioned:[]}};
+  G={tournament:null,player:null,atmosphere:"NORMAL",selectedPanel:savedPanel,day:0,holeIdx:0,holesPerDay:3,yourScore:0,holeResults:[],phase:"tee",holeStrokes:0,currentShot:null,isRolling:false,composure:10,streak:0,fieldScores:{},history:[],rollHistory:{1:0,2:0,3:0,4:0,5:0,6:0},lastChoiceLabel:null,characterFiles:{},fortuneActive:false,angerActive:false,angerShots:0,illnessActive:false,illnessHoles:0,tempThresholdMod:0,tempThresholdHoles:0,tempSkillBonus:false,tempSkillHoles:0,isDead:false,causeOfDeath:null,collapseNode:null,collapseChipOutAvailable:true,clothing:{trousers:true,glove:true,shoes:true,hat:true,shirt:true},panelState:{runningJokes:[],playerNickname:null,lastInsult:null,atmosphere_escalation:0,panelFeuds:{},momentsMentioned:[]}};
   document.querySelectorAll('.tc').forEach(c=>c.classList.remove('selected'));
   document.querySelectorAll('.player-btn').forEach(b=>b.classList.remove('selected'));
   document.getElementById('player-area').classList.add('hidden');
