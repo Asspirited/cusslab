@@ -93,7 +93,9 @@ const CommentaryService = (() => {
   function buildShotPrompt(ctx) {
     const { tournament: t, player: p, hole, shot, quality, roll, desc,
             yourScore, day, composure, atmosphere, selectedPanel,
-            panelState, characterFiles, characters } = ctx;
+            panelState, characterFiles, characters, mpCtx } = ctx;
+
+    const isRyder = t.type === 'ryder';
 
     const histScore  = p.historicalScores[day] || 0;
     const diff       = yourScore - histScore;
@@ -129,7 +131,26 @@ const CommentaryService = (() => {
       })
       .join(',\n  ');
 
-    return `You are generating live TV golf commentary for GOLF ADVENTURE — a historic tournament simulation.
+    // For Ryder Cup: inject match play context
+    const ryderAddendum = (isRyder && mpCtx)
+      ? (typeof MatchPlayService !== 'undefined'
+          ? MatchPlayService.buildCommentaryAddendum(ctx, mpCtx)
+          : '')
+      : '';
+
+    const preamble = isRyder
+      ? `You are generating live TV commentary for GOLF ADVENTURE — a Ryder Cup match-play simulation. This is team golf. Every hole is its own contest. National pride, partisan crowds, and individual honour collide.`
+      : `You are generating live TV golf commentary for GOLF ADVENTURE — a historic tournament simulation.`;
+
+    const ryderRules = isRyder && mpCtx ? `
+RYDER CUP COMMENTARY RULES:
+- This is match play — one hole at a time. React to THIS hole's result immediately.
+- Reference the match standing (${mpCtx.liveLine}) and its implications.
+${mpCtx.historicalResult ? `- One commentator must note how this diverges from or matches the historical result: "${mpCtx.historicalResult}".` : ''}
+- Comedy, roasting, and premonition are encouraged — but keep it short and specific.
+- NO Augusta/Masters references. This is a Ryder Cup — national pride, team sport.` : '';
+
+    return `${preamble}
 
 TOURNAMENT: ${t.name} (${t.year}) — ${t.course}
 PLAYER: ${p.name} — ${p.desc}
@@ -138,7 +159,7 @@ DAY: ${day + 1} of ${t.days} · HOLE: ${hole.name} — Par ${hole.par}, ${hole.y
 HAZARD: ${hole.hazard}
 HISTORICAL SIGNIFICANCE:
 ${hole.incidents?.length ? hole.incidents.map((inc, i) => `${i + 1}. ${inc}`).join('\n') : 'Famous hole.'}
-
+${ryderAddendum}
 SHOT: ${shot.label} (risk ${shot.risk}/4) · DICE: ${roll} · QUALITY: ${quality.toUpperCase()}
 DESCRIPTION: ${desc}
 SCORE: ${yourScore === 0 ? 'Even' : yourScore > 0 ? '+' + yourScore : yourScore} vs par · ${diffStr}
@@ -156,6 +177,8 @@ RULES:
 - Characters with wounds should have those wounds influence their commentary
 - If DISASTER: relish the horror
 - If MIRACLE: grudging admiration or find fault anyway
+${ryderRules}
+SHOT COMMENTARY STYLE: One punchy line each. React to what just happened. Reference the last shot's outcome where relevant. Be quick, sharp, funny. Roast the player if warranted. Premonition is fine. Intellectual posturing is fine. NO waffle.
 ${buildPanelEngagementContext(panelState)}
 
 Return ONLY a JSON array with one entry per commentator, no preamble:

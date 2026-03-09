@@ -1114,6 +1114,62 @@ body {
   padding: 20px;
   text-transform: uppercase;
 }
+
+/* ── Dice outcomes row ── */
+#dice-outcomes {
+  padding: 6px 12px 2px;
+  text-align: center;
+}
+.dice-outcomes-row {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 6px;
+  justify-content: center;
+  align-items: center;
+}
+.do-miracle  { color: #f0c040; font-weight: bold; }
+.do-solid    { color: var(--positive-hi); }
+.do-trouble  { color: var(--accent-bright); }
+.do-disaster { color: var(--danger-hi); font-weight: bold; }
+.do-sep      { color: var(--muted); }
+
+/* ── In-flight Ryder Cup leaderboard ── */
+#inflight-lb {
+  margin: 10px 0 4px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+  background: var(--surface);
+  font-family: var(--font-mono);
+}
+.inflight-lb-title {
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  color: var(--muted);
+  text-transform: uppercase;
+  padding: 5px 10px 4px;
+  border-bottom: 1px solid var(--border);
+  background: var(--card);
+}
+.inflight-lb-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 10px;
+  font-size: 11px;
+  border-bottom: 1px solid var(--border);
+}
+.inflight-lb-row:last-child { border-bottom: none; }
+.inflight-lb-match { color: var(--text); flex: 1; }
+.inflight-lb-score { font-weight: bold; min-width: 52px; text-align: right; }
+.inflight-lb-score.pos { color: var(--positive-hi); }
+.inflight-lb-score.neg { color: var(--danger-hi); }
+.inflight-lb-score.as  { color: var(--muted); }
+.inflight-lb-user-row { background: rgba(212,130,10,0.06); }
+.inflight-lb-user-row .inflight-lb-match { color: var(--accent-bright); }
 </style>
 </head>
 <body>
@@ -1244,6 +1300,7 @@ body {
 
   <div id="result-area"></div>
   <div class="commentary" id="commentary"></div>
+  <div id="inflight-lb" class="hidden"></div>
   <div class="next-wrap hidden" id="next-wrap">
     <button class="btn btn-accent" id="next-btn" onclick="advanceGame()">Next →</button>
   </div>
@@ -1296,6 +1353,7 @@ body {
 <script src="golf-data/shots.js"></script>
 <script src="golf-engine/game-engine.js"></script>
 <script src="golf-service/commentary-service.js"></script>
+<script src="golf-service/matchplay-service.js"></script>
 
 <script>
 // ═══════════════════════════════════════════
@@ -1550,6 +1608,7 @@ function loadHole() {
   document.getElementById('commentary').innerHTML='';
   document.getElementById('event-card').classList.add('hidden');
   document.getElementById('next-wrap').classList.add('hidden');
+  document.getElementById('inflight-lb').classList.add('hidden');
   document.getElementById('shot-wrap').style.display='block';
 
   if (!maybeAmbientDeath()) {
@@ -1563,27 +1622,21 @@ function buildSituation(hole) {
   const atmoAdd = {SIMMERING:" Something is building between the group.",POWDER_KEG:" The atmosphere is incendiary.",CHAOS_MODE:" Nothing today has gone as planned.",DEEP_WOUNDS:" Old wounds are bleeding into the present.",FUNNY_PECULIAR:" Things have taken a strange turn."}[G.atmosphere]||'';
 
   if (G.tournament.type === 'ryder') {
+    const ryderSit = MatchPlayService.buildSituation(G);
+    if (ryderSit) return ryderSit;
+    // fallback if no matchPlayDays
     const mpDay = G.player.matchPlayDays?.[G.day];
     const opp = mpDay ? mpDay.opponent : 'your opponent';
-    const fmt = mpDay?.format || 'SINGLES';
-    const partner = mpDay?.partner;
     const mp = G.matchPlayScore;
     const mpStr = mp === 0 ? 'all square' : mp > 0 ? `${mp} up` : `${Math.abs(mp)} down`;
-    const holesPlayed = G.holeResults.filter(r => r.day === G.day).length;
-    const holesLeft = G.holesPerDay - holesPlayed;
-    const holesNote = holesLeft > 0 ? ` with ${holesLeft} to play` : '';
-    const fmtLabel = fmt === 'FOURSOMES' ? 'foursomes (alternate shot)'
-                   : fmt === 'FOURBALLS' ? 'fourballs (best ball)'
-                   : 'singles';
-    const partnerNote = (fmt !== 'SINGLES' && partner) ? ` alongside ${partner}` : '';
-    return `${G.player.name}. ${dayWords[G.day]||'Day '+G.day+1} of The Miracle at Medinah — ${fmtLabel}${partnerNote} against ${opp}. You are ${mpStr}${holesNote}. Europe needs every point.${atmoAdd}`;
+    return `${G.player.name}. ${dayWords[G.day]||'Day '+(G.day+1)} of ${G.tournament.name} — singles against ${opp}. You are ${mpStr}.${atmoAdd}`;
   }
 
   const scoreStr = G.yourScore===0?'level par':G.yourScore<0?`${G.yourScore} under par`:`+${G.yourScore} over par`;
   const histScore = G.player.historicalScores[G.day]||0;
   const diff = G.yourScore - histScore;
   const histNote = diff===0?'tracking history exactly':diff<0?`${Math.abs(diff)} ahead of history`:`${diff} behind history`;
-  return `${G.player.name}. ${dayWords[G.day]||'Day '+G.day+1} round of the ${G.tournament.name}. You are ${scoreStr} — ${histNote}.${atmoAdd}`;
+  return `${G.player.name}. ${dayWords[G.day]||'Day '+(G.day+1)} round of the ${G.tournament.name}. You are ${scoreStr} — ${histNote}.${atmoAdd}`;
 }
 
 // ═══════════════════════════════════════════
@@ -1677,6 +1730,9 @@ function loadShots(type) {
   const dice=document.getElementById('the-dice');
   dice.className='dice off';
   document.getElementById('dice-hint').textContent='Select a shot — then roll';
+  // Clear dice outcomes from previous shot
+  const doEl = document.getElementById('dice-outcomes');
+  if (doEl) doEl.innerHTML = '';
 }
 
 function pickShot(btn,shot) {
@@ -1685,6 +1741,34 @@ function pickShot(btn,shot) {
   G.currentShot=shot;
   document.getElementById('the-dice').className='dice';
   document.getElementById('dice-hint').textContent='Now roll the dice';
+
+  // Dice outcomes breakdown
+  const outcomes = [1,2,3,4,5,6].map(roll => {
+    const {quality} = GameEngine.processRoll(roll, shot, G);
+    return { roll, quality };
+  });
+  const qualityLabel = { miracle:'★ MIRACLE', solid:'SOLID', trouble:'TROUBLE', disaster:'☠ DISASTER' };
+  let existing = document.getElementById('dice-outcomes');
+  if (!existing) {
+    existing = document.createElement('div');
+    existing.id = 'dice-outcomes';
+    document.getElementById('shot-wrap').appendChild(existing);
+  }
+  const groups = [];
+  let cur = null;
+  outcomes.forEach(o => {
+    if (!cur || cur.quality !== o.quality) {
+      cur = { quality: o.quality, start: o.roll, end: o.roll };
+      groups.push(cur);
+    } else {
+      cur.end = o.roll;
+    }
+  });
+  const parts = groups.map(g => {
+    const rangeStr = g.start === g.end ? `${g.start}` : `${g.start}–${g.end}`;
+    return `<span class="do-${g.quality}">${rangeStr}→${qualityLabel[g.quality]}</span>`;
+  });
+  existing.innerHTML = `<div class="dice-outcomes-row">${parts.join(' <span class="do-sep">·</span> ')}</div>`;
 }
 
 function rollDice() {
@@ -1860,6 +1944,7 @@ async function getCommentary(desc,quality,roll,shot) {
     atmosphere:G.atmosphere, selectedPanel:G.selectedPanel,
     panelState:G.panelState, history:G.history,
     characterFiles:G.characterFiles||{}, characters:CHARACTERS,
+    mpCtx: G.tournament.type === 'ryder' ? MatchPlayService.buildContext(G) : null,
   };
   const prompt = CommentaryService.buildShotPrompt(ctx);
 
@@ -2002,6 +2087,7 @@ async function endHole() {
   // Ryder Cup: panel reacts to the hole result before Next Hole button appears
   if (mpCtx) {
     await getMatchPlayCommentary(G.holeStrokes, hole.par, mpCtx);
+    showInflightLeaderboard();
   }
 
   document.getElementById('next-wrap').classList.remove('hidden');
@@ -2033,13 +2119,21 @@ async function getMatchPlayCommentary(yourScore, holePar, mpCtx) {
                  : mpCtx.format === 'FOURBALLS' ? 'fourballs (best ball)' : 'singles';
   const partnerNote = (mpCtx.format !== 'SINGLES' && mpCtx.partner) ? ` (${G.player.name} partnered with ${mpCtx.partner})` : '';
 
+  const mpDay = G.player.matchPlayDays?.[G.day];
+  const histResultLine = mpDay?.historicalResult
+    ? `HISTORICAL RESULT OF THIS MATCH: ${mpDay.historicalResult}`
+    : '';
+  const teamNote = (G.player.team === 'USA') ? 'USA needs every point.' : 'Europe needs every point.';
+
   const prompt = `Golf Adventure — Ryder Cup hole end. The panel reacts.
 
 FORMAT: ${fmtLabel}${partnerNote}.
 HOLE RESULT: ${G.player.name} made ${yourLabel} (${yourScore} shots, Par ${holePar}). Opponent${mpCtx.format !== 'SINGLES' ? 's' : ''} (${mpCtx.opponent}) made ${oppLabel} (${mpCtx.oppScore} shots).
 HOLE ${mpCtx.holeResult === 'won' ? 'WON by ' + G.player.name : mpCtx.holeResult === 'lost' ? 'LOST by ' + G.player.name : 'HALVED — neither side budges'}.
 MATCH STANDING: ${mpCtx.format !== 'SINGLES' ? G.player.name + ' & ' + (mpCtx.partner?.split(' ').pop() || 'partner') : G.player.name} is now ${standing}${isLast ? ' — match complete' : ` with ${holesLeft} hole${holesLeft !== 1 ? 's' : ''} to play`}.
-TOURNAMENT: The Miracle at Medinah. Europe needs every point. This is match play — every hole is its own drama.
+TOURNAMENT: ${G.tournament.name} (${G.tournament.year}) — ${G.tournament.course}.
+${histResultLine}
+${teamNote} This is match play — every hole is its own drama. Every point counts for the team.
 
 Each panellist speaks ONE LINE reacting to this hole and the match position. React to each other where possible. No waffle. Pure reaction.
 Return ONLY valid JSON:
@@ -2072,6 +2166,39 @@ Return ONLY valid JSON:
   } catch(e) {
     feed.innerHTML = '';
   }
+}
+
+function showInflightLeaderboard() {
+  const lb = document.getElementById('inflight-lb');
+  if (!lb) return;
+  if (G.tournament.type !== 'ryder') { lb.classList.add('hidden'); return; }
+
+  const rows = MatchPlayService.buildInflightLeaderboard(
+    G.tournament, G.day, G.holeIdx, G.matchPlayScore, G.player.name
+  );
+  if (!rows || !rows.length) { lb.classList.add('hidden'); return; }
+
+  const userLiveLine = MatchPlayService.formatLive(G.matchPlayScore);
+  const mpDay = G.player.matchPlayDays?.[G.day];
+  const oppName = mpDay?.opponent || 'Opponent';
+
+  let html = `<div class="inflight-lb-title">▸ MATCH PLAY — HOLE ${G.holeIdx + 1} OF ${G.holesPerDay}</div>`;
+
+  // User's own match row
+  const userScoreCls = G.matchPlayScore === 0 ? 'as' : G.matchPlayScore > 0 ? 'pos' : 'neg';
+  const userMatchLabel = mpDay?.format === 'FOURSOMES' ? `${G.player.name} & ${mpDay.partner?.split(' ').pop()||'partner'} vs ${oppName}`
+    : mpDay?.format === 'FOURBALLS' ? `${G.player.name} & ${mpDay.partner?.split(' ').pop()||'partner'} vs ${oppName}`
+    : `${G.player.name} vs ${oppName}`;
+  html += `<div class="inflight-lb-row inflight-lb-user-row"><span class="inflight-lb-match">${userMatchLabel}</span><span class="inflight-lb-score ${userScoreCls}">${userLiveLine}</span></div>`;
+
+  // Parallel match rows
+  rows.forEach(r => {
+    const cls = r.score === 0 ? 'as' : r.score > 0 ? 'pos' : 'neg';
+    html += `<div class="inflight-lb-row"><span class="inflight-lb-match">${r.match}</span><span class="inflight-lb-score ${cls}">${r.label}</span></div>`;
+  });
+
+  lb.innerHTML = html;
+  lb.classList.remove('hidden');
 }
 
 function advanceGame() {

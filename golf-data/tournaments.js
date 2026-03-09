@@ -85,33 +85,53 @@ const TOURNAMENTS = [
     type:"ryder", badge:"badge-ryder", days:3,
     lore:"Europe 10–6 down going into Sunday singles. Poulter had kept Europe alive Saturday night with five birdies in a row on the last five holes. What followed was a miracle. Or an American collapse.",
     players:[
-      { id:"poulter", name:"Ian Poulter", abbr:"IPC",
+      { id:"poulter", name:"Ian Poulter", abbr:"IPC", team:"EUR",
         desc:"Five birdies on the last five Saturday holes. The heart of Europe. Ryder Cup animal.",
         wound:"The weight of a continent. Personal mythology being written in real time.",
         historicalScores:[0,-3,-7],
         matchPlayDays:[
-          { format:"FOURSOMES", partner:"Rory McIlroy",   opponent:"Keegan Bradley / Phil Mickelson", opponentHoleScores:[3,4,4] },
-          { format:"FOURBALLS", partner:"Rory McIlroy",   opponent:"Tiger Woods / Steve Stricker",    opponentHoleScores:[3,5,4] },
-          { format:"SINGLES",                             opponent:"Webb Simpson",                    opponentHoleScores:[4,4,5] },
+          { format:"FOURSOMES", partner:"Rory McIlroy",   opponent:"Keegan Bradley / Phil Mickelson", opponentHoleScores:[3,4,4], historicalResult:"McIlroy & Poulter lost 1 DOWN" },
+          { format:"FOURBALLS", partner:"Rory McIlroy",   opponent:"Tiger Woods / Steve Stricker",    opponentHoleScores:[3,5,4], historicalResult:"Poulter & McIlroy won 1 UP" },
+          { format:"SINGLES",                             opponent:"Webb Simpson",                    opponentHoleScores:[4,4,5], historicalResult:"Poulter won 1 UP" },
         ]},
-      { id:"garcia", name:"Sergio Garcia", abbr:"SGC",
+      { id:"garcia", name:"Sergio Garcia", abbr:"SGC", team:"EUR",
         desc:"Quietly brilliant across all three days. Won his Sunday singles comfortably.",
         wound:"Always performing against the noise of expectation. Quieter than his reputation.",
         historicalScores:[-1,-2,-5],
         matchPlayDays:[
-          { format:"FOURSOMES", partner:"Lee Westwood",   opponent:"Bubba Watson / Webb Simpson",   opponentHoleScores:[3,5,5] },
-          { format:"FOURBALLS", partner:"Luke Donald",    opponent:"Jason Dufner / Zach Johnson",   opponentHoleScores:[4,4,4] },
-          { format:"SINGLES",                             opponent:"Bubba Watson",                  opponentHoleScores:[3,4,5] },
+          { format:"FOURSOMES", partner:"Lee Westwood",   opponent:"Bubba Watson / Webb Simpson",   opponentHoleScores:[3,5,5], historicalResult:"Garcia & Westwood won 4&3" },
+          { format:"FOURBALLS", partner:"Luke Donald",    opponent:"Jason Dufner / Zach Johnson",   opponentHoleScores:[4,4,4], historicalResult:"Garcia & Donald halved" },
+          { format:"SINGLES",                             opponent:"Bubba Watson",                  opponentHoleScores:[3,4,5], historicalResult:"Garcia won 4&3" },
         ]},
-      { id:"rose", name:"Justin Rose", abbr:"JRO",
+      { id:"rose", name:"Justin Rose", abbr:"JRO", team:"EUR",
         desc:"Won his Sunday singles point on the 18th. Part of the miracle.",
         wound:"Composed under pressure that would unravel other people.",
         historicalScores:[0,-1,-4],
         matchPlayDays:[
-          { format:"FOURSOMES", partner:"Martin Kaymer",      opponent:"Phil Mickelson / Keegan Bradley", opponentHoleScores:[4,4,5] },
-          { format:"FOURBALLS", partner:"Francesco Molinari", opponent:"Jason Dufner / Zach Johnson",     opponentHoleScores:[3,5,4] },
-          { format:"SINGLES",                                 opponent:"Phil Mickelson",                  opponentHoleScores:[3,4,4] },
+          { format:"FOURSOMES", partner:"Martin Kaymer",      opponent:"Phil Mickelson / Keegan Bradley", opponentHoleScores:[4,4,5], historicalResult:"Rose & Kaymer lost 3&2" },
+          { format:"FOURBALLS", partner:"Francesco Molinari", opponent:"Jason Dufner / Zach Johnson",     opponentHoleScores:[3,5,4], historicalResult:"Rose & Molinari won 3&2" },
+          { format:"SINGLES",                                 opponent:"Phil Mickelson",                  opponentHoleScores:[3,4,4], historicalResult:"Rose won 1 UP on 18" },
         ]},
+    ],
+    parallelMatches:[
+      // Day 0 — Foursomes
+      [
+        { match:"Garcia/Westwood vs Watson/Simpson",      scores:[ 1, 2, 3],  teamA:"EUR" },
+        { match:"Rose/Kaymer vs Mickelson/Bradley",       scores:[-1,-2,-3],  teamA:"EUR" },
+        { match:"Colsaerts/Lawrie vs Couples/Furyk",      scores:[ 0, 1, 1],  teamA:"EUR" },
+      ],
+      // Day 1 — Fourballs
+      [
+        { match:"Poulter/McIlroy vs Woods/Stricker",      scores:[ 0, 1, 1],  teamA:"EUR" },
+        { match:"Garcia/Donald vs Dufner/Johnson",        scores:[ 0, 0, 0],  teamA:"EUR" },
+        { match:"Rose/Molinari vs Dufner/Johnson",        scores:[ 1, 2, 3],  teamA:"EUR" },
+      ],
+      // Day 2 — Singles
+      [
+        { match:"Garcia vs Watson",                       scores:[ 1, 2, 3],  teamA:"EUR" },
+        { match:"Donald vs Furyk",                        scores:[ 0, 1, 1],  teamA:"EUR" },
+        { match:"Kaymer vs Stricker",                     scores:[ 0, 0, 1],  teamA:"EUR" },
+      ],
     ],
     field:[
       {name:"Francesco Molinari", scores:[0,-1,-3]},
@@ -376,24 +396,44 @@ const TOURNAMENTS = [
     type:"ryder", badge:"badge-ryder", days:3,
     lore:"The most hostile Ryder Cup in history. USA won 14.5-13.5. Bernhard Langer had a six-foot putt on the 18th hole of the last match to halve and save the Cup for Europe. He missed. Dave Stockton sat down on the grass.",
     players:[
-      { id:"langer_91", name:"Bernhard Langer", abbr:"BLG",
+      { id:"langer_91", name:"Bernhard Langer", abbr:"BLG", team:"EUR",
         desc:"Won his foursomes, halved his fourballs. Then faced the six-foot putt on 18 to save the Cup. Two decades of preparation. One missed putt.",
         wound:"The putt. Six feet. Everything else in his career happened before and after it.",
         historicalScores:[0,-2,-4],
         matchPlayDays:[
-          { format:"FOURSOMES", partner:"Mark James",          opponent:"Lanny Wadkins / Hale Irwin",        opponentHoleScores:[3,4,4] },
-          { format:"FOURBALLS", partner:"Colin Montgomerie",   opponent:"Corey Pavin / Steve Pate",          opponentHoleScores:[4,3,4] },
-          { format:"SINGLES",                                  opponent:"Hale Irwin",                        opponentHoleScores:[3,4,5] },
+          { format:"FOURSOMES", partner:"Mark James",          opponent:"Lanny Wadkins / Hale Irwin",        opponentHoleScores:[3,4,4], historicalResult:"Langer & James halved" },
+          { format:"FOURBALLS", partner:"Colin Montgomerie",   opponent:"Corey Pavin / Steve Pate",          opponentHoleScores:[4,3,4], historicalResult:"Langer & Montgomerie won 1 UP" },
+          { format:"SINGLES",                                  opponent:"Hale Irwin",                        opponentHoleScores:[3,4,5], historicalResult:"Langer lost — missed 6-foot putt to halve" },
         ]},
-      { id:"irwin_91", name:"Hale Irwin", abbr:"HIR",
+      { id:"irwin_91", name:"Hale Irwin", abbr:"HIR", team:"USA",
         desc:"The USA's unshowy anchor. Won three of his four points. Watched Langer miss the final putt from four feet away.",
         wound:"Winning means the other man has to lose. Irwin understood this completely.",
         historicalScores:[-1,-3,-5],
         matchPlayDays:[
-          { format:"FOURSOMES", partner:"Lanny Wadkins",       opponent:"Bernhard Langer / Mark James",      opponentHoleScores:[4,3,5] },
-          { format:"FOURBALLS", partner:"Mark O'Meara",        opponent:"Seve Ballesteros / Jose Olazabal",  opponentHoleScores:[3,4,4] },
-          { format:"SINGLES",                                  opponent:"Bernhard Langer",                   opponentHoleScores:[4,3,4] },
+          { format:"FOURSOMES", partner:"Lanny Wadkins",       opponent:"Bernhard Langer / Mark James",      opponentHoleScores:[4,3,5], historicalResult:"Irwin & Wadkins halved" },
+          { format:"FOURBALLS", partner:"Mark O'Meara",        opponent:"Seve Ballesteros / Jose Olazabal",  opponentHoleScores:[3,4,4], historicalResult:"Irwin & O'Meara lost 1 DOWN" },
+          { format:"SINGLES",                                  opponent:"Bernhard Langer",                   opponentHoleScores:[4,3,4], historicalResult:"Irwin won — Langer missed 6-foot putt on 18" },
         ]},
+    ],
+    parallelMatches:[
+      // Day 0 — Foursomes
+      [
+        { match:"Faldo/Gilford vs Floyd/Couples",         scores:[-1,-1,-2],  teamA:"EUR" },
+        { match:"Torrance/Feherty vs Wadkins/O'Meara",    scores:[ 0,-1,-1],  teamA:"EUR" },
+        { match:"Ballesteros/Olazabal vs Azinger/Beck",   scores:[ 1, 1, 2],  teamA:"EUR" },
+      ],
+      // Day 1 — Fourballs
+      [
+        { match:"Langer/Montgomerie vs Pavin/Pate",       scores:[ 0, 1, 1],  teamA:"EUR" },
+        { match:"Faldo/Woosnam vs Azinger/Irwin",         scores:[-1,-1,-2],  teamA:"EUR" },
+        { match:"Ballesteros/Olazabal vs Couples/Floyd",  scores:[ 1, 0, 0],  teamA:"EUR" },
+      ],
+      // Day 2 — Singles
+      [
+        { match:"Ballesteros vs Couples",                 scores:[-1,-1,-1],  teamA:"EUR" },
+        { match:"Montgomerie vs Calcavecchia",            scores:[ 0, 0, 0],  teamA:"EUR" },
+        { match:"Faldo vs Floyd",                         scores:[ 1, 1, 2],  teamA:"EUR" },
+      ],
     ],
     field:[
       {name:"Corey Pavin",        scores:[0,-1,-3]},
@@ -433,24 +473,44 @@ const TOURNAMENTS = [
     type:"ryder", badge:"badge-ryder", days:3,
     lore:"Europe led 10-6 after two days. USA needed 8.5 from 12 Sunday singles. They got them. Justin Leonard holed a 45-foot putt on 17. The American team rushed the green before Olazabal had putted. European golf did not forget this for a decade.",
     players:[
-      { id:"leonard", name:"Justin Leonard", abbr:"JLD",
+      { id:"leonard", name:"Justin Leonard", abbr:"JLD", team:"USA",
         desc:"Holed a 45-foot putt across the 17th green. The USA team erupted. Olazabal still had a putt to halve. He missed.",
         wound:"The putt was real. The celebration on the green while Olazabal stood there — also real.",
         historicalScores:[0,-2,-4],
         matchPlayDays:[
-          { format:"FOURSOMES", partner:"Hal Sutton",           opponent:"Lee Westwood / Darren Clarke",          opponentHoleScores:[4,4,3] },
-          { format:"FOURBALLS", partner:"David Duval",          opponent:"Padraig Harrington / Paul McGinley",    opponentHoleScores:[3,3,4] },
-          { format:"SINGLES",                                   opponent:"Jose Maria Olazabal",                   opponentHoleScores:[3,4,4] },
+          { format:"FOURSOMES", partner:"Hal Sutton",           opponent:"Lee Westwood / Darren Clarke",          opponentHoleScores:[4,4,3], historicalResult:"Leonard & Sutton won 2&1" },
+          { format:"FOURBALLS", partner:"David Duval",          opponent:"Padraig Harrington / Paul McGinley",    opponentHoleScores:[3,3,4], historicalResult:"Halved" },
+          { format:"SINGLES",                                   opponent:"Jose Maria Olazabal",                   opponentHoleScores:[3,4,4], historicalResult:"Leonard won 1 UP on 17" },
         ]},
-      { id:"olazabal_99", name:"José Maria Olazabal", abbr:"JMO",
+      { id:"olazabal_99", name:"José Maria Olazabal", abbr:"JMO", team:"EUR",
         desc:"Level with Leonard going to 17. Leonard holed from 45 feet. Americans stormed the green. Olazabal waited. He then putted and missed.",
         wound:"Standing on the green while a celebration happens around you. Not having yet missed.",
         historicalScores:[-1,-3,-5],
         matchPlayDays:[
-          { format:"FOURSOMES", partner:"Miguel Angel Jimenez", opponent:"Phil Mickelson / Tom Lehman",           opponentHoleScores:[4,3,4] },
-          { format:"FOURBALLS", partner:"Sergio Garcia",        opponent:"Davis Love III / Jeff Maggert",         opponentHoleScores:[3,4,5] },
-          { format:"SINGLES",                                   opponent:"Justin Leonard",                        opponentHoleScores:[4,4,3] },
+          { format:"FOURSOMES", partner:"Miguel Angel Jimenez", opponent:"Phil Mickelson / Tom Lehman",           opponentHoleScores:[4,3,4], historicalResult:"Olazabal & Jimenez lost 1 DOWN" },
+          { format:"FOURBALLS", partner:"Sergio Garcia",        opponent:"Davis Love III / Jeff Maggert",         opponentHoleScores:[3,4,5], historicalResult:"Halved" },
+          { format:"SINGLES",                                   opponent:"Justin Leonard",                        opponentHoleScores:[4,4,3], historicalResult:"Leonard won 1 UP on 17" },
         ]},
+    ],
+    parallelMatches:[
+      // Day 0 — Foursomes
+      [
+        { match:"Clarke/Westwood vs Sutton/Maggert",      scores:[-1,-2,-2],  teamA:"EUR" },
+        { match:"Jimenez/Olazabal vs Mickelson/Lehman",   scores:[-1,-1,-1],  teamA:"EUR" },
+        { match:"Montgomerie/Lawrie vs Woods/Duval",      scores:[ 0,-1,-2],  teamA:"EUR" },
+      ],
+      // Day 1 — Fourballs
+      [
+        { match:"Leonard/Duval vs Harrington/McGinley",   scores:[ 0, 0, 0],  teamA:"USA" },
+        { match:"Olazabal/Garcia vs Love/Maggert",        scores:[ 0, 0, 0],  teamA:"EUR" },
+        { match:"Clarke/Bjorn vs Sutton/Maggert",         scores:[ 1, 1, 2],  teamA:"EUR" },
+      ],
+      // Day 2 — Singles
+      [
+        { match:"Clarke vs Sutton",                       scores:[ 1, 1, 2],  teamA:"EUR" },
+        { match:"Westwood vs Duval",                      scores:[ 0,-1,-1],  teamA:"EUR" },
+        { match:"Montgomerie vs Pavin",                   scores:[ 0, 0, 0],  teamA:"EUR" },
+      ],
     ],
     field:[
       {name:"Sergio Garcia",    scores:[0,-1,-2]},
