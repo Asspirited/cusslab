@@ -147,3 +147,81 @@ Feature: Golf Adventure — MatchPlayService
     Given an mpCtx with no historicalResult
     When buildCommentaryAddendum is called
     Then the MPS result does not contain "HISTORICAL MATCH RESULT"
+
+  # ── End-of-day leaderboard (BL-014) ──────────────────────────────────────
+
+  Scenario: buildEndOfDayLeaderboard returns null for non-Ryder tournament
+    Given a game state with tournament type "major"
+    When buildEndOfDayLeaderboard is called for day 0
+    Then the MPS result is null
+
+  Scenario Outline: Historical result string is parsed to a match outcome using player surname and team
+    Given a player with surname "<surname>" on team "<team>"
+    And the player's historical result for the day is "<result>"
+    When the end-of-day leaderboard computes the match outcome
+    Then the match outcome is "<outcome>"
+
+    Examples:
+      | surname     | team | result                                  | outcome |
+      | Garcia      | EUR  | Garcia & Westwood won 4&3               | EUR     |
+      | Poulter     | EUR  | Poulter & McIlroy won 1 UP              | EUR     |
+      | Poulter     | EUR  | McIlroy & Poulter lost 1 DOWN           | USA     |
+      | Rose        | EUR  | Rose & Kaymer lost 3&2                  | USA     |
+      | Molinari    | EUR  | Tiger Woods won 2&1                     | USA     |
+      | Molinari    | EUR  | Halved                                  | HALVED  |
+      | Montgomerie | EUR  | Montgomerie halved with Payne Stewart   | HALVED  |
+      | Langer      | EUR  | Langer lost — missed 6-foot putt on 18 | USA     |
+      | Mickelson   | USA  | Mickelson & Bradley won 3&2             | USA     |
+      | Stricker    | USA  | Stricker & Woods lost 1 DOWN            | EUR     |
+
+  Scenario: buildEndOfDayLeaderboard sums points correctly across a full day
+    Given Medinah 2012 day 1 historical results:
+      | playerSurname | team | historicalResult            |
+      | Poulter       | EUR  | Poulter & McIlroy won 1 UP  |
+      | Garcia        | EUR  | Garcia & Donald halved      |
+      | Rose          | EUR  | Rose & Molinari won 3&2     |
+    And I am not playing as any of these players
+    When buildEndOfDayLeaderboard is called for day 1
+    Then EUR total is 2.5
+    And USA total is 0.5
+    And 3 match rows are returned
+
+  Scenario: buildEndOfDayLeaderboard replaces historical result with user's actual result
+    Given Medinah 2012 day 1 with historical EUR total 2.5 and USA total 0.5
+    And I am playing as Ian Poulter (EUR) whose historical result was "Poulter & McIlroy won 1 UP"
+    And my actual match ended All Square (matchPlayScore 0, holesLeft 0)
+    When buildEndOfDayLeaderboard is called
+    Then my match result shows "Halved"
+    And EUR total is 2.0
+    And USA total is 1.0
+
+  Scenario: buildEndOfDayLeaderboard — user beats history (historical loss becomes a win)
+    Given Medinah 2012 day 0 where historically Rose & Kaymer lost 3&2 to USA
+    And I am playing as Justin Rose (EUR)
+    And my actual match ended matchPlayScore 2 holesLeft 1
+    When buildEndOfDayLeaderboard is called
+    Then my match result shows "2&1"
+    And my match outcome is EUR
+    And EUR total is 1 higher than the fully historical total for that day
+    And USA total is 1 lower than the fully historical total for that day
+
+  Scenario: buildEndOfDayLeaderboard — user loses where history had a win
+    Given Medinah 2012 day 1 where historically Poulter & McIlroy won 1 UP for EUR
+    And I am playing as Ian Poulter (EUR)
+    And my actual match ended matchPlayScore -2 holesLeft 0
+    When buildEndOfDayLeaderboard is called
+    Then my match outcome is USA
+    And EUR total is 1 lower than the fully historical total for that day
+    And USA total is 1 higher than the fully historical total for that day
+
+  Scenario: buildEndOfDayLeaderboard flags exactly one row as the user's match
+    Given any Ryder Cup day state where I am a named player
+    When buildEndOfDayLeaderboard is called
+    Then exactly one match row has isUser true
+    And all other rows have isUser false
+
+  Scenario: buildEndOfDayLeaderboard formats user result via formatResult
+    Given I am playing as Martin Kaymer (EUR) on day 2
+    And my actual match ended matchPlayScore 3 holesLeft 2
+    When buildEndOfDayLeaderboard is called
+    Then my match result shows "3&2"
