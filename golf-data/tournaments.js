@@ -1317,6 +1317,111 @@ const TOURNAMENTS = [
        events:["ryder_climax","nicklaus_concession","historic_first"], pressureRating:4,
        modifiers:{compCost:1, atmosphereNote:"Muirfield Village 18 — Nicklaus designed this hole. He is standing near it. He has been standing near it all afternoon. He is about to shake Jacklin's hand and acknowledge that European golf has arrived."}},
     ]
+  },
+
+  // ── 2010 Ryder Cup — Celtic Manor ────────────────────────────────────────────
+  {
+    id:"celtic_manor_2010", year:2010, eraClass:"era-2010", lbClass:"lb-2010",
+    name:"The Monday Match",
+    course:"Celtic Manor — Twenty Ten Course", country:"Newport, Wales",
+    type:"ryder", badge:"badge-ryder", days:3,
+    lore:"Europe 14.5–13.5. It rained for two days. The matches overflowed into Sunday. Sunday overflowed into Monday. Graeme McDowell beat Hunter Mahan in the final singles match on Monday afternoon to win the Cup for Europe. It was the first Ryder Cup held in Wales. The Twenty Ten course had been built specifically for it.",
+    players:[
+      { id:"mcdowell_10", name:"Graeme McDowell", abbr:"GMD", team:"EUR",
+        temperamentProfile:"ICEBERG",
+        bottle:9, ego:6, temperament:9, shame:3,
+        driving:7, irons:8, short_game:9, putting:9, recovery:8, bunkers:8, course_management:9, shot_variation:7,
+        desc:"Won the US Open six weeks earlier. Now won the Ryder Cup with the decisive point on Monday. Holed from 12 feet on the 16th to go 2 UP. Mahan couldn't respond.",
+        wound:"The quiet one. When he holes the putt, he doesn't roar — he just looks at the ball in the hole for a moment, as if making sure it's real.",
+        historicalScores:[0,-1,-2],
+        matchPlayDays:[
+          { format:"FOURSOMES", partner:"Rory McIlroy",   opponent:"Stewart Cink / Matt Kuchar",   opponentHoleScores:[4,4,5], historicalResult:"McDowell & McIlroy lost 3&2" },
+          { format:"ABSENT" },
+          { format:"SINGLES",                             opponent:"Hunter Mahan",                  opponentHoleScores:[4,4,5], historicalResult:"McDowell won 3&1 Monday — the winning point" },
+        ]},
+      { id:"mcilroy_10", name:"Rory McIlroy", abbr:"RMC", team:"EUR",
+        temperamentProfile:"PEAKER",
+        bottle:6, ego:9, temperament:6, shame:4,
+        driving:10, irons:9, short_game:8, putting:8, recovery:7, bunkers:7, course_management:7, shot_variation:9,
+        desc:"Twenty-one years old. Lost his foursomes. Won his singles convincingly. The future was already visible.",
+        wound:"He is 21 and the weight of Northern Ireland has been on his shoulders since he turned professional. He is still learning to wear it.",
+        historicalScores:[0,0,-2],
+        matchPlayDays:[
+          { format:"FOURSOMES", partner:"Graeme McDowell", opponent:"Stewart Cink / Matt Kuchar",  opponentHoleScores:[4,4,5], historicalResult:"McDowell & McIlroy lost 3&2" },
+          { format:"FOURBALLS", partner:"Luke Donald",     opponent:"Jim Furyk / Hunter Mahan",    opponentHoleScores:[4,5,4], historicalResult:"McIlroy & Donald won 3&2" },
+          { format:"SINGLES",                              opponent:"Stewart Cink",                opponentHoleScores:[4,4,4], historicalResult:"McIlroy won 4&3 — dominant" },
+        ]},
+      { id:"westwood_10", name:"Lee Westwood", abbr:"LWS", team:"EUR",
+        temperamentProfile:"LEVELHEADED",
+        bottle:7, ego:6, temperament:8, shame:5,
+        driving:9, irons:9, short_game:7, putting:6, recovery:7, bunkers:7, course_management:8, shot_variation:7,
+        desc:"Went 4-1 across the week. World number one at the time. In 2010, for a brief window, he was the best player on earth. He played like it.",
+        wound:"The majors still haven't come. He performs better in Ryder Cups than anywhere else on earth, as if the absence of individual pressure releases something.",
+        historicalScores:[0,-1,-2],
+        matchPlayDays:[
+          { format:"FOURBALLS", partner:"Martin Kaymer",   opponent:"Phil Mickelson / Dustin Johnson", opponentHoleScores:[4,4,5], historicalResult:"Westwood & Kaymer won 3&2" },
+          { format:"FOURSOMES", partner:"Edoardo Molinari", opponent:"Mickelson / Johnson",            opponentHoleScores:[4,5,4], historicalResult:"Westwood & Molinari won 3&2" },
+          { format:"SINGLES",                              opponent:"Matt Kuchar",                    opponentHoleScores:[4,4,4], historicalResult:"Westwood won 2 UP" },
+        ]},
+      { id:"donald_10", name:"Luke Donald", abbr:"LDN", team:"EUR",
+        temperamentProfile:"LEVELHEADED",
+        bottle:7, ego:5, temperament:9, shame:3,
+        driving:5, irons:8, short_game:10, putting:9, recovery:8, bunkers:8, course_management:10, shot_variation:7,
+        desc:"Won four from four. Never long off the tee. Never needed to be. The short game is so precise it functions as an entirely separate weapon.",
+        wound:"World number one in putting statistics. The American players know this. They know the hole is not safe until it has swallowed the ball.",
+        historicalScores:[0,0,-1],
+        matchPlayDays:[
+          { format:"FOURBALLS", partner:"Rory McIlroy",    opponent:"Jim Furyk / Hunter Mahan",    opponentHoleScores:[4,5,4], historicalResult:"McIlroy & Donald won 3&2" },
+          { format:"FOURSOMES", partner:"Ian Poulter",     opponent:"Tiger Woods / Steve Stricker", opponentHoleScores:[4,4,5], historicalResult:"Donald & Poulter won 2&1" },
+          { format:"SINGLES",                              opponent:"Jim Furyk",                   opponentHoleScores:[4,4,4], historicalResult:"Donald won 1 UP" },
+        ]},
+    ],
+    parallelMatches:[
+      // Day 0 — Fourballs (first session after rain delay)
+      [
+        { match:"Westwood/Kaymer vs Mickelson/Johnson",    scores:[ 0, 1, 3], teamA:"EUR" },
+        { match:"McIlroy/Donald vs Furyk/Mahan",           scores:[ 0, 1, 3], teamA:"EUR" },
+        { match:"Garcia/Poulter vs Woods/Stricker",        scores:[-1,-2,-2], teamA:"EUR" },
+        { match:"Harrington/Fisher vs Cink/Kuchar",        scores:[-1,-1,-1], teamA:"EUR" },
+      ],
+      // Day 1 — Foursomes
+      [
+        { match:"Westwood/Molinari vs Mickelson/Johnson",  scores:[ 0, 1, 2], teamA:"EUR" },
+        { match:"Donald/Poulter vs Woods/Stricker",        scores:[ 0, 0, 2], teamA:"EUR" },
+        { match:"McDowell/McIlroy vs Cink/Kuchar",         scores:[-1,-2,-3], teamA:"EUR" },
+        { match:"Kaymer/Jimenez vs Overton/Haas",          scores:[ 0, 0, 1], teamA:"EUR" },
+      ],
+      // Day 2 — Singles (Monday)
+      [
+        { match:"McDowell vs Mahan",                       scores:[ 0, 0, 3], teamA:"EUR" },
+        { match:"McIlroy vs Cink",                         scores:[ 1, 2, 4], teamA:"EUR" },
+        { match:"Westwood vs Kuchar",                      scores:[ 0, 1, 2], teamA:"EUR" },
+        { match:"Donald vs Furyk",                         scores:[ 0, 0, 1], teamA:"EUR" },
+      ],
+    ],
+    field:[
+      {name:"Ian Poulter",      scores:[0,-1,-2]},
+      {name:"Martin Kaymer",    scores:[0,-1,-2]},
+      {name:"Miguel Angel Jimenez", scores:[0, 0,-1]},
+      {name:"Edoardo Molinari", scores:[0,-1,-2]},
+    ],
+    holes:[
+      {id:"tt14", name:"14th — The Valley",    par:4, yards:441, hazard:"river valley, trees both sides, tight approach",
+       lore:"The Twenty Ten course was built to host the Ryder Cup. Every hole was designed with match play in mind. The 14th is where the match tightens — the valley takes everything offline.",
+       incidents:["Multiple matches were level or within one after 14 in Monday singles. The valley at 14 was where players found out what they had left."],
+       events:["rain_soaked","valley_wind"], pressureRating:2,
+       modifiers:{atmosphereNote:"Celtic Manor 14 — it rained for two days. The fairways are still damp. The valley at 14 channels whatever wind has survived the Welsh morning."}},
+      {id:"tt16", name:"16th — The McDowell",  par:4, yards:437, hazard:"water right, gallery standing both sides",
+       lore:"Where McDowell went 2 UP on Mahan on Monday morning. The 12-foot putt. The moment the Cup tilted.",
+       incidents:["McDowell's 12-foot putt on 16 to go 2 UP on Monday left Mahan needing to win the last two holes. He couldn't.","Graeme McDowell stood and looked at the ball in the hole for a long moment before he acknowledged the gallery."],
+       events:["decisive_putt","monday_morning","gallery_building"], pressureRating:4,
+       modifiers:{compCost:1, atmosphereNote:"Celtic Manor 16 on Monday morning — the Cup is very close. McDowell is 2 UP. The gallery has been waiting since Saturday. The hole is quiet."}},
+      {id:"tt18", name:"18th — The Monday",    par:4, yards:494, hazard:"tight approach, full gallery, the finish line",
+       lore:"Europe won here on Monday. The first Ryder Cup in Wales. The Twenty Ten course delivered exactly what it was built for.",
+       incidents:["McDowell's winning point was secured on the 16th — by 18, it was confirmation rather than decision.","The first Ryder Cup ever held in Wales concluded on a Monday morning with a 14.5-13.5 European win."],
+       events:["ryder_climax","monday_finish","first_wales"], pressureRating:3,
+       modifiers:{atmosphereNote:"Celtic Manor 18 on Monday — the match is already won, but the Cup ceremony requires someone to finish. The gallery is not cold any more."}},
+    ]
   }
 
 ];
