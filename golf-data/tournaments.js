@@ -1422,6 +1422,111 @@ const TOURNAMENTS = [
        events:["ryder_climax","monday_finish","first_wales"], pressureRating:3,
        modifiers:{atmosphereNote:"Celtic Manor 18 on Monday — the match is already won, but the Cup ceremony requires someone to finish. The gallery is not cold any more."}},
     ]
+  },
+
+  // ── 1995 Ryder Cup — Oak Hill ────────────────────────────────────────────────
+  {
+    id:"oak_hill_1995", year:1995, eraClass:"era-1995", lbClass:"lb-1995",
+    name:"Faldo's 4th",
+    course:"Oak Hill Country Club — East Course", country:"Rochester, New York",
+    type:"ryder", badge:"badge-ryder", days:3,
+    lore:"Europe 14.5–13.5. Bernard Gallacher's third attempt at captaincy. He had lost in 1991 and 1993. Nick Faldo beat Curtis Strange on the final hole of the final match to win the Cup for Europe — holing from 12 feet after Strange missed. Philip Walton had actually won the necessary point moments earlier. Faldo's hole completed the point total. It was the most Faldo-adjacent way for the Cup to end.",
+    players:[
+      { id:"faldo_95", name:"Nick Faldo", abbr:"NFA", team:"EUR",
+        temperamentProfile:"ICEBERG",
+        bottle:10, ego:8, temperament:9, shame:2,
+        driving:8, irons:10, short_game:9, putting:8, recovery:8, bunkers:8, course_management:10, shot_variation:7,
+        desc:"Won the deciding singles match against Curtis Strange. Holed from 12 feet after Strange missed. The Cup was already won when he holed out — Walton had just beaten Haas — but Faldo wasn't told that. He played the hole as if it were the last thing on earth.",
+        wound:"The system. The precision. The complete absence of sentiment. He doesn't hole the 12-footer with drama — he holes it because it is the correct shot to execute.",
+        historicalScores:[0,-1,-2],
+        matchPlayDays:[
+          { format:"FOURSOMES", partner:"Colin Montgomerie",  opponent:"Curtis Strange / Jay Haas",    opponentHoleScores:[4,4,5], historicalResult:"Faldo & Montgomerie won 4&2" },
+          { format:"FOURBALLS", partner:"Colin Montgomerie",  opponent:"Jay Haas / Fred Couples",      opponentHoleScores:[4,4,4], historicalResult:"Faldo & Montgomerie halved" },
+          { format:"SINGLES",                                 opponent:"Curtis Strange",               opponentHoleScores:[4,4,4], historicalResult:"Faldo won 1 UP on 18 — holed 12-footer after Strange missed" },
+        ]},
+      { id:"montgomerie_95", name:"Colin Montgomerie", abbr:"CMG", team:"EUR",
+        temperamentProfile:"COMBUSTIBLE",
+        bottle:8, ego:7, temperament:5, shame:9,
+        driving:8, irons:9, short_game:7, putting:7, recovery:7, bunkers:7, course_management:8, shot_variation:7,
+        desc:"Partnered Faldo in the team matches and won decisively. The American crowd gave him no peace. He was 4-0 up at one point in his singles.",
+        wound:"The abuse from the American galleries has become a feature of his existence at US events. He channels it. Poorly, sometimes. Effectively, mostly.",
+        historicalScores:[0,-1,-1],
+        matchPlayDays:[
+          { format:"FOURSOMES", partner:"Nick Faldo",         opponent:"Curtis Strange / Jay Haas",    opponentHoleScores:[4,4,5], historicalResult:"Faldo & Montgomerie won 4&2" },
+          { format:"FOURBALLS", partner:"Nick Faldo",         opponent:"Jay Haas / Fred Couples",      opponentHoleScores:[4,4,4], historicalResult:"Faldo & Montgomerie halved" },
+          { format:"SINGLES",                                 opponent:"Ben Crenshaw",                 opponentHoleScores:[4,4,4], historicalResult:"Montgomerie halved — needed the half to clinch the Cup" },
+        ]},
+      { id:"torrance_95", name:"Sam Torrance", abbr:"STR", team:"EUR",
+        temperamentProfile:"PEAKER",
+        bottle:8, ego:6, temperament:6, shame:7,
+        driving:7, irons:7, short_game:7, putting:8, recovery:7, bunkers:7, course_management:7, shot_variation:6,
+        desc:"Ten years after The Photograph. Back in the Ryder Cup, older, still capable of the moment when it matters.",
+        wound:"He holed the putt that won it in 1985. Everyone knows. That is a blessing and a weight simultaneously.",
+        historicalScores:[0,-1,-2],
+        matchPlayDays:[
+          { format:"FOURSOMES", partner:"Costantino Rocca",   opponent:"Davis Love III / Jeff Maggert", opponentHoleScores:[4,4,5], historicalResult:"Torrance & Rocca won 3&2" },
+          { format:"ABSENT" },
+          { format:"SINGLES",                                 opponent:"Loren Roberts",                opponentHoleScores:[4,4,4], historicalResult:"Torrance halved" },
+        ]},
+      { id:"langer_95", name:"Bernhard Langer", abbr:"BLG", team:"EUR",
+        temperamentProfile:"ICEBERG",
+        bottle:9, ego:4, temperament:9, shame:3,
+        driving:7, irons:9, short_game:8, putting:7, recovery:7, bunkers:8, course_management:9, shot_variation:7,
+        desc:"Played all week. Won in the team matches. Carried the memory of 1991 with him everywhere, as an asset rather than a wound. It made him harder to rattle.",
+        wound:"In 1991 he missed the putt. At Oak Hill he has already resolved that he will not miss the important ones. He hasn't discussed this with anyone.",
+        historicalScores:[0,-1,-2],
+        matchPlayDays:[
+          { format:"FOURSOMES", partner:"Bernhard Langer",    opponent:"Corey Pavin / Tom Lehman",     opponentHoleScores:[4,4,4], historicalResult:"Langer & Gilford won 4&3" },
+          { format:"FOURBALLS", partner:"Per-Ulrik Johansson", opponent:"Brad Faxon / Peter Jacobsen", opponentHoleScores:[4,4,5], historicalResult:"Langer & Johansson won 1 UP" },
+          { format:"SINGLES",                                 opponent:"Corey Pavin",                  opponentHoleScores:[4,4,5], historicalResult:"Langer lost 3&2" },
+        ]},
+    ],
+    parallelMatches:[
+      // Day 0 — Foursomes
+      [
+        { match:"Faldo/Montgomerie vs Strange/Haas",        scores:[ 1, 2, 4], teamA:"EUR" },
+        { match:"Torrance/Rocca vs Love/Maggert",          scores:[ 0, 1, 3], teamA:"EUR" },
+        { match:"Langer/Gilford vs Pavin/Lehman",          scores:[ 1, 2, 4], teamA:"EUR" },
+        { match:"Woosnam/Walton vs Couples/Jacobsen",      scores:[-1,-2,-3], teamA:"EUR" },
+      ],
+      // Day 1 — Fourballs
+      [
+        { match:"Faldo/Montgomerie vs Haas/Couples",       scores:[ 0, 0, 0], teamA:"EUR" },
+        { match:"Langer/Johansson vs Faxon/Jacobsen",      scores:[ 0, 0, 1], teamA:"EUR" },
+        { match:"Woosnam/Rocca vs Love/Maggert",           scores:[-1,-2,-2], teamA:"EUR" },
+        { match:"James/Clarke vs Crenshaw/Strange",        scores:[ 0, 1, 1], teamA:"EUR" },
+      ],
+      // Day 2 — Singles
+      [
+        { match:"Faldo vs Strange",                        scores:[ 0, 0, 1], teamA:"EUR" },
+        { match:"Montgomerie vs Crenshaw",                 scores:[ 0, 0, 0], teamA:"EUR" },
+        { match:"Torrance vs Roberts",                     scores:[ 0, 0, 0], teamA:"EUR" },
+        { match:"Walton vs Haas",                          scores:[ 0, 0, 1], teamA:"EUR" },
+      ],
+    ],
+    field:[
+      {name:"Philip Walton",     scores:[0, 0,-1]},
+      {name:"Ian Woosnam",       scores:[0,-1,-2]},
+      {name:"Costantino Rocca",  scores:[0,-1,-1]},
+      {name:"David Gilford",     scores:[0,-1,-2]},
+    ],
+    holes:[
+      {id:"oh12", name:"12th — The Creek",     par:4, yards:372, hazard:"Allens Creek right, tight fairway",
+       lore:"The creek that runs through Oak Hill is more psychological than physical. Every approach carries the question of exactly how much it matters.",
+       incidents:["Montgomerie parred the 12th in all three of his matches. His playing partners found this difficult to explain."],
+       events:["creek_right","crowd_hostile"], pressureRating:2,
+       modifiers:{atmosphereNote:"Oak Hill 12 — Allens Creek is to the right. The American gallery is to the left. Both are waiting for a mistake."}},
+      {id:"oh17", name:"17th — The Decision",  par:4, yards:458, hazard:"bunkers both sides, long approach",
+       lore:"The last par 4 before the finish. In 1995, matches that reached 17 all-square produced the most compressed golf of the week.",
+       incidents:["Faldo was all-square with Strange on the 17th tee. He hit the fairway. Strange did not. It was, observers noted, entirely in keeping with both men."],
+       events:["match_tension","crowd_swelling"], pressureRating:3,
+       modifiers:{compCost:1, atmosphereNote:"Oak Hill 17 — you can hear the 18th gallery from here. Every player on the 17th tee in 1995 knew exactly what was at stake."}},
+      {id:"oh18", name:"18th — Faldo's Hole",  par:4, yards:440, hazard:"bunkers right, gallery three-deep",
+       lore:"Faldo holed from 12 feet after Strange missed. Philip Walton had already won the necessary point — the Cup was decided — but nobody had told Faldo. He played 18 as if it were the last thing on earth.",
+       incidents:["Strange's missed putt on 18 left Faldo with 12 feet to win the hole and the match. He holed it. He pumped his fist — once, precisely.","Philip Walton had beaten Jay Haas moments earlier to actually win the Cup for Europe. Faldo was not informed of this."],
+       events:["ryder_climax","faldo_precision","cup_won"], pressureRating:5,
+       modifiers:{compCost:2, atmosphereNote:"Oak Hill 18 — Faldo is 12 feet from the hole. Strange missed. The Cup is already won but nobody has told Faldo. He is treating this putt as the only thing that exists."}},
+    ]
   }
 
 ];
