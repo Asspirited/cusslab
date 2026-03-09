@@ -302,6 +302,7 @@ body {
 .tournament-grid { margin-bottom: 18px; }
 .tc-section { margin-bottom: 20px; }
 .tc-section-header { font-family: var(--font-display); font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); border-top: 1px solid var(--border); padding-top: 12px; margin-bottom: 10px; }
+.tc-decade-hdr { font-size: 16px; text-transform: none; letter-spacing: 0.06em; cursor: pointer; display: flex; align-items: center; justify-content: space-between; user-select: none; }
 .tc-section-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap: 8px; }
 
 .tc {
@@ -1543,7 +1544,7 @@ function buildSetup() {
     sec.className = 'tc-section tc-decade';
     const hdr = document.createElement('div');
     hdr.className = 'tc-section-header tc-decade-hdr' + (isOpen ? ' open' : '');
-    hdr.innerHTML = `<span>${decade}s</span><span class="tc-decade-count">${entries.length}</span><span class="tc-decade-arrow">${isOpen ? '▲' : '▼'}</span>`;
+    hdr.innerHTML = `<span>\u2019${String(decade).slice(2)}s</span><span class="tc-decade-arrow">${isOpen ? '▲' : '▼'}</span>`;
     const grid = document.createElement('div');
     grid.className = 'tc-section-grid';
     grid.style.display = isOpen ? '' : 'none';
