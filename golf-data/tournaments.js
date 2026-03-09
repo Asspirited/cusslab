@@ -898,6 +898,110 @@ const TOURNAMENTS = [
        events:["final_hole","gallery_eruption","historic_moment"], pressureRating:5,
        modifiers:{atmosphereNote:"Sunday 18 at Torrey Pines, 2008. Tiger needs birdie to stay alive. The leg is gone. He makes it. The roar is unlike anything NBC had broadcast in years."}},
     ]
+  },
+
+  // ── 1997 Ryder Cup — Valderrama ──────────────────────────────────────────────
+  {
+    id:"valderrama_1997", year:1997, eraClass:"era-1997", lbClass:"lb-1997",
+    name:"Seve's Valderrama",
+    course:"Club de Golf Valderrama", country:"Sotogrande, Spain",
+    type:"ryder", badge:"badge-ryder", days:3,
+    lore:"Europe 14.5–13.5. Seve Ballesteros captained and did not play a single shot. He walked every fairway, appeared at every green, and on more than one occasion attempted to influence his players' shot selection while they were standing over the ball. Europe won anyway. Andrew Coltart sat on the bench for two days and then faced Tiger Woods on Sunday morning.",
+    players:[
+      { id:"coltart_97", name:"Andrew Coltart", abbr:"ACL", team:"EUR",
+        temperamentProfile:"LEVELHEADED",
+        bottle:6, ego:4, temperament:8, shame:6,
+        driving:7, irons:7, short_game:6, putting:6, recovery:6, bunkers:6, course_management:7, shot_variation:5,
+        desc:"Selected by Seve over more experienced players. Did not play Friday. Did not play Saturday. Sunday morning he was told he was leading off the singles against Tiger Woods.",
+        wound:"Two days on the bench. No explanation from Seve. First shot in a Ryder Cup — against the 21-year-old who just won The Masters.",
+        historicalScores:[0,0,-3],
+        matchPlayDays:[
+          { format:"ABSENT" },
+          { format:"ABSENT" },
+          { format:"SINGLES", opponent:"Tiger Woods", opponentHoleScores:[3,4,5], historicalResult:"Coltart lost 3&2 — his first Ryder Cup appearance and it was against Tiger" },
+        ]},
+      { id:"montgomerie_97", name:"Colin Montgomerie", abbr:"CMG", team:"EUR",
+        temperamentProfile:"COMBUSTIBLE",
+        bottle:8, ego:7, temperament:5, shame:9,
+        driving:8, irons:9, short_game:7, putting:7, recovery:7, bunkers:7, course_management:8, shot_variation:7,
+        desc:"Went 3.5 from 5. The American galleries heckled him throughout the week. He responded by being the best European player on the course.",
+        wound:"The crowd abuse has followed him for years. Every Ryder Cup is personal. He plays better when it's personal.",
+        historicalScores:[1,0,-1],
+        matchPlayDays:[
+          { format:"FOURSOMES", partner:"Bernhard Langer", opponent:"Davis Love III / Jim Furyk", opponentHoleScores:[3,4,4], historicalResult:"Montgomerie & Langer won 1 UP" },
+          { format:"FOURBALLS", partner:"Darren Clarke",   opponent:"Fred Couples / Brad Faxon",  opponentHoleScores:[4,4,5], historicalResult:"Montgomerie & Clarke lost 1 DOWN" },
+          { format:"SINGLES",                              opponent:"Scott Hoch",                   opponentHoleScores:[4,4,4], historicalResult:"Montgomerie won 1 UP on 18" },
+        ]},
+      { id:"westwood_97", name:"Lee Westwood", abbr:"LWS", team:"EUR",
+        temperamentProfile:"PEAKER",
+        bottle:7, ego:6, temperament:7, shame:4,
+        driving:9, irons:8, short_game:7, putting:6, recovery:7, bunkers:7, course_management:7, shot_variation:8,
+        desc:"Twenty-four years old. His first Ryder Cup. Paired with Faldo in foursomes and played without a flicker of nerves.",
+        wound:"Youngest in the European team. Half the crowd have never heard of him. He is here to change that.",
+        historicalScores:[0,0,-2],
+        matchPlayDays:[
+          { format:"FOURSOMES", partner:"Nick Faldo",     opponent:"Tom Lehman / Jeff Maggert", opponentHoleScores:[4,4,4], historicalResult:"Westwood & Faldo won 3&2" },
+          { format:"ABSENT" },
+          { format:"SINGLES",                             opponent:"Brad Faxon",                 opponentHoleScores:[4,4,5], historicalResult:"Westwood won 3&1" },
+        ]},
+      { id:"parnevik_97", name:"Jesper Parnevik", abbr:"JPV", team:"EUR",
+        temperamentProfile:"STREAKY",
+        bottle:7, ego:7, temperament:6, shame:3,
+        driving:8, irons:8, short_game:8, putting:7, recovery:8, bunkers:7, course_management:7, shot_variation:9,
+        desc:"The turned-up cap brim. The most recognisable silhouette on the European team. Played with a flair that baffled opponents and occasionally confused his partners.",
+        wound:"Never quite got the recognition his talent deserved. At least the cap is famous.",
+        historicalScores:[0,1,-1],
+        matchPlayDays:[
+          { format:"FOURSOMES", partner:"Ignacio Garrido", opponent:"Phil Mickelson / Tom Lehman",  opponentHoleScores:[4,4,4], historicalResult:"Parnevik & Garrido won 1 UP" },
+          { format:"FOURBALLS", partner:"Per-Ulrik Johansson", opponent:"Tiger Woods / Mark O'Meara", opponentHoleScores:[4,4,5], historicalResult:"Parnevik & Johansson lost 1 DOWN" },
+          { format:"SINGLES",                              opponent:"Justin Leonard",                opponentHoleScores:[4,4,4], historicalResult:"Parnevik won 2&1" },
+        ]},
+    ],
+    parallelMatches:[
+      // Day 0 — Foursomes
+      [
+        { match:"Montgomerie/Langer vs Love/Furyk",        scores:[ 0, 1, 1], teamA:"EUR" },
+        { match:"Westwood/Faldo vs Lehman/Maggert",        scores:[ 1, 2, 3], teamA:"EUR" },
+        { match:"Parnevik/Garrido vs Mickelson/Lehman",    scores:[ 0, 0, 1], teamA:"EUR" },
+        { match:"Olazabal/Rocca vs Couples/Love",          scores:[ 0, 1, 1], teamA:"EUR" },
+      ],
+      // Day 1 — Fourballs
+      [
+        { match:"Montgomerie/Clarke vs Couples/Faxon",     scores:[-1,-1,-1], teamA:"EUR" },
+        { match:"Parnevik/Johansson vs Woods/O'Meara",     scores:[-1,-1,-1], teamA:"EUR" },
+        { match:"Olazabal/Garrido vs Mickelson/Leonard",   scores:[ 0, 1, 1], teamA:"EUR" },
+        { match:"Faldo/Bjorn vs Love/Janzen",              scores:[ 0, 0, 1], teamA:"EUR" },
+      ],
+      // Day 2 — Singles
+      [
+        { match:"Clarke vs Mickelson",                     scores:[ 0, 0, 1], teamA:"EUR" },
+        { match:"Montgomerie vs Hoch",                     scores:[ 0, 0, 1], teamA:"EUR" },
+        { match:"Olazabal vs Faxon",                       scores:[ 0, 0, 1], teamA:"EUR" },
+      ],
+    ],
+    field:[
+      {name:"José María Olazabal", scores:[ 0, 0,-1]},
+      {name:"Darren Clarke",       scores:[ 1, 0,-1]},
+      {name:"Nick Faldo",          scores:[ 0, 0,-1]},
+      {name:"Bernhard Langer",     scores:[ 0, 1,-1]},
+    ],
+    holes:[
+      {id:"v17", name:"17th — The Waterfall",  par:5, yards:511, hazard:"waterfall guarding the green — lay-up mandatory",
+       lore:"Seve's hole. He designed the waterfall short of the green. He told his Europeans to lay up. Some Americans tried to carry it. The arguments about whether he was right continued for years.",
+       incidents:["Seve appeared at the 17th fairway during matches to direct his players' decisions, gesturing at the lay-up zone. At one point he appeared to physically steer a player away from the green.","Tom Kite watched from the opposite fairway and said nothing."],
+       events:["captain_intervention","water_decision"], pressureRating:3,
+       modifiers:{thresholdAdd:1, compCost:1, atmosphereNote:"The 17th at Valderrama 1997 — Seve's waterfall. He designed it. He has opinions about how it should be played. He is currently walking towards you to share them."}},
+      {id:"v18", name:"18th — The Close",      par:4, yards:457, hazard:"cork oak right, gallery three-deep both sides",
+       lore:"Where Europe finally closed out. Olazabal beat Faxon on 18 to seal the Cup. Seve was somewhere between the 17th green and the 18th tee, making it difficult for anyone to know exactly where he was.",
+       incidents:["Darren Clarke beat Mickelson 1 UP — the crucial early point that told Europe it was possible.","Olazabal's par on 18 to beat Faxon was the moment the Cup was won. The cork oaks at Valderrama held the noise in."],
+       events:["ryder_climax","cork_oak_gallery"], pressureRating:3,
+       modifiers:{compCost:1, atmosphereNote:"Valderrama 18 — the cork oaks line both sides of the fairway and hold the noise in like a theatre. The Cup is very close. Seve is very close."}},
+      {id:"v3",  name:"3rd — The Olive",       par:4, yards:174, hazard:"narrow fairway, Spanish pine both sides",
+       lore:"The hole where the European team found out whether they could handle Valderrama's peculiar demands. The course is not long. It is precise. Every deviation from the correct line costs.",
+       incidents:["The 3rd established in round one that Valderrama would punish anything other than perfect placement. Several Americans, unfamiliar with the course, found the pines here."],
+       events:["crowd_partisan","seve_watching"], pressureRating:2,
+       modifiers:{atmosphereNote:"Valderrama 3 — a Spanish crowd watching European golf in Spain, with Seve Ballesteros somewhere in the gallery being recognisable. The home atmosphere is as heavy as the cork oaks."}},
+    ]
   }
 
 ];
