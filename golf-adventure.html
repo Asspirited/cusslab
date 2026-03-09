@@ -1410,6 +1410,7 @@ body {
 <script src="golf-service/commentary-service.js"></script>
 <script src="golf-service/matchplay-service.js"></script>
 <script src="golf-service/temperament-service.js"></script>
+<script src="golf-service/chaos-injector-service.js"></script>
 
 <script>
 // ═══════════════════════════════════════════
@@ -2189,7 +2190,10 @@ async function endHole() {
   const _te = G.player.ego || 5;
   const { composureDelta: _tcd, newStreak: _tns } = TemperamentService.applyHoleResult(_tp, diff, G.streak, _te);
   G.streak = _tns;
-  G.composure = Math.max(0, Math.min(10, G.composure + _tcd));
+  const _cid = ChaosInjectorService.apply(G.player.id || '', {
+    diff, streak: _tns, composure: G.composure, isRyder: G.tournament.type === 'ryder',
+  });
+  G.composure = Math.max(0, Math.min(10, G.composure + _tcd + _cid));
   updateComposure();
 
   // Match play update — capture before mutating for commentary

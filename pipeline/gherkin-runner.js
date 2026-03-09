@@ -6157,6 +6157,25 @@ function makeSteps(ctx) {
         throw new Error(`Expected newStreak ${streak} but got ${ctx._tsResult.newStreak}`);
     }],
 
+    // ── ChaosInjectorService (specs/golf-chaos-injectors.feature) ───────────────
+
+    [/^the ChaosInjectorService module is loaded$/, () => {
+      const { ChaosInjectorService } = require('../golf-service/chaos-injector-service.js');
+      ctx._cis = ChaosInjectorService;
+    }],
+
+    [/^ChaosInjectorService is applied for player "([^"]+)" with diff (-?\d+) streak (-?\d+) composure (\d+) isRyder (true|false)$/, (id, diff, streak, comp, ryder) => {
+      ctx._cisResult = ctx._cis.apply(id, {
+        diff: Number(diff), streak: Number(streak),
+        composure: Number(comp), isRyder: ryder === 'true',
+      });
+    }],
+
+    [/^the chaos additionalDelta is (-?\d+)$/, (delta) => {
+      if (ctx._cisResult !== Number(delta))
+        throw new Error(`Expected additionalDelta ${delta} but got ${ctx._cisResult}`);
+    }],
+
     // ── Golf Adventure Players (specs/golf-adventure-players.feature) ───────────
 
     [/^every player in every Ryder Cup tournament has a numeric "([^"]+)" between 1 and 10$/, (attr) => {
