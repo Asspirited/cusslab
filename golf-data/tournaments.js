@@ -1107,6 +1107,111 @@ const TOURNAMENTS = [
        events:["crowd_swelling","match_tension"], pressureRating:2,
        modifiers:{atmosphereNote:"Belfry 17 — you can hear the roars from 18 already. Whatever happens here follows you onto the closing tee."}},
     ]
+  },
+
+  // ── 2006 Ryder Cup — K Club ──────────────────────────────────────────────────
+  {
+    id:"kclub_2006", year:2006, eraClass:"era-2006", lbClass:"lb-2006",
+    name:"The Week That Stopped",
+    course:"K Club — Palmer Course", country:"County Kildare, Ireland",
+    type:"ryder", badge:"badge-ryder", days:3,
+    lore:"Europe 18.5–9.5. The largest winning margin in modern Ryder Cup history. Darren Clarke's wife Heather had died of cancer five weeks earlier. Ian Woosnam captained. Clarke played in a black armband. He went 3-0. When he holed the winning point in singles, Lee Westwood ran onto the fairway and held him. The gallery stood in silence for a moment before it erupted.",
+    players:[
+      { id:"clarke_06", name:"Darren Clarke", abbr:"DCL", team:"EUR",
+        temperamentProfile:"PEAKER",
+        bottle:10, ego:7, temperament:6, shame:8,
+        driving:9, irons:8, short_game:8, putting:7, recovery:8, bunkers:8, course_management:8, shot_variation:8,
+        desc:"Five weeks after Heather died. Black armband. Went 3-0. Won his singles on the 16th and stood there while Westwood ran across the fairway to hold him.",
+        wound:"She died five weeks ago. He is here because golf is the only thing that makes sense right now. The gallery knows. Everyone knows.",
+        historicalScores:[-1,-2,-3],
+        matchPlayDays:[
+          { format:"FOURBALLS", partner:"Lee Westwood",   opponent:"Phil Mickelson / Chris DiMarco", opponentHoleScores:[4,4,5], historicalResult:"Clarke & Westwood won 1 UP" },
+          { format:"FOURSOMES", partner:"Lee Westwood",   opponent:"Chad Campbell / Vaughn Taylor",  opponentHoleScores:[4,4,4], historicalResult:"Clarke & Westwood won 3&2" },
+          { format:"SINGLES",                             opponent:"Zach Johnson",                   opponentHoleScores:[4,4,5], historicalResult:"Clarke won 3&2 — Westwood ran onto the fairway to hold him" },
+        ]},
+      { id:"westwood_06", name:"Lee Westwood", abbr:"LWS", team:"EUR",
+        temperamentProfile:"LEVELHEADED",
+        bottle:7, ego:6, temperament:8, shame:5,
+        driving:9, irons:9, short_game:7, putting:6, recovery:7, bunkers:7, course_management:8, shot_variation:7,
+        desc:"Paired with Clarke for all three days. Won his own singles. When Clarke holed out on 16, Westwood was already running.",
+        wound:"He knows what Clarke is carrying. His job this week is to make sure Clarke doesn't have to carry it alone.",
+        historicalScores:[0,-1,-2],
+        matchPlayDays:[
+          { format:"FOURBALLS", partner:"Darren Clarke",  opponent:"Phil Mickelson / Chris DiMarco", opponentHoleScores:[4,4,5], historicalResult:"Clarke & Westwood won 1 UP" },
+          { format:"FOURSOMES", partner:"Darren Clarke",  opponent:"Chad Campbell / Vaughn Taylor",  opponentHoleScores:[4,4,4], historicalResult:"Clarke & Westwood won 3&2" },
+          { format:"SINGLES",                             opponent:"Lee Janzen",                     opponentHoleScores:[4,4,4], historicalResult:"Westwood won 2 UP" },
+        ]},
+      { id:"mcginley_06", name:"Paul McGinley", abbr:"PMG", team:"EUR",
+        temperamentProfile:"LEVELHEADED",
+        bottle:8, ego:5, temperament:9, shame:4,
+        driving:6, irons:7, short_game:8, putting:8, recovery:7, bunkers:7, course_management:9, shot_variation:6,
+        desc:"An Irishman at an Irish Ryder Cup, playing on the course he knows as well as his own garden. The crowd were not neutral.",
+        wound:"The expectation of 40,000 Irish people follows him to every tee. He finds it energising rather than crushing, which is either strength or delusion.",
+        historicalScores:[0,0,-1],
+        matchPlayDays:[
+          { format:"FOURSOMES", partner:"Padraig Harrington", opponent:"Stewart Cink / J.J. Henry",  opponentHoleScores:[4,4,4], historicalResult:"McGinley & Harrington won 4&3" },
+          { format:"ABSENT" },
+          { format:"SINGLES",                                  opponent:"J.J. Henry",                opponentHoleScores:[4,4,4], historicalResult:"McGinley won 2 UP — an Irishman on an Irish course" },
+        ]},
+      { id:"casey_06", name:"Paul Casey", abbr:"PCS", team:"EUR",
+        temperamentProfile:"STREAKY",
+        bottle:7, ego:7, temperament:6, shame:4,
+        driving:9, irons:8, short_game:7, putting:7, recovery:7, bunkers:7, course_management:7, shot_variation:8,
+        desc:"Went 3-0. The most belligerent performer on the European team, and in 2006 that was a very high bar.",
+        wound:"He runs hot. When it's working, nobody is stopping him. When it goes, it goes badly.",
+        historicalScores:[-1,-1,-2],
+        matchPlayDays:[
+          { format:"FOURBALLS", partner:"David Howell",   opponent:"Tiger Woods / Jim Furyk",        opponentHoleScores:[4,4,4], historicalResult:"Casey & Howell won 3&2" },
+          { format:"FOURSOMES", partner:"Robert Karlsson", opponent:"Stewart Cink / Zach Johnson",   opponentHoleScores:[4,4,5], historicalResult:"Casey & Karlsson won 1 UP" },
+          { format:"SINGLES",                              opponent:"Chad Campbell",                  opponentHoleScores:[4,4,4], historicalResult:"Casey won 3&2" },
+        ]},
+    ],
+    parallelMatches:[
+      // Day 0 — Fourballs
+      [
+        { match:"Clarke/Westwood vs Mickelson/DiMarco",    scores:[ 0, 0, 1], teamA:"EUR" },
+        { match:"Casey/Howell vs Woods/Furyk",             scores:[ 1, 2, 3], teamA:"EUR" },
+        { match:"Harrington/Montgomerie vs Toms/Wetterich",scores:[ 0, 1, 1], teamA:"EUR" },
+        { match:"Garcia/Donald vs Cink/Henry",             scores:[ 0, 1, 1], teamA:"EUR" },
+      ],
+      // Day 1 — Foursomes
+      [
+        { match:"Clarke/Westwood vs Campbell/Taylor",      scores:[ 1, 2, 3], teamA:"EUR" },
+        { match:"McGinley/Harrington vs Cink/Henry",       scores:[ 1, 2, 3], teamA:"EUR" },
+        { match:"Casey/Karlsson vs Cink/Johnson",          scores:[ 0, 0, 1], teamA:"EUR" },
+        { match:"Garcia/Donald vs Mickelson/Toms",         scores:[ 0, 1, 1], teamA:"EUR" },
+      ],
+      // Day 2 — Singles
+      [
+        { match:"Clarke vs Johnson",                       scores:[ 0, 1, 3], teamA:"EUR" },
+        { match:"Westwood vs Janzen",                      scores:[ 0, 1, 2], teamA:"EUR" },
+        { match:"Casey vs Campbell",                       scores:[ 0, 1, 3], teamA:"EUR" },
+        { match:"McGinley vs Henry",                       scores:[ 0, 0, 2], teamA:"EUR" },
+      ],
+    ],
+    field:[
+      {name:"Sergio Garcia",      scores:[ 0,-1,-2]},
+      {name:"Luke Donald",        scores:[ 0,-1,-2]},
+      {name:"Padraig Harrington", scores:[ 0,-1,-2]},
+      {name:"Colin Montgomerie",  scores:[ 0, 0,-1]},
+    ],
+    holes:[
+      {id:"k7",  name:"7th — The Island",      par:4, yards:428, hazard:"River Liffey left, out-of-bounds right",
+       lore:"The hole where the River Liffey enters the match. The gallery stands six deep around the green. In 2006, every Irish roar carried an extra frequency.",
+       incidents:["The 7th gallery in 2006 was unlike anything the Ryder Cup had produced. 40,000 Irish spectators and a home team dominant from the start."],
+       events:["crowd_partisan","river_liffey"], pressureRating:2,
+       modifiers:{atmosphereNote:"K Club 7 — the River Liffey runs to the left. The gallery has been here since morning. Ireland won the hosting rights in 2006 and every one of the 40,000 in attendance is reminding you of that."}},
+      {id:"k16", name:"16th — The Clarke Hole", par:4, yards:412, hazard:"water left, tight approach",
+       lore:"Where Clarke won his singles point in 2006. Westwood ran onto the fairway when the putt dropped. The gallery stood for a moment in silence before it found its voice.",
+       incidents:["Darren Clarke's winning putt on 16 in his singles match. Westwood was already running before it dropped.","The gallery held the silence for three seconds after the ball fell. Then it erupted."],
+       events:["ryder_climax","clarke_moment","westwood_runs"], pressureRating:4,
+       modifiers:{compCost:2, atmosphereNote:"K Club 16 — this is where it ended for Clarke. She died five weeks ago. He is wearing a black armband. The gallery knows. When the putt drops, Westwood runs."}},
+      {id:"k18", name:"18th — The Finish",      par:4, yards:537, hazard:"Water fronting green, gallery standing",
+       lore:"The closing hole of the Palmer Course at the K Club. In 2006 it was the last stop on a romp. Europe had been dominant all week. By Sunday the question was not whether Europe would win but by how much.",
+       incidents:["Europe's 18.5-9.5 win was the largest winning margin in modern Ryder Cup history.","Ian Woosnam captained a team that had more points available than the USA had players."],
+       events:["gallery_eruption","historic_margin"], pressureRating:3,
+       modifiers:{atmosphereNote:"K Club 18 — by the time most matches reached this hole, the result was already settled. Europe won by a distance. The gallery had been celebrating since the 14th."}},
+    ]
   }
 
 ];
