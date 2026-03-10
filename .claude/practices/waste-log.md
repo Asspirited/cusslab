@@ -1422,7 +1422,7 @@ Status: CLOSED
 - **Time lost:** ~5 min (discovery + workaround planning)
 - **Cost impact:** Low — BL items raised, design captured; just awaiting file transfer
 - **Tags:** `#cross-claude-sync` `#claude-ai-artifacts` `#file-transfer`
-- **Status:** Open — waiting on Rod to copy files to accessible path
+- **Status:** Closed — Rod provided file content in session 2026-03-10; files created via Write tool and committed f7b8466
 
 ## WL-106
 - **Item:** Sandwich Gate wound missing from `characters/faldo.md` — exists only in `docs/characters-sports.md`
