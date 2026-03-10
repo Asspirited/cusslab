@@ -1,8 +1,7 @@
-Feature: House Name Oracle — Comedy Room Mode 2
+Feature: House Name Oracle — standalone panel
 
   Background:
-    Given the user is on the Comedy Room
-    And the Oracle mode is active
+    Given the user is on the House Name Oracle panel
 
   # ─── INPUT VALIDATION ───────────────────────────────────────────
 
@@ -27,6 +26,21 @@ Feature: House Name Oracle — Comedy Room Mode 2
       | 12345   |
       | ABCDEFG |
       |         |
+
+  # ─── ARCHETYPE SELECTOR ──────────────────────────────────────────
+
+  Scenario: Oracle archetype selector lists all eight voices
+    Then the archetype selector contains "Elegist"
+    And the archetype selector contains "Rogue"
+    And the archetype selector contains "DarkOracle"
+    And the archetype selector contains "Booster"
+    And the archetype selector contains "Snob"
+    And the archetype selector contains "Anarchist"
+    And the archetype selector contains "Mystic"
+    And the archetype selector contains "Local"
+
+  Scenario: Oracle archetype selector is marked as required
+    Then the archetype selector has a required indicator
 
   # ─── ARCHETYPE GATE (mandatory) ─────────────────────────────────
 
