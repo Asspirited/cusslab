@@ -1,6 +1,6 @@
 # Session Startup — Heckler and Cox
 # Read this first. Everything else is referenced from here.
-# Last updated: 2026-03-08
+# Last updated: 2026-03-10
 
 ---
 
@@ -61,8 +61,7 @@ This is the handoff from the other Claude. If file doesn't exist: note it and co
 
 **Then:** Read `.claude/practices/waste-log.md` — last 5 entries only, report any with Status: OPEN.
 
-Current open items as of 2026-03-09: WL-080 (session protocol bypassed — Gherkin owed for MatchPlayService).
-WL-081 closed (backlog migrated). Recurring: auth failures (WL-060, 066).
+Current open items as of 2026-03-10: WL-MODE-001 (design-session audit gap), WL-MODE-002 (darts character debt: Rod Harrington/Bobby George). WL-087 closed (compaction pattern). Recurring: auth failures (WL-060, 066).
 
 ---
 
@@ -76,15 +75,20 @@ For each open product-bet item, ask:
 - Is there a falsifier — something that would tell us we were wrong?
 Full outer loop: `.claude/practices/hypothesis-driven.md`
 
-Current top 3 as of 2026-03-09 (session 2):
-- BL-034 Dual temperament profiles (CD3=5.0) — OPEN — do next session
-- BL-032 Modern Majors Tier 2 — items 2 (2005 Masters), 3 (Winged Foot), 9 (Carnoustie 2007) — OPEN
-- BL-025 Ryder Cup Tier 2 — Whistling Straits 2021 remaining (Hazeltine done)
+Current top 3 as of 2026-03-10:
+- BL-040 2000 Open St Andrews Tiger Grand Slam (CD3=4.7) — OPEN
+- BL-041 2011 US Open Congressional Rory (CD3=4.7) — OPEN
+- BL-043 2011 Open Sandwich Darren Clarke (CD3=4.7) — OPEN
 
-Recently closed (this session):
-- BL-023 Valderrama 1997, BL-024 all 5 (Belfry/K Club/Muirfield Village/Celtic Manor/Oak Hill)
-- BL-025 #1 Hazeltine 2016 — pushed
-- BL-035 Watch Back mode — added to backlog, design Q open (strip vs modal)
+Recently closed (2026-03-10 session):
+- BL-009 Mode 2 moment type expansion (8 new options, 3 panels)
+- BL-002 Food pool expansion (FOOD_TERMS tripled, Faldo Ginsters/adjective variation)
+- BL-003 Hypochondria pool 11→42 entries (4 pools, panel-agnostic)
+- BL-034 Dual temperament profiles (applyHoleResultDual, 53 players, Ryder Cup decade UI)
+- BL-036 Oakmont 1994 (Monty/The American Crowd)
+- BL-037 2005 Masters (Tiger chip-in), BL-038 Winged Foot 2006 (Phil collapse), BL-044 Carnoustie 2007
+- BL-039 Pebble Beach 2000 (Tiger +15)
+- Process: RAISE NEW WORK SEQUENCE, BL-032 sub-items → BL-036..BL-047, clean seam protocol
 
 Agree with Rod which item is being worked this session BEFORE opening any code file.
 

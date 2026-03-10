@@ -1238,3 +1238,20 @@ Status: CLOSED
 - **Cost impact:** High — player selection (Coltart) is completely broken; any future bench-sitter player will have the same issue
 - **Tags:** golf-adventure, ryder-cup, absent-day, matchplay, data-model, engine
 - **Status:** Closed — 2026-03-10: firstActiveDay/isDayAbsent added to MatchPlayService; startGame uses firstActiveDay; endHole guarded against ABSENT; buildContext returns null for ABSENT; Coltart vs Tiger added to Valderrama Day 2 parallelMatches
+
+## WL-087
+- **Item:** Auto-compact fired at session boundary despite WL-082 and WL-084 rules
+- **Symptom:** Session compacted during the prior context window. Continuation started from a summary, not from live context. Same pattern as WL-082 (rule existed, had no observable enforcement mechanism) and WL-084 (forcing functions added, but no "clean seam" definition — could stop mid-sequence).
+- **Root cause (5 Whys):**
+  1. Why did compact fire? Context window filled during a long multi-BL session.
+  2. Why didn't WL-084 forcing functions prevent it? The 3-BL-item / 5-pipeline-run checkpoints require me to notice and announce proactively — the announcement happened but "Rod says continue" reset the counter implicitly and no second checkpoint fired.
+  3. Why was there no second checkpoint? The rule says "at each checkpoint" but doesn't define how the counter resets after Rod says continue. The counter was treated as a one-time gate, not a recurring gate every 3 items.
+  4. Why did the rule treat it as one-time? The SEQUENCE was not defined. A rule without a sequence has no re-entry point.
+  5. Root cause: The forcing function needed a "clean seam" definition to prevent stopping mid-work; but the seam definition was added only this session (after the compact had already occurred).
+- **Session date:** 2026-03-10
+- **Time lost:** ~10-15 min summary reconstruction
+- **Cost impact:** Medium — same pattern, recurring
+- **Tags:** session-protocol, auto-compact, context-window, forcing-function, rule-without-sequence
+- **Fix:** Clean seam protocol added to session-insession.md this session — defines valid stop points and makes forcing function recurrent (not one-time). Counter resets after each clean stop, not after Rod says continue.
+- **Status:** Closed — 2026-03-10 (c76e4b7): PROACTIVE SESSION CLOSE SEQUENCE added
+

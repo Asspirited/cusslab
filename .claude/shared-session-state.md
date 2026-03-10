@@ -1,44 +1,40 @@
 # Shared Session State
 # Written by session-closedown.md step 8b. Overwritten each close.
 # Read at startup step 3. Included in session-ref.md for Claude.ai.
-Last updated: 2026-03-09 (session 2 — clean stop requested by Rod) by Claude Code
-Last commit: 26e5928 — chore: session closedown
+Last updated: 2026-03-10 by Claude Code
+Last commit: 928d25e — BL-039: 2000 US Open Pebble Beach — Fifteen
 
 ## What shipped this session
-- WL-085: nav scroll bleed fix — overscroll-behavior: contain on nav (desktop + mobile)
-- Decade header display bugs fixed ("2000S2" → "'00s", text-transform override, count removed)
-- Tournament chooser section headers: MAJORS / RYDER CUP / SPECIAL GAMES via .tc-category-hdr (32px)
-- Era CSS: era-1991, era-1997, era-1999-rc, era-1985, era-1987, era-1995, era-2006, era-2010, era-2016, era-2006-us, era-2007 — all added to golf-adventure.html
-- BL-023: Valderrama 1997 (Coltart/Monty/Westwood/Parnevik — Seve's interference, the waterfall)
-- BL-024 #1–5: Belfry 1985, K Club 2006, Muirfield Village 1987, Celtic Manor 2010, Oak Hill 1995
-- BL-025 #1: Hazeltine 2016 (McIlroy furious, Reed, Pieters rookie 4-1)
-- BL-035 added: Watch Back mode (sofa commentary from player-characters watching their own games)
-- Backlog audit done: full open/closed list in this conversation
+- **Process**: RAISE NEW WORK SEQUENCE — trigger + sequence in session-insession.md
+- **Process**: Clean seam protocol for proactive session close (WL-087 closed)
+- **Process**: BL-032 sub-items → individual BL-036..BL-047; Epic label in schema
+- **BL-009**: Mode 2 moment type expansion — 8 new options Football/Golf/LongRoom
+- **BL-002**: FOOD_TERMS tripled across 3 axes; Faldo Ginsters adjective+location variation
+- **BL-003**: HYPO_BASE 11→42 entries, 4 pools, all panel-agnostic
+- **BL-034**: Dual temperament profiles — CLOSED (earlier in session, pre-compact)
+- **BL-036**: Oakmont 1994 US Open — The American Crowd (Monty/Els, era-1994)
+- **BL-037/038/044**: 2005 Masters, Winged Foot 2006, Carnoustie 2007 — CLOSED (pre-compact)
+- **BL-039**: Pebble Beach 2000 US Open — Fifteen (Tiger +15, era-2000-us)
+- **BL-028**: Design resolved — play AS celebrity; use existing panel members
 
 ## Open waste items
-- None this session. Last waste: WL-085 (closed).
+- WL-MODE-001: Design-session protocol gap — Status: Open
+- WL-MODE-002: Darts character debt (Rod Harrington, Bobby George) — Status: Open
+- WL-068: Claude Code Windows bugs (upstream) — Status: Open
 
-## Backlog top 3 by CD3 (Cusslab)
-- BL-034 (CD3=5.0): Dual temperament profiles — OPEN — do this session
-- BL-032 items 2,3,9 (CD3=5.0 bucket): 2005 Masters Tiger chip-in, Winged Foot Phil, Carnoustie 2007 Harrington — OPEN
-- BL-025 (CD3=1.6): Whistling Straits 2021 — remaining from Ryder Cup Tier 2
-
-## Rod's stated next-session plan
-- BL-034 (dual temperament profiles) — explicitly requested
-- BL-032 items 2, 3, 9 (2005 Masters, Winged Foot, Carnoustie 2007) — explicitly requested
-- "Then 34 and 24-32" — suggesting a range of BL items after that
-- BL-035 (Watch Back): design question unresolved — strip vs modal — resolve before Gherkin
+## Backlog top 3 by CD3
+- BL-040 (CD3=4.7): 2000 Open St Andrews — Tiger Grand Slam
+- BL-041 (CD3=4.7): 2011 US Open Congressional — Rory 8-shot win
+- BL-043 (CD3=4.7): 2011 Open Sandwich — Darren Clarke
 
 ## Protocol status this session
-- Session startup: FOLLOWED
-- Gherkin gate: N/A — all work was data additions to existing code paths (no new behaviour)
-- Pipeline: GREEN at close — 454/454, canary OK
-- All commits pushed, nothing dangling
+- Session startup: followed (continued from compacted session)
+- Gherkin gate: N/A — all changes data-only
+- TDD: N/A — no new code paths
+- Pipeline: GREEN — 1335/1335 Gherkin, 454/454 unit, 9/9 golf-sim
 
 ## Carry-forward notes
-- era-2006-us (Winged Foot NBC) and era-2007 (Carnoustie BBC/Sky) CSS stubs already written — ready for tournament data
-- era-2005 (Augusta CBS) already exists — reuse for 2005 Masters
-- BL-024 fully closed (all 5 Tier 1 Europe wins)
-- BL-025 partially done (Hazeltine done, Whistling Straits 2021 remaining)
-- BL-026/027/028 untouched — lower priority Ryder Cups
-- Watch Back (BL-035): discuss strip vs modal at next session start before touching code
+- Celebrity pro-am research agent (a530f57bc3559b430) dispatched — check /tmp when next session starts
+- BL-028 next step: add celebrity player profiles + first Pro-Am tournament (Pebble Beach or Dunhill Links)
+- Player plays AS celebrity; existing non-golfer panel members are the celebrity characters
+- Forcing function counter resets: next session starts at 0 items / 0 pipeline runs

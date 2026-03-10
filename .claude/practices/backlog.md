@@ -164,15 +164,16 @@ For items that represent a product hypothesis, add after the CD3 line:
 
 ### BL-028 — Golf Adventure: Other Historic category expansion (Pro-Ams, celebrity golf, TV formats)
 - Expand "Other Historic" beyond traditional tournament golf into televised oddities:
-  - **Shell's Wonderful World of Golf** (1960s–70s) — head-to-head matchplay at exotic locations. Self-contained episode format. Perfect for Golf Adventure.
-  - **A Round with Alliss** (BBC, 1980s–90s) — Alliss takes a celebrity around a course and narrates their suffering. Alliss as commentary character mechanic.
-  - **The Skins Game** — winner-takes-all, carries over. Trevino/Player/Watson/Nicklaus ideal.
-  - **Pro-Am formats** — celebrity + pro pairing. Quality gap is the comedy engine.
-  - **The Dunhill Links** — St Andrews/Carnoustie/Kingsbarns, celebrities playing real links.
-  - **TSL / modern exhibition formats** — big personalities, social media stakes.
-- Key design question to resolve before Gherkin: does player play as celebrity or as babysitting pro?
+  - **AT&T Pebble Beach Pro-Am** — Bill Murray, Michael Jordan, Clint Eastwood, celebrities vs Pebble Beach rough
+  - **Alfred Dunhill Links** (St Andrews/Carnoustie/Kingsbarns) — Hugh Grant, Samuel L Jackson, Chris Martin, Shane Warne, Terry Wogan, Jamie Redknapp, Gary Lineker
+  - **Shell's Wonderful World of Golf** (1960s–70s) — head-to-head matchplay at exotic locations
+  - **A Round with Alliss** (BBC, 1980s–90s) — Alliss narrates celebrity suffering
+  - **The Skins Game** — winner-takes-all, Trevino/Player/Watson/Nicklaus
+- **Design decision (2026-03-10):** Player plays AS the celebrity. The pro is a passenger. Incompetence is the comedy engine. Commentary reacts to celebrity chaos.
+- **Character approach:** Use existing non-golfer panel members (Football/Darts/LongRoom) as celebrities — no new character research needed. Their voices, wounds, and profiles already built.
+- **Celebrity research:** Research agent dispatched 2026-03-10 for Bill Murray, Michael Jordan, Hugh Grant, Samuel L Jackson, Chris Martin, Terry Wogan, Shane Warne, Gary Lineker incidents at Pebble Beach and Dunhill Links.
 - CD3: UBV=6 TC=1 RR=1 → CoD=8, Dur=6, **CD3=1.3**
-- Status: OPEN — design question unresolved
+- Status: OPEN — design resolved; celebrity research in progress; next: add celebrity player profiles and first Pro-Am tournament
 
 ### BL-029 — Golf Adventure: Temperament profile archetype mechanics
 - Each `temperamentProfile` (ICEBERG, STREAKY, LEVELHEADED, PEAKER, DEFENSIVE, COMBUSTIBLE) has its own
@@ -228,7 +229,7 @@ For items that represent a product hypothesis, add after the CD3 line:
 - Monty shoots 65 in final round to tie. 3-man playoff vs Els and Loren Roberts. Els wins. US crowd notoriously hostile to Monty throughout.
 - Players: Monty (protagonist), Els (foil). Era: pre-2000 but standalone iconic. NBC.
 - CD3: UBV=8 TC=6 RR=1 → CoD=15, Dur=3, **CD3=5.0** (own score; not inherited from epic)
-- Status: OPEN
+- Status: CLOSED — 2026-03-10 (852a9c4): oakmont_1994, era-1994 CSS, 3 holes; 1335/1335 green
 
 ### BL-037 — Golf Adventure: 2005 Masters (Tiger chip-in 16th)
 - Epic: Modern Majors Tier 2
@@ -246,7 +247,7 @@ For items that represent a product hypothesis, add after the CD3 line:
 - Epic: Modern Majors Tier 2
 - Tiger wins by 15. Untouchable performance. Sets every US Open scoring record. NBC. Players: Tiger (protagonist), Ernie Els (distant second).
 - CD3: UBV=8 TC=5 RR=1 → CoD=14, Dur=3, **CD3=4.7**
-- Status: OPEN
+- Status: CLOSED — 2026-03-10 (928d25e): pebble_beach_2000, era-2000-us CSS, 3 holes; 1335/1335 green
 
 ### BL-040 — Golf Adventure: 2000 Open St Andrews (Tiger Grand Slam)
 - Epic: Modern Majors Tier 2
@@ -337,20 +338,20 @@ For items that represent a product hypothesis, add after the CD3 line:
 - Golf: flagstick controversy, slow play warning, eagle putt, 18th ceremony
 - LongRoom: DRS review, lunch interval, century milestone
 - CD3: UBV=5 TC=2 RR=1 → CoD=8, Dur=4, **CD3=2.0**
-- Status: OPEN
+- Status: CLOSED — 2026-03-10 (d4023e5): 8 new options across 3 panels; 1335/1335 Gherkin green
 
 ### BL-002 — Food pool expansion (all characters)
 - Same references repeating — pool too small
 - Design: three orthogonal axes: Food type / Location / Context+person
 - Applies to ALL characters
 - CD3: UBV=7 TC=2 RR=1 → CoD=10, Dur=5, **CD3=2.0**
-- Status: OPEN — design confirmed, implementation not started
+- Status: CLOSED — 2026-03-10 (2887de2): FOOD_TERMS tripled across 3 axes; Faldo Ginsters adjective/garage-location variation rules added; general adjective/adverb variety principle added
 
 ### BL-003 — Hypochondria pool expansion (all characters)
 - Pool types: real ailments exaggerated, fictional, borrowed, sport-specific
 - Each character has own flavour (Radar: dramatic/Australian; Faldo: biomechanical)
 - CD3: UBV=6 TC=2 RR=1 → CoD=9, Dur=4, **CD3=2.25**
-- Status: OPEN — design confirmed, pool content not written
+- Status: CLOSED — 2026-03-10 (2887de2): HYPO_BASE 11→42 entries across 4 pools; all entries panel-agnostic
 
 ### BL-006 — pipeline @claude skip count reduction
 - 400+ scenarios @claude-tagged (manual / behavioural)
