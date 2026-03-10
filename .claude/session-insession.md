@@ -4,6 +4,10 @@
 # Sources: Evans (DDD), Martin (Clean Code, SOLID), Fowler (Refactoring),
 #          Meszaros (xUnit Patterns), Smart (BDD in Action),
 #          Adzic/Evans (Fifty Quick Ideas to Improve Your Tests),
+#          Adzic & Evans — Fifty Quick Ideas to Improve Your User Stories (2014),
+#          Cohn — User Stories Applied (2004),
+#          Wake — INVEST model (XP123, 2003),
+#          Jeffries — Three C's (Card, Conversation, Confirmation),
 #          Nielsen (10 Usability Heuristics), SUS, WCAG 2.1 AA,
 #          DORA metrics, OWASP,
 #          Beck — Extreme Programming Explained (2nd ed, 2004),
@@ -88,7 +92,11 @@ When a new epic is raised that involves multiple characters, panels, or distinct
   working on it** — not deferred until implementation begins. Unfiled characters = invisible work.
 - Batch size target: each BL item should be completable within a single session (one Gherkin → red → green → clean → push cycle).
 - Reason: lean batching, smaller commits, faster feedback loops, session-sized work, no WIP pile-up.
-- Source: Poppendieck — Lean Software Development (small batch size); Reinertsen — Product Development Flow (WIP limits)
+- Splitting pattern: apply SPIDR (Spike/Paths/Interface/Data/Rules) to decompose — see `.claude/practices/user-stories.md`.
+  Walking skeleton rule: first story in an epic always delivers the thinnest end-to-end slice.
+  Each subsequent story adds flesh — never build depth before breadth is proven.
+- Source: Poppendieck — Lean Software Development (small batch size); Reinertsen — Product Development Flow (WIP limits);
+  Cohn — User Stories Applied (SPIDR splitting); Adzic & Evans — Fifty Quick Ideas (vertical slices, survivable experiments)
 
 ### RULE: CONTINUE — message queue handling
 When Rod sends messages while I am mid-task:
@@ -231,6 +239,11 @@ DDD CLEAN fires after BDD CLOSE — harvest new concepts into domain model.
    - What job is Rod hiring this feature to do? Does the design serve that job directly?
    - Source: Christensen — Jobs to Be Done; Norman — Design of Everyday Things
 1. Confirm scope — what behaviour are we specifying?
+   Apply INVEST if not already checked at RAISE NEW WORK (see `.claude/practices/user-stories.md`).
+   If the story fails **Small** — split before writing Gherkin (SPIDR patterns in user-stories.md).
+   If the story fails **Valuable** — run Three Amigos to surface the outcome before proceeding.
+   Walking skeleton rule: if this is the first slice of an epic, build the thinnest end-to-end
+   slice first (input → logic → output) — prove it works before adding complexity.
 2. DEVOPS DESIGN CHECK — for every new artefact this feature will create:
    Run the check (see below). Single responsibility, bounded interface, detectable failure,
    reuse over reinvention, small and deployable, right location.
@@ -396,6 +409,22 @@ No sub-items. No BL-NNN-X. Every item is a first-class BL or WL entry with its o
 **Step 3 — Write the minimum viable entry immediately:**
 - **WL entry minimum:** Item + Symptom + Suspected cause + Tags + Status: Open
 - **BL entry minimum:** Name (one line) + CD3 score (UBV / TC / RR / CoD / Dur / CD3) + Epic (if part of a group) + Status: OPEN
+
+**Step 3b — Story quality check (BL items only):**
+Before finalising the BL entry, apply INVEST (see `.claude/practices/user-stories.md`):
+- **Independent** — can it be shipped without an unfinished story blocking it?
+- **Negotiable** — is it a placeholder for Three Amigos, not a fixed spec?
+- **Valuable** — does the "so that" clause name a user or product outcome?
+- **Estimable** — is scope clear enough to score Dur?
+- **Small** — completable in one session (one Gherkin → red → green → clean → push)?
+- **Testable** — can Gherkin describe the acceptance condition right now?
+
+If it fails **Small**: split now using SPIDR (user-stories.md). Each split gets its own BL number.
+If it fails **Valuable**: reframe until the outcome is named, or flag for Three Amigos first.
+If it fails **Estimable**: raise a spike story (Dur=1, output=decision) before the delivery story.
+If it's an epic (multiple characters, panels, deliverables): apply the epic decomposition sequence in user-stories.md.
+
+Source: Cohn — User Stories Applied; Wake — INVEST; Adzic & Evans — Fifty Quick Ideas to Improve Your User Stories
 
 **Step 4 — Announce it:**
 - Say: "Raised as BL-NNN: [name]" or "Raised as WL-NNN: [symptom]"
@@ -602,3 +631,4 @@ pipeline/unit-runner.js            — all unit tests (count live: run pipeline)
 pipeline/logic.js                  — pure functions under test
 pipeline/gherkin-runner.js         — Gherkin step definitions
 .claude/practices/hypothesis-driven.md — outer loop: hypothesis card, AARRR, pivot/persevere
+.claude/practices/user-stories.md     — work decomposition: INVEST, Three C's, SPIDR splitting, epic decomposition
