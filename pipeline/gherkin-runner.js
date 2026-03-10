@@ -3,7 +3,7 @@
 
 const fs   = require('fs');
 const path = require('path');
-const { Temperature, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetector, DartsVoiceFmt, dartsBuildBlock, DARTS_PREMONITION_AFFINITIES, COLLECTIVE_CALL_MINIMUM, premonitionEligible, blankPremonitionLedger, assignPremonitionRC, resolvePremonitionCommits, isPremonitionTruthTeller, detectIntellectualAttempt, buildAttemptInstruction, INTELLECTUAL_ATTEMPTS_CONFIG, CONSEQUENCE_TIERS, applyConsequence, MARSHALS_BELT_EVENT, accumulatePanelStats, computeAvgDepth } = require('./logic.js');
+const { Temperature, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetector, DartsVoiceFmt, dartsBuildBlock, DARTS_PREMONITION_AFFINITIES, COLLECTIVE_CALL_MINIMUM, premonitionEligible, blankPremonitionLedger, assignPremonitionRC, resolvePremonitionCommits, isPremonitionTruthTeller, detectIntellectualAttempt, buildAttemptInstruction, INTELLECTUAL_ATTEMPTS_CONFIG, CONSEQUENCE_TIERS, applyConsequence, MARSHALS_BELT_EVENT, accumulatePanelStats, computeAvgDepth, GOLF_PANEL_MEMBER_IDS, COLTART_SOFA_POOLS, getSofaCommentator, getHistoricalDivergence, selectReactionMode } = require('./logic.js');
 const { QUNTUM_LEEKS_SCENARIOS, initState, pickRandomScenario, betLeekiness, spendLeekiness, processTurnEffects, buildModifiers } = require('../src/logic/quntum-leeks-engine.js');
 
 // ── Mock state (simulates browser localStorage + DOM) ────────────────────────
@@ -6328,6 +6328,71 @@ function makeSteps(ctx) {
 
     [/^matchPlayDays with format "ABSENT" do not require an opponent field$/, () => {
       // structural rule — satisfied by schema design. No assertion needed.
+    }],
+
+    // ── Golf Adventure WatchBack (specs/golf-adventure-watchback.feature) ────────
+
+    [/^GOLF_PANEL_MEMBER_IDS contains "([^"]+)"$/, (id) => {
+      if (!GOLF_PANEL_MEMBER_IDS.includes(id))
+        throw new Error(`GOLF_PANEL_MEMBER_IDS does not contain "${id}"`);
+    }],
+
+    [/^the tournament "([^"]+)" has a player with id "([^"]+)"$/, (tId, pId) => {
+      const t = ctx._gaData.TOURNAMENTS.find(t => t.id === tId);
+      if (!t) throw new Error(`Tournament "${tId}" not found`);
+      if (!t.players.some(p => p.id === pId))
+        throw new Error(`Tournament "${tId}" has no player with id "${pId}"`);
+      ctx._wbTournament = t;
+    }],
+
+    [/^getSofaCommentator is called with the tournament and GOLF_PANEL_MEMBER_IDS$/, () => {
+      ctx._tempOpResult = getSofaCommentator(ctx._wbTournament, GOLF_PANEL_MEMBER_IDS);
+    }],
+
+    [/^the tournament "([^"]+)" has no players matching GOLF_PANEL_MEMBER_IDS$/, (tId) => {
+      const t = ctx._gaData.TOURNAMENTS.find(t => t.id === tId);
+      if (!t) throw new Error(`Tournament "${tId}" not found`);
+      ctx._wbTournament = t;
+    }],
+
+    [/^the result is null$/, () => {
+      if (ctx._tempOpResult !== null)
+        throw new Error(`Expected null, got "${ctx._tempOpResult}"`);
+    }],
+
+    [/^getHistoricalDivergence is called with playerScore (-?\d+) and historicalScore (-?\d+)$/, (p, h) => {
+      ctx._wbDivergence = getHistoricalDivergence(parseInt(p), parseInt(h));
+    }],
+
+    [/^the divergence is "([^"]+)"$/, (expected) => {
+      if (ctx._wbDivergence !== expected)
+        throw new Error(`Expected divergence "${expected}", got "${ctx._wbDivergence}"`);
+    }],
+
+    [/^selectReactionMode returns "([^"]+)"$/, (expected) => {
+      const mode = selectReactionMode(ctx._wbDivergence);
+      if (mode !== expected)
+        throw new Error(`Expected reaction mode "${expected}", got "${mode}"`);
+    }],
+
+    [/^COLTART_SOFA_POOLS contains entries for tournament "([^"]+)"$/, (tId) => {
+      ctx._wbSofaTournament = tId;
+      // Pool existence verified in next step — structural check only here
+    }],
+
+    [/^any reaction mode line is retrieved for "([^"]+)" at "([^"]+)"$/, (commentatorId, tId) => {
+      // Retrieve first available line from any pool
+      if (!COLTART_SOFA_POOLS[tId])
+        throw new Error(`No sofa pool for tournament "${tId}"`);
+      const allLines = Object.values(COLTART_SOFA_POOLS[tId]).flat();
+      if (allLines.length === 0) throw new Error('Sofa pool is empty');
+      ctx._wbSofaLine = allLines[0];
+    }],
+
+    [/^the line does not describe Coltart as having played in a match$/, () => {
+      const played = /\bI played\b|\bI holed\b|\bI drove\b|\bI made\b|\bI hit\b/i;
+      if (played.test(ctx._wbSofaLine))
+        throw new Error(`Line implies Coltart played: "${ctx._wbSofaLine}"`);
     }],
 
   ];

@@ -1,7 +1,7 @@
 // Unit test runner — tests pure functions in pipeline/logic.js
 // Run: node pipeline/unit-runner.js
 
-const { maskKey, isValidKey, shouldUpdateInput, Temperature, makeWoundDetector, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetector, DartsVoiceFmt, dartsBuildBlock, DARTS_PREMONITION_AFFINITIES, COLLECTIVE_CALL_MINIMUM, premonitionEligible, blankPremonitionLedger, assignPremonitionRC, resolvePremonitionCommits, isPremonitionTruthTeller, detectIntellectualAttempt, buildAttemptInstruction, INTELLECTUAL_ATTEMPTS_CONFIG, SOUNESS_CAT_PRE_EXISTING, SOUNESS_CAT_IDS, getAllPairs, getPairTone, allPairsHaveToneAndNote, teslaHasNoWarmOrSolidary, pairToneIsSymmetrical, noConflictingTones, CONSEQUENCE_TIERS, applyConsequence, MARSHALS_BELT_EVENT, accumulatePanelStats, computeAvgDepth } = require('./logic.js');
+const { maskKey, isValidKey, shouldUpdateInput, Temperature, makeWoundDetector, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetector, DartsVoiceFmt, dartsBuildBlock, DARTS_PREMONITION_AFFINITIES, COLLECTIVE_CALL_MINIMUM, premonitionEligible, blankPremonitionLedger, assignPremonitionRC, resolvePremonitionCommits, isPremonitionTruthTeller, detectIntellectualAttempt, buildAttemptInstruction, INTELLECTUAL_ATTEMPTS_CONFIG, SOUNESS_CAT_PRE_EXISTING, SOUNESS_CAT_IDS, getAllPairs, getPairTone, allPairsHaveToneAndNote, teslaHasNoWarmOrSolidary, pairToneIsSymmetrical, noConflictingTones, CONSEQUENCE_TIERS, applyConsequence, MARSHALS_BELT_EVENT, accumulatePanelStats, computeAvgDepth, getSofaCommentator, getHistoricalDivergence, selectReactionMode } = require('./logic.js');
 
 let passed = 0;
 let failed = 0;
@@ -921,6 +921,62 @@ assert('computeAvgDepth: returns 0 for unknown panel',
 
 assert('computeAvgDepth: returns 0 for null existing',
   computeAvgDepth(null, 'boardroom'), 0.0);
+
+// ── WatchBack — sofa commentary ───────────────────────────────────────────────
+
+assert('getSofaCommentator: returns commentator id when player id matches panel member',
+  getSofaCommentator({ players:[{id:'andrew_coltart'},{id:'tiger_woods'}] }, ['andrew_coltart']), 'andrew_coltart');
+
+assert('getSofaCommentator: returns null when no player matches panel members',
+  getSofaCommentator({ players:[{id:'tiger_woods_standrews'},{id:'colin_montgomerie_2000'}] }, ['andrew_coltart']), null);
+
+assert('getSofaCommentator: returns null for empty players array',
+  getSofaCommentator({ players:[] }, ['andrew_coltart']), null);
+
+assert('getSofaCommentator: returns first match when multiple panel members present',
+  getSofaCommentator({ players:[{id:'andrew_coltart'},{id:'faldo_2008'}] }, ['faldo_2008','andrew_coltart']), 'faldo_2008');
+
+assert('getHistoricalDivergence: MATCH when scores are equal',
+  getHistoricalDivergence(-5, -5), 'MATCH');
+
+assert('getHistoricalDivergence: MATCH when both zero',
+  getHistoricalDivergence(0, 0), 'MATCH');
+
+assert('getHistoricalDivergence: BETTER when player score is lower (more under par)',
+  getHistoricalDivergence(-8, -5), 'BETTER');
+
+assert('getHistoricalDivergence: SLIGHT when player is 1 worse than historical',
+  getHistoricalDivergence(-4, -5), 'SLIGHT');
+
+assert('getHistoricalDivergence: SLIGHT when player is 2 worse than historical',
+  getHistoricalDivergence(-3, -5), 'SLIGHT');
+
+assert('getHistoricalDivergence: CLEAR when player is 3 worse than historical',
+  getHistoricalDivergence(-2, -5), 'CLEAR');
+
+assert('getHistoricalDivergence: CLEAR when player is 4 worse than historical',
+  getHistoricalDivergence(-1, -5), 'CLEAR');
+
+assert('getHistoricalDivergence: EXTREME when player is 5 or more worse than historical',
+  getHistoricalDivergence(0, -5), 'EXTREME');
+
+assert('getHistoricalDivergence: EXTREME when player is 8 worse than historical',
+  getHistoricalDivergence(3, -5), 'EXTREME');
+
+assert('selectReactionMode: CONFIRMATION for MATCH',
+  selectReactionMode('MATCH'), 'CONFIRMATION');
+
+assert('selectReactionMode: ENDORSEMENT for BETTER',
+  selectReactionMode('BETTER'), 'ENDORSEMENT');
+
+assert('selectReactionMode: PERTURBED for SLIGHT',
+  selectReactionMode('SLIGHT'), 'PERTURBED');
+
+assert('selectReactionMode: BEWILDERMENT for CLEAR',
+  selectReactionMode('CLEAR'), 'BEWILDERMENT');
+
+assert('selectReactionMode: IGNORANCE for EXTREME',
+  selectReactionMode('EXTREME'), 'IGNORANCE');
 
 // ── Results ──────────────────────────────────────────────────────────────────
 

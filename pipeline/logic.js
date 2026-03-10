@@ -426,6 +426,63 @@ function computeAvgDepth(existing, panelType) {
   return parseFloat((s.totalDepth / s.runs).toFixed(1));
 }
 
+// ── WatchBack — sofa commentary ───────────────────────────────────────────────
+
+const GOLF_PANEL_MEMBER_IDS = [
+  'coltart_97',        // Andrew Coltart — Valderrama 1997
+];
+
+const COLTART_SOFA_POOLS = {
+  valderrama_1997: {
+    CONFIRMATION: [
+      "Yes. That's exactly right. I was watching from just behind the green. That's what happened.",
+      "I remember this. I was there. I was standing to the left of the fairway. That's correct.",
+      "That's it. That's the shot. I saw that from the side. Seve was three feet away from me when that happened.",
+    ],
+    PERTURBED: [
+      "That's... I was there. That isn't quite... I may be misremembering the exact line but I'm fairly sure...",
+      "Hm. I was watching from behind the 17th. That's not... I mean it's close. That's close to what happened.",
+      "From where I was standing — and I was standing there, I had nowhere else to be — that's not quite it.",
+    ],
+    BEWILDERMENT: [
+      "I'm sorry. I was there. I was physically present. That is not what I saw.",
+      "That's not — Seve was standing right next to me when this hole was played. That didn't happen.",
+      "I watched every match from the side. I had time to watch every match. I am confident that did not happen.",
+    ],
+    IGNORANCE: [
+      "What I remember is this. What actually happened was: the ball went down the left side, found the rough, and they made bogey. That's what happened. I was there.",
+      "I'm going to tell you what occurred. Because I saw it. And what occurred was not that.",
+      "Seve asked me to watch the 17th specifically. I watched it. That is my memory of the 17th. I'm keeping it.",
+    ],
+    ENDORSEMENT: [
+      "Yes. That's — yes. That's what I thought should happen. I may have said something to that effect at the time.",
+      "I always felt that was the right line. I said that to someone. I'm not sure who. But I said it.",
+      "That's the correct outcome. I want to be clear I had a view on this. I had time to form a view. I was watching.",
+    ],
+  },
+};
+
+function getSofaCommentator(tournament, panelMemberIds) {
+  for (const id of panelMemberIds) {
+    if (tournament.players.some(p => p.id === id)) return id;
+  }
+  return null;
+}
+
+function getHistoricalDivergence(playerScore, historicalScore) {
+  const delta = playerScore - historicalScore;
+  if (delta < 0)   return 'BETTER';
+  if (delta === 0) return 'MATCH';
+  if (delta <= 2)  return 'SLIGHT';
+  if (delta <= 4)  return 'CLEAR';
+  return 'EXTREME';
+}
+
+function selectReactionMode(divergence) {
+  const map = { BETTER:'ENDORSEMENT', MATCH:'CONFIRMATION', SLIGHT:'PERTURBED', CLEAR:'BEWILDERMENT', EXTREME:'IGNORANCE' };
+  return map[divergence];
+}
+
 module.exports = {
   maskKey, isValidKey, shouldUpdateInput,
   Temperature,
@@ -440,4 +497,5 @@ module.exports = {
   teslaHasNoWarmOrSolidary, pairToneIsSymmetrical, noConflictingTones,
   CONSEQUENCE_TIERS, applyConsequence, MARSHALS_BELT_EVENT,
   accumulatePanelStats, computeAvgDepth,
+  GOLF_PANEL_MEMBER_IDS, COLTART_SOFA_POOLS, getSofaCommentator, getHistoricalDivergence, selectReactionMode,
 };

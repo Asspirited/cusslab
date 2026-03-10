@@ -414,12 +414,21 @@ For items that represent a product hypothesis, add after the CD3 line:
 - Status: CLOSED — 2026-03-08
 
 ### BL-035 — Golf Adventure: "Watch Back" mode — sofa commentary for tournaments with player-characters
-- When the user selects a tournament where one or more commentators (panel members) actually played (e.g. Westwood at Valderrama, Parnevik at Valderrama, Poulter at Medinah), those commentators appear in a "Watch Back" frame — sitting on a sofa watching the round together, like Sky Sports' Goals on Sunday or NBC's broadcast replays
-- They comment on the action as it unfolds, but they MUST describe events as if they happened at the time (the official, unchanged timeline) — even if the user has altered history mid-game
-- Comedy engine: the sofa commentator has to earnestly describe "yes that's exactly how I remember it" while the user may have just done something completely different
-- The sofa frame appears alongside (or above) the game UI — small persistent commentary strip or modal
-- Trigger: check if any player in `tournament.players[]` has `id` matching a panel commentator. If yes, show sofa mode
-- Phase 2: two sofa commentators react to each other if both match (e.g. Westwood AND Parnevik both at Valderrama)
-- Design question to resolve before Gherkin: sofa strip (persistent) vs modal (on key moments only)?
+- When the user selects a tournament where one or more panel members actually played (e.g. Coltart at Valderrama, Faldo at Valhalla, Poulter at Medinah), those characters appear in a persistent sofa strip watching the round unfold.
+- **Design resolved (2026-03-10):**
+  - **Persistent strip** — low footprint, no performance/UI attention grab, sits quietly below the game. Updates after each hole event with 1-2 lines. TV feel, enables running gags.
+  - **First-person memory** — commentators were THERE. They don't observe neutrally. Coltart was benched at Valderrama. Faldo was captain at Valhalla. Poulter made those putts at Medinah. Commentary is their personal recollection filtered through their wound and voice.
+  - **Templated v1** — commentary pools pre-authored per character per tournament, using incidents[] as factual anchor. AI layer added later once mechanics proven.
+  - **First implementation:** Coltart / Valderrama 1997.
+- **Reaction modes (7) — fires based on divergence from historicalScores/incidents:**
+  1. **Confirmation** — player matched history, commentator nods along ("yes, exactly as I remember it")
+  2. **Perturbed** — slight deviation, uncomfortable, keeps returning to their version
+  3. **Seeking confirmation** — "did anyone else see that? Because from where I was standing..."
+  4. **Bewilderment** — clear divergence, visibly confused, can't process it
+  5. **Ignorance** — refuses to acknowledge the change, describes the historical version anyway
+  6. **Retroactive adoption** — insists what just happened IS exactly what they remember
+  7. **Endorsement** — player did better than history, commentator claims credit or quiet approval
+- **Trigger:** check `tournament.players[].id` against panel member IDs. If match → sofa strip active.
+- **Phase 2:** two sofa commentators react to each other when both match.
 - CD3: UBV=9 TC=2 RR=1 → CoD=12, Dur=5, **CD3=2.4**
-- Status: OPEN — design question unresolved (strip vs modal)
+- Status: OPEN — design resolved; Gherkin next
