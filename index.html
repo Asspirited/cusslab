@@ -10772,9 +10772,7 @@ const RoastRoom = (() => {
   }
 
   async function _fetchRoast(voice, title) {
-    const r    = await hcFetch({ model: 'claude-haiku-4-5-20251001', max_tokens: 300, messages: [{ role: 'user', content: _buildPrompt(voice, title) }] });
-    const data = await r.json();
-    return data.content?.[0]?.text || '';
+    return await API.call(_buildPrompt(voice, title), '', 300);
   }
 
   function _renderResults(title, results) {
@@ -10868,9 +10866,7 @@ const WritingRoom = (() => {
   }
 
   async function _fetchResponse(voice, topic, priorContext) {
-    const r    = await hcFetch({ model: 'claude-haiku-4-5-20251001', max_tokens: 600, messages: [{ role: 'user', content: _buildPrompt(voice, topic, priorContext) }] });
-    const data = await r.json();
-    return data.content?.[0]?.text || '';
+    return await API.call(_buildPrompt(voice, topic, priorContext), '', 600);
   }
 
   function _renderResults(results) {
