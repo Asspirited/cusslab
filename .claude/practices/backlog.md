@@ -322,11 +322,23 @@ For items that represent a product hypothesis, add after the CD3 line:
 - CD3: UBV=8 TC=3 RR=2 → CoD=13, Dur=4, **CD3=3.25**
 - Status: OPEN — design discussion needed before any implementation
 
+### BL-057 — Homepage quotes: Colemanballs and real sporting gaffes pool
+- Epic: Brand Polish
+- Add a dedicated pool of real Colemanballs-style quotes (David Coleman, Ron Atkinson, Murray Walker, Des Lynam, Peter Alliss, John Motson, Barry Davies) plus genuine sporting howlers attributed to real people with caveats. These sit alongside the character pool or form their own rotation. Could also add famous non-sporting foot-in-mouth quotes (Ratner, Prescott, etc.).
+- CD3: UBV=4 TC=1 RR=1 → CoD=6, Dur=3, **CD3=2.0**
+- Status: OPEN — logged 2026-03-10, no implementation scope yet
+
+### BL-056 — Homepage quotes: Yogi Berra pool
+- Epic: Brand Polish
+- Yogi Berra quotes are canonical for this app: absurd, profound, accidentally correct. Add ~8-10 to CONSULTANT_SLOGANS attributed to Yogi Berra with appropriate caveats. ("I never said most of the things I said" makes the caveat self-referential.) Interleave with existing pool.
+- CD3: UBV=4 TC=1 RR=1 → CoD=6, Dur=1, **CD3=6.0**
+- Status: CLOSED — done 2026-03-10
+
 ### BL-055 — Homepage quotes: attribution strategy rethink
 - Epic: Brand Polish
-- Rod doesn't like "Heckler on X" pattern — arrogant/off-brand. Design question: (a) attribute all quotes to historical figures with caveats like (probably)/(possibly)/(he'd dispute this) — keep the humour but remove ownership vanity; (b) leave unattributed Heckler quotes genuinely unattributed (Heckler implied, unspoken) — but risk users reading silence as a bug not a choice. Current slogan pool has: character-voiced quotes (Hicks, Carlin, Cook-King, Adams, Oscar, Prof Cox, Blyton, Carr, Keegan, Souness, Radar, Faldo) + original Heckler-attributed quotes. Fix: remove "Heckler on X" framing entirely — historical figure quotes keep attribution+caveat, original Heckler lines become anonymous or rephrased as if by a known voice. Also fix: many unattributed quotes appear in a run — review sequencing so attribution varies.
+- Remove "Heckler on X" and "— Heckler" attribution entirely. Room-voice lines stay anonymous (the room has a voice). Character-voiced quotes keep attribution to the character + caveat. Panel-description quotes ("sitting on a bench since 1973") get the character name baked into the quote body. Interleave pool so attributed and unattributed quotes alternate rather than running in blocks.
 - CD3: UBV=3 TC=1 RR=1 → CoD=5, Dur=2, **CD3=2.5**
-- Status: OPEN — logged 2026-03-10
+- Status: CLOSED — done 2026-03-10
 
 ### BL-054 — Expert Evolution engine: apply to sports panels, build toward panel-agnostic independent engine
 - Current Expert Evolution feature applied to one context. Apply the same mechanic to Sports panels (golf, football, darts) for different attributes (technique evolution, tactical thinking, commentary style over career arc).
