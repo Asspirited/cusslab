@@ -11,7 +11,7 @@
 ### 0. PRE-FLIGHT — prime Downloads for Claude.ai (run first, no exceptions)
 
 ```bash
-export NVM_DIR="/home/rodent/.nvm" && \. "/home/rodent/.nvm/nvm.sh" && cd /home/rodent/cusslab && cat .claude/session-startup.md .claude/shared-session-state.md .claude/practices/domain-model.md .claude/practices/backlog.md .claude/practices/waste-log.md > /mnt/c/Users/roden/Downloads/session-ref.md && echo "session-ref.md ready"
+export NVM_DIR="/home/rodent/.nvm" && \. "/home/rodent/.nvm/nvm.sh" && cd /home/rodent/cusslab && cat .claude/session-startup.md .claude/shared-session-state.md .claude/practices/domain-model.md .claude/practices/backlog.md .claude/practices/ideas.md .claude/practices/waste-log.md > /mnt/c/Users/roden/Downloads/session-ref.md && echo "session-ref.md ready"
 ```
 
 This creates `/mnt/c/Users/roden/Downloads/session-ref.md` — one file Claude.ai uploads to get
@@ -104,6 +104,24 @@ Open epics requiring decomposition next session:
 - BL-058 Author Epilogue — 18 authors need individual BL items (BL-060 onward) per epic decomposition rule
 
 Agree with Rod which item is being worked this session BEFORE opening any code file.
+
+---
+
+### 4b. IDEAS BOARD REVIEW (promote or park — 2 minutes max)
+
+Read `.claude/practices/ideas.md` — UNREVIEWED section only.
+
+For each idea: has it ripened since it was captured? Ask:
+- Does it now have a clear "so that" clause?
+- Has it been through at least an informal Three Amigos?
+- Is it session-sized, or does it need decomposition?
+
+If yes to all three → promote: run RAISE NEW WORK SEQUENCE, assign BL-NNN, CD3 score.
+If no → leave in UNREVIEWED. Do not force it.
+If clearly dead or superseded → move to ARCHIVED with one-line reason.
+
+Report: "Ideas board: N unreviewed, N promoted, N archived."
+Do not spend more than 2 minutes on this step. It is a scan, not a design session.
 
 ---
 

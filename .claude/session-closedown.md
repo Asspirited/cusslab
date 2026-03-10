@@ -40,7 +40,21 @@ For every scope idea, tech debt item, bug, or enhancement that came up this sess
 
 ---
 
-### 3b. HYPOTHESIS REVIEW (outer loop — 60 seconds)
+### 3b. IDEAS BOARD REVIEW (capture and confirm — 60 seconds)
+
+Read `.claude/practices/ideas.md`.
+
+1. **Capture check**: were any ideas discussed this session that are NOT yet in ideas.md?
+   If yes — add them now (UNREVIEWED section, date + source + one sentence).
+2. **Promotion check**: did any idea ripen enough during this session to move to backlog?
+   If yes — run RAISE NEW WORK SEQUENCE, assign BL-NNN. Move the idea entry to REVIEWED.
+3. **Nothing to do?** Write one line: "Ideas board: nothing new, nothing promoted." Do not skip.
+
+Source: `.claude/practices/ideas.md`
+
+---
+
+### 3c. HYPOTHESIS REVIEW (outer loop — 60 seconds)
 
 For any feature shipped this session that has a hypothesis card:
 - Did the falsifier condition become testable? If yes — when will we check the signal?

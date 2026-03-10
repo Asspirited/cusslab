@@ -324,6 +324,229 @@ For items that represent a product hypothesis, add after the CD3 line:
 - CD3: UBV=7 TC=1 RR=1 → CoD=9, Dur=5, **CD3=1.8**
 - Status: OPEN — raised 2026-03-10, blocked on BL-058
 
+---
+### BL-058 decomposition — Author Epilogue delivery items (BL-060 onward)
+Epic decomposition applied 2026-03-10 per user-stories.md protocol.
+Walking skeleton first (BL-060), then pool mechanics (BL-061), then one author per BL item.
+BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
+---
+
+### BL-060 — Author Epilogue: walking skeleton (Hemingway, Golf Adventure, hardcoded)
+- Epic: Author Epilogue
+- Walking skeleton. Thinnest end-to-end slice that proves the concept works before building the pool.
+- Golf Adventure end-of-game state: "The Author's Account 📖" button appears. One click → Hemingway
+  prompt fires via Worker → response rendered in UI. Hemingway hardcoded (no picker, no shuffle yet).
+- Hemingway voice: short sentences, iceberg theory, masculine stoicism. Structural tell: the silence
+  between sentences. Wound: nothing left unsaid that couldn't be left unsaid better.
+- Delivers: proof that comedy works. Architecture proven. Prompt format established.
+- SPIDR-R: no pool, no rules for selection. SPIDR-D: Golf Adventure only.
+- CD3: UBV=8 TC=7 RR=8 → CoD=23, Dur=3, **CD3=7.7**
+- Status: OPEN
+
+### BL-061 — Author Epilogue: pool mechanics (random selection + re-roll + sessionStorage shuffle)
+- Epic: Author Epilogue
+- Depends on: BL-060 (skeleton proven)
+- Convert Hemingway from hardcoded to pool member. Build AUTHORS_POOL array. Random selection on first
+  press. "Another Author 🎲" re-roll button. sessionStorage shuffle — no repeat until pool exhausted.
+- Add McCarthy as second pool member to validate multi-author mechanics before full pool build.
+- Delivers: the mechanics that make every subsequent author story trivially addable.
+- CD3: UBV=7 TC=5 RR=6 → CoD=18, Dur=2, **CD3=9.0**
+- Status: OPEN — depends on BL-060
+
+### BL-062 — Author Epilogue: Cormac McCarthy
+- Epic: Author Epilogue
+- Depends on: BL-061 (pool mechanics)
+- Voice: no punctuation, biblical register, dust, nihilism. Structural tell: the ball rolled. Everything
+  was dust. The sun did not care. Wound: briefly attempts punctuation, gives up mid-summary.
+- CD3: UBV=6 TC=2 RR=1 → CoD=9, Dur=2, **CD3=4.5**
+- Status: OPEN
+
+### BL-063 — Author Epilogue: J.R.R. Tolkien
+- Epic: Author Epilogue
+- Depends on: BL-061
+- Voice: mythic scope, Elvish, appendices, ancestral lineage. Structural tell: the appendix is longer
+  than the summary. Wound: insists on naming the course in Elvish before describing any shots.
+- CD3: UBV=6 TC=2 RR=1 → CoD=9, Dur=2, **CD3=4.5**
+- Status: OPEN
+
+### BL-064 — Author Epilogue: James Patterson
+- Epic: Author Epilogue
+- Depends on: BL-061
+- Voice: short chapters, everything DRAMATIC, pace pace pace. Structural tell: chapter numbers for
+  every sentence. Wound: novel has 94 chapters. Closing: a cliffhanger about the 19th hole.
+- CD3: UBV=6 TC=2 RR=1 → CoD=9, Dur=2, **CD3=4.5**
+- Status: OPEN
+
+### BL-065 — Author Epilogue: Terry Pratchett
+- Epic: Author Epilogue
+- Depends on: BL-061
+- Voice: footnotes, satire, truth disguised as comedy. Structural tell: *A FOOTNOTE ABOUT THE PHYSICS
+  OF GOLF BALLS.* Death plays off scratch. Nobody will acknowledge this. Wound: the footnote is longer.
+- CD3: UBV=6 TC=2 RR=1 → CoD=9, Dur=2, **CD3=4.5**
+- Status: OPEN
+
+### BL-066 — Author Epilogue: P.G. Wodehouse
+- Epic: Author Epilogue
+- Depends on: BL-061
+- Voice: Jeeves, gentle chaos, upper-class incompetence. Structural tell: Bertie wanders in uninvited.
+  Wound: Bertie's handicap. It is not improving. Jeeves has opinions on this that he does not share.
+- CD3: UBV=6 TC=2 RR=1 → CoD=9, Dur=2, **CD3=4.5**
+- Status: OPEN
+
+### BL-067 — Author Epilogue: Jane Austen
+- Epic: Author Epilogue
+- Depends on: BL-061
+- Voice: social comedy, manners, sly observation. Structural tell: "It is a truth universally
+  acknowledged…" Wound: the club secretary's conduct. It has been noted. It will not be forgotten.
+- CD3: UBV=6 TC=2 RR=1 → CoD=9, Dur=2, **CD3=4.5**
+- Status: OPEN
+
+### BL-068 — Author Epilogue: Hunter S. Thompson
+- Epic: Author Epilogue
+- Depends on: BL-061
+- Voice: gonzo, paranoid, political, drugs. Structural tell: "We were somewhere around the 7th hole
+  when the drugs began to take hold." Wound: the caddie. The caddie was no longer human.
+- CD3: UBV=6 TC=2 RR=1 → CoD=9, Dur=2, **CD3=4.5**
+- Status: OPEN
+
+### BL-069 — Author Epilogue: Raymond Chandler
+- Epic: Author Epilogue
+- Depends on: BL-061
+- Voice: hardboiled, noir, Los Angeles similes. Structural tell: the green was as smooth as a lie told
+  by a man who'd told better ones. Wound: the woman watching from the clubhouse. She knows something.
+- CD3: UBV=6 TC=2 RR=1 → CoD=9, Dur=2, **CD3=4.5**
+- Status: OPEN
+
+### BL-070 — Author Epilogue: Oscar Wilde (existing character — epilogue template)
+- Epic: Author Epilogue
+- Depends on: BL-061
+- Existing panel character. Needs epilogue prompt template only (no new character file).
+- Voice: every shot is an epigram. Suffering is merely bad taste. The ball knows it's being watched.
+  Structural tell: the closing epigram is better than everything that preceded it. Wound: the rough.
+- CD3: UBV=5 TC=2 RR=1 → CoD=8, Dur=2, **CD3=4.0**
+- Status: OPEN
+
+### BL-071 — Author Epilogue: Agatha Christie
+- Epic: Author Epilogue
+- Depends on: BL-061
+- Voice: suspects everywhere, the reveal, Poirot. Structural tell: Poirot has known since the 3rd hole.
+  He merely waited for the confession. Wound: the alibi for the missed putt doesn't hold up.
+- CD3: UBV=5 TC=2 RR=1 → CoD=8, Dur=2, **CD3=4.0**
+- Status: OPEN
+
+### BL-072 — Author Epilogue: J.K. Rowling
+- Epic: Author Epilogue
+- Depends on: BL-061
+- Voice: wizarding lens + extended commentary on themes. Structural tell: everyone is sorted into houses.
+  Wound: the game is inadvertently problematic on several levels she would like to address at length.
+- CD3: UBV=5 TC=2 RR=1 → CoD=8, Dur=2, **CD3=4.0**
+- Status: OPEN
+
+### BL-073 — Author Epilogue: Dan Brown
+- Epic: Author Epilogue
+- Depends on: BL-061
+- Voice: every sentence a cliffhanger, symbols, codes, the Vatican. Structural tell: the symbol on the
+  scorecard was not a birdie. It was a warning. Wound: the caddie knew about the Priory of the Tee.
+- CD3: UBV=5 TC=2 RR=1 → CoD=8, Dur=2, **CD3=4.0**
+- Status: OPEN
+
+### BL-074 — Author Epilogue: Enid Blyton (existing character — epilogue template)
+- Epic: Author Epilogue
+- Depends on: BL-061
+- Existing panel character (Slightly Squiffy Blyton). Needs epilogue prompt template only.
+- Voice: Famous Five adventure. The rough is a secret passage. Everyone is jolly or a villain.
+  Has had a couple. Structural tell: there is a mystery. It involves the greenkeeper.
+- CD3: UBV=5 TC=2 RR=1 → CoD=8, Dur=2, **CD3=4.0**
+- Status: OPEN
+
+### BL-075 — Author Epilogue: Isaac Asimov
+- Epic: Author Epilogue
+- Depends on: BL-061
+- Voice: rational, systematic, Three Laws applied. Structural tell: Three Laws of Golf. The caddie is
+  a robot. It cannot harm a golfer except through incorrect club selection. Wound: the First Law fails.
+- CD3: UBV=5 TC=2 RR=1 → CoD=8, Dur=2, **CD3=4.0**
+- Status: OPEN
+
+### BL-076 — Author Epilogue: Leo Tolstoy
+- Epic: Author Epilogue
+- Depends on: BL-061
+- Voice: vast, philosophical, suffering as meaning. Structural tell: one round = 600 pages of context.
+  The birdie at the 7th is a microcosm of the human condition. Wound: the character on the bench.
+- CD3: UBV=4 TC=2 RR=1 → CoD=7, Dur=2, **CD3=3.5**
+- Status: OPEN
+
+### BL-077 — Author Epilogue: Charlotte Brontë
+- Epic: Author Epilogue
+- Depends on: BL-061
+- Voice: gothic, moors, passion, unspoken feeling. Structural tell: the rough is the moors. Someone
+  brooding is in the bunker. It begins to rain with intent. Wound: Mr Rochester. He is always there.
+- CD3: UBV=4 TC=2 RR=1 → CoD=7, Dur=2, **CD3=3.5**
+- Status: OPEN
+
+### BL-078 — Author Epilogue: John le Carré
+- Epic: Author Epilogue
+- Depends on: BL-061
+- Voice: paranoid, espionage, nobody is who they say. Structural tell: everyone at the club is working
+  for someone else. The caddie has a past. The scorecard was a message. Wound: the mole.
+- CD3: UBV=4 TC=2 RR=1 → CoD=7, Dur=2, **CD3=3.5**
+- Status: OPEN
+
+### BL-079 — Author Epilogue: Wilbur Smith
+- Epic: Author Epilogue
+- Depends on: BL-061
+- Voice: adventure, vast scale, raw masculinity. Structural tell: impossible distances. Someone is
+  hunting something. The game takes place across a continent. Wound: the lion on the 16th.
+- CD3: UBV=4 TC=2 RR=1 → CoD=7, Dur=2, **CD3=3.5**
+- Status: OPEN
+
+### BL-080 — Author Epilogue: Jeffrey Archer
+- Epic: Author Epilogue
+- Depends on: BL-061
+- Voice: shameless, self-aggrandising, economical with truth. Structural tell: he had never lost a round
+  of golf, he told himself. This was not entirely true. It was not true at all. Wound: the scoreboard.
+- CD3: UBV=4 TC=2 RR=1 → CoD=7, Dur=2, **CD3=3.5**
+- Status: OPEN
+
+### BL-081 — Author Epilogue: Barbara Cartland
+- Epic: Author Epilogue
+- Depends on: BL-061
+- Voice: romance, heaving bosoms, pastel, eternal love. Structural tell: her heart fluttered as he
+  approached the 18th hole. His grip was masterful. Wound: his handicap. It was seven. Irresistible.
+- CD3: UBV=4 TC=2 RR=1 → CoD=7, Dur=2, **CD3=3.5**
+- Status: OPEN
+
+### BL-082 — Author Epilogue: Phase 2 — Football Moment integration
+- Epic: Author Epilogue
+- Depends on: BL-060 + BL-061 (Phase 1 proven); blocked until Phase 1 complete
+- Trigger Author Epilogue from Football Moment end state. Same pool, different context prompt.
+- SPIDR-D: extending data scope from Golf Adventure to Football.
+- CD3: UBV=6 TC=1 RR=1 → CoD=8, Dur=2, **CD3=4.0**
+- Status: OPEN — blocked on BL-060/061
+
+### BL-083 — Author Epilogue: Phase 2 — Darts integration
+- Epic: Author Epilogue
+- Depends on: BL-082
+- CD3: UBV=6 TC=1 RR=1 → CoD=8, Dur=2, **CD3=4.0**
+- Status: OPEN — blocked on BL-082
+
+### BL-084 — Author Epilogue: Phase 2 — Cricket Long Room integration
+- Epic: Author Epilogue
+- Depends on: BL-082
+- CD3: UBV=6 TC=1 RR=1 → CoD=8, Dur=2, **CD3=4.0**
+- Status: OPEN — blocked on BL-082
+
+### BL-085 — Author Epilogue: Phase 2 — Oracle conversation integration
+- Epic: Author Epilogue
+- Depends on: BL-082; Oracle must have a session narrative to summarise
+- CD3: UBV=6 TC=1 RR=1 → CoD=8, Dur=2, **CD3=4.0**
+- Status: OPEN — blocked on BL-082
+
+### BL-086 — Author Epilogue: Phase 2 — Boardroom session integration
+- Epic: Author Epilogue
+- Depends on: BL-082
+- CD3: UBV=6 TC=1 RR=1 → CoD=8, Dur=2, **CD3=4.0**
+- Status: OPEN — blocked on BL-082
+
 ### BL-058 — The Author's Epilogue: post-game prose summary by random literary voice
 - Epic: Author Epilogue
 - At the end of any sports game (Golf Adventure, Football Moment, Darts, Cricket — and potentially other outputs like Oracle conversation), a randomly selected author from the pool is summoned to write a short prose summary of events in their inimitable style. 3–5 paragraphs. The comedy is in the collision between the literary register and the subject matter.
@@ -366,7 +589,8 @@ For items that represent a product hypothesis, add after the CD3 line:
 - **Phase 3:** Oracle conversation, Boardroom session — any output with a narrative arc
 - Needs: author character files (docs/characters-authors.md), prompt templates per voice, UI button wiring
 - CD3: UBV=8 TC=2 RR=1 → CoD=11, Dur=6, **CD3=1.83**
-- Status: OPEN — raised 2026-03-10, no implementation scope yet
+- Status: OPEN — design/discovery item. Decomposed 2026-03-10 into BL-060 (skeleton) through BL-086 (Phase 2).
+  First delivery item: BL-060 (walking skeleton, Hemingway, Golf Adventure). BL-058 closes when BL-061 ships.
 
 ### BL-051 — Distribution: make Cusslab discoverable + installable
 - Currently: direct URL only. No SEO, no install, no organic reach.

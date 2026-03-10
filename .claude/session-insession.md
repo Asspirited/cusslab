@@ -74,6 +74,17 @@ Any time a bug, broken flow, missing behaviour, or quality gap is discovered —
 
 Do not filter or defer. Log it, assign the next WL number, report it. Return to current work.
 
+### TRIGGER: any new idea surfaces (Rod or Claude) — CAPTURE IMMEDIATELY to ideas.md
+Signal: Rod says "what if…" / "could we…" / "one day…" / "I wonder if…"
+        OR Claude spots a concept that is interesting but not yet scoped enough for a BL item
+        OR something emerges in conversation that doesn't have a clear "so that" clause yet
+→ Add to `.claude/practices/ideas.md` UNREVIEWED section — one sentence minimum, date + source.
+→ Do NOT interrupt current work. Do NOT raise a BL item yet.
+→ Do NOT add to backlog without a "so that" clause and informal Three Amigos.
+→ Announce: "Added to ideas board: [name]" — one line — then continue.
+The ideas board has zero barrier to entry. Capture first, judge at session start review.
+Source: Lean — pull system; options have value before they are exercised (Reinertsen)
+
 ### TRIGGER: RAISE NEW WORK — fires on any of these signals:
 - I spot a bug, gap, or quality issue while reading, implementing, or refactoring
 - Pipeline fails and reveals a structural gap
@@ -632,3 +643,4 @@ pipeline/logic.js                  — pure functions under test
 pipeline/gherkin-runner.js         — Gherkin step definitions
 .claude/practices/hypothesis-driven.md — outer loop: hypothesis card, AARRR, pivot/persevere
 .claude/practices/user-stories.md     — work decomposition: INVEST, Three C's, SPIDR splitting, epic decomposition
+.claude/practices/ideas.md            — ideas board: unvalidated concepts, raw captures, pre-backlog holding area
