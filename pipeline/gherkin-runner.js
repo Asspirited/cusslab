@@ -6145,6 +6145,10 @@ function makeSteps(ctx) {
       ctx._tsResult = ctx._ts.applyHoleResult(profile, Number(diff), Number(streak), Number(ego));
     }],
 
+    [/^applyHoleResultDual is called with primary "([^"]+)" secondary "([^"]+)" diff (-?\d+) streak (-?\d+) ego (\d+)$/, (primary, secondary, diff, streak, ego) => {
+      ctx._tsResult = ctx._ts.applyHoleResultDual(primary, secondary, Number(diff), Number(streak), Number(ego));
+    }],
+
     [/^the temperament composureDelta is (-?\d+)$/, (delta) => {
       if (!ctx._tsResult) throw new Error('No temperament result');
       if (ctx._tsResult.composureDelta !== Number(delta))

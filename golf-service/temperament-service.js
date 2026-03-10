@@ -69,7 +69,19 @@ const TemperamentService = (() => {
     return { composureDelta, newStreak };
   }
 
-  return { applyHoleResult };
+  // Apply hole result using both primary and secondary temperament profiles.
+  // Secondary contributes at half magnitude (truncated toward zero).
+  // Returns { composureDelta: number, newStreak: number }
+  function applyHoleResultDual(primary, secondary, diff, streak, ego) {
+    const p = applyHoleResult(primary, diff, streak, ego);
+    const s = applyHoleResult(secondary, diff, streak, ego);
+    return {
+      composureDelta: p.composureDelta + Math.trunc(s.composureDelta / 2),
+      newStreak: p.newStreak
+    };
+  }
+
+  return { applyHoleResult, applyHoleResultDual };
 
 })();
 
