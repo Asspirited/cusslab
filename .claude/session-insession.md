@@ -79,6 +79,17 @@ Do not filter or defer. Log it, assign the next WL number, report it. Return to 
 - Any observation that, if unrecorded, will be WL-001 all over again
 → Run: RAISE NEW WORK SEQUENCE — immediately, before returning to current work
 
+### RULE: Epic decomposition — characters and deliverables are first-class BL items
+When a new epic is raised that involves multiple characters, panels, or distinct deliverables
+(Author Epilogue with 18 authors, Oracle with 8 archetypes, Ryder Cup with multiple tournaments, etc.):
+- **Each character is a separate BL item.** Each deliverable is a separate BL item.
+- The epic label groups them — it is never itself a BL item with a number.
+- **Raise the decomposed items at the time the epic is raised, or at the start of the first session
+  working on it** — not deferred until implementation begins. Unfiled characters = invisible work.
+- Batch size target: each BL item should be completable within a single session (one Gherkin → red → green → clean → push cycle).
+- Reason: lean batching, smaller commits, faster feedback loops, session-sized work, no WIP pile-up.
+- Source: Poppendieck — Lean Software Development (small batch size); Reinertsen — Product Development Flow (WIP limits)
+
 ### RULE: CONTINUE — message queue handling
 When Rod sends messages while I am mid-task:
 - **Default behaviour:** queue them in order, work through them after the current task completes.
@@ -394,6 +405,16 @@ No sub-items. No BL-NNN-X. Every item is a first-class BL or WL entry with its o
 - If this item belongs to a set of related items (same tournament series, same feature theme), add: `Epic: [label]`
 - The epic is a label only — never a backlog item itself, never numbered as BL-NNN.
 - Example: Epic: "Modern Majors Tier 2", Epic: "Ryder Cup Rollout"
+
+**Epic decomposition rule:**
+- If the item being raised IS an epic (multiple characters, multiple panels, multiple distinct deliverables):
+  immediately decompose it into individual BL items — one per character, one per deliverable.
+- Do this at the time of raising, not at the start of implementation.
+- Each decomposed item should be session-sized: one Gherkin → red → green → clean → push.
+- The parent epic item (e.g. BL-058 Author Epilogue) becomes the design/discovery item.
+  Its children (BL-060 Author: Tolkien, BL-061 Author: McCarthy, etc.) are the delivery items.
+- Unfiled characters = invisible WIP = waste.
+- Source: Poppendieck — Lean (small batch size, WIP limits); Reinertsen — Product Development Flow
 
 **Source:** WL-001, WL-081 — unrecorded work is the primary source of knowledge loss.
 
