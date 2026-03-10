@@ -3,9 +3,6 @@ Feature: Sports panel suggestion cards
   I want to see suggestion cards above the textarea
   So that I have prompts to get started without a blank page
 
-  Background:
-    Given the page is loaded
-
   # ── FOOTBALL ──────────────────────────────────────────────────
 
   Scenario: Football Q&A mode shows suggestion cards on load
