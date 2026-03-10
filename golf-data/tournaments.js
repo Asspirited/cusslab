@@ -1739,6 +1739,58 @@ const TOURNAMENTS = [
     ]
   }
 
+,
+
+  // ── 2006 US Open — Winged Foot ────────────────────────────────────────────────
+  {
+    id:"winged_foot_2006", year:2006, eraClass:"era-2006-us", lbClass:"lb-2006-us",
+    name:"I Am Such an Idiot",
+    course:"Winged Foot Golf Club — West Course", country:"Mamaroneck, New York",
+    type:"collapse", badge:"badge-major", days:4,
+    lore:"Phil Mickelson stood on the 18th tee at Winged Foot needing par to win the 2006 US Open. He had led for most of the week. He drove into the left rough, punched into a hospitality tent, attempted a heroic recovery that hit a tree, chipped to 25 feet, two-putted for double bogey. Geoff Ogilvy, watching on a monitor from the scorer's tent, became US Open champion without hitting another shot. Phil walked off the green and said: 'I am such an idiot.' He was correct.",
+    players:[
+      { id:"phil_mickelson_wf", name:"Phil Mickelson", abbr:"PHI",
+        temperamentProfile:"COMBUSTIBLE",
+        temperamentProfileSecondary:"PEAKER",
+        bottle:6, ego:9, temperament:6, shame:5,
+        driving:9, irons:9, short_game:10, putting:8, recovery:9, bunkers:9, course_management:5,
+        desc:"Arrived at the 18th tee needing par to win the US Open. The shot he hit was not a par shot. It was not even close to a par shot. It was a driver, hard left, into a hospitality tent.",
+        wound:"Has never won the US Open. Came closer than this before — a 30-footer on the last at Pinehurst 1999 — and it didn't drop. Now he has handed it away. He knows it immediately.",
+        historicalScores:[-4,-4,-3,-2] },
+      { id:"geoff_ogilvy", name:"Geoff Ogilvy", abbr:"OGI",
+        temperamentProfile:"LEVELHEADED",
+        temperamentProfileSecondary:"DEFENSIVE",
+        bottle:8, ego:5, temperament:8, shame:3,
+        driving:7, irons:8, short_game:8, putting:8, recovery:7, bunkers:7, course_management:8,
+        desc:"Made bogey on 18 and walked to the scorer's tent. He thought he had finished second. Then the scoreboard changed. Phil Mickelson had made double. Geoff Ogilvy sat in the scorer's tent and became US Open champion by watching television.",
+        wound:"Won the US Open by doing nothing. Is not sure how he feels about this. Is starting to feel pretty good about it.",
+        historicalScores:[-2,-3,-4,-5] },
+    ],
+    field:[
+      {name:"Jim Furyk",        scores:[-1,-2,-3,-4]},
+      {name:"Colin Montgomerie", scores:[-1,-2,-3,-4]},
+      {name:"Padraig Harrington",scores:[0,-1,-2,-3]},
+      {name:"Steve Stricker",    scores:[0,0,-1,-2]},
+    ],
+    holes:[
+      {id:"wf9",  name:"9th — The Long Turn",       par:3, yards:213, hazard:"deep rough framing a narrow green, no flat lies around it",
+       lore:"Winged Foot's 9th was the hole that separated the field each day. Par was a genuine achievement. Bogey was routine. Double bogey arrived without warning.",
+       incidents:["Winged Foot's rough in 2006 was described by players as the worst they had faced. Not the longest — the worst. It grabbed iron heads and turned shots forty yards from their intended line.","The USGA set the rough specifically to punish Mickelson's style of play. This was not widely acknowledged at the time."],
+       events:["rough_penalty","gallery_hushed"], pressureRating:3,
+       modifiers:{atmosphereNote:"Winged Foot 9 in the US Open. The rough is longer than the fairway is wide. The crowd is quiet because the golf is very hard and everyone can see it."}},
+      {id:"wf16", name:"16th — The Last Chance",    par:4, yards:478, hazard:"rough, trees, narrow approach corridor",
+       lore:"Phil birdied 16 on Sunday to move to -2, one clear of the field. Two holes remained. He needed to par them both.",
+       incidents:["Mickelson birdied 16 on Sunday to take a one-shot lead with two to play.","At this moment, NBC commentators began discussing whether Phil Mickelson was about to win the US Open.","At this moment, Phil Mickelson was not going to win the US Open."],
+       events:["lead_change","gallery_eruption","false_dawn"], pressureRating:3,
+       modifiers:{atmosphereNote:"16 at Winged Foot, Sunday 2006. Phil birdies. He leads by one. Two holes left. The camera follows him off the green."}},
+      {id:"wf18", name:"18th — The Double",         par:4, yards:450, hazard:"hospitality tent left, trees right, unforgiving rough everywhere",
+       lore:"Phil needed par. He hit driver left into a hospitality tent. He took a drop, punched toward the green, hit a tree. He chipped to 25 feet and two-putted for double bogey. Geoff Ogilvy, in the scorer's tent, became US Open champion. Phil walked off and said: 'I am such an idiot.' This is the most accurate self-assessment in the history of professional golf.",
+       incidents:["Phil Mickelson hit driver on 18. Into a hospitality tent.","He punched out. He hit a tree.","He chipped to 25 feet. He two-putted. Double bogey.","Geoff Ogilvy was in the scorer's tent watching on a monitor. He became US Open champion without hitting another shot.","Phil said: 'I am such an idiot.' This quote led every broadcast, every newspaper, and every golf conversation for the next week.","Phil Mickelson has never won the US Open."],
+       events:["historic_collapse","gallery_shocked","idiot_moment","accidental_champion"], pressureRating:5,
+       modifiers:{thresholdAdd:2, compCost:3, atmosphereNote:"Winged Foot 18, Sunday 2006. Phil needs par. He does not make par. He does not come close to par. He makes double. Geoff Ogilvy is US Open champion. Phil says the thing he says."}},
+    ]
+  }
+
 ];
 
 if (typeof module !== 'undefined') module.exports = { TOURNAMENTS };
