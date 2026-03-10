@@ -1,7 +1,7 @@
 // Unit test runner — tests pure functions in pipeline/logic.js
 // Run: node pipeline/unit-runner.js
 
-const { maskKey, isValidKey, shouldUpdateInput, Temperature, makeWoundDetector, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetector, DartsVoiceFmt, dartsBuildBlock, DARTS_PREMONITION_AFFINITIES, COLLECTIVE_CALL_MINIMUM, premonitionEligible, blankPremonitionLedger, assignPremonitionRC, resolvePremonitionCommits, isPremonitionTruthTeller, detectIntellectualAttempt, buildAttemptInstruction, INTELLECTUAL_ATTEMPTS_CONFIG, SOUNESS_CAT_PRE_EXISTING, SOUNESS_CAT_IDS, getAllPairs, getPairTone, allPairsHaveToneAndNote, teslaHasNoWarmOrSolidary, pairToneIsSymmetrical, noConflictingTones, CONSEQUENCE_TIERS, applyConsequence, MARSHALS_BELT_EVENT, accumulatePanelStats, computeAvgDepth, GOLF_PANEL_MEMBER_IDS, COLTART_SOFA_POOLS, getSofaCommentator, getHistoricalDivergence, selectReactionMode, validateOutwardCode, parseOutwardCode, ORACLE_VOICES, isValidOracleVoice, canSubmitOracle, ORACLE_REGISTERS, ORACLE_CHARACTERS, hasPhilTranslation, hasAllDublinDriftStages, COMEDY_ROOM_MODES, COMEDY_MODE_LABELS, getDefaultComedyMode, isValidComedyMode } = require('./logic.js');
+const { maskKey, isValidKey, shouldUpdateInput, Temperature, makeWoundDetector, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetector, DartsVoiceFmt, dartsBuildBlock, DARTS_PREMONITION_AFFINITIES, COLLECTIVE_CALL_MINIMUM, premonitionEligible, blankPremonitionLedger, assignPremonitionRC, resolvePremonitionCommits, isPremonitionTruthTeller, detectIntellectualAttempt, buildAttemptInstruction, INTELLECTUAL_ATTEMPTS_CONFIG, SOUNESS_CAT_PRE_EXISTING, SOUNESS_CAT_IDS, getAllPairs, getPairTone, allPairsHaveToneAndNote, teslaHasNoWarmOrSolidary, pairToneIsSymmetrical, noConflictingTones, CONSEQUENCE_TIERS, applyConsequence, MARSHALS_BELT_EVENT, accumulatePanelStats, computeAvgDepth, GOLF_PANEL_MEMBER_IDS, COLTART_SOFA_POOLS, getSofaCommentator, getHistoricalDivergence, selectReactionMode, validateOutwardCode, parseOutwardCode, ORACLE_VOICES, isValidOracleVoice, canSubmitOracle, ORACLE_REGISTERS, ORACLE_CHARACTERS, hasPhilTranslation, hasAllDublinDriftStages, COMEDY_ROOM_MODES, COMEDY_MODE_LABELS, getDefaultComedyMode, isValidComedyMode, AUTHOR_VOICES, buildAuthorEpiloguePrompt } = require('./logic.js');
 
 let passed = 0;
 let failed = 0;
@@ -1181,6 +1181,29 @@ assert('isValidComedyMode: house-name-oracle is valid',    isValidComedyMode('ho
 assert('isValidComedyMode: unknown mode is invalid',       isValidComedyMode('unknown'), false);
 assert('isValidComedyMode: empty string is invalid',       isValidComedyMode(''), false);
 assert('isValidComedyMode: null is invalid',               isValidComedyMode(null), false);
+
+// ── Author Epilogue — BL-060 ─────────────────────────────────────────────────
+
+assert('AUTHOR_VOICES.hemingway has voiceSignature',  typeof AUTHOR_VOICES.hemingway.voiceSignature, 'string');
+assert('AUTHOR_VOICES.hemingway has structuralTell',  typeof AUTHOR_VOICES.hemingway.structuralTell, 'string');
+assert('AUTHOR_VOICES.hemingway has wound',           typeof AUTHOR_VOICES.hemingway.wound, 'string');
+
+const _hVoice = AUTHOR_VOICES.hemingway;
+const _ctx1   = { player: 'Nick Faldo', outcome: '3 over par', panel: 'golf' };
+const _p1     = buildAuthorEpiloguePrompt(_hVoice, _ctx1);
+assert('buildAuthorEpiloguePrompt includes voice signature',   _p1.includes(_hVoice.voiceSignature), true);
+assert('buildAuthorEpiloguePrompt includes player (Faldo)',    _p1.includes('Nick Faldo'), true);
+assert('buildAuthorEpiloguePrompt includes outcome (3 over)',  _p1.includes('3 over par'), true);
+assert('buildAuthorEpiloguePrompt includes word count lower',  _p1.includes('250'), true);
+assert('buildAuthorEpiloguePrompt includes word count upper',  _p1.includes('400'), true);
+
+const _p2 = buildAuthorEpiloguePrompt(_hVoice, { player: 'Tiger Woods', outcome: '15 under par', panel: 'golf' });
+assert('buildAuthorEpiloguePrompt includes player (Tiger)',    _p2.includes('Tiger Woods'), true);
+assert('buildAuthorEpiloguePrompt includes outcome (15 under)',_p2.includes('15 under par'), true);
+
+const _p3 = buildAuthorEpiloguePrompt(_hVoice, { player: 'Rocco Mediate', outcome: 'level par playoff', panel: 'golf' });
+assert('buildAuthorEpiloguePrompt includes player (Rocco)',    _p3.includes('Rocco Mediate'), true);
+assert('buildAuthorEpiloguePrompt includes outcome (playoff)', _p3.includes('level par playoff'), true);
 
 // ── Results ──────────────────────────────────────────────────────────────────
 

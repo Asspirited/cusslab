@@ -538,6 +538,22 @@ function isValidComedyMode(mode) {
   return typeof mode === 'string' && COMEDY_ROOM_MODES.includes(mode);
 }
 
+// ── Author Epilogue — BL-060 ──────────────────────────────────────────────────
+
+const AUTHOR_VOICES = {
+  hemingway: {
+    id: 'hemingway',
+    name: 'Ernest Hemingway',
+    voiceSignature: 'Short sentences. The iceberg theory. What is not said matters more than what is. Masculine stoicism. The pause is the point. Nothing decorative. The thing that happened is stated once and not explained.',
+    structuralTell: 'The silence between sentences. The thing that happened but is only mentioned once, briefly, and not again. The sentence that ends without sentiment.',
+    wound: 'Nothing left unsaid that could not have been left unsaid better. He has been trying. He will try again tomorrow. It will be the same sun.',
+  },
+};
+
+function buildAuthorEpiloguePrompt(authorVoice, context) {
+  return `You are ${authorVoice.name}. Write a 250 to 400 word summary of the following golf game in your distinctive voice.\n\nYour voice: ${authorVoice.voiceSignature}\n\nGame details: ${context.player} played golf. Outcome: ${context.outcome}. Panel: ${context.panel}.\n\nWrite the summary now. Do not break character. Do not explain your style. Simply write.`;
+}
+
 module.exports = {
   maskKey, isValidKey, shouldUpdateInput,
   Temperature,
@@ -557,4 +573,5 @@ module.exports = {
   validateOutwardCode, parseOutwardCode, isValidOracleVoice, canSubmitOracle,
   hasPhilTranslation, hasAllDublinDriftStages,
   COMEDY_ROOM_MODES, COMEDY_MODE_LABELS, getDefaultComedyMode, isValidComedyMode,
+  AUTHOR_VOICES, buildAuthorEpiloguePrompt,
 };

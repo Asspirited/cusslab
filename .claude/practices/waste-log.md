@@ -1370,3 +1370,14 @@ Status: CLOSED
 - **Cost impact:** None
 - **Tags:** n/a
 - **Status:** Nothing went wrong. Pipeline GREEN 580/580 throughout. All commits pushed cleanly.
+
+## WL-099
+- **Item:** Generic `the user clicks "([^"]+)"` step shadows specific click steps
+- **Symptom:** `requestAuthorEpilogue` was never called — Gherkin scenario "Clicking the button requests an epilogue" failed with "No epilogue request was made" despite step definition being present
+- **Suspected cause:** Gherkin runner matches the first regex that fits. Generic step at line ~3547 (`/^the user clicks "([^"]+)"$/`) matched before the specific Author Epilogue step. The generic step is a `@claude dom` stub that does nothing.
+- **Session date:** 2026-03-10
+- **Time lost:** ~5 min
+- **Cost impact:** Low
+- **Tags:** `#gherkin-step-shadowing` `#false-green-risk` `#repeated-pattern`
+- **Status:** Closed — fix: renamed step to avoid quoted-button-name pattern (`the user clicks the Author's Account button`)
+- **5 Whys root cause:** No convention prevents generic catch-all step patterns. Any step using `"([^"]+)"` will silently shadow more specific steps defined later. Corrective: prefer unquoted or differently-structured step text for interaction steps that need real behaviour.

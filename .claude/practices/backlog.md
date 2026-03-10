@@ -515,6 +515,73 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - CD3: UBV=4 TC=2 RR=1 → CoD=7, Dur=2, **CD3=3.5**
 - Status: OPEN
 
+### BL-087 — Author Epilogue: Mark Twain
+- Epic: Author Epilogue
+- Depends on: BL-061 (pool mechanics)
+- Voice: sardonic, aphoristic, American vernacular. Tall tales. Deadpan understatement.
+  The Mississippi applied to golf. Structural tell: the parenthetical aside longer than the main
+  sentence, which undercuts the premise entirely. Wound: being taken seriously as a humorist.
+  He is the most serious man in the room. The comedy is an accident of observation.
+  Closing register: a maxim that sounds invented but might not be. Probably is.
+- "The reports of my eagle were greatly exaggerated."
+- CD3: UBV=6 TC=2 RR=1 → CoD=9, Dur=2, **CD3=4.5**
+- Status: OPEN — raised 2026-03-10
+
+### BL-088 — Author Epilogue: Stephen King
+- Epic: Author Epilogue
+- Depends on: BL-061 (pool mechanics)
+- Voice: horror, supernatural, Maine, specific dread. The detail that is too precise to be safe.
+  Structural tell: the ordinary thing described until it becomes wrong. The golf course was fine.
+  The golf course had always been fine. Something about the bunker on the 7th wasn't fine.
+  Wound: the constant question of whether it is literary or genre. It is both. He is tired of this.
+  Closing register: the thing you thought was resolved is still there. It is always still there.
+- CD3: UBV=6 TC=2 RR=1 → CoD=9, Dur=2, **CD3=4.5**
+- Status: OPEN — raised 2026-03-10
+
+### BL-089 — Author Epilogue: William Shakespeare
+- Epic: Author Epilogue
+- Depends on: BL-061
+- Voice: dramatic prose + embedded soliloquy. Stage directions. The aside. The epilogue becomes
+  a short scene: "ACT V. The links. Enter [PLAYER], undone." Structural tell: the soliloquy
+  arrives mid-summary and the player addresses the gallery directly. Wound: everyone quotes him
+  wrong, and always the obvious ones. The good lines never get used. He has noted this.
+  Closing register: "Exeunt all, pursued by a par five."
+- CD3: UBV=6 TC=2 RR=1 → CoD=9, Dur=2, **CD3=4.5**
+- Status: OPEN — raised 2026-03-10
+
+### BL-090 — Author Epilogue: The Venerable Bede
+- Epic: Author Epilogue
+- Depends on: BL-061
+- Voice: ecclesiastical chronicle, Latin asides, the year of our Lord. "In the year of our Lord
+  two thousand and eight, upon the links of Valhalla, there came a great calamity unto the
+  captain." Structural tell: events recorded with monastic precision and complete moral gravity.
+  Wound: the scribes. They keep abbreviating. The full account requires twelve volumes.
+  Closing register: the illuminated manuscript note in the margin — barely legible, entirely correct.
+- CD3: UBV=6 TC=2 RR=1 → CoD=9, Dur=2, **CD3=4.5**
+- Status: OPEN — raised 2026-03-10
+
+### BL-091 — Author Epilogue: James Herbert
+- Epic: Author Epilogue
+- Depends on: BL-061
+- Voice: British horror, visceral, working-class dread. Very different register to King — more
+  graphic, more urban, more Rats-in-the-rough. The rough isn't metaphorically dangerous.
+  Structural tell: the ordinary thing described until something wrong is inside it.
+  Wound: being grouped with King. He got there first, in several important respects.
+  Closing register: whatever was in the bunker is still there.
+- CD3: UBV=5 TC=2 RR=1 → CoD=8, Dur=2, **CD3=4.0**
+- Status: OPEN — raised 2026-03-10
+
+### BL-092 — Author Epilogue: Jackie Collins
+- Epic: Author Epilogue
+- Depends on: BL-061
+- Voice: Hollywood glamour, Dynasty-era excess, big hair, power, money, erotic subtext applied
+  to entirely wrong subjects. Structural tell: everyone is magnificently tanned. The grip is,
+  frankly, erotic. The caddie has a past and a body. Wound: being called a guilty pleasure.
+  She was a serious student of human ambition. The books were research.
+  Closing register: the birdie was just the beginning.
+- CD3: UBV=6 TC=2 RR=1 → CoD=9, Dur=2, **CD3=4.5**
+- Status: OPEN — raised 2026-03-10
+
 ### BL-082 — Author Epilogue: Phase 2 — Football Moment integration
 - Epic: Author Epilogue
 - Depends on: BL-060 + BL-061 (Phase 1 proven); blocked until Phase 1 complete

@@ -78,6 +78,17 @@ Full notes: notes/2026-03-09-phils-opoly.md
 Open question: what panel does this belong to? New panel or extension of existing?
 Placement decision needed before any BL item can be raised.
 
+### IDEA: Nostradamus as Author Epilogue voice
+Added: 2026-03-10 | Source: Rod
+The comedy IS the quatrain format applied to golf — which is why it's here and not in backlog.
+Nostradamus writes in four-line prophecies, not prose. The epilogue mechanic currently specifies
+250-400 word prose. Nostradamus breaks that in a way that might be funnier but needs a
+design decision: (a) author pool allows author-specific output formats; (b) Nostradamus outputs
+4–6 quatrains with a straight-faced "interpretation" appended; (c) he goes on the ideas board
+until pool mechanics (BL-061) are proven and we revisit the format question.
+Open question: is this a special-format author, or a different mechanic entirely?
+Needs Three Amigos before BL item can be raised.
+
 ---
 
 ## REVIEWED — discussed, not yet promoted

@@ -1910,6 +1910,10 @@ body {
     <div class="mt16">
       <button class="btn btn-accent" onclick="resetGame()" style="font-size:22px;padding:14px 40px;">Play Again</button>
     </div>
+    <div class="mt16">
+      <button class="btn" id="author-account-btn" onclick="requestAuthorEpilogue()" style="font-size:18px;padding:10px 28px;">The Author's Account 📖</button>
+    </div>
+    <div id="author-epilogue-output" style="display:none;max-width:680px;margin:24px auto 0;text-align:left;line-height:1.7;font-size:16px;color:var(--fg);background:rgba(255,255,255,0.04);border-radius:8px;padding:24px 28px;white-space:pre-wrap;"></div>
     <div class="press-tease">
       <strong>⬤ Coming Soon — Post-Tournament Press Conference</strong>
       The journalists are waiting outside. Your answers will define how history remembers this round.
@@ -1939,6 +1943,47 @@ function golfFetch(body) {
   const headers = { 'Content-Type': 'application/json', 'anthropic-version': '2023-06-01' };
   if (key) headers['x-api-key'] = key;
   return fetch(GOLF_WORKER, { method: 'POST', headers, body: JSON.stringify(body) });
+}
+
+// ═══════════════════════════════════════════
+// AUTHOR EPILOGUE — walking skeleton — BL-060
+// Mirror of AUTHOR_VOICES / buildAuthorEpiloguePrompt in pipeline/logic.js — keep in sync.
+// ═══════════════════════════════════════════
+const _AUTHOR_VOICES = {
+  hemingway: {
+    id: 'hemingway',
+    name: 'Ernest Hemingway',
+    voiceSignature: 'Short sentences. The iceberg theory. What is not said matters more than what is. Masculine stoicism. The pause is the point. Nothing decorative. The thing that happened is stated once and not explained.',
+  },
+};
+
+function _buildEpiloguePrompt(voice, ctx) {
+  return `You are ${voice.name}. Write a 250 to 400 word summary of the following golf game in your distinctive voice.\n\nYour voice: ${voice.voiceSignature}\n\nGame details: ${ctx.player} played golf. Outcome: ${ctx.outcome}. Panel: golf.\n\nWrite the summary now. Do not break character. Do not explain your style. Simply write.`;
+}
+
+async function requestAuthorEpilogue() {
+  const btn = document.getElementById('author-account-btn');
+  const out = document.getElementById('author-epilogue-output');
+  btn.disabled = true;
+  btn.textContent = 'Summoning…';
+  out.style.display = 'block';
+  out.textContent = '';
+  const s      = G.yourScore;
+  const score  = s === 0 ? 'even par' : s > 0 ? `+${s}` : `${s}`;
+  const sorted = buildSortedField();
+  const pos    = sorted.findIndex(r => r.you) + 1;
+  const sfx    = ['','st','nd','rd'][Math.min(pos,3)] || 'th';
+  const outcome = `${score}, finished ${pos}${sfx} of ${sorted.length} playing as ${G.player.name} at ${G.tournament.name}`;
+  const prompt  = _buildEpiloguePrompt(_AUTHOR_VOICES.hemingway, { player: G.player.name, outcome, panel: 'golf' });
+  try {
+    const r    = await golfFetch({ model: 'claude-haiku-4-5-20251001', max_tokens: 600, messages: [{ role: 'user', content: prompt }] });
+    const data = await r.json();
+    out.textContent = data?.content?.[0]?.text || 'The author was unavailable for comment.';
+  } catch (_) {
+    out.textContent = 'The author declined to comment.';
+  }
+  btn.textContent = "The Author's Account 📖";
+  btn.disabled = false;
 }
 
 // ═══════════════════════════════════════════

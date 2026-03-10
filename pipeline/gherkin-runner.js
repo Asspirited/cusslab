@@ -3,7 +3,7 @@
 
 const fs   = require('fs');
 const path = require('path');
-const { Temperature, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetector, DartsVoiceFmt, dartsBuildBlock, DARTS_PREMONITION_AFFINITIES, COLLECTIVE_CALL_MINIMUM, premonitionEligible, blankPremonitionLedger, assignPremonitionRC, resolvePremonitionCommits, isPremonitionTruthTeller, detectIntellectualAttempt, buildAttemptInstruction, INTELLECTUAL_ATTEMPTS_CONFIG, CONSEQUENCE_TIERS, applyConsequence, MARSHALS_BELT_EVENT, accumulatePanelStats, computeAvgDepth, GOLF_PANEL_MEMBER_IDS, COLTART_SOFA_POOLS, getSofaCommentator, getHistoricalDivergence, selectReactionMode, validateOutwardCode, parseOutwardCode, ORACLE_VOICES, isValidOracleVoice, canSubmitOracle, ORACLE_REGISTERS, ORACLE_CHARACTERS, hasPhilTranslation, hasAllDublinDriftStages, COMEDY_ROOM_MODES, COMEDY_MODE_LABELS, getDefaultComedyMode, isValidComedyMode } = require('./logic.js');
+const { Temperature, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetector, DartsVoiceFmt, dartsBuildBlock, DARTS_PREMONITION_AFFINITIES, COLLECTIVE_CALL_MINIMUM, premonitionEligible, blankPremonitionLedger, assignPremonitionRC, resolvePremonitionCommits, isPremonitionTruthTeller, detectIntellectualAttempt, buildAttemptInstruction, INTELLECTUAL_ATTEMPTS_CONFIG, CONSEQUENCE_TIERS, applyConsequence, MARSHALS_BELT_EVENT, accumulatePanelStats, computeAvgDepth, GOLF_PANEL_MEMBER_IDS, COLTART_SOFA_POOLS, getSofaCommentator, getHistoricalDivergence, selectReactionMode, validateOutwardCode, parseOutwardCode, ORACLE_VOICES, isValidOracleVoice, canSubmitOracle, ORACLE_REGISTERS, ORACLE_CHARACTERS, hasPhilTranslation, hasAllDublinDriftStages, COMEDY_ROOM_MODES, COMEDY_MODE_LABELS, getDefaultComedyMode, isValidComedyMode, AUTHOR_VOICES, buildAuthorEpiloguePrompt } = require('./logic.js');
 const { QUNTUM_LEEKS_SCENARIOS, initState, pickRandomScenario, betLeekiness, spendLeekiness, processTurnEffects, buildModifiers } = require('../src/logic/quntum-leeks-engine.js');
 
 // ── Mock state (simulates browser localStorage + DOM) ────────────────────────
@@ -6648,6 +6648,94 @@ function makeSteps(ctx) {
       const withoutVoice = canSubmitOracle('SW1A', '');
       if (withoutVoice)
         throw new Error('Expected canSubmitOracle to block submission when no voice selected');
+    }],
+
+    // ── Author Epilogue skeleton (author-epilogue-skeleton.feature) ───────────
+
+    [/^the author voice definitions are loaded$/, () => {
+      ctx._authorVoices = AUTHOR_VOICES;
+    }],
+
+    [/^the hemingway voice has a (\w+) property$/, (prop) => {
+      if (typeof AUTHOR_VOICES.hemingway[prop] !== 'string')
+        throw new Error(`AUTHOR_VOICES.hemingway.${prop} is not a string`);
+    }],
+
+    [/^the hemingway author voice$/, () => {
+      ctx._authorVoice = AUTHOR_VOICES.hemingway;
+    }],
+
+    [/^a game context with player "([^"]+)", outcome "([^"]+)", panel "([^"]+)"$/, (player, outcome, panel) => {
+      ctx._gameContext = { player, outcome, panel };
+    }],
+
+    [/^buildAuthorEpiloguePrompt is called with the hemingway voice and the game context$/, () => {
+      ctx._prompt = buildAuthorEpiloguePrompt(ctx._authorVoice, ctx._gameContext);
+    }],
+
+    [/^the prompt includes the voice signature$/, () => {
+      if (!ctx._prompt.includes(ctx._authorVoice.voiceSignature))
+        throw new Error('Prompt does not include voice signature');
+    }],
+
+    [/^the prompt includes "([^"]+)"$/, (text) => {
+      if (!ctx._prompt.includes(text))
+        throw new Error(`Prompt does not include "${text}"`);
+    }],
+
+    [/^the prompt requests between 250 and 400 words$/, () => {
+      if (!ctx._prompt.includes('250') || !ctx._prompt.includes('400'))
+        throw new Error('Prompt does not specify 250 to 400 word count');
+    }],
+
+    [/^a Golf Adventure game has ended$/, () => {
+      ctx._gameEnded = true;
+    }],
+
+    [/^the final score screen is shown$/, () => {
+      ctx._gameEnded = true;
+      ctx._finalScoreShown = true;
+    }],
+
+    [/^a button labelled "([^"]+)" is visible$/, (label) => {
+      if (!ctx._gameEnded)
+        throw new Error(`Button "${label}" should not be visible before game ends`);
+      if (label !== 'The Author\'s Account 📖')
+        throw new Error(`Unexpected button label: "${label}"`);
+    }],
+
+    [/^the epilogue output area is not visible$/, () => {
+      if (ctx._epilogueVisible)
+        throw new Error('Epilogue output area should not be visible yet');
+    }],
+
+    [/^the user clicks the Author's Account button$/, () => {
+      if (!ctx._gameEnded)
+        throw new Error('Cannot click Author\'s Account before game ends');
+      const prompt = buildAuthorEpiloguePrompt(AUTHOR_VOICES.hemingway, ctx._gameContext || { player: 'unknown', outcome: 'unknown', panel: 'golf' });
+      ctx._epilogueRequested = true;
+      ctx._epiloguePrompt    = prompt;
+    }],
+
+    [/^an epilogue is requested from the Worker with the Hemingway prompt$/, () => {
+      if (!ctx._epilogueRequested)
+        throw new Error('No epilogue request was made');
+      if (!ctx._epiloguePrompt.includes(AUTHOR_VOICES.hemingway.voiceSignature))
+        throw new Error('Epilogue request prompt does not include Hemingway voice signature');
+    }],
+
+    [/^an epilogue request has returned "([^"]+)"$/, (text) => {
+      ctx._epilogueResponse = text;
+      ctx._epilogueVisible  = true;
+    }],
+
+    [/^the response is rendered$/, () => {
+      ctx._epilogueDisplayed = ctx._epilogueResponse;
+    }],
+
+    [/^the epilogue output area displays "([^"]+)"$/, (text) => {
+      if (ctx._epilogueDisplayed !== text)
+        throw new Error(`Expected epilogue to display "${text}" but got "${ctx._epilogueDisplayed}"`);
     }],
 
   ];
