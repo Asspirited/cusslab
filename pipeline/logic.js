@@ -524,10 +524,11 @@ function hasAllDublinDriftStages(text) {
 
 // ── Comedy Room mode switcher (BL-053) ────────────────────────────────────────
 
-const COMEDY_ROOM_MODES = ['into-the-room', 'house-name-oracle'];
+const COMEDY_ROOM_MODES = ['into-the-room', 'house-name-oracle', 'roast-room'];
 const COMEDY_MODE_LABELS = {
   'into-the-room':     'Into The Room',
   'house-name-oracle': 'The House Name Oracle',
+  'roast-room':        'The Roast Room',
 };
 
 function getDefaultComedyMode() {
@@ -612,6 +613,17 @@ function buildAuthorEpiloguePrompt(authorVoice, context) {
   return `You are ${authorVoice.name}. Write a 250 to 400 word summary of the following golf game in your distinctive voice.\n\nYour voice: ${authorVoice.voiceSignature}\n\nGame details: ${context.player} played golf. Outcome: ${context.outcome}. Panel: ${context.panel}.\n\nWrite the summary now. Do not break character. Do not explain your style. Simply write.`;
 }
 
+// ── Roast Room — BL-095 ───────────────────────────────────────────────────────
+
+function selectRoastAuthors(pool, count) {
+  const shuffled = shufflePool(pool);
+  return shuffled.slice(0, Math.min(count, shuffled.length));
+}
+
+function buildRoastPrompt(authorVoice, title) {
+  return `You are ${authorVoice.name}. Write a 100 to 150 word roast or critique of "${title}" in your distinctive voice.\n\nYour voice: ${authorVoice.voiceSignature}\n\nDraw on what you know about this title. If it is unfamiliar, infer from the title alone — do not admit ignorance. Write now. Do not break character. Do not explain your style.`;
+}
+
 module.exports = {
   maskKey, isValidKey, shouldUpdateInput,
   Temperature,
@@ -633,4 +645,5 @@ module.exports = {
   COMEDY_ROOM_MODES, COMEDY_MODE_LABELS, getDefaultComedyMode, isValidComedyMode,
   AUTHORS_POOL, shufflePool, selectNextAuthorFromQueue,
   AUTHOR_VOICES, buildAuthorEpiloguePrompt,
+  selectRoastAuthors, buildRoastPrompt,
 };

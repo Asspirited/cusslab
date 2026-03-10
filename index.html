@@ -2023,6 +2023,7 @@
   <div style="display:flex;gap:8px;margin-bottom:20px;">
     <button id="cr-tab-standard" class="btn-secondary" onclick="ComedyRoom.switchMode('into-the-room')" style="flex:1;font-size:13px;padding:8px 12px;border-color:var(--accent);color:var(--accent);">Into The Room</button>
     <button id="cr-tab-oracle" class="btn-secondary" onclick="ComedyRoom.switchMode('house-name-oracle')" style="flex:1;font-size:13px;padding:8px 12px;">The House Name Oracle</button>
+    <button id="cr-tab-roast" class="btn-secondary" onclick="ComedyRoom.switchMode('roast-room')" style="flex:1;font-size:13px;padding:8px 12px;">The Roast Room</button>
   </div>
 
   <!-- Standard view -->
@@ -2061,6 +2062,19 @@
         <button class="btn-secondary" onclick="showAskUs('comedy')" style="margin-left:8px;font-size:12px;padding:6px 12px;">Ask us</button>
       </div>
       <button class="btn-secondary" onclick="ComedyRoom.present()" style="margin-top:12px;">ROUND AGAIN 🔄</button>
+    </div>
+  </div>
+
+  <!-- Roast Room view -->
+  <div id="cr-roast-view" style="display:none;">
+    <div style="margin-bottom:16px;">
+      <label>What do you want roasted</label>
+      <input type="text" id="cr-roast-title" placeholder="A book. A magazine. A publication. Anything with a title." maxlength="120" autocomplete="off">
+    </div>
+    <button class="btn" onclick="RoastRoom.submit()" id="cr-roast-btn" disabled>ROAST IT 🔥</button>
+    <div id="cr-roast-output" style="display:none;margin-top:24px;">
+      <div id="cr-roast-responses"></div>
+      <button class="btn-secondary" onclick="RoastRoom.reroll()" style="margin-top:16px;">Re-roll 🎲</button>
     </div>
   </div>
 
@@ -10683,19 +10697,113 @@ HYPOCHONDRIA RESPONSE: Default silence. You have been feeling like this for year
   function switchMode(mode) {
     sessionStorage.setItem('cr-mode', mode);
     const isOracle = mode === 'house-name-oracle';
-    document.getElementById('cr-standard-view').style.display = isOracle ? 'none' : '';
-    document.getElementById('cr-oracle-view').style.display   = isOracle ? ''     : 'none';
+    const isRoast  = mode === 'roast-room';
+    document.getElementById('cr-standard-view').style.display = (!isOracle && !isRoast) ? '' : 'none';
+    document.getElementById('cr-oracle-view').style.display   = isOracle  ? '' : 'none';
+    document.getElementById('cr-roast-view').style.display    = isRoast   ? '' : 'none';
     const activeStyle   = 'border-color:var(--accent);color:var(--accent);';
     const inactiveStyle = '';
-    document.getElementById('cr-tab-standard').style.cssText = isOracle ? inactiveStyle : activeStyle;
-    document.getElementById('cr-tab-oracle').style.cssText   = isOracle ? activeStyle   : inactiveStyle;
-    if (!isOracle) {
+    document.getElementById('cr-tab-standard').style.cssText = (!isOracle && !isRoast) ? activeStyle : inactiveStyle;
+    document.getElementById('cr-tab-oracle').style.cssText   = isOracle  ? activeStyle : inactiveStyle;
+    document.getElementById('cr-tab-roast').style.cssText    = isRoast   ? activeStyle : inactiveStyle;
+    if (!isOracle && !isRoast) {
       const out = document.getElementById('cr-output');
       if (out) out.style.display = 'none';
     }
   }
 
   return { present, switchMode };
+})();
+
+// ── Roast Room — BL-095 ──────────────────────────────────────────────────────
+const RoastRoom = (() => {
+  const ROAST_AUTHORS_POOL = ['hemingway', 'mccarthy', 'tolkien', 'patterson', 'pratchett', 'wodehouse', 'austen'];
+  const ROAST_AUTHOR_VOICES = {
+    hemingway: { name: 'Ernest Hemingway',  voiceSignature: 'Short sentences. The iceberg theory. What is not said matters more than what is. Masculine stoicism. The pause is the point. Nothing decorative. The thing that happened is stated once and not explained.' },
+    mccarthy:  { name: 'Cormac McCarthy',   voiceSignature: 'No quotation marks. No chapters. Biblical register mixed with stark American vernacular. Long sentences without punctuation that accumulate like weather. Violence and grace treated identically. The land endures. Men do not.' },
+    tolkien:   { name: 'J.R.R. Tolkien',    voiceSignature: 'Epic mythic scope. Elvish names for everything. Ancestral lineage of the golf club established in appendix. Maps included. The course has a history of three thousand years and we will cover all of it before the first tee shot. The club motto is in Quenya.' },
+    patterson: { name: 'James Patterson',   voiceSignature: 'Short chapters. Everything is URGENT. Something is wrong. He did not know yet how wrong. Chapter 7: three sentences. Chapter 8: two. The pace does not stop. Possibly cannot stop. Each sentence is its own chapter. Some chapters are one sentence. Several are one word.' },
+    pratchett: { name: 'Terry Pratchett',   voiceSignature: 'Footnotes deployed as weapons. Satire so affectionate it hurts. Truth delivered sideways. Genuine warmth disguised as absurdism. Death plays golf. He plays off scratch. Nobody has beaten him. Nobody has asked why. *Footnote: They should ask why.*' },
+    wodehouse: { name: 'P.G. Wodehouse',    voiceSignature: "Bertie Wooster is present. He should not be. Jeeves is also present. He has a plan. He has not shared it yet. The situation is grave. It will get worse before it gets better. It will get better only because of Jeeves. Bertie will take credit." },
+    austen:    { name: 'Jane Austen',        voiceSignature: 'Social comedy of exquisite precision. Manners observed and found wanting. Irony so dry it requires no acknowledgement. What is said and what is meant are separated by an ocean of implication. The club secretary has been noted.' },
+  };
+
+  function _shuffle(pool) {
+    const arr = [...pool];
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  function _selectAuthors() {
+    return _shuffle(ROAST_AUTHORS_POOL).slice(0, 5);
+  }
+
+  function _buildPrompt(voice, title) {
+    return `You are ${voice.name}. Write a 100 to 150 word roast or critique of "${title}" in your distinctive voice.\n\nYour voice: ${voice.voiceSignature}\n\nDraw on what you know about this title. If it is unfamiliar, infer from the title alone — do not admit ignorance. Write now. Do not break character. Do not explain your style.`;
+  }
+
+  async function _fetchRoast(voice, title) {
+    const r    = await hcFetch({ model: 'claude-haiku-4-5-20251001', max_tokens: 300, messages: [{ role: 'user', content: _buildPrompt(voice, title) }] });
+    const data = await r.json();
+    return data.content?.[0]?.text || '';
+  }
+
+  function _renderResults(title, results) {
+    const container = document.getElementById('cr-roast-responses');
+    container.innerHTML = results.map(({ name, text }) => `
+      <div style="margin-bottom:24px;padding:20px 24px;background:rgba(255,255,255,0.04);border-radius:8px;border:1px solid var(--border);">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:2px;color:var(--accent);margin-bottom:10px;">${name.toUpperCase()}</div>
+        <div style="font-size:15px;line-height:1.75;white-space:pre-wrap;color:var(--fg);">${text}</div>
+      </div>
+    `).join('');
+    document.getElementById('cr-roast-output').style.display = '';
+  }
+
+  async function submit() {
+    const title = document.getElementById('cr-roast-title').value.trim();
+    if (!title) return;
+    const btn = document.getElementById('cr-roast-btn');
+    btn.disabled = true;
+    btn.textContent = 'ROASTING… 🔥';
+    document.getElementById('cr-roast-output').style.display = 'none';
+    try {
+      const authors = _selectAuthors();
+      const results = await Promise.all(
+        authors.map(async id => ({ name: ROAST_AUTHOR_VOICES[id].name, text: await _fetchRoast(ROAST_AUTHOR_VOICES[id], title) }))
+      );
+      _renderResults(title, results);
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'ROAST IT 🔥';
+    }
+  }
+
+  async function reroll() {
+    const title = document.getElementById('cr-roast-title').value.trim();
+    if (!title) return;
+    document.getElementById('cr-roast-output').style.display = 'none';
+    try {
+      const authors = _selectAuthors();
+      const results = await Promise.all(
+        authors.map(async id => ({ name: ROAST_AUTHOR_VOICES[id].name, text: await _fetchRoast(ROAST_AUTHOR_VOICES[id], title) }))
+      );
+      _renderResults(title, results);
+    } catch(e) { console.error(e); }
+  }
+
+  // Enable/disable button based on input
+  document.addEventListener('DOMContentLoaded', () => {
+    const input = document.getElementById('cr-roast-title');
+    const btn   = document.getElementById('cr-roast-btn');
+    if (input && btn) {
+      input.addEventListener('input', () => { btn.disabled = !input.value.trim(); });
+    }
+  });
+
+  return { submit, reroll };
 })();
 
 // ============================================================

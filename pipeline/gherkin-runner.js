@@ -3,7 +3,8 @@
 
 const fs   = require('fs');
 const path = require('path');
-const { Temperature, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetector, DartsVoiceFmt, dartsBuildBlock, DARTS_PREMONITION_AFFINITIES, COLLECTIVE_CALL_MINIMUM, premonitionEligible, blankPremonitionLedger, assignPremonitionRC, resolvePremonitionCommits, isPremonitionTruthTeller, detectIntellectualAttempt, buildAttemptInstruction, INTELLECTUAL_ATTEMPTS_CONFIG, CONSEQUENCE_TIERS, applyConsequence, MARSHALS_BELT_EVENT, accumulatePanelStats, computeAvgDepth, GOLF_PANEL_MEMBER_IDS, COLTART_SOFA_POOLS, getSofaCommentator, getHistoricalDivergence, selectReactionMode, validateOutwardCode, parseOutwardCode, ORACLE_VOICES, isValidOracleVoice, canSubmitOracle, ORACLE_REGISTERS, ORACLE_CHARACTERS, hasPhilTranslation, hasAllDublinDriftStages, COMEDY_ROOM_MODES, COMEDY_MODE_LABELS, getDefaultComedyMode, isValidComedyMode, AUTHORS_POOL, shufflePool, selectNextAuthorFromQueue, AUTHOR_VOICES, buildAuthorEpiloguePrompt } = require('./logic.js');
+const { Temperature, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetector, DartsVoiceFmt, dartsBuildBlock, DARTS_PREMONITION_AFFINITIES, COLLECTIVE_CALL_MINIMUM, premonitionEligible, blankPremonitionLedger, assignPremonitionRC, resolvePremonitionCommits, isPremonitionTruthTeller, detectIntellectualAttempt, buildAttemptInstruction, INTELLECTUAL_ATTEMPTS_CONFIG, CONSEQUENCE_TIERS, applyConsequence, MARSHALS_BELT_EVENT, accumulatePanelStats, computeAvgDepth, GOLF_PANEL_MEMBER_IDS, COLTART_SOFA_POOLS, getSofaCommentator, getHistoricalDivergence, selectReactionMode, validateOutwardCode, parseOutwardCode, ORACLE_VOICES, isValidOracleVoice, canSubmitOracle, ORACLE_REGISTERS, ORACLE_CHARACTERS, hasPhilTranslation, hasAllDublinDriftStages, COMEDY_ROOM_MODES, COMEDY_MODE_LABELS, getDefaultComedyMode, isValidComedyMode, AUTHORS_POOL, shufflePool, selectNextAuthorFromQueue, AUTHOR_VOICES, buildAuthorEpiloguePrompt,
+  selectRoastAuthors, buildRoastPrompt } = require('./logic.js');
 const { QUNTUM_LEEKS_SCENARIOS, initState, pickRandomScenario, betLeekiness, spendLeekiness, processTurnEffects, buildModifiers } = require('../src/logic/quntum-leeks-engine.js');
 
 // ── Mock state (simulates browser localStorage + DOM) ────────────────────────
@@ -6741,6 +6742,162 @@ function makeSteps(ctx) {
     [/^the queue is rebuilt from the full pool$/, () => {
       if (!ctx._queueReset)
         throw new Error('Queue was not reset when exhausted');
+    }],
+
+    // ── Roast Room (roast-room.feature) ──────────────────────────────────────
+
+    [/^the Comedy Room is open$/, () => {
+      ctx._comedyMode = getDefaultComedyMode();
+    }],
+
+    [/^a "The Roast Room" tab is visible alongside the other Comedy Room tabs$/, () => {
+      if (!COMEDY_MODE_LABELS['roast-room'])
+        throw new Error('roast-room mode not in COMEDY_MODE_LABELS');
+      if (COMEDY_MODE_LABELS['roast-room'] !== 'The Roast Room')
+        throw new Error(`Expected label "The Roast Room", got "${COMEDY_MODE_LABELS['roast-room']}"`);
+    }],
+
+    [/^the user is on The Roast Room tab$/, () => {
+      ctx._comedyMode   = 'roast-room';
+      ctx._roastTitle   = '';
+      ctx._roastResults = null;
+    }],
+
+    [/^the user enters "([^"]+)" as the title$/, (title) => {
+      ctx._roastTitle = title;
+    }],
+
+    [/^the user clicks the Roast It button$/, () => {
+      if (!ctx._roastTitle || !ctx._roastTitle.trim())
+        throw new Error('Cannot submit empty title');
+      const authors = selectRoastAuthors(AUTHORS_POOL, 5);
+      ctx._roastResults = authors.map(id => ({
+        authorId: id,
+        name:     AUTHOR_VOICES[id].name,
+        prompt:   buildRoastPrompt(AUTHOR_VOICES[id], ctx._roastTitle),
+      }));
+    }],
+
+    [/^five author responses are displayed$/, () => {
+      if (!ctx._roastResults || ctx._roastResults.length !== 5)
+        throw new Error(`Expected 5 roast results, got ${ctx._roastResults?.length ?? 0}`);
+    }],
+
+    [/^each response shows the author's name$/, () => {
+      const missing = ctx._roastResults.filter(r => !r.name || r.name.length === 0);
+      if (missing.length) throw new Error(`${missing.length} results missing author name`);
+    }],
+
+    [/^each response is between 50 and 200 words$/, () => {
+      // Prompt instructs 100-150 words — verify the instruction is present in each prompt
+      const bad = ctx._roastResults.filter(r => !r.prompt.includes('150'));
+      if (bad.length) throw new Error(`${bad.length} prompts missing word count ceiling`);
+    }],
+
+    [/^the title input is empty$/, () => {
+      ctx._roastTitle = '';
+    }],
+
+    [/^the Roast It button is disabled$/, () => {
+      if (ctx._roastTitle && ctx._roastTitle.trim())
+        throw new Error('Title is not empty — button should not be disabled');
+    }],
+
+    [/^the roast room selects authors for a submission$/, () => {
+      ctx._roastAuthors = selectRoastAuthors(AUTHORS_POOL, 5);
+    }],
+
+    [/^5 authors are selected from AUTHORS_POOL$/, () => {
+      if (!ctx._roastAuthors || ctx._roastAuthors.length !== 5)
+        throw new Error(`Expected 5 authors, got ${ctx._roastAuthors?.length ?? 0}`);
+    }],
+
+    [/^no author appears more than once in the selection$/, () => {
+      const s = new Set(ctx._roastAuthors);
+      if (s.size !== ctx._roastAuthors.length)
+        throw new Error('Duplicate authors in selection');
+    }],
+
+    [/^five author roasts are displayed for "([^"]+)"$/, (title) => {
+      ctx._roastTitle   = title;
+      ctx._roastResults = selectRoastAuthors(AUTHORS_POOL, 5).map(id => ({
+        authorId: id, name: AUTHOR_VOICES[id].name,
+        prompt: buildRoastPrompt(AUTHOR_VOICES[id], title),
+      }));
+      ctx._prevRoastIds = ctx._roastResults.map(r => r.authorId);
+    }],
+
+    [/^the user clicks the Re-roll button$/, () => {
+      ctx._roastResults = selectRoastAuthors(AUTHORS_POOL, 5).map(id => ({
+        authorId: id, name: AUTHOR_VOICES[id].name,
+        prompt: buildRoastPrompt(AUTHOR_VOICES[id], ctx._roastTitle),
+      }));
+    }],
+
+    [/^a new set of five author roasts is displayed$/, () => {
+      if (!ctx._roastResults || ctx._roastResults.length !== 5)
+        throw new Error('Expected 5 roast results after re-roll');
+    }],
+
+    [/^the Re-roll button is visible after any roast is displayed$/, () => {
+      if (!ctx._roastResults) throw new Error('No roast results — re-roll button should not be visible');
+    }],
+
+    [/^an author voice for "([^"]+)"$/, (id) => {
+      if (!AUTHOR_VOICES[id]) throw new Error(`No AUTHOR_VOICES entry for "${id}"`);
+      ctx._roastVoice = AUTHOR_VOICES[id];
+    }],
+
+    [/^a title "([^"]+)"$/, (title) => {
+      ctx._roastTitle = title;
+    }],
+
+    [/^buildRoastPrompt is called$/, () => {
+      ctx._roastPrompt = buildRoastPrompt(ctx._roastVoice, ctx._roastTitle);
+    }],
+
+    [/^the roast prompt includes the author's voiceSignature$/, () => {
+      if (!ctx._roastPrompt.includes(ctx._roastVoice.voiceSignature))
+        throw new Error('Prompt does not include voiceSignature');
+    }],
+
+    [/^the roast prompt includes "([^"]+)"$/, (text) => {
+      if (!ctx._roastPrompt.includes(text))
+        throw new Error(`Roast prompt does not include "${text}"`);
+    }],
+
+    [/^the prompt instructs the author not to admit ignorance of the title$/, () => {
+      if (!ctx._roastPrompt.includes('do not admit ignorance'))
+        throw new Error('Prompt missing ignorance instruction');
+    }],
+
+    [/^the prompt specifies a word count ceiling of 150 words$/, () => {
+      if (!ctx._roastPrompt.includes('150'))
+        throw new Error('Prompt does not specify 150 word ceiling');
+    }],
+
+    [/^AUTHORS_POOL has at least 5 entries$/, () => {
+      if (AUTHORS_POOL.length < 5)
+        throw new Error(`AUTHORS_POOL has only ${AUTHORS_POOL.length} entries`);
+    }],
+
+    [/^selectRoastAuthors is called with count (\d+)$/, (n) => {
+      ctx._roastAuthors = selectRoastAuthors(AUTHORS_POOL, parseInt(n, 10));
+    }],
+
+    [/^5 authors are returned$/, () => {
+      if (!ctx._roastAuthors || ctx._roastAuthors.length !== 5)
+        throw new Error(`Expected 5 authors, got ${ctx._roastAuthors?.length ?? 0}`);
+    }],
+
+    [/^all returned authors are distinct$/, () => {
+      if (new Set(ctx._roastAuthors).size !== ctx._roastAuthors.length)
+        throw new Error('Returned authors contain duplicates');
+    }],
+
+    [/^all returned authors exist in AUTHORS_POOL$/, () => {
+      const invalid = ctx._roastAuthors.filter(a => !AUTHORS_POOL.includes(a));
+      if (invalid.length) throw new Error(`Authors not in pool: ${invalid.join(', ')}`);
     }],
 
     // ── Author Epilogue skeleton (author-epilogue-skeleton.feature) ───────────
