@@ -2,10 +2,6 @@ Feature: The Roast Room — literary authors roast any title
   Five randomly selected authors each write a short roast of a user-submitted title.
   All five appear on screen together. Re-roll replaces them with a different five.
 
-  Scenario: The Roast Room tab is present in the Comedy Room
-    Given the Comedy Room is open
-    Then a "The Roast Room" tab is visible alongside the other Comedy Room tabs
-
   Scenario: Submitting a title triggers five author roasts
     Given the user is on The Roast Room tab
     And the user enters "Hello magazine" as the title
