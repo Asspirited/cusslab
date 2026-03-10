@@ -1,6 +1,7 @@
 // Unit test runner — tests pure functions in pipeline/logic.js
 // Run: node pipeline/unit-runner.js
 const { lintStepDuplicates } = require('./lint-steps.js');
+const { initGameState, appendToHistory, incrementTurn, buildModifierBlock } = require('../src/logic/ff-engine.js');
 
 const { maskKey, isValidKey, shouldUpdateInput, Temperature, makeWoundDetector, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetector, DartsVoiceFmt, dartsBuildBlock, DARTS_PREMONITION_AFFINITIES, COLLECTIVE_CALL_MINIMUM, premonitionEligible, blankPremonitionLedger, assignPremonitionRC, resolvePremonitionCommits, isPremonitionTruthTeller, detectIntellectualAttempt, buildAttemptInstruction, INTELLECTUAL_ATTEMPTS_CONFIG, SOUNESS_CAT_PRE_EXISTING, SOUNESS_CAT_IDS, getAllPairs, getPairTone, allPairsHaveToneAndNote, teslaHasNoWarmOrSolidary, pairToneIsSymmetrical, noConflictingTones, CONSEQUENCE_TIERS, applyConsequence, MARSHALS_BELT_EVENT, accumulatePanelStats, computeAvgDepth, GOLF_PANEL_MEMBER_IDS, COLTART_SOFA_POOLS, getSofaCommentator, getHistoricalDivergence, selectReactionMode, validateOutwardCode, parseOutwardCode, ORACLE_VOICES, isValidOracleVoice, canSubmitOracle, ORACLE_REGISTERS, ORACLE_CHARACTERS, hasPhilTranslation, hasAllDublinDriftStages, COMEDY_ROOM_MODES, COMEDY_MODE_LABELS, getDefaultComedyMode, isValidComedyMode, AUTHOR_VOICES, buildAuthorEpiloguePrompt, AUTHORS_POOL, shufflePool, selectNextAuthorFromQueue, selectRoastAuthors, buildRoastPrompt, selectWritingRoomAuthors, buildWritingRoomPrompt, PUB_SITUATIONS, buildPubAdvicePrompt } = require('./logic.js');
 
@@ -1317,6 +1318,64 @@ assert('buildPubAdvicePrompt: includes the situation text',
 assert('buildPubAdvicePrompt: instructs principle, application, and warning',
   ['principle', 'application', 'warning'].every(w =>
     buildPubAdvicePrompt(PUB_SITUATIONS[0]).toLowerCase().includes(w)), true);
+
+// ── FF shared engine ─────────────────────────────────────────────────────────
+
+assert('initGameState: history is empty array',
+  JSON.stringify(initGameState().history), '[]');
+
+assert('initGameState: turnCount is 0',
+  initGameState().turnCount, 0);
+
+assert('initGameState: merges custom fields',
+  initGameState({ composure: 10 }).composure, 10);
+
+assert('initGameState: does not mutate between calls',
+  initGameState() !== initGameState(), true);
+
+const _ffS1 = initGameState();
+appendToHistory(_ffS1, 'hello', 5);
+assert('appendToHistory: adds one entry',
+  _ffS1.history.length, 1);
+
+assert('appendToHistory: entry value is correct',
+  _ffS1.history[0], 'hello');
+
+const _ffS2 = initGameState();
+appendToHistory(_ffS2, 'a', 3);
+appendToHistory(_ffS2, 'b', 3);
+appendToHistory(_ffS2, 'c', 3);
+appendToHistory(_ffS2, 'd', 3);
+assert('appendToHistory: evicts oldest when cap exceeded',
+  _ffS2.history.length, 3);
+
+assert('appendToHistory: oldest entry evicted',
+  _ffS2.history[0], 'b');
+
+assert('appendToHistory: newest entry present',
+  _ffS2.history[2], 'd');
+
+const _ffS3 = initGameState();
+incrementTurn(_ffS3);
+incrementTurn(_ffS3);
+assert('incrementTurn: increments turnCount correctly',
+  _ffS3.turnCount, 2);
+
+assert('buildModifierBlock: empty array returns empty string',
+  buildModifierBlock([]), '');
+
+assert('buildModifierBlock: null returns empty string',
+  buildModifierBlock(null), '');
+
+assert('buildModifierBlock: contains header when modifiers present',
+  buildModifierBlock(['Mod A']).includes('ACTIVE MODIFIERS THIS TURN:'), true);
+
+assert('buildModifierBlock: contains modifier text',
+  buildModifierBlock(['Mod A']).includes('Mod A'), true);
+
+assert('buildModifierBlock: multiple modifiers each appear',
+  buildModifierBlock(['Mod A', 'Mod B']).includes('Mod A') &&
+  buildModifierBlock(['Mod A', 'Mod B']).includes('Mod B'), true);
 
 // ── Results ──────────────────────────────────────────────────────────────────
 

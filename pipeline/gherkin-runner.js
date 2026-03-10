@@ -7,6 +7,7 @@ const { Temperature, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetect
   selectRoastAuthors, buildRoastPrompt, selectWritingRoomAuthors, buildWritingRoomPrompt,
   PUB_SITUATIONS, buildPubAdvicePrompt } = require('./logic.js');
 const { QUNTUM_LEEKS_SCENARIOS, initState, pickRandomScenario, betLeekiness, spendLeekiness, processTurnEffects, buildModifiers } = require('../src/logic/quntum-leeks-engine.js');
+const { initGameState, appendToHistory, incrementTurn, buildModifierBlock } = require('../src/logic/ff-engine.js');
 const { lintStepDuplicates } = require('./lint-steps.js');
 
 // ── Mock state (simulates browser localStorage + DOM) ────────────────────────
@@ -7540,6 +7541,130 @@ function makeSteps(ctx) {
     [/^Training\.logPanelRating is a function$/, () => {
       // Structural check — verified by implementation in index.html Training module export
       // This step passes when the feature file is shipped (Training.logPanelRating exists in the module return)
+    }],
+
+    // ── FF shared engine (ff-engine.feature) ──────────────────────────────────
+
+    [/^a game config with fields composure:(\d+) and phase:"([^"]+)"$/, (composure, phase) => {
+      ctx._ffConfig = { composure: parseInt(composure, 10), phase };
+    }],
+
+    [/^I call initGameState with that config$/, () => {
+      ctx._ffState = initGameState(ctx._ffConfig);
+    }],
+
+    [/^I call initGameState with no config$/, () => {
+      ctx._ffState = initGameState();
+    }],
+
+    [/^the ff state has history: \[\]$/, () => {
+      if (!Array.isArray(ctx._ffState.history) || ctx._ffState.history.length !== 0)
+        throw new Error(`Expected history: [] but got ${JSON.stringify(ctx._ffState.history)}`);
+    }],
+
+    [/^the ff state has turnCount: (\d+)$/, (n) => {
+      const expected = parseInt(n, 10);
+      if (ctx._ffState.turnCount !== expected)
+        throw new Error(`Expected turnCount: ${expected} but got ${ctx._ffState.turnCount}`);
+    }],
+
+    [/^the ff state has composure: (\d+)$/, (n) => {
+      const expected = parseInt(n, 10);
+      if (ctx._ffState.composure !== expected)
+        throw new Error(`Expected composure: ${expected} but got ${ctx._ffState.composure}`);
+    }],
+
+    [/^the ff state has phase: "([^"]+)"$/, (phase) => {
+      if (ctx._ffState.phase !== phase)
+        throw new Error(`Expected phase: "${phase}" but got "${ctx._ffState.phase}"`);
+    }],
+
+    [/^a fresh ff game state$/, () => {
+      ctx._ffState = initGameState();
+    }],
+
+    [/^I append the entry "([^"]+)" to ff history with cap (\d+)$/, (entry, cap) => {
+      appendToHistory(ctx._ffState, entry, parseInt(cap, 10));
+    }],
+
+    [/^the ff history contains (\d+) entr(?:y|ies)$/, (n) => {
+      const expected = parseInt(n, 10);
+      if (ctx._ffState.history.length !== expected)
+        throw new Error(`Expected ${expected} history entries but got ${ctx._ffState.history.length}`);
+    }],
+
+    [/^the first ff history entry is "([^"]+)"$/, (entry) => {
+      if (ctx._ffState.history[0] !== entry)
+        throw new Error(`Expected first entry "${entry}" but got "${ctx._ffState.history[0]}"`);
+    }],
+
+    [/^the last ff history entry is "([^"]+)"$/, (entry) => {
+      const last = ctx._ffState.history[ctx._ffState.history.length - 1];
+      if (last !== entry)
+        throw new Error(`Expected last entry "${entry}" but got "${last}"`);
+    }],
+
+    [/^I append entries "([^"]+)", "([^"]+)", "([^"]+)" to ff history with cap (\d+)$/, (a, b, c, cap) => {
+      const capN = parseInt(cap, 10);
+      appendToHistory(ctx._ffState, a, capN);
+      appendToHistory(ctx._ffState, b, capN);
+      appendToHistory(ctx._ffState, c, capN);
+    }],
+
+    [/^the ff history contains 3 entries in insertion order$/, () => {
+      const h = ctx._ffState.history;
+      if (h.length !== 3) throw new Error(`Expected 3 entries but got ${h.length}`);
+      if (h[0] !== 'first' || h[1] !== 'second' || h[2] !== 'third')
+        throw new Error(`Expected ["first","second","third"] but got ${JSON.stringify(h)}`);
+    }],
+
+    [/^the ff history is at capacity with entries "([^"]+)", "([^"]+)", "([^"]+)" and cap (\d+)$/, (a, b, c, cap) => {
+      const capN = parseInt(cap, 10);
+      appendToHistory(ctx._ffState, a, capN);
+      appendToHistory(ctx._ffState, b, capN);
+      appendToHistory(ctx._ffState, c, capN);
+    }],
+
+    [/^I call incrementTurn (\d+) times$/, (n) => {
+      for (let i = 0; i < parseInt(n, 10); i++) incrementTurn(ctx._ffState);
+    }],
+
+    [/^I call buildModifierBlock with an empty array$/, () => {
+      ctx._ffModResult = buildModifierBlock([]);
+    }],
+
+    [/^the ff modifier result is an empty string$/, () => {
+      if (ctx._ffModResult !== '')
+        throw new Error(`Expected empty string but got "${ctx._ffModResult}"`);
+    }],
+
+    [/^the ff modifier "([^"]+)"$/, (mod) => {
+      ctx._ffMods = [mod];
+    }],
+
+    [/^I call buildModifierBlock with that ff modifier$/, () => {
+      ctx._ffModResult = buildModifierBlock(ctx._ffMods);
+    }],
+
+    [/^the ff modifier result contains "([^"]+)"$/, (text) => {
+      if (!ctx._ffModResult.includes(text))
+        throw new Error(`Expected modifier result to contain "${text}" but got: ${ctx._ffModResult}`);
+    }],
+
+    [/^the ff modifiers "([^"]+)" and "([^"]+)"$/, (a, b) => {
+      ctx._ffMods = [a, b];
+    }],
+
+    [/^I call buildModifierBlock with those ff modifiers$/, () => {
+      ctx._ffModResult = buildModifierBlock(ctx._ffMods);
+    }],
+
+    [/^each ff modifier appears on its own line$/, () => {
+      const lines = ctx._ffModResult.split('\n');
+      const hasA = lines.some(l => l === 'Modifier A');
+      const hasB = lines.some(l => l === 'Modifier B');
+      if (!hasA || !hasB)
+        throw new Error(`Expected each modifier on its own line. Got: ${JSON.stringify(lines)}`);
     }],
 
   ];
