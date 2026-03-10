@@ -16,7 +16,7 @@ Feature: Author Epilogue — pool mechanics
   Scenario Outline: selectNextAuthorFromQueue returns the correct result
     Given an author queue <queue>
     When selectNextAuthorFromQueue is called
-    Then the result is <result>
+    Then the queue result is <result>
 
     Examples:
       | queue                    | result   |
