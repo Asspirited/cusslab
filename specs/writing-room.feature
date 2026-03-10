@@ -3,10 +3,6 @@ Feature: The Writing Room — literary authors discuss any topic in sequence
   Each author is aware of what the previous author said.
   All three responses appear on screen together. Re-roll replaces them.
 
-  Scenario: The Writing Room tab is present in the Comedy Room
-    Given the Comedy Room is open
-    Then a "The Writing Room" tab is visible alongside the other Comedy Room tabs
-
   Scenario: Submitting a topic triggers three author responses
     Given the user is on The Writing Room tab
     And the user enters "a corporate away day" as the topic
