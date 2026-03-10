@@ -540,6 +540,22 @@ function isValidComedyMode(mode) {
 
 // ── Author Epilogue — BL-060 ──────────────────────────────────────────────────
 
+const AUTHORS_POOL = ['hemingway', 'mccarthy'];
+
+function shufflePool(pool) {
+  const arr = [...pool];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function selectNextAuthorFromQueue(queue) {
+  if (!queue || queue.length === 0) return null;
+  return queue[0];
+}
+
 const AUTHOR_VOICES = {
   hemingway: {
     id: 'hemingway',
@@ -547,6 +563,13 @@ const AUTHOR_VOICES = {
     voiceSignature: 'Short sentences. The iceberg theory. What is not said matters more than what is. Masculine stoicism. The pause is the point. Nothing decorative. The thing that happened is stated once and not explained.',
     structuralTell: 'The silence between sentences. The thing that happened but is only mentioned once, briefly, and not again. The sentence that ends without sentiment.',
     wound: 'Nothing left unsaid that could not have been left unsaid better. He has been trying. He will try again tomorrow. It will be the same sun.',
+  },
+  mccarthy: {
+    id: 'mccarthy',
+    name: 'Cormac McCarthy',
+    voiceSignature: 'No quotation marks. No chapters. Biblical register. The landscape as witness. Dust. Men doing things without explaining why. Violence is not dramatic it is just what happens. The sentences run long then stop. Then there is silence.',
+    structuralTell: 'The ball rolled. Everything was dust. The sun did not care about the outcome. It never had.',
+    wound: 'Briefly attempts punctuation mid-summary. Gives up. The comma was always a kind of lie.',
   },
 };
 
@@ -573,5 +596,6 @@ module.exports = {
   validateOutwardCode, parseOutwardCode, isValidOracleVoice, canSubmitOracle,
   hasPhilTranslation, hasAllDublinDriftStages,
   COMEDY_ROOM_MODES, COMEDY_MODE_LABELS, getDefaultComedyMode, isValidComedyMode,
+  AUTHORS_POOL, shufflePool, selectNextAuthorFromQueue,
   AUTHOR_VOICES, buildAuthorEpiloguePrompt,
 };

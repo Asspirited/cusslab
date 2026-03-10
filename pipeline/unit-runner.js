@@ -1,7 +1,7 @@
 // Unit test runner — tests pure functions in pipeline/logic.js
 // Run: node pipeline/unit-runner.js
 
-const { maskKey, isValidKey, shouldUpdateInput, Temperature, makeWoundDetector, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetector, DartsVoiceFmt, dartsBuildBlock, DARTS_PREMONITION_AFFINITIES, COLLECTIVE_CALL_MINIMUM, premonitionEligible, blankPremonitionLedger, assignPremonitionRC, resolvePremonitionCommits, isPremonitionTruthTeller, detectIntellectualAttempt, buildAttemptInstruction, INTELLECTUAL_ATTEMPTS_CONFIG, SOUNESS_CAT_PRE_EXISTING, SOUNESS_CAT_IDS, getAllPairs, getPairTone, allPairsHaveToneAndNote, teslaHasNoWarmOrSolidary, pairToneIsSymmetrical, noConflictingTones, CONSEQUENCE_TIERS, applyConsequence, MARSHALS_BELT_EVENT, accumulatePanelStats, computeAvgDepth, GOLF_PANEL_MEMBER_IDS, COLTART_SOFA_POOLS, getSofaCommentator, getHistoricalDivergence, selectReactionMode, validateOutwardCode, parseOutwardCode, ORACLE_VOICES, isValidOracleVoice, canSubmitOracle, ORACLE_REGISTERS, ORACLE_CHARACTERS, hasPhilTranslation, hasAllDublinDriftStages, COMEDY_ROOM_MODES, COMEDY_MODE_LABELS, getDefaultComedyMode, isValidComedyMode, AUTHOR_VOICES, buildAuthorEpiloguePrompt } = require('./logic.js');
+const { maskKey, isValidKey, shouldUpdateInput, Temperature, makeWoundDetector, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetector, DartsVoiceFmt, dartsBuildBlock, DARTS_PREMONITION_AFFINITIES, COLLECTIVE_CALL_MINIMUM, premonitionEligible, blankPremonitionLedger, assignPremonitionRC, resolvePremonitionCommits, isPremonitionTruthTeller, detectIntellectualAttempt, buildAttemptInstruction, INTELLECTUAL_ATTEMPTS_CONFIG, SOUNESS_CAT_PRE_EXISTING, SOUNESS_CAT_IDS, getAllPairs, getPairTone, allPairsHaveToneAndNote, teslaHasNoWarmOrSolidary, pairToneIsSymmetrical, noConflictingTones, CONSEQUENCE_TIERS, applyConsequence, MARSHALS_BELT_EVENT, accumulatePanelStats, computeAvgDepth, GOLF_PANEL_MEMBER_IDS, COLTART_SOFA_POOLS, getSofaCommentator, getHistoricalDivergence, selectReactionMode, validateOutwardCode, parseOutwardCode, ORACLE_VOICES, isValidOracleVoice, canSubmitOracle, ORACLE_REGISTERS, ORACLE_CHARACTERS, hasPhilTranslation, hasAllDublinDriftStages, COMEDY_ROOM_MODES, COMEDY_MODE_LABELS, getDefaultComedyMode, isValidComedyMode, AUTHOR_VOICES, buildAuthorEpiloguePrompt, AUTHORS_POOL, shufflePool, selectNextAuthorFromQueue } = require('./logic.js');
 
 let passed = 0;
 let failed = 0;
@@ -1204,6 +1204,22 @@ assert('buildAuthorEpiloguePrompt includes outcome (15 under)',_p2.includes('15 
 const _p3 = buildAuthorEpiloguePrompt(_hVoice, { player: 'Rocco Mediate', outcome: 'level par playoff', panel: 'golf' });
 assert('buildAuthorEpiloguePrompt includes player (Rocco)',    _p3.includes('Rocco Mediate'), true);
 assert('buildAuthorEpiloguePrompt includes outcome (playoff)', _p3.includes('level par playoff'), true);
+
+// ── Author Epilogue pool mechanics — BL-061 ──────────────────────────────────
+
+assert('AUTHORS_POOL contains hemingway',              AUTHORS_POOL.includes('hemingway'), true);
+assert('AUTHORS_POOL contains mccarthy',               AUTHORS_POOL.includes('mccarthy'), true);
+assert('AUTHORS_POOL has at least 2 entries',          AUTHORS_POOL.length >= 2, true);
+
+const _pool3     = ['hemingway', 'mccarthy', 'tolkien'];
+const _poolOrig  = [..._pool3];
+const _shuffled  = shufflePool(_pool3);
+assert('shufflePool returns correct length',           _shuffled.length, 3);
+assert('shufflePool contains all original elements',   _shuffled.slice().sort().join(','), _poolOrig.slice().sort().join(','));
+assert('shufflePool does not modify original',         _pool3.join(','), _poolOrig.join(','));
+
+assert('selectNextAuthorFromQueue returns first item', selectNextAuthorFromQueue(['mccarthy', 'hemingway']), 'mccarthy');
+assert('selectNextAuthorFromQueue returns null for []', selectNextAuthorFromQueue([]), null);
 
 // ── Results ──────────────────────────────────────────────────────────────────
 

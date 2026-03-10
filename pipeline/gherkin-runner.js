@@ -3,7 +3,7 @@
 
 const fs   = require('fs');
 const path = require('path');
-const { Temperature, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetector, DartsVoiceFmt, dartsBuildBlock, DARTS_PREMONITION_AFFINITIES, COLLECTIVE_CALL_MINIMUM, premonitionEligible, blankPremonitionLedger, assignPremonitionRC, resolvePremonitionCommits, isPremonitionTruthTeller, detectIntellectualAttempt, buildAttemptInstruction, INTELLECTUAL_ATTEMPTS_CONFIG, CONSEQUENCE_TIERS, applyConsequence, MARSHALS_BELT_EVENT, accumulatePanelStats, computeAvgDepth, GOLF_PANEL_MEMBER_IDS, COLTART_SOFA_POOLS, getSofaCommentator, getHistoricalDivergence, selectReactionMode, validateOutwardCode, parseOutwardCode, ORACLE_VOICES, isValidOracleVoice, canSubmitOracle, ORACLE_REGISTERS, ORACLE_CHARACTERS, hasPhilTranslation, hasAllDublinDriftStages, COMEDY_ROOM_MODES, COMEDY_MODE_LABELS, getDefaultComedyMode, isValidComedyMode, AUTHOR_VOICES, buildAuthorEpiloguePrompt } = require('./logic.js');
+const { Temperature, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetector, DartsVoiceFmt, dartsBuildBlock, DARTS_PREMONITION_AFFINITIES, COLLECTIVE_CALL_MINIMUM, premonitionEligible, blankPremonitionLedger, assignPremonitionRC, resolvePremonitionCommits, isPremonitionTruthTeller, detectIntellectualAttempt, buildAttemptInstruction, INTELLECTUAL_ATTEMPTS_CONFIG, CONSEQUENCE_TIERS, applyConsequence, MARSHALS_BELT_EVENT, accumulatePanelStats, computeAvgDepth, GOLF_PANEL_MEMBER_IDS, COLTART_SOFA_POOLS, getSofaCommentator, getHistoricalDivergence, selectReactionMode, validateOutwardCode, parseOutwardCode, ORACLE_VOICES, isValidOracleVoice, canSubmitOracle, ORACLE_REGISTERS, ORACLE_CHARACTERS, hasPhilTranslation, hasAllDublinDriftStages, COMEDY_ROOM_MODES, COMEDY_MODE_LABELS, getDefaultComedyMode, isValidComedyMode, AUTHORS_POOL, shufflePool, selectNextAuthorFromQueue, AUTHOR_VOICES, buildAuthorEpiloguePrompt } = require('./logic.js');
 const { QUNTUM_LEEKS_SCENARIOS, initState, pickRandomScenario, betLeekiness, spendLeekiness, processTurnEffects, buildModifiers } = require('../src/logic/quntum-leeks-engine.js');
 
 // ── Mock state (simulates browser localStorage + DOM) ────────────────────────
@@ -6648,6 +6648,99 @@ function makeSteps(ctx) {
       const withoutVoice = canSubmitOracle('SW1A', '');
       if (withoutVoice)
         throw new Error('Expected canSubmitOracle to block submission when no voice selected');
+    }],
+
+    // ── Author Epilogue pool mechanics (author-epilogue-pool.feature) ────────
+
+    [/^the author pool is loaded$/, () => {
+      ctx._pool = AUTHORS_POOL;
+    }],
+
+    [/^the pool contains the "([^"]+)" author$/, (id) => {
+      if (!AUTHORS_POOL.includes(id))
+        throw new Error(`AUTHORS_POOL does not contain "${id}"`);
+    }],
+
+    [/^a pool \[([^\]]+)\]$/, (raw) => {
+      ctx._poolInput = raw.replace(/"/g, '').split(',').map(s => s.trim());
+      ctx._poolInputOrig = [...ctx._poolInput];
+    }],
+
+    [/^shufflePool is called on the pool$/, () => {
+      ctx._shuffleResult = shufflePool(ctx._poolInput);
+    }],
+
+    [/^the result contains (\d+) authors$/, (n) => {
+      if (ctx._shuffleResult.length !== Number(n))
+        throw new Error(`Expected ${n} authors, got ${ctx._shuffleResult.length}`);
+    }],
+
+    [/^the result contains all authors from the original pool$/, () => {
+      const a = ctx._shuffleResult.slice().sort().join(',');
+      const b = ctx._poolInputOrig.slice().sort().join(',');
+      if (a !== b) throw new Error(`Shuffled pool elements differ: got "${a}", expected "${b}"`);
+    }],
+
+    [/^an author queue \[([^\]]*)\]$/, (raw) => {
+      ctx._authorQueue = raw ? raw.replace(/"/g, '').split(',').map(s => s.trim()) : [];
+    }],
+
+    [/^an empty author queue$/, () => {
+      ctx._authorQueue = [];
+    }],
+
+    [/^selectNextAuthorFromQueue is called$/, () => {
+      ctx._queueResult = selectNextAuthorFromQueue(ctx._authorQueue);
+    }],
+
+    [/^the queue result is (mccarthy|hemingway|tolkien|null)$/, (val) => {
+      const expected = val === 'null' ? null : val;
+      if (ctx._queueResult !== expected)
+        throw new Error(`Expected "${expected}", got "${ctx._queueResult}"`);
+    }],
+
+    [/^an epilogue has been displayed$/, () => {
+      ctx._epilogueDisplayed = 'some text';
+      ctx._epilogueVisible   = true;
+    }],
+
+    [/^an "Another Author 🎲" button is visible$/, () => {
+      if (!ctx._epilogueVisible)
+        throw new Error('Another Author button should not be visible before epilogue is displayed');
+    }],
+
+    [/^the current author was "([^"]+)"$/, (id) => {
+      ctx._currentAuthor = id;
+    }],
+
+    [/^the user clicks the Another Author button$/, () => {
+      const next = selectNextAuthorFromQueue(ctx._authorQueue);
+      if (next === null) throw new Error('Queue is empty — cannot select next author');
+      ctx._selectedAuthor = next;
+      ctx._authorQueue    = ctx._authorQueue.slice(1);
+    }],
+
+    [/^the selected author is "([^"]+)"$/, (id) => {
+      if (ctx._selectedAuthor !== id)
+        throw new Error(`Expected selected author "${id}", got "${ctx._selectedAuthor}"`);
+    }],
+
+    [/^all pool authors have been used$/, () => {
+      ctx._usedAuthors = [...AUTHORS_POOL];
+      ctx._authorQueue = [];
+    }],
+
+    [/^the next author is requested$/, () => {
+      if (selectNextAuthorFromQueue(ctx._authorQueue) === null) {
+        ctx._authorQueue    = shufflePool(AUTHORS_POOL);
+        ctx._queueReset     = true;
+      }
+      ctx._selectedAuthor = ctx._authorQueue[0];
+    }],
+
+    [/^the queue is rebuilt from the full pool$/, () => {
+      if (!ctx._queueReset)
+        throw new Error('Queue was not reset when exhausted');
     }],
 
     // ── Author Epilogue skeleton (author-epilogue-skeleton.feature) ───────────

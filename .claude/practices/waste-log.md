@@ -1381,3 +1381,14 @@ Status: CLOSED
 - **Tags:** `#gherkin-step-shadowing` `#false-green-risk` `#repeated-pattern`
 - **Status:** Closed — fix: renamed step to avoid quoted-button-name pattern (`the user clicks the Author's Account button`)
 - **5 Whys root cause:** No convention prevents generic catch-all step patterns. Any step using `"([^"]+)"` will silently shadow more specific steps defined later. Corrective: prefer unquoted or differently-structured step text for interaction steps that need real behaviour.
+
+## WL-100
+- **Item:** Generic `the result is null` step shadows author queue result step
+- **Symptom:** `selectNextAuthorFromQueue returns the correct result — [], null` failed with "Expected null, got undefined" — step matched `ctx._tempOpResult` (undefined) instead of `ctx._queueResult` (null)
+- **Suspected cause:** Step at line ~6358 (`/^the result is null$/`) matched before the author-specific step (`/^the result is (mccarthy|hemingway|tolkien|null)$/`) because exact-string regex matches earlier in iteration.
+- **Session date:** 2026-03-10
+- **Time lost:** ~5 min
+- **Cost impact:** Low
+- **Tags:** `#gherkin-step-shadowing` `#repeated-pattern`
+- **Status:** Closed — fix: renamed feature step and definition to `the queue result is <result>` to avoid collision with the generic `the result is null` step
+- **5 Whys root cause:** Same pattern as WL-099. Generic result-checking steps using bare `the result is null` will shadow any more-specific step using the same phrasing. Corrective: prefix result steps with the context they belong to (e.g. `the queue result is`, `the author result is`).

@@ -1914,6 +1914,9 @@ body {
       <button class="btn" id="author-account-btn" onclick="requestAuthorEpilogue()" style="font-size:18px;padding:10px 28px;">The Author's Account 📖</button>
     </div>
     <div id="author-epilogue-output" style="display:none;max-width:680px;margin:24px auto 0;text-align:left;line-height:1.7;font-size:16px;color:var(--fg);background:rgba(255,255,255,0.04);border-radius:8px;padding:24px 28px;white-space:pre-wrap;"></div>
+    <div class="mt16" id="reroll-author-div" style="display:none;">
+      <button class="btn" id="reroll-author-btn" onclick="rerollAuthorEpilogue()" style="font-size:16px;padding:8px 22px;">Another Author 🎲</button>
+    </div>
     <div class="press-tease">
       <strong>⬤ Coming Soon — Post-Tournament Press Conference</strong>
       The journalists are waiting outside. Your answers will define how history remembers this round.
@@ -1946,43 +1949,111 @@ function golfFetch(body) {
 }
 
 // ═══════════════════════════════════════════
-// AUTHOR EPILOGUE — walking skeleton — BL-060
-// Mirror of AUTHOR_VOICES / buildAuthorEpiloguePrompt in pipeline/logic.js — keep in sync.
+// AUTHOR EPILOGUE — pool mechanics — BL-061
+// Mirror of AUTHOR_VOICES / AUTHORS_POOL / buildAuthorEpiloguePrompt in pipeline/logic.js — keep in sync.
 // ═══════════════════════════════════════════
+const _AUTHORS_POOL = ['hemingway', 'mccarthy'];
+
 const _AUTHOR_VOICES = {
   hemingway: {
     id: 'hemingway',
     name: 'Ernest Hemingway',
     voiceSignature: 'Short sentences. The iceberg theory. What is not said matters more than what is. Masculine stoicism. The pause is the point. Nothing decorative. The thing that happened is stated once and not explained.',
   },
+  mccarthy: {
+    id: 'mccarthy',
+    name: 'Cormac McCarthy',
+    voiceSignature: 'No quotation marks. No chapters. Biblical register mixed with stark American vernacular. Long sentences without punctuation that accumulate like weather. Violence and grace treated identically. The land endures. Men do not.',
+  },
 };
+
+function _shufflePool(pool) {
+  const arr = [...pool];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function _getAuthorQueue() {
+  try {
+    const raw = sessionStorage.getItem('hc_epilogue_queue');
+    if (raw) {
+      const q = JSON.parse(raw);
+      if (Array.isArray(q) && q.length > 0) return q;
+    }
+  } catch (_) {}
+  const fresh = _shufflePool(_AUTHORS_POOL);
+  sessionStorage.setItem('hc_epilogue_queue', JSON.stringify(fresh));
+  return fresh;
+}
+
+function _advanceAuthorQueue(queue) {
+  const next = queue.slice(1);
+  if (next.length === 0) {
+    sessionStorage.removeItem('hc_epilogue_queue');
+    return [];
+  }
+  sessionStorage.setItem('hc_epilogue_queue', JSON.stringify(next));
+  return next;
+}
 
 function _buildEpiloguePrompt(voice, ctx) {
   return `You are ${voice.name}. Write a 250 to 400 word summary of the following golf game in your distinctive voice.\n\nYour voice: ${voice.voiceSignature}\n\nGame details: ${ctx.player} played golf. Outcome: ${ctx.outcome}. Panel: golf.\n\nWrite the summary now. Do not break character. Do not explain your style. Simply write.`;
 }
 
+async function _fetchEpilogue(authorId) {
+  const voice = _AUTHOR_VOICES[authorId];
+  if (!voice) throw new Error(`Unknown author: ${authorId}`);
+  const s       = G.yourScore;
+  const score   = s === 0 ? 'even par' : s > 0 ? `+${s}` : `${s}`;
+  const sorted  = buildSortedField();
+  const pos     = sorted.findIndex(r => r.you) + 1;
+  const sfx     = ['','st','nd','rd'][Math.min(pos,3)] || 'th';
+  const outcome = `${score}, finished ${pos}${sfx} of ${sorted.length} playing as ${G.player.name} at ${G.tournament.name}`;
+  const prompt  = _buildEpiloguePrompt(voice, { player: G.player.name, outcome, panel: 'golf' });
+  const r    = await golfFetch({ model: 'claude-haiku-4-5-20251001', max_tokens: 600, messages: [{ role: 'user', content: prompt }] });
+  const data = await r.json();
+  return data?.content?.[0]?.text || 'The author was unavailable for comment.';
+}
+
 async function requestAuthorEpilogue() {
-  const btn = document.getElementById('author-account-btn');
-  const out = document.getElementById('author-epilogue-output');
+  const btn     = document.getElementById('author-account-btn');
+  const out     = document.getElementById('author-epilogue-output');
+  const reroll  = document.getElementById('reroll-author-div');
   btn.disabled = true;
   btn.textContent = 'Summoning…';
   out.style.display = 'block';
   out.textContent = '';
-  const s      = G.yourScore;
-  const score  = s === 0 ? 'even par' : s > 0 ? `+${s}` : `${s}`;
-  const sorted = buildSortedField();
-  const pos    = sorted.findIndex(r => r.you) + 1;
-  const sfx    = ['','st','nd','rd'][Math.min(pos,3)] || 'th';
-  const outcome = `${score}, finished ${pos}${sfx} of ${sorted.length} playing as ${G.player.name} at ${G.tournament.name}`;
-  const prompt  = _buildEpiloguePrompt(_AUTHOR_VOICES.hemingway, { player: G.player.name, outcome, panel: 'golf' });
+  const queue    = _getAuthorQueue();
+  const authorId = queue[0];
+  _advanceAuthorQueue(queue);
   try {
-    const r    = await golfFetch({ model: 'claude-haiku-4-5-20251001', max_tokens: 600, messages: [{ role: 'user', content: prompt }] });
-    const data = await r.json();
-    out.textContent = data?.content?.[0]?.text || 'The author was unavailable for comment.';
+    out.textContent = await _fetchEpilogue(authorId);
   } catch (_) {
     out.textContent = 'The author declined to comment.';
   }
   btn.textContent = "The Author's Account 📖";
+  btn.disabled = false;
+  if (reroll) reroll.style.display = 'block';
+}
+
+async function rerollAuthorEpilogue() {
+  const btn    = document.getElementById('reroll-author-btn');
+  const out    = document.getElementById('author-epilogue-output');
+  btn.disabled = true;
+  btn.textContent = 'Summoning…';
+  out.textContent = '';
+  const queue    = _getAuthorQueue();
+  const authorId = queue[0];
+  _advanceAuthorQueue(queue);
+  try {
+    out.textContent = await _fetchEpilogue(authorId);
+  } catch (_) {
+    out.textContent = 'The author declined to comment.';
+  }
+  btn.textContent = 'Another Author 🎲';
   btn.disabled = false;
 }
 

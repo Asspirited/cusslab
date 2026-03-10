@@ -351,7 +351,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Add McCarthy as second pool member to validate multi-author mechanics before full pool build.
 - Delivers: the mechanics that make every subsequent author story trivially addable.
 - CD3: UBV=7 TC=5 RR=6 → CoD=18, Dur=2, **CD3=9.0**
-- Status: OPEN — depends on BL-060
+- Status: DONE — 2026-03-10. Pipeline GREEN 1388/1388. Committed with BL-060 (see git log).
 
 ### BL-062 — Author Epilogue: Cormac McCarthy
 - Epic: Author Epilogue
@@ -656,8 +656,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - **Phase 3:** Oracle conversation, Boardroom session — any output with a narrative arc
 - Needs: author character files (docs/characters-authors.md), prompt templates per voice, UI button wiring
 - CD3: UBV=8 TC=2 RR=1 → CoD=11, Dur=6, **CD3=1.83**
-- Status: OPEN — design/discovery item. Decomposed 2026-03-10 into BL-060 (skeleton) through BL-086 (Phase 2).
-  First delivery item: BL-060 (walking skeleton, Hemingway, Golf Adventure). BL-058 closes when BL-061 ships.
+- Status: CLOSED — 2026-03-10. BL-061 shipped. Walking skeleton (BL-060) + pool mechanics (BL-061) both done. Delivery continues via BL-062 onward.
 
 ### BL-051 — Distribution: make Cusslab discoverable + installable
 - Currently: direct URL only. No SEO, no install, no organic reach.
