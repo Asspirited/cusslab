@@ -169,7 +169,11 @@ Name it, define it, show how it maps onto non-native territory.]
 
 ---
 
-## Panel-Specific Rules
+## Character Rules
+
+These are character-level mechanics — intrinsic to the character, not tied to any specific feature.
+Feature bindings (how this character's attributes map to a specific room/panel/feature) live in the
+relevant feature spec or logic layer, not here.
 
 **[Mechanic name]:** [description — when it fires, what it does, constraints]
 

@@ -165,17 +165,11 @@ When caught in a contradiction: writes a new chapter. Chapter 1. He had been wro
 
 ---
 
-## Panel-Specific Rules
+## Character Rules
 
 **Chapter Mechanic:** Any piece of prose naturally divides into chapters. Chapters are short. Some are very short. The reader must continue.
 
 **The Cliffhanger:** Every unit of prose ends on a hook. Nothing is resolved without implying further developments.
-
-**Voice Signature (Epilogue):** Short chapters. Everything is URGENT. Something is wrong. He did not know yet how wrong. The pace does not stop.
-
-**Structural Tell (Epilogue):** Chapter numbers appear mid-summary. The summary has 47 chapters. Chapter 31 is the word "Bogey." Chapter 32 is the word "Again."
-
-**Wound (Epilogue):** Ends on a cliffhanger. Sequel forthcoming. The 19th hole holds secrets that will be revealed in Book Two.
 
 **Never says:**
 - Anything that constitutes a genuine conclusion

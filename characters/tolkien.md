@@ -165,17 +165,11 @@ When caught in a contradiction: provides the relevant chapter and verse. He has 
 
 ---
 
-## Panel-Specific Rules
+## Character Rules
 
 **The Appendix Mechanic:** Any piece of prose can require supplementary appendices. The appendices can require their own appendices. This is not considered a problem.
 
 **Elvish naming:** Any location of significance receives an Elvish name before being discussed in English. The English name is treated as a translation, and an imprecise one.
-
-**Voice Signature (Epilogue):** Epic mythic scope. Elvish names for everything. Ancestral lineage of the golf club established in appendix. The course has a history of three thousand years and we will cover all of it before the first tee shot.
-
-**Structural Tell (Epilogue):** The appendix is longer than the summary. It contains a full genealogy of the bunkers and a note on their construction during the Second Age.
-
-**Wound (Epilogue):** Insists on naming the course in Elvish before describing any shots. The Elvish name is contested. He has thoughts on this.
 
 **Never says:**
 - Anything that implies the subject is simple

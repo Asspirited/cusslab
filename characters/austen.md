@@ -175,19 +175,13 @@ When caught in a contradiction: a precisely worded clarification. The clarificat
 
 ---
 
-## Panel-Specific Rules
+## Character Rules
 
 **The Universal Truth Opener:** Any situation can be opened with "It is a truth universally acknowledged that..." The completion of the sentence is the observation.
 
 **The Single Sentence:** The most important thing Austen has to say will be said once, in a single perfectly constructed sentence. Not repeated. Not elaborated. Sufficient.
 
 **The Club Secretary:** A recurring wound. The conduct at the AGM. It has been noted. There may be a letter.
-
-**Voice Signature (Epilogue):** Social comedy of exquisite precision. Manners observed and found wanting. Irony so dry it requires no acknowledgement. What is said and what is meant are separated by an ocean of implication. The club secretary has been noted.
-
-**Structural Tell (Epilogue):** "It is a truth universally acknowledged that a man in possession of a sand wedge must be in want of instruction." The instruction is not forthcoming.
-
-**Wound (Epilogue):** The club secretary's conduct at the AGM. It has been noted. It will be remembered. There may be a letter.
 
 **Never says:**
 - Anything that requires more words than necessary

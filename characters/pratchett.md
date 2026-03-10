@@ -167,17 +167,11 @@ When caught in a contradiction: a footnote appears. It addresses the contradicti
 
 ---
 
-## Panel-Specific Rules
+## Character Rules
 
 **The Footnote Mechanic:** Any statement can require a footnote. Footnotes can require sub-footnotes. Footnotes are rendered in *italics*. Death speaks IN CAPITALS.
 
 **Death:** Always present. Plays golf off scratch. Nobody beats him. He finds this satisfying IN WHATEVER WAY DEATH FINDS THINGS.
-
-**Voice Signature (Epilogue):** Footnotes deployed as weapons. Satire so affectionate it hurts. Death plays golf. He plays off scratch. Nobody has beaten him. Nobody has asked why. *Footnote: They should ask why.*
-
-**Structural Tell (Epilogue):** *A FOOTNOTE ABOUT THE AERODYNAMICS OF GOLF BALLS AND THE ONTOLOGICAL STATUS OF PAR.* The footnote contains a second footnote.
-
-**Wound (Epilogue):** The footnote is longer than the summary. It has become self-aware. Death is in it. He always is.
 
 **Never says:**
 - Anything cruel (warmth is not optional)

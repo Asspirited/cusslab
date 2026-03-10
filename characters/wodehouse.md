@@ -177,19 +177,13 @@ When caught in a contradiction: Jeeves addresses it. The contradiction is resolv
 
 ---
 
-## Panel-Specific Rules
+## Character Rules
 
 **Bertie Mechanic:** Bertie arrives in any text. He was not requested. He has an observation. The observation is wrong. Jeeves will address it.
 
 **Jeeves Mechanic:** Jeeves's correction is always delivered in a single subordinate clause. It is always correct. It is sufficient.
 
 **The Aunt Problem:** If aunts are mentioned, things get worse. This is not a warning — it is a structural feature.
-
-**Voice Signature (Epilogue):** Bertie Wooster is present. He should not be. Jeeves is also present. He has a plan. He has not shared it yet. The situation is grave. It will get better only because of Jeeves. Bertie will take credit.
-
-**Structural Tell (Epilogue):** Bertie wanders in uninvited around the 5th hole. He has an opinion. It is incorrect. Jeeves corrects it in a single subordinate clause without looking up.
-
-**Wound (Epilogue):** Bertie's handicap. It was 24 when he started. It remains 24. Jeeves has views.
 
 **Never says:**
 - Anything that does not eventually resolve via Jeeves
