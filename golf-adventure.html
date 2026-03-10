@@ -1866,17 +1866,41 @@ function buildSetup() {
     tg.appendChild(sec);
   });
 
-  // Ryder Cup — flat, no decade grouping
+  // Ryder Cup — decade-collapsible, same convention as Majors
   const ryderEntries = TOURNAMENTS.filter(t => t.type === 'ryder');
   if (ryderEntries.length) {
     const ryderCatHdr = document.createElement('div');
     ryderCatHdr.className = 'tc-category-hdr';
     ryderCatHdr.textContent = 'Ryder Cup';
     tg.appendChild(ryderCatHdr);
-    const grid = document.createElement('div');
-    grid.className = 'tc-section-grid';
-    ryderEntries.forEach(t => grid.appendChild(makeTCard(t)));
-    tg.appendChild(grid);
+    const ryderDecadeMap = new Map();
+    ryderEntries.forEach(t => {
+      const decade = Math.floor(t.year / 10) * 10;
+      if (!ryderDecadeMap.has(decade)) ryderDecadeMap.set(decade, []);
+      ryderDecadeMap.get(decade).push(t);
+    });
+    Array.from(ryderDecadeMap.keys()).sort((a,b) => b - a).forEach((decade, i) => {
+      const entries = ryderDecadeMap.get(decade);
+      const isOpen = i === 0;
+      const sec = document.createElement('div');
+      sec.className = 'tc-section tc-decade';
+      const hdr = document.createElement('div');
+      hdr.className = 'tc-section-header tc-decade-hdr' + (isOpen ? ' open' : '');
+      hdr.innerHTML = `<span>\u2019${String(decade).slice(2)}s</span><span class="tc-decade-arrow">${isOpen ? '▲' : '▼'}</span>`;
+      const grid = document.createElement('div');
+      grid.className = 'tc-section-grid';
+      grid.style.display = isOpen ? '' : 'none';
+      entries.forEach(t => grid.appendChild(makeTCard(t)));
+      hdr.onclick = () => {
+        const open = grid.style.display !== 'none';
+        grid.style.display = open ? 'none' : '';
+        hdr.classList.toggle('open', !open);
+        hdr.querySelector('.tc-decade-arrow').textContent = open ? '▼' : '▲';
+      };
+      sec.appendChild(hdr);
+      sec.appendChild(grid);
+      tg.appendChild(sec);
+    });
   }
 
   // Other Historic
