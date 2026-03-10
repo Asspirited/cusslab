@@ -582,6 +582,40 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - CD3: UBV=6 TC=2 RR=1 → CoD=9, Dur=2, **CD3=4.5**
 - Status: OPEN — raised 2026-03-10
 
+### BL-093 — Self-Training: panel ratings disconnected from preference store
+- Epic: Self-Training
+- Bug. `logTurdRating()` writes to `session.turdRatings` (in-memory, lost on reload). The self-training
+  preference store (`data.ratings`) is a separate persistent KV store. Panel thumbs-up/down clicks never
+  reach the self-training store — so the "5 ratings required to operate" threshold can never be crossed
+  from panel interactions alone. Only Workout section ratings reach `data.ratings`.
+- Fix: route `logTurdRating` (or a new bridge function) to also write to the self-training persistent
+  store so every rating in the app counts toward the threshold.
+- CD3: UBV=7 TC=6 RR=5 → CoD=18, Dur=2, **CD3=9.0**
+- Status: OPEN — raised 2026-03-10
+
+### BL-094 — Self-Training: rating buttons missing from most panel outputs
+- Epic: Self-Training
+- Companion to BL-093. Rating buttons (👍 / 👎 / 😐 etc.) only appear in the Comedy Workout section.
+  They are absent from panel output areas: Golf Commentary, Football Moment, Darts, Heckler outputs,
+  Oracle, etc. The self-training model needs ratings from all outputs to build a meaningful preference
+  profile. Without button coverage, users cannot rate even if the storage bug (BL-093) is fixed.
+- Fix: audit all panel output areas; add rating row (at minimum thumbs up/down) post-output in each.
+  Three Amigos needed: decide rating UI pattern before implementation to ensure consistency.
+- CD3: UBV=7 TC=3 RR=4 → CoD=14, Dur=4, **CD3=3.5**
+- Status: OPEN — raised 2026-03-10, blocked on BL-093 (fix storage first)
+
+### BL-095 — The Literary Roast Room: authors roast any book / comic / magazine title you enter
+- Epic: Author Epilogue
+- Depends on: BL-061 (pool mechanics). Related to BL-059 (Writing Room).
+- Input: any book name, comic, magazine (user-entered freetext). Output: randomly selected author
+  from pool writes a roast/critique of the title in their distinctive voice. Comedy is in the
+  collision — McCarthy on Hello magazine. Hemingway on Harry Potter. Wodehouse on GQ.
+- Differs from BL-059 (Writing Room): roast is reactive (targets user input), not a panel conversation.
+  Panel panel: single author, single roast. Extendable to multi-author round-robin.
+- Natural home: Comedy Room tab (alongside Heckler, Oracle, Writing Room).
+- CD3: UBV=8 TC=5 RR=5 → CoD=18, Dur=3, **CD3=6.0**
+- Status: OPEN — raised 2026-03-10
+
 ### BL-082 — Author Epilogue: Phase 2 — Football Moment integration
 - Epic: Author Epilogue
 - Depends on: BL-060 + BL-061 (Phase 1 proven); blocked until Phase 1 complete
