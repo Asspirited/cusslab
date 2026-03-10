@@ -1844,6 +1844,58 @@ const TOURNAMENTS = [
     ]
   }
 
+,
+
+  // ── 1994 US Open — Oakmont Country Club ───────────────────────────────────────────────
+  {
+    id:"oakmont_1994", year:1994, eraClass:"era-1994", lbClass:"lb-1994",
+    name:"The American Crowd",
+    course:"Oakmont Country Club", country:"Oakmont, Pennsylvania",
+    type:"major", badge:"badge-major", days:4,
+    lore:"Colin Montgomerie shot a brilliant final round at Oakmont to force a three-man playoff with Ernie Els and Loren Roberts. Throughout the week the American gallery had been relentlessly hostile — booing Monty's good shots, jeering his name. In the playoff Roberts made a crucial birdie to eliminate Montgomerie. Els beat Roberts in sudden death for his first major. Monty wept. He would go on to win seven consecutive European Order of Merit titles and never a major. Oakmont 1994 is where the template was cut.",
+    players:[
+      { id:"colin_montgomerie", name:"Colin Montgomerie", abbr:"MON",
+        temperamentProfile:"COMBUSTIBLE",
+        temperamentProfileSecondary:"STREAKY",
+        bottle:7, ego:8, temperament:6, shame:5,
+        driving:8, irons:9, short_game:8, putting:8, recovery:7, bunkers:7, course_management:9, shot_variation:8,
+        desc:"Playing his best golf of the week when it matters most. The crowd has been on him since the first tee on Thursday. Every birdie is met with silence or worse. He is making birdies anyway.",
+        wound:"Seven consecutive European Tour Order of Merit titles and not one major. The crowd noise at Oakmont is part of the reason. The larger part is that Oakmont is simply where the story of Monty and majors began.",
+        historicalScores:[-1,+1,-1,-5] },
+      { id:"ernie_els_1994", name:"Ernie Els", abbr:"ELS",
+        temperamentProfile:"ICEBERG",
+        temperamentProfileSecondary:"LEVELHEADED",
+        bottle:9, ego:6, temperament:9, shame:2,
+        driving:9, irons:9, short_game:8, putting:9, recovery:9, bunkers:8, course_management:9, shot_variation:8,
+        desc:"Twenty-four years old and utterly unruffled. The Big Easy. Hits it far enough and straight enough that Oakmont's famous rough barely affects him. The pressure appears not to register.",
+        wound:"First major. Everyone watching expects someone older to win. That someone is not him. He does not appear to have noticed this.",
+        historicalScores:[-2,-2,-1,-1] },
+    ],
+    field:[
+      {name:"Loren Roberts",   scores:[-1,-2,-2,-1]},
+      {name:"Tom Watson",      scores:[0,-1,-1,-1]},
+      {name:"John Cook",       scores:[0,0,-1,-1]},
+      {name:"Jeff Maggert",    scores:[-1,-1,0,-1]},
+    ],
+    holes:[
+      {id:"oak3_1994", name:"3rd — Church Pew Country",  par:4, yards:428, hazard:"Church Pew bunkers run parallel to fairway — 12 bunkers in two rows, 100 yards long",
+       lore:"The Church Pew bunkers on the 3rd and 4th at Oakmont are the most famous stretch of sand in American golf. Twelve bunkers raked with furrows so deep the ball nestles and never sits. The gallery here was vocal all week — anything Monty did well was met with pointed quiet. Anything mis-hit was cheered.",
+       incidents:["Monty drove into the Church Pew bunkers on Thursday and made bogey. The gallery cheered the bunker.","On Sunday Monty carried the bunkers and made birdie. The gallery was silent. He was two under for the day.","The furrow-raked bunkers at Oakmont were raked weekly by a special rake designed in 1919. No other club uses the same method."],
+       events:["crowd_pressure","bunker_carry","gallery_hostile"], pressureRating:3,
+       modifiers:{atmosphereNote:"Oakmont 3rd. Church Pew bunkers right. The gallery is three-deep and has been on Monty since the first tee. Every good shot earns silence. Every mistake earns noise."}},
+      {id:"oak9_1994", name:"9th — The Turn",            par:5, yards:481, hazard:"Rough and slopes, two-shot hole if you drive it right",
+       lore:"Monty turned in his final round three under for the day — a remarkable number at Oakmont where the scoring average for the week was over par. He needed four more holes of this. He got them.",
+       incidents:["Monty birdied 9 in the final round to go three under through nine holes — a scoring pace virtually nobody else achieved at Oakmont that week.","The rough at Oakmont in 1994 was described by the USGA as 'the most severe in US Open history' — blades of grass had been specially chosen for vertical growth.","Monty played the back nine in -2. His total round of -5 is one of the great final rounds in US Open history."],
+       events:["birdie_chance","gallery_quiet","momentum"], pressureRating:3,
+       modifiers:{atmosphereNote:"Monty turns three under. The back nine at Oakmont in a final round. The crowd has gone quiet. Something is happening here."}},
+      {id:"oak18p_1994", name:"18th — Playoff",          par:4, yards:484, hazard:"Tight tee shot, rough right, approach to difficult putting surface",
+       lore:"In the three-man playoff Loren Roberts made birdie on the first hole to edge ahead. Montgomerie, unravelling under the continuous crowd noise, could not match it. He was eliminated after the first extra hole. Roberts and Els continued. Els won in sudden death. Monty walked to the scorer's tent and could not compose himself. Seven Order of Merits. No major.",
+       incidents:["Loren Roberts made birdie on the first playoff hole.","Monty made par and was eliminated from the playoff immediately.","Roberts and Els continued to sudden death. Els won.","Monty did not speak to the media after the playoff. His wife Eimear waited for him.","He would play in six more US Opens and never win. Seven European Order of Merit titles and no major. The number is always said together."],
+       events:["playoff","elimination","gallery_eruption","the_great_loss"], pressureRating:5,
+       modifiers:{thresholdAdd:2, compCost:2, atmosphereNote:"The playoff. 18th at Oakmont. Loren Roberts makes birdie. Monty needs birdie to stay alive. The gallery wants him to miss. He misses. It is over."}},
+    ]
+  }
+
 ];
 
 if (typeof module !== 'undefined') module.exports = { TOURNAMENTS };
