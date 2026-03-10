@@ -845,6 +845,72 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - CD3: UBV=6 TC=4 RR=3 → CoD=13, Dur=1, **CD3=13.0**
 - Status: CLOSED — 2026-03-10. Sandwich Gate wound added to characters/faldo.md: P1 (third wound, full incident + trigger words), P6 (trigger mechanic + cross-panel needles), P7 (Poulter and Garcia standing conflicts added).
 
+### BL-104 — Sun Tzu Pub Navigator: Mode A spike (voice validation)
+- Epic: Sun Tzu Pub Navigator
+- User presented with a fixed menu of 5 pub situations. Sun Tzu responds: principle → application → warning.
+- Purpose: validate that Sun Tzu's voice is funny before building anything else. Single advisor, no hardmen panel.
+- Spike: if the voice lands, proceed to Mode B. If not, don't. BL-105 (hardmen panel) and BL-110 (scene library) are blocked until this validates.
+- Design notes: notes/2026-03-10-sun-tzu-pub-navigator.md
+- CD3: UBV=8 TC=8 RR=7 → CoD=23, Dur=2, **CD3=11.5**
+- Status: OPEN — raised 2026-03-10
+
+### BL-105 — Hardmen reaction panel (Roy Keane, Vinny Jones, Nostradamus)
+- Epic: Sun Tzu Pub Navigator
+- Second hypothesis, post-Mode A. Roy Keane and Vinny Jones react to pub situations alongside Nostradamus.
+- Depends on: BL-104 (Mode A validates the format). Do not build before Mode A is confirmed working.
+- Character files: characters/roy-keane.md, characters/vinny-jones.md (written, pending commit)
+- CD3: UBV=7 TC=5 RR=3 → CoD=15, Dur=2, **CD3=7.5**
+- Status: OPEN — blocked on BL-104
+
+### BL-106 — Sun Tzu general advisory mode (post-pub validation)
+- Epic: Sun Tzu Pub Navigator
+- After pub context proven: Sun Tzu answers any question (not just pub situations). Principle → application → warning applied universally.
+- Depends on: BL-104 (voice validated in pub context first)
+- CD3: UBV=6 TC=3 RR=2 → CoD=11, Dur=2, **CD3=5.5**
+- Status: OPEN — blocked on BL-104
+
+### BL-107 — Nostradamus character spec: juxtaposition mechanic with Sun Tzu
+- Epic: Sun Tzu Pub Navigator
+- Nostradamus character file written in Claude.ai session (pending commit to characters/).
+- Juxtaposition: Sun Tzu acts before the event; Nostradamus claims to have predicted it. Nostradamus is useless hindsight voiced with complete prophetic confidence.
+- Design detail in notes/2026-03-10-sun-tzu-pub-navigator.md; Nostradamus also doubles in hardmen panel (BL-105).
+- CD3: UBV=5 TC=4 RR=2 → CoD=11, Dur=1, **CD3=11.0**
+- Status: OPEN — character file pending commit (waiting on file transfer from Claude.ai)
+
+### BL-108 — Bruce Lee character spec: fifth advisor candidate
+- Epic: Sun Tzu Pub Navigator
+- Modern Sun Tzu — physical/philosophical, may join or replace one of the quartet.
+- Not yet written. Needs spec session before any implementation.
+- Depends on: BL-104 (Mode A validated — do we need a fifth?)
+- CD3: UBV=5 TC=3 RR=2 → CoD=10, Dur=2, **CD3=5.0**
+- Status: OPEN — spec not yet written
+
+### BL-109 — FF shared engine extraction (Quntum Leeks + Golf Adventure → shared module)
+- Epic: Sun Tzu Pub Navigator
+- Architectural prerequisite for Mode B. Quntum Leeks and Golf Adventure both implement FF-style scene state, choice trees, pressure accumulation. Extract to shared module before Mode B builds a third copy.
+- All three games (Pub Navigator, Quntum Leeks, Golf Adventure) use the shared engine post-extraction.
+- Must complete before BL-110 (Mode B scene library implementation).
+- CD3: UBV=5 TC=7 RR=9 → CoD=21, Dur=4, **CD3=5.25**
+- Status: OPEN — blocked until Mode A validates (BL-104), then this is first Mode B prerequisite
+
+### BL-110 — Mode B scene library: Gherkin spec per location (8 scenes)
+- Epic: Sun Tzu Pub Navigator
+- Eight pub scenes ratified. Full environment spec (scene state, choice trees, escalation triggers, lederhosen flag) per location. Gherkin before any implementation.
+- Scenes: Rising Sun Basingstoke / Scotia Bar Glasgow / Horseshoe Bar Glasgow / Drunken Duck Lake District / Slug & Lettuce Canary Wharf / Dave's Bar Marbella / McSorley's NYC / Hofbräu Oktoberfest
+- See full scene brief in notes/2026-03-10-sun-tzu-pub-navigator.md
+- Depends on: BL-109 (shared engine extracted first)
+- CD3: UBV=8 TC=4 RR=3 → CoD=15, Dur=6, **CD3=2.5**
+- Status: OPEN — blocked on BL-104 + BL-109
+
+### BL-111 — Lederhosen state: persistent flag mechanic, cross-scene item system
+- Epic: Sun Tzu Pub Navigator
+- Persistent cross-scene item: triggers at pressure threshold in Oktoberfest scene, persists to subsequent scenes (McSorley's barman: three-second stare, "Light or dark", no other comment).
+- Player discovers it gradually then all at once. Each advisor reacts differently (design in notes/2026-03-10-sun-tzu-pub-navigator.md).
+- Requires cross-scene state persistence — architectural question for Three Amigos.
+- Depends on: BL-109 (shared engine), BL-110 (scene library)
+- CD3: UBV=8 TC=3 RR=4 → CoD=15, Dur=3, **CD3=5.0**
+- Status: OPEN — blocked on BL-109 + BL-110
+
 ### BL-006 — pipeline @claude skip count reduction
 - 400+ scenarios @claude-tagged (manual / behavioural)
 - First candidates: watching-oche-mode1 suggestion card shuffle, panel-slots cross-panel invariants

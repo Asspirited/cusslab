@@ -1414,6 +1414,16 @@ Status: CLOSED
 - **Tags:** `#stale-assertion` `#magic-number` `#unit-test`
 - **Status:** Closed (both times) — updated count. Consider replacing with `>= 2` floor check or dynamic `COMEDY_ROOM_MODES.length` assertion.
 
+## WL-107
+- **Item:** Character files from Claude.ai design session not accessible at `/mnt/user-data/outputs/` — path doesn't exist on local filesystem
+- **Symptom:** Rod provided commit instruction referencing `/mnt/user-data/outputs/` (Claude.ai artifact space). Path not mounted or accessible from WSL. Character files (sun-tzu.md, nostradamus.md, chuck-norris.md, buddha.md, roy-keane.md, vinny-jones.md) cannot be read or committed without manual transfer.
+- **Suspected cause:** Claude.ai artifact download path is browser-side only. Files must be explicitly downloaded to a local path (e.g. Downloads/) for Claude Code to access.
+- **Session date:** 2026-03-10
+- **Time lost:** ~5 min (discovery + workaround planning)
+- **Cost impact:** Low — BL items raised, design captured; just awaiting file transfer
+- **Tags:** `#cross-claude-sync` `#claude-ai-artifacts` `#file-transfer`
+- **Status:** Open — waiting on Rod to copy files to accessible path
+
 ## WL-106
 - **Item:** Sandwich Gate wound missing from `characters/faldo.md` — exists only in `docs/characters-sports.md`
 - **Symptom:** Rod asked "where is 2008 sandwich gate for faldo" — it is in `docs/characters-sports.md:181` (full wound + Poulter quote) but NOT in the canonical `characters/faldo.md` character file. The canonical file has the cheese-and-pickle/childhood mechanic but not the Ryder Cup wound.
