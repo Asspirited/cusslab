@@ -891,7 +891,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - All three games (Pub Navigator, Quntum Leeks, Golf Adventure) use the shared engine post-extraction.
 - Must complete before BL-110 (Mode B scene library implementation).
 - CD3: UBV=5 TC=7 RR=9 → CoD=21, Dur=4, **CD3=5.25**
-- Status: OPEN — blocked until Mode A validates (BL-104), then this is first Mode B prerequisite
+- Status: CLOSED — 2026-03-10. 2ae8a43. src/logic/ff-engine.js: initGameState, appendToHistory, incrementTurn, buildModifierBlock. 9 Gherkin scenarios, 15 unit tests. 669/669 units GREEN.
 
 ### BL-110 — Mode B scene library: Gherkin spec per location (8 scenes)
 - Epic: Sun Tzu Pub Navigator
@@ -900,7 +900,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - See full scene brief in notes/2026-03-10-sun-tzu-pub-navigator.md
 - Depends on: BL-109 (shared engine extracted first)
 - CD3: UBV=8 TC=4 RR=3 → CoD=15, Dur=6, **CD3=2.5**
-- Status: OPEN — blocked on BL-104 + BL-109
+- Status: CLOSED — 2026-03-10. f8cf3a1. Full Mode B delivered: 8 scenes, engine, advisors, pressure/outcomes, lederhosen, UI. 24 Gherkin scenarios, 707/707 units. Live on GitHub Pages.
 
 ### BL-111 — Lederhosen state: persistent flag mechanic, cross-scene item system
 - Epic: Sun Tzu Pub Navigator
@@ -909,7 +909,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Requires cross-scene state persistence — architectural question for Three Amigos.
 - Depends on: BL-109 (shared engine), BL-110 (scene library)
 - CD3: UBV=8 TC=3 RR=4 → CoD=15, Dur=3, **CD3=5.0**
-- Status: OPEN — blocked on BL-109 + BL-110
+- Status: PARTIALLY CLOSED — 2026-03-10. Lederhosen flag delivered in BL-110 (Oktoberfest pressure threshold + universal easter egg "wear/put on lederhosen"). Cross-scene persistence (McSorley's reaction etc.) and per-advisor lederhosen reactions are the remaining scope — see BL-113.
 
 ### BL-112 — Ryder Cup: 5-session structure, team score tracking, user match in totals
 - Epic: Golf Misadventure
@@ -922,6 +922,18 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Gherkin approved 2026-03-10.
 - CD3: UBV=7 TC=2 RR=3 → CoD=12, Dur=4, **CD3=3.0**
 - Status: DONE 2026-03-10
+
+### BL-113 — Unexpected outfit mechanic: generalised cross-scene item discovery
+- Epic: Sun Tzu Pub Navigator
+- Generalise lederhosen into a reusable "unexpected outfit" pattern. Like Sam Beckett in Quantum Leap — you realise gradually, then all at once, that you are wearing something. The discovery is the comedy, not the wearing.
+- Pool of outfits: lederhosen, a party dress (if you're a big burly bloke), pyjamas, 70s-style tight football shorts, a referee kit, a full Santa suit (seasonal), a wedding dress (unspecified whose), a hazmat suit.
+- Discovery mechanic: player doesn't know they're wearing it until the engine reveals it. Triggered by: scene-specific pressure threshold, time-in-scene, or a choice that implies movement/mirror/other character's reaction.
+- Advisor reactions are outfit-specific (not generic). Nostradamus: has a quatrain specifically about this. Chuck Norris: also wearing one, doesn't see the problem. Buddha: where were you when the outfit went on? Sun Tzu: noted it. Already incorporated. Moved on.
+- Lederhosen (existing) becomes one instance of this pattern.
+- Requires: Three Amigos to agree outfit pool, discovery triggers, per-advisor reaction templates. Design in notes before any Gherkin.
+- Depends on: BL-110 (pub crawl must exist), BL-111 partial (lederhosen already live as prototype)
+- CD3: UBV=8 TC=3 RR=4 → CoD=15, Dur=3, **CD3=5.0**
+- Status: OPEN — raised 2026-03-10
 
 ### BL-006 — pipeline @claude skip count reduction
 - 400+ scenarios @claude-tagged (manual / behavioural)
