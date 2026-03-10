@@ -341,7 +341,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Delivers: proof that comedy works. Architecture proven. Prompt format established.
 - SPIDR-R: no pool, no rules for selection. SPIDR-D: Golf Adventure only.
 - CD3: UBV=8 TC=7 RR=8 → CoD=23, Dur=3, **CD3=7.7**
-- Status: OPEN
+- Status: CLOSED — 2026-03-10. Shipped with BL-061 (see BL-058 note + BL-061 entry). Walking skeleton proven; delivery continues via BL-062 onward.
 
 ### BL-061 — Author Epilogue: pool mechanics (random selection + re-roll + sessionStorage shuffle)
 - Epic: Author Epilogue

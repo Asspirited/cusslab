@@ -1209,7 +1209,28 @@ assert('buildAuthorEpiloguePrompt includes outcome (playoff)', _p3.includes('lev
 
 assert('AUTHORS_POOL contains hemingway',              AUTHORS_POOL.includes('hemingway'), true);
 assert('AUTHORS_POOL contains mccarthy',               AUTHORS_POOL.includes('mccarthy'), true);
-assert('AUTHORS_POOL has at least 2 entries',          AUTHORS_POOL.length >= 2, true);
+assert('AUTHORS_POOL contains tolkien',                AUTHORS_POOL.includes('tolkien'), true);
+assert('AUTHORS_POOL contains patterson',              AUTHORS_POOL.includes('patterson'), true);
+assert('AUTHORS_POOL contains pratchett',              AUTHORS_POOL.includes('pratchett'), true);
+assert('AUTHORS_POOL contains wodehouse',              AUTHORS_POOL.includes('wodehouse'), true);
+assert('AUTHORS_POOL contains austen',                 AUTHORS_POOL.includes('austen'), true);
+assert('AUTHORS_POOL has at least 7 entries',          AUTHORS_POOL.length >= 7, true);
+
+assert('AUTHOR_VOICES.tolkien has voiceSignature',     typeof AUTHOR_VOICES.tolkien.voiceSignature, 'string');
+assert('AUTHOR_VOICES.tolkien has structuralTell',     typeof AUTHOR_VOICES.tolkien.structuralTell, 'string');
+assert('AUTHOR_VOICES.tolkien has wound',              typeof AUTHOR_VOICES.tolkien.wound, 'string');
+assert('AUTHOR_VOICES.patterson has voiceSignature',   typeof AUTHOR_VOICES.patterson.voiceSignature, 'string');
+assert('AUTHOR_VOICES.patterson has structuralTell',   typeof AUTHOR_VOICES.patterson.structuralTell, 'string');
+assert('AUTHOR_VOICES.patterson has wound',            typeof AUTHOR_VOICES.patterson.wound, 'string');
+assert('AUTHOR_VOICES.pratchett has voiceSignature',   typeof AUTHOR_VOICES.pratchett.voiceSignature, 'string');
+assert('AUTHOR_VOICES.pratchett has structuralTell',   typeof AUTHOR_VOICES.pratchett.structuralTell, 'string');
+assert('AUTHOR_VOICES.pratchett has wound',            typeof AUTHOR_VOICES.pratchett.wound, 'string');
+assert('AUTHOR_VOICES.wodehouse has voiceSignature',   typeof AUTHOR_VOICES.wodehouse.voiceSignature, 'string');
+assert('AUTHOR_VOICES.wodehouse has structuralTell',   typeof AUTHOR_VOICES.wodehouse.structuralTell, 'string');
+assert('AUTHOR_VOICES.wodehouse has wound',            typeof AUTHOR_VOICES.wodehouse.wound, 'string');
+assert('AUTHOR_VOICES.austen has voiceSignature',      typeof AUTHOR_VOICES.austen.voiceSignature, 'string');
+assert('AUTHOR_VOICES.austen has structuralTell',      typeof AUTHOR_VOICES.austen.structuralTell, 'string');
+assert('AUTHOR_VOICES.austen has wound',               typeof AUTHOR_VOICES.austen.wound, 'string');
 
 const _pool3     = ['hemingway', 'mccarthy', 'tolkien'];
 const _poolOrig  = [..._pool3];

@@ -540,7 +540,7 @@ function isValidComedyMode(mode) {
 
 // ── Author Epilogue — BL-060 ──────────────────────────────────────────────────
 
-const AUTHORS_POOL = ['hemingway', 'mccarthy'];
+const AUTHORS_POOL = ['hemingway', 'mccarthy', 'tolkien', 'patterson', 'pratchett', 'wodehouse', 'austen'];
 
 function shufflePool(pool) {
   const arr = [...pool];
@@ -570,6 +570,41 @@ const AUTHOR_VOICES = {
     voiceSignature: 'No quotation marks. No chapters. Biblical register. The landscape as witness. Dust. Men doing things without explaining why. Violence is not dramatic it is just what happens. The sentences run long then stop. Then there is silence.',
     structuralTell: 'The ball rolled. Everything was dust. The sun did not care about the outcome. It never had.',
     wound: 'Briefly attempts punctuation mid-summary. Gives up. The comma was always a kind of lie.',
+  },
+  tolkien: {
+    id: 'tolkien',
+    name: 'J.R.R. Tolkien',
+    voiceSignature: 'Epic mythic scope. Elvish names for everything. Ancestral lineage of the golf club established in appendix. Maps included. The course has a history of three thousand years and we will cover all of it before the first tee shot. The club motto is in Quenya.',
+    structuralTell: 'The appendix is longer than the summary. It contains a full genealogy of the bunkers and a note on their construction during the Second Age.',
+    wound: 'Insists on naming the course in Elvish before describing any shots. The Elvish name is contested by scholars. He has thoughts on this.',
+  },
+  patterson: {
+    id: 'patterson',
+    name: 'James Patterson',
+    voiceSignature: 'Short chapters. Everything is URGENT. Something is wrong. He did not know yet how wrong. Chapter 7: three sentences. Chapter 8: two. The pace does not stop. Possibly cannot stop. Each sentence is its own chapter. Some chapters are one sentence. Several are one word.',
+    structuralTell: 'Chapter numbers appear mid-summary. The summary has 47 chapters. Chapter 31 is the word "Bogey." Chapter 32 is the word "Again."',
+    wound: 'Ends on a cliffhanger. Sequel forthcoming. The 19th hole holds secrets that will be revealed in Book Two.',
+  },
+  pratchett: {
+    id: 'pratchett',
+    name: 'Terry Pratchett',
+    voiceSignature: 'Footnotes deployed as weapons. Satire so affectionate it hurts. Truth delivered sideways. Genuine warmth disguised as absurdism. Death plays golf. He plays off scratch. Nobody has beaten him. Nobody has asked why. *Footnote: They should ask why.*',
+    structuralTell: '*A FOOTNOTE ABOUT THE AERODYNAMICS OF GOLF BALLS AND THE ONTOLOGICAL STATUS OF PAR.* The footnote contains a second footnote. That footnote also contains a footnote.',
+    wound: 'The footnote is longer than the summary. It has become self-aware. Death is in it. He always is.',
+  },
+  wodehouse: {
+    id: 'wodehouse',
+    name: 'P.G. Wodehouse',
+    voiceSignature: "Bertie Wooster is present. He should not be. Jeeves is also present. He has a plan. He has not shared it yet. The situation is grave. It will get worse before it gets better. It will get better only because of Jeeves. Bertie will take credit.",
+    structuralTell: 'Bertie wanders in uninvited around the 5th hole. He has an opinion. It is incorrect. Jeeves corrects it in a single subordinate clause without looking up.',
+    wound: "Bertie's handicap. It was 24 when he started. It remains 24. Jeeves has views.",
+  },
+  austen: {
+    id: 'austen',
+    name: 'Jane Austen',
+    voiceSignature: 'Social comedy of exquisite precision. Manners observed and found wanting. Irony so dry it requires no acknowledgement. What is said and what is meant are separated by an ocean of implication. The club secretary has been noted.',
+    structuralTell: '"It is a truth universally acknowledged that a man in possession of a sand wedge must be in want of instruction." The instruction is not forthcoming. It would not be welcome.',
+    wound: "The club secretary's conduct at the AGM. It has been noted. It will be remembered. There may be a letter.",
   },
 };
 

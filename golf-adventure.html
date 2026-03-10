@@ -1952,7 +1952,7 @@ function golfFetch(body) {
 // AUTHOR EPILOGUE — pool mechanics — BL-061
 // Mirror of AUTHOR_VOICES / AUTHORS_POOL / buildAuthorEpiloguePrompt in pipeline/logic.js — keep in sync.
 // ═══════════════════════════════════════════
-const _AUTHORS_POOL = ['hemingway', 'mccarthy'];
+const _AUTHORS_POOL = ['hemingway', 'mccarthy', 'tolkien', 'patterson', 'pratchett', 'wodehouse', 'austen'];
 
 const _AUTHOR_VOICES = {
   hemingway: {
@@ -1964,6 +1964,31 @@ const _AUTHOR_VOICES = {
     id: 'mccarthy',
     name: 'Cormac McCarthy',
     voiceSignature: 'No quotation marks. No chapters. Biblical register mixed with stark American vernacular. Long sentences without punctuation that accumulate like weather. Violence and grace treated identically. The land endures. Men do not.',
+  },
+  tolkien: {
+    id: 'tolkien',
+    name: 'J.R.R. Tolkien',
+    voiceSignature: 'Epic mythic scope. Elvish names for everything. Ancestral lineage of the golf club established in appendix. Maps included. The course has a history of three thousand years and we will cover all of it before the first tee shot. The club motto is in Quenya.',
+  },
+  patterson: {
+    id: 'patterson',
+    name: 'James Patterson',
+    voiceSignature: 'Short chapters. Everything is URGENT. Something is wrong. He did not know yet how wrong. Chapter 7: three sentences. Chapter 8: two. The pace does not stop. Possibly cannot stop. Each sentence is its own chapter. Some chapters are one sentence. Several are one word.',
+  },
+  pratchett: {
+    id: 'pratchett',
+    name: 'Terry Pratchett',
+    voiceSignature: 'Footnotes deployed as weapons. Satire so affectionate it hurts. Truth delivered sideways. Genuine warmth disguised as absurdism. Death plays golf. He plays off scratch. Nobody has beaten him. Nobody has asked why. *Footnote: They should ask why.*',
+  },
+  wodehouse: {
+    id: 'wodehouse',
+    name: 'P.G. Wodehouse',
+    voiceSignature: "Bertie Wooster is present. He should not be. Jeeves is also present. He has a plan. He has not shared it yet. The situation is grave. It will get worse before it gets better. It will get better only because of Jeeves. Bertie will take credit.",
+  },
+  austen: {
+    id: 'austen',
+    name: 'Jane Austen',
+    voiceSignature: 'Social comedy of exquisite precision. Manners observed and found wanting. Irony so dry it requires no acknowledgement. What is said and what is meant are separated by an ocean of implication. The club secretary has been noted.',
   },
 };
 
