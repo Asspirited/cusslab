@@ -34,8 +34,8 @@ Feature: The Roast Room — literary authors roast any title
     Given an author voice for "hemingway"
     And a title "Hello magazine"
     When buildRoastPrompt is called
-    Then the prompt includes the author's voiceSignature
-    And the prompt includes "Hello magazine"
+    Then the roast prompt includes the author's voiceSignature
+    And the roast prompt includes "Hello magazine"
     And the prompt instructs the author not to admit ignorance of the title
     And the prompt specifies a word count ceiling of 150 words
 
