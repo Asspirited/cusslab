@@ -313,6 +313,50 @@ For items that represent a product hypothesis, add after the CD3 line:
 - CD3: UBV=7 TC=1 RR=1 → CoD=9, Dur=4, **CD3=2.3**
 - Status: OPEN
 
+### BL-058 — The Author's Epilogue: post-game prose summary by random literary voice
+- Epic: Author Epilogue
+- At the end of any sports game (Golf Adventure, Football Moment, Darts, Cricket — and potentially other outputs like Oracle conversation), a randomly selected author from the pool is summoned to write a short prose summary of events in their inimitable style. 3–5 paragraphs. The comedy is in the collision between the literary register and the subject matter.
+- Trigger point: end of game (after final score / Oracle verdict / etc). Button: "The Author's Account 📖" — opt-in, one press, one author.
+- Selection: random from pool each press. No repeat until pool exhausted (sessionStorage shuffle).
+- Output length: 250–400 words. Enough to establish the voice. Not so long it becomes a bit.
+- See notes file to be created: notes/2026-03-10-author-epilogue.md
+
+**Author pool — existing characters (already have voice/profile):**
+| Author | Panel name | Register |
+|---|---|---|
+| Enid Blyton | Slightly Squiffy Blyton | Famous Five adventure. The rough is a secret passage. Everyone is jolly or villainous. |
+| Oscar Wilde | Wildest of Oscars | Every shot is an epigram. Suffering is merely bad taste. The ball knows it's being watched. |
+
+**Author pool — new characters needed:**
+| Author | Register | The comedy |
+|---|---|---|
+| Leo Tolstoy | Vast, philosophical, suffering as purpose | War and golf. The birdie at the 7th is a microcosm of the human condition. 600 pages of one round. |
+| Isaac Asimov | Rational, systematic, Three Laws applied | Three Laws of Golf. The caddie is a robot who cannot harm a golfer except through poor club selection. |
+| J.R.R. Tolkien | Mythic, Elvish, appendices, ancestral lineage | The course is named in Elvish. One chip shot has three pages of backstory. There is an appendix. |
+| Charlotte Brontë | Gothic, moors, passion, Mr Rochester | The rough is the moors. Someone brooding is in the bunker. It begins to rain meaningfully. |
+| Jane Austen | Social comedy, manners, sly observation | "It is a truth universally acknowledged that a golfer in possession of a good handicap must be in want of a birdie." |
+| John le Carré | Paranoid, espionage, nobody is who they say | Everyone at the club is a spy. The caddie has a past. The scorecard was a message. |
+| Wilbur Smith | Adventure, vast scale, raw masculinity | Impossible distances. Someone is hunting something. The game takes place across a continent. |
+| James Patterson | Short chapters, everything DRAMATIC | Chapter 1. He lined up the putt. Chapter 2. He missed. Chapter 3. "Damn," he said. Chapter 47. |
+| J.K. Rowling | Wizarding lens + extended author commentary | The course is Hogwarts. Everyone is sorted. The game is inadvertently problematic on several levels she would like to address. |
+| Cormac McCarthy | No punctuation, biblical, dust, nihilism | No quotation marks. The ball rolled. Everything was dust. The sun did not care. |
+| Raymond Chandler | Hardboiled, noir, Los Angeles similes | The green was as smooth as a lie told by a man who'd told better ones. He putted. |
+| Ernest Hemingway | Short sentences, iceberg, masculine stoicism | He putted. He missed. The sun was hot. Tomorrow he would try again. It would be the same sun. |
+| Agatha Christie | Suspects everywhere, the reveal, Poirot | Everyone in the clubhouse is a suspect. Poirot examines the divot. He already knows. |
+| Terry Pratchett | Footnotes, Death plays too, satire, truth | *A FOOTNOTE ABOUT THE PHYSICS OF GOLF.* Death plays. He is annoyingly consistent off scratch. |
+| Dan Brown | Every sentence a cliffhanger, symbols, codes | The symbol on the scorecard was not a birdie. It was a warning. |
+| P.G. Wodehouse | Jeeves, gentle chaos, upper-class incompetence | Bertie Wooster is hopeless at golf. Jeeves, however, is not. The situation deteriorates pleasantly. |
+| Hunter S. Thompson | Gonzo, paranoid, political, drugs, Las Vegas | We were somewhere around the 7th hole when the drugs began to take hold. |
+| Jeffrey Archer | Shameless, self-aggrandising, economical with truth | He had never lost a round of golf, he told himself. This was not entirely true. It was not true at all. |
+| Barbara Cartland | Heaving bosoms, romance, pastel | Her heart fluttered as he approached the 18th hole. His grip was masterful. His handicap even more so. |
+
+- **Phase 1:** Golf Adventure (natural end point, score exists, narrative arc exists)
+- **Phase 2:** Football Moment, Darts, Cricket
+- **Phase 3:** Oracle conversation, Boardroom session — any output with a narrative arc
+- Needs: author character files (docs/characters-authors.md), prompt templates per voice, UI button wiring
+- CD3: UBV=8 TC=2 RR=1 → CoD=11, Dur=6, **CD3=1.83**
+- Status: OPEN — raised 2026-03-10, no implementation scope yet
+
 ### BL-051 — Distribution: make Cusslab discoverable + installable
 - Currently: direct URL only. No SEO, no install, no organic reach.
 - **Phase 1 (low cost):** Real domain (cusslab.co.uk or similar), `<title>` + meta description per page, og:image for sharing. Makes it indexable and shareable.
