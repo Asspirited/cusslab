@@ -89,15 +89,19 @@ For each open product-bet item, ask:
 - Is there a falsifier — something that would tell us we were wrong?
 Full outer loop: `.claude/practices/hypothesis-driven.md`
 
-Current top 3 as of 2026-03-10 (post close):
+Current top 3 as of 2026-03-10 (session 2 post close):
+- BL-051 Distribution: domain + SEO + PWA (CD3=3.25) — OPEN
 - BL-050 2008 Ryder Cup Valhalla Faldo's disaster (CD3=2.8) — OPEN
-- BL-049 Sir Nick sandwich gate wound + insult vocabulary (CD3=2.3) — CLOSED this session
+- BL-055/056 quotes — CLOSED this session
 - BL-048 Round selection — final round only OR all 4 (CD3=1.8) — OPEN
 
-Recently closed (2026-03-10 session):
-- BL-040 2000 Open St Andrews (Tiger Slam), BL-041 2011 US Open Congressional (Rory Eight), BL-043 2011 Open Sandwich (Clarke Long Wait)
-- BL-049 Sir Nick sandwich gate wound + insult vocabulary
-- BL-035 WatchBack sofa commentary strip — Coltart/Valderrama, 5 reaction modes, logic + Gherkin + UI all wired (472/472)
+Recently closed (2026-03-10 session 2):
+- BL-053: Comedy Room mode switcher — logic layer + UI (mode tabs, Oracle inputs, HouseNameOracle module)
+- BL-055: Quote attribution rethink — "Heckler on X" removed, pool interleaved
+- BL-056: Yogi Berra quotes added (8 quotes, both pools)
+
+Open epics requiring decomposition next session:
+- BL-058 Author Epilogue — 18 authors need individual BL items (BL-060 onward) per epic decomposition rule
 
 Agree with Rod which item is being worked this session BEFORE opening any code file.
 

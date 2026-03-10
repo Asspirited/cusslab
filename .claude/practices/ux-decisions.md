@@ -95,3 +95,15 @@ Job: "Show me something genuinely interesting about language."
 **Decision:** Era classes named `era-YYYY` by year. Where two tournaments share a year but different broadcasters, use `era-YYYY-suffix` (e.g. `era-2006` = K Club Sky, `era-2006-us` = Winged Foot NBC). Do not reuse era classes across fundamentally different aesthetic contexts.
 
 **Rationale:** era-2005 (Augusta CBS) already existed and is appropriate for the 2005 Masters. era-2006-us is distinct (NBC greens/gold vs Sky blue). Suffix pattern avoids class name collisions without year duplication.
+
+## 2026-03-10 — Comedy Room mode tabs (Into The Room / The House Name Oracle)
+
+**Decision:** Comedy Room uses the same two-tab mode switcher pattern as Football, Golf, Darts, Cricket. Tab IDs: `cr-tab-standard` / `cr-tab-oracle`. View wrappers: `cr-standard-view` / `cr-oracle-view`. Active tab highlighted with `border-color:var(--accent);color:var(--accent)`. `ComedyRoom.switchMode(mode)` is the single entry point — mirrors `Football.switchMode`.
+
+**Rationale:** Consistency with every other multi-mode panel. `switchMode` pattern is the gold standard — no reason to invent an alternative.
+
+## 2026-03-10 — Quote attribution strategy
+
+**Decision:** "— Heckler, on X" and "— Heckler" attribution removed entirely from slogan pools. Room-voice lines stay anonymous — the room has a voice; it does not need a byline. Panel character descriptions have the character name baked into the quote body ("Hicks. You'll want to agree with everything he says..."). Character-voiced quotes keep attribution to the character + uncertainty caveat. Pool interleaved so attributed and anonymous quotes alternate.
+
+**Rationale:** "Heckler on X" read as a brand congratulating itself. If a line is strong enough it doesn't need a name attached. If it isn't strong enough, attribution won't save it.
