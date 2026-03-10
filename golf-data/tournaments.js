@@ -1948,6 +1948,58 @@ const TOURNAMENTS = [
     ]
   }
 
+,
+
+  // ── 2011 Open Championship — Royal St George's ────────────────────────────────────────
+  {
+    id:"sandwich_2011", year:2011, eraClass:"era-2011", lbClass:"lb-2011",
+    name:"The Long Wait",
+    course:"Royal St George's Golf Club", country:"Sandwich, Kent, England",
+    type:"major", badge:"badge-major", days:4,
+    lore:"Darren Clarke won the 2011 Open Championship at Royal St George's at the age of 42. His wife Heather had died of breast cancer in August 2006. Clarke had played on through the grief — won the Ryder Cup as a wild card three months after her death, carried the weight of it across five years of tournaments. At Sandwich he played four rounds of composed, unhurried links golf while 54-hole leader Dustin Johnson unravelled in the final round wind. Clarke shot 68-68-69-70 for -5. He walked up the 18th fairway knowing. He wept on the green. He lit a cigar. Someone handed him a pint. Fifteen years of trying. Five years of grief. One Sunday afternoon in Kent.",
+    players:[
+      { id:"darren_clarke_2011", name:"Darren Clarke", abbr:"CLA",
+        temperamentProfile:"LEVELHEADED",
+        temperamentProfileSecondary:"ICEBERG",
+        bottle:9, ego:6, temperament:9, shame:3,
+        driving:8, irons:8, short_game:9, putting:8, recovery:9, bunkers:9, course_management:10,
+        desc:"Forty-two years old. Five years of grief in his hands and in his face. Playing the most composed golf of his career at the tournament he has wanted most. The gallery is not watching a golfer. They are watching a man.",
+        wound:"Heather died in August 2006. Clarke played on. He won every room he walked into and lost every major he entered. The gap between the man the gallery saw and the trophy he deserved was the story of his career until it wasn't.",
+        historicalScores:[-2,-4,-5,-5] },
+      { id:"dustin_johnson_2011", name:"Dustin Johnson", abbr:"DJO",
+        temperamentProfile:"STREAKY",
+        temperamentProfileSecondary:"COMBUSTIBLE",
+        bottle:6, ego:8, temperament:6, shame:4,
+        driving:10, irons:8, short_game:7, putting:7, recovery:8, bunkers:7, course_management:6,
+        desc:"Led after 54 holes by two shots. Had played the most aggressive links golf of the week, driving past every hazard. Final round the conditions turned, the putts stopped, and the lead evaporated the way leads always do when you have been relying on distance and the wind switches.",
+        wound:"Whistling Straits 2010. Grounded his club in a sand scrape on 18 with a one-shot lead. Two-shot penalty. Lost the playoff. He has been carrying that ever since. It resurfaces when the pressure builds.",
+        historicalScores:[-3,-6,-8,-4] },
+    ],
+    field:[
+      {name:"Phil Mickelson",    scores:[-1,-3,-5,-4]},
+      {name:"Chad Campbell",     scores:[-1,-2,-4,-3]},
+      {name:"Rickie Fowler",     scores:[0,-2,-3,-3]},
+      {name:"Thomas Bjørn",      scores:[0,-1,-2,-2]},
+    ],
+    holes:[
+      {id:"sg4_2011",  name:"4th — The Suez Canal",  par:4, yards:470, hazard:"Suez Canal drainage ditch crosses fairway diagonally — must carry 230 yards to clear it",
+       lore:"The Suez Canal at Royal St George's is a long drainage ditch that cuts diagonally across the 4th fairway. Miss the carry and you are in rough with the ditch still between you and the green. The gallery on 4 is three-deep and already with Clarke. Every time he walks to his ball they start. He does not acknowledge them. He plays the hole.",
+       incidents:["The Suez Canal on the 4th at Royal St George's has been claiming tee shots since the club was founded in 1887.","Clarke drove through the Canal landing area to the short rough and made par with quiet authority.","Dustin Johnson drove it 310 past the Canal on Thursday. The gallery noted it. Clarke noted it too.","The Canal runs diagonally — a driver aimed at the correct angle clears it comfortably, but links wind changes the arithmetic."],
+       events:["links_hazard","crowd_building","canal_carry","composure"], pressureRating:3,
+       modifiers:{atmosphereNote:"4th at Royal St George's. The Suez Canal crosses the fairway 230 out. Clarke drives to the correct side. The crowd settles in. Something is happening and everyone can feel it."}},
+      {id:"sg14_2011", name:"14th — Door Opens",     par:5, yards:508, hazard:"Out of bounds right, bunkers left, crosswind off the sea makes second shot unpredictable",
+       lore:"By the time the leaders reached 14 in the final round the leaderboard had shifted. Dustin Johnson, who had led by two at the start of the day, had dropped shots. Clarke had not. Into a crosswind off the sea, the 14th rewards patience and punishes aggression. Clarke was patient. Johnson was not.",
+       incidents:["Johnson dropped another shot on 14 as the crosswind made the long second shot unplayable with his usual aggression.","Clarke laid up short of the fairway bunkers and made routine par. Nothing dramatic. Just the next shot.","The leaderboard on the 14th showed Clarke and Johnson level for the first time since Thursday morning.","A spectator near the 14th green raised a Northern Ireland flag. Clarke glanced at it once."],
+       events:["lead_change","wind_factor","johnson_drops","door_opens"], pressureRating:4,
+       modifiers:{thresholdAdd:1, atmosphereNote:"14th. Final round. Johnson has dropped shots. Clarke has not. The leaderboard says level. The crowd says something different. The flag of Northern Ireland is out."}},
+      {id:"sg18_2011", name:"18th — Home",           par:4, yards:459, hazard:"Out of bounds left, fairway narrows at 280, approach to elevated green",
+       lore:"Clarke stood on the 18th tee needing par to win the Open Championship. He drove it into the fairway. He hit his approach to the green. He two-putted. He had won. His caddie John Mulrooney held him on the green. Both men wept. Clarke pulled a cigar from his bag. Someone handed him a pint. Fifteen years of trying. Five years of grief. One Sunday afternoon in Kent.",
+       incidents:["Clarke drove the 18th with a three-wood — no risk, no drama, the next shot.","His approach tracked to the middle of the 18th green — not close, not in trouble.","When the final putt dropped Clarke stood with his arms wide, then walked to caddie John Mulrooney.","He lit a cigar on the 18th green. A pint arrived. The gallery did not stop.","Phil Mickelson embraced Clarke on the 18th green. 'I have never seen anyone deserve something as much as you deserve this,' Mickelson said.","The Claret Jug was presented as the afternoon light went golden over the Kent coast. Clarke held it for a long time."],
+       events:["final_hole","claret_jug","gallery_eruption","tears","the_long_wait_over"], pressureRating:5,
+       modifiers:{thresholdAdd:2, compCost:1, atmosphereNote:"18th at Royal St George's. Final round. Clarke needs par to win. He makes it. The crowd erupts. He weeps. He lights a cigar. The Long Wait is over."}},
+    ]
+  }
+
 ];
 
 if (typeof module !== 'undefined') module.exports = { TOURNAMENTS };

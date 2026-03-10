@@ -172,6 +172,7 @@ For items that represent a product hypothesis, add after the CD3 line:
 - **Design decision (2026-03-10):** Player plays AS the celebrity. The pro is a passenger. Incompetence is the comedy engine. Commentary reacts to celebrity chaos.
 - **Character approach:** Use existing non-golfer panel members (Football/Darts/LongRoom) as celebrities — no new character research needed. Their voices, wounds, and profiles already built.
 - **Celebrity research:** Research agent dispatched 2026-03-10 for Bill Murray, Michael Jordan, Hugh Grant, Samuel L Jackson, Chris Martin, Terry Wogan, Shane Warne, Gary Lineker incidents at Pebble Beach and Dunhill Links.
+- **Era palette note (2026-03-10):** Shell's Wonderful World of Golf ran 1962–1970 (original series), revived 1994–2003. Era CSS should lean into 1960s–70s technicolour: oversaturated, warm, slightly garish — not the clean broadcast look of modern eras. Think Kodachrome rather than HD.
 - **Format complexity (2026-03-10):** AT&T Pebble Beach Pro-Am and Alfred Dunhill Links both use special tournament formats (pro-am scoring, multi-course rotation across Kingsbarns/Carnoustie/St Andrews) that require dedicated research and design before implementation. Shell's Wonderful World, A Round with Alliss, and The Skins Game are simpler one-off formats — do those first. Pro-Am and Dunhill saved for later.
 - CD3: UBV=6 TC=2 RR=1 → CoD=9, Dur=8, **CD3=1.1** — revised up for format research and design cost on Pro-Am/Dunhill
 - Status: OPEN — celebrity research in progress; start with simpler formats (Shell's/Alliss/Skins); Pro-Am and Dunhill deferred pending format research
@@ -296,6 +297,12 @@ For items that represent a product hypothesis, add after the CD3 line:
 - Epic: Modern Majors Tier 2
 - Bubba Watson punch hook from pine straw on 10 in playoff. Weeps at the hole. CBS. Players: Bubba (protagonist), Louis Oosthuizen (foil).
 - CD3: UBV=7 TC=4 RR=1 → CoD=12, Dur=3, **CD3=4.0**
+- Status: OPEN
+
+### BL-048 — Golf Adventure: Round selection — play final round only OR all 4
+- Option at tournament start: play the full 4 rounds or jump straight to the final round with historical scores loaded for rounds 1–3.
+- Enables quick plays of the key dramatic round without replaying the whole tournament.
+- CD3: UBV=7 TC=1 RR=1 → CoD=9, Dur=5, **CD3=1.8**
 - Status: OPEN
 
 ### BL-033 — Golf Adventure: Tournament picker decade-panel UI
