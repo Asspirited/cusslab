@@ -94,10 +94,10 @@ Feature: Ryder Cup Player Selection
     And every matchPlaySession has a non-empty "format"
 
   @players-data
-  Scenario: Active matchPlayDays have opponent and historical result
+  Scenario: Active matchPlaySessions have opponent and historical result
     When the tournament catalogue is inspected
-    Then every matchPlayDay where format is not "ABSENT" has a non-empty "opponent"
-    And every matchPlayDay where format is not "ABSENT" has a non-empty "historicalResult"
+    Then every matchPlaySession where format is not "ABSENT" has a non-empty "opponent"
+    And every matchPlaySession where format is not "ABSENT" has a non-empty "historicalResult"
 
   @players-data
   Scenario: Every Ryder Cup player has a team assignment
