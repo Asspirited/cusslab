@@ -2073,7 +2073,7 @@ function startGame() {
   if (!G.tournament || !G.player || G.selectedPanel.length < 2) return;
   applyEraTheme(G.tournament);
 
-  G.day=0; G.holeIdx=0; G.yourScore=0; G.holeResults=[]; G.matchPlayScore=0;
+  G.day=MatchPlayService.firstActiveDay(G.player); G.holeIdx=0; G.yourScore=0; G.holeResults=[]; G.matchPlayScore=0;
   G.composure=10; G.history=[]; G.fieldScores={}; G.characterFiles={};
   G.fortuneActive=false; G.angerActive=false; G.angerShots=0; G.illnessActive=false; G.illnessHoles=0;
   G.tempThresholdMod=0; G.tempThresholdHoles=0; G.tempSkillBonus=false; G.tempSkillHoles=0;
@@ -2622,7 +2622,7 @@ async function endHole() {
   let mpCtx = null;
   if (G.tournament.type === 'ryder' && G.player.matchPlayDays) {
     const mpDay = G.player.matchPlayDays[G.day];
-    if (mpDay) {
+    if (mpDay && !MatchPlayService.isDayAbsent(G.player, G.day)) {
       const oppScore = mpDay.opponentHoleScores[G.holeIdx];
       const holeResult = G.holeStrokes < oppScore ? 'won' : G.holeStrokes > oppScore ? 'lost' : 'halved';
       if (G.holeStrokes < oppScore)      G.matchPlayScore++;

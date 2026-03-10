@@ -23,7 +23,7 @@ const MatchPlayService = (() => {
   function buildContext(state) {
     if (!state.tournament || state.tournament.type !== 'ryder') return null;
     const mpDay = state.player.matchPlayDays?.[state.day];
-    if (!mpDay) return null;
+    if (!mpDay || mpDay.format === 'ABSENT') return null;
 
     const holesPlayed = state.holeResults.filter(r => r.day === state.day).length;
     const holesLeft = state.holesPerDay - holesPlayed;
@@ -168,6 +168,20 @@ MATCH STANDING: ${mpCtx.liveLine} with ${mpCtx.holesLeft} hole${mpCtx.holesLeft 
 TEAM: ${mpCtx.team} — this point matters for the overall Cup.`;
   }
 
+  // Return the index of the first matchPlayDay that is not ABSENT.
+  // Returns 0 if the player has no matchPlayDays (normal stroke-play fallback).
+  function firstActiveDay(player) {
+    const days = player.matchPlayDays;
+    if (!days || !days.length) return 0;
+    const idx = days.findIndex(d => d.format !== 'ABSENT');
+    return idx === -1 ? 0 : idx;
+  }
+
+  // Returns true if the player's matchPlayDays entry for this day is ABSENT.
+  function isDayAbsent(player, day) {
+    return player.matchPlayDays?.[day]?.format === 'ABSENT';
+  }
+
   return {
     formatLive,
     formatResult,
@@ -177,6 +191,8 @@ TEAM: ${mpCtx.team} — this point matters for the overall Cup.`;
     buildCommentaryAddendum,
     parseHistoricalResult,
     buildEndOfDayLeaderboard,
+    firstActiveDay,
+    isDayAbsent,
   };
 
 })();

@@ -1223,3 +1223,18 @@ Status: CLOSED
 - **Cost impact:** Medium — confusing UX, intermittent, hard to reproduce reliably
 - **Tags:** ui, nav, scroll, overscroll, sticky, scroll-chain, css
 - **Status:** Closed — fixed 2026-03-09
+
+## WL-086
+- **Item:** Ryder Cup ABSENT day hangs on "The Situation — Loading..."
+- **Symptom:** Selecting Coltart (Valderrama 1997) causes the situation panel to stay on "Loading..." indefinitely when entering a day where the player was absent (matchPlayDays format:"ABSENT"). The game state is stuck.
+- **Root cause (5 Whys):**
+  1. Why does "Loading..." persist? → `sit-text` is never updated; line 2162 (`buildSituation`) is not reached.
+  2. Why is it not reached? → `loadHole` throws or returns early before reaching line 2162 — likely because the Ryder Cup code path tries to access `matchPlayDays[day].opponentHoleScores` on an ABSENT day that has no opponent.
+  3. Why does the code not handle ABSENT? → ABSENT days were added to player data but the game startup never skips to the first active day; `G.day` starts at 0 regardless of whether the player participates that day.
+  4. Why does the game not skip to the right day? → No logic exists to advance `G.day` past ABSENT days at start, and no defensive guard in `loadHole` / `buildSituation` for ABSENT format.
+  5. Root cause: Data model has ABSENT days but the engine has no concept of "skip to first day player is in." The game starts at day 0 unconditionally, hitting a null opponent and crashing before the situation text is set.
+- **Session date:** 2026-03-10
+- **Time lost:** Reported by user — play session interrupted
+- **Cost impact:** High — player selection (Coltart) is completely broken; any future bench-sitter player will have the same issue
+- **Tags:** golf-adventure, ryder-cup, absent-day, matchplay, data-model, engine
+- **Status:** Closed — 2026-03-10: firstActiveDay/isDayAbsent added to MatchPlayService; startGame uses firstActiveDay; endHole guarded against ABSENT; buildContext returns null for ABSENT; Coltart vs Tiger added to Valderrama Day 2 parallelMatches

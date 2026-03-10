@@ -6134,6 +6134,37 @@ function makeSteps(ctx) {
       ctx._mpsEodUser = { playerName: 'Martin Kaymer', playerTeam: 'EUR', day: 2 };
     }],
 
+    // ── MatchPlayService ABSENT day (specs/golf-ryder-absent-day.feature) ─────────
+
+    [/^a ryder player with matchPlayDays formats "([^"]+)"$/, (formats) => {
+      ctx._absentPlayer = {
+        matchPlayDays: formats.split(',').map(f => ({ format: f.trim() }))
+      };
+    }],
+
+    [/^a ryder player with no matchPlayDays$/, () => {
+      ctx._absentPlayer = {};
+    }],
+
+    [/^firstActiveDay is called on the player$/, () => {
+      ctx._absentResult = ctx._mps.firstActiveDay(ctx._absentPlayer);
+    }],
+
+    [/^the firstActiveDay result is (\d+)$/, (n) => {
+      if (ctx._absentResult !== Number(n))
+        throw new Error(`Expected firstActiveDay ${n} but got ${ctx._absentResult}`);
+    }],
+
+    [/^isDayAbsent is called for day (\d+)$/, (day) => {
+      ctx._absentResult = ctx._mps.isDayAbsent(ctx._absentPlayer, Number(day));
+    }],
+
+    [/^the isDayAbsent result is (true|false)$/, (expected) => {
+      const exp = expected === 'true';
+      if (ctx._absentResult !== exp)
+        throw new Error(`Expected isDayAbsent ${exp} but got ${ctx._absentResult}`);
+    }],
+
     // ── TemperamentService (specs/golf-temperament-archetypes.feature) ───────────
 
     [/^the TemperamentService module is loaded$/, () => {

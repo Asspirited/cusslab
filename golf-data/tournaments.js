@@ -1001,8 +1001,9 @@ const TOURNAMENTS = [
         { match:"Olazabal/Garrido vs Mickelson/Leonard",   scores:[ 0, 1, 1], teamA:"EUR" },
         { match:"Faldo/Bjorn vs Love/Janzen",              scores:[ 0, 0, 1], teamA:"EUR" },
       ],
-      // Day 2 — Singles
+      // Day 3 (Sunday) — Singles  [array index 2]
       [
+        { match:"Coltart vs Woods",                        scores:[-1,-2,-2], teamA:"EUR" },
         { match:"Clarke vs Mickelson",                     scores:[ 0, 0, 1], teamA:"EUR" },
         { match:"Montgomerie vs Hoch",                     scores:[ 0, 0, 1], teamA:"EUR" },
         { match:"Olazabal vs Faxon",                       scores:[ 0, 0, 1], teamA:"EUR" },
