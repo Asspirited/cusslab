@@ -31,7 +31,7 @@ Feature: Author's Epilogue — walking skeleton
 
   Scenario: Clicking the button requests an epilogue via the Worker
     Given the final score screen is shown
-    When the user clicks "The Author's Account 📖"
+    When the user clicks the Author's Account button
     Then an epilogue is requested from the Worker with the Hemingway prompt
 
   Scenario: The epilogue response is displayed when received
