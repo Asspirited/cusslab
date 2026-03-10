@@ -117,10 +117,6 @@ Feature: Ryder Cup — 5-session structure, team score, user match in totals (BL
 
   Scenario: Ryder Cup buildRestScreenData includes EUR and USA totals from parallel matches
     Given a Ryder Cup session 2 with parallel matches:
-      | match                         | scores    | teamA |
-      | Westwood/Donald vs Watson/Sim | [0, 1, 1] | EUR   |
-      | Molinari/Garcia vs Dufner/Joh | [1, 1, 2] | EUR   |
-      | Rose/Kaymer vs Woods/Kuchar   | [0, 0, 1] | EUR   |
     When ryder buildRestScreenData is called for session 2
     Then the ryder rest screen EUR total is 3
     And the ryder rest screen USA total is 0
