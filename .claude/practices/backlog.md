@@ -826,7 +826,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Fix: expand the pool with new questions across all existing categories (golf, big, contemporary, absurd). Implement a session-shuffle so the same cards don't appear in the same order every visit.
 - Can combine with BL-100 work on suggestion card infrastructure.
 - CD3: UBV=5 TC=3 RR=2 → CoD=10, Dur=2, **CD3=5.0**
-- Status: OPEN — raised 2026-03-10
+- Status: CLOSED — 2026-03-10. GOLF_SUGGESTIONS expanded 15→26 items (9 golf, 6 big, 5 contemporary, 5 absurd). Shuffle mechanic already in place.
 
 ### BL-102 — Feature activity report: label WL/BL entries by feature; add to close protocol
 - Rod identified (2026-03-10) that per-feature development stats are not available. WL and BL entries have no feature label, so "how much work has gone into Golf Adventure vs Comedy Room vs Sports" is unanswerable from the data.
