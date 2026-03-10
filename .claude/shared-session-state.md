@@ -2,39 +2,38 @@
 # Written by session-closedown.md step 8b. Overwritten each close.
 # Read at startup step 3. Included in session-ref.md for Claude.ai.
 Last updated: 2026-03-10 by Claude Code
-Last commit: 2903c57 — Session closedown 2026-03-10
+Last commit: 4c41bac — Session closedown 2026-03-10
 
 ## What shipped this session
-- BL-053 (partial): Comedy Room mode switcher — COMEDY_ROOM_MODES/LABELS/isValidComedyMode/getDefaultComedyMode in logic.js; 12 unit tests (568→580); comedy-room-mode-switcher.feature (6 scenarios, 1374/1374 Gherkin); ComedyRoom.switchMode() UI; HouseNameOracle module (submit, _buildPrompt, _renderConversation); mode tabs HTML
-- BL-055 CLOSED: "Heckler on X" / "— Heckler" attribution removed from all slogan pools; room-voice lines anonymous; character names baked into quote bodies; pool interleaved attributed/unattributed
-- BL-056 CLOSED: 8 Yogi Berra quotes added to both CONSULTANT_SLOGANS and SCIENCE_SLOGANS pools
-- BL-057 raised: Colemanballs + real sporting gaffes pool (CD3=2.0, open)
-- BL-058 raised: The Author's Epilogue — post-game prose summary by random literary voice (CD3=1.83, open); notes/2026-03-10-author-epilogue.md written; 18-author pool specced
-- BL-059 raised: The Writing Room — authors as standalone Comedy Room tab 3 (CD3=1.8, blocked on BL-058)
-- Protocol: Epic decomposition rule added to session-insession.md (RULE + RAISE NEW WORK SEQUENCE step)
+- BL-095: The Roast Room — Comedy Room tab 3. 5 randomly selected authors roast any user-submitted title simultaneously. selectRoastAuthors() + buildRoastPrompt() in logic.js. Full RoastRoom IIFE in index.html.
+- BL-059: The Writing Room — Comedy Room tab 4. 3 randomly selected authors discuss any topic in sequence; each author aware of prior responses. selectWritingRoomAuthors() + buildWritingRoomPrompt() in logic.js. WritingRoom IIFE in index.html.
+- BL-093: Bug fix — panelRating() now bridges to self-training persistent store via Training.logPanelRating(). Panel thumbs-up/down now count toward 5-rating threshold.
+- Hot fix: hcFetch → API.call in RoastRoom and WritingRoom (hcFetch does not exist in this codebase).
 
-## BL-053 remaining work
-- Oracle API integration: the HouseNameOracle.submit() module is wired and live but untested end-to-end
-- Prompt is in index.html: _buildPrompt(code, voice) — Phil/Kirstie/Dion + 3 house names in JSON
-- Stage markers ([BRIDGE][DEPARTURE][WANDER][SUMMIT]) are in the prompt and stripped in display
-- No Gherkin for API integration layer yet — that comes when we do the LLM response parsing
+## Comedy Room state
+Comedy Room: 4 tabs — Into The Room / House Name Oracle / The Roast Room / The Writing Room.
+AUTHORS_POOL: ['hemingway', 'mccarthy', 'tolkien', 'patterson', 'pratchett', 'wodehouse', 'austen']
+Character files: canonical feature-agnostic model in characters/*.md for all 7 authors.
+Thompson (BL-068) parked — not yet in pool.
 
 ## Open waste items (WL numbers)
-- WL-097: Nav focus-lock — left nav panel stuck in right-panel context — Status: Open (pre-existing, deferred)
-- WL-096: Bespoke Material broken — "Enter a sentence to build from" with no sentences — Status: Open (deferred)
+- WL-MODE-001: design-session audit gap — Status: Open
+- WL-MODE-002: darts character debt (Rod Harrington/Bobby George) — Status: Open
+- WL-103: Gherkin step collision roast/writing room (recurring) — Status: Closed this session
 
 ## Backlog top 3 by CD3
-- BL-051 (CD3=3.25): Distribution — domain, SEO, PWA — OPEN
-- BL-050 (CD3=2.8): 2008 Ryder Cup Valhalla (Faldo's disaster) — OPEN
-- BL-048 (CD3=1.8): Round selection — final round only OR all 4 — OPEN
+- BL-098 (CD3=4.5): Gherkin step namespace collision lint check — OPEN
+- BL-094 (CD3=3.5): Self-Training: rating buttons missing from most panel outputs — OPEN, unblocked
+- BL-051 (CD3=3.25): Distribution: domain + SEO + PWA — OPEN
 
 ## Protocol status this session
-- Session startup: followed (resumed from compacted context — "y" approval for mode-switcher Gherkin counted as in-session)
-- Gherkin gate: followed — comedy-room-mode-switcher.feature approved before TDD
-- TDD: followed — RED confirmed before implementing logic.js functions
-- Pipeline: GREEN — 580/580 unit tests, 1374/1374 Gherkin throughout
+- Session startup: followed
+- Gherkin gate: followed on all 3 features
+- TDD: followed
+- Pipeline: GREEN — 642/642 units, 1405/1405 gherkin passing
+- Checkpoint: 3 BL items closed, user ended session at checkpoint
 
 ## Carry-forward notes
-- BL-058 Author Epilogue epic needs decomposition: 18 authors → 18 BL items (BL-060 onward), per new epic decomposition protocol rule. Do this at the start of the first Author Epilogue implementation session.
-- Comedy Room tab 3 (The Writing Room, BL-059) is blocked on BL-058 — do not start until author characters exist
-- BL-053 Oracle is live in index.html but API integration not battle-tested — first real postcode submission will reveal any prompt/parsing issues
+- Recurring gherkin step shadowing (3rd time): BL-098 raised for lint fix. Pattern: identical regex in two features — first match wins silently. Prefix steps with domain noun.
+- hcFetch does not exist — correct API pattern is API.call(systemPrompt, userMessage, maxTokens).
+- BL-094 is next natural pick-up after BL-098 (or can run in parallel).
