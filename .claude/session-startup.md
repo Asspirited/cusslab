@@ -75,20 +75,15 @@ For each open product-bet item, ask:
 - Is there a falsifier — something that would tell us we were wrong?
 Full outer loop: `.claude/practices/hypothesis-driven.md`
 
-Current top 3 as of 2026-03-10:
-- BL-040 2000 Open St Andrews Tiger Grand Slam (CD3=4.7) — OPEN
-- BL-041 2011 US Open Congressional Rory (CD3=4.7) — OPEN
-- BL-043 2011 Open Sandwich Darren Clarke (CD3=4.7) — OPEN
+Current top 3 as of 2026-03-10 (post close):
+- BL-050 2008 Ryder Cup Valhalla Faldo's disaster (CD3=2.8) — OPEN
+- BL-049 Sir Nick sandwich gate wound + insult vocabulary (CD3=2.3) — CLOSED this session
+- BL-048 Round selection — final round only OR all 4 (CD3=1.8) — OPEN
 
 Recently closed (2026-03-10 session):
-- BL-009 Mode 2 moment type expansion (8 new options, 3 panels)
-- BL-002 Food pool expansion (FOOD_TERMS tripled, Faldo Ginsters/adjective variation)
-- BL-003 Hypochondria pool 11→42 entries (4 pools, panel-agnostic)
-- BL-034 Dual temperament profiles (applyHoleResultDual, 53 players, Ryder Cup decade UI)
-- BL-036 Oakmont 1994 (Monty/The American Crowd)
-- BL-037 2005 Masters (Tiger chip-in), BL-038 Winged Foot 2006 (Phil collapse), BL-044 Carnoustie 2007
-- BL-039 Pebble Beach 2000 (Tiger +15)
-- Process: RAISE NEW WORK SEQUENCE, BL-032 sub-items → BL-036..BL-047, clean seam protocol
+- BL-040 2000 Open St Andrews (Tiger Slam), BL-041 2011 US Open Congressional (Rory Eight), BL-043 2011 Open Sandwich (Clarke Long Wait)
+- BL-049 Sir Nick sandwich gate wound + insult vocabulary
+- BL-035 WatchBack sofa commentary strip — Coltart/Valderrama, 5 reaction modes, logic + Gherkin + UI all wired (472/472)
 
 Agree with Rod which item is being worked this session BEFORE opening any code file.
 

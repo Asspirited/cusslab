@@ -431,4 +431,4 @@ For items that represent a product hypothesis, add after the CD3 line:
 - **Trigger:** check `tournament.players[].id` against panel member IDs. If match → sofa strip active.
 - **Phase 2:** two sofa commentators react to each other when both match.
 - CD3: UBV=9 TC=2 RR=1 → CoD=12, Dur=5, **CD3=2.4**
-- Status: OPEN — design resolved; Gherkin next
+- Status: CLOSED — 2026-03-10. Logic layer (getSofaCommentator, getHistoricalDivergence, selectReactionMode, COLTART_SOFA_POOLS) in pipeline/logic.js. Gherkin in specs/golf-adventure-watchback.feature. UI wired in golf-adventure.html: constants + functions inline, sofa strip shows on startGame, updates after each hole via updateSofaStrip(). 472/472 passing.

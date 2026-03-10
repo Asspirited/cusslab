@@ -1248,6 +1248,28 @@ body {
 
 .next-wrap { text-align: center; margin-top: 12px; }
 
+/* ── SOFA STRIP — Watch Back commentary ── */
+.sofa-strip {
+  margin-top: 10px;
+  padding: 6px 10px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--muted);
+  min-height: 24px;
+}
+.sofa-name {
+  color: var(--accent-dim);
+  white-space: nowrap;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+.sofa-line { color: var(--muted); line-height: 1.4; }
+
 /* ═══════════════════════════════════════════
    LEADERBOARD — era-aware
 ═══════════════════════════════════════════ */
@@ -1850,6 +1872,10 @@ body {
   <div class="next-wrap hidden" id="next-wrap">
     <button class="btn btn-accent" id="next-btn" onclick="advanceGame()">Next →</button>
   </div>
+  <div id="sofa-strip" class="sofa-strip hidden">
+    <span id="sofa-name" class="sofa-name"></span>
+    <span id="sofa-line" class="sofa-line"></span>
+  </div>
 </div>
 
 <!-- ════════════════════════════ DAY END ════════════════════════════ -->
@@ -1913,6 +1939,74 @@ function golfFetch(body) {
   const headers = { 'Content-Type': 'application/json', 'anthropic-version': '2023-06-01' };
   if (key) headers['x-api-key'] = key;
   return fetch(GOLF_WORKER, { method: 'POST', headers, body: JSON.stringify(body) });
+}
+
+// ═══════════════════════════════════════════
+// WATCHBACK — sofa commentary strip — BL-035
+// Mirror of WatchBack section in pipeline/logic.js — keep in sync.
+// ═══════════════════════════════════════════
+const GOLF_PANEL_MEMBER_IDS = ['coltart_97'];
+
+const COLTART_SOFA_POOLS = {
+  valderrama_1997: {
+    CONFIRMATION: [
+      "Yes. That's exactly right. That's exactly how that played.",
+      "I remember this. I was standing at the 17th. That's correct.",
+      "That's it. That's the shot. I watched that from the side.",
+    ],
+    PERTURBED: [
+      "That's... I was there. I don't recall it going quite like that.",
+      "Hm. I was watching from the rope. That's not quite what I saw.",
+      "From where I was standing, that hole played differently.",
+    ],
+    BEWILDERMENT: [
+      "I'm sorry. I was there. That is not what happened on that hole.",
+      "That's not — Seve was standing right beside me. That shot didn't go there.",
+      "I watched every match that week. That is not the outcome I remember.",
+    ],
+    IGNORANCE: [
+      "What I remember is this. And this bears no resemblance to that.",
+      "I'm going to tell you what occurred on that hole. Because that wasn't it.",
+      "Seve asked me to watch the 17th. I watched it. That did not happen.",
+    ],
+    ENDORSEMENT: [
+      "Yes. That's — yes. That's actually better than the original.",
+      "I always felt that was the right line on that hole. I said so at the time.",
+      "That's the correct outcome. I may have suggested that to the player.",
+    ],
+  },
+};
+
+function getSofaCommentator(tournament, ids) {
+  for (const id of ids) {
+    if (tournament.players.some(p => p.id === id)) return id;
+  }
+  return null;
+}
+
+function getHistoricalDivergence(playerScore, historicalScore) {
+  const d = playerScore - historicalScore;
+  if (d < 0)   return 'BETTER';
+  if (d === 0) return 'MATCH';
+  if (d <= 2)  return 'SLIGHT';
+  if (d <= 4)  return 'CLEAR';
+  return 'EXTREME';
+}
+
+function selectReactionMode(divergence) {
+  return { BETTER:'ENDORSEMENT', MATCH:'CONFIRMATION', SLIGHT:'PERTURBED', CLEAR:'BEWILDERMENT', EXTREME:'IGNORANCE' }[divergence];
+}
+
+function updateSofaStrip(commentatorId, tournamentId, playerScore, historicalScore) {
+  const pool = COLTART_SOFA_POOLS[tournamentId];
+  if (!pool) return;
+  const divergence = getHistoricalDivergence(playerScore, historicalScore);
+  const mode = selectReactionMode(divergence);
+  const lines = pool[mode] || pool['CONFIRMATION'];
+  const line = lines[Math.floor(Math.random() * lines.length)];
+  const nameMap = { coltart_97: 'Coltart' };
+  document.getElementById('sofa-name').textContent = nameMap[commentatorId] || commentatorId;
+  document.getElementById('sofa-line').textContent = line;
 }
 
 // ═══════════════════════════════════════════
@@ -2233,6 +2327,16 @@ function startGame() {
     renderAttrHud();
   }
   document.getElementById('attr-hud').style.display = G.attrs ? '' : 'none';
+
+  G.sofaCommentatorId = getSofaCommentator(G.tournament, GOLF_PANEL_MEMBER_IDS);
+  const sofaStrip = document.getElementById('sofa-strip');
+  if (G.sofaCommentatorId) {
+    sofaStrip.classList.remove('hidden');
+    document.getElementById('sofa-name').textContent = G.sofaCommentatorId === 'coltart_97' ? 'Coltart' : G.sofaCommentatorId;
+    document.getElementById('sofa-line').textContent = '...';
+  } else {
+    sofaStrip.classList.add('hidden');
+  }
 
   showScreen('game');
   // Fire-and-forget — files are small, will be ready before first shot lands
@@ -2769,6 +2873,11 @@ async function endHole() {
   }
 
   updateHUD();
+
+  if (G.sofaCommentatorId && G.player.historicalScores) {
+    const historical = G.player.historicalScores[G.day] || 0;
+    updateSofaStrip(G.sofaCommentatorId, G.tournament.id, G.yourScore, historical);
+  }
 
   const lbls={'-3':'ALBATROSS','-2':'EAGLE','-1':'BIRDIE','0':'PAR','1':'BOGEY','2':'DOUBLE BOGEY'};
   const lbl=lbls[String(diff)]||(diff>2?`+${diff} CATASTROPHE`:String(diff));
