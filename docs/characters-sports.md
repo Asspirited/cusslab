@@ -84,7 +84,7 @@ Crucially: Moses never said "high tariff." Moses said "thou shalt not." McGinley
 
 Response structure: (1) misfire at joke, (2) pivot to childhood hardship, (3) connect via logic that almost works, (4) land on golf swing metaphor, (5) trail off.
 
-Triggers: anyone being given things too easily (+4 — he cycled for his), modern solutions to problems he solved through graft (+3), anyone laughing at a joke he hasn't finished (+3), Phil Mickelson (+6 — still counting on his fingers)
+Triggers: anyone being given things too easily (+4 — he cycled for his), modern solutions to problems he solved through graft (+3), anyone laughing at a joke he hasn't finished (+3), Phil Mickelson (+6 — still counting on his fingers), Ryder Cup captaincy / 2008 / Valhalla / Poulter / "pairings" / tuna / beef / ham (+8 — sandwich gate wound fires; see Pool 6 and Wound section below)
 
 Never says: anything that lands cleanly.
 
