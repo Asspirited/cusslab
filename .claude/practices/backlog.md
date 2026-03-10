@@ -801,6 +801,50 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - CD3: UBV=6 TC=2 RR=1 → CoD=9, Dur=4, **CD3=2.25**
 - Status: CLOSED — 2026-03-10 (2887de2): HYPO_BASE 11→42 entries across 4 pools; all entries panel-agnostic
 
+### BL-100 — Sports panels: add suggestion cards to Football, Darts, Cricket, Long Room (Q&A mode)
+- Feature parity gap: Golf (19th Hole Q&A mode) has scrollable suggestion cards; Football / Darts / Cricket / Long Room (Q&A modes) do not.
+- Rod-caught during exploratory test 2026-03-10 (WL-105).
+- Fix: port `.gf-suggestion-card` mechanic and shuffle logic to each sports panel. Each panel needs its own question pool appropriate to domain (football punditry questions, darts commentary, cricket Long Room prompts).
+- CSS classes: reuse existing `.gf-suggestion-card` styles or alias. Logic: one `buildSuggestionTray()` call per panel on page load / mode switch.
+- Three Amigos needed: agree whether to reuse existing question data, create panel-specific pools, or pull from a shared suggestions data file.
+- CD3: UBV=7 TC=5 RR=3 → CoD=15, Dur=2, **CD3=7.5**
+- Status: OPEN — raised 2026-03-10
+
+### BL-099 — Comedy Room: promote sub-features to top-level nav items
+- House Name Oracle, The Roast Room, and The Writing Room are currently nested as sub-tabs inside the Comedy Room panel.
+- DDD boundary violation: each is a distinct domain concept with its own input, output, and user journey (WL-104). They should have their own `<div class="panel">` and their own nav items in the COMEDY ROOM nav group — same pattern as 19TH HOLE group containing Football / Golf / Darts / Cricket / Souness's Cat.
+- Comedy Room panel reverts to single-purpose: "Into The Room" (the core comedy panel).
+- Comedy Room nav group expands: The Comedy Room / The House Name Oracle / The Roast Room / The Writing Room (4 items, count=4).
+- Each promoted panel: own panel div, own panel-title + panel-desc, nav entry in ni-comedy.
+- Process fix accompanying this: add DDD boundary check to Three Amigos prompt in bdd.md ("does this feature have its own bounded context? If yes → new panel, not a sub-tab").
+- Three Amigos needed before implementation: agree panel titles, desc copy, and nav copy for each.
+- CD3: UBV=8 TC=7 RR=5 → CoD=20, Dur=4, **CD3=5.0**
+- Status: OPEN — raised 2026-03-10
+
+### BL-101 — Golf panel: recycle and expand suggestion card question pool
+- Current golf suggestion cards draw from a fixed pool. Rod flagged it as needing expansion and recycling (2026-03-10).
+- Fix: expand the pool with new questions across all existing categories (golf, big, contemporary, absurd). Implement a session-shuffle so the same cards don't appear in the same order every visit.
+- Can combine with BL-100 work on suggestion card infrastructure.
+- CD3: UBV=5 TC=3 RR=2 → CoD=10, Dur=2, **CD3=5.0**
+- Status: OPEN — raised 2026-03-10
+
+### BL-102 — Feature activity report: label WL/BL entries by feature; add to close protocol
+- Rod identified (2026-03-10) that per-feature development stats are not available. WL and BL entries have no feature label, so "how much work has gone into Golf Adventure vs Comedy Room vs Sports" is unanswerable from the data.
+- Phase 1: Add `Feature:` field to WL and BL schema. Canonical labels: `golf-adventure`, `comedy-room`, `sports-19th-hole`, `darts`, `cricket`, `quntum-leeks`, `boardroom`, `play`, `learn`, `platform`.
+- Phase 2: Backfill `Feature:` on all open WL items and BL items (last 20 closed BL items minimum).
+- Phase 3: Script in `.claude/scripts/feature-report.sh` — reads backlog.md and waste-log.md, counts by feature label. Outputs: open BL per feature, closed BL per feature, WL entries per feature (overall + last session). Two sections: ALL TIME and LATEST SESSION.
+- Phase 4: Add to session-closedown.md step — run `feature-report.sh` and include output in session summary.
+- CD3: UBV=6 TC=4 RR=5 → CoD=15, Dur=3, **CD3=5.0**
+- Status: OPEN — raised 2026-03-10
+
+### BL-103 — Faldo character: add Sandwich Gate wound to canonical character file
+- Sandwich Gate (2008 Ryder Cup) is the primary wound for Nick Faldo (`docs/characters-sports.md:181`) but is absent from `characters/faldo.md`. The canonical file has childhood cheese-and-pickle mechanic but not the Valhalla/pairings-note incident.
+- Full wound from docs: Faldo shows handwritten pairing note (11 of 12 players) to Stenson during practice round; photographer catches it; press conference claim it's "who wants tuna, who wants the beef, who wants the ham"; Europe loses 16½–11½; Poulter's autobiography quote; McGinley captaincy comparison. Trigger words in `docs/characters-sports.md:87`: tuna / beef / ham (+8 — sandwich gate wound fires).
+- Fix: copy Sandwich Gate wound section from docs into `characters/faldo.md` under Wounds block. Cross-reference `docs/needles-and-conflicts.md` for Sandwich Needle trigger mechanic.
+- WL-106 raised.
+- CD3: UBV=6 TC=4 RR=3 → CoD=13, Dur=1, **CD3=13.0**
+- Status: CLOSED — 2026-03-10. Sandwich Gate wound added to characters/faldo.md: P1 (third wound, full incident + trigger words), P6 (trigger mechanic + cross-panel needles), P7 (Poulter and Garcia standing conflicts added).
+
 ### BL-006 — pipeline @claude skip count reduction
 - 400+ scenarios @claude-tagged (manual / behavioural)
 - First candidates: watching-oche-mode1 suggestion card shuffle, panel-slots cross-panel invariants

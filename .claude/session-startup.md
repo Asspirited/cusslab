@@ -53,6 +53,27 @@ If any other check fails: root cause before proceeding.
 
 ---
 
+### 2c. EXPLORATORY TEST (Rod — manual product check, 5 minutes max)
+
+Before any code work: Rod opens the live product and does a quick smoke-test across panels.
+
+```
+https://cusslab-api.leanspirited.workers.dev
+```
+
+Check at minimum:
+- One Boardroom prompt end-to-end (submits, response arrives)
+- One Comedy Room tab works (Into The Room or Roast Room)
+- One Sports panel works (Football or Golf)
+- Quntum Leeks: select a Ziggy voice, leap in
+
+Note any layout, interaction, or content issues that feel off. Log them as WL entries immediately.
+**This is Rod's usability lens — Claude Code's TDD/BDD cannot substitute for eyes-on-product.**
+
+Report: "Exploratory test: clean / N issues found (logged as WL-NNN)"
+
+---
+
 ### 2b. NOTES DIRECTORY SCAN (mandatory)
 
 Check for unfiled concept notes from previous sessions:

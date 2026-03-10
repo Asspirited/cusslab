@@ -1414,6 +1414,36 @@ Status: CLOSED
 - **Tags:** `#stale-assertion` `#magic-number` `#unit-test`
 - **Status:** Closed (both times) — updated count. Consider replacing with `>= 2` floor check or dynamic `COMEDY_ROOM_MODES.length` assertion.
 
+## WL-106
+- **Item:** Sandwich Gate wound missing from `characters/faldo.md` — exists only in `docs/characters-sports.md`
+- **Symptom:** Rod asked "where is 2008 sandwich gate for faldo" — it is in `docs/characters-sports.md:181` (full wound + Poulter quote) but NOT in the canonical `characters/faldo.md` character file. The canonical file has the cheese-and-pickle/childhood mechanic but not the Ryder Cup wound.
+- **Suspected cause:** Character file migration from docs to characters/ left the Sandwich Gate wound behind. Or wound was added to docs after the character file was created.
+- **Session date:** 2026-03-10
+- **Time lost:** 0 (discovery)
+- **Cost impact:** Low (character is still functional) — Medium (wrong Ryder Cup behaviour possible; wound won't fire correctly without canonical spec)
+- **Tags:** `#character-debt` `#faldo` `#canonical-file` `#sandwich-gate`
+- **Status:** Open — add to backlog. Similar to WL-MODE-002 (darts character debt).
+
+## WL-105
+- **Item:** Sports panels (Football, Darts, Cricket, Long Room) missing suggestion cards — only Golf has them
+- **Symptom:** Rod noticed during exploratory test: Golf panel has suggestion cards in Q&A mode; Football, Darts, Cricket, Long Room do not. Feature parity gap.
+- **Suspected cause:** Suggestion cards were built for Golf and never ported to other sports panels. No feature-parity check in delivery cycle.
+- **Session date:** 2026-03-10
+- **Time lost:** 0 (discovered at startup, not mid-feature)
+- **Cost impact:** Low (discovery) — Medium (user experience: 4 panels feel incomplete)
+- **Tags:** `#feature-parity` `#sports-panels` `#rod-caught` `#usability`
+- **Status:** Open — BL-100 raised to fix
+
+## WL-104
+- **Item:** Comedy Room sub-features (House Name Oracle, Roast Room, Writing Room) shipped as sub-tabs — should be top-level nav items per DDD bounded context rule
+- **Symptom:** Rod identified during exploratory test: features with distinct domain identities, distinct inputs/outputs, and distinct user journeys are nested inside Comedy Room as tabs. Three Amigos and Gherkin gate did not catch the architectural error.
+- **Suspected cause:** No DDD boundary check in Three Amigos step — "does this feature have its own bounded context?" is not a question in the gate. TDD/BDD loops test behaviour, not domain model correctness or nav information architecture.
+- **Session date:** 2026-03-10
+- **Time lost:** 0 (discovery) — ~1 session (3 features built in wrong location)
+- **Cost impact:** Medium — rework needed to promote 3 features to top-level panels
+- **Tags:** `#ddd-boundary` `#nav-architecture` `#rod-caught` `#usability` `#process-gap`
+- **Status:** Open — BL-099 raised to fix. Process fix: add DDD boundary check to Three Amigos prompt in CLAUDE.md/bdd.md
+
 ## WL-103
 - **Item:** Roast Room and Writing Room gherkin steps collide on identical regexes (recurring)
 - **Symptom:** Multiple failures on writing-room.feature — `the prompt includes "..."`, `each response shows the author's name`, `no author appears more than once in the selection`, `the user clicks the Re-roll button` all fired the roast room's step definition instead of the writing room's, using the wrong context variable
