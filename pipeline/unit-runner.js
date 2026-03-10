@@ -2,7 +2,7 @@
 // Run: node pipeline/unit-runner.js
 const { lintStepDuplicates } = require('./lint-steps.js');
 
-const { maskKey, isValidKey, shouldUpdateInput, Temperature, makeWoundDetector, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetector, DartsVoiceFmt, dartsBuildBlock, DARTS_PREMONITION_AFFINITIES, COLLECTIVE_CALL_MINIMUM, premonitionEligible, blankPremonitionLedger, assignPremonitionRC, resolvePremonitionCommits, isPremonitionTruthTeller, detectIntellectualAttempt, buildAttemptInstruction, INTELLECTUAL_ATTEMPTS_CONFIG, SOUNESS_CAT_PRE_EXISTING, SOUNESS_CAT_IDS, getAllPairs, getPairTone, allPairsHaveToneAndNote, teslaHasNoWarmOrSolidary, pairToneIsSymmetrical, noConflictingTones, CONSEQUENCE_TIERS, applyConsequence, MARSHALS_BELT_EVENT, accumulatePanelStats, computeAvgDepth, GOLF_PANEL_MEMBER_IDS, COLTART_SOFA_POOLS, getSofaCommentator, getHistoricalDivergence, selectReactionMode, validateOutwardCode, parseOutwardCode, ORACLE_VOICES, isValidOracleVoice, canSubmitOracle, ORACLE_REGISTERS, ORACLE_CHARACTERS, hasPhilTranslation, hasAllDublinDriftStages, COMEDY_ROOM_MODES, COMEDY_MODE_LABELS, getDefaultComedyMode, isValidComedyMode, AUTHOR_VOICES, buildAuthorEpiloguePrompt, AUTHORS_POOL, shufflePool, selectNextAuthorFromQueue, selectRoastAuthors, buildRoastPrompt, selectWritingRoomAuthors, buildWritingRoomPrompt } = require('./logic.js');
+const { maskKey, isValidKey, shouldUpdateInput, Temperature, makeWoundDetector, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetector, DartsVoiceFmt, dartsBuildBlock, DARTS_PREMONITION_AFFINITIES, COLLECTIVE_CALL_MINIMUM, premonitionEligible, blankPremonitionLedger, assignPremonitionRC, resolvePremonitionCommits, isPremonitionTruthTeller, detectIntellectualAttempt, buildAttemptInstruction, INTELLECTUAL_ATTEMPTS_CONFIG, SOUNESS_CAT_PRE_EXISTING, SOUNESS_CAT_IDS, getAllPairs, getPairTone, allPairsHaveToneAndNote, teslaHasNoWarmOrSolidary, pairToneIsSymmetrical, noConflictingTones, CONSEQUENCE_TIERS, applyConsequence, MARSHALS_BELT_EVENT, accumulatePanelStats, computeAvgDepth, GOLF_PANEL_MEMBER_IDS, COLTART_SOFA_POOLS, getSofaCommentator, getHistoricalDivergence, selectReactionMode, validateOutwardCode, parseOutwardCode, ORACLE_VOICES, isValidOracleVoice, canSubmitOracle, ORACLE_REGISTERS, ORACLE_CHARACTERS, hasPhilTranslation, hasAllDublinDriftStages, COMEDY_ROOM_MODES, COMEDY_MODE_LABELS, getDefaultComedyMode, isValidComedyMode, AUTHOR_VOICES, buildAuthorEpiloguePrompt, AUTHORS_POOL, shufflePool, selectNextAuthorFromQueue, selectRoastAuthors, buildRoastPrompt, selectWritingRoomAuthors, buildWritingRoomPrompt, PUB_SITUATIONS, buildPubAdvicePrompt } = require('./logic.js');
 
 let passed = 0;
 let failed = 0;
@@ -1297,6 +1297,26 @@ assert('lintStepDuplicates: two duplicate patterns returns 2 collisions', _lintT
 const _lintThree = lintStepDuplicates([[/^foo$/, ()=>{}], [/^foo$/, ()=>{}], [/^foo$/, ()=>{}]]);
 assert('lintStepDuplicates: three occurrences counts as 1 collision', _lintThree.length, 1);
 assert('lintStepDuplicates: three occurrences count is 3', _lintThree[0].count, 3);
+
+// ── PUB_SITUATIONS ────────────────────────────────────────────────────────────
+
+assert('PUB_SITUATIONS: has exactly 5 situations',
+  PUB_SITUATIONS.length, 5);
+
+assert('PUB_SITUATIONS: every situation has an id',
+  PUB_SITUATIONS.every(s => typeof s.id === 'string' && s.id.length > 0), true);
+
+assert('PUB_SITUATIONS: every situation has text',
+  PUB_SITUATIONS.every(s => typeof s.text === 'string' && s.text.length > 0), true);
+
+// ── buildPubAdvicePrompt ──────────────────────────────────────────────────────
+
+assert('buildPubAdvicePrompt: includes the situation text',
+  buildPubAdvicePrompt(PUB_SITUATIONS[0]).includes(PUB_SITUATIONS[0].text), true);
+
+assert('buildPubAdvicePrompt: instructs principle, application, and warning',
+  ['principle', 'application', 'warning'].every(w =>
+    buildPubAdvicePrompt(PUB_SITUATIONS[0]).toLowerCase().includes(w)), true);
 
 // ── Results ──────────────────────────────────────────────────────────────────
 

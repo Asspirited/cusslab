@@ -4,7 +4,8 @@
 const fs   = require('fs');
 const path = require('path');
 const { Temperature, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetector, DartsVoiceFmt, dartsBuildBlock, DARTS_PREMONITION_AFFINITIES, COLLECTIVE_CALL_MINIMUM, premonitionEligible, blankPremonitionLedger, assignPremonitionRC, resolvePremonitionCommits, isPremonitionTruthTeller, detectIntellectualAttempt, buildAttemptInstruction, INTELLECTUAL_ATTEMPTS_CONFIG, CONSEQUENCE_TIERS, applyConsequence, MARSHALS_BELT_EVENT, accumulatePanelStats, computeAvgDepth, GOLF_PANEL_MEMBER_IDS, COLTART_SOFA_POOLS, getSofaCommentator, getHistoricalDivergence, selectReactionMode, validateOutwardCode, parseOutwardCode, ORACLE_VOICES, isValidOracleVoice, canSubmitOracle, ORACLE_REGISTERS, ORACLE_CHARACTERS, hasPhilTranslation, hasAllDublinDriftStages, COMEDY_ROOM_MODES, COMEDY_MODE_LABELS, getDefaultComedyMode, isValidComedyMode, AUTHORS_POOL, shufflePool, selectNextAuthorFromQueue, AUTHOR_VOICES, buildAuthorEpiloguePrompt,
-  selectRoastAuthors, buildRoastPrompt, selectWritingRoomAuthors, buildWritingRoomPrompt } = require('./logic.js');
+  selectRoastAuthors, buildRoastPrompt, selectWritingRoomAuthors, buildWritingRoomPrompt,
+  PUB_SITUATIONS, buildPubAdvicePrompt } = require('./logic.js');
 const { QUNTUM_LEEKS_SCENARIOS, initState, pickRandomScenario, betLeekiness, spendLeekiness, processTurnEffects, buildModifiers } = require('../src/logic/quntum-leeks-engine.js');
 const { lintStepDuplicates } = require('./lint-steps.js');
 
@@ -24,11 +25,12 @@ const USER_MESSAGES = {
 
 // Nav tabs present in each nav group — mirrors index.html structure
 const NAV_GROUPS = {
-  personas:  ['Ask The Panel','Joke Test','Expert Clash','The Wheel','Professionals',"Isn't It Ironic?"],
-  boardroom: ['Present to the Boardroom'],
-  comedy:    ['The Comedy Room'],
-  sports:    ['The Pub After The Match', 'The 19th Hole'],
-  play:      ['Roast Battle','Dinner Party',"Rogues' Gallery",'Comedy Lab','Dimension Duel','Quntum Leeks']
+  personas:      ['Ask The Panel','Joke Test','Expert Clash','The Wheel','Professionals',"Isn't It Ironic?"],
+  boardroom:     ['Present to the Boardroom'],
+  comedy:        ['The Comedy Room'],
+  sports:        ['The Pub After The Match', 'The 19th Hole'],
+  play:          ['Roast Battle','Dinner Party',"Rogues' Gallery",'Comedy Lab','Dimension Duel','Quntum Leeks'],
+  misadventure:  ['Relive Golfing Greatness', 'Survive a Friday night at...'],
 };
 
 
@@ -982,6 +984,48 @@ function makeSteps(ctx) {
 
     // ── Quntum Leeks — background ─────────────────────────────────────────────
     [/^the Quntum Leeks panel is available in the app$/, () => { /* structural fixture */ }],
+
+    // ── Pub Navigator — nav check ────────────────────────────────────────────
+    [/^"([^"]+)" should be in the LITTLE MISADVENTURE nav group$/,
+      (label) => {
+        const group = NAV_GROUPS['misadventure'] || [];
+        if (!group.includes(label)) throw new Error(`nav: expected "${label}" in misadventure group, got [${group.join(', ')}]`);
+      }],
+
+    // ── Pub Navigator — Mode A ────────────────────────────────────────────────
+    [/^the user is on the Pub Navigator panel$/, () => {
+      ctx._pubNavSituationSelected = null;
+      ctx._pubNavResponseDisplayed = false;
+    }],
+    [/^five pub situation cards are visible$/, () => {
+      if (PUB_SITUATIONS.length !== 5) throw new Error(`expected 5 pub situations, got ${PUB_SITUATIONS.length}`);
+    }],
+    [/^the user selects a pub situation$/, () => {
+      ctx._pubNavSituationSelected = PUB_SITUATIONS[0].id;
+      ctx._pubNavResponseDisplayed = true;
+    }],
+    [/^a Sun Tzu advisory response is displayed$/, () => {
+      if (!ctx._pubNavResponseDisplayed) throw new Error('expected Sun Tzu advisory response to be displayed');
+    }],
+    [/^the user has already received a Sun Tzu response$/, () => {
+      ctx._pubNavSituationSelected = PUB_SITUATIONS[0].id;
+      ctx._pubNavResponseDisplayed = true;
+    }],
+    [/^a pub situation "([^"]+)"$/, (text) => {
+      ctx._pubAdviceSituation = { id: 'test', text };
+    }],
+    [/^buildPubAdvicePrompt is called$/, () => {
+      ctx._pubAdvicePromptResult = buildPubAdvicePrompt(ctx._pubAdviceSituation);
+    }],
+    [/^the pub advice prompt includes the situation text$/, () => {
+      if (!ctx._pubAdvicePromptResult.includes(ctx._pubAdviceSituation.text))
+        throw new Error(`prompt does not include situation text "${ctx._pubAdviceSituation.text}"`);
+    }],
+    [/^the pub advice prompt instructs principle, application, and warning$/, () => {
+      const p = ctx._pubAdvicePromptResult.toLowerCase();
+      if (!['principle', 'application', 'warning'].every(w => p.includes(w)))
+        throw new Error('prompt does not instruct principle, application, and warning');
+    }],
 
     // ── Quntum Leeks — nav check ──────────────────────────────────────────────
     [/^I am on the main page$/, () => { /* navigate */ }],

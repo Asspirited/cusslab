@@ -1286,14 +1286,15 @@
 
 <nav id="sidebar">
 
-  <!-- ── GOLF ADVENTURE ── -->
-  <div class="nav-group active" id="ng-golfadventure">
-    <div class="nav-group-header" onclick="toggleNavGroup('golfadventure')">
-      <span class="nav-group-icon">⛳</span> GOLF ADVENTURE
-      <span class="nav-group-count">1</span>
+  <!-- ── LITTLE MISADVENTURE ── -->
+  <div class="nav-group active" id="ng-misadventure">
+    <div class="nav-group-header" onclick="toggleNavGroup('misadventure')">
+      <span class="nav-group-icon">🏴</span> LITTLE MISADVENTURE
+      <span class="nav-group-count">2</span>
     </div>
-    <div class="nav-items" id="ni-golfadventure">
-      <div class="tab active" onclick="switchTab(event,'golfadventure')"><span class="tab-icon">🏌️</span>Play Golf Adventure</div>
+    <div class="nav-items" id="ni-misadventure">
+      <div class="tab active" onclick="switchTab(event,'golfadventure')"><span class="tab-icon">🏌️</span>Relive Golfing Greatness</div>
+      <div class="tab" onclick="switchTab(event,'pubnavigator')"><span class="tab-icon">🍺</span>Survive a Friday night at...</div>
     </div>
   </div>
 
@@ -2013,6 +2014,20 @@
     <p style="color:var(--muted);font-size:0.85rem;margin-bottom:36px;opacity:0.7;">Faldo. McGinley. Radar. Roe. Henni. Butch. Cox. Souness. Pietersen. Pick four.</p>
     <button class="btn btn-accent" onclick="window.location.href='golf-adventure.html'" style="font-size:22px;padding:16px 52px;letter-spacing:0.05em;">TEE IT UP</button>
   </div>
+</div>
+
+<!-- ============ PUB NAVIGATOR ============ -->
+<div class="panel" id="panel-pubnavigator">
+  <div class="panel-title">🍺 Survive a Friday night at...</div>
+  <div class="panel-desc" style="margin-bottom:24px;">The situation is against you. The terrain is unfamiliar. The enemy has not read The Art of War. You have. Choose your predicament.</div>
+
+  <div id="pn-situations" style="display:grid;gap:12px;margin-bottom:24px;"></div>
+
+  <div id="pn-response" style="display:none;">
+    <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;">Sun Tzu advises</div>
+    <div id="pn-response-body" class="bills-response-body" style="white-space:pre-wrap;line-height:1.75;"></div>
+  </div>
+  <div id="pn-loading" style="display:none;color:var(--muted);font-size:0.9rem;padding:16px 0;">Consulting the ancient texts…</div>
 </div>
 
 <div class="panel" id="panel-comedyroom">
@@ -4307,7 +4322,7 @@ const App = (() => {
       title: 'HECKLER\'S',
       pageTitle: 'Heckler\'s — The Comedy Panel',
       slogans: CONSULTANT_SLOGANS,
-      tabs: ['golfadventure','comedyroom','boardroom','football','golf','darts','cricket','souness-cat',
+      tabs: ['golfadventure','pubnavigator','comedyroom','boardroom','football','golf','darts','cricket','souness-cat',
              'bills','joketest','clash','roulette','professionals','ironic',
              'comscience','evolution','blend','experiment',
              'roastbattle','dinner','topcnuts','comedylab','trumps','qleeks',
@@ -4331,7 +4346,7 @@ const App = (() => {
 
   function init() {
     _startSlogans('consultant');
-    API.initKeyUI(); switchTab({currentTarget:document.querySelector('[onclick*=\'golfadventure\']')}, 'golfadventure');
+    API.initKeyUI(); switchTab({currentTarget:document.querySelector('[onclick*="golfadventure"]')}, 'golfadventure');
     RoastBattle.initScenarios();
     TopCnuts.init();
     Polls.load(0);
@@ -4352,8 +4367,8 @@ const App = (() => {
   // Nav group that contains a given tab name
   const _NAV_GROUP_MAP = {
     settings:'personas',
-    // GOLF ADVENTURE
-    golfadventure:'golfadventure',
+    // LITTLE MISADVENTURE
+    golfadventure:'misadventure', pubnavigator:'misadventure',
     // BOARDROOM
     boardroom:'boardroom',
     // COMEDY ROOM
@@ -10931,6 +10946,74 @@ const WritingRoom = (() => {
   });
 
   return { submit, reroll };
+})();
+
+// ============================================================
+// MODULE: PubNavigator — Mode A advisory panel (BL-104)
+// ============================================================
+const PubNavigator = (() => {
+
+  // Mirror of PUB_SITUATIONS in pipeline/logic.js — keep in sync.
+  const PUB_SITUATIONS = [
+    { id: 'bar-three-deep', text: 'The bar is three deep. You need a drink.' },
+    { id: 'bouncer-door',   text: 'The bouncer has stopped you at the door.' },
+    { id: 'seat-taken',     text: 'Someone is in your seat.' },
+    { id: 'last-orders',    text: 'Last orders called. You\'re not ready.' },
+    { id: 'wrong-tab',      text: 'Your round. But the tab is wrong.' },
+  ];
+
+  // Mirror of buildPubAdvicePrompt in pipeline/logic.js — keep in sync.
+  function buildPubAdvicePrompt(situation) {
+    return `You are Sun Tzu. Ancient Chinese military strategist. Author of The Art of War.
+
+The user faces a pub situation. Apply your framework with complete seriousness. The wisdom is genuine. The context is absurd. That is not your concern.
+
+Respond in exactly three movements:
+
+PRINCIPLE — a short aphorism. One or two sentences. The tactical truth that governs this situation.
+APPLICATION — how the principle applies to the specific situation before you. Precise. Concrete. What the general does.
+WARNING — what happens if the principle is ignored. State it as fact, not prediction.
+
+Never use modern slang. Never rush. Speak in short declarative sentences. Occasionally use "one" to mean "you".
+
+The situation: ${situation.text}`;
+  }
+
+  function init() {
+    const container = document.getElementById('pn-situations');
+    if (!container) return;
+    container.innerHTML = PUB_SITUATIONS.map(s => `
+      <button class="btn-secondary pn-situation-btn" onclick="PubNavigator.selectSituation('${s.id}')"
+        style="text-align:left;padding:14px 18px;font-size:0.95rem;line-height:1.5;width:100%;cursor:pointer;">
+        ${s.text}
+      </button>`).join('');
+  }
+
+  async function selectSituation(id) {
+    const situation = PUB_SITUATIONS.find(s => s.id === id);
+    if (!situation) return;
+
+    document.getElementById('pn-response').style.display = 'none';
+    document.getElementById('pn-loading').style.display = 'block';
+
+    const prompt = buildPubAdvicePrompt(situation);
+    const userMsg = `The situation: ${situation.text}`;
+
+    try {
+      const text = await API.call(prompt, userMsg, 400, 'pub-navigator/advice');
+      document.getElementById('pn-response-body').textContent = text;
+      document.getElementById('pn-response').style.display = 'block';
+    } catch (e) {
+      document.getElementById('pn-response-body').textContent = 'The general is unavailable. Try again.';
+      document.getElementById('pn-response').style.display = 'block';
+    } finally {
+      document.getElementById('pn-loading').style.display = 'none';
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', init);
+
+  return { init, selectSituation };
 })();
 
 // ============================================================

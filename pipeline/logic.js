@@ -639,6 +639,33 @@ function buildWritingRoomPrompt(authorVoice, topic, priorContext) {
   return `You are ${authorVoice.name}. Write 150 to 300 words on the following topic in your distinctive voice.\n\nYour voice: ${authorVoice.voiceSignature}\n\nTopic: "${topic}"${prior} Do not break character. Do not explain your style.`;
 }
 
+// ── Pub Navigator — Mode A ────────────────────────────────────────────────────
+// Mirror of PUB_SITUATIONS and buildPubAdvicePrompt in index.html — keep in sync.
+
+const PUB_SITUATIONS = [
+  { id: 'bar-three-deep',  text: 'The bar is three deep. You need a drink.' },
+  { id: 'bouncer-door',    text: 'The bouncer has stopped you at the door.' },
+  { id: 'seat-taken',      text: 'Someone is in your seat.' },
+  { id: 'last-orders',     text: 'Last orders called. You\'re not ready.' },
+  { id: 'wrong-tab',       text: 'Your round. But the tab is wrong.' },
+];
+
+function buildPubAdvicePrompt(situation) {
+  return `You are Sun Tzu. Ancient Chinese military strategist. Author of The Art of War.
+
+The user faces a pub situation. Apply your framework with complete seriousness. The wisdom is genuine. The context is absurd. That is not your concern.
+
+Respond in exactly three movements:
+
+PRINCIPLE — a short aphorism. One or two sentences. The tactical truth that governs this situation.
+APPLICATION — how the principle applies to the specific situation before you. Precise. Concrete. What the general does.
+WARNING — what happens if the principle is ignored. State it as fact, not prediction.
+
+Never use modern slang. Never rush. Speak in short declarative sentences. Occasionally use "one" to mean "you".
+
+The situation: ${situation.text}`;
+}
+
 module.exports = {
   maskKey, isValidKey, shouldUpdateInput,
   Temperature,
@@ -662,4 +689,5 @@ module.exports = {
   AUTHOR_VOICES, buildAuthorEpiloguePrompt,
   selectRoastAuthors, buildRoastPrompt,
   selectWritingRoomAuthors, buildWritingRoomPrompt,
+  PUB_SITUATIONS, buildPubAdvicePrompt,
 };
