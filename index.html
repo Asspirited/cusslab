@@ -4141,24 +4141,67 @@ const App = (() => {
     'I\'ve seen a lot of material come through this room.',
     'Some of it left better than it arrived.',
     // Heckler on the panel
-    '\"You\'ll want to agree with everything he says. That\'s fine. He\'d have hated that.\" — Heckler, on Hicks',
-    '\"Sitting on a bench since 1973. Still talking. Worth the trip.\" — Heckler, on Cook',
-    '\"The most compressed man alive, which is impressive given he\'s dead.\" — Heckler, on Carlin',
-    '\"Approaches all problems from the perspective of geological time. Somehow this helps.\" — Heckler, on Adams',
-    '\"I invited him last. He arrived first. He\'s been here ever since.\" — Heckler, on Keegan',
-    '\"I\'m not explaining this one. Just listen.\" — Heckler, on Yoda',
-    '\"Finds everyone slightly ridiculous, including himself. Particularly himself.\" — Heckler, on Gervais',
-    '\"Arrived with more material than anyone needed. Used all of it.\" — Heckler, on Boyle',
-    '\"Once invaded a country to settle an argument. We keep him away from the big topics.\" — Heckler, on William',
+    '\"You\'ll want to agree with everything he says. That\'s fine. He\'d have hated that.\" — Heckler, on Hicks (probably)',
+    '\"Sitting on a bench since 1973. Still talking. Worth the trip.\" — Heckler, on Cook (almost certainly)',
+    '\"The most compressed man alive, which is impressive given he\'s dead.\" — Heckler, on Carlin (he\'d dispute this)',
+    '\"Approaches all problems from the perspective of geological time. Somehow this helps.\" — Heckler, on Adams (possibly)',
+    '\"I invited him last. He arrived first. He\'s been here ever since.\" — Heckler, on Keegan (yeah....maybe)',
+    '\"I\'m not explaining this one. Just listen.\" — Heckler, on Yoda (we think)',
+    '\"Finds everyone slightly ridiculous, including himself. Particularly himself.\" — Heckler, on Gervais (unverified)',
+    '\"Arrived with more material than anyone needed. Used all of it.\" — Heckler, on Boyle (according to them)',
+    '\"Once invaded a country to settle an argument. We keep him away from the big topics.\" — Heckler, on William (almost certainly)',
     // Heckler on the work
-    '\"Carlin compresses. You give him a paragraph, he gives you a word. The word is correct. You hate him for it.\" — Heckler',
-    '\"Adams found seventeen ways to describe it using the age of the universe. One of them was beautiful. I wrote it down.\" — Heckler',
-    '\"The lab doesn\'t sleep. Neither does Yoda, apparently. I\'ve stopped asking.\" — Heckler',
-    '\"You\'ll learn something here. Whether you wanted to is a separate question.\" — Heckler',
-    '\"Somebody had to build this. That was my mistake. Here we are.\" — Heckler',
-    '\"It isn\'t magic. It\'s architecture. These nine people understand the architecture.\" — Heckler',
-    '\"The gap between who someone thinks they are and what they actually are. That\'s where it lives.\" — Heckler',
-    '\"Cook never arrives at the point. That\'s the method. Don\'t rush him.\" — Heckler',
+    '\"Carlin compresses. You give him a paragraph, he gives you a word. The word is correct. You hate him for it.\" — Heckler (probably)',
+    '\"Adams found seventeen ways to describe it using the age of the universe. One of them was beautiful. I wrote it down.\" — Heckler (possibly)',
+    '\"The lab doesn\'t sleep. Neither does Yoda, apparently. I\'ve stopped asking.\" — Heckler (yeah....maybe)',
+    '\"You\'ll learn something here. Whether you wanted to is a separate question.\" — Heckler (almost certainly)',
+    '\"Somebody had to build this. That was my mistake. Here we are.\" — Heckler (he\'d say the same)',
+    '\"It isn\'t magic. It\'s architecture. These nine people understand the architecture.\" — Heckler (probably)',
+    '\"The gap between who someone thinks they are and what they actually are. That\'s where it lives.\" — Heckler (possibly)',
+    '\"Cook never arrives at the point. That\'s the method. Don\'t rush him.\" — Heckler (unverified but consistent)',
+    // Hicks the Humanist
+    '\"You laugh because it hurts. That\'s always why.\" — Hicks (probably)',
+    '\"Ask the follow-up question. It\'s always the follow-up question.\" — Hicks (almost certainly)',
+    '\"I didn\'t come here to make you comfortable. That was never the arrangement.\" — Hicks (yeah....maybe)',
+    '\"It\'s just a ride. But some of the people on it are genuinely unwell.\" — Hicks (possibly)',
+    // Curious George (Carlin)
+    '\"You want the answer? Here it is. You won\'t use it.\" — Carlin (filed in 1985)',
+    '\"The language is designed to hide what\'s happening. We should probably notice that.\" — Carlin (he did notice)',
+    '\"Owners. They have it. They know you\'re not getting it. That\'s the whole thing.\" — Carlin (probably)',
+    '\"Two commandments. Everything else is commentary on those two.\" — Carlin (unverified but consistent)',
+    // The Cook-King
+    '\"I put it to the court that whatever just happened has produced nothing of value.\" — The Cook-King (finding: insufficient)',
+    '\"The badger, at least, has a plan.\" — The Cook-King (revised position: standing)',
+    '\"The ocean remains a scandal.\" — The Cook-King (ruling: final)',
+    '\"Whales. Revised position. I\'ll allow it. The ocean remains a scandal.\" — The Cook-King (yeah....maybe)',
+    // Adams the Unparanoid Android
+    '\"Oh well.\" — Adams (which, when you think about it, covers it)',
+    '\"The universe is thirteen-point-eight billion years old. I find that helpful when things get frustrating.\" — Adams (probably)',
+    '\"Fish. Millions of them. Entirely committed to being fish. There\'s something in that.\" — Adams (unverified)',
+    '\"Right. What were we deciding?\" — Adams (almost certainly)',
+    // Wildest of Oscars
+    '\"The only thing worse than being in this room is not being in it.\" — Wildest of Oscars (almost certainly)',
+    '\"Comedy is the luxury of people who have understood something.\" — Wildest of Oscars (he\'d dispute the attribution)',
+    '\"To understand a thing fully is to lose the ability to be surprised by it. We\'re against that here.\" — Wildest of Oscars (probably)',
+    '\"I have nothing to declare except my methodology.\" — Wildest of Oscars (yeah....maybe)',
+    // Prof Cox
+    '\"The universe is dead big.\" — Prof Cox (this is the whole point)',
+    '\"Whatever\'s worrying you happened against the backdrop of thirteen-point-eight billion years. Dead wonderful, actually.\" — Prof Cox (verified)',
+    '\"E=mc². That\'s it. That\'s what I\'m saying.\" — Prof Cox (probably)',
+    '\"Things Can Only Get Better. And yet.\" — Prof Cox (yeah....maybe)',
+    // Slightly Squiffy Blyton
+    '\"Crikey. What a rum do.\" — Slightly Squiffy Blyton (she\'s had a couple)',
+    '\"There\'s always a secret passage. Always. Julian agreed.\" — Slightly Squiffy Blyton (we think)',
+    '\"Sebastian is the villain. He owns the old mill. The children suspected it from the start.\" — Slightly Squiffy Blyton (after her third)',
+    // Jimmy Carr
+    '\"Jersey. Legally speaking.\" — Jimmy Carr (smug face)',
+    '\"You laughed. That\'s the tell.\" — Jimmy Carr (probably)',
+    '\"Dark. But accurate.\" — Jimmy Carr (the target state)',
+    // Sports
+    '\"I would love it if we could — love it.\" — Keegan (possibly)',
+    '\"That is simply not good enough.\" — Souness (definitely)',
+    '\"Magnificent.\" — Radar (almost certainly)',
+    '\"From the heart of my bottom.\" — Sir Nick (sincerely)',
   ];
 
   const SCIENCE_SLOGANS = [
@@ -4173,12 +4216,25 @@ const App = (() => {
     'Style drift is measurable. We measured it.',
     'Hicks has been absorbing Carlin\'s compression. You can see it in the data.',
     'The influence network doesn\'t lie. Neither do the dimension weights.',
-    '\"I have measured this. Something moved.\" — Heckler, post-experiment',
-    '\"The control group is also evolving. I didn\'t plan for that.\" — Heckler',
-    '\"Results inconclusive. More sessions needed. This is fine.\" — Heckler',
-    '\"The hypothesis was sound. The panel had other ideas.\" — Heckler',
-    '\"Cook\'s sincere failure dimension increased 12 points after 30 sessions with Adams. I don\'t know what to do with that.\" — Heckler',
-    '\"I would cite this if I knew what to cite.\" — Heckler',
+    '\"I have measured this. Something moved.\" — Heckler, post-experiment (probably)',
+    '\"The control group is also evolving. I didn\'t plan for that.\" — Heckler (possibly)',
+    '\"Results inconclusive. More sessions needed. This is fine.\" — Heckler (almost certainly)',
+    '\"The hypothesis was sound. The panel had other ideas.\" — Heckler (yeah....maybe)',
+    '\"Cook\'s sincere failure dimension increased 12 points after 30 sessions with Adams. I don\'t know what to do with that.\" — Heckler (unverified)',
+    '\"I would cite this if I knew what to cite.\" — Heckler (he\'d say the same)',
+    // Cox in lab mode
+    '\"Entropy always increases. Which, looking at the data, is consistent.\" — Prof Cox (verified)',
+    '\"The Chandrasekhar limit applies here. There is a point beyond which collapse is inevitable.\" — Prof Cox (probably)',
+    '\"L is proportional to M to the power of three-point-five. The more massive the project, the shorter its lifespan. I mention this only for context.\" — Prof Cox (almost certainly)',
+    // Adams in lab mode
+    '\"The numbers don\'t lie. Neither does the shrug.\" — Adams (probably)',
+    '\"Forty-two. I\'ve run it multiple times. Still forty-two.\" — Adams (unverified)',
+    // Carlin on the framework
+    '\"Seven dimensions. I would have used one. It\'s always one.\" — Carlin (filed in 1985)',
+    '\"You\'re measuring it. Good. Now ask who benefits from the measurement.\" — Carlin (probably)',
+    // Cook-King on methodology
+    '\"The framework has produced seventeen metrics. The tribunal finds this excessive.\" — The Cook-King (finding: pending)',
+    '\"What has the experiment actually produced? I\'ll wait.\" — The Cook-King (ruling: provisional)',
   ];
 
   const SKIN_CONFIGS = {
