@@ -313,6 +313,17 @@ For items that represent a product hypothesis, add after the CD3 line:
 - CD3: UBV=7 TC=1 RR=1 → CoD=9, Dur=4, **CD3=2.3**
 - Status: OPEN
 
+### BL-059 — The Writing Room: authors as a standalone Comedy Room panel
+- Epic: Author Epilogue
+- Depends on: BL-058 (author characters must exist and be voiced first)
+- Once the author pool is built for BL-058, extract them into their own Comedy Room mode tab: "The Writing Room". User submits any topic, event, premise, or piece of text. A randomly selected author (or user-chosen) responds in their full literary register — same collision comedy as the epilogue but untethered from sport. A press release narrated by Cormac McCarthy. A team-building day by Jane Austen. A product roadmap by Tolkien (with appendix). Corporate prompt goes in; literary masterwork comes out.
+- Natural home: third tab in Comedy Room after "Into The Room" and "The House Name Oracle"
+- Author selection: either random-with-re-roll (like epilogue) or a picker dropdown (like Oracle archetype) — decide during Three Amigos
+- Structural difference from Comedy Room: single author response, not a panel conversation. Longer output — 300–500 words. The author is not interrupted.
+- Characters already specced in notes/2026-03-10-author-epilogue.md — just needs prompt templates and UI
+- CD3: UBV=7 TC=1 RR=1 → CoD=9, Dur=5, **CD3=1.8**
+- Status: OPEN — raised 2026-03-10, blocked on BL-058
+
 ### BL-058 — The Author's Epilogue: post-game prose summary by random literary voice
 - Epic: Author Epilogue
 - At the end of any sports game (Golf Adventure, Football Moment, Darts, Cricket — and potentially other outputs like Oracle conversation), a randomly selected author from the pool is summoned to write a short prose summary of events in their inimitable style. 3–5 paragraphs. The comedy is in the collision between the literary register and the subject matter.
