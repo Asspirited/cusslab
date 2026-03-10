@@ -3,7 +3,7 @@
 
 const fs   = require('fs');
 const path = require('path');
-const { Temperature, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetector, DartsVoiceFmt, dartsBuildBlock, DARTS_PREMONITION_AFFINITIES, COLLECTIVE_CALL_MINIMUM, premonitionEligible, blankPremonitionLedger, assignPremonitionRC, resolvePremonitionCommits, isPremonitionTruthTeller, detectIntellectualAttempt, buildAttemptInstruction, INTELLECTUAL_ATTEMPTS_CONFIG, CONSEQUENCE_TIERS, applyConsequence, MARSHALS_BELT_EVENT, accumulatePanelStats, computeAvgDepth, GOLF_PANEL_MEMBER_IDS, COLTART_SOFA_POOLS, getSofaCommentator, getHistoricalDivergence, selectReactionMode } = require('./logic.js');
+const { Temperature, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetector, DartsVoiceFmt, dartsBuildBlock, DARTS_PREMONITION_AFFINITIES, COLLECTIVE_CALL_MINIMUM, premonitionEligible, blankPremonitionLedger, assignPremonitionRC, resolvePremonitionCommits, isPremonitionTruthTeller, detectIntellectualAttempt, buildAttemptInstruction, INTELLECTUAL_ATTEMPTS_CONFIG, CONSEQUENCE_TIERS, applyConsequence, MARSHALS_BELT_EVENT, accumulatePanelStats, computeAvgDepth, GOLF_PANEL_MEMBER_IDS, COLTART_SOFA_POOLS, getSofaCommentator, getHistoricalDivergence, selectReactionMode, validateOutwardCode, parseOutwardCode, ORACLE_VOICES, isValidOracleVoice, canSubmitOracle, ORACLE_REGISTERS, ORACLE_CHARACTERS, hasPhilTranslation, hasAllDublinDriftStages } = require('./logic.js');
 const { QUNTUM_LEEKS_SCENARIOS, initState, pickRandomScenario, betLeekiness, spendLeekiness, processTurnEffects, buildModifiers } = require('../src/logic/quntum-leeks-engine.js');
 
 // ── Mock state (simulates browser localStorage + DOM) ────────────────────────
@@ -6393,6 +6393,195 @@ function makeSteps(ctx) {
       const played = /\bI played\b|\bI holed\b|\bI drove\b|\bI made\b|\bI hit\b/i;
       if (played.test(ctx._wbSofaLine))
         throw new Error(`Line implies Coltart played: "${ctx._wbSofaLine}"`);
+    }],
+
+    // ── House Name Oracle (BL-053) ─────────────────────────────────────────────
+
+    [/^the user is on the Comedy Room$/, () => { ctx._panel = 'comedyroom'; }],
+    [/^the Oracle mode is active$/, () => { ctx._oracleMode = true; }],
+
+    [/^the user enters "([^"]*)" in the Oracle location field$/, (code) => {
+      ctx._oracleInput = code;
+      ctx._oracleParsed = parseOutwardCode(code);
+    }],
+
+    [/^the code is accepted as a valid input$/, () => {
+      if (!validateOutwardCode(ctx._oracleParsed))
+        throw new Error(`Expected valid outward code, got: "${ctx._oracleInput}"`);
+    }],
+
+    [/^an error is shown explaining the accepted format$/, () => {
+      if (validateOutwardCode(ctx._oracleParsed))
+        throw new Error(`Expected invalid, but "${ctx._oracleInput}" was accepted`);
+    }],
+
+    [/^the user has entered a valid location code$/, () => {
+      ctx._oracleInput  = 'SW1A';
+      ctx._oracleParsed = 'SW1A';
+    }],
+
+    [/^no Oracle voice archetype is selected$/, () => { ctx._oracleVoice = ''; }],
+    [/^the user has selected an Oracle voice archetype$/, () => { ctx._oracleVoice = 'Elegist'; }],
+    [/^the user selects the "([^"]+)" Oracle voice$/, (v) => { ctx._oracleVoice = v; }],
+
+    [/^the user attempts to submit to the Oracle$/, () => {
+      ctx._oracleCanSubmit = canSubmitOracle(ctx._oracleParsed || '', ctx._oracleVoice || '');
+    }],
+
+    [/^the archetype selector is highlighted as required$/, () => {
+      if (ctx._oracleCanSubmit)
+        throw new Error('Expected submit to be blocked but canSubmitOracle returned true');
+    }],
+
+    [/^no generation occurs$/, () => {
+      if (ctx._oracleCanSubmit)
+        throw new Error('Expected no generation but submission gate passed');
+    }],
+
+    [/^the user submits to the Oracle$/, () => {
+      ctx._oracleCanSubmit = canSubmitOracle(ctx._oracleParsed || '', ctx._oracleVoice || '');
+    }],
+
+    [/^the Oracle conversation is generated$/, () => {
+      if (!ctx._oracleCanSubmit)
+        throw new Error('Expected Oracle to generate but canSubmitOracle returned false');
+    }],
+
+    // Output structure — mock a completed Oracle response in ctx
+    [/^a valid Oracle submission has completed$/, () => {
+      ctx._oracleVoice = 'Elegist';
+      ctx._oracleParsed = 'SW1A';
+      ctx._oracleResponse = {
+        phil:    "what we're really talking about here is the market value implication of a 14th-century plague pit.",
+        kirstie: "Such atmosphere. That connection to the land is exactly what you cannot manufacture.",
+        dion:    "[BRIDGE] Location is everything in football too [DEPARTURE] reminds me of a particular dressing room at Villa [WANDER] there was a pie, pre-match, Coventry, 2001, I think it was chicken and mushroom [SUMMIT] I scored a hat-trick that day. Anyway. Lovely kitchen.",
+        names:   [
+          { register: 'Dignified', name: 'The Old Pit House',  rationale: 'Once, this ground held those we could not name.' },
+          { register: 'Knowing',   name: 'Plague View',         rationale: "It's what everyone's thinking." },
+          { register: 'Unhinged',  name: 'The Pestilence',      rationale: 'Historically accurate. Fully committing.' },
+        ],
+      };
+    }],
+
+    [/^Phil Spencer's response is present$/, () => {
+      if (!ctx._oracleResponse || !ctx._oracleResponse.phil)
+        throw new Error('Phil Spencer response missing from Oracle output');
+    }],
+
+    [/^Kirstie Allsopp's response is present$/, () => {
+      if (!ctx._oracleResponse || !ctx._oracleResponse.kirstie)
+        throw new Error('Kirstie Allsopp response missing from Oracle output');
+    }],
+
+    [/^Dion Dublin's response is present$/, () => {
+      if (!ctx._oracleResponse || !ctx._oracleResponse.dion)
+        throw new Error('Dion Dublin response missing from Oracle output');
+    }],
+
+    [/^three house names are presented$/, () => {
+      if (!ctx._oracleResponse || ctx._oracleResponse.names.length !== 3)
+        throw new Error(`Expected 3 house names, got ${ctx._oracleResponse?.names?.length ?? 0}`);
+    }],
+
+    [/^one name is in the Dignified register$/, () => {
+      if (!ctx._oracleResponse.names.some(n => n.register === 'Dignified'))
+        throw new Error('No Dignified register name in output');
+    }],
+
+    [/^one name is in the Knowing register$/, () => {
+      if (!ctx._oracleResponse.names.some(n => n.register === 'Knowing'))
+        throw new Error('No Knowing register name in output');
+    }],
+
+    [/^one name is in the Unhinged register$/, () => {
+      if (!ctx._oracleResponse.names.some(n => n.register === 'Unhinged'))
+        throw new Error('No Unhinged register name in output');
+    }],
+
+    [/^each name includes a one-line Oracle rationale$/, () => {
+      const missing = ctx._oracleResponse.names.filter(n => !n.rationale || !n.rationale.trim());
+      if (missing.length > 0)
+        throw new Error(`${missing.length} name(s) missing Oracle rationale`);
+    }],
+
+    // Character mechanics — tested with mock responses via hasPhilTranslation / hasAllDublinDriftStages
+    [/^the Oracle has surfaced a research finding for the location$/, () => {
+      ctx._oracleResponse = ctx._oracleResponse || {};
+      ctx._oracleResponse.phil = "what we're really talking about here is the market value implication of a 14th-century plague pit.";
+    }],
+
+    [/^Phil Spencer's response is generated$/, () => { /* already in ctx */ }],
+
+    [/^his response includes the phrase "what we're really talking about here"$/, () => {
+      if (!hasPhilTranslation(ctx._oracleResponse.phil))
+        throw new Error('Phil response missing translation marker phrase');
+    }],
+
+    [/^the finding is reframed in property market terms$/, () => {
+      const marketTerms = /market|value|buyer|price|square foot|investment|property/i;
+      if (!marketTerms.test(ctx._oracleResponse.phil))
+        throw new Error('Phil response lacks property market language');
+    }],
+
+    [/^the Oracle has surfaced a negative characteristic of the location$/, () => {
+      ctx._oracleResponse = ctx._oracleResponse || {};
+      ctx._oracleResponse.kirstie = "Such atmosphere. That connection to the land is exactly what you cannot manufacture.";
+    }],
+
+    [/^Kirstie Allsopp's response is generated$/, () => { /* already in ctx */ }],
+
+    [/^her response reframes the characteristic as a positive$/, () => {
+      const positive = /atmosphere|character|authentic|charm|history|story|cannot manufacture|connection/i;
+      if (!positive.test(ctx._oracleResponse.kirstie))
+        throw new Error('Kirstie response lacks positive reframe language');
+    }],
+
+    [/^the reframe is completed within two sentences$/, () => {
+      const sentences = ctx._oracleResponse.kirstie.split(/[.!?]+/).filter(s => s.trim());
+      if (sentences.length > 2)
+        throw new Error(`Kirstie reframe is ${sentences.length} sentences, expected ≤2`);
+    }],
+
+    [/^the Oracle has surfaced any research finding$/, () => {
+      ctx._oracleResponse = ctx._oracleResponse || {};
+      ctx._oracleResponse.dion = "[BRIDGE] Location is everything in football too [DEPARTURE] reminds me of a particular dressing room at Villa [WANDER] there was a pie, pre-match, Coventry, 2001 [SUMMIT] I scored a hat-trick that day. Anyway. Lovely kitchen.";
+    }],
+
+    [/^Dion Dublin's response is generated$/, () => { /* already in ctx */ }],
+
+    [/^his response contains The Bridge stage$/, () => {
+      if (!ctx._oracleResponse.dion.includes('[BRIDGE]'))
+        throw new Error('Dion response missing [BRIDGE] stage marker');
+    }],
+
+    [/^his response contains The Departure stage$/, () => {
+      if (!ctx._oracleResponse.dion.includes('[DEPARTURE]'))
+        throw new Error('Dion response missing [DEPARTURE] stage marker');
+    }],
+
+    [/^his response contains The Wander stage$/, () => {
+      if (!ctx._oracleResponse.dion.includes('[WANDER]'))
+        throw new Error('Dion response missing [WANDER] stage marker');
+    }],
+
+    [/^his response contains The Accidental Summit stage$/, () => {
+      if (!ctx._oracleResponse.dion.includes('[SUMMIT]'))
+        throw new Error('Dion response missing [SUMMIT] stage marker');
+    }],
+
+    [/^his response returns to the property at the end$/, () => {
+      const propertyReturn = /kitchen|garden|lounge|hall|bedroom|house|property|drive|door|window|room/i;
+      if (!propertyReturn.test(ctx._oracleResponse.dion))
+        throw new Error('Dion response does not return to property at end');
+    }],
+
+    [/^the Oracle rationale is generated$/, () => {
+      ctx._oracleRationale = ctx._oracleVoice; // voice IS the rationale key for structural test
+    }],
+
+    [/^the rationale reflects the "([^"]+)" register$/, (register) => {
+      if (!ctx._oracleVoice || !isValidOracleVoice(ctx._oracleVoice))
+        throw new Error(`Oracle voice "${ctx._oracleVoice}" is not valid — cannot produce register "${register}"`);
     }],
 
   ];

@@ -483,6 +483,45 @@ function selectReactionMode(divergence) {
   return map[divergence];
 }
 
+// ── House Name Oracle — pure functions (BL-053) ───────────────────────────────
+
+const ORACLE_VOICES = ['Elegist', 'Rogue', 'DarkOracle', 'Booster', 'Snob', 'Anarchist', 'Mystic', 'Local'];
+const ORACLE_REGISTERS = ['Dignified', 'Knowing', 'Unhinged'];
+const ORACLE_CHARACTERS = ['phil', 'kirstie', 'dion'];
+
+const OUTWARD_CODE_RE = /^[A-Z]{1,2}[0-9]{1,2}[A-Z]?$/;
+
+function parseOutwardCode(input) {
+  if (!input || typeof input !== 'string') return '';
+  const trimmed = input.trim().toUpperCase();
+  return trimmed.includes(' ') ? trimmed.split(' ')[0] : trimmed;
+}
+
+function validateOutwardCode(code) {
+  if (!code || typeof code !== 'string') return false;
+  return OUTWARD_CODE_RE.test(code.trim().toUpperCase());
+}
+
+function isValidOracleVoice(voice) {
+  return typeof voice === 'string' && ORACLE_VOICES.includes(voice);
+}
+
+function canSubmitOracle(outwardCode, voice) {
+  return validateOutwardCode(parseOutwardCode(outwardCode || '')) && isValidOracleVoice(voice);
+}
+
+function hasPhilTranslation(text) {
+  if (!text) return false;
+  return text.includes("what we're really talking about here");
+}
+
+const DUBLIN_DRIFT_STAGES = ['[BRIDGE]', '[DEPARTURE]', '[WANDER]', '[SUMMIT]'];
+
+function hasAllDublinDriftStages(text) {
+  if (!text) return false;
+  return DUBLIN_DRIFT_STAGES.every(stage => text.includes(stage));
+}
+
 module.exports = {
   maskKey, isValidKey, shouldUpdateInput,
   Temperature,
@@ -498,4 +537,7 @@ module.exports = {
   CONSEQUENCE_TIERS, applyConsequence, MARSHALS_BELT_EVENT,
   accumulatePanelStats, computeAvgDepth,
   GOLF_PANEL_MEMBER_IDS, COLTART_SOFA_POOLS, getSofaCommentator, getHistoricalDivergence, selectReactionMode,
+  ORACLE_VOICES, ORACLE_REGISTERS, ORACLE_CHARACTERS,
+  validateOutwardCode, parseOutwardCode, isValidOracleVoice, canSubmitOracle,
+  hasPhilTranslation, hasAllDublinDriftStages,
 };

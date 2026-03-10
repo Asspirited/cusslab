@@ -1315,6 +1315,31 @@ Status: CLOSED
 - **Tags:** bug, rod-caught, missing-scenario, dom-state-not-tested, three-amigos-skipped, false-green
 - **Status:** Closed — Session 7
 
+## WL-096
+- **Item:** Bespoke Material function broken — "Enter a sentence to build from" with no sentences
+- **Symptom:** User fills all data fields in Bespoke Material, system shows "Enter a sentence to build from" but no sentences are available to select from — flow is blocked
+- **Suspected cause:** Unknown — likely a missing data source, empty pool, or conditional rendering bug that hides the sentence input without providing an alternative path
+- **Session date:** 2026-03-10
+- **Time lost:** Not yet investigated
+- **Cost impact:** Medium — feature is silently unusable
+- **Tags:** bug, rod-caught, broken-flow, ui
+- **Status:** Open — log only this session, fix deferred
+
+## WL-095
+- **Item:** Claude.ai design session context not captured to Claude Code filesystem
+- **Symptom:** Claude Code had no knowledge of House Name Oracle concept, character specs
+  (Phil/Kirstie/Dion), Oracle voices, or proposed BL items from a ~45-minute Claude.ai
+  design session. Context only available via manual paste by Rod.
+- **Suspected cause:** No protocol trigger for "user pastes Claude.ai transcript" — Claude Code
+  didn't treat it as a capture event. shared-session-state.md only carries Code Claude's
+  output, not Claude.ai design work. Cross-Claude sync is one-directional (Code → Code).
+- **Session date:** 2026-03-10
+- **Time lost:** ~5 min (recoverable), but recurring risk every design session
+- **Cost impact:** Medium (low per session, high cumulative — any un-pasted design session is lost)
+- **Tags:** process-gap, claude-ai-sync, knowledge-loss, cross-claude-handoff, context-recovery
+- **Status:** Open — fix being applied this session: (1) trigger added to session-insession.md;
+  (2) notes/2026-03-10-house-name-oracle.md created with full Oracle design context
+
 ## WL-088
 - **Item:** No failures in BL-035 UI wiring continuation session
 - **Symptom:** N/A — clean run

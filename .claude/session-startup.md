@@ -53,6 +53,20 @@ If any other check fails: root cause before proceeding.
 
 ---
 
+### 2b. NOTES DIRECTORY SCAN (mandatory)
+
+Check for unfiled concept notes from previous sessions:
+```bash
+ls /home/rodent/cusslab/notes/
+ls /home/rodent/risk-and-impact-assessor/notes/
+```
+
+For each file found: read it, confirm whether it has since been promoted to a proper spec or BL item. If yes, delete or archive. If no, treat as active context for this session.
+
+Log count: "Notes pending: N" in session opening summary.
+
+---
+
 ### 3. SHARED STATE + RECENT WASTE (cross-Claude sync — read both)
 
 **First:** Read `.claude/shared-session-state.md` — written by whichever Claude closed last.

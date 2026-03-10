@@ -122,6 +122,24 @@ Keep session-startup.md current. It is the entry point for the next session.
 
 ---
 
+### 6b. CONCEPTUAL CAPTURE (mandatory)
+
+Before closing, scan the full conversation for any of the following that have NOT produced a file this session:
+
+- New panel concepts or character ideas
+- Named mechanics discussed but not specced
+- Design decisions made in conversation
+- BL items referenced but not logged
+- Any named concept (technique, pattern, mechanic) coined this session
+
+For each found: create `/notes/YYYY-MM-DD-[topic].md` in the most relevant repo (cusslab or RIA). One file per topic. Minimum viable capture — bullet points acceptable, full prose not required.
+
+If nothing found: log "Conceptual capture: nothing unfiled" in session summary.
+
+This step is not optional. Unfiled concepts are waste.
+
+---
+
 ### 7. COMMIT AND PUSH (nothing unpushed at close)
 
 ```bash

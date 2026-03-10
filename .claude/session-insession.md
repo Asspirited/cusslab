@@ -50,6 +50,26 @@
 ### TRIGGER: any new persistent artefact (code, config, script, doc, test, report)
 → Run: DEVOPS DESIGN CHECK before writing it
 
+### RULE: Automatic waste logging — always on
+Any time a bug, broken flow, missing behaviour, or quality gap is discovered — log a WL entry immediately, regardless of where in the session it surfaces. Do not wait for closedown.
+
+**Report timing:**
+- **Immediately** if the issue blocks current work or is user-visible (broken feature, crash, wrong output)
+- **At the end of each TDD/BDD/DDD cycle** (after BDD CLOSE or DDD CLEAN): report any waste found during that cycle
+- **At each forcing function checkpoint** (every 3 BL items closed or 5 pipeline runs): summarise open waste logged since last checkpoint
+- **At session closedown**: full waste log review as per existing step 2
+
+**Discovery triggers for automatic logging:**
+- Pipeline failure (any check going RED mid-session)
+- TDD GAP CHECK reveals untested export
+- BDD CLOSE reveals scenario drift or missing scenarios
+- DDD CLEAN reveals domain model gaps
+- TDD CLEAN / refactor checklist finds duplication, magic numbers, or SRP violations
+- Rod mentions something broken in passing
+- Any feature found broken while reading code for a different task (e.g. WL-096 Bespoke Material)
+
+Do not filter or defer. Log it, assign the next WL number, report it. Return to current work.
+
 ### TRIGGER: RAISE NEW WORK — fires on any of these signals:
 - I spot a bug, gap, or quality issue while reading, implementing, or refactoring
 - Pipeline fails and reveals a structural gap
@@ -68,6 +88,15 @@ When Rod sends messages while I am mid-task:
     The override signal may appear in the same message as the priority item, or in the message before it.
 - When I return to the queue after an interrupt, say "Returning to queue:" and list the remaining items.
 - Never silently drop a queued message — if I finish the session without addressing it, flag it at closedown.
+
+### TRIGGER: user pastes a Claude.ai conversation or design transcript
+→ FIRST ACTION before anything else: extract all design decisions, character specs,
+  named mechanics, and proposed BL items to a notes file.
+→ Write to: `/notes/YYYY-MM-DD-[topic].md` in the relevant repo (cusslab or RIA)
+→ Announce: "Capturing [topic] design session to notes/[filename]" before proceeding
+→ Then address the user's actual request.
+→ Log WL item if context would have been lost without the paste (cross-Claude sync gap).
+Failure to do this = WL-095 pattern. The paste is a capture event, not just context.
 
 ### RULE: claude.ai → Claude Code communication
 Never print large instruction blocks to chat for copy-paste.

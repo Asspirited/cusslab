@@ -322,6 +322,26 @@ For items that represent a product hypothesis, add after the CD3 line:
 - CD3: UBV=8 TC=3 RR=2 → CoD=13, Dur=4, **CD3=3.25**
 - Status: OPEN — design discussion needed before any implementation
 
+### BL-054 — Expert Evolution engine: apply to sports panels, build toward panel-agnostic independent engine
+- Current Expert Evolution feature applied to one context. Apply the same mechanic to Sports panels (golf, football, darts) for different attributes (technique evolution, tactical thinking, commentary style over career arc).
+- Longer-term goal: extract into a standalone panel-agnostic engine that can model attribute evolution for any character across any panel, industry, or domain.
+- Needs scoping conversation before CD3 can be scored properly.
+- CD3: TBD — scoping required
+- Status: OPEN — logged only, no implementation scope yet
+
+### BL-053 — House Name Oracle — Comedy Room Mode 2 (postcode → research → Phil/Kirstie/Dion → house names)
+- Epic: House Name Oracle
+- New Comedy Room mode. Input: UK/Irish outward code + mandatory OracleVoice archetype (Elegist/Rogue/DarkOracle/Booster/Snob/Anarchist/Mystic/Local). Oracle researches the location (topography, history, IMD, famous people, wrong attribution, political stance, proximity). Phil Spencer, Kirstie Allsopp, Dion Dublin have a conversation about the research and converge (or don't) on a name. Output: three house names in three registers (Dignified/Knowing/Unhinged) each with Oracle rationale.
+- See notes/2026-03-10-house-name-oracle.md for full design spec.
+- CD3: UBV=8 TC=2 RR=1 → CoD=11, Dur=8, **CD3=1.375**
+- Status: OPEN — Gherkin approved 2026-03-10, TDD in progress
+
+### BL-052 — Homepage quotes: random character attribution + uncertainty disclaimer
+- Epic: Brand Polish
+- Quotes displayed at the top of the app should reference cusslab characters randomly. Each quote attributed to a character followed by a disclaimer in parentheses: (possibly) / (probably) / (yeah....maybe) / (almost certainly) / (according to them) etc. Rotates on load.
+- CD3: UBV=3 TC=1 RR=1 → CoD=5, Dur=2, **CD3=2.5**
+- Status: OPEN
+
 ### BL-050 — Golf Adventure: 2008 Ryder Cup Valhalla (Faldo's disaster)
 - Epic: Ryder Cup Rollout
 - Faldo's catastrophic captaincy. USA win 16½–11½. Sandwich gate, botched opening ceremony introductions (potato joke for Harrington, confused McDowell's nationality, called Hansen "Stenson"), bottom-loaded singles order, Azinger outmanoeuvred him tactically. Players: Faldo (captain/protagonist — plays as an actual character), Poulter (emotional engine of the European team despite the captaincy). Sky/NBC.

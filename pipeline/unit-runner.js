@@ -1,7 +1,7 @@
 // Unit test runner — tests pure functions in pipeline/logic.js
 // Run: node pipeline/unit-runner.js
 
-const { maskKey, isValidKey, shouldUpdateInput, Temperature, makeWoundDetector, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetector, DartsVoiceFmt, dartsBuildBlock, DARTS_PREMONITION_AFFINITIES, COLLECTIVE_CALL_MINIMUM, premonitionEligible, blankPremonitionLedger, assignPremonitionRC, resolvePremonitionCommits, isPremonitionTruthTeller, detectIntellectualAttempt, buildAttemptInstruction, INTELLECTUAL_ATTEMPTS_CONFIG, SOUNESS_CAT_PRE_EXISTING, SOUNESS_CAT_IDS, getAllPairs, getPairTone, allPairsHaveToneAndNote, teslaHasNoWarmOrSolidary, pairToneIsSymmetrical, noConflictingTones, CONSEQUENCE_TIERS, applyConsequence, MARSHALS_BELT_EVENT, accumulatePanelStats, computeAvgDepth, GOLF_PANEL_MEMBER_IDS, COLTART_SOFA_POOLS, getSofaCommentator, getHistoricalDivergence, selectReactionMode } = require('./logic.js');
+const { maskKey, isValidKey, shouldUpdateInput, Temperature, makeWoundDetector, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetector, DartsVoiceFmt, dartsBuildBlock, DARTS_PREMONITION_AFFINITIES, COLLECTIVE_CALL_MINIMUM, premonitionEligible, blankPremonitionLedger, assignPremonitionRC, resolvePremonitionCommits, isPremonitionTruthTeller, detectIntellectualAttempt, buildAttemptInstruction, INTELLECTUAL_ATTEMPTS_CONFIG, SOUNESS_CAT_PRE_EXISTING, SOUNESS_CAT_IDS, getAllPairs, getPairTone, allPairsHaveToneAndNote, teslaHasNoWarmOrSolidary, pairToneIsSymmetrical, noConflictingTones, CONSEQUENCE_TIERS, applyConsequence, MARSHALS_BELT_EVENT, accumulatePanelStats, computeAvgDepth, GOLF_PANEL_MEMBER_IDS, COLTART_SOFA_POOLS, getSofaCommentator, getHistoricalDivergence, selectReactionMode, validateOutwardCode, parseOutwardCode, ORACLE_VOICES, isValidOracleVoice, canSubmitOracle, ORACLE_REGISTERS, ORACLE_CHARACTERS, hasPhilTranslation, hasAllDublinDriftStages } = require('./logic.js');
 
 let passed = 0;
 let failed = 0;
@@ -1064,6 +1064,106 @@ const _vPool = COLTART_SOFA_POOLS.valderrama_1997;
   assert(`COLTART_SOFA_POOLS.valderrama_1997.${mode}[0] is a string`,
     typeof _vPool[mode][0], 'string');
 });
+
+// ── ORACLE — validateOutwardCode ──────────────────────────────────────────────
+
+assert('validateOutwardCode: accepts SW1A',     validateOutwardCode('SW1A'), true);
+assert('validateOutwardCode: accepts LS1',      validateOutwardCode('LS1'),  true);
+assert('validateOutwardCode: accepts M1',       validateOutwardCode('M1'),   true);
+assert('validateOutwardCode: accepts EH1',      validateOutwardCode('EH1'),  true);
+assert('validateOutwardCode: accepts BT1',      validateOutwardCode('BT1'),  true);
+assert('validateOutwardCode: accepts D02',      validateOutwardCode('D02'),  true);
+assert('validateOutwardCode: accepts A65',      validateOutwardCode('A65'),  true);
+assert('validateOutwardCode: rejects 12345',    validateOutwardCode('12345'),   false);
+assert('validateOutwardCode: rejects ABCDEFG',  validateOutwardCode('ABCDEFG'), false);
+assert('validateOutwardCode: rejects empty',    validateOutwardCode(''),        false);
+assert('validateOutwardCode: rejects null',     validateOutwardCode(null),      false);
+
+// ── ORACLE — parseOutwardCode ─────────────────────────────────────────────────
+
+assert('parseOutwardCode: full postcode returns outward code',
+  parseOutwardCode('SW1A 2AA'), 'SW1A');
+assert('parseOutwardCode: already outward code returned as-is',
+  parseOutwardCode('LS1'), 'LS1');
+assert('parseOutwardCode: lowercased input uppercased',
+  parseOutwardCode('m1'), 'M1');
+assert('parseOutwardCode: trims whitespace',
+  parseOutwardCode('  SW1A '), 'SW1A');
+
+// ── ORACLE — ORACLE_VOICES ────────────────────────────────────────────────────
+
+assert('ORACLE_VOICES is an array',          Array.isArray(ORACLE_VOICES), true);
+assert('ORACLE_VOICES has 8 entries',        ORACLE_VOICES.length, 8);
+assert('ORACLE_VOICES contains Elegist',     ORACLE_VOICES.includes('Elegist'),    true);
+assert('ORACLE_VOICES contains Rogue',       ORACLE_VOICES.includes('Rogue'),      true);
+assert('ORACLE_VOICES contains DarkOracle',  ORACLE_VOICES.includes('DarkOracle'), true);
+assert('ORACLE_VOICES contains Booster',     ORACLE_VOICES.includes('Booster'),    true);
+assert('ORACLE_VOICES contains Snob',        ORACLE_VOICES.includes('Snob'),       true);
+assert('ORACLE_VOICES contains Anarchist',   ORACLE_VOICES.includes('Anarchist'),  true);
+assert('ORACLE_VOICES contains Mystic',      ORACLE_VOICES.includes('Mystic'),     true);
+assert('ORACLE_VOICES contains Local',       ORACLE_VOICES.includes('Local'),      true);
+
+// ── ORACLE — isValidOracleVoice ───────────────────────────────────────────────
+
+assert('isValidOracleVoice: Elegist is valid',    isValidOracleVoice('Elegist'),    true);
+assert('isValidOracleVoice: DarkOracle is valid', isValidOracleVoice('DarkOracle'), true);
+assert('isValidOracleVoice: empty string invalid', isValidOracleVoice(''),          false);
+assert('isValidOracleVoice: null invalid',         isValidOracleVoice(null),        false);
+assert('isValidOracleVoice: unknown voice invalid', isValidOracleVoice('Wizard'),   false);
+
+// ── ORACLE — canSubmitOracle ──────────────────────────────────────────────────
+
+assert('canSubmitOracle: valid code + valid voice → true',
+  canSubmitOracle('SW1A', 'Elegist'), true);
+assert('canSubmitOracle: empty code → false',
+  canSubmitOracle('', 'Elegist'), false);
+assert('canSubmitOracle: null code → false',
+  canSubmitOracle(null, 'Elegist'), false);
+assert('canSubmitOracle: invalid code → false',
+  canSubmitOracle('12345', 'Elegist'), false);
+assert('canSubmitOracle: empty voice → false',
+  canSubmitOracle('SW1A', ''), false);
+assert('canSubmitOracle: null voice → false',
+  canSubmitOracle('SW1A', null), false);
+assert('canSubmitOracle: invalid voice → false',
+  canSubmitOracle('SW1A', 'Wizard'), false);
+
+// ── ORACLE — ORACLE_REGISTERS ─────────────────────────────────────────────────
+
+assert('ORACLE_REGISTERS is an array',           Array.isArray(ORACLE_REGISTERS), true);
+assert('ORACLE_REGISTERS has exactly 3 entries', ORACLE_REGISTERS.length, 3);
+assert('ORACLE_REGISTERS contains Dignified',    ORACLE_REGISTERS.includes('Dignified'), true);
+assert('ORACLE_REGISTERS contains Knowing',      ORACLE_REGISTERS.includes('Knowing'),   true);
+assert('ORACLE_REGISTERS contains Unhinged',     ORACLE_REGISTERS.includes('Unhinged'),  true);
+
+// ── ORACLE — ORACLE_CHARACTERS ────────────────────────────────────────────────
+
+assert('ORACLE_CHARACTERS is an array',          Array.isArray(ORACLE_CHARACTERS), true);
+assert('ORACLE_CHARACTERS has exactly 3 entries', ORACLE_CHARACTERS.length, 3);
+assert('ORACLE_CHARACTERS contains phil',        ORACLE_CHARACTERS.includes('phil'),    true);
+assert('ORACLE_CHARACTERS contains kirstie',     ORACLE_CHARACTERS.includes('kirstie'), true);
+assert('ORACLE_CHARACTERS contains dion',        ORACLE_CHARACTERS.includes('dion'),    true);
+
+// ── ORACLE — hasPhilTranslation ───────────────────────────────────────────────
+
+assert('hasPhilTranslation: detects Phil marker phrase',
+  hasPhilTranslation("what we're really talking about here is the market value"), true);
+assert('hasPhilTranslation: returns false without marker',
+  hasPhilTranslation("This is a lovely area with good transport links."), false);
+assert('hasPhilTranslation: returns false on empty string',
+  hasPhilTranslation(''), false);
+
+// ── ORACLE — hasAllDublinDriftStages ─────────────────────────────────────────
+
+const _fullDrift = '[BRIDGE] Location is everything [DEPARTURE] reminds me of Villa [WANDER] pie in Coventry [SUMMIT] I scored a hat-trick. Anyway. Lovely kitchen.';
+const _missingWander = '[BRIDGE] Location [DEPARTURE] reminds me [SUMMIT] hat-trick.';
+
+assert('hasAllDublinDriftStages: returns true when all four stages present',
+  hasAllDublinDriftStages(_fullDrift), true);
+assert('hasAllDublinDriftStages: returns false when a stage is missing',
+  hasAllDublinDriftStages(_missingWander), false);
+assert('hasAllDublinDriftStages: returns false on empty string',
+  hasAllDublinDriftStages(''), false);
 
 // ── Results ──────────────────────────────────────────────────────────────────
 
