@@ -852,7 +852,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Spike: if the voice lands, proceed to Mode B. If not, don't. BL-105 (hardmen panel) and BL-110 (scene library) are blocked until this validates.
 - Design notes: notes/2026-03-10-sun-tzu-pub-navigator.md
 - CD3: UBV=8 TC=8 RR=7 → CoD=23, Dur=2, **CD3=11.5**
-- Status: OPEN — raised 2026-03-10
+- Status: CLOSED — 2026-03-10. 205a606. 5 situations, buildPubAdvicePrompt(), PubNavigator IIFE, LITTLE MISADVENTURE nav group. 1423/1423 Gherkin, 654/654 units.
 
 ### BL-105 — Hardmen reaction panel (Roy Keane, Vinny Jones, Nostradamus)
 - Epic: Sun Tzu Pub Navigator
