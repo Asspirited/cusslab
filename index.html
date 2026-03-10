@@ -6482,8 +6482,15 @@ const Training = (() => {
       : '<div style="color:var(--muted);font-style:italic;">Nothing inferred yet. Run pattern analysis.</div>';
   }
 
+  async function logPanelRating(panelType, emoji, score) {
+    const data = await _loadTraining();
+    data.ratings.push({ ts: Date.now(), feature: panelType, emoji, score, phrase: '' });
+    if (data.ratings.length > 200) data.ratings = data.ratings.slice(-200);
+    await _saveTraining(data);
+  }
+
   return {
-    logFeedback, logWorkoutRating, showMode, initDashboard, recalcProfile,
+    logFeedback, logWorkoutRating, logPanelRating, showMode, initDashboard, recalcProfile,
     runWorkout, addToDictionary, generateInsights, getDictionary,
   };
 })();
@@ -9112,6 +9119,7 @@ function panelRating(evt, panelType, emoji) {
   const scoreMap = { '💩': 1, '😐': 2, '😂': 3, '🤣': 4 };
   const rating = scoreMap[emoji] || 2;
   HCSession.logTurdRating(rating, panelType, '');
+  Training.logPanelRating(panelType, emoji, rating);
   // Brief thank-you flash on button
   const btn = evt.target;
   const orig = btn.style.transform;
