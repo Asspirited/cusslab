@@ -59,6 +59,16 @@
 - Any observation that, if unrecorded, will be WL-001 all over again
 → Run: RAISE NEW WORK SEQUENCE — immediately, before returning to current work
 
+### RULE: CONTINUE — message queue handling
+When Rod sends messages while I am mid-task:
+- **Default behaviour:** queue them in order, work through them after the current task completes.
+  Do not interrupt mid-sequence to address a new message.
+- **Override signals** — Rod uses these to break queue order:
+  - `INTERRUPT` / `THIS 1st` / `FIRST` / `STOP` → address THAT message before finishing the current task.
+    The override signal may appear in the same message as the priority item, or in the message before it.
+- When I return to the queue after an interrupt, say "Returning to queue:" and list the remaining items.
+- Never silently drop a queued message — if I finish the session without addressing it, flag it at closedown.
+
 ### RULE: claude.ai → Claude Code communication
 Never print large instruction blocks to chat for copy-paste.
 Always write to a file using the computer tool, present it to Rod,

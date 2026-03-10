@@ -313,6 +313,15 @@ For items that represent a product hypothesis, add after the CD3 line:
 - CD3: UBV=7 TC=1 RR=1 → CoD=9, Dur=4, **CD3=2.3**
 - Status: OPEN
 
+### BL-051 — Distribution: make Cusslab discoverable + installable
+- Currently: direct URL only. No SEO, no install, no organic reach.
+- **Phase 1 (low cost):** Real domain (cusslab.co.uk or similar), `<title>` + meta description per page, og:image for sharing. Makes it indexable and shareable.
+- **Phase 2 (moderate cost):** PWA — manifest.json + service worker. iOS/Android "Add to Home Screen" install, offline caching. Feels native, no App Store needed.
+- **Phase 3 (high cost, validate demand first):** Native app store wrapper (Capacitor/React Native). Only justified if Phase 1+2 prove audience exists.
+- Recommend: discuss Phase 1 first — it costs almost nothing and unblocks organic discovery before Phase 2.
+- CD3: UBV=8 TC=3 RR=2 → CoD=13, Dur=4, **CD3=3.25**
+- Status: OPEN — design discussion needed before any implementation
+
 ### BL-050 — Golf Adventure: 2008 Ryder Cup Valhalla (Faldo's disaster)
 - Epic: Ryder Cup Rollout
 - Faldo's catastrophic captaincy. USA win 16½–11½. Sandwich gate, botched opening ceremony introductions (potato joke for Harrington, confused McDowell's nationality, called Hansen "Stenson"), bottom-loaded singles order, Azinger outmanoeuvred him tactically. Players: Faldo (captain/protagonist — plays as an actual character), Poulter (emotional engine of the European team despite the captaincy). Sky/NBC.
