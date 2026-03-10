@@ -6,9 +6,9 @@ Feature: Quntum Leeks
   Background:
     Given the Quntum Leeks panel is available in the app
 
-  Scenario: Quntum Leeks tab appears in the PLAY nav group
+  Scenario: Quntum Leeks tab appears in the LITTLE MISADVENTURE nav group
     Given I am on the main page
-    Then "Quntum Leeks" should be in the PLAY nav group
+    Then "Quntum Leeks" should be in the LITTLE MISADVENTURE nav group
 
   Scenario: Quntum Leeks panel has a scenario selector and leap button
     Given the Quntum Leeks panel is loaded
