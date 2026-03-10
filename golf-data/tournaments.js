@@ -1791,6 +1791,58 @@ const TOURNAMENTS = [
     ]
   }
 
+,
+
+  // ── 2007 Open Championship — Carnoustie ───────────────────────────────────────
+  {
+    id:"carnoustie_2007", year:2007, eraClass:"era-2007", lbClass:"lb-2007",
+    name:"The Burn",
+    course:"Carnoustie Golf Links", country:"Carnoustie, Angus, Scotland",
+    type:"major", badge:"badge-major", days:4,
+    lore:"Padraig Harrington hit his tee shot into the Barry Burn on 18. He dropped, hit his third shot into the Barry Burn again. He made double bogey to finish at -1, tied with Sergio García who was watching in the scorer's tent with a two-shot lead that had evaporated over the last two holes. They played a four-hole playoff. Harrington won. García has not won a major. He would not win a major for another ten years.",
+    players:[
+      { id:"padraig_harrington", name:"Pádraig Harrington", abbr:"HAR",
+        temperamentProfile:"LEVELHEADED",
+        temperamentProfileSecondary:"COMBUSTIBLE",
+        bottle:9, ego:6, temperament:8, shame:4,
+        driving:7, irons:8, short_game:9, putting:8, recovery:9, bunkers:8, course_management:9,
+        desc:"Made double bogey on the last hole of regulation. Hit it in the burn twice. Tied García as a result of this disaster. Won the playoff. This is either a story about resilience or about luck depending on which player you were watching.",
+        wound:"Knows he should have made five at worst on 18. Instead he made six. Still won. Is not entirely sure what to feel about this.",
+        historicalScores:[-3,-4,-3,-1] },
+      { id:"sergio_garcia_2007", name:"Sergio García", abbr:"SER",
+        temperamentProfile:"COMBUSTIBLE",
+        temperamentProfileSecondary:"STREAKY",
+        bottle:5, ego:8, temperament:6, shame:6,
+        driving:9, irons:9, short_game:8, putting:6, recovery:8, bunkers:8, course_management:6,
+        desc:"Led by two with two holes to play. Bogeyed 17. Watched Harrington make double on 18 from the scorer's tent. Went back out for the playoff and could not win it. Another major championship that got away.",
+        wound:"Had it. Had it in both hands with two holes left. Bogeyed 17. Then watched Harrington dismantle 18 and still tie him. Has now lost majors he was leading. The pattern is forming.",
+        historicalScores:[-4,-3,-4,-1] },
+    ],
+    field:[
+      {name:"Andres Romero",    scores:[-4,-3,-2,-2]},
+      {name:"Richard Green",    scores:[-2,-3,-3,-3]},
+      {name:"Stewart Cink",     scores:[-2,-2,-2,-2]},
+      {name:"Hunter Mahan",     scores:[-1,-2,-2,-2]},
+    ],
+    holes:[
+      {id:"car17_2007", name:"17th — Island Green",    par:4, yards:461, hazard:"Barry Burn crossing fairway and behind green, tight line required",
+       lore:"García bogeyed 17 in the final round to drop to -3, suddenly only one clear. The Burn crosses the fairway 280 yards out and runs behind the green. Every approach has water in play. It is the hole that opened the door.",
+       incidents:["Sergio García bogeyed 17 in the final round to drop his lead to one.","The Barry Burn on 17 has ended more Open Championships than any single hazard in links golf.","The sound of the burn running through Carnoustie's finishing holes is the sound of golf history being made and unmade."],
+       events:["lead_change","burn_hazard","door_opens"], pressureRating:4,
+       modifiers:{atmosphereNote:"Carnoustie 17 in the final round. García is at -4. He bogeys. He is at -3. Harrington is at -2. One hole left. The wind is off the sea."}},
+      {id:"car18_2007", name:"18th — The Barry Burn",  par:4, yards:499, hazard:"Barry Burn crossing fairway twice, out of bounds left, long tight approach",
+       lore:"Harrington hit his tee shot into the Barry Burn. He dropped. He hit his third into the Barry Burn again. He made double bogey six. He tied García. García, who had watched this from the scorer's tent while leading, had to go back out. Harrington won the playoff.",
+       incidents:["Padraig Harrington hit his tee shot into the Barry Burn on 18.","He dropped and played his third shot. Into the Barry Burn again.","He made double bogey six and finished tied with Sergio García.","Sergio García, watching from the scorer's tent with a two-shot lead that had become a tie, had to return to the course.","Harrington won the four-hole aggregate playoff.","García has still not won a major. He will wait another ten years.","The Barry Burn on 18 at Carnoustie is 80 yards wide. Harrington found it twice from the same tee."],
+       events:["historic_collapse","burn_twice","tied_up","playoff_earned"], pressureRating:5,
+       modifiers:{thresholdAdd:2, compCost:2, atmosphereNote:"Carnoustie 18, Sunday 2007. Harrington needs par. He finds the burn. He drops. He finds the burn again. He makes six. He is tied. García, in the scorer's tent with a two-shot lead, watches his major disappear."}},
+      {id:"car18p_2007", name:"18th — The Playoff",    par:4, yards:499, hazard:"Barry Burn still there, same hole, different day",
+       lore:"The four-hole aggregate playoff was played the following day. Harrington made birdie on the last to win. García made par. The margin was one shot across four holes. Harrington held the Claret Jug. García walked back to the clubhouse.",
+       incidents:["Harrington birdied the final hole of the playoff.","García made par. The aggregate score across the four playoff holes was Harrington -1, García E.","It was Harrington's first major. He won again at Carnoustie the following year and then at Birkdale in 2008.","García did not win a major until the 2017 Masters, on what would have been Seve Ballesteros's 60th birthday."],
+       events:["playoff","final_hole","claret_jug","garcia_again"], pressureRating:5,
+       modifiers:{atmosphereNote:"The playoff hole. Carnoustie 18 again. Harrington birdies. García pars. It is over. Harrington holds the Claret Jug. García does not."}},
+    ]
+  }
+
 ];
 
 if (typeof module !== 'undefined') module.exports = { TOURNAMENTS };
