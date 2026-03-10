@@ -808,7 +808,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - CSS classes: reuse existing `.gf-suggestion-card` styles or alias. Logic: one `buildSuggestionTray()` call per panel on page load / mode switch.
 - Three Amigos needed: agree whether to reuse existing question data, create panel-specific pools, or pull from a shared suggestions data file.
 - CD3: UBV=7 TC=5 RR=3 → CoD=15, Dur=2, **CD3=7.5**
-- Status: OPEN — raised 2026-03-10
+- Status: CLOSED — 2026-03-10 (7c829be). FB/DT/LR suggestion trays added. Shared buildSuggestions() extracted. 14 Gherkin scenarios green.
 
 ### BL-099 — Comedy Room: promote sub-features to top-level nav items
 - House Name Oracle, The Roast Room, and The Writing Room are currently nested as sub-tabs inside the Comedy Room panel.
