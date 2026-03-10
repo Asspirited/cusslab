@@ -96,7 +96,7 @@ This is the handoff from the other Claude. If file doesn't exist: note it and co
 
 **Then:** Read `.claude/practices/waste-log.md` — last 5 entries only, report any with Status: OPEN.
 
-Current open items as of 2026-03-10: WL-MODE-001 (design-session audit gap), WL-MODE-002 (darts character debt: Rod Harrington/Bobby George). Recurring: auth failures (WL-060, 066). Recurring gherkin step shadowing: WL-099, WL-100, WL-103 (lint fix is BL-098).
+Current open items as of 2026-03-10 (session 4): WL-MODE-001 (design-session audit gap), WL-MODE-002 (darts character debt: Rod Harrington/Bobby George). Recurring: auth failures (WL-060, 066). Recurring gherkin step shadowing: WL-099, WL-100, WL-103 (lint fix BL-098 now CLOSED). WL-111: transform script comment-parsing bug (closed same session).
 
 ---
 
@@ -110,19 +110,18 @@ For each open product-bet item, ask:
 - Is there a falsifier — something that would tell us we were wrong?
 Full outer loop: `.claude/practices/hypothesis-driven.md`
 
-Current top 3 as of 2026-03-10 (session 3 post close):
-- BL-094 Self-Training: rating buttons missing from most panel outputs (CD3=3.5) — OPEN, unblocked by BL-093
-- BL-098 Gherkin step namespace collision lint check (CD3=4.5) — OPEN
-- BL-051 Distribution: domain + SEO + PWA (CD3=3.25) — OPEN
+Current top 3 as of 2026-03-10 (session 4 post close):
+- BL-107 Nostradamus character spec: juxtaposition mechanic with Sun Tzu (CD3=11.0) — OPEN
+- BL-105 Hardmen reaction panel (Roy Keane, Vinny Jones, Nostradamus) (CD3=7.5) — OPEN
+- BL-106 Sun Tzu general advisory mode (post-pub validation) (CD3=5.5) — OPEN
 
-Recently closed (2026-03-10 session 3):
-- BL-095: The Roast Room — 5 authors roast any title simultaneously (Comedy Room tab 3)
-- BL-059: The Writing Room — 3 authors discuss any topic in sequence (Comedy Room tab 4)
-- BL-093: Panel ratings bridge to self-training persistent store (bug fix)
+Recently closed (2026-03-10 session 4):
+- BL-112: Ryder Cup 5-session structure, team score tracking, user match in totals (WL-109 + WL-110 fixed)
 
 Comedy Room now has 4 tabs: Into The Room / House Name Oracle / The Roast Room / The Writing Room.
 AUTHORS_POOL: 7 authors (hemingway, mccarthy, tolkien, patterson, pratchett, wodehouse, austen).
 Character files for all 7 authors: feature-agnostic canonical model in characters/*.md.
+Golf Adventure: Ryder Cup now 5-session model (matchPlaySessions[5], sessions:5, sessionLabels). G.session + G.teamScore in state. All 10 Ryder Cup tournaments updated.
 
 Agree with Rod which item is being worked this session BEFORE opening any code file.
 

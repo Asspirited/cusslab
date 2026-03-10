@@ -456,3 +456,26 @@ Unit runner imports from pipeline/logic.js. No unit runner changes needed.
 **Contents:** last commit, what shipped, open WL items, backlog top 3, protocol status, carry-forward notes.
 
 **Invariant:** If the file doesn't exist (first session after this decision), Claude notes it and continues — not an error.
+
+### BL-112: Ryder Cup 5-session model (2026-03-10)
+
+**Decision:** Ryder Cup restructured from 3 days to 5 sessions. `matchPlayDays[3]` → `matchPlaySessions[5]`. Tournament property `days:3` → `sessions:5` + `sessionLabels:[5 labels]`.
+
+**Session structure:**
+- Session 0: Day 1 Morning — Foursomes
+- Session 1: Day 1 Afternoon — Fourballs
+- Session 2: Day 2 Morning — Fourballs
+- Session 3: Day 2 Afternoon — Foursomes
+- Session 4: Day 3 — Singles
+
+**ABSENT format:** `{format:"ABSENT"}` marks sessions where the player is not selected. `isSessionAbsent()` checks this; `showRestScreen()` shows parallel match results instead of game.
+
+**Game state:** `G.session` (current session 0-4) added alongside `G.day` (kept for non-Ryder stroke play). `G.teamScore:{EUR:N, USA:N}` accumulates across sessions via `addSessionToTeamScore()`.
+
+**parallelMatches:** expanded from 3 arrays to 5 — index matches session index. Day 2 AM/PM placeholder data added to all 10 Ryder Cup tournaments.
+
+**MatchPlayService additions:** `firstActiveSession`, `isSessionAbsent`, `addSessionToTeamScore`, `buildEndOfSessionLeaderboard`, `buildRestScreenData`. Old `buildEndOfDayLeaderboard` / `firstActiveDay` / `isDayAbsent` kept for backward compat.
+
+**WL-109 fix:** `buildEndOfSessionLeaderboard` always adds user's match as explicit row; never relies on pm name detection.
+
+**Invariant:** `tournament.sessions` (Ryder) or `tournament.days` (other) gives total session/day count. Code uses `tournament.sessions || tournament.days` to handle both types.

@@ -1494,3 +1494,13 @@ Status: CLOSED
 - **Cost impact:** Low — cosmetic but confusing
 - **Tags:** `#ryder-cup` `#commentary` `#error-handling` `#silent-failure`
 - **Status:** Fixed 2026-03-10 — BL-112
+
+## WL-111
+- **Item:** Transform script `expand-ryder-sessions.js` produced syntax error due to `[` inside inline comment
+- **Symptom:** Pipeline RED after applying the Ryder Cup session transform. `node -e "require('./golf-data/tournaments.js')"` threw `SyntaxError: Unexpected token ']'` at line 1059. The Brookline 1999 `parallelMatches` had an inline comment `// Day 3 (Sunday) — Singles  [array index 2]` containing a `[` bracket that the `expandParallelMatches()` parser matched as the start of the third sub-array, leaving 4 arrays (not 3) and corrupting the output.
+- **Suspected cause:** `expandParallelMatches()` skip-to-first-bracket loop `while (text[i] !== '[' && text[i] !== ']') i++` does not skip JS comments. A bracket inside a comment is treated as array syntax.
+- **Session date:** 2026-03-10
+- **Time lost:** ~10 min (caught immediately, manual fix)
+- **Cost impact:** Low — pipeline caught it, corrected in the same session
+- **Tags:** `#transform-script` `#comment-parsing` `#tournaments-js` `#ryder-cup`
+- **Status:** Closed — manually fixed Brookline 1999 parallelMatches in tournaments.js. Script is one-time-use so no code change made.
