@@ -9381,14 +9381,33 @@ const ConspireEngine = (() => {
 // ============================================================
 const FoodWeather = (() => {
   const FOOD_TERMS = [
-    'eat','ate','eating','eaten','food','lunch','dinner','breakfast','sandwich','restaurant',
-    'meal','hungry','dish','drink','coffee','tea','wine','beer','chicken','beef','fish',
-    'pasta','pizza','burger','chips','toast','barramundi','meat','pie','kebab','lashings',
-    'pudding','curry','steak','cake','pimento','biscuit','ginsters','tunnock','buffet',
-    'takeaway','menu','waiter','waitress','pub grub','bite','snack'
+    // FOOD TYPE — specific items and categories
+    'eat','ate','eating','eaten','food','meal','dish','bite','snack','portion','serving',
+    'breakfast','lunch','dinner','supper','brunch','elevenses',
+    'sandwich','sarnie','baguette','wrap','roll','bap','cob',
+    'chicken','beef','lamb','pork','steak','sausage','bacon','ham','prawn','lobster',
+    'fish','salmon','tuna','cod','haddock','sea bass','barramundi',
+    'pasta','pizza','risotto','paella','tapas','tagine','goulash','biryani','curry',
+    'burger','chips','toast','pie','pasty','sausage roll','scotch egg',
+    'kebab','shawarma','gyros','dim sum','noodles','ramen','sushi',
+    'salad','avocado','hummus','sourdough','croissant','brioche','artisan',
+    'pudding','cake','biscuit','chocolate','ice cream','sorbet','trifle','pavlova',
+    'crisps','pork scratchings','pimento','lashings','ginsters','tunnock',
+    // LOCATION — where food is consumed or discussed
+    'restaurant','bistro','brasserie','cafe','canteen','chippy','chip shop',
+    'pub grub','greasy spoon','hotel','room service','buffet','takeaway','drive-through',
+    'motorway services','hospitality','green room','club house','press room',
+    'nobu','the ivy','hawksmoor','rules','claridge','savoy grill',
+    // CONTEXT — drinks and social eating signals
+    'drink','coffee','tea','wine','beer','lager','pint','champagne','whisky','gin',
+    'water','orange juice','smoothie','cocktail','spritzer',
+    'hungry','thirsty','starving','famished','full','stuffed',
+    'menu','waiter','waitress','sommelier','maître d','reservation','table',
+    'course','starter','main','dessert','afters','nightcap'
   ];
 
   const HYPO_BASE = [
+    // REAL AILMENTS — exaggerated
     "burnt toast",
     "arm's gone a bit numb",
     "jaw's quite tight",
@@ -9399,7 +9418,37 @@ const FoodWeather = (() => {
     "I can smell something burning",
     "feel a bit short of breath if I'm honest",
     "I've gone quite hot",
-    "my left side's gone funny"
+    "my left side's gone funny",
+    "back's not right — not wrong, just not right",
+    "the knee — not the obvious knee, the other one",
+    "shoulder's gone — well, not gone, but different from what it was",
+    "I've had an eye thing since Tuesday",
+    "lower lumbar situation developing",
+    "the hip flexor's been a conversation all week",
+    "the ankle — I don't want to talk about the ankle",
+    "something with the neck that clicks now — it didn't use to click",
+    // FICTIONAL — medically unverifiable
+    "I've had it diagnosed as nothing, which is its own diagnosis",
+    "the doctor said it was stress. It isn't stress. He knows it isn't stress.",
+    "tingling that I've had categorised and I don't love the category",
+    "something systemic — nothing local — they've ruled out the obvious things",
+    "I'm monitoring it, which is different from treating it, and I want that noted",
+    "it resolved itself, which is sometimes worse — you never know what resolved it",
+    "a pressure that moves — not pain, pressure — starts here, ends there",
+    "I've been advised to 'observe and report back', which I'm doing, and the report is not good",
+    "I have a number for it now. They gave me a number. I don't know what the number means.",
+    // BORROWED — observed in others
+    "I watched someone limp earlier and my foot started",
+    "Langer mentioned something similar in '94 and his cleared up eventually",
+    "saw something in a documentary and recognised it immediately — the recognition was not welcome",
+    "a colleague described their symptoms and I had half of them before he finished",
+    // PRESSURE AND PERFORMANCE — general
+    "cortisone — not my first — the third, which I'm told is normal but feels like a trajectory",
+    "something about the way I'm standing that the physio says is fine but he's being reassuring",
+    "something behind the knee that only appears under pressure — I've had it verified",
+    "the tremor is very minor. The fact that it's minor is not reassuring.",
+    "something at the base of the skull that arrives at roughly the same time every day",
+    "I've had three opinions and they don't match, which is its own kind of answer"
   ];
 
   function createPool() {
@@ -11535,7 +11584,11 @@ NON-SEQUITUR OPENERS — fire occasionally:
 
 Method:
 1. The golf metaphor that turns out to be about something else — or doesn't — both outcomes acceptable.
-2. Food pool — pick any item, in any order, never repeat within a session. Do NOT default to cheese and pickle — it is one item among many, used occasionally, not a starting point. Pool: ham sandwich (no mayo, never could stand the stuff). Prawn sandwich. Baguette. Bagel. Jambon ibéric (Valderrama, Tuesday, the Spanish understood something). Victoria sponge. Scotch egg. Tunnock's teacake. Kendal Mint Cake. Crème brûlée (Sunningdale, after the second round, he committed to it). Pot Noodle. Findus Crispy Pancake. Slightly warm Ginsters from a garage near the A1. McDonald's double cheeseburger (not embarrassed — he committed to it). Cheese and pickle with piccalilli — do you remember piccalilli? Magic stuff. Cheese and pickle sandwich (plain, occasionally, not as a default). Dirty kebab after too many sherries (late rounds only — cycled home, in the rain, committed). The food is always slightly wrong for the occasion. The commitment is always total.
+2. Food pool — pick any item, in any order, never repeat within a session. Do NOT default to cheese and pickle — it is one item among many, used occasionally, not a starting point. Pool: ham sandwich (no mayo, never could stand the stuff). Prawn sandwich. Baguette. Bagel. Jambon ibéric (Valderrama, Tuesday, the Spanish understood something). Victoria sponge. Scotch egg. Tunnock's teacake. Kendal Mint Cake. Crème brûlée (Sunningdale, after the second round, he committed to it). Pot Noodle. Findus Crispy Pancake. [GINSTERS — see below]. McDonald's double cheeseburger (not embarrassed — he committed to it). Cheese and pickle with piccalilli — do you remember piccalilli? Magic stuff. Cheese and pickle sandwich (plain, occasionally, not as a default). Dirty kebab after too many sherries (late rounds only — cycled home, in the rain, committed). The food is always slightly wrong for the occasion. The commitment is always total.
+
+GINSTERS ADJECTIVE RULE: Never use "slightly warm" twice. Vary the thermal adjective every time. Options (rotate unpredictably): slightly warm. worryingly warm. technically warm. barely warm. what you'd generously call warm. somehow still warm. ambient — which is not the same as warm but adjacent. warm in spirit if not in temperature. room temperature (the room was cold). not cold, which is not the same as warm, but is something. The Ginsters is always from a garage. The garage is never the same one. Garage locations (rotate): near the A1. off the A12. somewhere on the M25 (the junction is disputed). on the M1 going north, or possibly south. a Shell off the A14. a forecourt in Stevenage that may now be a Waitrose. a BP on the orbital that was mostly a car park. a garage that smelled of WD-40 and optimism. Do not fix the location. The Ginsters moved. The garage changed. The commitment was total.
+
+ADJECTIVE/ADVERB VARIETY — general principle: never use the same thermal, quality, or contextual adjective twice for any food in a session. The variance is the point. If something is "slightly" wrong, the next wrong thing is "technically" wrong or "fractionally" wrong or "wrong in a way that reveals something true." Vary the modifier, not just the noun.
 
 Piccalilli trigger: when Faldo mentions piccalilli, it sets the room off. Faldo is genuinely enthusiastic — "magic stuff." The reactions are character-specific and defined in each character's prompt.
 3. The almost-insight: arrive somewhere true by an absurd route. The reference produces a genuine point. The destination is occasionally real. You don't notice you've arrived somewhere true. Everyone else does.
