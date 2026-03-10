@@ -1846,6 +1846,58 @@ const TOURNAMENTS = [
 
 ,
 
+  // ── 2000 US Open — Pebble Beach ────────────────────────────────────────────────────────
+  {
+    id:"pebble_beach_2000", year:2000, eraClass:"era-2000-us", lbClass:"lb-2000-us",
+    name:"Fifteen",
+    course:"Pebble Beach Golf Links", country:"Monterey, California",
+    type:"major", badge:"badge-major", days:4,
+    lore:"Tiger Woods won the 2000 US Open at Pebble Beach by fifteen shots. He set or tied every US Open scoring record that existed. He shot 65-69-71-67 for 272, 12 under par. The next player on the leaderboard was Ernie Els and Miguel Angel Jimenez, tied for second at 3 over. That is a margin of fifteen shots. On the Thursday morning Tiger made his first double bogey of the tournament and still led after round one. The rough at Pebble Beach that week was grown to five inches. Tiger found it three times in four rounds.",
+    players:[
+      { id:"tiger_woods_2000", name:"Tiger Woods", abbr:"TIG",
+        temperamentProfile:"ICEBERG",
+        temperamentProfileSecondary:"PEAKER",
+        bottle:10, ego:10, temperament:10, shame:1,
+        driving:10, irons:10, short_game:10, putting:10, recovery:10, bunkers:10, course_management:10, shot_variation:10,
+        desc:"In the middle of the Tiger Slam year. Three majors from four attempted in 2000-2001. In a different place mentally and physically from any other competitor at Pebble Beach this week.",
+        wound:"No wound. Tiger at 24 in the year 2000 has no wound that the game of golf can find.",
+        historicalScores:[-7,-11,-11,-12] },
+      { id:"ernie_els_2000", name:"Ernie Els", abbr:"ELS",
+        temperamentProfile:"ICEBERG",
+        temperamentProfileSecondary:"LEVELHEADED",
+        bottle:9, ego:6, temperament:9, shame:2,
+        driving:9, irons:9, short_game:8, putting:9, recovery:9, bunkers:8, course_management:9, shot_variation:8,
+        desc:"Finished second to Tiger. Played well. It was not remotely enough. Second at two US Opens in six years and twelve shots behind both times is a different kind of record.",
+        wound:"The Big Easy won three majors and spent most of the early 2000s in Tiger's shadow. Finishing second by fifteen is its own biography.",
+        historicalScores:[0,-1,+1,+3] },
+    ],
+    field:[
+      {name:"Miguel Ángel Jiménez", scores:[0,-1,+1,+3]},
+      {name:"John Huston",          scores:[+1,0,0,+2]},
+      {name:"Lee Westwood",         scores:[+1,+1,+1,+2]},
+      {name:"Padraig Harrington",   scores:[+1,+1,+1,+2]},
+    ],
+    holes:[
+      {id:"pb6_2000", name:"6th — The Cliffside",         par:5, yards:516, hazard:"Fairway curves left, cliff face right drops to ocean, no bailout right",
+       lore:"The 6th at Pebble Beach runs along the ocean cliff. The rough on the right catches anything missing the fairway — and in 2000 the rough was grown to five inches to prevent exactly the recovery shots Tiger had mastered everywhere else.",
+       incidents:["Tiger made birdie on 6 in three of four rounds.","The cliffside rough at Pebble Beach in 2000 was USGA-specification five inches — the longest rough for a US Open in twenty years.","Two players found the cliff edge in round two and were unable to make up-and-down from the rocks."],
+       events:["eagle_chance","cliff_hazard","ocean_wind"], pressureRating:3,
+       modifiers:{atmosphereNote:"6th at Pebble Beach. Ocean to the right. Five-inch rough. Birdie opportunity if you can carry the fairway bunker. Tiger is already at -8."}},
+      {id:"pb8_2000", name:"8th — The Chasm",             par:4, yards:431, hazard:"Tee shot over inlet, second shot over 100-foot chasm to elevated green above Pacific",
+       lore:"The 8th at Pebble Beach is rated one of the greatest holes in golf. The tee shot crosses a coastal inlet. The approach shot must carry a 100-foot chasm to a green sitting above the Pacific Ocean. In 2000 the wind was offshore and the approach yardages were unreliable.",
+       incidents:["Tiger hit his approach on 8 to four feet in the final round and made birdie.","At least eight players found the cliff face or the chasm in the first two rounds.","Jack Nicklaus called 8 at Pebble Beach 'the most demanding second shot in golf.'"],
+       events:["iconic_hole","chasm_carry","wind_factor","gallery_hushed"], pressureRating:4,
+       modifiers:{thresholdAdd:1, atmosphereNote:"8th at Pebble Beach. The chasm. The Pacific. The approach over nothing. Tiger has played it four times and birdied three. You are not Tiger."}},
+      {id:"pb18_2000", name:"18th — The Pacific Closer",  par:5, yards:543, hazard:"Left side is ocean wall the entire length, tee shot over ocean inlet",
+       lore:"Tiger stood on the 18th tee on Sunday knowing he had already won by the widest margin in US Open history. He made birdie. The gap at the end was fifteen shots. The silver trophy was presented on the 18th green with the Pacific as the backdrop and the number fifteen in every broadcast caption.",
+       incidents:["Tiger needed only a walk to win — he made birdie anyway.","The fifteen-shot margin at a US Open had not been seen since Jim Barnes in 1921.","Every scoring record Tiger set or tied in 2000 at Pebble Beach still stands.","When the scoreboard was taken down the number 272 was underneath and the gap next to it read +3. They left the gap up for the broadcast."],
+       events:["final_hole","gallery_eruption","historic_margin","tiger_slam"], pressureRating:3,
+       modifiers:{atmosphereNote:"18th at Pebble Beach. Tiger on the 18th. He's won by fifteen. The ocean is on his left. He birdies anyway. There is no drama. That's the drama."}},
+    ]
+  }
+
+,
+
   // ── 1994 US Open — Oakmont Country Club ───────────────────────────────────────────────
   {
     id:"oakmont_1994", year:1994, eraClass:"era-1994", lbClass:"lb-1994",
