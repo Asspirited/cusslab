@@ -1687,6 +1687,58 @@ const TOURNAMENTS = [
     ]
   }
 
+,
+
+  // ── 2005 Masters — Augusta National ──────────────────────────────────────────
+  {
+    id:"augusta_2005", year:2005, eraClass:"era-2005", lbClass:"lb-2005",
+    name:"The Chip-In",
+    course:"Augusta National Golf Club", country:"Augusta, Georgia",
+    type:"major", badge:"badge-major", days:4,
+    lore:"Tiger Woods and Chris DiMarco played 72 holes and finished tied. On the 16th tee in Sunday's final round Tiger was one behind DiMarco. He hit a chip shot from above the hole — the ball rolled toward the cup, slowed on the lip, paused for a full second with the Nike swoosh visible to every camera in the world, and dropped in. Verne Lundquist said: 'In your life, have you ever seen anything like that?' Nike ran an ad using the footage that night. Tiger won the playoff on the first extra hole.",
+    players:[
+      { id:"tiger_woods_2005", name:"Tiger Woods", abbr:"TIG",
+        temperamentProfile:"ICEBERG",
+        temperamentProfileSecondary:"PEAKER",
+        bottle:10, ego:10, temperament:9, shame:2,
+        driving:10, irons:10, short_game:10, putting:9, recovery:10, bunkers:9, course_management:10, shot_variation:9,
+        desc:"Trailing by one with six holes to play. Hit a chip from a difficult above-hole position on 16 that stopped on the lip and waited a full second before dropping. CBS showed the replay six times before the next shot was played.",
+        wound:"Carrying a run of four majors from 2004 — none of them here. Augusta has become the one place he simply has to win again.",
+        historicalScores:[-6,-6,-5,-6] },
+      { id:"chris_dimarco", name:"Chris DiMarco", abbr:"CDM",
+        temperamentProfile:"COMBUSTIBLE",
+        temperamentProfileSecondary:"STREAKY",
+        bottle:7, ego:6, temperament:7, shame:5,
+        driving:7, irons:7, short_game:9, putting:8, recovery:7, bunkers:7, course_management:7, shot_variation:6,
+        desc:"Led with six holes to play. Had himself chipped in on 16 earlier in the final round. Watched the Nike ball balance on the cup lip and fall in and understood, in the moment, that he had probably just lost.",
+        wound:"Was leading. Then the lip. Fought back for a playoff and it still wasn't enough. One of the great almost-was stories in Masters history.",
+        historicalScores:[-5,-5,-6,-6] },
+    ],
+    field:[
+      {name:"Retief Goosen",   scores:[-3,-4,-5,-5]},
+      {name:"Luke Donald",     scores:[-3,-3,-4,-4]},
+      {name:"Mike Weir",       scores:[-2,-3,-3,-4]},
+      {name:"Trevor Immelman", scores:[-1,-2,-2,-3]},
+    ],
+    holes:[
+      {id:"aug13_2005", name:"13th — Amen Corner",     par:5, yards:510, hazard:"Rae's Creek front, steep approach, green slopes hard",
+       lore:"Tiger birdied 13 twice over the weekend to keep himself in contention. The creek has ended more Masters challenges than any other hole on the course.",
+       incidents:["Tiger birdied 13 on Saturday to move to -5, keeping pace with DiMarco at the top.","The decision whether to go for 13 in two is Augusta's purest gamble — Rae's Creek catches anything short or left."],
+       events:["amen_corner","gallery_hushed","eagle_chance"], pressureRating:3,
+       modifiers:{atmosphereNote:"Amen Corner in the final round. The crowd is stretched along the creek bank. Every birdie and every splash is heard across the course."}},
+      {id:"aug16_2005", name:"16th — The Chip-In",     par:3, yards:170, hazard:"lake left, tier green, above-hole positions deadly",
+       lore:"Tiger hit his tee shot above the hole on the left tier. He chipped toward the cup. The ball slowed to nothing on the lip, showed the Nike swoosh to every camera in the world, paused for a full second, and dropped. The CBS tower went silent and then Verne Lundquist said the words. The ad ran that night.",
+       incidents:["Tiger's chip-in on 16 is one of the most replayed shots in Masters history.","Verne Lundquist: 'In your life, have you ever seen anything like that?'","CBS held the replay for a full 90 seconds before cutting to commercial. They couldn't bring themselves to stop.","Nike ran an advertisement using the footage the same night. The swoosh on the lip is visible for 1.4 seconds.","DiMarco had chipped in on 16 himself earlier in the round from a similar position. Both men made the same shot. Only one of them will be remembered for it."],
+       events:["historic_moment","gallery_eruption","chip_in","nike_moment"], pressureRating:5,
+       modifiers:{thresholdAdd:2, compCost:2, atmosphereNote:"16th at Augusta, Sunday 2005. Tiger is above the hole. He chips it. It slows. It stops on the lip. It waits. It drops. Verne Lundquist loses it on national television."}},
+      {id:"aug18_2005", name:"18th — Playoff",         par:4, yards:465, hazard:"bunkers, tight fairway, downhill second, gallery three-deep",
+       lore:"Tiger made birdie on the first playoff hole to beat DiMarco. DiMarco made par. It was over. Tiger picked up his third Masters title. He pumped his fist, found his father Earl in the crowd, and held him for a long time.",
+       incidents:["Tiger birdied 18 on the first extra hole to win the playoff.","Earl Woods was watching from the gallery. Tiger found him immediately after holing out. Earl had been ill for some time.","This was the last major Tiger and Earl celebrated together. Earl died in May 2006."],
+       events:["playoff","final_hole","gallery_eruption","family_moment"], pressureRating:5,
+       modifiers:{atmosphereNote:"First playoff hole. Augusta 18. Tiger needs one more birdie. He makes it. He finds his father. It is the last major they win together."}},
+    ]
+  }
+
 ];
 
 if (typeof module !== 'undefined') module.exports = { TOURNAMENTS };

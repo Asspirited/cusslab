@@ -198,7 +198,7 @@ For items that represent a product hypothesis, add after the CD3 line:
 - Counter-property variant: secondary profile can invert one rule (e.g. COMBUSTIBLE secondary on a LEVELHEADED player means big shots break the dam in either direction)
 - Prerequisite: BL-029 archetype mechanics shipped; BL-030 chaos injectors for implementation context
 - CD3: UBV=7 TC=3 RR=5 → CoD=15, Dur=3, **CD3=5.0**
-- Status: OPEN — awaiting BL-030
+- Status: CLOSED — 2026-03-10 (0c1018c/e6b752c): applyHoleResultDual added to TemperamentService; 13 Gherkin scenarios green; temperamentProfileSecondary added to all 53 players; Ryder Cup UI decade-grouping applied (0ece07d)
 
 ### BL-031 — Golf Adventure: Modern Majors Tier 1 (post-2000, highest CD3 comedy + history)
 - Add one at a time in priority order. Each is a full tournament with holes, players, historicalResult data.
