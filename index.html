@@ -2019,40 +2019,80 @@
   <div class="panel-title">🎭 The Comedy Room</div>
   <div class="panel-desc">Not the stage. Not the boardroom. The room where the real conversation happens. Eight comedians, philosophers, and one cosmologist who has mostly made peace with the keyboards. You say something. They take it apart. Then they take each other apart. Then someone says something true.</div>
 
-  <div style="margin-bottom:20px;">
-    <label>What do you want to put in front of them</label>
-    <textarea id="cr-input" rows="3" placeholder="A topic. An observation. A corporate phrase that needs destroying. Something you can't stop thinking about. Anything."></textarea>
+  <!-- Mode tabs -->
+  <div style="display:flex;gap:8px;margin-bottom:20px;">
+    <button id="cr-tab-standard" class="btn-secondary" onclick="ComedyRoom.switchMode('into-the-room')" style="flex:1;font-size:13px;padding:8px 12px;border-color:var(--accent);color:var(--accent);">Into The Room</button>
+    <button id="cr-tab-oracle" class="btn-secondary" onclick="ComedyRoom.switchMode('house-name-oracle')" style="flex:1;font-size:13px;padding:8px 12px;">The House Name Oracle</button>
   </div>
 
-  <div style="display:flex;gap:12px;align-items:center;margin-bottom:24px;">
-    <button class="btn" onclick="ComedyRoom.present()" id="cr-btn">INTO THE ROOM 🎭</button>
-    <label style="display:flex;align-items:center;gap:8px;margin:0;">
-      <span style="font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;">Round</span>
-      <select id="cr-round" style="width:80px;padding:8px;">
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3" selected>3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="6">6</option>
-        <option value="7">7</option>
-        <option value="8">8</option>
-        <option value="9">9</option>
-        <option value="10">10</option>
-      </select>
-    </label>
-  </div>
-
-  <div id="cr-output" style="display:none;">
-    <div id="cr-responses"></div>
-    <div style="display:flex;gap:8px;margin-top:16px;align-items:center;">
-      <button class="feedback-btn" onclick="panelRating(event,'comedy','💩')" title="Didn't land">💩</button>
-      <button class="feedback-btn" onclick="panelRating(event,'comedy','😐')" title="Fine">😐</button>
-      <button class="feedback-btn" onclick="panelRating(event,'comedy','😂')" title="Good">😂</button>
-      <button class="feedback-btn" onclick="panelRating(event,'comedy','🤣')" title="Brilliant">🤣</button>
-      <button class="btn-secondary" onclick="showAskUs('comedy')" style="margin-left:8px;font-size:12px;padding:6px 12px;">Ask us</button>
+  <!-- Standard view -->
+  <div id="cr-standard-view">
+    <div style="margin-bottom:20px;">
+      <label>What do you want to put in front of them</label>
+      <textarea id="cr-input" rows="3" placeholder="A topic. An observation. A corporate phrase that needs destroying. Something you can't stop thinking about. Anything."></textarea>
     </div>
-    <button class="btn-secondary" onclick="ComedyRoom.present()" style="margin-top:12px;">ROUND AGAIN 🔄</button>
+
+    <div style="display:flex;gap:12px;align-items:center;margin-bottom:24px;">
+      <button class="btn" onclick="ComedyRoom.present()" id="cr-btn">INTO THE ROOM 🎭</button>
+      <label style="display:flex;align-items:center;gap:8px;margin:0;">
+        <span style="font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;">Round</span>
+        <select id="cr-round" style="width:80px;padding:8px;">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3" selected>3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+          <option value="8">8</option>
+          <option value="9">9</option>
+          <option value="10">10</option>
+        </select>
+      </label>
+    </div>
+
+    <div id="cr-output" style="display:none;">
+      <div id="cr-responses"></div>
+      <div style="display:flex;gap:8px;margin-top:16px;align-items:center;">
+        <button class="feedback-btn" onclick="panelRating(event,'comedy','💩')" title="Didn't land">💩</button>
+        <button class="feedback-btn" onclick="panelRating(event,'comedy','😐')" title="Fine">😐</button>
+        <button class="feedback-btn" onclick="panelRating(event,'comedy','😂')" title="Good">😂</button>
+        <button class="feedback-btn" onclick="panelRating(event,'comedy','🤣')" title="Brilliant">🤣</button>
+        <button class="btn-secondary" onclick="showAskUs('comedy')" style="margin-left:8px;font-size:12px;padding:6px 12px;">Ask us</button>
+      </div>
+      <button class="btn-secondary" onclick="ComedyRoom.present()" style="margin-top:12px;">ROUND AGAIN 🔄</button>
+    </div>
+  </div>
+
+  <!-- Oracle view -->
+  <div id="cr-oracle-view" style="display:none;">
+    <div style="margin-bottom:16px;">
+      <label>UK postcode district or Irish routing key</label>
+      <input type="text" id="cr-oracle-code" placeholder="e.g. SW1A, LS1, M1, D02, A65" maxlength="10" autocomplete="off" spellcheck="false" style="text-transform:uppercase;" oninput="this.value=this.value.toUpperCase()">
+    </div>
+
+    <div style="margin-bottom:20px;">
+      <label>Oracle voice <span style="color:var(--accent);font-size:12px;">* required</span></label>
+      <select id="cr-oracle-voice">
+        <option value="">— select an archetype —</option>
+        <option value="Elegist">Elegist — mournful, past-focused</option>
+        <option value="Rogue">Rogue — innuendo, double entendre</option>
+        <option value="DarkOracle">DarkOracle — sincere delivery of grim facts</option>
+        <option value="Booster">Booster — relentlessly positive about grim realities</option>
+        <option value="Snob">Snob — aspirational, slightly too effortful</option>
+        <option value="Anarchist">Anarchist — political, angry, accurate</option>
+        <option value="Mystic">Mystic — ley lines, ancient energies, UFO-confident</option>
+        <option value="Local">Local — hyper-specific, assumes insider knowledge</option>
+      </select>
+    </div>
+
+    <button class="btn" onclick="HouseNameOracle.submit()" id="cr-oracle-btn">CONSULT THE ORACLE 🔮</button>
+
+    <div id="cr-oracle-output" style="display:none;margin-top:24px;">
+      <div id="cr-oracle-conversation"></div>
+      <div id="cr-oracle-names" style="margin-top:20px;"></div>
+      <button class="btn-secondary" onclick="HouseNameOracle.submit()" style="margin-top:12px;">CONSULT AGAIN 🔮</button>
+    </div>
   </div>
 </div>
 
@@ -10655,7 +10695,160 @@ HYPOCHONDRIA RESPONSE: Default silence. You have been feeling like this for year
     if (body) { body.style.color = ''; body.style.fontStyle = ''; body.textContent = text || '…'; }
   }
 
-  return { present };
+  function switchMode(mode) {
+    sessionStorage.setItem('cr-mode', mode);
+    const isOracle = mode === 'house-name-oracle';
+    document.getElementById('cr-standard-view').style.display = isOracle ? 'none' : '';
+    document.getElementById('cr-oracle-view').style.display   = isOracle ? ''     : 'none';
+    const activeStyle   = 'border-color:var(--accent);color:var(--accent);';
+    const inactiveStyle = '';
+    document.getElementById('cr-tab-standard').style.cssText = isOracle ? inactiveStyle : activeStyle;
+    document.getElementById('cr-tab-oracle').style.cssText   = isOracle ? activeStyle   : inactiveStyle;
+    if (!isOracle) {
+      const out = document.getElementById('cr-output');
+      if (out) out.style.display = 'none';
+    }
+  }
+
+  return { present, switchMode };
+})();
+
+// ============================================================
+// MODULE: HouseNameOracle — The House Name Oracle (BL-053)
+// ============================================================
+const HouseNameOracle = (() => {
+  const VOICE_REGISTERS = {
+    Elegist:    'mournful and past-focused',
+    Rogue:      'full of innuendo and double entendre, mock-innocent',
+    DarkOracle: 'sincere delivery of grim historical facts as heritage',
+    Booster:    'relentlessly positive about genuinely grim realities',
+    Snob:       'aspirational, slightly too effortful — the trying is the tell',
+    Anarchist:  'political, angry, accurate — names the class dynamics',
+    Mystic:     'ley lines, ancient energies, UFO-confident',
+    Local:      'hyper-specific, assumes insider knowledge',
+  };
+
+  function _buildPrompt(code, voice) {
+    const register = VOICE_REGISTERS[voice] || voice;
+    return `You are the House Name Oracle for the UK/Irish location code: ${code}.
+
+You research the location and generate house names. Then Phil Spencer, Kirstie Allsopp, and Dion Dublin discuss your findings and converge (or don't) on a recommendation.
+
+Oracle voice: ${voice} — your rationale for each name must be ${register}.
+
+CHARACTERS:
+- Phil Spencer (The Pragmatist): always includes "what we're really talking about here" before converting any Oracle finding to property market language. The darker the finding, the more earnest.
+- Kirstie Allsopp (The Romantic): reframes any negative finding as aspirational within two sentences. Always finds the angle. Never concedes a finding is bad.
+- Dion Dublin (The Drifter): Dublin Drift — four stages, always in order, always marked in your output:
+  [BRIDGE] genuine connection between location and football
+  [DEPARTURE] connection breaks, specific career memory surfaces
+  [WANDER] fully off-piste, specific, detailed, going nowhere
+  [SUMMIT] the accidental boast — Dion doesn't notice it's a boast; everyone else does
+  Then he returns, naturally, to the property.
+
+OUTPUT FORMAT (JSON, no prose wrapper):
+{
+  "oracle_finding": "one sentence — the most interesting/dark/absurd thing about this location",
+  "phil": "Phil's full response including 'what we're really talking about here'",
+  "kirstie": "Kirstie's full response — reframe within two sentences",
+  "dion": "Dion's full response with [BRIDGE][DEPARTURE][WANDER][SUMMIT] markers",
+  "names": [
+    { "register": "Dignified", "name": "...", "rationale": "one-line Oracle rationale in ${voice} voice" },
+    { "register": "Knowing",   "name": "...", "rationale": "one-line Oracle rationale in ${voice} voice" },
+    { "register": "Unhinged",  "name": "...", "rationale": "one-line Oracle rationale in ${voice} voice" }
+  ],
+  "convergence": "agreed name or null if panel cannot converge",
+  "oracle_override": "if no convergence — the name the Oracle gives that none of them would have reached"
+}
+
+The Oracle's own disclaimer: "The Oracle's sources are ancient and not entirely sober."`;
+  }
+
+  function _setLoading(on) {
+    UI.setDisabled('cr-oracle-btn', on);
+    document.getElementById('cr-oracle-btn').textContent = on ? 'Consulting…' : 'CONSULT THE ORACLE 🔮';
+  }
+
+  function _renderConversation(data) {
+    const conv = document.getElementById('cr-oracle-conversation');
+    const names = document.getElementById('cr-oracle-names');
+
+    const strip = t => t.replace(/\[BRIDGE\]|\[DEPARTURE\]|\[WANDER\]|\[SUMMIT\]/g, '').trim();
+
+    conv.innerHTML = `
+      <div class="bills-response" style="margin-bottom:12px;">
+        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:6px;">The Oracle finds</div>
+        <div style="font-style:italic;color:var(--muted);">${data.oracle_finding}</div>
+      </div>
+      <div class="bills-response" style="margin-bottom:12px;">
+        <div class="bills-response-name" style="color:#4488ff;">Phil Spencer</div>
+        <div class="bills-response-body">${data.phil}</div>
+      </div>
+      <div class="bills-response" style="margin-bottom:12px;">
+        <div class="bills-response-name" style="color:#ff88aa;">Kirstie Allsopp</div>
+        <div class="bills-response-body">${data.kirstie}</div>
+      </div>
+      <div class="bills-response" style="margin-bottom:12px;">
+        <div class="bills-response-name" style="color:#88ddaa;">Dion Dublin</div>
+        <div class="bills-response-body">${strip(data.dion)}</div>
+      </div>`;
+
+    const nameItems = data.names.map(n => `
+      <div style="padding:12px;border:1px solid var(--border);border-radius:6px;margin-bottom:8px;">
+        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px;">${n.register}</div>
+        <div style="font-size:18px;font-weight:700;color:var(--accent);margin-bottom:4px;">${n.name}</div>
+        <div style="font-size:12px;color:var(--muted);font-style:italic;">${n.rationale}</div>
+      </div>`).join('');
+
+    const verdict = data.convergence
+      ? `<div style="margin-top:12px;padding:12px;background:var(--surface2);border-radius:6px;"><span style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">The room agrees: </span><strong>${data.convergence}</strong></div>`
+      : data.oracle_override
+        ? `<div style="margin-top:12px;padding:12px;background:var(--surface2);border-radius:6px;"><span style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">The Oracle overrides: </span><strong>${data.oracle_override}</strong></div>`
+        : '';
+
+    names.innerHTML = nameItems + verdict;
+  }
+
+  async function submit() {
+    const rawCode = (document.getElementById('cr-oracle-code').value || '').trim().toUpperCase();
+    const voice   = document.getElementById('cr-oracle-voice').value;
+    const code    = rawCode.includes(' ') ? rawCode.split(' ')[0] : rawCode;
+
+    const codeRe  = /^[A-Z]{1,2}[0-9]{1,2}[A-Z]?$/;
+    if (!codeRe.test(code)) {
+      alert('Enter a valid UK postcode district or Irish routing key (e.g. SW1A, LS1, D02)');
+      return;
+    }
+    if (!voice) {
+      const sel = document.getElementById('cr-oracle-voice');
+      sel.style.borderColor = 'var(--accent)';
+      setTimeout(() => { sel.style.borderColor = ''; }, 2000);
+      return;
+    }
+
+    const key = API.getKey();
+    if (!key) { UI.showNoKey(); return; }
+
+    _setLoading(true);
+    document.getElementById('cr-oracle-output').style.display = 'none';
+
+    try {
+      const prompt = _buildPrompt(code, voice);
+      const raw = await API.call([{ role: 'user', content: prompt }], 0.9);
+      const jsonMatch = raw.match(/\{[\s\S]*\}/);
+      if (!jsonMatch) throw new Error('No JSON in Oracle response');
+      const data = JSON.parse(jsonMatch[0]);
+      _renderConversation(data);
+      document.getElementById('cr-oracle-output').style.display = '';
+    } catch (e) {
+      console.error('Oracle error:', e);
+      alert('The Oracle is unavailable. Try again shortly.');
+    } finally {
+      _setLoading(false);
+    }
+  }
+
+  return { submit };
 })();
 
 // ============================================================
