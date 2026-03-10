@@ -8,6 +8,7 @@ const { Temperature, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetect
   PUB_SITUATIONS, buildPubAdvicePrompt } = require('./logic.js');
 const { QUNTUM_LEEKS_SCENARIOS, initState, pickRandomScenario, betLeekiness, spendLeekiness, processTurnEffects, buildModifiers } = require('../src/logic/quntum-leeks-engine.js');
 const { initGameState, appendToHistory, incrementTurn, buildModifierBlock } = require('../src/logic/ff-engine.js');
+const { PUB_CRAWL_SCENES, getAllScenes, getPubScene, getActiveAdvisor, initPubCrawl, resolveChoice, determineOutcome, checkLederhosen, buildAdvisorPrompt, ADVISOR_IDS } = require('../src/logic/pub-navigator-engine.js');
 const { lintStepDuplicates } = require('./lint-steps.js');
 
 // ── Mock state (simulates browser localStorage + DOM) ────────────────────────
@@ -31,7 +32,7 @@ const NAV_GROUPS = {
   comedy:        ['The Comedy Room','The House Name Oracle','The Roast Room','The Writing Room',"Souness's Cat"],
   sports:        ['Post Game Cunditry', 'The 19th Hole', 'Watching the Oche', 'The Long Room'],
   play:          ['Roast Battle','Dinner Party',"Rogues' Gallery",'Comedy Lab','Dimension Duel'],
-  misadventure:  ['Relive Golfing Greatness', 'Survive a Friday night at...', 'Quntum Leeks'],
+  misadventure:  ['Relive Golfing Greatness', 'Survive a Friday night at...', 'Friday Pub Crawl Misadventure', 'Quntum Leeks'],
 };
 
 
@@ -56,7 +57,7 @@ const CONSULTANT_SKIN_TABS = [
   'golfadventure','comedyroom','boardroom','football','golf','darts',
   'bills','joketest','clash','roulette','professionals','ironic',
   'comscience','evolution','blend','experiment',
-  'roastbattle','dinner','topcnuts','comedylab','trumps','qleeks',
+  'roastbattle','dinner','topcnuts','comedylab','trumps','qleeks','pubcrawl',
   'premise','charlens','bizcard','training',
   'localiser','generator','historian','sentence','it','polls',
 ];
@@ -7541,6 +7542,183 @@ function makeSteps(ctx) {
     [/^Training\.logPanelRating is a function$/, () => {
       // Structural check — verified by implementation in index.html Training module export
       // This step passes when the feature file is shipped (Training.logPanelRating exists in the module return)
+    }],
+
+    // ── Friday Pub Crawl Misadventure (friday-pub-crawl.feature) ─────────────
+
+    [/^I load all pub crawl scenes$/, () => {
+      ctx._pubScenes = getAllScenes();
+    }],
+
+    [/^there are exactly 8 scenes$/, () => {
+      if (ctx._pubScenes.length !== 8)
+        throw new Error(`Expected 8 scenes, got ${ctx._pubScenes.length}`);
+    }],
+
+    [/^each scene has an id, name, location, description, and beats$/, () => {
+      ctx._pubScenes.forEach(s => {
+        if (!s.id || !s.name || !s.location || !s.description || !Array.isArray(s.beats))
+          throw new Error(`Scene missing required fields: ${JSON.stringify(s)}`);
+      });
+    }],
+
+    [/^each beat has exactly 4 choices$/, () => {
+      ctx._pubScenes.forEach(s => {
+        s.beats.forEach((b, i) => {
+          if (b.choices.length !== 4)
+            throw new Error(`${s.id} beat ${i} has ${b.choices.length} choices, expected 4`);
+        });
+      });
+    }],
+
+    [/^each choice has a label and a pressure cost$/, () => {
+      ctx._pubScenes.forEach(s => {
+        s.beats.forEach(b => {
+          b.choices.forEach(c => {
+            if (!c.label || typeof c.pressure !== 'number')
+              throw new Error(`Choice missing label or pressure: ${JSON.stringify(c)}`);
+          });
+        });
+      });
+    }],
+
+    [/^each scene has a worst outcome description$/, () => {
+      ctx._pubScenes.forEach(s => {
+        if (!s.worstOutcome || s.worstOutcome.length < 5)
+          throw new Error(`Scene ${s.id} missing worstOutcome`);
+      });
+    }],
+
+    [/^the pub scene "([^"]+)"$/, (sceneId) => {
+      ctx._pubSceneId = sceneId;
+    }],
+
+    [/^I initialise the pub crawl at that scene$/, () => {
+      ctx._pubState = initPubCrawl(ctx._pubSceneId);
+    }],
+
+    [/^an initialised pub crawl at "([^"]+)"$/, (sceneId) => {
+      ctx._pubState = initPubCrawl(sceneId);
+    }],
+
+    [/^the crawl pressure is 0$/, () => {
+      if (ctx._pubState.pressure !== 0)
+        throw new Error(`Expected pressure 0, got ${ctx._pubState.pressure}`);
+    }],
+
+    [/^the crawl beat is 0$/, () => {
+      if (ctx._pubState.turnCount !== 0)
+        throw new Error(`Expected beat 0, got ${ctx._pubState.turnCount}`);
+    }],
+
+    [/^the crawl is not over$/, () => {
+      if (ctx._pubState.done)
+        throw new Error('Expected crawl to not be over');
+    }],
+
+    [/^the crawl is over$/, () => {
+      if (!ctx._pubState.done)
+        throw new Error('Expected crawl to be over');
+    }],
+
+    [/^the advisor order contains Sun Tzu, Nostradamus, Chuck Norris, and Buddha$/, () => {
+      const order = ctx._pubState.advisorOrder;
+      const expected = ['sun-tzu', 'nostradamus', 'chuck-norris', 'buddha'];
+      const missing = expected.filter(a => !order.includes(a));
+      if (missing.length)
+        throw new Error(`Advisor order missing: ${missing.join(', ')}`);
+    }],
+
+    [/^the advisor order is 4 advisors long$/, () => {
+      if (ctx._pubState.advisorOrder.length !== 4)
+        throw new Error(`Expected 4 advisors, got ${ctx._pubState.advisorOrder.length}`);
+    }],
+
+    [/^I resolve pub crawl choice index (\d+) on beat (\d+)$/, (choiceIdx) => {
+      ctx._pubChoiceIdx = parseInt(choiceIdx, 10);
+      const scene = getPubScene(ctx._pubState.sceneId);
+      ctx._pubChoicePressure = scene.beats[ctx._pubState.turnCount].choices[ctx._pubChoiceIdx].pressure;
+      resolveChoice(ctx._pubState, ctx._pubChoiceIdx);
+    }],
+
+    [/^the crawl pressure is the pressure cost of beat 0 choice 0$/, () => {
+      if (ctx._pubState.pressure !== ctx._pubChoicePressure)
+        throw new Error(`Expected pressure ${ctx._pubChoicePressure}, got ${ctx._pubState.pressure}`);
+    }],
+
+    [/^the crawl beat is 1$/, () => {
+      if (ctx._pubState.turnCount !== 1)
+        throw new Error(`Expected beat 1, got ${ctx._pubState.turnCount}`);
+    }],
+
+    [/^I resolve pub crawl choice index 0 on each of 4 beats$/, () => {
+      for (let i = 0; i < 4; i++) resolveChoice(ctx._pubState, 0);
+    }],
+
+    [/^a completed pub crawl with total pressure (\d+)$/, (pressure) => {
+      ctx._pubOutcomePressure = parseInt(pressure, 10);
+    }],
+
+    [/^I determine the pub crawl outcome$/, () => {
+      ctx._pubOutcome = determineOutcome(ctx._pubOutcomePressure);
+    }],
+
+    [/^the pub crawl outcome is "([^"]+)"$/, (outcome) => {
+      if (ctx._pubOutcome !== outcome)
+        throw new Error(`Expected outcome "${outcome}", got "${ctx._pubOutcome}"`);
+    }],
+
+    [/^I ask for the active pub crawl advisor with no topic$/, () => {
+      ctx._pubAdvisor = getActiveAdvisor(ctx._pubState, null);
+    }],
+
+    [/^I ask for the active pub crawl advisor with topic "([^"]+)"$/, (topic) => {
+      ctx._pubAdvisor = getActiveAdvisor(ctx._pubState, topic);
+    }],
+
+    [/^the active pub crawl advisor is the first in the advisor order$/, () => {
+      const expected = ctx._pubState.advisorOrder[0];
+      if (ctx._pubAdvisor !== expected)
+        throw new Error(`Expected advisor "${expected}", got "${ctx._pubAdvisor}"`);
+    }],
+
+    [/^the active pub crawl advisor is "([^"]+)"$/, (advisorId) => {
+      if (ctx._pubAdvisor !== advisorId)
+        throw new Error(`Expected advisor "${advisorId}", got "${ctx._pubAdvisor}"`);
+    }],
+
+    [/^I build the pub crawl advisor prompt for "([^"]+)" after choosing "([^"]+)"$/, (advisorId, choice) => {
+      ctx._pubPrompt = buildAdvisorPrompt(advisorId, ctx._pubState.sceneId, choice, ctx._pubState);
+    }],
+
+    [/^the pub crawl advisor prompt includes "([^"]+)"$/, (text) => {
+      if (!ctx._pubPrompt.includes(text))
+        throw new Error(`Expected prompt to include "${text}". Got:\n${ctx._pubPrompt.slice(0, 200)}`);
+    }],
+
+    [/^pub crawl lederhosen is not active$/, () => {
+      if (ctx._pubState.lederhosen)
+        throw new Error('Expected lederhosen to not be active');
+    }],
+
+    [/^pub crawl lederhosen is active$/, () => {
+      if (!ctx._pubState.lederhosen)
+        throw new Error('Expected lederhosen to be active');
+    }],
+
+    [/^the pub crawl pressure is set to (\d+)$/, (n) => {
+      ctx._pubState.pressure = parseInt(n, 10);
+      if (ctx._pubState.sceneId === 'hofbrau-oktoberfest' && ctx._pubState.pressure >= 8) {
+        ctx._pubState.lederhosen = true;
+      }
+    }],
+
+    [/^I check pub crawl lederhosen with input "([^"]+)"$/, (input) => {
+      checkLederhosen(ctx._pubState, input);
+    }],
+
+    [/^pub crawl lederhosen is manually activated$/, () => {
+      ctx._pubState.lederhosen = true;
     }],
 
     // ── FF shared engine (ff-engine.feature) ──────────────────────────────────

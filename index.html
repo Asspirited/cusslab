@@ -1290,11 +1290,12 @@
   <div class="nav-group active" id="ng-misadventure">
     <div class="nav-group-header" onclick="toggleNavGroup('misadventure')">
       <span class="nav-group-icon">🏴</span> LITTLE MISADVENTURE
-      <span class="nav-group-count">3</span>
+      <span class="nav-group-count">4</span>
     </div>
     <div class="nav-items" id="ni-misadventure">
       <div class="tab active" onclick="switchTab(event,'golfadventure')"><span class="tab-icon">🏌️</span>Relive Golfing Greatness</div>
       <div class="tab" onclick="switchTab(event,'pubnavigator')"><span class="tab-icon">🍺</span>Survive a Friday night at...</div>
+      <div class="tab" onclick="switchTab(event,'pubcrawl')"><span class="tab-icon">🍻</span>Friday Pub Crawl Misadventure</div>
       <div class="tab" onclick="switchTab(event,'qleeks')"><span class="tab-icon">🐸</span>Quntum Leeks</div>
     </div>
   </div>
@@ -2016,6 +2017,66 @@
     <p style="color:var(--muted);font-size:1rem;line-height:1.6;max-width:500px;margin:0 auto 16px;">Historic tournament simulation with live commentary from your 19th Hole panel. Pick your era. Watson vs Nicklaus. Tiger at Augusta. Van de Velde's collapse. Build your panel. See if you can rewrite history — or make it worse.</p>
     <p style="color:var(--muted);font-size:0.85rem;margin-bottom:36px;opacity:0.7;">Faldo. McGinley. Radar. Roe. Henni. Butch. Cox. Souness. Pietersen. Pick four.</p>
     <button class="btn btn-accent" onclick="window.location.href='golf-adventure.html'" style="font-size:22px;padding:16px 52px;letter-spacing:0.05em;">TEE IT UP</button>
+  </div>
+</div>
+
+<!-- ============ FRIDAY PUB CRAWL MISADVENTURE ============ -->
+<div class="panel" id="panel-pubcrawl">
+  <div class="panel-title">🍻 Friday Pub Crawl Misadventure</div>
+  <div class="panel-desc" style="margin-bottom:24px;">Eight pubs. Four advisors. One Friday night. Your decisions will be assessed by Sun Tzu, Nostradamus, Chuck Norris, and the Buddha — in whatever order the universe demands. Choose your location.</div>
+
+  <!-- Scene selection -->
+  <div id="pc-scene-select">
+    <div style="display:grid;gap:10px;margin-bottom:24px;" id="pc-scene-list"></div>
+  </div>
+
+  <!-- Active scene -->
+  <div id="pc-active-scene" style="display:none;">
+    <div id="pc-scene-header" style="margin-bottom:20px;">
+      <div id="pc-scene-name" style="font-size:1.1rem;font-weight:600;letter-spacing:0.05em;margin-bottom:6px;"></div>
+      <div id="pc-scene-location" style="font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:12px;"></div>
+      <div id="pc-scene-desc" style="color:var(--text-secondary);font-size:0.9rem;line-height:1.6;margin-bottom:16px;"></div>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);">Pressure</div>
+        <div id="pc-pressure-bar" style="flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden;">
+          <div id="pc-pressure-fill" style="height:100%;width:0%;background:var(--danger);border-radius:3px;transition:width 0.4s ease;"></div>
+        </div>
+        <div id="pc-pressure-val" style="font-size:11px;color:var(--muted);min-width:30px;text-align:right;">0/16</div>
+      </div>
+      <div id="pc-lederhosen-badge" style="display:none;margin-top:8px;font-size:11px;color:#c8a000;letter-spacing:1px;text-transform:uppercase;">🥨 Lederhosen acquired</div>
+    </div>
+
+    <div id="pc-situation" style="font-size:0.95rem;line-height:1.6;color:var(--text);padding:14px 16px;background:var(--surface);border:1px solid var(--border);border-radius:6px;margin-bottom:16px;"></div>
+
+    <div id="pc-choices" style="display:grid;gap:10px;margin-bottom:20px;"></div>
+
+    <div id="pc-advisor-loading" style="display:none;color:var(--muted);font-size:0.9rem;padding:12px 0;">The council convenes…</div>
+
+    <div id="pc-advisor-response" style="display:none;margin-bottom:20px;">
+      <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px;" id="pc-advisor-name"></div>
+      <div id="pc-advisor-body" class="bills-response-body" style="white-space:pre-wrap;line-height:1.75;"></div>
+    </div>
+
+    <div id="pc-history-log" style="display:none;margin-bottom:20px;">
+      <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px;">The account so far</div>
+      <div id="pc-history-entries" style="font-size:0.85rem;color:var(--text-secondary);line-height:1.8;"></div>
+    </div>
+  </div>
+
+  <!-- Outcome screen -->
+  <div id="pc-outcome-screen" style="display:none;">
+    <div id="pc-outcome-badge" style="font-size:1.3rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:16px;"></div>
+    <div id="pc-outcome-desc" style="font-size:0.95rem;line-height:1.7;color:var(--text-secondary);margin-bottom:8px;"></div>
+    <div id="pc-worst-outcome" style="display:none;font-size:0.85rem;color:var(--danger-hi);font-style:italic;line-height:1.6;margin-bottom:24px;padding:12px 16px;border:1px solid var(--danger);border-radius:6px;"></div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:20px;">
+      <button class="btn" onclick="PubCrawl.restart()">Another pub 🍻</button>
+      <button class="btn-secondary" onclick="PubCrawl.samePub()">Same pub, different choices</button>
+    </div>
+  </div>
+
+  <!-- Easter egg input (hidden by default, always listening) -->
+  <div style="margin-top:24px;border-top:1px solid var(--border);padding-top:16px;display:none;" id="pc-input-area">
+    <input id="pc-text-input" type="text" placeholder="Say something to the advisors…" style="width:100%;padding:10px 14px;font-size:0.9rem;" oninput="PubCrawl.handleInput(this.value)">
   </div>
 </div>
 
@@ -3746,6 +3807,9 @@
 <script src="src/logic/lie-engine.js"></script>
 <script src="src/data/quntum-leeks-scenarios.js"></script>
 <script src="src/logic/quntum-leeks-engine.js"></script>
+<script src="src/logic/ff-engine.js"></script>
+<script src="src/data/pub-crawl-scenes.js"></script>
+<script src="src/logic/pub-navigator-engine.js"></script>
 
 <script>
 // ============================================================
@@ -4325,7 +4389,7 @@ const App = (() => {
       title: 'HECKLER\'S',
       pageTitle: 'Heckler\'s — The Comedy Panel',
       slogans: CONSULTANT_SLOGANS,
-      tabs: ['golfadventure','pubnavigator','qleeks','comedyroom','housenameoracle','roastroom','writingroom','souness-cat','boardroom','football','golf','darts','cricket',
+      tabs: ['golfadventure','pubnavigator','pubcrawl','qleeks','comedyroom','housenameoracle','roastroom','writingroom','souness-cat','boardroom','football','golf','darts','cricket',
              'bills','joketest','clash','roulette','professionals','ironic',
              'comscience','evolution','blend','experiment',
              'roastbattle','dinner','topcnuts','comedylab','trumps',
@@ -4371,7 +4435,7 @@ const App = (() => {
   const _NAV_GROUP_MAP = {
     settings:'personas',
     // LITTLE MISADVENTURE
-    golfadventure:'misadventure', pubnavigator:'misadventure',
+    golfadventure:'misadventure', pubnavigator:'misadventure', pubcrawl:'misadventure',
     // BOARDROOM
     boardroom:'boardroom',
     // COMEDY ROOM
@@ -10997,6 +11061,229 @@ The situation: ${situation.text}`;
   document.addEventListener('DOMContentLoaded', init);
 
   return { init, selectSituation };
+})();
+
+// ============================================================
+// MODULE: PubCrawl — Friday Pub Crawl Misadventure — Mode B (BL-110)
+// ============================================================
+const PubCrawl = (() => {
+
+  // ── Local mirrors of engine data (browser context — no require) ──────────
+
+  const SCENES = window.PubCrawlScenes.PUB_CRAWL_SCENES;
+  const ENGINE = window.PubNavigatorEngine;
+
+  const ADVISOR_LABELS = {
+    'sun-tzu':     'Sun Tzu advises',
+    'nostradamus': 'Nostradamus has foreseen this',
+    'chuck-norris':'Chuck Norris weighs in',
+    'buddha':      'The Buddha reflects',
+  };
+
+  const OUTCOME_LABELS = {
+    escape:    { badge: '✅ Clean Escape', colour: 'var(--success, #4caf50)' },
+    ejected:   { badge: '🚪 Ejected', colour: 'var(--warning, #ff9800)' },
+    worst:     { badge: '💥 Worse Than Ejected', colour: 'var(--danger-hi)' },
+    legendary: { badge: '🌟 Legendary Disaster', colour: '#c8a000' },
+  };
+
+  let _state = null;
+  let _currentTopic = null;
+
+  // ── Init ──────────────────────────────────────────────────────────────────
+
+  function init() {
+    const list = document.getElementById('pc-scene-list');
+    if (!list) return;
+    list.innerHTML = SCENES.map(s => `
+      <button class="btn-secondary" onclick="PubCrawl.startScene('${s.id}')"
+        style="text-align:left;padding:14px 18px;font-size:0.9rem;line-height:1.5;width:100%;cursor:pointer;">
+        <strong>${s.name}</strong>
+        <span style="display:block;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:4px;">${s.location}</span>
+      </button>`).join('');
+  }
+
+  // ── Scene start ───────────────────────────────────────────────────────────
+
+  function startScene(sceneId) {
+    _state = ENGINE.initPubCrawl(sceneId);
+    const scene = ENGINE.getPubScene(sceneId);
+
+    document.getElementById('pc-scene-select').style.display = 'none';
+    document.getElementById('pc-outcome-screen').style.display = 'none';
+    document.getElementById('pc-active-scene').style.display = 'block';
+    document.getElementById('pc-input-area').style.display = 'block';
+    document.getElementById('pc-advisor-response').style.display = 'none';
+    document.getElementById('pc-history-log').style.display = 'none';
+    document.getElementById('pc-lederhosen-badge').style.display = 'none';
+
+    document.getElementById('pc-scene-name').textContent = scene.name;
+    document.getElementById('pc-scene-location').textContent = scene.location;
+    document.getElementById('pc-scene-desc').textContent = scene.description;
+
+    _updatePressure();
+    _renderBeat();
+  }
+
+  // ── Beat rendering ────────────────────────────────────────────────────────
+
+  function _renderBeat() {
+    const scene  = ENGINE.getPubScene(_state.sceneId);
+    const beat   = scene.beats[_state.turnCount];
+    if (!beat) return;
+
+    document.getElementById('pc-situation').textContent = beat.situation;
+
+    const ch = document.getElementById('pc-choices');
+    ch.innerHTML = beat.choices.map((c, i) => `
+      <button class="btn-secondary" onclick="PubCrawl.choose(${i})"
+        style="text-align:left;padding:12px 16px;font-size:0.9rem;line-height:1.5;width:100%;cursor:pointer;">
+        ${c.label}
+      </button>`).join('');
+  }
+
+  // ── Choice handler ────────────────────────────────────────────────────────
+
+  async function choose(choiceIdx) {
+    if (!_state || _state.done) return;
+
+    const scene      = ENGINE.getPubScene(_state.sceneId);
+    const beat       = scene.beats[_state.turnCount];
+    const choiceLabel = beat.choices[choiceIdx].label;
+
+    ENGINE.resolveChoice(_state, choiceIdx);
+    _updatePressure();
+
+    if (_state.done) {
+      _showOutcome(scene);
+      return;
+    }
+
+    _renderBeat();
+    _updateHistory();
+    await _fetchAdvisorResponse(choiceLabel);
+  }
+
+  // ── Advisor response ──────────────────────────────────────────────────────
+
+  async function _fetchAdvisorResponse(choiceLabel) {
+    const advisorId = ENGINE.getActiveAdvisor(_state, _currentTopic);
+    _currentTopic = null;
+
+    document.getElementById('pc-advisor-loading').style.display = 'block';
+    document.getElementById('pc-advisor-response').style.display = 'none';
+
+    const prompt = ENGINE.buildAdvisorPrompt(advisorId, _state.sceneId, choiceLabel, _state);
+    const userMsg = `Scene: ${ENGINE.getPubScene(_state.sceneId).name}. The player chose: "${choiceLabel}"`;
+
+    try {
+      const text = await API.call(prompt, userMsg, 300, 'pub-crawl/advice');
+      document.getElementById('pc-advisor-name').textContent = ADVISOR_LABELS[advisorId] || advisorId;
+      document.getElementById('pc-advisor-body').textContent = text;
+      document.getElementById('pc-advisor-response').style.display = 'block';
+    } catch (e) {
+      document.getElementById('pc-advisor-name').textContent = 'The council';
+      document.getElementById('pc-advisor-body').textContent = 'The advisors confer in silence. No wisdom arrives.';
+      document.getElementById('pc-advisor-response').style.display = 'block';
+    } finally {
+      document.getElementById('pc-advisor-loading').style.display = 'none';
+    }
+  }
+
+  // ── Outcome ───────────────────────────────────────────────────────────────
+
+  function _showOutcome(scene) {
+    document.getElementById('pc-active-scene').style.display = 'none';
+    document.getElementById('pc-input-area').style.display = 'none';
+
+    const outcome      = ENGINE.determineOutcome(_state.pressure);
+    const outcomeLabel = OUTCOME_LABELS[outcome];
+
+    const badge = document.getElementById('pc-outcome-badge');
+    badge.textContent = outcomeLabel.badge;
+    badge.style.color = outcomeLabel.colour;
+
+    const descEl = document.getElementById('pc-outcome-desc');
+    const worstEl = document.getElementById('pc-worst-outcome');
+
+    if (outcome === 'escape') {
+      descEl.textContent = `Total pressure: ${_state.pressure}/16. You made it out. Sun Tzu nods. Once.`;
+      worstEl.style.display = 'none';
+    } else if (outcome === 'ejected') {
+      descEl.textContent = `Total pressure: ${_state.pressure}/16. You were asked to leave.`;
+      worstEl.style.display = 'none';
+    } else {
+      descEl.textContent = `Total pressure: ${_state.pressure}/16.`;
+      worstEl.textContent = scene.worstOutcome;
+      worstEl.style.display = 'block';
+    }
+
+    if (_state.lederhosen) {
+      const extra = document.createElement('div');
+      extra.style.cssText = 'margin-top:12px;font-size:0.85rem;color:#c8a000;';
+      extra.textContent = '🥨 You were wearing lederhosen at the end of this.';
+      descEl.after(extra);
+    }
+
+    document.getElementById('pc-outcome-screen').style.display = 'block';
+  }
+
+  // ── Pressure display ──────────────────────────────────────────────────────
+
+  function _updatePressure() {
+    const p = _state.pressure;
+    document.getElementById('pc-pressure-val').textContent = `${p}/16`;
+    document.getElementById('pc-pressure-fill').style.width = `${Math.min(100, (p / 16) * 100)}%`;
+
+    const fill = document.getElementById('pc-pressure-fill');
+    if (p <= 4)       fill.style.background = '#4caf50';
+    else if (p <= 8)  fill.style.background = '#ff9800';
+    else if (p <= 12) fill.style.background = '#f44336';
+    else              fill.style.background = '#9c27b0';
+
+    if (_state.lederhosen) {
+      document.getElementById('pc-lederhosen-badge').style.display = 'block';
+    }
+  }
+
+  // ── History ───────────────────────────────────────────────────────────────
+
+  function _updateHistory() {
+    if (!_state.history.length) return;
+    const el = document.getElementById('pc-history-entries');
+    el.innerHTML = _state.history.map(h =>
+      `<div>Beat ${h.beat + 1}: <em>${h.choice}</em> — pressure +${h.pressure}</div>`
+    ).join('');
+    document.getElementById('pc-history-log').style.display = 'block';
+  }
+
+  // ── Easter egg input ──────────────────────────────────────────────────────
+
+  function handleInput(val) {
+    if (!_state) return;
+    const wasLeder = _state.lederhosen;
+    ENGINE.checkLederhosen(_state, val);
+    if (!wasLeder && _state.lederhosen) {
+      document.getElementById('pc-lederhosen-badge').style.display = 'block';
+    }
+  }
+
+  // ── Navigation ────────────────────────────────────────────────────────────
+
+  function restart() {
+    _state = null;
+    document.getElementById('pc-outcome-screen').style.display = 'none';
+    document.getElementById('pc-active-scene').style.display = 'none';
+    document.getElementById('pc-scene-select').style.display = 'block';
+  }
+
+  function samePub() {
+    if (_state) startScene(_state.sceneId);
+  }
+
+  document.addEventListener('DOMContentLoaded', init);
+
+  return { init, startScene, choose, handleInput, restart, samePub };
 })();
 
 // ============================================================

@@ -2,6 +2,7 @@
 // Run: node pipeline/unit-runner.js
 const { lintStepDuplicates } = require('./lint-steps.js');
 const { initGameState, appendToHistory, incrementTurn, buildModifierBlock } = require('../src/logic/ff-engine.js');
+const { getAllScenes, getPubScene, initPubCrawl, resolveChoice, determineOutcome, checkLederhosen, getActiveAdvisor, buildAdvisorPrompt, ADVISOR_IDS } = require('../src/logic/pub-navigator-engine.js');
 
 const { maskKey, isValidKey, shouldUpdateInput, Temperature, makeWoundDetector, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetector, DartsVoiceFmt, dartsBuildBlock, DARTS_PREMONITION_AFFINITIES, COLLECTIVE_CALL_MINIMUM, premonitionEligible, blankPremonitionLedger, assignPremonitionRC, resolvePremonitionCommits, isPremonitionTruthTeller, detectIntellectualAttempt, buildAttemptInstruction, INTELLECTUAL_ATTEMPTS_CONFIG, SOUNESS_CAT_PRE_EXISTING, SOUNESS_CAT_IDS, getAllPairs, getPairTone, allPairsHaveToneAndNote, teslaHasNoWarmOrSolidary, pairToneIsSymmetrical, noConflictingTones, CONSEQUENCE_TIERS, applyConsequence, MARSHALS_BELT_EVENT, accumulatePanelStats, computeAvgDepth, GOLF_PANEL_MEMBER_IDS, COLTART_SOFA_POOLS, getSofaCommentator, getHistoricalDivergence, selectReactionMode, validateOutwardCode, parseOutwardCode, ORACLE_VOICES, isValidOracleVoice, canSubmitOracle, ORACLE_REGISTERS, ORACLE_CHARACTERS, hasPhilTranslation, hasAllDublinDriftStages, COMEDY_ROOM_MODES, COMEDY_MODE_LABELS, getDefaultComedyMode, isValidComedyMode, AUTHOR_VOICES, buildAuthorEpiloguePrompt, AUTHORS_POOL, shufflePool, selectNextAuthorFromQueue, selectRoastAuthors, buildRoastPrompt, selectWritingRoomAuthors, buildWritingRoomPrompt, PUB_SITUATIONS, buildPubAdvicePrompt } = require('./logic.js');
 
@@ -1318,6 +1319,144 @@ assert('buildPubAdvicePrompt: includes the situation text',
 assert('buildPubAdvicePrompt: instructs principle, application, and warning',
   ['principle', 'application', 'warning'].every(w =>
     buildPubAdvicePrompt(PUB_SITUATIONS[0]).toLowerCase().includes(w)), true);
+
+// ── Pub Navigator Engine ─────────────────────────────────────────────────────
+
+assert('getAllScenes: returns 8 scenes',
+  getAllScenes().length, 8);
+
+assert('getAllScenes: each scene has an id',
+  getAllScenes().every(s => typeof s.id === 'string'), true);
+
+assert('getAllScenes: each scene has 4 beats',
+  getAllScenes().every(s => s.beats.length === 4), true);
+
+assert('getAllScenes: each beat has 4 choices',
+  getAllScenes().every(s => s.beats.every(b => b.choices.length === 4)), true);
+
+assert('getAllScenes: each choice has label and pressure',
+  getAllScenes().every(s => s.beats.every(b => b.choices.every(c => c.label && typeof c.pressure === 'number'))), true);
+
+assert('getAllScenes: each scene has worstOutcome',
+  getAllScenes().every(s => typeof s.worstOutcome === 'string' && s.worstOutcome.length > 0), true);
+
+assert('getPubScene: returns correct scene by id',
+  getPubScene('rising-sun-basingstoke').name, 'The Rising Sun, Chapel Hill');
+
+assert('getPubScene: returns undefined for unknown id',
+  getPubScene('not-a-pub'), undefined);
+
+const _pcS1 = initPubCrawl('rising-sun-basingstoke');
+assert('initPubCrawl: pressure starts at 0',
+  _pcS1.pressure, 0);
+
+assert('initPubCrawl: beat (turnCount) starts at 0',
+  _pcS1.turnCount, 0);
+
+assert('initPubCrawl: lederhosen starts false',
+  _pcS1.lederhosen, false);
+
+assert('initPubCrawl: done starts false',
+  _pcS1.done, false);
+
+assert('initPubCrawl: advisor order has 4 entries',
+  _pcS1.advisorOrder.length, 4);
+
+assert('initPubCrawl: advisor order contains all 4 advisors',
+  ADVISOR_IDS.every(a => _pcS1.advisorOrder.includes(a)), true);
+
+const _pcS2 = initPubCrawl('rising-sun-basingstoke');
+const _pcChoicePressure = getPubScene('rising-sun-basingstoke').beats[0].choices[0].pressure;
+resolveChoice(_pcS2, 0);
+assert('resolveChoice: pressure increases by choice cost',
+  _pcS2.pressure, _pcChoicePressure);
+
+assert('resolveChoice: beat increments',
+  _pcS2.turnCount, 1);
+
+const _pcS3 = initPubCrawl('rising-sun-basingstoke');
+for (let i = 0; i < 4; i++) resolveChoice(_pcS3, 0);
+assert('resolveChoice: done after 4 beats',
+  _pcS3.done, true);
+
+assert('determineOutcome: 4 → escape',
+  determineOutcome(4), 'escape');
+
+assert('determineOutcome: 5 → ejected',
+  determineOutcome(5), 'ejected');
+
+assert('determineOutcome: 8 → ejected',
+  determineOutcome(8), 'ejected');
+
+assert('determineOutcome: 9 → worst',
+  determineOutcome(9), 'worst');
+
+assert('determineOutcome: 12 → worst',
+  determineOutcome(12), 'worst');
+
+assert('determineOutcome: 13 → legendary',
+  determineOutcome(13), 'legendary');
+
+assert('getActiveAdvisor: no topic returns first in order',
+  getActiveAdvisor(_pcS1, null), _pcS1.advisorOrder[0]);
+
+assert('getActiveAdvisor: physical → chuck-norris',
+  getActiveAdvisor(_pcS1, 'physical'), 'chuck-norris');
+
+assert('getActiveAdvisor: philosophical → buddha',
+  getActiveAdvisor(_pcS1, 'philosophical'), 'buddha');
+
+assert('getActiveAdvisor: strategic → sun-tzu',
+  getActiveAdvisor(_pcS1, 'strategic'), 'sun-tzu');
+
+assert('getActiveAdvisor: outcome → nostradamus',
+  getActiveAdvisor(_pcS1, 'outcome'), 'nostradamus');
+
+const _pcPrompt = buildAdvisorPrompt('sun-tzu', 'rising-sun-basingstoke', 'Order at the bar', _pcS1);
+assert('buildAdvisorPrompt: contains scene name',
+  _pcPrompt.includes('Rising Sun'), true);
+
+assert('buildAdvisorPrompt: contains choice label',
+  _pcPrompt.includes('Order at the bar'), true);
+
+assert('buildAdvisorPrompt: sun-tzu prompt contains PRINCIPLE',
+  _pcPrompt.includes('PRINCIPLE'), true);
+
+const _pcPromptNos = buildAdvisorPrompt('nostradamus', 'rising-sun-basingstoke', 'Order at the bar', _pcS1);
+assert('buildAdvisorPrompt: nostradamus prompt contains Nostradamus',
+  _pcPromptNos.includes('Nostradamus'), true);
+
+const _pcS4 = initPubCrawl('rising-sun-basingstoke');
+_pcS4.lederhosen = true;
+const _pcPromptLeder = buildAdvisorPrompt('chuck-norris', 'rising-sun-basingstoke', 'Order at the bar', _pcS4);
+assert('buildAdvisorPrompt: includes lederhosen note when active',
+  _pcPromptLeder.includes('lederhosen'), true);
+
+const _pcLeder1 = initPubCrawl('hofbrau-oktoberfest');
+_pcLeder1.pressure = 8;
+if (_pcLeder1.sceneId === 'hofbrau-oktoberfest' && _pcLeder1.pressure >= 8) _pcLeder1.lederhosen = true;
+assert('lederhosen: activates in Oktoberfest at pressure 8',
+  _pcLeder1.lederhosen, true);
+
+const _pcLeder2 = initPubCrawl('rising-sun-basingstoke');
+_pcLeder2.pressure = 8;
+assert('lederhosen: does not activate outside Oktoberfest from pressure',
+  _pcLeder2.lederhosen, false);
+
+const _pcLeder3 = initPubCrawl('rising-sun-basingstoke');
+checkLederhosen(_pcLeder3, 'wear lederhosen');
+assert('checkLederhosen: "wear lederhosen" activates lederhosen',
+  _pcLeder3.lederhosen, true);
+
+const _pcLeder4 = initPubCrawl('mcsorleys-nyc');
+checkLederhosen(_pcLeder4, 'put on lederhosen');
+assert('checkLederhosen: "put on lederhosen" activates lederhosen',
+  _pcLeder4.lederhosen, true);
+
+const _pcLeder5 = initPubCrawl('rising-sun-basingstoke');
+checkLederhosen(_pcLeder5, 'order a pint');
+assert('checkLederhosen: unrelated input does not activate lederhosen',
+  _pcLeder5.lederhosen, false);
 
 // ── FF shared engine ─────────────────────────────────────────────────────────
 
