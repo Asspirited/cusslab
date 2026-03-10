@@ -3,7 +3,7 @@
 
 const fs   = require('fs');
 const path = require('path');
-const { Temperature, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetector, DartsVoiceFmt, dartsBuildBlock, DARTS_PREMONITION_AFFINITIES, COLLECTIVE_CALL_MINIMUM, premonitionEligible, blankPremonitionLedger, assignPremonitionRC, resolvePremonitionCommits, isPremonitionTruthTeller, detectIntellectualAttempt, buildAttemptInstruction, INTELLECTUAL_ATTEMPTS_CONFIG, CONSEQUENCE_TIERS, applyConsequence, MARSHALS_BELT_EVENT, accumulatePanelStats, computeAvgDepth, GOLF_PANEL_MEMBER_IDS, COLTART_SOFA_POOLS, getSofaCommentator, getHistoricalDivergence, selectReactionMode, validateOutwardCode, parseOutwardCode, ORACLE_VOICES, isValidOracleVoice, canSubmitOracle, ORACLE_REGISTERS, ORACLE_CHARACTERS, hasPhilTranslation, hasAllDublinDriftStages } = require('./logic.js');
+const { Temperature, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetector, DartsVoiceFmt, dartsBuildBlock, DARTS_PREMONITION_AFFINITIES, COLLECTIVE_CALL_MINIMUM, premonitionEligible, blankPremonitionLedger, assignPremonitionRC, resolvePremonitionCommits, isPremonitionTruthTeller, detectIntellectualAttempt, buildAttemptInstruction, INTELLECTUAL_ATTEMPTS_CONFIG, CONSEQUENCE_TIERS, applyConsequence, MARSHALS_BELT_EVENT, accumulatePanelStats, computeAvgDepth, GOLF_PANEL_MEMBER_IDS, COLTART_SOFA_POOLS, getSofaCommentator, getHistoricalDivergence, selectReactionMode, validateOutwardCode, parseOutwardCode, ORACLE_VOICES, isValidOracleVoice, canSubmitOracle, ORACLE_REGISTERS, ORACLE_CHARACTERS, hasPhilTranslation, hasAllDublinDriftStages, COMEDY_ROOM_MODES, COMEDY_MODE_LABELS, getDefaultComedyMode, isValidComedyMode } = require('./logic.js');
 const { QUNTUM_LEEKS_SCENARIOS, initState, pickRandomScenario, betLeekiness, spendLeekiness, processTurnEffects, buildModifiers } = require('../src/logic/quntum-leeks-engine.js');
 
 // ── Mock state (simulates browser localStorage + DOM) ────────────────────────
@@ -6582,6 +6582,72 @@ function makeSteps(ctx) {
     [/^the rationale reflects the "([^"]+)" register$/, (register) => {
       if (!ctx._oracleVoice || !isValidOracleVoice(ctx._oracleVoice))
         throw new Error(`Oracle voice "${ctx._oracleVoice}" is not valid — cannot produce register "${register}"`);
+    }],
+
+    // ── Comedy Room mode switcher (comedy-room-mode-switcher.feature) ──────────
+
+    [/^a mode tab labelled "([^"]+)" is present$/, (label) => {
+      if (!Object.values(COMEDY_MODE_LABELS).includes(label))
+        throw new Error(`No Comedy Room mode tab with label "${label}"`);
+    }],
+
+    [/^the "([^"]+)" tab is active$/, (label) => {
+      const defaultMode  = getDefaultComedyMode();
+      const defaultLabel = COMEDY_MODE_LABELS[defaultMode];
+      if (label !== defaultLabel)
+        throw new Error(`Expected "${label}" to be active by default, but default is "${defaultLabel}"`);
+    }],
+
+    [/^the standard Comedy Room input is visible$/, () => {
+      const mode = ctx._comedyMode || getDefaultComedyMode();
+      if (mode !== 'into-the-room')
+        throw new Error(`Standard input not visible — current mode: "${mode}"`);
+    }],
+
+    [/^the Oracle input is not visible$/, () => {
+      const mode = ctx._comedyMode || getDefaultComedyMode();
+      if (mode === 'house-name-oracle')
+        throw new Error(`Oracle input visible when it should not be — current mode: "${mode}"`);
+    }],
+
+    [/^the user selects the "([^"]+)" mode$/, (label) => {
+      const entry = Object.entries(COMEDY_MODE_LABELS).find(([, v]) => v === label);
+      if (!entry) throw new Error(`Unknown Comedy Room mode label: "${label}"`);
+      ctx._comedyMode = entry[0];
+    }],
+
+    [/^the user has selected the "([^"]+)" mode$/, (label) => {
+      const entry = Object.entries(COMEDY_MODE_LABELS).find(([, v]) => v === label);
+      if (!entry) throw new Error(`Unknown Comedy Room mode label: "${label}"`);
+      ctx._comedyMode = entry[0];
+    }],
+
+    [/^the Oracle location field is visible$/, () => {
+      if (ctx._comedyMode !== 'house-name-oracle')
+        throw new Error(`Oracle location field not visible — current mode: "${ctx._comedyMode}"`);
+    }],
+
+    [/^the Oracle archetype selector is visible$/, () => {
+      if (ctx._comedyMode !== 'house-name-oracle')
+        throw new Error(`Oracle archetype selector not visible — current mode: "${ctx._comedyMode}"`);
+    }],
+
+    [/^the standard Comedy Room input is not visible$/, () => {
+      if (ctx._comedyMode !== 'house-name-oracle')
+        throw new Error(`Standard input still visible — current mode: "${ctx._comedyMode}"`);
+    }],
+
+    [/^the archetype selector contains "([^"]+)"$/, (voice) => {
+      if (!ORACLE_VOICES.includes(voice))
+        throw new Error(`Oracle voice "${voice}" is not in ORACLE_VOICES`);
+    }],
+
+    [/^the archetype selector has a required indicator$/, () => {
+      // Required indicator is a UI concern enforced in index.html.
+      // Logic gate: the archetype must be mandatory (canSubmitOracle returns false without it).
+      const withoutVoice = canSubmitOracle('SW1A', '');
+      if (withoutVoice)
+        throw new Error('Expected canSubmitOracle to block submission when no voice selected');
     }],
 
   ];

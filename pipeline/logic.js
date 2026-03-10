@@ -522,6 +522,22 @@ function hasAllDublinDriftStages(text) {
   return DUBLIN_DRIFT_STAGES.every(stage => text.includes(stage));
 }
 
+// ── Comedy Room mode switcher (BL-053) ────────────────────────────────────────
+
+const COMEDY_ROOM_MODES = ['into-the-room', 'house-name-oracle'];
+const COMEDY_MODE_LABELS = {
+  'into-the-room':     'Into The Room',
+  'house-name-oracle': 'The House Name Oracle',
+};
+
+function getDefaultComedyMode() {
+  return 'into-the-room';
+}
+
+function isValidComedyMode(mode) {
+  return typeof mode === 'string' && COMEDY_ROOM_MODES.includes(mode);
+}
+
 module.exports = {
   maskKey, isValidKey, shouldUpdateInput,
   Temperature,
@@ -540,4 +556,5 @@ module.exports = {
   ORACLE_VOICES, ORACLE_REGISTERS, ORACLE_CHARACTERS,
   validateOutwardCode, parseOutwardCode, isValidOracleVoice, canSubmitOracle,
   hasPhilTranslation, hasAllDublinDriftStages,
+  COMEDY_ROOM_MODES, COMEDY_MODE_LABELS, getDefaultComedyMode, isValidComedyMode,
 };

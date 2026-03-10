@@ -1,7 +1,7 @@
 // Unit test runner — tests pure functions in pipeline/logic.js
 // Run: node pipeline/unit-runner.js
 
-const { maskKey, isValidKey, shouldUpdateInput, Temperature, makeWoundDetector, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetector, DartsVoiceFmt, dartsBuildBlock, DARTS_PREMONITION_AFFINITIES, COLLECTIVE_CALL_MINIMUM, premonitionEligible, blankPremonitionLedger, assignPremonitionRC, resolvePremonitionCommits, isPremonitionTruthTeller, detectIntellectualAttempt, buildAttemptInstruction, INTELLECTUAL_ATTEMPTS_CONFIG, SOUNESS_CAT_PRE_EXISTING, SOUNESS_CAT_IDS, getAllPairs, getPairTone, allPairsHaveToneAndNote, teslaHasNoWarmOrSolidary, pairToneIsSymmetrical, noConflictingTones, CONSEQUENCE_TIERS, applyConsequence, MARSHALS_BELT_EVENT, accumulatePanelStats, computeAvgDepth, GOLF_PANEL_MEMBER_IDS, COLTART_SOFA_POOLS, getSofaCommentator, getHistoricalDivergence, selectReactionMode, validateOutwardCode, parseOutwardCode, ORACLE_VOICES, isValidOracleVoice, canSubmitOracle, ORACLE_REGISTERS, ORACLE_CHARACTERS, hasPhilTranslation, hasAllDublinDriftStages } = require('./logic.js');
+const { maskKey, isValidKey, shouldUpdateInput, Temperature, makeWoundDetector, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetector, DartsVoiceFmt, dartsBuildBlock, DARTS_PREMONITION_AFFINITIES, COLLECTIVE_CALL_MINIMUM, premonitionEligible, blankPremonitionLedger, assignPremonitionRC, resolvePremonitionCommits, isPremonitionTruthTeller, detectIntellectualAttempt, buildAttemptInstruction, INTELLECTUAL_ATTEMPTS_CONFIG, SOUNESS_CAT_PRE_EXISTING, SOUNESS_CAT_IDS, getAllPairs, getPairTone, allPairsHaveToneAndNote, teslaHasNoWarmOrSolidary, pairToneIsSymmetrical, noConflictingTones, CONSEQUENCE_TIERS, applyConsequence, MARSHALS_BELT_EVENT, accumulatePanelStats, computeAvgDepth, GOLF_PANEL_MEMBER_IDS, COLTART_SOFA_POOLS, getSofaCommentator, getHistoricalDivergence, selectReactionMode, validateOutwardCode, parseOutwardCode, ORACLE_VOICES, isValidOracleVoice, canSubmitOracle, ORACLE_REGISTERS, ORACLE_CHARACTERS, hasPhilTranslation, hasAllDublinDriftStages, COMEDY_ROOM_MODES, COMEDY_MODE_LABELS, getDefaultComedyMode, isValidComedyMode } = require('./logic.js');
 
 let passed = 0;
 let failed = 0;
@@ -1164,6 +1164,23 @@ assert('hasAllDublinDriftStages: returns false when a stage is missing',
   hasAllDublinDriftStages(_missingWander), false);
 assert('hasAllDublinDriftStages: returns false on empty string',
   hasAllDublinDriftStages(''), false);
+
+// ── Comedy Room mode switcher (BL-053) ───────────────────────────────────────
+assert('COMEDY_ROOM_MODES is an array',                    Array.isArray(COMEDY_ROOM_MODES), true);
+assert('COMEDY_ROOM_MODES has exactly 2 entries',          COMEDY_ROOM_MODES.length, 2);
+assert('COMEDY_ROOM_MODES contains into-the-room',         COMEDY_ROOM_MODES.includes('into-the-room'), true);
+assert('COMEDY_ROOM_MODES contains house-name-oracle',     COMEDY_ROOM_MODES.includes('house-name-oracle'), true);
+
+assert('COMEDY_MODE_LABELS Into The Room',                 COMEDY_MODE_LABELS['into-the-room'], 'Into The Room');
+assert('COMEDY_MODE_LABELS The House Name Oracle',         COMEDY_MODE_LABELS['house-name-oracle'], 'The House Name Oracle');
+
+assert('getDefaultComedyMode returns into-the-room',       getDefaultComedyMode(), 'into-the-room');
+
+assert('isValidComedyMode: into-the-room is valid',        isValidComedyMode('into-the-room'), true);
+assert('isValidComedyMode: house-name-oracle is valid',    isValidComedyMode('house-name-oracle'), true);
+assert('isValidComedyMode: unknown mode is invalid',       isValidComedyMode('unknown'), false);
+assert('isValidComedyMode: empty string is invalid',       isValidComedyMode(''), false);
+assert('isValidComedyMode: null is invalid',               isValidComedyMode(null), false);
 
 // ── Results ──────────────────────────────────────────────────────────────────
 
