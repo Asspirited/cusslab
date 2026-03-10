@@ -322,6 +322,12 @@ For items that represent a product hypothesis, add after the CD3 line:
 - CD3: UBV=8 TC=3 RR=2 → CoD=13, Dur=4, **CD3=3.25**
 - Status: OPEN — design discussion needed before any implementation
 
+### BL-055 — Homepage quotes: attribution strategy rethink
+- Epic: Brand Polish
+- Rod doesn't like "Heckler on X" pattern — arrogant/off-brand. Design question: (a) attribute all quotes to historical figures with caveats like (probably)/(possibly)/(he'd dispute this) — keep the humour but remove ownership vanity; (b) leave unattributed Heckler quotes genuinely unattributed (Heckler implied, unspoken) — but risk users reading silence as a bug not a choice. Current slogan pool has: character-voiced quotes (Hicks, Carlin, Cook-King, Adams, Oscar, Prof Cox, Blyton, Carr, Keegan, Souness, Radar, Faldo) + original Heckler-attributed quotes. Fix: remove "Heckler on X" framing entirely — historical figure quotes keep attribution+caveat, original Heckler lines become anonymous or rephrased as if by a known voice. Also fix: many unattributed quotes appear in a run — review sequencing so attribution varies.
+- CD3: UBV=3 TC=1 RR=1 → CoD=5, Dur=2, **CD3=2.5**
+- Status: OPEN — logged 2026-03-10
+
 ### BL-054 — Expert Evolution engine: apply to sports panels, build toward panel-agnostic independent engine
 - Current Expert Evolution feature applied to one context. Apply the same mechanic to Sports panels (golf, football, darts) for different attributes (technique evolution, tactical thinking, commentary style over career arc).
 - Longer-term goal: extract into a standalone panel-agnostic engine that can model attribute evolution for any character across any panel, industry, or domain.
