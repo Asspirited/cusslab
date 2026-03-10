@@ -322,7 +322,7 @@ For items that represent a product hypothesis, add after the CD3 line:
 - Structural difference from Comedy Room: single author response, not a panel conversation. Longer output — 300–500 words. The author is not interrupted.
 - Characters already specced in notes/2026-03-10-author-epilogue.md — just needs prompt templates and UI
 - CD3: UBV=7 TC=1 RR=1 → CoD=9, Dur=5, **CD3=1.8**
-- Status: OPEN — raised 2026-03-10, blocked on BL-058
+- Status: CLOSED — shipped 2026-03-10 (commit e7b0c80)
 
 ---
 ### BL-058 decomposition — Author Epilogue delivery items (BL-060 onward)
@@ -591,7 +591,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Fix: route `logTurdRating` (or a new bridge function) to also write to the self-training persistent
   store so every rating in the app counts toward the threshold.
 - CD3: UBV=7 TC=6 RR=5 → CoD=18, Dur=2, **CD3=9.0**
-- Status: OPEN — raised 2026-03-10
+- Status: CLOSED — shipped 2026-03-10 (commit 615f19a)
 
 ### BL-094 — Self-Training: rating buttons missing from most panel outputs
 - Epic: Self-Training
@@ -602,7 +602,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Fix: audit all panel output areas; add rating row (at minimum thumbs up/down) post-output in each.
   Three Amigos needed: decide rating UI pattern before implementation to ensure consistency.
 - CD3: UBV=7 TC=3 RR=4 → CoD=14, Dur=4, **CD3=3.5**
-- Status: OPEN — raised 2026-03-10, blocked on BL-093 (fix storage first)
+- Status: OPEN — raised 2026-03-10. BL-093 shipped 2026-03-10 — no longer blocked.
 
 ### BL-095 — The Literary Roast Room: authors roast any book / comic / magazine title you enter
 - Epic: Author Epilogue
@@ -614,7 +614,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
   Panel panel: single author, single roast. Extendable to multi-author round-robin.
 - Natural home: Comedy Room tab (alongside Heckler, Oracle, Writing Room).
 - CD3: UBV=8 TC=5 RR=5 → CoD=18, Dur=3, **CD3=6.0**
-- Status: OPEN — raised 2026-03-10
+- Status: CLOSED — shipped 2026-03-10 (commit db88416)
 
 ### BL-082 — Author Epilogue: Phase 2 — Football Moment integration
 - Epic: Author Epilogue
@@ -858,3 +858,38 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - **Phase 2:** two sofa commentators react to each other when both match.
 - CD3: UBV=9 TC=2 RR=1 → CoD=12, Dur=5, **CD3=2.4**
 - Status: CLOSED — 2026-03-10. Logic layer (getSofaCommentator, getHistoricalDivergence, selectReactionMode, COLTART_SOFA_POOLS) in pipeline/logic.js. Gherkin in specs/golf-adventure-watchback.feature. UI wired in golf-adventure.html: constants + functions inline, sofa strip shows on startGame, updates after each hole via updateSofaStrip(). 472/472 passing.
+
+### BL-096 — Character files: align all pre-author files to feature-agnostic canonical model
+- 30+ character files (characters/*.md) were created before the feature-agnostic convention was
+  established this session. They contain "Panel-Specific Rules" sections that mix feature bindings
+  (how the character is used in a specific room/panel) into the canonical character definition.
+- Work: audit each file, rename "Panel-Specific Rules" → "Character Rules", extract any
+  feature-specific content (prompt text, epilogue bindings, panel trigger rules) into the relevant
+  feature spec or logic layer. Leave only character-intrinsic mechanics in the file.
+- New standard: characters/*.md = canonical model only. Feature bindings live in feature specs
+  and logic layers. Established in TEMPLATE.md 2026-03-10.
+- Files in scope: all ~30 pre-author files (radar.md, faldo.md, coltart.md, souness.md, etc.)
+- Author files (tolkien/patterson/pratchett/wodehouse/austen) already compliant — done this session.
+- CD3: UBV=4 TC=3 RR=6 → CoD=13, Dur=4, **CD3=3.25**
+- Status: OPEN — raised 2026-03-10
+
+### BL-097 — Roast Room: select authors by predicted comedy value for the material
+- Currently: 5 authors selected at random from the pool.
+- Enhancement: score each author's likely comedy collision value against the submitted title
+  before selection. Authors with higher predicted comedy value (based on title genre/type vs
+  author's known style) are weighted higher in selection.
+- Example: Hello magazine → Hemingway (masculine stoicism vs celebrity gossip = high value),
+  Tolkien (Elvish genealogy of a magazine = high value), Austen (social observation = high value).
+  A technical manual → McCarthy (dust and nihilism vs instructions = high value), Patterson (CHAPTER 1: STEP 1).
+- Requires: either a pre-scored affinity table (author × genre type) or a pre-flight LLM call
+  that scores affinities before selecting the 5. Pre-scored table is cheaper and faster.
+- Depends on: BL-095 (Roast Room must exist first)
+- CD3: UBV=6 TC=1 RR=1 → CoD=8, Dur=3, **CD3=2.7**
+- Status: OPEN — raised 2026-03-10, blocked on BL-095
+
+### BL-098 — Gherkin step namespace collision lint check
+- Epic: Pipeline Health
+- Recurring waste: WL-099, WL-100, WL-103 all caused by identical regex patterns across features silently shadowing each other. First-match wins; the wrong step fires; pipeline may appear green while behaviour is untested.
+- Fix: add a lint pass to gherkin-runner.js (or a separate script) that detects duplicate regex patterns across all step definitions and fails with a clear error naming the collision. Could also enforce a naming convention: steps containing `"([^"]+)"` must be prefixed with a feature-specific noun.
+- CD3: UBV=2 TC=3 RR=4 → CoD=9, Dur=2, **CD3=4.5**
+- Status: OPEN — raised 2026-03-10

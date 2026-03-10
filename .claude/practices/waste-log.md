@@ -1392,3 +1392,35 @@ Status: CLOSED
 - **Tags:** `#gherkin-step-shadowing` `#repeated-pattern`
 - **Status:** Closed — fix: renamed feature step and definition to `the queue result is <result>` to avoid collision with the generic `the result is null` step
 - **5 Whys root cause:** Same pattern as WL-099. Generic result-checking steps using bare `the result is null` will shadow any more-specific step using the same phrasing. Corrective: prefix result steps with the context they belong to (e.g. `the queue result is`, `the author result is`).
+
+## WL-101
+- **Item:** Missing import of `selectRoastAuthors`/`buildRoastPrompt` in unit-runner.js
+- **Symptom:** Pipeline RED on first run — `ReferenceError: selectRoastAuthors is not defined` in unit-runner.js
+- **Suspected cause:** Functions were added to logic.js and exported, but unit-runner.js destructured import was not updated to include them.
+- **Session date:** 2026-03-10
+- **Time lost:** ~3 min
+- **Cost impact:** Low
+- **Tags:** `#missing-import` `#unit-runner` `#new-function`
+- **Status:** Closed — added `selectRoastAuthors, buildRoastPrompt` to unit-runner.js import line
+- **5 Whys root cause:** No checklist item prompts "did you update the unit-runner import?" when adding exports to logic.js. The import is a long single-line destructure that's easy to miss.
+
+## WL-102
+- **Item:** Stale `COMEDY_ROOM_MODES has exactly N entries` assertion after adding new modes
+- **Symptom:** Pipeline RED — unit test expected 2 entries (then 3), got 3 (then 4), on two separate occasions this session (roast-room added, writing-room added)
+- **Suspected cause:** Hardcoded count assertion becomes stale every time a mode is added. The test is fragile by design.
+- **Session date:** 2026-03-10
+- **Time lost:** ~2 min each occurrence
+- **Cost impact:** Low
+- **Tags:** `#stale-assertion` `#magic-number` `#unit-test`
+- **Status:** Closed (both times) — updated count. Consider replacing with `>= 2` floor check or dynamic `COMEDY_ROOM_MODES.length` assertion.
+
+## WL-103
+- **Item:** Roast Room and Writing Room gherkin steps collide on identical regexes (recurring)
+- **Symptom:** Multiple failures on writing-room.feature — `the prompt includes "..."`, `each response shows the author's name`, `no author appears more than once in the selection`, `the user clicks the Re-roll button` all fired the roast room's step definition instead of the writing room's, using the wrong context variable
+- **Suspected cause:** Same root cause as WL-099/100. Both features share natural-language step phrasing; the gherkin runner uses first-match, so the earlier-registered step wins.
+- **Session date:** 2026-03-10
+- **Time lost:** ~15 min
+- **Cost impact:** Medium
+- **Tags:** `#gherkin-step-shadowing` `#repeated-pattern` `#writing-room` `#roast-room`
+- **Status:** Closed — merged shared steps to check active mode context (`ctx._comedyMode === 'writing-room'`), and prefixed feature-specific steps (`the roast prompt includes`, `the writing room prompt includes`)
+- **5 Whys root cause:** Third occurrence of this pattern (WL-099, WL-100, WL-103). Root cause: no convention enforces step namespace isolation. Steps from different features share a global array; any generic phrasing will collide. Corrective (deferred): add a lint check or naming convention that flags steps containing `"([^"]+)"` as potentially shadowing, or prefix feature steps with their feature name.

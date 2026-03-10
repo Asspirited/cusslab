@@ -181,6 +181,26 @@ BL-008 (RIA ACC label fix):
   Window:      Immediate — this is a label fix with obvious falsifier
   Falsifier:   User still asks "what does ACC stand for?" after fix
 
+BL-095 (The Roast Room — shipped 2026-03-10):
+  Actor:       Comedy Room users submitting a title (book, magazine, publication)
+  Assumption:  Collision comedy (McCarthy on Hello magazine) is engaging enough to prompt re-rolls and shares
+  AARRR stage: Activation
+  Signal:      Re-roll clicks per session on roast-room tab (proxy for engagement / delight)
+  Baseline:    0 — not yet shipped to users
+  Target:      ≥ 1 re-roll per 3 roast submissions within first 10 user sessions
+  Window:      10 sessions after deploy
+  Falsifier:   Re-roll rate < 1 in 5 after 10 sessions (users don't find results compelling enough to retry)
+
+BL-059 (The Writing Room — shipped 2026-03-10):
+  Actor:       Comedy Room users submitting a topic (event, concept, premise)
+  Assumption:  Sequential author awareness ("each author reads the previous") produces richer outputs than parallel monologues
+  AARRR stage: Activation
+  Signal:      Session time on writing-room tab vs roast-room tab (richer = longer read)
+  Baseline:    0 — not yet observable
+  Target:      Writing Room avg session time ≥ Roast Room avg session time within 10 sessions
+  Window:      10 sessions after deploy
+  Falsifier:   Writing Room session time consistently shorter than Roast Room (awareness mechanic adds no value)
+
 ---
 
 ## Reference Files
