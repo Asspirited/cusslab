@@ -12,8 +12,12 @@ Every open item is scored when possible:
 - **CoD** = UBV + TC + RR
 - **Dur** — Duration (1–10): relative effort/size
 - **CD3** = CoD / Dur (rank descending — highest = do first)
+- **Epic** — (optional) group label for related items sharing a design theme or dependency chain.
+  Set on individual items. An "epic" is not a backlog item — it is only a label.
+  Example: Epic: "Modern Majors Tier 2" groups BL-036 through BL-047.
 
 Items are sorted by CD3 within each section. Rescore when scope changes.
+Every item has its own BL-NNN number. No sub-items (BL-032-1 etc.) ever.
 
 ## Hypothesis Card (optional — for product bets, not pure tech debt)
 
@@ -215,22 +219,82 @@ For items that represent a product hypothesis, add after the CD3 line:
 - CD3 (bucket): UBV=9 TC=7 RR=2 → CoD=18, Dur=3 per tournament, **CD3=6.0**
 - Status: CLOSED — 2026-03-09 (71b2bf5). First tournament (Torrey Pines 2008) shipped: era-2008 CSS, Tiger/Rocco players, TemperamentService + ChaosInjectorService wiring, 3 canonical holes. Remaining 7 tournaments remain in backlog for future iterations.
 
-### BL-032 — Golf Adventure: Modern Majors Tier 2 (post-2000, strong history, do after Tier 1)
-- Priority order:
-  1. **Monty at US Open (1994 Oakmont)** — pre-2000 but standalone iconic. Monty shoots 65 in final round to tie. 3-man playoff vs Els and Loren Roberts. Els wins. US crowd notoriously hostile to Monty throughout. Players: Monty (protagonist), Els (foil). CD3=5.7
-  2. **2005 Masters** — Tiger chip-in on 16. "In your life, have you seen anything like that?" — Verne Lundquist. Nike ad made that night. CBS. Players: Tiger (protagonist), Chris DiMarco (foil). CD3=5.7
-  3. **2006 US Open Winged Foot** — Phil Mickelson needs par on 18 to win. Makes double bogey. "I am such an idiot." Geoff Ogilvy wins by watching. NBC. Players: Phil (collapse), Ogilvy (accidental winner). CD3=5.3
-  4. **2000 US Open Pebble Beach** — Tiger wins by 15. Untouchable performance. Sets every US Open scoring record. NBC. Players: Tiger (protagonist), Ernie Els (distant second). CD3=5.3
-  5. **2000 Open St Andrews** — Tiger completes Career Grand Slam (never visited a bunker). 19-under. Monty as great Scottish foil with crowd. BBC. Players: Tiger (protagonist), Monty (crowd favourite). CD3=5.3
-  6. **2011 US Open Congressional** — Rory McIlroy 8-shot win at 22. After Masters collapse. Utterly dominant. NBC. Players: Rory (protagonist), Jason Day (distant second). CD3=5.3
-  7. **2002 Open Muirfield** — 4-man playoff (Els, Elkington, Levet, Appleby). Els wins. Thomas Levet falls over after hole-in-one celebrations. BBC. Players: Els (protagonist), Levet (comedy foil). CD3=5.3
-  8. **2011 Open Sandwich** — Darren Clarke wins three weeks after anniversary of wife Heather's death. Emotional. Sky. Players: Clarke (protagonist), Phil Mickelson / Dustin Johnson (foils). CD3=5.3
-  9. **2007 Open Carnoustie** — Harrington makes double bogey on 18, still wins. García ties, Harrington wins playoff. Players: Harrington (protagonist), García (near-miss again). CD3=5.0
-  10. **2012 PGA Kiawah** — Rory McIlroy dominant. 8-shot win. Ryder Cup backdrop (Ocean Course). Players: Rory (protagonist). CD3=5.0
-  11. **2004 Masters** — Phil Mickelson's first major after 0-for-46. Arms in air on 18. Ernie Els misses short putt on 18 to tie. CBS. CD3=4.7
-  12. **2012 Masters** — Bubba Watson punch hook from pine straw on 10 in playoff. Weeps at the hole. CBS. Players: Bubba (protagonist), Louis Oosthuizen (foil). CD3=4.7
-- CD3 (bucket): UBV=8 TC=6 RR=1 → CoD=15, Dur=3 per tournament, **CD3=5.0**
-- Status: OPEN — after BL-031
+### BL-032 — EPIC: Modern Majors Tier 2
+- Epic container only — not a work item. Individual items: BL-036 through BL-047.
+- Status: CLOSED as epic definition — tracking moves to individual items
+
+### BL-036 — Golf Adventure: Monty at US Open 1994 Oakmont
+- Epic: Modern Majors Tier 2
+- Monty shoots 65 in final round to tie. 3-man playoff vs Els and Loren Roberts. Els wins. US crowd notoriously hostile to Monty throughout.
+- Players: Monty (protagonist), Els (foil). Era: pre-2000 but standalone iconic. NBC.
+- CD3: UBV=8 TC=6 RR=1 → CoD=15, Dur=3, **CD3=5.0** (own score; not inherited from epic)
+- Status: OPEN
+
+### BL-037 — Golf Adventure: 2005 Masters (Tiger chip-in 16th)
+- Epic: Modern Majors Tier 2
+- Tiger chip-in on 16. "In your life, have you seen anything like that?" — Verne Lundquist. Nike ad made that night. CBS. Players: Tiger (protagonist), Chris DiMarco (foil).
+- CD3: UBV=8 TC=6 RR=1 → CoD=15, Dur=3, **CD3=5.0**
+- Status: CLOSED — 2026-03-10 (this session): era-2005 CSS, 3 holes (13th, 16th chip-in, 18th playoff)
+
+### BL-038 — Golf Adventure: 2006 US Open Winged Foot (Phil collapse)
+- Epic: Modern Majors Tier 2
+- Phil Mickelson needs par on 18 to win. Makes double bogey. "I am such an idiot." Geoff Ogilvy wins by watching. NBC. Players: Phil (collapse), Ogilvy (accidental winner).
+- CD3: UBV=8 TC=5 RR=1 → CoD=14, Dur=3, **CD3=4.7**
+- Status: CLOSED — 2026-03-10 (this session): type:collapse, era-2006-us, 3 holes (9th, 16th, 18th double)
+
+### BL-039 — Golf Adventure: 2000 US Open Pebble Beach (Tiger +15)
+- Epic: Modern Majors Tier 2
+- Tiger wins by 15. Untouchable performance. Sets every US Open scoring record. NBC. Players: Tiger (protagonist), Ernie Els (distant second).
+- CD3: UBV=8 TC=5 RR=1 → CoD=14, Dur=3, **CD3=4.7**
+- Status: OPEN
+
+### BL-040 — Golf Adventure: 2000 Open St Andrews (Tiger Grand Slam)
+- Epic: Modern Majors Tier 2
+- Tiger completes Career Grand Slam (never visited a bunker). 19-under. Monty as great Scottish foil with crowd. BBC. Players: Tiger (protagonist), Monty (crowd favourite).
+- CD3: UBV=8 TC=5 RR=1 → CoD=14, Dur=3, **CD3=4.7**
+- Status: OPEN
+
+### BL-041 — Golf Adventure: 2011 US Open Congressional (Rory 8-shot)
+- Epic: Modern Majors Tier 2
+- Rory McIlroy 8-shot win at 22. After Masters collapse. Utterly dominant. NBC. Players: Rory (protagonist), Jason Day (distant second).
+- CD3: UBV=8 TC=5 RR=1 → CoD=14, Dur=3, **CD3=4.7**
+- Status: OPEN
+
+### BL-042 — Golf Adventure: 2002 Open Muirfield (Els 4-way playoff)
+- Epic: Modern Majors Tier 2
+- 4-man playoff (Els, Elkington, Levet, Appleby). Els wins. Thomas Levet falls over after hole-in-one celebrations. BBC. Players: Els (protagonist), Levet (comedy foil).
+- CD3: UBV=7 TC=5 RR=1 → CoD=13, Dur=3, **CD3=4.3**
+- Status: OPEN
+
+### BL-043 — Golf Adventure: 2011 Open Sandwich (Darren Clarke)
+- Epic: Modern Majors Tier 2
+- Clarke wins three weeks after anniversary of wife Heather's death. Emotional. Sky. Players: Clarke (protagonist), Phil Mickelson / Dustin Johnson (foils).
+- CD3: UBV=8 TC=5 RR=1 → CoD=14, Dur=3, **CD3=4.7**
+- Status: OPEN
+
+### BL-044 — Golf Adventure: 2007 Open Carnoustie (Harrington/García)
+- Epic: Modern Majors Tier 2
+- Harrington makes double bogey on 18, still wins. García ties, Harrington wins playoff. Players: Harrington (protagonist), García (near-miss again). era-2007 BBC/Sky indigo.
+- CD3: UBV=7 TC=5 RR=1 → CoD=13, Dur=3, **CD3=4.3**
+- Status: CLOSED — 2026-03-10 (this session): era-2007, 3 holes (17th, 18th Barry Burn, 18th playoff)
+
+### BL-045 — Golf Adventure: 2012 PGA Kiawah (Rory dominant)
+- Epic: Modern Majors Tier 2
+- Rory McIlroy dominant. 8-shot win. Ryder Cup backdrop (Ocean Course). Players: Rory (protagonist).
+- CD3: UBV=7 TC=4 RR=1 → CoD=12, Dur=3, **CD3=4.0**
+- Status: OPEN
+
+### BL-046 — Golf Adventure: 2004 Masters (Phil's first major)
+- Epic: Modern Majors Tier 2
+- Phil Mickelson's first major after 0-for-46. Arms in air on 18. Ernie Els misses short putt on 18 to tie. CBS.
+- CD3: UBV=7 TC=4 RR=1 → CoD=12, Dur=3, **CD3=4.0**
+- Status: OPEN
+
+### BL-047 — Golf Adventure: 2012 Masters (Bubba Watson)
+- Epic: Modern Majors Tier 2
+- Bubba Watson punch hook from pine straw on 10 in playoff. Weeps at the hole. CBS. Players: Bubba (protagonist), Louis Oosthuizen (foil).
+- CD3: UBV=7 TC=4 RR=1 → CoD=12, Dur=3, **CD3=4.0**
+- Status: OPEN
 
 ### BL-033 — Golf Adventure: Tournament picker decade-panel UI
 - Scope: Golf Adventure tournament picker only — the main panel list grows unwieldy as BL-031/032 land

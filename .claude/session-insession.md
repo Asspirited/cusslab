@@ -1,6 +1,6 @@
 # In-Session Protocol — Heckler and Cox
 # Trigger map and delivery discipline
-# Last updated: 2026-03-08
+# Last updated: 2026-03-10
 # Sources: Evans (DDD), Martin (Clean Code, SOLID), Fowler (Refactoring),
 #          Meszaros (xUnit Patterns), Smart (BDD in Action),
 #          Adzic/Evans (Fifty Quick Ideas to Improve Your Tests),
@@ -43,13 +43,21 @@
 ### TRIGGER: "research" / "find out about" / "who is"
 → Run: CHARACTER RESEARCH PROTOCOL
 
-### TRIGGER: "something just went wrong" / "that's broken" / "wtf" / pipeline RED
-→ Waste log entry IMMEDIATELY — not at session end.
-→ 5 Whys before any fix. Root cause first. See .claude/practices/5-whys.md
+### TRIGGER: "something just went wrong" / "that's broken" / "wtf" / "live bug" / pipeline RED
+→ Run: INVESTIGATE AND RESOLVE SEQUENCE
 → Source: Poppendieck — build quality in, not inspect in after the fact
 
 ### TRIGGER: any new persistent artefact (code, config, script, doc, test, report)
 → Run: DEVOPS DESIGN CHECK before writing it
+
+### TRIGGER: RAISE NEW WORK — fires on any of these signals:
+- I spot a bug, gap, or quality issue while reading, implementing, or refactoring
+- Pipeline fails and reveals a structural gap
+- Rod mentions something in passing ("we should...", "that could be better...", "annoying that...")
+- A review (closedown standards review, retro, BDD CLOSE, DDD CLEAN) surfaces an improvement
+- An INVESTIGATE AND RESOLVE step reveals a pattern or class of defects
+- Any observation that, if unrecorded, will be WL-001 all over again
+→ Run: RAISE NEW WORK SEQUENCE — immediately, before returning to current work
 
 ### RULE: claude.ai → Claude Code communication
 Never print large instruction blocks to chat for copy-paste.
@@ -65,22 +73,33 @@ via .claude/settings.local.json. If a prompt appears for a routine operation it 
 the allow list needs updating — add the pattern to settings.local.json and commit.
 Do NOT ask Rod to approve routine reads, writes, git commands, or pipeline runs.
 
-### RULE: Stop before auto-compact — never let it fire reactively
-When context is getting long and auto-compact is approaching:
-STOP. Do not wait for it to fire.
-1. Run session closedown (pipeline → waste log → backlog → shared-session-state → commit → push)
-2. Tell Rod: "Context filling — clean stop here, start a new session"
-3. New session picks up from shared-session-state.md — no context lost
-Letting auto-compact fire mid-task wastes 10-20 min re-establishing state every time (WL-082, WL-084).
-Applies to both Claude Code and Claude.ai. Proactive stop > reactive compact.
+### SEQUENCE: Proactive session close — never let auto-compact fire
+Auto-compact is a system event, not a rule I can enforce. What I CAN control:
+watching for clean natural separations and closing there before the limit hits.
 
-FORCING FUNCTIONS — observable checkpoints (WL-084: rule had no teeth without these):
-Do NOT wait to feel "context is long". Stop at whichever comes first:
-- After 3 BL items closed in a single session → clean stop
-- After 5 or more pipeline runs in a single session → clean stop
+FORCING FUNCTIONS — observable checkpoints (WL-082, WL-084, WL-087):
+Stop at whichever comes first:
+- After 3 BL items closed in a single session → clean stop at next seam
+- After 5 or more pipeline runs in a single session → clean stop at next seam
 - Any time Rod says "pause" / "stop there" / "let's take stock" → clean stop immediately
-These are observable and don't require monitoring opaque context size.
-If in doubt — stop. The cost of a clean stop is 2 min. The cost of a reactive compact is 15+ min.
+
+WHAT IS A CLEAN SEAM:
+A clean stop is only valid at a natural boundary — never mid-sequence.
+Valid seams (in priority order):
+  1. After COMMIT SEQUENCE completes (pipeline green, pushed, hash confirmed)
+  2. After a BDD CLOSE or DDD CLEAN step
+  3. After Rod confirms a decision but before the next sequence starts
+  4. After a BL item is fully closed (not in the middle of TDD or Gherkin)
+If a forcing function fires mid-sequence: finish the current atomic step, then close at the next seam above.
+Never stop mid-Gherkin, mid-TDD, mid-investigation, mid-commit.
+
+CLOSE SEQUENCE when a seam is reached:
+1. Run session closedown: pipeline → waste log → backlog → shared-session-state → commit → push
+2. Say: "Forcing function reached — clean stop here. Start a new session to continue."
+3. New session picks up from shared-session-state.md — no context lost.
+
+The cost of a clean stop is 2 min. The cost of a reactive compact is 15+ min (WL-082, WL-084).
+Auto-compact firing = process failure. A clean seam stop = process working.
 
 ### RULE: Windows Downloads folder is accessible
 Rod's Downloads folder is always available at /mnt/c/Users/roden/Downloads/
@@ -252,6 +271,91 @@ Run before any implementation. Report findings. Propose design. Await Rod approv
 - [ ] What is the job the user is hiring this feature to do? Does the design serve that job?
 - Source: Norman — The Design of Everyday Things; Krug — Don't Make Me Think;
           Christensen — Jobs to Be Done
+
+### INVESTIGATE AND RESOLVE SEQUENCE — DMAIC within PDCA
+
+Structure: PDCA (Deming) is the outer cycle. DMAIC (Six Sigma) marshals the investigation.
+PLAN = Define + Measure + Analyze. DO = Improve. CHECK = verify. ACT = Control + prevent.
+
+**D — DEFINE (confirm and bound the defect)**
+1. Reproduce it. Can you make it happen consistently? If not — characterise the conditions.
+2. State the defect precisely: "When [X], [Y] happens instead of [Z]."
+3. Waste log entry NOW — not at session end. WL number logged before any investigation.
+   Include: symptom, suspected cause (hypothesis), tags, Status: Open.
+4. Source: Juran — Project-by-Project Quality Improvement; Pyzdek — Six Sigma Handbook
+
+**M — MEASURE (quantify impact and blast radius)**
+1. How often does this occur? Always / sometimes / edge case?
+2. Which users / flows / data does it affect?
+3. What is the cost? (Rod play time lost, pipeline trust, hidden debt)
+4. Are there related WL entries (pattern matching)?
+5. Source: Reinertsen — Cost of Delay (measure before acting); DORA — change failure rate
+
+**A — ANALYZE (root cause — pick the right tool)**
+Use the appropriate root cause tool from the standards library:
+- **5 Whys** (`.claude/practices/5-whys.md`): default for simple linear cause chains
+- **Fishbone / Ishikawa**: when multiple independent cause branches are possible
+  (Machine, Method, Material, Man, Measurement, Environment)
+- **Fault Tree Analysis (FTA)**: when failure requires multiple conditions to coincide
+  (AND/OR logic trees — useful for intermittent bugs)
+- **Systems Thinking (Meadows)**: when the bug is a symptom of a feedback loop or
+  structural incentive in the design, not just a code error
+
+The fifth why always ends at a system, process, or structural gap — never at a person.
+Source: Ohno — Toyota Production System; Meadows — Thinking in Systems
+
+**I — IMPROVE (frame as hypothesis, not just a fix)**
+1. Form an improvement hypothesis (see `.claude/practices/hypothesis-driven.md`):
+   "If we [do X], then [observable outcome] because [root cause from Analyze]."
+2. State the falsifier: "We will know we were wrong if [counter-signal]."
+3. Apply the minimum fix — no gold-plating around a bug fix (Beck — XP; Poppendieck — Lean).
+4. If new behaviour is introduced: Gherkin gate applies.
+   If fix restores existing contract only: guard + WL closure sufficient.
+5. Source: Beck — XP (simplest thing that works); Fowler — Refactoring (change safely)
+
+**C — CHECK (verify the fix)**
+1. Pipeline green before any commit. No exceptions.
+2. Confirm the original defect is no longer reproducible.
+3. Confirm no regressions — all existing Gherkin still passing.
+4. If a new code path was added: Gherkin scenario added and green.
+5. Source: DORA — change failure rate; Fowler — Continuous Delivery
+
+**A — ACT (control and prevent recurrence)**
+1. WL entry: update Status to Closed with fix commit hash.
+2. Ask: could a pipeline check have caught this earlier? If yes — add it.
+3. Ask: does this reveal a class of similar defects? If yes — backlog item for the pattern.
+4. Ask: does the root cause suggest a process gap? If yes — update session-insession.md
+   or closedown.md (using the standards review step 4b at session close).
+5. Source: Deming — PDCA; Juran — Control Phase; Reinertsen — Cost of Delay (prevent recurrence)
+
+### RAISE NEW WORK SEQUENCE — file it before it evaporates
+
+**RULE: never let new work live only in conversation.** If it matters, it gets a number now.
+No sub-items. No BL-NNN-X. Every item is a first-class BL or WL entry with its own number.
+
+**Step 1 — Classify:**
+- **WL** if something already went wrong: waste, rework, bug experienced, time lost, trust damaged.
+  (If raised during INVESTIGATE AND RESOLVE, the Define step already opens the WL entry — do not duplicate.)
+- **BL** if it is new capability, improvement, or content not yet built.
+
+**Step 2 — Assign the next number:**
+- Read backlog.md or waste-log.md to find the current highest number.
+- Assign next available BL-NNN or WL-NNN. Never reuse. Never sub-number.
+
+**Step 3 — Write the minimum viable entry immediately:**
+- **WL entry minimum:** Item + Symptom + Suspected cause + Tags + Status: Open
+- **BL entry minimum:** Name (one line) + CD3 score (UBV / TC / RR / CoD / Dur / CD3) + Epic (if part of a group) + Status: OPEN
+
+**Step 4 — Announce it:**
+- Say: "Raised as BL-NNN: [name]" or "Raised as WL-NNN: [symptom]"
+- Then return to the current work without losing thread.
+
+**Epic label rule:**
+- If this item belongs to a set of related items (same tournament series, same feature theme), add: `Epic: [label]`
+- The epic is a label only — never a backlog item itself, never numbered as BL-NNN.
+- Example: Epic: "Modern Majors Tier 2", Epic: "Ryder Cup Rollout"
+
+**Source:** WL-001, WL-081 — unrecorded work is the primary source of knowledge loss.
 
 ### TDD SEQUENCE — red → green → clean
 1. Identify unit assertions from approved Gherkin
