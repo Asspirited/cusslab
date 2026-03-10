@@ -3794,6 +3794,89 @@ function makeSteps(ctx) {
     [/^suggestion cards with category "([^"]+)" have the gold colour class$/, (cat) => { if (!(ctx._suggestionCards||[]).some(c=>c.category===cat)) throw new Error('No cards with category '+cat); }],
     [/^suggestion cards with category "([^"]+)" have the blush colour class$/, (cat) => { if (!(ctx._suggestionCards||[]).some(c=>c.category===cat)) throw new Error('No cards with category '+cat); }],
     [/^at least one suggestion card has category "([^"]+)"$/, (cat) => { if (!(ctx._suggestionCards||[]).some(c=>c.category===cat)) throw new Error('No card with category '+cat); }],
+
+    // ── SPORTS PANEL SUGGESTION CARDS (BL-100) ────────────────────────────────
+    [/^the Football panel is in qanda mode$/, () => {
+      const pool = [
+        {cat:'match',text:'Was that a red card, or is he just theatrical?'},
+        {cat:'match',text:'Should he have been dropped for that?'},
+        {cat:'match',text:'Is modern defending a lost art?'},
+        {cat:'match',text:'Was that the right substitution at 1-0 up?'},
+        {cat:'big',text:'Does talent survive pressure, or does pressure just reveal whether there was any?'},
+        {cat:'big',text:'Is the best manager the one who wins or the one who gets the most out of what he\'s got?'},
+        {cat:'contemporary',text:'Is VAR fixing a problem we\'d rather have had?'},
+        {cat:'contemporary',text:'Has the Premier League become too money-driven to care about the England team?'},
+        {cat:'contemporary',text:'Is the Euros or the World Cup the one that actually matters?'},
+        {cat:'absurd',text:'If Souness could pick his own five-a-side from history, who\'s first to be dropped?'},
+        {cat:'absurd',text:'What\'s Big Ron\'s best sentence and does it even mean anything?'},
+        {cat:'absurd',text:'Is a 0-0 a result or a crime?'},
+      ];
+      ctx._fbPool = pool;
+      ctx._fbSuggestions = [...pool].sort(() => Math.random() - 0.5);
+      ctx._activePanel = 'football';
+    }],
+    [/^the football suggestion tray is visible$/, () => { if (!ctx._fbSuggestions?.length) throw new Error('Football suggestion tray is empty'); }],
+    [/^the football suggestion tray contains at least (\d+) cards$/, (n) => { if ((ctx._fbSuggestions||[]).length < parseInt(n)) throw new Error('Expected >=' + n + ' football cards, got ' + (ctx._fbSuggestions||[]).length); }],
+    [/^at least one football suggestion card has category "([^"]+)"$/, (cat) => { if (!(ctx._fbSuggestions||[]).some(c=>c.cat===cat)) throw new Error('No football card with category ' + cat); }],
+    [/^the user clicks a football suggestion card$/, () => { const card = ctx._fbSuggestions?.[0]; if (!card) throw new Error('No football cards'); ctx._fbClickedCard = card; ctx._fbTextarea = card.text; }],
+    [/^the football textarea contains the card text$/, () => { if (ctx._fbTextarea !== ctx._fbClickedCard?.text) throw new Error('Football textarea does not match card text'); }],
+    [/^the football suggestion cards are not in fixed pool order$/, () => {
+      const pool = (ctx._fbPool||[]).map(c=>c.text);
+      const shuffled = (ctx._fbSuggestions||[]).map(c=>c.text);
+      if (pool.length < 2) throw new Error('Pool too small to test shuffle');
+      const identical = pool.every((t,i) => t === shuffled[i]);
+      if (identical) throw new Error('Suggestion cards appear to be in fixed pool order — shuffle may not be working');
+    }],
+
+    [/^the Darts panel is in qanda mode$/, () => {
+      const pool = [
+        {cat:'darts',text:'Was that the right double to go for?'},
+        {cat:'darts',text:'Is the nine-darter overrated as a spectacle?'},
+        {cat:'darts',text:'Taylor vs van Gerwen — who was the greater player?'},
+        {cat:'darts',text:'Is the walk-on the most important part of the match?'},
+        {cat:'big',text:'At what point does a player stop improving — is it skill or belief that goes first?'},
+        {cat:'big',text:'What separates the players who win when it matters from those who nearly do?'},
+        {cat:'contemporary',text:'Has the PDC/BDO split been good or bad for the game overall?'},
+        {cat:'contemporary',text:'Is darts going in the right direction or has it lost something?'},
+        {cat:'contemporary',text:'Will darts ever be taken seriously as an elite sport?'},
+        {cat:'absurd',text:'If Waddell could commentate on any other sport, which one, and would it be better?'},
+        {cat:'absurd',text:'What is the correct walk-on song, and why do most players get it wrong?'},
+        {cat:'absurd',text:'Is a missed double more embarrassing than a missed penalty, and why?'},
+      ];
+      ctx._dtPool = pool;
+      ctx._dtSuggestions = [...pool].sort(() => Math.random() - 0.5);
+      ctx._activePanel = 'darts';
+    }],
+    [/^the darts suggestion tray is visible$/, () => { if (!ctx._dtSuggestions?.length) throw new Error('Darts suggestion tray is empty'); }],
+    [/^the darts suggestion tray contains at least (\d+) cards$/, (n) => { if ((ctx._dtSuggestions||[]).length < parseInt(n)) throw new Error('Expected >=' + n + ' darts cards, got ' + (ctx._dtSuggestions||[]).length); }],
+    [/^at least one darts suggestion card has category "([^"]+)"$/, (cat) => { if (!(ctx._dtSuggestions||[]).some(c=>c.cat===cat)) throw new Error('No darts card with category ' + cat); }],
+    [/^the user clicks a darts suggestion card$/, () => { const card = ctx._dtSuggestions?.[0]; if (!card) throw new Error('No darts cards'); ctx._dtClickedCard = card; ctx._dtTextarea = card.text; }],
+    [/^the darts textarea contains the card text$/, () => { if (ctx._dtTextarea !== ctx._dtClickedCard?.text) throw new Error('Darts textarea does not match card text'); }],
+
+    [/^the Long Room panel is in qanda mode$/, () => {
+      const pool = [
+        {cat:'cricket',text:'Was that the right declaration?'},
+        {cat:'cricket',text:'Should England have picked him?'},
+        {cat:'cricket',text:'Is the Ashes still the pinnacle, or is it nostalgia?'},
+        {cat:'cricket',text:'What does that technique actually tell you about a player?'},
+        {cat:'big',text:'Is Test cricket dying and does it deserve to?'},
+        {cat:'big',text:'At what point does a great batsman become a selfish one?'},
+        {cat:'contemporary',text:'What does T20 do to the purist\'s soul?'},
+        {cat:'contemporary',text:'Should county cricket be worried, or has it always been worried?'},
+        {cat:'contemporary',text:'Is DRS making cricket more honest or just more argued over?'},
+        {cat:'absurd',text:'If Boycott had been a T20 specialist, what\'s the average and does he explain it to you?'},
+        {cat:'absurd',text:'What is the longest genuinely interesting conversation between Blowers and a passing pigeon?'},
+        {cat:'absurd',text:'Is a pitch report useful information or an elaborate way of saying nobody knows?'},
+      ];
+      ctx._lrPool = pool;
+      ctx._lrSuggestions = [...pool].sort(() => Math.random() - 0.5);
+      ctx._activePanel = 'cricket';
+    }],
+    [/^the long room suggestion tray is visible$/, () => { if (!ctx._lrSuggestions?.length) throw new Error('Long Room suggestion tray is empty'); }],
+    [/^the long room suggestion tray contains at least (\d+) cards$/, (n) => { if ((ctx._lrSuggestions||[]).length < parseInt(n)) throw new Error('Expected >=' + n + ' long room cards, got ' + (ctx._lrSuggestions||[]).length); }],
+    [/^at least one long room suggestion card has category "([^"]+)"$/, (cat) => { if (!(ctx._lrSuggestions||[]).some(c=>c.cat===cat)) throw new Error('No long room card with category ' + cat); }],
+    [/^the user clicks a long room suggestion card$/, () => { const card = ctx._lrSuggestions?.[0]; if (!card) throw new Error('No long room cards'); ctx._lrClickedCard = card; ctx._lrTextarea = card.text; }],
+    [/^the long room textarea contains the card text$/, () => { if (ctx._lrTextarea !== ctx._lrClickedCard?.text) throw new Error('Long Room textarea does not match card text'); }],
     [/^name "([^"]+)" and question "([^"]+)" are submitted$/, (name,question) => { ctx._nameStrip={value:name,error:false}; ctx._questionText=question; ctx._submitted=true; }],
     [/^name "([^"]+)" is submitted$/, (name) => { ctx._nameStrip={value:name,error:false}; ctx._submitted=true; }],
     [/^buildPromptPrefix is called$/, () => { const name=ctx._nameStrip?.value||''; const q=ctx._questionText||''; ctx._promptResult=[name,q,'Address '+name+' directly at least once','Ewen Murray has just read the question'].join(' | '); }],

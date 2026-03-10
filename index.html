@@ -2146,6 +2146,10 @@
       <input type="text" id="fb-username" class="gf-name-strip__input" placeholder="your name" maxlength="40" autocomplete="off" spellcheck="false" oninput="fbNameInput()" onkeydown="if(event.key==='Enter')this.blur()">
       <span class="gf-name-strip__hint" id="fb-name-hint">— Gary Lineker will read your question</span>
     </div>
+    <!-- Suggestion cards -->
+    <div class="gf-suggestion-tray">
+      <div class="gf-suggestion-scroll" id="fb-suggestion-scroll"></div>
+    </div>
     <div style="margin-bottom:20px;">
       <label>The match. The incident. The player. The decision. Whatever it is.</label>
       <textarea id="fb-input" rows="3" placeholder="e.g. Was that a red card? Should he have been dropped? Is modern football too soft? Was it a penalty?"></textarea>
@@ -2304,6 +2308,10 @@
       <input type="text" id="dt-username" class="gf-name-strip__input" placeholder="your name" maxlength="40" autocomplete="off" spellcheck="false" style="border-bottom-color:rgba(255,102,51,0.2);color:#ff6633;" oninput="dtNameInput()" onkeydown="if(event.key==='Enter')this.blur()">
       <span class="gf-name-strip__hint" id="dt-name-hint">— Sid Waddell will herald your question</span>
     </div>
+    <!-- Suggestion cards -->
+    <div class="gf-suggestion-tray">
+      <div class="gf-suggestion-scroll" id="dt-suggestion-scroll"></div>
+    </div>
     <div style="margin-bottom:20px;">
       <div id="dt-crowd-indicator" style="display:none;margin-bottom:12px;padding:8px 14px;border-radius:6px;background:rgba(255,102,51,0.08);border:1px solid rgba(255,102,51,0.2);font-size:13px;font-weight:600;letter-spacing:0.05em;color:#ff6633;"></div>
       <label>The throw. The player. The finish. The match. The moment.</label>
@@ -2407,6 +2415,10 @@
       <span class="gf-name-strip__label">You are</span>
       <input type="text" id="lr-username" class="gf-name-strip__input" placeholder="your name" maxlength="40" autocomplete="off" spellcheck="false" style="border-bottom-color:rgba(0,229,255,0.2);color:#00e5ff;" oninput="lrNameInput()" onkeydown="if(event.key==='Enter')this.blur()">
       <span class="gf-name-strip__hint" id="lr-name-hint">— Blowers will receive your question</span>
+    </div>
+    <!-- Suggestion cards -->
+    <div class="gf-suggestion-tray">
+      <div class="gf-suggestion-scroll" id="lr-suggestion-scroll"></div>
     </div>
     <div style="margin-bottom:20px;">
       <div id="lr-round-indicator" style="display:none;margin-bottom:12px;padding:8px 14px;border-radius:6px;background:rgba(0,229,255,0.06);border:1px solid rgba(0,229,255,0.2);font-size:13px;font-weight:600;letter-spacing:0.05em;color:#00e5ff;"></div>
@@ -11950,9 +11962,58 @@ function golfUpdateNameHint(name) {
 }
 
 function golfBuildSuggestions() {
-  const tray = document.getElementById('gf-suggestion-scroll');
+  buildSuggestions('gf-suggestion-scroll', GOLF_SUGGESTIONS, 'gf-input');
+}
+
+const FB_SUGGESTIONS = [
+  { cat: 'match',       text: 'Was that a red card, or is he just theatrical?' },
+  { cat: 'match',       text: 'Should he have been dropped for that?' },
+  { cat: 'match',       text: 'Is modern defending a lost art?' },
+  { cat: 'match',       text: 'Was that the right substitution at 1-0 up?' },
+  { cat: 'big',         text: 'Does talent survive pressure, or does pressure just reveal whether there was any?' },
+  { cat: 'big',         text: 'Is the best manager the one who wins or the one who gets the most out of what he\'s got?' },
+  { cat: 'contemporary',text: 'Is VAR fixing a problem we\'d rather have had?' },
+  { cat: 'contemporary',text: 'Has the Premier League become too money-driven to care about the England team?' },
+  { cat: 'contemporary',text: 'Is the Euros or the World Cup the one that actually matters?' },
+  { cat: 'absurd',      text: 'If Souness could pick his own five-a-side from history, who\'s first to be dropped?' },
+  { cat: 'absurd',      text: 'What\'s Big Ron\'s best sentence and does it even mean anything?' },
+  { cat: 'absurd',      text: 'Is a 0-0 a result or a crime?' },
+];
+
+const DT_SUGGESTIONS = [
+  { cat: 'darts',       text: 'Was that the right double to go for?' },
+  { cat: 'darts',       text: 'Is the nine-darter overrated as a spectacle?' },
+  { cat: 'darts',       text: 'Taylor vs van Gerwen — who was the greater player?' },
+  { cat: 'darts',       text: 'Is the walk-on the most important part of the match?' },
+  { cat: 'big',         text: 'At what point does a player stop improving — is it skill or belief that goes first?' },
+  { cat: 'big',         text: 'What separates the players who win when it matters from those who nearly do?' },
+  { cat: 'contemporary',text: 'Has the PDC/BDO split been good or bad for the game overall?' },
+  { cat: 'contemporary',text: 'Is darts going in the right direction or has it lost something?' },
+  { cat: 'contemporary',text: 'Will darts ever be taken seriously as an elite sport?' },
+  { cat: 'absurd',      text: 'If Waddell could commentate on any other sport, which one, and would it be better?' },
+  { cat: 'absurd',      text: 'What is the correct walk-on song, and why do most players get it wrong?' },
+  { cat: 'absurd',      text: 'Is a missed double more embarrassing than a missed penalty, and why?' },
+];
+
+const LR_SUGGESTIONS = [
+  { cat: 'cricket',     text: 'Was that the right declaration?' },
+  { cat: 'cricket',     text: 'Should England have picked him?' },
+  { cat: 'cricket',     text: 'Is the Ashes still the pinnacle, or is it nostalgia?' },
+  { cat: 'cricket',     text: 'What does that technique actually tell you about a player?' },
+  { cat: 'big',         text: 'Is Test cricket dying and does it deserve to?' },
+  { cat: 'big',         text: 'At what point does a great batsman become a selfish one?' },
+  { cat: 'contemporary',text: 'What does T20 do to the purist\'s soul?' },
+  { cat: 'contemporary',text: 'Should county cricket be worried, or has it always been worried?' },
+  { cat: 'contemporary',text: 'Is DRS making cricket more honest or just more argued over?' },
+  { cat: 'absurd',      text: 'If Boycott had been a T20 specialist, what\'s the average and does he explain it to you?' },
+  { cat: 'absurd',      text: 'What is the longest genuinely interesting conversation between Blowers and a passing pigeon?' },
+  { cat: 'absurd',      text: 'Is a pitch report useful information or an elaborate way of saying nobody knows?' },
+];
+
+function buildSuggestions(scrollId, pool, inputId) {
+  const tray = document.getElementById(scrollId);
   if (!tray) return;
-  const shuffled = [...GOLF_SUGGESTIONS].sort(() => Math.random() - 0.5);
+  const shuffled = [...pool].sort(() => Math.random() - 0.5);
   shuffled.forEach(s => {
     const card = document.createElement('div');
     card.className = 'gf-suggestion-card';
@@ -11961,7 +12022,7 @@ function golfBuildSuggestions() {
     card.style.transform = `rotate(${rot}deg)`;
     card.innerHTML = `<div class="gf-suggestion-card__cat">${s.cat}</div><div>${s.text}</div>`;
     card.addEventListener('click', () => {
-      const inp = document.getElementById('gf-input');
+      const inp = document.getElementById(inputId);
       if (inp) { inp.value = s.text; inp.focus(); }
       card.style.outline = '2px solid rgba(255,215,0,0.5)';
       setTimeout(() => card.style.outline = '', 600);
@@ -15842,6 +15903,9 @@ RESPONSE FORMAT — return ONLY valid JSON, no text outside it:
 App.init();
 golfLoadName();
 golfBuildSuggestions();
+buildSuggestions('fb-suggestion-scroll', FB_SUGGESTIONS, 'fb-input');
+buildSuggestions('dt-suggestion-scroll', DT_SUGGESTIONS, 'dt-input');
+buildSuggestions('lr-suggestion-scroll', LR_SUGGESTIONS, 'lr-input');
 fbLoadName();
 dtLoadName();
 lrLoadName();
