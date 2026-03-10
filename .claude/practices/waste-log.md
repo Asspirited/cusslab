@@ -1414,6 +1414,16 @@ Status: CLOSED
 - **Tags:** `#stale-assertion` `#magic-number` `#unit-test`
 - **Status:** Closed (both times) — updated count. Consider replacing with `>= 2` floor check or dynamic `COMEDY_ROOM_MODES.length` assertion.
 
+## WL-108
+- **Item:** 19TH HOLE nav group count badge showed 3 when 5 tabs were present (Post Game Cunditry, The 19th Hole, Watching the Oche, The Long Room, Souness's Cat)
+- **Symptom:** `nav-group-count` hardcoded to "3" in ng-sports; actual tab count was 5. Badge was visually wrong since Souness's Cat was added to 19TH HOLE (likely during BL-053 or similar).
+- **Suspected cause:** Count badge is a manually maintained hardcoded number — no automated sync with actual tab count. Same root cause as WL-104 (DDD boundary violation — Souness's Cat should not have been in sports at all).
+- **Session date:** 2026-03-10
+- **Time lost:** 0 (discovered and fixed in BL-099 delivery)
+- **Cost impact:** Low — cosmetic only, no functional impact
+- **Tags:** `#nav-badge` `#hardcoded` `#19th-hole` `#comedy-room`
+- **Status:** Closed — fixed in BL-099 delivery (04ddea4). Souness's Cat moved to Comedy Room; sports count corrected to 4.
+
 ## WL-107
 - **Item:** Character files from Claude.ai design session not accessible at `/mnt/user-data/outputs/` — path doesn't exist on local filesystem
 - **Symptom:** Rod provided commit instruction referencing `/mnt/user-data/outputs/` (Claude.ai artifact space). Path not mounted or accessible from WSL. Character files (sun-tzu.md, nostradamus.md, chuck-norris.md, buddha.md, roy-keane.md, vinny-jones.md) cannot be read or committed without manual transfer.
@@ -1464,3 +1474,23 @@ Status: CLOSED
 - **Tags:** `#gherkin-step-shadowing` `#repeated-pattern` `#writing-room` `#roast-room`
 - **Status:** Closed — merged shared steps to check active mode context (`ctx._comedyMode === 'writing-room'`), and prefixed feature-specific steps (`the roast prompt includes`, `the writing room prompt includes`)
 - **5 Whys root cause:** Third occurrence of this pattern (WL-099, WL-100, WL-103). Root cause: no convention enforces step namespace isolation. Steps from different features share a global array; any generic phrasing will collide. Corrective (deferred): add a lint check or naming convention that flags steps containing `"([^"]+)"` as potentially shadowing, or prefix feature steps with their feature name.
+
+## WL-109
+- **Item:** Ryder Cup end-of-session leaderboard missing user's match from team point totals
+- **Symptom:** End-of-day EUR vs USA totals only count the 3 entries in `parallelMatches`. User's own match (e.g. Poulter/McIlroy vs Bradley/Mickelson) is not listed in `parallelMatches` — it's the 4th match. `buildEndOfDayLeaderboard` detects `isUser` by surname match within `pm` only, so the user's match result contributes 0 to `eurTotal`/`usaTotal`. Max 3 points shown.
+- **Suspected cause:** Design gap: `parallelMatches` was designed to hold OTHER matches, with the user's match detected by name. But if the user's match isn't listed in `pm`, detection always fails silently.
+- **Session date:** 2026-03-10
+- **Time lost:** 0 (found during exploratory test)
+- **Cost impact:** Medium — leaderboard is visually and functionally incorrect
+- **Tags:** `#ryder-cup` `#leaderboard` `#match-totals` `#design-gap`
+- **Status:** Fixed 2026-03-10 — BL-112
+
+## WL-110
+- **Item:** Ryder Cup match play hole-end commentary silently clears on API error
+- **Symptom:** After each Ryder Cup hole, `getMatchPlayCommentary` fires. On API error, catch block does `feed.innerHTML = ''` — spinner appears then disappears with no message. User sees commentary "try to load and get shutdown." Only Ryder Cup affected because `getMatchPlayCommentary` is Ryder-only.
+- **Root cause:** `getCommentary` (shot commentary) shows "Commentary signal lost" on error. `getMatchPlayCommentary` catch block (line 3119) does `feed.innerHTML = ''` instead — inconsistent error handling.
+- **Session date:** 2026-03-10
+- **Time lost:** 0 (found during exploratory test)
+- **Cost impact:** Low — cosmetic but confusing
+- **Tags:** `#ryder-cup` `#commentary` `#error-handling` `#silent-failure`
+- **Status:** Fixed 2026-03-10 — BL-112

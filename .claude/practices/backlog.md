@@ -819,7 +819,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Process fix accompanying this: add DDD boundary check to Three Amigos prompt in bdd.md ("does this feature have its own bounded context? If yes → new panel, not a sub-tab").
 - Three Amigos needed before implementation: agree panel titles, desc copy, and nav copy for each.
 - CD3: UBV=8 TC=7 RR=5 → CoD=20, Dur=4, **CD3=5.0**
-- Status: OPEN — raised 2026-03-10
+- Status: CLOSED — 04ddea4, 2026-03-10. Comedy Room mode tabs removed; Oracle/Roast/Writing promoted to standalone panels; Souness's Cat moved to Comedy Room; Quntum Leeks moved to Little Misadventure. bdd.md process fix deferred (BL-110).
 
 ### BL-101 — Golf panel: recycle and expand suggestion card question pool
 - Current golf suggestion cards draw from a fixed pool. Rod flagged it as needing expansion and recycling (2026-03-10).
@@ -910,6 +910,18 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Depends on: BL-109 (shared engine), BL-110 (scene library)
 - CD3: UBV=8 TC=3 RR=4 → CoD=15, Dur=3, **CD3=5.0**
 - Status: OPEN — blocked on BL-109 + BL-110
+
+### BL-112 — Ryder Cup: 5-session structure, team score tracking, user match in totals
+- Epic: Golf Misadventure
+- Restructure Ryder Cup from 3 days to 5 sessions: Day 1 Morning (Foursomes), Day 1 Afternoon (Fourballs), Day 2 Morning (Fourballs), Day 2 Afternoon (Foursomes), Day 3 Singles.
+- Fix WL-109: user's own match counted in EUR/USA team totals at session end.
+- Fix WL-110: getMatchPlayCommentary error shows "Commentary signal lost" not blank.
+- Add sessionLabels, addSessionToTeamScore, buildRestScreenData to MatchPlayService.
+- Rename matchPlayDays → matchPlaySessions (5 entries per player; Day 2 data added to all 4 Ryder Cup tournaments).
+- Running team score in HUD. ABSENT sessions show "You are resting" + session results.
+- Gherkin approved 2026-03-10.
+- CD3: UBV=7 TC=2 RR=3 → CoD=12, Dur=4, **CD3=3.0**
+- Status: DONE 2026-03-10
 
 ### BL-006 — pipeline @claude skip count reduction
 - 400+ scenarios @claude-tagged (manual / behavioural)

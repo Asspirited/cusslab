@@ -6325,6 +6325,223 @@ function makeSteps(ctx) {
         throw new Error(`Expected isDayAbsent ${exp} but got ${ctx._absentResult}`);
     }],
 
+    // ── BL-112 Ryder Cup sessions (specs/golf-ryder-sessions.feature) ────────────
+
+    [/^a Ryder Cup tournament with sessionLabels$/, () => {
+      ctx._ryderT = {
+        type: 'ryder',
+        sessionLabels: [
+          'Day 1 Morning — Foursomes',
+          'Day 1 Afternoon — Fourballs',
+          'Day 2 Morning — Fourballs',
+          'Day 2 Afternoon — Foursomes',
+          'Day 3 — Singles',
+        ],
+        parallelMatches: [[], [], [], [], []],
+        players: [],
+      };
+    }],
+
+    [/^the ryder session label (\d+) is "([^"]+)"$/, (idx, label) => {
+      const actual = ctx._ryderT.sessionLabels[Number(idx)];
+      if (actual !== label) throw new Error(`Session label ${idx}: expected "${label}" got "${actual}"`);
+    }],
+
+    [/^a ryder player with matchPlaySessions formats "([^"]+)"$/, (formats) => {
+      ctx._ryderSessionPlayer = {
+        matchPlaySessions: formats.split(',').map(f => ({ format: f.trim() }))
+      };
+    }],
+
+    [/^a ryder player with no matchPlaySessions$/, () => {
+      ctx._ryderSessionPlayer = {};
+    }],
+
+    [/^ryder firstActiveSession is called$/, () => {
+      ctx._ryderSessionResult = ctx._mps.firstActiveSession(ctx._ryderSessionPlayer);
+    }],
+
+    [/^the ryder firstActiveSession result is (\d+)$/, (n) => {
+      if (ctx._ryderSessionResult !== Number(n))
+        throw new Error(`Expected firstActiveSession ${n} but got ${ctx._ryderSessionResult}`);
+    }],
+
+    [/^ryder isSessionAbsent is called for session (\d+)$/, (session) => {
+      ctx._ryderSessionResult = ctx._mps.isSessionAbsent(ctx._ryderSessionPlayer, Number(session));
+    }],
+
+    [/^the ryder isSessionAbsent result is (true|false)$/, (expected) => {
+      const exp = expected === 'true';
+      if (ctx._ryderSessionResult !== exp)
+        throw new Error(`Expected isSessionAbsent ${exp} but got ${ctx._ryderSessionResult}`);
+    }],
+
+    [/^a ryder team score of EUR ([\d.]+) USA ([\d.]+)$/, (eur, usa) => {
+      ctx._ryderTeamScore = { EUR: Number(eur), USA: Number(usa) };
+    }],
+
+    [/^ryder addSessionToTeamScore is called with EUR ([\d.]+) USA ([\d.]+)$/, (eur, usa) => {
+      ctx._mps.addSessionToTeamScore(ctx._ryderTeamScore, Number(eur), Number(usa));
+    }],
+
+    [/^the ryder team score EUR is ([\d.]+)$/, (n) => {
+      if (ctx._ryderTeamScore.EUR !== Number(n))
+        throw new Error(`Expected team EUR ${n} but got ${ctx._ryderTeamScore.EUR}`);
+    }],
+
+    [/^the ryder team score USA is ([\d.]+)$/, (n) => {
+      if (ctx._ryderTeamScore.USA !== Number(n))
+        throw new Error(`Expected team USA ${n} but got ${ctx._ryderTeamScore.USA}`);
+    }],
+
+    // buildEndOfSessionLeaderboard — session/user match scenarios
+    [/^a Ryder Cup session with 3 parallel matches not including Ian Poulter$/, () => {
+      ctx._ryderSessionTournament = {
+        type: 'ryder',
+        sessionLabels: ['Day 1 Morning — Foursomes', 'Day 1 Afternoon — Fourballs', 'Day 2 Morning — Fourballs', 'Day 2 Afternoon — Foursomes', 'Day 3 — Singles'],
+        players: [],
+        parallelMatches: [
+          [
+            { match: 'Garcia/Westwood vs Watson/Simpson', scores: [1, 2, 2], teamA: 'EUR' },
+            { match: 'Rose/Kaymer vs Mickelson/Bradley',  scores: [-1,-2,-3], teamA: 'EUR' },
+            { match: 'Colsaerts/Lawrie vs Couples/Furyk', scores: [0, 1, 1], teamA: 'EUR' },
+          ],
+          [], [], [], [],
+        ],
+      };
+      ctx._ryderSession = 0;
+      ctx._ryderUserScore = null;
+      ctx._ryderHolesLeft = null;
+      ctx._ryderPlayerName = null;
+      ctx._ryderPlayerTeam = null;
+      // Parallel match EUR total (all 3 historical): EUR wins Garcia 2, loses Rose -3, EUR 1 UP Colsaerts → EUR=2, USA=1
+      // Using last score: Garcia +2=EUR win, Rose -3=USA win, Colsaerts +1=EUR win → EUR=2, USA=1
+      ctx._ryderPmEUR = 2;
+      ctx._ryderPmUSA = 1;
+    }],
+
+    [/^I am playing as Ian Poulter \(EUR\) with matchPlayScore (-?\d+) holesLeft (\d+)$/, (score, holes) => {
+      ctx._ryderUserScore = Number(score);
+      ctx._ryderHolesLeft = Number(holes);
+      ctx._ryderPlayerName = 'Ian Poulter';
+      ctx._ryderPlayerTeam = 'EUR';
+    }],
+
+    [/^ryder buildEndOfSessionLeaderboard is called$/, () => {
+      ctx._ryderLb = ctx._mps.buildEndOfSessionLeaderboard(
+        ctx._ryderSessionTournament, ctx._ryderSession,
+        ctx._ryderUserScore, ctx._ryderHolesLeft,
+        ctx._ryderPlayerName, ctx._ryderPlayerTeam
+      );
+    }],
+
+    [/^ryder buildEndOfSessionLeaderboard is called with no player name$/, () => {
+      ctx._ryderLb = ctx._mps.buildEndOfSessionLeaderboard(
+        ctx._ryderSessionTournament, ctx._ryderSession,
+        0, 0, null, null
+      );
+    }],
+
+    [/^(\d+) ryder match rows are returned$/, (n) => {
+      if (!ctx._ryderLb) throw new Error('No leaderboard result');
+      if (ctx._ryderLb.matches.length !== Number(n))
+        throw new Error(`Expected ${n} match rows but got ${ctx._ryderLb.matches.length}`);
+    }],
+
+    [/^exactly one ryder match row has isUser true$/, () => {
+      const count = ctx._ryderLb.matches.filter(m => m.isUser).length;
+      if (count !== 1) throw new Error(`Expected 1 isUser row but got ${count}`);
+    }],
+
+    [/^(\d+) ryder match rows have isUser true$/, (n) => {
+      const count = ctx._ryderLb.matches.filter(m => m.isUser).length;
+      if (count !== Number(n)) throw new Error(`Expected ${n} isUser rows but got ${count}`);
+    }],
+
+    [/^ryder EUR total is 1 more than the sum of the 3 parallel match EUR points$/, () => {
+      if (ctx._ryderLb.eurTotal !== ctx._ryderPmEUR + 1)
+        throw new Error(`Expected EUR ${ctx._ryderPmEUR + 1} but got ${ctx._ryderLb.eurTotal}`);
+    }],
+
+    [/^ryder USA total is 1 more than the sum of the 3 parallel match USA points$/, () => {
+      if (ctx._ryderLb.usaTotal !== ctx._ryderPmUSA + 1)
+        throw new Error(`Expected USA ${ctx._ryderPmUSA + 1} but got ${ctx._ryderLb.usaTotal}`);
+    }],
+
+    [/^ryder EUR total includes 0\.5 from the user match$/, () => {
+      if (ctx._ryderLb.eurTotal !== ctx._ryderPmEUR + 0.5)
+        throw new Error(`Expected EUR ${ctx._ryderPmEUR + 0.5} but got ${ctx._ryderLb.eurTotal}`);
+    }],
+
+    [/^ryder USA total includes 0\.5 from the user match$/, () => {
+      if (ctx._ryderLb.usaTotal !== ctx._ryderPmUSA + 0.5)
+        throw new Error(`Expected USA ${ctx._ryderPmUSA + 0.5} but got ${ctx._ryderLb.usaTotal}`);
+    }],
+
+    // buildRestScreenData
+    [/^a Ryder Cup session 2 with 3 parallel matches and session label "([^"]+)"$/, (label) => {
+      ctx._ryderRestTournament = {
+        type: 'ryder',
+        sessionLabels: ['Day 1 Morning — Foursomes', 'Day 1 Afternoon — Fourballs', label, 'Day 2 Afternoon — Foursomes', 'Day 3 — Singles'],
+        players: [],
+        parallelMatches: [
+          [], [],
+          [
+            { match: 'Westwood/Donald vs Watson/Sim', scores: [0, 1, 1], teamA: 'EUR' },
+            { match: 'Molinari/Garcia vs Dufner/Joh', scores: [1, 1, 2], teamA: 'EUR' },
+            { match: 'Rose/Kaymer vs Woods/Kuchar',   scores: [0, 0, 1], teamA: 'EUR' },
+          ],
+          [], [],
+        ],
+      };
+      ctx._ryderRestSession = 2;
+    }],
+
+    [/^a Ryder Cup session 2 with parallel matches:$/, () => {
+      // Fixture: Westwood/Donald EUR win (+1), Molinari/Garcia EUR win (+2), Rose/Kaymer EUR win (+1)
+      // All 3 EUR wins → EUR=3, USA=0
+      ctx._ryderRestTournament = {
+        type: 'ryder',
+        sessionLabels: ['Day 1 Morning — Foursomes', 'Day 1 Afternoon — Fourballs', 'Day 2 Morning — Fourballs', 'Day 2 Afternoon — Foursomes', 'Day 3 — Singles'],
+        players: [],
+        parallelMatches: [[], [], [
+          { match: 'Westwood/Donald vs Watson/Sim', scores: [0, 1, 1], teamA: 'EUR' },
+          { match: 'Molinari/Garcia vs Dufner/Joh', scores: [1, 1, 2], teamA: 'EUR' },
+          { match: 'Rose/Kaymer vs Woods/Kuchar',   scores: [0, 0, 1], teamA: 'EUR' },
+        ], [], []],
+      };
+      ctx._ryderRestSession = 2;
+    }],
+
+    [/^ryder buildRestScreenData is called for session (\d+)$/, (session) => {
+      ctx._ryderRestData = ctx._mps.buildRestScreenData(ctx._ryderRestTournament, Number(session));
+    }],
+
+    [/^the ryder rest screen title is "([^"]+)"$/, (title) => {
+      if (ctx._ryderRestData.title !== title)
+        throw new Error(`Expected rest title "${title}" but got "${ctx._ryderRestData.title}"`);
+    }],
+
+    [/^the ryder rest screen match row count is (\d+)$/, (n) => {
+      if (ctx._ryderRestData.matches.length !== Number(n))
+        throw new Error(`Expected ${n} rest rows but got ${ctx._ryderRestData.matches.length}`);
+    }],
+
+    [/^(\d+) ryder rest screen rows have isUser true$/, (n) => {
+      const count = ctx._ryderRestData.matches.filter(m => m.isUser).length;
+      if (count !== Number(n)) throw new Error(`Expected ${n} isUser rest rows but got ${count}`);
+    }],
+
+    [/^the ryder rest screen EUR total is ([\d.]+)$/, (n) => {
+      if (ctx._ryderRestData.eurTotal !== Number(n))
+        throw new Error(`Expected rest EUR ${n} but got ${ctx._ryderRestData.eurTotal}`);
+    }],
+
+    [/^the ryder rest screen USA total is ([\d.]+)$/, (n) => {
+      if (ctx._ryderRestData.usaTotal !== Number(n))
+        throw new Error(`Expected rest USA ${n} but got ${ctx._ryderRestData.usaTotal}`);
+    }],
+
     // ── TemperamentService (specs/golf-temperament-archetypes.feature) ───────────
 
     [/^the TemperamentService module is loaded$/, () => {
@@ -6425,34 +6642,34 @@ function makeSteps(ctx) {
         throw new Error(`SKILL out of range: ${bad.map(s=>`${s.id}=${s.skill}`).join(', ')}`);
     }],
 
-    [/^every player in every Ryder Cup tournament has a "matchPlayDays" array with exactly 3 entries$/, () => {
+    [/^every player in every Ryder Cup tournament has a "matchPlaySessions" array with exactly 5 entries$/, () => {
       const ryders = ctx._gaData.TOURNAMENTS.filter(t => t.type === 'ryder');
       for (const t of ryders) {
         for (const p of t.players) {
-          if (!Array.isArray(p.matchPlayDays) || p.matchPlayDays.length !== 3)
-            throw new Error(`${t.id}/${p.id||p.name}: matchPlayDays must have exactly 3 entries (got ${p.matchPlayDays?.length ?? 'none'})`);
+          if (!Array.isArray(p.matchPlaySessions) || p.matchPlaySessions.length !== 5)
+            throw new Error(`${t.id}/${p.id||p.name}: matchPlaySessions must have exactly 5 entries (got ${p.matchPlaySessions?.length ?? 'none'})`);
         }
       }
     }],
 
-    [/^every matchPlayDay has a non-empty "format"$/, () => {
+    [/^every matchPlaySession has a non-empty "format"$/, () => {
       const ryders = ctx._gaData.TOURNAMENTS.filter(t => t.type === 'ryder');
       for (const t of ryders) {
         for (const p of t.players) {
-          const bad = (p.matchPlayDays || []).filter(d => !d || !d.format || d.format.trim() === '');
+          const bad = (p.matchPlaySessions || []).filter(d => !d || !d.format || d.format.trim() === '');
           if (bad.length)
-            throw new Error(`${t.id}/${p.id||p.name}: has matchPlayDay entries missing format`);
+            throw new Error(`${t.id}/${p.id||p.name}: has matchPlaySession entries missing format`);
         }
       }
     }],
 
-    [/^every matchPlayDay where format is not "ABSENT" has a non-empty "([^"]+)"$/, (field) => {
+    [/^every matchPlaySession where format is not "ABSENT" has a non-empty "([^"]+)"$/, (field) => {
       const ryders = ctx._gaData.TOURNAMENTS.filter(t => t.type === 'ryder');
       for (const t of ryders) {
         for (const p of t.players) {
-          const bad = (p.matchPlayDays || []).filter(d => d && d.format !== 'ABSENT' && (!d[field] || String(d[field]).trim() === ''));
+          const bad = (p.matchPlaySessions || []).filter(d => d && d.format !== 'ABSENT' && (!d[field] || String(d[field]).trim() === ''));
           if (bad.length)
-            throw new Error(`${t.id}/${p.id||p.name}: active matchPlayDay missing "${field}"`);
+            throw new Error(`${t.id}/${p.id||p.name}: active matchPlaySession missing "${field}"`);
         }
       }
     }],

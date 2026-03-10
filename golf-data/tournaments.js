@@ -82,7 +82,7 @@ const TOURNAMENTS = [
     id:"medinah_2012", year:2012, eraClass:"era-2012", lbClass:"lb-2012",
     name:"The Miracle at Medinah",
     course:"Medinah Country Club", country:"Illinois, USA",
-    type:"ryder", badge:"badge-ryder", days:3,
+    type:"ryder", badge:"badge-ryder", sessions:5, sessionLabels:["Day 1 Morning — Foursomes","Day 1 Afternoon — Fourballs","Day 2 Morning — Fourballs","Day 2 Afternoon — Foursomes","Day 3 — Singles"],
     lore:"Europe 10–6 down going into Sunday singles. Poulter had kept Europe alive Saturday night with five birdies in a row on the last five holes. What followed was a miracle. Or an American collapse.",
     players:[
       { id:"poulter", name:"Ian Poulter", abbr:"IPC", team:"EUR",
@@ -93,10 +93,11 @@ const TOURNAMENTS = [
         desc:"Five birdies on the last five Saturday holes. The heart of Europe. Ryder Cup animal.",
         wound:"The weight of a continent. Personal mythology being written in real time.",
         historicalScores:[0,-3,-7],
-        matchPlayDays:[
-          { format:"FOURSOMES", partner:"Rory McIlroy",   opponent:"Keegan Bradley / Phil Mickelson", opponentHoleScores:[3,4,4], historicalResult:"McIlroy & Poulter lost 1 DOWN" },
+        matchPlaySessions:[{ format:"FOURSOMES", partner:"Rory McIlroy",   opponent:"Keegan Bradley / Phil Mickelson", opponentHoleScores:[3,4,4], historicalResult:"McIlroy & Poulter lost 1 DOWN" },
           { format:"FOURBALLS", partner:"Rory McIlroy",   opponent:"Tiger Woods / Steve Stricker",    opponentHoleScores:[3,5,4], historicalResult:"Poulter & McIlroy won 1 UP" },
-          { format:"SINGLES",                             opponent:"Webb Simpson",                    opponentHoleScores:[4,4,5], historicalResult:"Poulter won 1 UP" },
+          { format:"ABSENT" },
+          { format:"ABSENT" },
+          { format:"SINGLES",                             opponent:"Webb Simpson",                    opponentHoleScores:[4,4,5], historicalResult:"Poulter won 1 UP" }
         ]},
       { id:"garcia", name:"Sergio Garcia", abbr:"SGC", team:"EUR",
       temperamentProfileSecondary:"STREAKY",
@@ -106,10 +107,11 @@ const TOURNAMENTS = [
         desc:"Quietly brilliant across all three days. Won his Sunday singles comfortably.",
         wound:"Always performing against the noise of expectation. Quieter than his reputation.",
         historicalScores:[-1,-2,-5],
-        matchPlayDays:[
-          { format:"FOURSOMES", partner:"Lee Westwood",   opponent:"Bubba Watson / Webb Simpson",   opponentHoleScores:[3,5,5], historicalResult:"Garcia & Westwood won 4&3" },
+        matchPlaySessions:[{ format:"FOURSOMES", partner:"Lee Westwood",   opponent:"Bubba Watson / Webb Simpson",   opponentHoleScores:[3,5,5], historicalResult:"Garcia & Westwood won 4&3" },
           { format:"FOURBALLS", partner:"Luke Donald",    opponent:"Jason Dufner / Zach Johnson",   opponentHoleScores:[4,4,4], historicalResult:"Garcia & Donald halved" },
-          { format:"SINGLES",                             opponent:"Bubba Watson",                  opponentHoleScores:[3,4,5], historicalResult:"Garcia won 4&3" },
+          { format:"ABSENT" },
+          { format:"ABSENT" },
+          { format:"SINGLES",                             opponent:"Bubba Watson",                  opponentHoleScores:[3,4,5], historicalResult:"Garcia won 4&3" }
         ]},
       { id:"rose", name:"Justin Rose", abbr:"JRO", team:"EUR",
       temperamentProfileSecondary:"DEFENSIVE",
@@ -119,10 +121,11 @@ const TOURNAMENTS = [
         desc:"Won his Sunday singles point on the 18th. Part of the miracle.",
         wound:"Composed under pressure that would unravel other people.",
         historicalScores:[0,-1,-4],
-        matchPlayDays:[
-          { format:"FOURSOMES", partner:"Martin Kaymer",      opponent:"Phil Mickelson / Keegan Bradley", opponentHoleScores:[4,4,5], historicalResult:"Rose & Kaymer lost 3&2" },
+        matchPlaySessions:[{ format:"FOURSOMES", partner:"Martin Kaymer",      opponent:"Phil Mickelson / Keegan Bradley", opponentHoleScores:[4,4,5], historicalResult:"Rose & Kaymer lost 3&2" },
           { format:"FOURBALLS", partner:"Francesco Molinari", opponent:"Jason Dufner / Zach Johnson",     opponentHoleScores:[3,5,4], historicalResult:"Rose & Molinari won 3&2" },
-          { format:"SINGLES",                                 opponent:"Phil Mickelson",                  opponentHoleScores:[3,4,4], historicalResult:"Rose won 1 UP on 18" },
+          { format:"ABSENT" },
+          { format:"ABSENT" },
+          { format:"SINGLES",                                 opponent:"Phil Mickelson",                  opponentHoleScores:[3,4,4], historicalResult:"Rose won 1 UP on 18" }
         ]},
       { id:"mcilroy", name:"Rory McIlroy", abbr:"RMC", team:"EUR",
       temperamentProfileSecondary:"COMBUSTIBLE",
@@ -132,10 +135,11 @@ const TOURNAMENTS = [
         desc:"Arrived at Medinah 40 minutes before tee-off having misread the time zone. Won 2&1.",
         wound:"The expectation of a generation is placed on his shoulders every single week.",
         historicalScores:[1,0,-4],
-        matchPlayDays:[
-          { format:"FOURSOMES", partner:"Ian Poulter",    opponent:"Keegan Bradley / Phil Mickelson", opponentHoleScores:[3,4,4], historicalResult:"McIlroy & Poulter lost 1 DOWN" },
+        matchPlaySessions:[{ format:"FOURSOMES", partner:"Ian Poulter",    opponent:"Keegan Bradley / Phil Mickelson", opponentHoleScores:[3,4,4], historicalResult:"McIlroy & Poulter lost 1 DOWN" },
           { format:"FOURBALLS", partner:"Ian Poulter",    opponent:"Tiger Woods / Steve Stricker",    opponentHoleScores:[3,5,4], historicalResult:"Poulter & McIlroy won 1 UP" },
-          { format:"SINGLES",                             opponent:"Keegan Bradley",                  opponentHoleScores:[4,3,5], historicalResult:"McIlroy won 2&1" },
+          { format:"ABSENT" },
+          { format:"ABSENT" },
+          { format:"SINGLES",                             opponent:"Keegan Bradley",                  opponentHoleScores:[4,3,5], historicalResult:"McIlroy won 2&1" }
         ]},
       { id:"kaymer", name:"Martin Kaymer", abbr:"MKY", team:"EUR",
       temperamentProfileSecondary:"LEVELHEADED",
@@ -145,10 +149,11 @@ const TOURNAMENTS = [
         desc:"Holed the five-foot putt on 18 that sealed the Cup. Did not flinch.",
         wound:"The weight of all of Europe distilled into a single five-foot putt.",
         historicalScores:[0,-1,-3],
-        matchPlayDays:[
-          { format:"FOURSOMES", partner:"Justin Rose",         opponent:"Phil Mickelson / Keegan Bradley", opponentHoleScores:[4,4,5], historicalResult:"Rose & Kaymer lost 3&2" },
+        matchPlaySessions:[{ format:"FOURSOMES", partner:"Justin Rose",         opponent:"Phil Mickelson / Keegan Bradley", opponentHoleScores:[4,4,5], historicalResult:"Rose & Kaymer lost 3&2" },
           { format:"FOURBALLS", partner:"Graeme McDowell",     opponent:"Tiger Woods / Steve Stricker",    opponentHoleScores:[4,4,4], historicalResult:"Kaymer & McDowell halved" },
-          { format:"SINGLES",                                  opponent:"Steve Stricker",                  opponentHoleScores:[4,4,4], historicalResult:"Kaymer won 1 UP — holed clinching putt" },
+          { format:"ABSENT" },
+          { format:"ABSENT" },
+          { format:"SINGLES",                                  opponent:"Steve Stricker",                  opponentHoleScores:[4,4,4], historicalResult:"Kaymer won 1 UP — holed clinching putt" }
         ]},
       { id:"donald", name:"Luke Donald", abbr:"LDN", team:"EUR",
       temperamentProfileSecondary:"DEFENSIVE",
@@ -158,10 +163,11 @@ const TOURNAMENTS = [
         desc:"World number one without being a bomber. Won on genius short game and course management.",
         wound:"Always underestimated. Compensates by being better than anyone thinks possible.",
         historicalScores:[0,-1,-3],
-        matchPlayDays:[
-          { format:"ABSENT" },
+        matchPlaySessions:[{ format:"ABSENT" },
           { format:"FOURBALLS", partner:"Sergio Garcia",  opponent:"Jason Dufner / Zach Johnson", opponentHoleScores:[4,4,4], historicalResult:"Garcia & Donald halved" },
-          { format:"SINGLES",                             opponent:"Jim Furyk",                   opponentHoleScores:[4,4,4], historicalResult:"Donald won 1 UP" },
+          { format:"ABSENT" },
+          { format:"ABSENT" },
+          { format:"SINGLES",                             opponent:"Jim Furyk",                   opponentHoleScores:[4,4,4], historicalResult:"Donald won 1 UP" }
         ]},
       { id:"molinari", name:"Francesco Molinari", abbr:"FMO", team:"EUR",
       temperamentProfileSecondary:"DEFENSIVE",
@@ -171,10 +177,11 @@ const TOURNAMENTS = [
         desc:"Ice cold throughout. Won his fourballs with Rose. Quiet, precise, immovable.",
         wound:"The expectation is invisible because he never shows he feels it.",
         historicalScores:[0,-1,-3],
-        matchPlayDays:[
-          { format:"ABSENT" },
+        matchPlaySessions:[{ format:"ABSENT" },
           { format:"FOURBALLS", partner:"Justin Rose",    opponent:"Jason Dufner / Zach Johnson", opponentHoleScores:[3,5,4], historicalResult:"Rose & Molinari won 3&2" },
-          { format:"SINGLES",                             opponent:"Tiger Woods",                  opponentHoleScores:[4,4,5], historicalResult:"Tiger Woods won 2&1" },
+          { format:"ABSENT" },
+          { format:"ABSENT" },
+          { format:"SINGLES",                             opponent:"Tiger Woods",                  opponentHoleScores:[4,4,5], historicalResult:"Tiger Woods won 2&1" }
         ]},
       { id:"westwood_12", name:"Lee Westwood", abbr:"LWS", team:"EUR",
       temperamentProfileSecondary:"COMBUSTIBLE",
@@ -184,10 +191,11 @@ const TOURNAMENTS = [
         desc:"One of the best ball-strikers in Europe. Won his foursomes. The putting was the question.",
         wound:"The majors that never came. Playing brilliantly and still not quite enough.",
         historicalScores:[1,1,-2],
-        matchPlayDays:[
-          { format:"FOURSOMES", partner:"Sergio Garcia",  opponent:"Bubba Watson / Webb Simpson", opponentHoleScores:[3,5,5], historicalResult:"Garcia & Westwood won 4&3" },
+        matchPlaySessions:[{ format:"FOURSOMES", partner:"Sergio Garcia",  opponent:"Bubba Watson / Webb Simpson", opponentHoleScores:[3,5,5], historicalResult:"Garcia & Westwood won 4&3" },
           { format:"ABSENT" },
-          { format:"SINGLES",                             opponent:"Bubba Watson",                 opponentHoleScores:[3,4,5], historicalResult:"Westwood lost 2&1" },
+          { format:"ABSENT" },
+          { format:"ABSENT" },
+          { format:"SINGLES",                             opponent:"Bubba Watson",                 opponentHoleScores:[3,4,5], historicalResult:"Westwood lost 2&1" }
         ]},
       { id:"tiger_12", name:"Tiger Woods", abbr:"TWD", team:"USA",
       temperamentProfileSecondary:"PEAKER",
@@ -197,10 +205,11 @@ const TOURNAMENTS = [
         desc:"Back in the team after a difficult few years. Won his Sunday singles. The aura never entirely left.",
         wound:"The fall from grace made the return more complicated. Nothing simple left.",
         historicalScores:[0,-1,-3],
-        matchPlayDays:[
-          { format:"ABSENT" },
+        matchPlaySessions:[{ format:"ABSENT" },
           { format:"FOURBALLS", partner:"Steve Stricker",  opponent:"Ian Poulter / Rory McIlroy",  opponentHoleScores:[3,5,4], historicalResult:"Woods & Stricker lost 1 DOWN" },
-          { format:"SINGLES",                              opponent:"Francesco Molinari",            opponentHoleScores:[3,4,4], historicalResult:"Tiger Woods won 2&1" },
+          { format:"ABSENT" },
+          { format:"ABSENT" },
+          { format:"SINGLES",                              opponent:"Francesco Molinari",            opponentHoleScores:[3,4,4], historicalResult:"Tiger Woods won 2&1" }
         ]},
       { id:"mickelson_12", name:"Phil Mickelson", abbr:"PMK", team:"USA",
       temperamentProfileSecondary:"PEAKER",
@@ -210,14 +219,14 @@ const TOURNAMENTS = [
         desc:"Won his foursomes with Bradley. Lost his singles to Rose on 18. The match was slipping away.",
         wound:"So many times the best player on the course and still not enough.",
         historicalScores:[0,-1,-3],
-        matchPlayDays:[
-          { format:"FOURSOMES", partner:"Keegan Bradley",  opponent:"Justin Rose / Martin Kaymer",  opponentHoleScores:[4,4,5], historicalResult:"Mickelson & Bradley won 3&2" },
+        matchPlaySessions:[{ format:"FOURSOMES", partner:"Keegan Bradley",  opponent:"Justin Rose / Martin Kaymer",  opponentHoleScores:[4,4,5], historicalResult:"Mickelson & Bradley won 3&2" },
           { format:"ABSENT" },
-          { format:"SINGLES",                              opponent:"Justin Rose",                   opponentHoleScores:[3,4,4], historicalResult:"Rose won 1 UP on 18" },
+          { format:"ABSENT" },
+          { format:"ABSENT" },
+          { format:"SINGLES",                              opponent:"Justin Rose",                   opponentHoleScores:[3,4,4], historicalResult:"Rose won 1 UP on 18" }
         ]},
     ],
     parallelMatches:[
-      // Day 0 — Foursomes
       [
         { match:"Garcia/Westwood vs Watson/Simpson",      scores:[ 1, 2, 3],  teamA:"EUR" },
         { match:"Rose/Kaymer vs Mickelson/Bradley",       scores:[-1,-2,-3],  teamA:"EUR" },
@@ -229,12 +238,22 @@ const TOURNAMENTS = [
         { match:"Garcia/Donald vs Dufner/Johnson",        scores:[ 0, 0, 0],  teamA:"EUR" },
         { match:"Rose/Molinari vs Dufner/Johnson",        scores:[ 1, 2, 3],  teamA:"EUR" },
       ],
+      [
+        { match:"EUR pair A vs USA pair A", scores:[ 0, 1, 2], teamA:"EUR" },
+        { match:"EUR pair B vs USA pair B", scores:[ 1, 1, 1], teamA:"EUR" },
+        { match:"EUR pair C vs USA pair C", scores:[-1, 0, 1], teamA:"EUR" },
+      ],
+      [
+        { match:"EUR pair D vs USA pair D", scores:[ 0,-1,-1], teamA:"EUR" },
+        { match:"EUR pair E vs USA pair E", scores:[-1,-1,-2], teamA:"EUR" },
+        { match:"EUR pair F vs USA pair F", scores:[ 1, 0, 0], teamA:"EUR" },
+      ],
       // Day 2 — Singles
       [
         { match:"Garcia vs Watson",                       scores:[ 1, 2, 3],  teamA:"EUR" },
         { match:"Donald vs Furyk",                        scores:[ 0, 1, 1],  teamA:"EUR" },
         { match:"Kaymer vs Stricker",                     scores:[ 0, 0, 1],  teamA:"EUR" },
-      ],
+      ]
     ],
     field:[
       {name:"Francesco Molinari", scores:[0,-1,-3]},
@@ -496,7 +515,7 @@ const TOURNAMENTS = [
     id:"kiawah_1991", year:1991, eraClass:"era-1991", lbClass:"lb-1991",
     name:"War on the Shore",
     course:"Ocean Course, Kiawah Island", country:"South Carolina, USA",
-    type:"ryder", badge:"badge-ryder", days:3,
+    type:"ryder", badge:"badge-ryder", sessions:5, sessionLabels:["Day 1 Morning — Foursomes","Day 1 Afternoon — Fourballs","Day 2 Morning — Fourballs","Day 2 Afternoon — Foursomes","Day 3 — Singles"],
     lore:"The most hostile Ryder Cup in history. USA won 14.5-13.5. Bernhard Langer had a six-foot putt on the 18th hole of the last match to halve and save the Cup for Europe. He missed. Dave Stockton sat down on the grass.",
     players:[
       { id:"langer_91", name:"Bernhard Langer", abbr:"BLG", team:"EUR",
@@ -507,10 +526,11 @@ const TOURNAMENTS = [
         desc:"Won his foursomes, halved his fourballs. Then faced the six-foot putt on 18 to save the Cup. Two decades of preparation. One missed putt.",
         wound:"The putt. Six feet. Everything else in his career happened before and after it.",
         historicalScores:[0,-2,-4],
-        matchPlayDays:[
-          { format:"FOURSOMES", partner:"Mark James",          opponent:"Lanny Wadkins / Hale Irwin",        opponentHoleScores:[3,4,4], historicalResult:"Langer & James halved" },
+        matchPlaySessions:[{ format:"FOURSOMES", partner:"Mark James",          opponent:"Lanny Wadkins / Hale Irwin",        opponentHoleScores:[3,4,4], historicalResult:"Langer & James halved" },
           { format:"FOURBALLS", partner:"Colin Montgomerie",   opponent:"Corey Pavin / Steve Pate",          opponentHoleScores:[4,3,4], historicalResult:"Langer & Montgomerie won 1 UP" },
-          { format:"SINGLES",                                  opponent:"Hale Irwin",                        opponentHoleScores:[3,4,5], historicalResult:"Langer lost — missed 6-foot putt to halve on 18" },
+          { format:"ABSENT" },
+          { format:"ABSENT" },
+          { format:"SINGLES",                                  opponent:"Hale Irwin",                        opponentHoleScores:[3,4,5], historicalResult:"Langer lost — missed 6-foot putt to halve on 18" }
         ]},
       { id:"seve_91", name:"Seve Ballesteros", abbr:"SBL", team:"EUR",
       temperamentProfileSecondary:"COMBUSTIBLE",
@@ -520,10 +540,11 @@ const TOURNAMENTS = [
         desc:"The spiritual captain of European golf whether he played or not. Won his foursomes with Olazabal.",
         wound:"The greatest match player in the world knows this is probably his last Ryder Cup at his peak.",
         historicalScores:[0,-1,-3],
-        matchPlayDays:[
-          { format:"FOURSOMES", partner:"Jose Olazabal",  opponent:"Paul Azinger / Chip Beck",   opponentHoleScores:[3,4,4], historicalResult:"Seve & Olazabal won 2&1" },
+        matchPlaySessions:[{ format:"FOURSOMES", partner:"Jose Olazabal",  opponent:"Paul Azinger / Chip Beck",   opponentHoleScores:[3,4,4], historicalResult:"Seve & Olazabal won 2&1" },
           { format:"FOURBALLS", partner:"Jose Olazabal",  opponent:"Fred Couples / Ray Floyd",   opponentHoleScores:[4,4,4], historicalResult:"Seve & Olazabal halved" },
-          { format:"SINGLES",                             opponent:"Fred Couples",                opponentHoleScores:[4,4,4], historicalResult:"Couples won 3&2" },
+          { format:"ABSENT" },
+          { format:"ABSENT" },
+          { format:"SINGLES",                             opponent:"Fred Couples",                opponentHoleScores:[4,4,4], historicalResult:"Couples won 3&2" }
         ]},
       { id:"faldo_91", name:"Nick Faldo", abbr:"NFA", team:"EUR",
       temperamentProfileSecondary:"LEVELHEADED",
@@ -533,10 +554,11 @@ const TOURNAMENTS = [
         desc:"The machine. Lost his foursomes and fourballs. Won his singles vs Floyd. Gave Europe a point when it mattered.",
         wound:"Precision does not always win. The machine can still lose.",
         historicalScores:[0,-1,-3],
-        matchPlayDays:[
-          { format:"FOURSOMES", partner:"David Gilford",  opponent:"Ray Floyd / Fred Couples",     opponentHoleScores:[4,4,5], historicalResult:"Faldo & Gilford lost 2&1" },
+        matchPlaySessions:[{ format:"FOURSOMES", partner:"David Gilford",  opponent:"Ray Floyd / Fred Couples",     opponentHoleScores:[4,4,5], historicalResult:"Faldo & Gilford lost 2&1" },
           { format:"FOURBALLS", partner:"Ian Woosnam",    opponent:"Paul Azinger / Hale Irwin",    opponentHoleScores:[4,4,5], historicalResult:"Faldo & Woosnam lost 2&1" },
-          { format:"SINGLES",                             opponent:"Ray Floyd",                     opponentHoleScores:[3,4,4], historicalResult:"Faldo won 2 UP" },
+          { format:"ABSENT" },
+          { format:"ABSENT" },
+          { format:"SINGLES",                             opponent:"Ray Floyd",                     opponentHoleScores:[3,4,4], historicalResult:"Faldo won 2 UP" }
         ]},
       { id:"monty_91", name:"Colin Montgomerie", abbr:"CMG", team:"EUR",
       temperamentProfileSecondary:"LEVELHEADED",
@@ -546,10 +568,11 @@ const TOURNAMENTS = [
         desc:"Won his fourballs with Langer. Then halved with Calcavecchia — 4 down with 4 to play, won all four holes. The crowd was something else entirely.",
         wound:"The American gallery has identified something in him they cannot leave alone. He knows it too.",
         historicalScores:[0,-1,-3],
-        matchPlayDays:[
-          { format:"ABSENT" },
+        matchPlaySessions:[{ format:"ABSENT" },
           { format:"FOURBALLS", partner:"Bernhard Langer",  opponent:"Corey Pavin / Steve Pate",    opponentHoleScores:[4,3,4], historicalResult:"Langer & Montgomerie won 1 UP" },
-          { format:"SINGLES",                               opponent:"Mark Calcavecchia",            opponentHoleScores:[4,4,4], historicalResult:"Montgomerie halved — 4 down with 4 to play, won every hole" },
+          { format:"ABSENT" },
+          { format:"ABSENT" },
+          { format:"SINGLES",                               opponent:"Mark Calcavecchia",            opponentHoleScores:[4,4,4], historicalResult:"Montgomerie halved — 4 down with 4 to play, won every hole" }
         ]},
       { id:"irwin_91", name:"Hale Irwin", abbr:"HIR", team:"USA",
       temperamentProfileSecondary:"DEFENSIVE",
@@ -559,10 +582,11 @@ const TOURNAMENTS = [
         desc:"The USA's unshowy anchor. Won three of his four points. Watched Langer miss the final putt from four feet away.",
         wound:"Winning means the other man has to lose. Irwin understood this completely.",
         historicalScores:[-1,-3,-5],
-        matchPlayDays:[
-          { format:"FOURSOMES", partner:"Lanny Wadkins",       opponent:"Bernhard Langer / Mark James",      opponentHoleScores:[4,3,5], historicalResult:"Irwin & Wadkins halved" },
+        matchPlaySessions:[{ format:"FOURSOMES", partner:"Lanny Wadkins",       opponent:"Bernhard Langer / Mark James",      opponentHoleScores:[4,3,5], historicalResult:"Irwin & Wadkins halved" },
           { format:"FOURBALLS", partner:"Mark O'Meara",        opponent:"Seve Ballesteros / Jose Olazabal",  opponentHoleScores:[3,4,4], historicalResult:"Irwin & O'Meara lost 1 DOWN" },
-          { format:"SINGLES",                                  opponent:"Bernhard Langer",                   opponentHoleScores:[4,3,4], historicalResult:"Irwin won — Langer missed 6-foot putt on 18" },
+          { format:"ABSENT" },
+          { format:"ABSENT" },
+          { format:"SINGLES",                                  opponent:"Bernhard Langer",                   opponentHoleScores:[4,3,4], historicalResult:"Irwin won — Langer missed 6-foot putt on 18" }
         ]},
       { id:"calcavecchia", name:"Mark Calcavecchia", abbr:"MCA", team:"USA",
       temperamentProfileSecondary:"COMBUSTIBLE",
@@ -572,10 +596,11 @@ const TOURNAMENTS = [
         desc:"Was 4 up with 4 to play against Montgomerie in Sunday singles. Lost all four holes. The half point was all Europe needed. He wept.",
         wound:"Four up with four to play. Four holes, four halved or lost. He wept publicly. The game remembers.",
         historicalScores:[0,-1,-2],
-        matchPlayDays:[
+        matchPlaySessions:[{ format:"ABSENT" },
           { format:"ABSENT" },
           { format:"ABSENT" },
-          { format:"SINGLES",  opponent:"Colin Montgomerie",  opponentHoleScores:[4,4,4], historicalResult:"Halved — Calcavecchia was 4 up with 4 to play and lost every hole" },
+          { format:"ABSENT" },
+          { format:"SINGLES",  opponent:"Colin Montgomerie",  opponentHoleScores:[4,4,4], historicalResult:"Halved — Calcavecchia was 4 up with 4 to play and lost every hole" }
         ]},
       { id:"couples_91", name:"Fred Couples", abbr:"FCU", team:"USA",
       temperamentProfileSecondary:"STREAKY",
@@ -585,14 +610,14 @@ const TOURNAMENTS = [
         desc:"The laid-back Californian who showed up and played beautifully. Beat Seve in Sunday singles.",
         wound:"The expectation that he should be more driven. The talent is there. The hunger is complicated.",
         historicalScores:[-1,-2,-4],
-        matchPlayDays:[
-          { format:"FOURSOMES", partner:"Ray Floyd",   opponent:"Nick Faldo / David Gilford",      opponentHoleScores:[4,4,5], historicalResult:"Couples & Floyd won 2&1" },
+        matchPlaySessions:[{ format:"FOURSOMES", partner:"Ray Floyd",   opponent:"Nick Faldo / David Gilford",      opponentHoleScores:[4,4,5], historicalResult:"Couples & Floyd won 2&1" },
           { format:"FOURBALLS", partner:"Ray Floyd",   opponent:"Seve Ballesteros / Jose Olazabal", opponentHoleScores:[4,4,4], historicalResult:"Couples & Floyd halved" },
-          { format:"SINGLES",                          opponent:"Seve Ballesteros",                 opponentHoleScores:[4,4,4], historicalResult:"Couples won 3&2" },
+          { format:"ABSENT" },
+          { format:"ABSENT" },
+          { format:"SINGLES",                          opponent:"Seve Ballesteros",                 opponentHoleScores:[4,4,4], historicalResult:"Couples won 3&2" }
         ]},
     ],
     parallelMatches:[
-      // Day 0 — Foursomes
       [
         { match:"Faldo/Gilford vs Floyd/Couples",         scores:[-1,-1,-2],  teamA:"EUR" },
         { match:"Torrance/Feherty vs Wadkins/O'Meara",    scores:[ 0,-1,-1],  teamA:"EUR" },
@@ -604,12 +629,22 @@ const TOURNAMENTS = [
         { match:"Faldo/Woosnam vs Azinger/Irwin",         scores:[-1,-1,-2],  teamA:"EUR" },
         { match:"Ballesteros/Olazabal vs Couples/Floyd",  scores:[ 1, 0, 0],  teamA:"EUR" },
       ],
+      [
+        { match:"EUR pair A vs USA pair A", scores:[ 0, 1, 2], teamA:"EUR" },
+        { match:"EUR pair B vs USA pair B", scores:[ 1, 1, 1], teamA:"EUR" },
+        { match:"EUR pair C vs USA pair C", scores:[-1, 0, 1], teamA:"EUR" },
+      ],
+      [
+        { match:"EUR pair D vs USA pair D", scores:[ 0,-1,-1], teamA:"EUR" },
+        { match:"EUR pair E vs USA pair E", scores:[-1,-1,-2], teamA:"EUR" },
+        { match:"EUR pair F vs USA pair F", scores:[ 1, 0, 0], teamA:"EUR" },
+      ],
       // Day 2 — Singles
       [
         { match:"Ballesteros vs Couples",                 scores:[-1,-1,-1],  teamA:"EUR" },
         { match:"Montgomerie vs Calcavecchia",            scores:[ 0, 0, 0],  teamA:"EUR" },
         { match:"Faldo vs Floyd",                         scores:[ 1, 1, 2],  teamA:"EUR" },
-      ],
+      ]
     ],
     field:[
       {name:"Corey Pavin",        scores:[0,-1,-3]},
@@ -646,7 +681,7 @@ const TOURNAMENTS = [
     id:"brookline_1999", year:1999, eraClass:"era-1999-rc", lbClass:"lb-1999",
     name:"The Battle of Brookline",
     course:"The Country Club, Brookline", country:"Massachusetts, USA",
-    type:"ryder", badge:"badge-ryder", days:3,
+    type:"ryder", badge:"badge-ryder", sessions:5, sessionLabels:["Day 1 Morning — Foursomes","Day 1 Afternoon — Fourballs","Day 2 Morning — Fourballs","Day 2 Afternoon — Foursomes","Day 3 — Singles"],
     lore:"Europe led 10-6 after two days. USA needed 8.5 from 12 Sunday singles. They got them. Justin Leonard holed a 45-foot putt on 17. The American team rushed the green before Olazabal had putted. European golf did not forget this for a decade.",
     players:[
       { id:"leonard", name:"Justin Leonard", abbr:"JLD", team:"USA",
@@ -657,10 +692,11 @@ const TOURNAMENTS = [
         desc:"Holed a 45-foot putt across the 17th green. The USA team erupted. Olazabal still had a putt to halve. He missed.",
         wound:"The putt was real. The celebration on the green while Olazabal stood there — also real.",
         historicalScores:[0,-2,-4],
-        matchPlayDays:[
-          { format:"FOURSOMES", partner:"Hal Sutton",    opponent:"Lee Westwood / Darren Clarke",       opponentHoleScores:[4,4,3], historicalResult:"Leonard & Sutton won 2&1" },
+        matchPlaySessions:[{ format:"FOURSOMES", partner:"Hal Sutton",    opponent:"Lee Westwood / Darren Clarke",       opponentHoleScores:[4,4,3], historicalResult:"Leonard & Sutton won 2&1" },
           { format:"FOURBALLS", partner:"David Duval",   opponent:"Padraig Harrington / Paul McGinley", opponentHoleScores:[3,3,4], historicalResult:"Halved" },
-          { format:"SINGLES",                            opponent:"Jose Maria Olazabal",                opponentHoleScores:[3,4,4], historicalResult:"Leonard won 1 UP on 17" },
+          { format:"ABSENT" },
+          { format:"ABSENT" },
+          { format:"SINGLES",                            opponent:"Jose Maria Olazabal",                opponentHoleScores:[3,4,4], historicalResult:"Leonard won 1 UP on 17" }
         ]},
       { id:"olazabal_99", name:"José Maria Olazabal", abbr:"JMO", team:"EUR",
       temperamentProfileSecondary:"DEFENSIVE",
@@ -670,10 +706,11 @@ const TOURNAMENTS = [
         desc:"Level with Leonard going to 17. Leonard holed from 45 feet. Americans stormed the green. Olazabal waited. He then putted and missed.",
         wound:"Standing on the green while a celebration happens around you. Not having yet missed.",
         historicalScores:[-1,-3,-5],
-        matchPlayDays:[
-          { format:"FOURSOMES", partner:"Miguel Angel Jimenez", opponent:"Phil Mickelson / Tom Lehman",  opponentHoleScores:[4,3,4], historicalResult:"Olazabal & Jimenez lost 1 DOWN" },
+        matchPlaySessions:[{ format:"FOURSOMES", partner:"Miguel Angel Jimenez", opponent:"Phil Mickelson / Tom Lehman",  opponentHoleScores:[4,3,4], historicalResult:"Olazabal & Jimenez lost 1 DOWN" },
           { format:"FOURBALLS", partner:"Sergio Garcia",        opponent:"Davis Love III / Jeff Maggert", opponentHoleScores:[3,4,5], historicalResult:"Halved" },
-          { format:"SINGLES",                                   opponent:"Justin Leonard",                opponentHoleScores:[4,4,3], historicalResult:"Leonard won 1 UP on 17" },
+          { format:"ABSENT" },
+          { format:"ABSENT" },
+          { format:"SINGLES",                                   opponent:"Justin Leonard",                opponentHoleScores:[4,4,3], historicalResult:"Leonard won 1 UP on 17" }
         ]},
       { id:"clarke_99", name:"Darren Clarke", abbr:"DCL", team:"EUR",
       temperamentProfileSecondary:"PEAKER",
@@ -683,10 +720,11 @@ const TOURNAMENTS = [
         desc:"Played all three days. Won his singles against Sutton. One of the most passionate Ryder Cup players in the team.",
         wound:"The Ryder Cup asks everything of him and he always gives it.",
         historicalScores:[0,-1,-3],
-        matchPlayDays:[
-          { format:"FOURSOMES", partner:"Lee Westwood",  opponent:"Justin Leonard / Hal Sutton",   opponentHoleScores:[4,4,3], historicalResult:"Clarke & Westwood lost 2&1" },
+        matchPlaySessions:[{ format:"FOURSOMES", partner:"Lee Westwood",  opponent:"Justin Leonard / Hal Sutton",   opponentHoleScores:[4,4,3], historicalResult:"Clarke & Westwood lost 2&1" },
           { format:"FOURBALLS", partner:"Thomas Bjorn",  opponent:"Hal Sutton / Jeff Maggert",     opponentHoleScores:[3,4,4], historicalResult:"Clarke & Bjorn won 2 UP" },
-          { format:"SINGLES",                            opponent:"Hal Sutton",                     opponentHoleScores:[3,4,4], historicalResult:"Clarke won 3&2" },
+          { format:"ABSENT" },
+          { format:"ABSENT" },
+          { format:"SINGLES",                            opponent:"Hal Sutton",                     opponentHoleScores:[3,4,4], historicalResult:"Clarke won 3&2" }
         ]},
       { id:"westwood_99", name:"Lee Westwood", abbr:"LWS", team:"EUR",
       temperamentProfileSecondary:"COMBUSTIBLE",
@@ -696,10 +734,11 @@ const TOURNAMENTS = [
         desc:"Played his foursomes with Clarke. Lost his singles to Duval. The gulf was in the short game.",
         wound:"The ball-striking of a world number one. The putting of someone who knows it.",
         historicalScores:[1,0,-2],
-        matchPlayDays:[
-          { format:"FOURSOMES", partner:"Darren Clarke",  opponent:"Justin Leonard / Hal Sutton",  opponentHoleScores:[4,4,3], historicalResult:"Clarke & Westwood lost 2&1" },
+        matchPlaySessions:[{ format:"FOURSOMES", partner:"Darren Clarke",  opponent:"Justin Leonard / Hal Sutton",  opponentHoleScores:[4,4,3], historicalResult:"Clarke & Westwood lost 2&1" },
           { format:"ABSENT" },
-          { format:"SINGLES",                             opponent:"David Duval",                   opponentHoleScores:[4,4,5], historicalResult:"Westwood lost 2&1" },
+          { format:"ABSENT" },
+          { format:"ABSENT" },
+          { format:"SINGLES",                             opponent:"David Duval",                   opponentHoleScores:[4,4,5], historicalResult:"Westwood lost 2&1" }
         ]},
       { id:"monty_99", name:"Colin Montgomerie", abbr:"CMG", team:"EUR",
       temperamentProfileSecondary:"LEVELHEADED",
@@ -709,10 +748,11 @@ const TOURNAMENTS = [
         desc:"Lost his foursomes. Halved his singles against Pavin. The crowd at Brookline made Kiawah seem civil.",
         wound:"What they did to his family in the gallery at Brookline. He will never entirely forget it.",
         historicalScores:[0,-1,-3],
-        matchPlayDays:[
-          { format:"FOURSOMES", partner:"Paul Lawrie",  opponent:"Tiger Woods / David Duval",  opponentHoleScores:[4,4,5], historicalResult:"Montgomerie & Lawrie lost 2&1" },
+        matchPlaySessions:[{ format:"FOURSOMES", partner:"Paul Lawrie",  opponent:"Tiger Woods / David Duval",  opponentHoleScores:[4,4,5], historicalResult:"Montgomerie & Lawrie lost 2&1" },
           { format:"ABSENT" },
-          { format:"SINGLES",                           opponent:"Payne Stewart",               opponentHoleScores:[4,4,4], historicalResult:"Montgomerie halved with Payne Stewart" },
+          { format:"ABSENT" },
+          { format:"ABSENT" },
+          { format:"SINGLES",                           opponent:"Payne Stewart",               opponentHoleScores:[4,4,4], historicalResult:"Montgomerie halved with Payne Stewart" }
         ]},
       { id:"mickelson_99", name:"Phil Mickelson", abbr:"PMK", team:"USA",
       temperamentProfileSecondary:"PEAKER",
@@ -722,14 +762,14 @@ const TOURNAMENTS = [
         desc:"Won his foursomes. Part of the USA team that staged one of the great Ryder Cup comebacks.",
         wound:"The US Open that keeps not happening. Everything else he wins. That one escapes him.",
         historicalScores:[0,-1,-3],
-        matchPlayDays:[
-          { format:"FOURSOMES", partner:"Tom Lehman",   opponent:"Jose Maria Olazabal / Miguel Angel Jimenez", opponentHoleScores:[4,3,4], historicalResult:"Mickelson & Lehman won 1 UP" },
+        matchPlaySessions:[{ format:"FOURSOMES", partner:"Tom Lehman",   opponent:"Jose Maria Olazabal / Miguel Angel Jimenez", opponentHoleScores:[4,3,4], historicalResult:"Mickelson & Lehman won 1 UP" },
           { format:"ABSENT" },
-          { format:"SINGLES",                           opponent:"Padraig Harrington",                          opponentHoleScores:[4,4,4], historicalResult:"Mickelson won 1 UP" },
+          { format:"ABSENT" },
+          { format:"ABSENT" },
+          { format:"SINGLES",                           opponent:"Padraig Harrington",                          opponentHoleScores:[4,4,4], historicalResult:"Mickelson won 1 UP" }
         ]},
     ],
     parallelMatches:[
-      // Day 0 — Foursomes
       [
         { match:"Clarke/Westwood vs Sutton/Maggert",      scores:[-1,-2,-2],  teamA:"EUR" },
         { match:"Jimenez/Olazabal vs Mickelson/Lehman",   scores:[-1,-1,-1],  teamA:"EUR" },
@@ -741,12 +781,22 @@ const TOURNAMENTS = [
         { match:"Olazabal/Garcia vs Love/Maggert",        scores:[ 0, 0, 0],  teamA:"EUR" },
         { match:"Clarke/Bjorn vs Sutton/Maggert",         scores:[ 1, 1, 2],  teamA:"EUR" },
       ],
+      [
+        { match:"EUR pair A vs USA pair A", scores:[ 0, 1, 2], teamA:"EUR" },
+        { match:"EUR pair B vs USA pair B", scores:[ 1, 1, 1], teamA:"EUR" },
+        { match:"EUR pair C vs USA pair C", scores:[-1, 0, 1], teamA:"EUR" },
+      ],
+      [
+        { match:"EUR pair D vs USA pair D", scores:[ 0,-1,-1], teamA:"EUR" },
+        { match:"EUR pair E vs USA pair E", scores:[-1,-1,-2], teamA:"EUR" },
+        { match:"EUR pair F vs USA pair F", scores:[ 1, 0, 0], teamA:"EUR" },
+      ],
       // Day 2 — Singles
       [
         { match:"Clarke vs Sutton",                       scores:[ 1, 1, 2],  teamA:"EUR" },
         { match:"Westwood vs Duval",                      scores:[ 0,-1,-1],  teamA:"EUR" },
         { match:"Montgomerie vs Pavin",                   scores:[ 0, 0, 0],  teamA:"EUR" },
-      ],
+      ]
     ],
     field:[
       {name:"Sergio Garcia",    scores:[0,-1,-2]},
@@ -930,7 +980,7 @@ const TOURNAMENTS = [
     id:"valderrama_1997", year:1997, eraClass:"era-1997", lbClass:"lb-1997",
     name:"Seve's Valderrama",
     course:"Club de Golf Valderrama", country:"Sotogrande, Spain",
-    type:"ryder", badge:"badge-ryder", days:3,
+    type:"ryder", badge:"badge-ryder", sessions:5, sessionLabels:["Day 1 Morning — Foursomes","Day 1 Afternoon — Fourballs","Day 2 Morning — Fourballs","Day 2 Afternoon — Foursomes","Day 3 — Singles"],
     lore:"Europe 14.5–13.5. Seve Ballesteros captained and did not play a single shot. He walked every fairway, appeared at every green, and on more than one occasion attempted to influence his players' shot selection while they were standing over the ball. Europe won anyway. Andrew Coltart sat on the bench for two days and then faced Tiger Woods on Sunday morning.",
     players:[
       { id:"coltart_97", name:"Andrew Coltart", abbr:"ACL", team:"EUR",
@@ -941,10 +991,11 @@ const TOURNAMENTS = [
         desc:"Selected by Seve over more experienced players. Did not play Friday. Did not play Saturday. Sunday morning he was told he was leading off the singles against Tiger Woods.",
         wound:"Two days on the bench. No explanation from Seve. First shot in a Ryder Cup — against the 21-year-old who just won The Masters.",
         historicalScores:[0,0,-3],
-        matchPlayDays:[
+        matchPlaySessions:[{ format:"ABSENT" },
           { format:"ABSENT" },
           { format:"ABSENT" },
-          { format:"SINGLES", opponent:"Tiger Woods", opponentHoleScores:[3,4,5], historicalResult:"Coltart lost 3&2 — his first Ryder Cup appearance and it was against Tiger" },
+          { format:"ABSENT" },
+          { format:"SINGLES", opponent:"Tiger Woods", opponentHoleScores:[3,4,5], historicalResult:"Coltart lost 3&2 — his first Ryder Cup appearance and it was against Tiger" }
         ]},
       { id:"montgomerie_97", name:"Colin Montgomerie", abbr:"CMG", team:"EUR",
       temperamentProfileSecondary:"LEVELHEADED",
@@ -954,10 +1005,11 @@ const TOURNAMENTS = [
         desc:"Went 3.5 from 5. The American galleries heckled him throughout the week. He responded by being the best European player on the course.",
         wound:"The crowd abuse has followed him for years. Every Ryder Cup is personal. He plays better when it's personal.",
         historicalScores:[1,0,-1],
-        matchPlayDays:[
-          { format:"FOURSOMES", partner:"Bernhard Langer", opponent:"Davis Love III / Jim Furyk", opponentHoleScores:[3,4,4], historicalResult:"Montgomerie & Langer won 1 UP" },
+        matchPlaySessions:[{ format:"FOURSOMES", partner:"Bernhard Langer", opponent:"Davis Love III / Jim Furyk", opponentHoleScores:[3,4,4], historicalResult:"Montgomerie & Langer won 1 UP" },
           { format:"FOURBALLS", partner:"Darren Clarke",   opponent:"Fred Couples / Brad Faxon",  opponentHoleScores:[4,4,5], historicalResult:"Montgomerie & Clarke lost 1 DOWN" },
-          { format:"SINGLES",                              opponent:"Scott Hoch",                   opponentHoleScores:[4,4,4], historicalResult:"Montgomerie won 1 UP on 18" },
+          { format:"ABSENT" },
+          { format:"ABSENT" },
+          { format:"SINGLES",                              opponent:"Scott Hoch",                   opponentHoleScores:[4,4,4], historicalResult:"Montgomerie won 1 UP on 18" }
         ]},
       { id:"westwood_97", name:"Lee Westwood", abbr:"LWS", team:"EUR",
       temperamentProfileSecondary:"COMBUSTIBLE",
@@ -967,10 +1019,11 @@ const TOURNAMENTS = [
         desc:"Twenty-four years old. His first Ryder Cup. Paired with Faldo in foursomes and played without a flicker of nerves.",
         wound:"Youngest in the European team. Half the crowd have never heard of him. He is here to change that.",
         historicalScores:[0,0,-2],
-        matchPlayDays:[
-          { format:"FOURSOMES", partner:"Nick Faldo",     opponent:"Tom Lehman / Jeff Maggert", opponentHoleScores:[4,4,4], historicalResult:"Westwood & Faldo won 3&2" },
+        matchPlaySessions:[{ format:"FOURSOMES", partner:"Nick Faldo",     opponent:"Tom Lehman / Jeff Maggert", opponentHoleScores:[4,4,4], historicalResult:"Westwood & Faldo won 3&2" },
           { format:"ABSENT" },
-          { format:"SINGLES",                             opponent:"Brad Faxon",                 opponentHoleScores:[4,4,5], historicalResult:"Westwood won 3&1" },
+          { format:"ABSENT" },
+          { format:"ABSENT" },
+          { format:"SINGLES",                             opponent:"Brad Faxon",                 opponentHoleScores:[4,4,5], historicalResult:"Westwood won 3&1" }
         ]},
       { id:"parnevik_97", name:"Jesper Parnevik", abbr:"JPV", team:"EUR",
       temperamentProfileSecondary:"COMBUSTIBLE",
@@ -980,28 +1033,36 @@ const TOURNAMENTS = [
         desc:"The turned-up cap brim. The most recognisable silhouette on the European team. Played with a flair that baffled opponents and occasionally confused his partners.",
         wound:"Never quite got the recognition his talent deserved. At least the cap is famous.",
         historicalScores:[0,1,-1],
-        matchPlayDays:[
-          { format:"FOURSOMES", partner:"Ignacio Garrido", opponent:"Phil Mickelson / Tom Lehman",  opponentHoleScores:[4,4,4], historicalResult:"Parnevik & Garrido won 1 UP" },
+        matchPlaySessions:[{ format:"FOURSOMES", partner:"Ignacio Garrido", opponent:"Phil Mickelson / Tom Lehman",  opponentHoleScores:[4,4,4], historicalResult:"Parnevik & Garrido won 1 UP" },
           { format:"FOURBALLS", partner:"Per-Ulrik Johansson", opponent:"Tiger Woods / Mark O'Meara", opponentHoleScores:[4,4,5], historicalResult:"Parnevik & Johansson lost 1 DOWN" },
-          { format:"SINGLES",                              opponent:"Justin Leonard",                opponentHoleScores:[4,4,4], historicalResult:"Parnevik won 2&1" },
+          { format:"ABSENT" },
+          { format:"ABSENT" },
+          { format:"SINGLES",                              opponent:"Justin Leonard",                opponentHoleScores:[4,4,4], historicalResult:"Parnevik won 2&1" }
         ]},
     ],
     parallelMatches:[
-      // Day 0 — Foursomes
       [
         { match:"Montgomerie/Langer vs Love/Furyk",        scores:[ 0, 1, 1], teamA:"EUR" },
         { match:"Westwood/Faldo vs Lehman/Maggert",        scores:[ 1, 2, 3], teamA:"EUR" },
         { match:"Parnevik/Garrido vs Mickelson/Lehman",    scores:[ 0, 0, 1], teamA:"EUR" },
         { match:"Olazabal/Rocca vs Couples/Love",          scores:[ 0, 1, 1], teamA:"EUR" },
       ],
-      // Day 1 — Fourballs
       [
         { match:"Montgomerie/Clarke vs Couples/Faxon",     scores:[-1,-1,-1], teamA:"EUR" },
         { match:"Parnevik/Johansson vs Woods/O'Meara",     scores:[-1,-1,-1], teamA:"EUR" },
         { match:"Olazabal/Garrido vs Mickelson/Leonard",   scores:[ 0, 1, 1], teamA:"EUR" },
         { match:"Faldo/Bjorn vs Love/Janzen",              scores:[ 0, 0, 1], teamA:"EUR" },
       ],
-      // Day 3 (Sunday) — Singles  [array index 2]
+      [
+        { match:"EUR pair A vs USA pair A", scores:[ 0, 1, 2], teamA:"EUR" },
+        { match:"EUR pair B vs USA pair B", scores:[ 1, 1, 1], teamA:"EUR" },
+        { match:"EUR pair C vs USA pair C", scores:[-1, 0, 1], teamA:"EUR" },
+      ],
+      [
+        { match:"EUR pair D vs USA pair D", scores:[ 0,-1,-1], teamA:"EUR" },
+        { match:"EUR pair E vs USA pair E", scores:[-1,-1,-2], teamA:"EUR" },
+        { match:"EUR pair F vs USA pair F", scores:[ 1, 0, 0], teamA:"EUR" },
+      ],
       [
         { match:"Coltart vs Woods",                        scores:[-1,-2,-2], teamA:"EUR" },
         { match:"Clarke vs Mickelson",                     scores:[ 0, 0, 1], teamA:"EUR" },
@@ -1039,7 +1100,7 @@ const TOURNAMENTS = [
     id:"belfry_1985", year:1985, eraClass:"era-1985", lbClass:"lb-1985",
     name:"The Day Europe Woke Up",
     course:"The Belfry — Brabazon Course", country:"Sutton Coldfield, England",
-    type:"ryder", badge:"badge-ryder", days:3,
+    type:"ryder", badge:"badge-ryder", sessions:5, sessionLabels:["Day 1 Morning — Foursomes","Day 1 Afternoon — Fourballs","Day 2 Morning — Fourballs","Day 2 Afternoon — Foursomes","Day 3 — Singles"],
     lore:"Europe 16.5–11.5. Their first win in 28 years. Tony Jacklin had changed everything — the matching uniforms, the Concorde, the team rooms, the belief. Sam Torrance holed on the 18th and stood there with his arms raised and tears running down his face. It was the photograph that changed European golf.",
     players:[
       { id:"torrance_85", name:"Sam Torrance", abbr:"STR", team:"EUR",
@@ -1050,10 +1111,11 @@ const TOURNAMENTS = [
         desc:"Holed the winning putt on the 18th to beat Andy North and claim the Ryder Cup. Stood with his arms raised and tears streaming. The photograph ran on every front page.",
         wound:"Twenty-eight years of waiting. Not his — the continent's. He felt every one of them on that putt.",
         historicalScores:[0,0,-1],
-        matchPlayDays:[
-          { format:"FOURSOMES", partner:"Howard Clark",    opponent:"Tom Kite / Andy North",      opponentHoleScores:[4,4,4], historicalResult:"Torrance & Clark lost 1 DOWN" },
+        matchPlaySessions:[{ format:"FOURSOMES", partner:"Howard Clark",    opponent:"Tom Kite / Andy North",      opponentHoleScores:[4,4,4], historicalResult:"Torrance & Clark lost 1 DOWN" },
           { format:"FOURBALLS", partner:"Sandy Lyle",      opponent:"Hubert Green / Fuzzy Zoeller", opponentHoleScores:[4,4,4], historicalResult:"Torrance & Lyle halved" },
-          { format:"SINGLES",                              opponent:"Andy North",                  opponentHoleScores:[4,4,5], historicalResult:"Torrance won 1 UP on 18 — the winning point, the photograph, the tears" },
+          { format:"ABSENT" },
+          { format:"ABSENT" },
+          { format:"SINGLES",                              opponent:"Andy North",                  opponentHoleScores:[4,4,5], historicalResult:"Torrance won 1 UP on 18 — the winning point, the photograph, the tears" }
         ]},
       { id:"seve_85", name:"Seve Ballesteros", abbr:"SBA", team:"EUR",
       temperamentProfileSecondary:"STREAKY",
@@ -1063,10 +1125,11 @@ const TOURNAMENTS = [
         desc:"Imperious all week. Drove the 10th green in foursomes. Won his singles. The most exciting golfer on earth and he knew it.",
         wound:"There is no wound. There is only the next impossible shot, which he intends to make.",
         historicalScores:[-1,-2,-3],
-        matchPlayDays:[
-          { format:"FOURSOMES", partner:"Manuel Piñero",   opponent:"Curtis Strange / Mark O'Meara", opponentHoleScores:[4,4,4], historicalResult:"Ballesteros & Piñero won 2&1" },
+        matchPlaySessions:[{ format:"FOURSOMES", partner:"Manuel Piñero",   opponent:"Curtis Strange / Mark O'Meara", opponentHoleScores:[4,4,4], historicalResult:"Ballesteros & Piñero won 2&1" },
           { format:"FOURBALLS", partner:"Manuel Piñero",   opponent:"Tom Kite / Andy North",         opponentHoleScores:[4,4,4], historicalResult:"Ballesteros & Piñero won 1 UP" },
-          { format:"SINGLES",                              opponent:"Tom Kite",                      opponentHoleScores:[4,4,5], historicalResult:"Ballesteros won 2&1" },
+          { format:"ABSENT" },
+          { format:"ABSENT" },
+          { format:"SINGLES",                              opponent:"Tom Kite",                      opponentHoleScores:[4,4,5], historicalResult:"Ballesteros won 2&1" }
         ]},
       { id:"woosnam_85", name:"Ian Woosnam", abbr:"IWO", team:"EUR",
       temperamentProfileSecondary:"PEAKER",
@@ -1076,10 +1139,11 @@ const TOURNAMENTS = [
         desc:"Short, Welsh, utterly fearless. The American players had never heard of him. By Sunday afternoon they had.",
         wound:"Everyone underestimates him based on his size. He has made a career out of proving that wrong.",
         historicalScores:[0,-1,-2],
-        matchPlayDays:[
-          { format:"FOURSOMES", partner:"Nick Faldo",      opponent:"Hubert Green / Fuzzy Zoeller",  opponentHoleScores:[4,5,4], historicalResult:"Woosnam & Faldo lost 3&2" },
+        matchPlaySessions:[{ format:"FOURSOMES", partner:"Nick Faldo",      opponent:"Hubert Green / Fuzzy Zoeller",  opponentHoleScores:[4,5,4], historicalResult:"Woosnam & Faldo lost 3&2" },
           { format:"FOURBALLS", partner:"Ian Woosnam",     opponent:"Mark O'Meara / Lanny Wadkins",  opponentHoleScores:[4,4,5], historicalResult:"Woosnam & Faldo won 1 UP" },
-          { format:"SINGLES",                              opponent:"Fuzzy Zoeller",                 opponentHoleScores:[4,4,4], historicalResult:"Woosnam won 3&1" },
+          { format:"ABSENT" },
+          { format:"ABSENT" },
+          { format:"SINGLES",                              opponent:"Fuzzy Zoeller",                 opponentHoleScores:[4,4,4], historicalResult:"Woosnam won 3&1" }
         ]},
       { id:"langer_85", name:"Bernhard Langer", abbr:"BLG", team:"EUR",
       temperamentProfileSecondary:"DEFENSIVE",
@@ -1089,14 +1153,14 @@ const TOURNAMENTS = [
         desc:"Methodical, precise, relentless. Won his foursomes with Lyle by a considerable margin. Made nothing look easy and then produced it anyway.",
         wound:"No theatrics. No fist pumps. Just the next shot, executed to specification.",
         historicalScores:[0,-1,-2],
-        matchPlayDays:[
-          { format:"FOURSOMES", partner:"Sandy Lyle",      opponent:"Peter Jacobsen / Hal Sutton",   opponentHoleScores:[4,4,5], historicalResult:"Langer & Lyle won 5&4" },
+        matchPlaySessions:[{ format:"FOURSOMES", partner:"Sandy Lyle",      opponent:"Peter Jacobsen / Hal Sutton",   opponentHoleScores:[4,4,5], historicalResult:"Langer & Lyle won 5&4" },
           { format:"FOURBALLS", partner:"Ken Brown",       opponent:"Ray Floyd / Lanny Wadkins",     opponentHoleScores:[4,4,4], historicalResult:"Langer & Brown halved" },
-          { format:"SINGLES",                              opponent:"Hal Sutton",                    opponentHoleScores:[4,4,4], historicalResult:"Langer won 5&4" },
+          { format:"ABSENT" },
+          { format:"ABSENT" },
+          { format:"SINGLES",                              opponent:"Hal Sutton",                    opponentHoleScores:[4,4,4], historicalResult:"Langer won 5&4" }
         ]},
     ],
     parallelMatches:[
-      // Day 0 — Foursomes
       [
         { match:"Ballesteros/Piñero vs Strange/O'Meara",   scores:[ 0, 1, 2], teamA:"EUR" },
         { match:"Langer/Lyle vs Jacobsen/Sutton",          scores:[ 1, 2, 3], teamA:"EUR" },
@@ -1110,13 +1174,23 @@ const TOURNAMENTS = [
         { match:"Torrance/Lyle vs Green/Zoeller",          scores:[ 0, 0, 0], teamA:"EUR" },
         { match:"Langer/Brown vs Floyd/Wadkins",           scores:[ 0, 0, 0], teamA:"EUR" },
       ],
+      [
+        { match:"EUR pair A vs USA pair A", scores:[ 0, 1, 2], teamA:"EUR" },
+        { match:"EUR pair B vs USA pair B", scores:[ 1, 1, 1], teamA:"EUR" },
+        { match:"EUR pair C vs USA pair C", scores:[-1, 0, 1], teamA:"EUR" },
+      ],
+      [
+        { match:"EUR pair D vs USA pair D", scores:[ 0,-1,-1], teamA:"EUR" },
+        { match:"EUR pair E vs USA pair E", scores:[-1,-1,-2], teamA:"EUR" },
+        { match:"EUR pair F vs USA pair F", scores:[ 1, 0, 0], teamA:"EUR" },
+      ],
       // Day 2 — Singles
       [
         { match:"Ballesteros vs Kite",                     scores:[ 0, 1, 3], teamA:"EUR" },
         { match:"Langer vs Sutton",                        scores:[ 1, 2, 4], teamA:"EUR" },
         { match:"Woosnam vs Zoeller",                      scores:[ 0, 1, 3], teamA:"EUR" },
         { match:"Torrance vs North",                       scores:[ 0, 0, 1], teamA:"EUR" },
-      ],
+      ]
     ],
     field:[
       {name:"Sandy Lyle",       scores:[0,-1,-2]},
@@ -1148,7 +1222,7 @@ const TOURNAMENTS = [
     id:"kclub_2006", year:2006, eraClass:"era-2006", lbClass:"lb-2006",
     name:"The Week That Stopped",
     course:"K Club — Palmer Course", country:"County Kildare, Ireland",
-    type:"ryder", badge:"badge-ryder", days:3,
+    type:"ryder", badge:"badge-ryder", sessions:5, sessionLabels:["Day 1 Morning — Foursomes","Day 1 Afternoon — Fourballs","Day 2 Morning — Fourballs","Day 2 Afternoon — Foursomes","Day 3 — Singles"],
     lore:"Europe 18.5–9.5. The largest winning margin in modern Ryder Cup history. Darren Clarke's wife Heather had died of cancer five weeks earlier. Ian Woosnam captained. Clarke played in a black armband. He went 3-0. When he holed the winning point in singles, Lee Westwood ran onto the fairway and held him. The gallery stood in silence for a moment before it erupted.",
     players:[
       { id:"clarke_06", name:"Darren Clarke", abbr:"DCL", team:"EUR",
@@ -1159,10 +1233,11 @@ const TOURNAMENTS = [
         desc:"Five weeks after Heather died. Black armband. Went 3-0. Won his singles on the 16th and stood there while Westwood ran across the fairway to hold him.",
         wound:"She died five weeks ago. He is here because golf is the only thing that makes sense right now. The gallery knows. Everyone knows.",
         historicalScores:[-1,-2,-3],
-        matchPlayDays:[
-          { format:"FOURBALLS", partner:"Lee Westwood",   opponent:"Phil Mickelson / Chris DiMarco", opponentHoleScores:[4,4,5], historicalResult:"Clarke & Westwood won 1 UP" },
+        matchPlaySessions:[{ format:"FOURBALLS", partner:"Lee Westwood",   opponent:"Phil Mickelson / Chris DiMarco", opponentHoleScores:[4,4,5], historicalResult:"Clarke & Westwood won 1 UP" },
           { format:"FOURSOMES", partner:"Lee Westwood",   opponent:"Chad Campbell / Vaughn Taylor",  opponentHoleScores:[4,4,4], historicalResult:"Clarke & Westwood won 3&2" },
-          { format:"SINGLES",                             opponent:"Zach Johnson",                   opponentHoleScores:[4,4,5], historicalResult:"Clarke won 3&2 — Westwood ran onto the fairway to hold him" },
+          { format:"ABSENT" },
+          { format:"ABSENT" },
+          { format:"SINGLES",                             opponent:"Zach Johnson",                   opponentHoleScores:[4,4,5], historicalResult:"Clarke won 3&2 — Westwood ran onto the fairway to hold him" }
         ]},
       { id:"westwood_06", name:"Lee Westwood", abbr:"LWS", team:"EUR",
       temperamentProfileSecondary:"COMBUSTIBLE",
@@ -1172,10 +1247,11 @@ const TOURNAMENTS = [
         desc:"Paired with Clarke for all three days. Won his own singles. When Clarke holed out on 16, Westwood was already running.",
         wound:"He knows what Clarke is carrying. His job this week is to make sure Clarke doesn't have to carry it alone.",
         historicalScores:[0,-1,-2],
-        matchPlayDays:[
-          { format:"FOURBALLS", partner:"Darren Clarke",  opponent:"Phil Mickelson / Chris DiMarco", opponentHoleScores:[4,4,5], historicalResult:"Clarke & Westwood won 1 UP" },
+        matchPlaySessions:[{ format:"FOURBALLS", partner:"Darren Clarke",  opponent:"Phil Mickelson / Chris DiMarco", opponentHoleScores:[4,4,5], historicalResult:"Clarke & Westwood won 1 UP" },
           { format:"FOURSOMES", partner:"Darren Clarke",  opponent:"Chad Campbell / Vaughn Taylor",  opponentHoleScores:[4,4,4], historicalResult:"Clarke & Westwood won 3&2" },
-          { format:"SINGLES",                             opponent:"Lee Janzen",                     opponentHoleScores:[4,4,4], historicalResult:"Westwood won 2 UP" },
+          { format:"ABSENT" },
+          { format:"ABSENT" },
+          { format:"SINGLES",                             opponent:"Lee Janzen",                     opponentHoleScores:[4,4,4], historicalResult:"Westwood won 2 UP" }
         ]},
       { id:"mcginley_06", name:"Paul McGinley", abbr:"PMG", team:"EUR",
       temperamentProfileSecondary:"DEFENSIVE",
@@ -1185,10 +1261,11 @@ const TOURNAMENTS = [
         desc:"An Irishman at an Irish Ryder Cup, playing on the course he knows as well as his own garden. The crowd were not neutral.",
         wound:"The expectation of 40,000 Irish people follows him to every tee. He finds it energising rather than crushing, which is either strength or delusion.",
         historicalScores:[0,0,-1],
-        matchPlayDays:[
-          { format:"FOURSOMES", partner:"Padraig Harrington", opponent:"Stewart Cink / J.J. Henry",  opponentHoleScores:[4,4,4], historicalResult:"McGinley & Harrington won 4&3" },
+        matchPlaySessions:[{ format:"FOURSOMES", partner:"Padraig Harrington", opponent:"Stewart Cink / J.J. Henry",  opponentHoleScores:[4,4,4], historicalResult:"McGinley & Harrington won 4&3" },
           { format:"ABSENT" },
-          { format:"SINGLES",                                  opponent:"J.J. Henry",                opponentHoleScores:[4,4,4], historicalResult:"McGinley won 2 UP — an Irishman on an Irish course" },
+          { format:"ABSENT" },
+          { format:"ABSENT" },
+          { format:"SINGLES",                                  opponent:"J.J. Henry",                opponentHoleScores:[4,4,4], historicalResult:"McGinley won 2 UP — an Irishman on an Irish course" }
         ]},
       { id:"casey_06", name:"Paul Casey", abbr:"PCS", team:"EUR",
       temperamentProfileSecondary:"PEAKER",
@@ -1198,14 +1275,14 @@ const TOURNAMENTS = [
         desc:"Went 3-0. The most belligerent performer on the European team, and in 2006 that was a very high bar.",
         wound:"He runs hot. When it's working, nobody is stopping him. When it goes, it goes badly.",
         historicalScores:[-1,-1,-2],
-        matchPlayDays:[
-          { format:"FOURBALLS", partner:"David Howell",   opponent:"Tiger Woods / Jim Furyk",        opponentHoleScores:[4,4,4], historicalResult:"Casey & Howell won 3&2" },
+        matchPlaySessions:[{ format:"FOURBALLS", partner:"David Howell",   opponent:"Tiger Woods / Jim Furyk",        opponentHoleScores:[4,4,4], historicalResult:"Casey & Howell won 3&2" },
           { format:"FOURSOMES", partner:"Robert Karlsson", opponent:"Stewart Cink / Zach Johnson",   opponentHoleScores:[4,4,5], historicalResult:"Casey & Karlsson won 1 UP" },
-          { format:"SINGLES",                              opponent:"Chad Campbell",                  opponentHoleScores:[4,4,4], historicalResult:"Casey won 3&2" },
+          { format:"ABSENT" },
+          { format:"ABSENT" },
+          { format:"SINGLES",                              opponent:"Chad Campbell",                  opponentHoleScores:[4,4,4], historicalResult:"Casey won 3&2" }
         ]},
     ],
     parallelMatches:[
-      // Day 0 — Fourballs
       [
         { match:"Clarke/Westwood vs Mickelson/DiMarco",    scores:[ 0, 0, 1], teamA:"EUR" },
         { match:"Casey/Howell vs Woods/Furyk",             scores:[ 1, 2, 3], teamA:"EUR" },
@@ -1219,13 +1296,23 @@ const TOURNAMENTS = [
         { match:"Casey/Karlsson vs Cink/Johnson",          scores:[ 0, 0, 1], teamA:"EUR" },
         { match:"Garcia/Donald vs Mickelson/Toms",         scores:[ 0, 1, 1], teamA:"EUR" },
       ],
+      [
+        { match:"EUR pair A vs USA pair A", scores:[ 0, 1, 2], teamA:"EUR" },
+        { match:"EUR pair B vs USA pair B", scores:[ 1, 1, 1], teamA:"EUR" },
+        { match:"EUR pair C vs USA pair C", scores:[-1, 0, 1], teamA:"EUR" },
+      ],
+      [
+        { match:"EUR pair D vs USA pair D", scores:[ 0,-1,-1], teamA:"EUR" },
+        { match:"EUR pair E vs USA pair E", scores:[-1,-1,-2], teamA:"EUR" },
+        { match:"EUR pair F vs USA pair F", scores:[ 1, 0, 0], teamA:"EUR" },
+      ],
       // Day 2 — Singles
       [
         { match:"Clarke vs Johnson",                       scores:[ 0, 1, 3], teamA:"EUR" },
         { match:"Westwood vs Janzen",                      scores:[ 0, 1, 2], teamA:"EUR" },
         { match:"Casey vs Campbell",                       scores:[ 0, 1, 3], teamA:"EUR" },
         { match:"McGinley vs Henry",                       scores:[ 0, 0, 2], teamA:"EUR" },
-      ],
+      ]
     ],
     field:[
       {name:"Sergio Garcia",      scores:[ 0,-1,-2]},
@@ -1257,7 +1344,7 @@ const TOURNAMENTS = [
     id:"muirfield_village_1987", year:1987, eraClass:"era-1987", lbClass:"lb-1987",
     name:"First Blood on American Soil",
     course:"Muirfield Village Golf Club", country:"Dublin, Ohio, USA",
-    type:"ryder", badge:"badge-ryder", days:3,
+    type:"ryder", badge:"badge-ryder", sessions:5, sessionLabels:["Day 1 Morning — Foursomes","Day 1 Afternoon — Fourballs","Day 2 Morning — Fourballs","Day 2 Afternoon — Foursomes","Day 3 — Singles"],
     lore:"Europe 15–13. The first time Europe had ever won on American soil. Tony Jacklin captained again. Seve Ballesteros and José María Olazabal played together for the first time — they won every match they played as a pair. Jack Nicklaus designed the course. He captained the USA. He watched Europe win on it.",
     players:[
       { id:"seve_87", name:"Seve Ballesteros", abbr:"SBA", team:"EUR",
@@ -1268,10 +1355,11 @@ const TOURNAMENTS = [
         desc:"Played with Olazabal in the foursomes and fourballs. They won every match together. On American soil. On Nicklaus's course. He found this amusing.",
         wound:"The Americans doubted whether European golf was real. He has spent his career proving it is.",
         historicalScores:[-1,-2,-3],
-        matchPlayDays:[
-          { format:"FOURSOMES", partner:"José María Olazabal", opponent:"Larry Mize / Lanny Wadkins",   opponentHoleScores:[4,4,4], historicalResult:"Ballesteros & Olazabal won 1 UP" },
+        matchPlaySessions:[{ format:"FOURSOMES", partner:"José María Olazabal", opponent:"Larry Mize / Lanny Wadkins",   opponentHoleScores:[4,4,4], historicalResult:"Ballesteros & Olazabal won 1 UP" },
           { format:"FOURBALLS", partner:"José María Olazabal", opponent:"Curtis Strange / Tom Kite",    opponentHoleScores:[4,4,5], historicalResult:"Ballesteros & Olazabal won 2&1" },
-          { format:"SINGLES",                                  opponent:"Curtis Strange",               opponentHoleScores:[4,4,4], historicalResult:"Ballesteros won 2&1" },
+          { format:"ABSENT" },
+          { format:"ABSENT" },
+          { format:"SINGLES",                                  opponent:"Curtis Strange",               opponentHoleScores:[4,4,4], historicalResult:"Ballesteros won 2&1" }
         ]},
       { id:"olazabal_87", name:"José María Olazabal", abbr:"JMO", team:"EUR",
       temperamentProfileSecondary:"DEFENSIVE",
@@ -1281,10 +1369,11 @@ const TOURNAMENTS = [
         desc:"Twenty-one years old. Seve's new partner. Won every team match alongside him. Quiet, precise, apparently unimpressed by anything.",
         wound:"The youngest player in the European team. Seve treats him as an equal. He is trying to justify that assessment on a daily basis.",
         historicalScores:[0,-1,-2],
-        matchPlayDays:[
-          { format:"FOURSOMES", partner:"Seve Ballesteros",    opponent:"Larry Mize / Lanny Wadkins",   opponentHoleScores:[4,4,4], historicalResult:"Ballesteros & Olazabal won 1 UP" },
+        matchPlaySessions:[{ format:"FOURSOMES", partner:"Seve Ballesteros",    opponent:"Larry Mize / Lanny Wadkins",   opponentHoleScores:[4,4,4], historicalResult:"Ballesteros & Olazabal won 1 UP" },
           { format:"FOURBALLS", partner:"Seve Ballesteros",    opponent:"Curtis Strange / Tom Kite",    opponentHoleScores:[4,4,5], historicalResult:"Ballesteros & Olazabal won 2&1" },
-          { format:"SINGLES",                                  opponent:"Payne Stewart",                opponentHoleScores:[4,4,4], historicalResult:"Olazabal won 2 UP" },
+          { format:"ABSENT" },
+          { format:"ABSENT" },
+          { format:"SINGLES",                                  opponent:"Payne Stewart",                opponentHoleScores:[4,4,4], historicalResult:"Olazabal won 2 UP" }
         ]},
       { id:"faldo_87", name:"Nick Faldo", abbr:"NFA", team:"EUR",
       temperamentProfileSecondary:"LEVELHEADED",
@@ -1294,10 +1383,11 @@ const TOURNAMENTS = [
         desc:"Had just rebuilt his swing. Everything was more controlled than it had been. The American crowd thought he looked robotic. He preferred methodical.",
         wound:"He changed everything about his game and won The Open with it. Nobody quite knows what to make of him now.",
         historicalScores:[0,-1,-2],
-        matchPlayDays:[
-          { format:"FOURSOMES", partner:"Ian Woosnam",         opponent:"Tom Kite / Curtis Strange",    opponentHoleScores:[4,4,4], historicalResult:"Faldo & Woosnam won 2&1" },
+        matchPlaySessions:[{ format:"FOURSOMES", partner:"Ian Woosnam",         opponent:"Tom Kite / Curtis Strange",    opponentHoleScores:[4,4,4], historicalResult:"Faldo & Woosnam won 2&1" },
           { format:"FOURBALLS", partner:"Ian Woosnam",         opponent:"Hal Sutton / Larry Mize",      opponentHoleScores:[4,4,5], historicalResult:"Faldo & Woosnam won 2&1" },
-          { format:"SINGLES",                                  opponent:"Mark Calcavecchia",            opponentHoleScores:[4,4,4], historicalResult:"Faldo won 2 UP" },
+          { format:"ABSENT" },
+          { format:"ABSENT" },
+          { format:"SINGLES",                                  opponent:"Mark Calcavecchia",            opponentHoleScores:[4,4,4], historicalResult:"Faldo won 2 UP" }
         ]},
       { id:"woosnam_87", name:"Ian Woosnam", abbr:"IWO", team:"EUR",
       temperamentProfileSecondary:"PEAKER",
@@ -1307,14 +1397,14 @@ const TOURNAMENTS = [
         desc:"Paired with Faldo for the team matches. The combination of Faldo's system and Woosnam's chaos was more effective than anyone predicted.",
         wound:"On an American course, in an American crowd. He plays better when nobody respects him.",
         historicalScores:[0,-1,-2],
-        matchPlayDays:[
-          { format:"FOURSOMES", partner:"Nick Faldo",          opponent:"Tom Kite / Curtis Strange",    opponentHoleScores:[4,4,4], historicalResult:"Faldo & Woosnam won 2&1" },
+        matchPlaySessions:[{ format:"FOURSOMES", partner:"Nick Faldo",          opponent:"Tom Kite / Curtis Strange",    opponentHoleScores:[4,4,4], historicalResult:"Faldo & Woosnam won 2&1" },
           { format:"FOURBALLS", partner:"Nick Faldo",          opponent:"Hal Sutton / Larry Mize",      opponentHoleScores:[4,4,5], historicalResult:"Faldo & Woosnam won 2&1" },
-          { format:"SINGLES",                                  opponent:"Andy Bean",                    opponentHoleScores:[4,4,4], historicalResult:"Woosnam won 1 UP" },
+          { format:"ABSENT" },
+          { format:"ABSENT" },
+          { format:"SINGLES",                                  opponent:"Andy Bean",                    opponentHoleScores:[4,4,4], historicalResult:"Woosnam won 1 UP" }
         ]},
     ],
     parallelMatches:[
-      // Day 0 — Foursomes
       [
         { match:"Seve/Olazabal vs Mize/Wadkins",           scores:[ 0, 0, 1], teamA:"EUR" },
         { match:"Faldo/Woosnam vs Kite/Strange",           scores:[ 0, 1, 2], teamA:"EUR" },
@@ -1328,13 +1418,23 @@ const TOURNAMENTS = [
         { match:"Langer/Lyle vs Nelson/Stewart",           scores:[-1,-1,-1], teamA:"EUR" },
         { match:"Brand/Rivero vs Bean/Calcavecchia",       scores:[ 0, 1, 1], teamA:"EUR" },
       ],
+      [
+        { match:"EUR pair A vs USA pair A", scores:[ 0, 1, 2], teamA:"EUR" },
+        { match:"EUR pair B vs USA pair B", scores:[ 1, 1, 1], teamA:"EUR" },
+        { match:"EUR pair C vs USA pair C", scores:[-1, 0, 1], teamA:"EUR" },
+      ],
+      [
+        { match:"EUR pair D vs USA pair D", scores:[ 0,-1,-1], teamA:"EUR" },
+        { match:"EUR pair E vs USA pair E", scores:[-1,-1,-2], teamA:"EUR" },
+        { match:"EUR pair F vs USA pair F", scores:[ 1, 0, 0], teamA:"EUR" },
+      ],
       // Day 2 — Singles
       [
         { match:"Ballesteros vs Strange",                  scores:[ 0, 1, 2], teamA:"EUR" },
         { match:"Olazabal vs Stewart",                     scores:[ 0, 1, 2], teamA:"EUR" },
         { match:"Faldo vs Calcavecchia",                   scores:[ 0, 0, 2], teamA:"EUR" },
         { match:"Woosnam vs Bean",                         scores:[ 0, 0, 1], teamA:"EUR" },
-      ],
+      ]
     ],
     field:[
       {name:"Sandy Lyle",        scores:[0,-1,-2]},
@@ -1366,7 +1466,7 @@ const TOURNAMENTS = [
     id:"celtic_manor_2010", year:2010, eraClass:"era-2010", lbClass:"lb-2010",
     name:"The Monday Match",
     course:"Celtic Manor — Twenty Ten Course", country:"Newport, Wales",
-    type:"ryder", badge:"badge-ryder", days:3,
+    type:"ryder", badge:"badge-ryder", sessions:5, sessionLabels:["Day 1 Morning — Foursomes","Day 1 Afternoon — Fourballs","Day 2 Morning — Fourballs","Day 2 Afternoon — Foursomes","Day 3 — Singles"],
     lore:"Europe 14.5–13.5. It rained for two days. The matches overflowed into Sunday. Sunday overflowed into Monday. Graeme McDowell beat Hunter Mahan in the final singles match on Monday afternoon to win the Cup for Europe. It was the first Ryder Cup held in Wales. The Twenty Ten course had been built specifically for it.",
     players:[
       { id:"mcdowell_10", name:"Graeme McDowell", abbr:"GMD", team:"EUR",
@@ -1377,10 +1477,11 @@ const TOURNAMENTS = [
         desc:"Won the US Open six weeks earlier. Now won the Ryder Cup with the decisive point on Monday. Holed from 12 feet on the 16th to go 2 UP. Mahan couldn't respond.",
         wound:"The quiet one. When he holes the putt, he doesn't roar — he just looks at the ball in the hole for a moment, as if making sure it's real.",
         historicalScores:[0,-1,-2],
-        matchPlayDays:[
-          { format:"FOURSOMES", partner:"Rory McIlroy",   opponent:"Stewart Cink / Matt Kuchar",   opponentHoleScores:[4,4,5], historicalResult:"McDowell & McIlroy lost 3&2" },
+        matchPlaySessions:[{ format:"FOURSOMES", partner:"Rory McIlroy",   opponent:"Stewart Cink / Matt Kuchar",   opponentHoleScores:[4,4,5], historicalResult:"McDowell & McIlroy lost 3&2" },
           { format:"ABSENT" },
-          { format:"SINGLES",                             opponent:"Hunter Mahan",                  opponentHoleScores:[4,4,5], historicalResult:"McDowell won 3&1 Monday — the winning point" },
+          { format:"ABSENT" },
+          { format:"ABSENT" },
+          { format:"SINGLES",                             opponent:"Hunter Mahan",                  opponentHoleScores:[4,4,5], historicalResult:"McDowell won 3&1 Monday — the winning point" }
         ]},
       { id:"mcilroy_10", name:"Rory McIlroy", abbr:"RMC", team:"EUR",
       temperamentProfileSecondary:"COMBUSTIBLE",
@@ -1390,10 +1491,11 @@ const TOURNAMENTS = [
         desc:"Twenty-one years old. Lost his foursomes. Won his singles convincingly. The future was already visible.",
         wound:"He is 21 and the weight of Northern Ireland has been on his shoulders since he turned professional. He is still learning to wear it.",
         historicalScores:[0,0,-2],
-        matchPlayDays:[
-          { format:"FOURSOMES", partner:"Graeme McDowell", opponent:"Stewart Cink / Matt Kuchar",  opponentHoleScores:[4,4,5], historicalResult:"McDowell & McIlroy lost 3&2" },
+        matchPlaySessions:[{ format:"FOURSOMES", partner:"Graeme McDowell", opponent:"Stewart Cink / Matt Kuchar",  opponentHoleScores:[4,4,5], historicalResult:"McDowell & McIlroy lost 3&2" },
           { format:"FOURBALLS", partner:"Luke Donald",     opponent:"Jim Furyk / Hunter Mahan",    opponentHoleScores:[4,5,4], historicalResult:"McIlroy & Donald won 3&2" },
-          { format:"SINGLES",                              opponent:"Stewart Cink",                opponentHoleScores:[4,4,4], historicalResult:"McIlroy won 4&3 — dominant" },
+          { format:"ABSENT" },
+          { format:"ABSENT" },
+          { format:"SINGLES",                              opponent:"Stewart Cink",                opponentHoleScores:[4,4,4], historicalResult:"McIlroy won 4&3 — dominant" }
         ]},
       { id:"westwood_10", name:"Lee Westwood", abbr:"LWS", team:"EUR",
       temperamentProfileSecondary:"COMBUSTIBLE",
@@ -1403,10 +1505,11 @@ const TOURNAMENTS = [
         desc:"Went 4-1 across the week. World number one at the time. In 2010, for a brief window, he was the best player on earth. He played like it.",
         wound:"The majors still haven't come. He performs better in Ryder Cups than anywhere else on earth, as if the absence of individual pressure releases something.",
         historicalScores:[0,-1,-2],
-        matchPlayDays:[
-          { format:"FOURBALLS", partner:"Martin Kaymer",   opponent:"Phil Mickelson / Dustin Johnson", opponentHoleScores:[4,4,5], historicalResult:"Westwood & Kaymer won 3&2" },
+        matchPlaySessions:[{ format:"FOURBALLS", partner:"Martin Kaymer",   opponent:"Phil Mickelson / Dustin Johnson", opponentHoleScores:[4,4,5], historicalResult:"Westwood & Kaymer won 3&2" },
           { format:"FOURSOMES", partner:"Edoardo Molinari", opponent:"Mickelson / Johnson",            opponentHoleScores:[4,5,4], historicalResult:"Westwood & Molinari won 3&2" },
-          { format:"SINGLES",                              opponent:"Matt Kuchar",                    opponentHoleScores:[4,4,4], historicalResult:"Westwood won 2 UP" },
+          { format:"ABSENT" },
+          { format:"ABSENT" },
+          { format:"SINGLES",                              opponent:"Matt Kuchar",                    opponentHoleScores:[4,4,4], historicalResult:"Westwood won 2 UP" }
         ]},
       { id:"donald_10", name:"Luke Donald", abbr:"LDN", team:"EUR",
       temperamentProfileSecondary:"DEFENSIVE",
@@ -1416,14 +1519,14 @@ const TOURNAMENTS = [
         desc:"Won four from four. Never long off the tee. Never needed to be. The short game is so precise it functions as an entirely separate weapon.",
         wound:"World number one in putting statistics. The American players know this. They know the hole is not safe until it has swallowed the ball.",
         historicalScores:[0,0,-1],
-        matchPlayDays:[
-          { format:"FOURBALLS", partner:"Rory McIlroy",    opponent:"Jim Furyk / Hunter Mahan",    opponentHoleScores:[4,5,4], historicalResult:"McIlroy & Donald won 3&2" },
+        matchPlaySessions:[{ format:"FOURBALLS", partner:"Rory McIlroy",    opponent:"Jim Furyk / Hunter Mahan",    opponentHoleScores:[4,5,4], historicalResult:"McIlroy & Donald won 3&2" },
           { format:"FOURSOMES", partner:"Ian Poulter",     opponent:"Tiger Woods / Steve Stricker", opponentHoleScores:[4,4,5], historicalResult:"Donald & Poulter won 2&1" },
-          { format:"SINGLES",                              opponent:"Jim Furyk",                   opponentHoleScores:[4,4,4], historicalResult:"Donald won 1 UP" },
+          { format:"ABSENT" },
+          { format:"ABSENT" },
+          { format:"SINGLES",                              opponent:"Jim Furyk",                   opponentHoleScores:[4,4,4], historicalResult:"Donald won 1 UP" }
         ]},
     ],
     parallelMatches:[
-      // Day 0 — Fourballs (first session after rain delay)
       [
         { match:"Westwood/Kaymer vs Mickelson/Johnson",    scores:[ 0, 1, 3], teamA:"EUR" },
         { match:"McIlroy/Donald vs Furyk/Mahan",           scores:[ 0, 1, 3], teamA:"EUR" },
@@ -1437,13 +1540,23 @@ const TOURNAMENTS = [
         { match:"McDowell/McIlroy vs Cink/Kuchar",         scores:[-1,-2,-3], teamA:"EUR" },
         { match:"Kaymer/Jimenez vs Overton/Haas",          scores:[ 0, 0, 1], teamA:"EUR" },
       ],
+      [
+        { match:"EUR pair A vs USA pair A", scores:[ 0, 1, 2], teamA:"EUR" },
+        { match:"EUR pair B vs USA pair B", scores:[ 1, 1, 1], teamA:"EUR" },
+        { match:"EUR pair C vs USA pair C", scores:[-1, 0, 1], teamA:"EUR" },
+      ],
+      [
+        { match:"EUR pair D vs USA pair D", scores:[ 0,-1,-1], teamA:"EUR" },
+        { match:"EUR pair E vs USA pair E", scores:[-1,-1,-2], teamA:"EUR" },
+        { match:"EUR pair F vs USA pair F", scores:[ 1, 0, 0], teamA:"EUR" },
+      ],
       // Day 2 — Singles (Monday)
       [
         { match:"McDowell vs Mahan",                       scores:[ 0, 0, 3], teamA:"EUR" },
         { match:"McIlroy vs Cink",                         scores:[ 1, 2, 4], teamA:"EUR" },
         { match:"Westwood vs Kuchar",                      scores:[ 0, 1, 2], teamA:"EUR" },
         { match:"Donald vs Furyk",                         scores:[ 0, 0, 1], teamA:"EUR" },
-      ],
+      ]
     ],
     field:[
       {name:"Ian Poulter",      scores:[0,-1,-2]},
@@ -1475,7 +1588,7 @@ const TOURNAMENTS = [
     id:"oak_hill_1995", year:1995, eraClass:"era-1995", lbClass:"lb-1995",
     name:"Faldo's 4th",
     course:"Oak Hill Country Club — East Course", country:"Rochester, New York",
-    type:"ryder", badge:"badge-ryder", days:3,
+    type:"ryder", badge:"badge-ryder", sessions:5, sessionLabels:["Day 1 Morning — Foursomes","Day 1 Afternoon — Fourballs","Day 2 Morning — Fourballs","Day 2 Afternoon — Foursomes","Day 3 — Singles"],
     lore:"Europe 14.5–13.5. Bernard Gallacher's third attempt at captaincy. He had lost in 1991 and 1993. Nick Faldo beat Curtis Strange on the final hole of the final match to win the Cup for Europe — holing from 12 feet after Strange missed. Philip Walton had actually won the necessary point moments earlier. Faldo's hole completed the point total. It was the most Faldo-adjacent way for the Cup to end.",
     players:[
       { id:"faldo_95", name:"Nick Faldo", abbr:"NFA", team:"EUR",
@@ -1486,10 +1599,11 @@ const TOURNAMENTS = [
         desc:"Won the deciding singles match against Curtis Strange. Holed from 12 feet after Strange missed. The Cup was already won when he holed out — Walton had just beaten Haas — but Faldo wasn't told that. He played the hole as if it were the last thing on earth.",
         wound:"The system. The precision. The complete absence of sentiment. He doesn't hole the 12-footer with drama — he holes it because it is the correct shot to execute.",
         historicalScores:[0,-1,-2],
-        matchPlayDays:[
-          { format:"FOURSOMES", partner:"Colin Montgomerie",  opponent:"Curtis Strange / Jay Haas",    opponentHoleScores:[4,4,5], historicalResult:"Faldo & Montgomerie won 4&2" },
+        matchPlaySessions:[{ format:"FOURSOMES", partner:"Colin Montgomerie",  opponent:"Curtis Strange / Jay Haas",    opponentHoleScores:[4,4,5], historicalResult:"Faldo & Montgomerie won 4&2" },
           { format:"FOURBALLS", partner:"Colin Montgomerie",  opponent:"Jay Haas / Fred Couples",      opponentHoleScores:[4,4,4], historicalResult:"Faldo & Montgomerie halved" },
-          { format:"SINGLES",                                 opponent:"Curtis Strange",               opponentHoleScores:[4,4,4], historicalResult:"Faldo won 1 UP on 18 — holed 12-footer after Strange missed" },
+          { format:"ABSENT" },
+          { format:"ABSENT" },
+          { format:"SINGLES",                                 opponent:"Curtis Strange",               opponentHoleScores:[4,4,4], historicalResult:"Faldo won 1 UP on 18 — holed 12-footer after Strange missed" }
         ]},
       { id:"montgomerie_95", name:"Colin Montgomerie", abbr:"CMG", team:"EUR",
       temperamentProfileSecondary:"LEVELHEADED",
@@ -1499,10 +1613,11 @@ const TOURNAMENTS = [
         desc:"Partnered Faldo in the team matches and won decisively. The American crowd gave him no peace. He was 4-0 up at one point in his singles.",
         wound:"The abuse from the American galleries has become a feature of his existence at US events. He channels it. Poorly, sometimes. Effectively, mostly.",
         historicalScores:[0,-1,-1],
-        matchPlayDays:[
-          { format:"FOURSOMES", partner:"Nick Faldo",         opponent:"Curtis Strange / Jay Haas",    opponentHoleScores:[4,4,5], historicalResult:"Faldo & Montgomerie won 4&2" },
+        matchPlaySessions:[{ format:"FOURSOMES", partner:"Nick Faldo",         opponent:"Curtis Strange / Jay Haas",    opponentHoleScores:[4,4,5], historicalResult:"Faldo & Montgomerie won 4&2" },
           { format:"FOURBALLS", partner:"Nick Faldo",         opponent:"Jay Haas / Fred Couples",      opponentHoleScores:[4,4,4], historicalResult:"Faldo & Montgomerie halved" },
-          { format:"SINGLES",                                 opponent:"Ben Crenshaw",                 opponentHoleScores:[4,4,4], historicalResult:"Montgomerie halved — needed the half to clinch the Cup" },
+          { format:"ABSENT" },
+          { format:"ABSENT" },
+          { format:"SINGLES",                                 opponent:"Ben Crenshaw",                 opponentHoleScores:[4,4,4], historicalResult:"Montgomerie halved — needed the half to clinch the Cup" }
         ]},
       { id:"torrance_95", name:"Sam Torrance", abbr:"STR", team:"EUR",
       temperamentProfileSecondary:"STREAKY",
@@ -1512,10 +1627,11 @@ const TOURNAMENTS = [
         desc:"Ten years after The Photograph. Back in the Ryder Cup, older, still capable of the moment when it matters.",
         wound:"He holed the putt that won it in 1985. Everyone knows. That is a blessing and a weight simultaneously.",
         historicalScores:[0,-1,-2],
-        matchPlayDays:[
-          { format:"FOURSOMES", partner:"Costantino Rocca",   opponent:"Davis Love III / Jeff Maggert", opponentHoleScores:[4,4,5], historicalResult:"Torrance & Rocca won 3&2" },
+        matchPlaySessions:[{ format:"FOURSOMES", partner:"Costantino Rocca",   opponent:"Davis Love III / Jeff Maggert", opponentHoleScores:[4,4,5], historicalResult:"Torrance & Rocca won 3&2" },
           { format:"ABSENT" },
-          { format:"SINGLES",                                 opponent:"Loren Roberts",                opponentHoleScores:[4,4,4], historicalResult:"Torrance halved" },
+          { format:"ABSENT" },
+          { format:"ABSENT" },
+          { format:"SINGLES",                                 opponent:"Loren Roberts",                opponentHoleScores:[4,4,4], historicalResult:"Torrance halved" }
         ]},
       { id:"langer_95", name:"Bernhard Langer", abbr:"BLG", team:"EUR",
       temperamentProfileSecondary:"DEFENSIVE",
@@ -1525,14 +1641,14 @@ const TOURNAMENTS = [
         desc:"Played all week. Won in the team matches. Carried the memory of 1991 with him everywhere, as an asset rather than a wound. It made him harder to rattle.",
         wound:"In 1991 he missed the putt. At Oak Hill he has already resolved that he will not miss the important ones. He hasn't discussed this with anyone.",
         historicalScores:[0,-1,-2],
-        matchPlayDays:[
-          { format:"FOURSOMES", partner:"Bernhard Langer",    opponent:"Corey Pavin / Tom Lehman",     opponentHoleScores:[4,4,4], historicalResult:"Langer & Gilford won 4&3" },
+        matchPlaySessions:[{ format:"FOURSOMES", partner:"Bernhard Langer",    opponent:"Corey Pavin / Tom Lehman",     opponentHoleScores:[4,4,4], historicalResult:"Langer & Gilford won 4&3" },
           { format:"FOURBALLS", partner:"Per-Ulrik Johansson", opponent:"Brad Faxon / Peter Jacobsen", opponentHoleScores:[4,4,5], historicalResult:"Langer & Johansson won 1 UP" },
-          { format:"SINGLES",                                 opponent:"Corey Pavin",                  opponentHoleScores:[4,4,5], historicalResult:"Langer lost 3&2" },
+          { format:"ABSENT" },
+          { format:"ABSENT" },
+          { format:"SINGLES",                                 opponent:"Corey Pavin",                  opponentHoleScores:[4,4,5], historicalResult:"Langer lost 3&2" }
         ]},
     ],
     parallelMatches:[
-      // Day 0 — Foursomes
       [
         { match:"Faldo/Montgomerie vs Strange/Haas",        scores:[ 1, 2, 4], teamA:"EUR" },
         { match:"Torrance/Rocca vs Love/Maggert",          scores:[ 0, 1, 3], teamA:"EUR" },
@@ -1546,13 +1662,23 @@ const TOURNAMENTS = [
         { match:"Woosnam/Rocca vs Love/Maggert",           scores:[-1,-2,-2], teamA:"EUR" },
         { match:"James/Clarke vs Crenshaw/Strange",        scores:[ 0, 1, 1], teamA:"EUR" },
       ],
+      [
+        { match:"EUR pair A vs USA pair A", scores:[ 0, 1, 2], teamA:"EUR" },
+        { match:"EUR pair B vs USA pair B", scores:[ 1, 1, 1], teamA:"EUR" },
+        { match:"EUR pair C vs USA pair C", scores:[-1, 0, 1], teamA:"EUR" },
+      ],
+      [
+        { match:"EUR pair D vs USA pair D", scores:[ 0,-1,-1], teamA:"EUR" },
+        { match:"EUR pair E vs USA pair E", scores:[-1,-1,-2], teamA:"EUR" },
+        { match:"EUR pair F vs USA pair F", scores:[ 1, 0, 0], teamA:"EUR" },
+      ],
       // Day 2 — Singles
       [
         { match:"Faldo vs Strange",                        scores:[ 0, 0, 1], teamA:"EUR" },
         { match:"Montgomerie vs Crenshaw",                 scores:[ 0, 0, 0], teamA:"EUR" },
         { match:"Torrance vs Roberts",                     scores:[ 0, 0, 0], teamA:"EUR" },
         { match:"Walton vs Haas",                          scores:[ 0, 0, 1], teamA:"EUR" },
-      ],
+      ]
     ],
     field:[
       {name:"Philip Walton",     scores:[0, 0,-1]},
@@ -1584,7 +1710,7 @@ const TOURNAMENTS = [
     id:"hazeltine_2016", year:2016, eraClass:"era-2016", lbClass:"lb-2016",
     name:"The Hazeltine Hammering",
     course:"Hazeltine National Golf Club", country:"Chaska, Minnesota, USA",
-    type:"ryder", badge:"badge-ryder", days:3,
+    type:"ryder", badge:"badge-ryder", sessions:5, sessionLabels:["Day 1 Morning — Foursomes","Day 1 Afternoon — Fourballs","Day 2 Morning — Fourballs","Day 2 Afternoon — Foursomes","Day 3 — Singles"],
     lore:"USA 17–11. A comprehensive American victory. Rory McIlroy was visibly furious for three days — on the course, off the course, in press conferences. Patrick Reed beat him in singles 1 UP in what felt like the match of the week. The American crowd was enormous and loud and very specifically aimed at Europe's best player.",
     players:[
       { id:"mcilroy_16", name:"Rory McIlroy", abbr:"RMC", team:"EUR",
@@ -1595,10 +1721,11 @@ const TOURNAMENTS = [
         desc:"World number three. Furious from the first tee shot to the closing handshake. Won three from four but the one he lost — to Reed in singles — became the defining image of the week.",
         wound:"He has won everything and is still losing Ryder Cups. The team format doesn't suit him and he knows it and it makes him furious.",
         historicalScores:[0,-1,-2],
-        matchPlayDays:[
-          { format:"FOURBALLS", partner:"Andy Sullivan",  opponent:"Phil Mickelson / Rickie Fowler",  opponentHoleScores:[4,4,5], historicalResult:"McIlroy & Sullivan lost 1 DOWN" },
+        matchPlaySessions:[{ format:"FOURBALLS", partner:"Andy Sullivan",  opponent:"Phil Mickelson / Rickie Fowler",  opponentHoleScores:[4,4,5], historicalResult:"McIlroy & Sullivan lost 1 DOWN" },
           { format:"FOURSOMES", partner:"Thomas Pieters", opponent:"Dustin Johnson / Matt Kuchar",    opponentHoleScores:[4,5,4], historicalResult:"McIlroy & Pieters won 3&2" },
-          { format:"SINGLES",                             opponent:"Patrick Reed",                    opponentHoleScores:[4,4,4], historicalResult:"McIlroy lost 1 DOWN — Reed beat him in front of a very loud Minnesota crowd" },
+          { format:"ABSENT" },
+          { format:"ABSENT" },
+          { format:"SINGLES",                             opponent:"Patrick Reed",                    opponentHoleScores:[4,4,4], historicalResult:"McIlroy lost 1 DOWN — Reed beat him in front of a very loud Minnesota crowd" }
         ]},
       { id:"rose_16", name:"Justin Rose", abbr:"JRO", team:"EUR",
       temperamentProfileSecondary:"DEFENSIVE",
@@ -1608,10 +1735,11 @@ const TOURNAMENTS = [
         desc:"Went 3-2. One of the steadiest performers in the European team all week. The results didn't tell the story — Europe were losing everywhere and Rose was holding sections of the scoreboard together.",
         wound:"Medinah 2012 produced one of the best moments of his career. This Ryder Cup is producing one of the worst weeks. He is the same player.",
         historicalScores:[0,-1,-2],
-        matchPlayDays:[
-          { format:"FOURBALLS", partner:"Henrik Stenson", opponent:"Jordan Spieth / Patrick Reed",   opponentHoleScores:[4,4,4], historicalResult:"Rose & Stenson lost 3&2" },
+        matchPlaySessions:[{ format:"FOURBALLS", partner:"Henrik Stenson", opponent:"Jordan Spieth / Patrick Reed",   opponentHoleScores:[4,4,4], historicalResult:"Rose & Stenson lost 3&2" },
           { format:"FOURSOMES", partner:"Henrik Stenson", opponent:"Bubba Watson / J.B. Holmes",     opponentHoleScores:[4,5,4], historicalResult:"Rose & Stenson lost 1 DOWN" },
-          { format:"SINGLES",                             opponent:"Ryan Moore",                     opponentHoleScores:[4,4,5], historicalResult:"Rose won 1 UP" },
+          { format:"ABSENT" },
+          { format:"ABSENT" },
+          { format:"SINGLES",                             opponent:"Ryan Moore",                     opponentHoleScores:[4,4,5], historicalResult:"Rose won 1 UP" }
         ]},
       { id:"pieters_16", name:"Thomas Pieters", abbr:"TPT", team:"EUR",
       temperamentProfileSecondary:"COMBUSTIBLE",
@@ -1621,10 +1749,11 @@ const TOURNAMENTS = [
         desc:"Went 4-1. The best European performer statistically. Belgian rookie, 24 years old, apparently unaware that Hazeltine 2016 was supposed to be difficult.",
         wound:"He is a rookie and the expectation is zero. He finds this liberating. Every hole he wins is a surprise. Even to him.",
         historicalScores:[-1,-1,-2],
-        matchPlayDays:[
-          { format:"FOURBALLS", partner:"Lee Westwood",   opponent:"Rickie Fowler / Phil Mickelson", opponentHoleScores:[4,4,4], historicalResult:"Pieters & Westwood won 3&2" },
+        matchPlaySessions:[{ format:"FOURBALLS", partner:"Lee Westwood",   opponent:"Rickie Fowler / Phil Mickelson", opponentHoleScores:[4,4,4], historicalResult:"Pieters & Westwood won 3&2" },
           { format:"FOURSOMES", partner:"Rory McIlroy",   opponent:"Dustin Johnson / Matt Kuchar",   opponentHoleScores:[4,5,4], historicalResult:"McIlroy & Pieters won 3&2" },
-          { format:"SINGLES",                             opponent:"Zach Johnson",                   opponentHoleScores:[4,4,5], historicalResult:"Pieters won 3&2" },
+          { format:"ABSENT" },
+          { format:"ABSENT" },
+          { format:"SINGLES",                             opponent:"Zach Johnson",                   opponentHoleScores:[4,4,5], historicalResult:"Pieters won 3&2" }
         ]},
       { id:"garcia_16", name:"Sergio Garcia", abbr:"SGC", team:"EUR",
       temperamentProfileSecondary:"STREAKY",
@@ -1634,14 +1763,14 @@ const TOURNAMENTS = [
         desc:"Went 2-3. The week went as Garcia weeks tend to go — moments of extraordinary brilliance surrounded by the quiet suspicion that something will go wrong. Something did.",
         wound:"The major. Still. Always. The Ryder Cup is the only format where he consistently outperforms his reputation. This week it wasn't enough.",
         historicalScores:[0,-1,-2],
-        matchPlayDays:[
-          { format:"FOURBALLS", partner:"Rafael Cabrera-Bello", opponent:"Bubba Watson / J.B. Holmes",  opponentHoleScores:[4,4,5], historicalResult:"Garcia & Cabrera-Bello won 3&2" },
+        matchPlaySessions:[{ format:"FOURBALLS", partner:"Rafael Cabrera-Bello", opponent:"Bubba Watson / J.B. Holmes",  opponentHoleScores:[4,4,5], historicalResult:"Garcia & Cabrera-Bello won 3&2" },
           { format:"FOURSOMES", partner:"Martin Kaymer",        opponent:"Jordan Spieth / Patrick Reed", opponentHoleScores:[4,4,4], historicalResult:"Garcia & Kaymer lost 3&2" },
-          { format:"SINGLES",                                   opponent:"Rickie Fowler",               opponentHoleScores:[4,4,4], historicalResult:"Garcia lost 1 DOWN" },
+          { format:"ABSENT" },
+          { format:"ABSENT" },
+          { format:"SINGLES",                                   opponent:"Rickie Fowler",               opponentHoleScores:[4,4,4], historicalResult:"Garcia lost 1 DOWN" }
         ]},
     ],
     parallelMatches:[
-      // Day 0 — Fourballs
       [
         { match:"Pieters/Westwood vs Fowler/Mickelson",    scores:[ 0, 1, 3], teamA:"EUR" },
         { match:"Garcia/Cabrera-Bello vs Watson/Holmes",   scores:[ 0, 1, 3], teamA:"EUR" },
@@ -1655,13 +1784,23 @@ const TOURNAMENTS = [
         { match:"Rose/Stenson vs Watson/Holmes",           scores:[-1,-1,-1], teamA:"EUR" },
         { match:"Hatton/Sullivan vs Furyk/Koepka",         scores:[-1,-2,-3], teamA:"EUR" },
       ],
+      [
+        { match:"EUR pair A vs USA pair A", scores:[ 0, 1, 2], teamA:"EUR" },
+        { match:"EUR pair B vs USA pair B", scores:[ 1, 1, 1], teamA:"EUR" },
+        { match:"EUR pair C vs USA pair C", scores:[-1, 0, 1], teamA:"EUR" },
+      ],
+      [
+        { match:"EUR pair D vs USA pair D", scores:[ 0,-1,-1], teamA:"EUR" },
+        { match:"EUR pair E vs USA pair E", scores:[-1,-1,-2], teamA:"EUR" },
+        { match:"EUR pair F vs USA pair F", scores:[ 1, 0, 0], teamA:"EUR" },
+      ],
       // Day 2 — Singles
       [
         { match:"McIlroy vs Reed",                         scores:[-1,-1,-1], teamA:"EUR" },
         { match:"Pieters vs Z.Johnson",                    scores:[ 0, 1, 3], teamA:"EUR" },
         { match:"Rose vs Moore",                           scores:[ 0, 0, 1], teamA:"EUR" },
         { match:"Garcia vs Fowler",                        scores:[-1,-1,-1], teamA:"EUR" },
-      ],
+      ]
     ],
     field:[
       {name:"Lee Westwood",      scores:[0,-1,-2]},

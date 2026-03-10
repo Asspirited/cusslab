@@ -2167,8 +2167,8 @@ const CONSEQUENCE_TIERS = {
 let G = {
   tournament:null, player:null, atmosphere:"NORMAL",
   selectedPanel:[], // array of character ids
-  day:0, holeIdx:0, holesPerDay:3,
-  yourScore:0, holeResults:[], matchPlayScore:0,
+  day:0, session:0, holeIdx:0, holesPerDay:3,
+  yourScore:0, holeResults:[], matchPlayScore:0, teamScore:{EUR:0,USA:0},
   phase:"tee", holeStrokes:0, currentShot:null, isRolling:false,
   composure:10, streak:0, fieldScores:{}, history:[],
   rollHistory:{1:0,2:0,3:0,4:0,5:0,6:0},
@@ -2443,7 +2443,14 @@ function startGame() {
   if (!G.tournament || !G.player || G.selectedPanel.length < 2) return;
   applyEraTheme(G.tournament);
 
-  G.day=MatchPlayService.firstActiveDay(G.player); G.holeIdx=0; G.yourScore=0; G.holeResults=[]; G.matchPlayScore=0;
+  if (G.tournament.type === 'ryder') {
+    G.session = MatchPlayService.firstActiveSession(G.player);
+    G.day = 0;
+  } else {
+    G.day = MatchPlayService.firstActiveDay(G.player);
+    G.session = G.day;
+  }
+  G.holeIdx=0; G.yourScore=0; G.holeResults=[]; G.matchPlayScore=0; G.teamScore={EUR:0,USA:0};
   G.composure=10; G.history=[]; G.fieldScores={}; G.characterFiles={};
   G.fortuneActive=false; G.angerActive=false; G.angerShots=0; G.illnessActive=false; G.illnessHoles=0;
   G.tempThresholdMod=0; G.tempThresholdHoles=0; G.tempSkillBonus=false; G.tempSkillHoles=0;
@@ -2508,7 +2515,8 @@ function loadHole() {
     G.phase='tee'; G.holeStrokes=0; G.currentShot=null; G.isRolling=false;
     updateHUD();
     const ordC=n=>[,'1st','2nd','3rd'][n]||(n+'th');
-    document.getElementById('hole-ordinal').textContent=`${G.tournament.year} · Day ${G.day+1} · Your ${ordC(G.holeIdx+1)} hole`;
+    const _ordLabel = G.tournament.type==='ryder' ? (G.tournament.sessionLabels?.[G.session]||`Session ${G.session+1}`) : `Day ${G.day+1}`;
+    document.getElementById('hole-ordinal').textContent=`${G.tournament.year} · ${_ordLabel} · Your ${ordC(G.holeIdx+1)} hole`;
     document.getElementById('hole-title').textContent=hole.name;
     document.getElementById('hole-meta').textContent = `${G.tournament.course} · ${hole.hazard}`;
     document.getElementById('hole-lore').textContent = hole.lore || '';
@@ -2528,7 +2536,8 @@ function loadHole() {
   updateHUD();
 
   const ordinal=n=>[,'1st','2nd','3rd'][n]||(n+'th');
-  document.getElementById('hole-ordinal').textContent=`${G.tournament.year} · Day ${G.day+1} · Your ${ordinal(G.holeIdx+1)} hole`;
+  const _sessionLabel = G.tournament.type==='ryder' ? (G.tournament.sessionLabels?.[G.session]||`Session ${G.session+1}`) : `Day ${G.day+1}`;
+  document.getElementById('hole-ordinal').textContent=`${G.tournament.year} · ${_sessionLabel} · Your ${ordinal(G.holeIdx+1)} hole`;
   document.getElementById('hole-title').textContent=hole.name;
   document.getElementById('hole-meta').textContent = `${G.tournament.course} · ${hole.hazard}`;
   document.getElementById('hole-lore').textContent = hole.lore || '';
@@ -2560,12 +2569,13 @@ function buildSituation(hole) {
   if (G.tournament.type === 'ryder') {
     const ryderSit = MatchPlayService.buildSituation(G);
     if (ryderSit) return ryderSit;
-    // fallback if no matchPlayDays
-    const mpDay = G.player.matchPlayDays?.[G.day];
+    // fallback if no matchPlaySessions
+    const mpDay = G.player.matchPlaySessions?.[G.session] ?? G.player.matchPlayDays?.[G.session];
     const opp = mpDay ? mpDay.opponent : 'your opponent';
     const mp = G.matchPlayScore;
     const mpStr = mp === 0 ? 'all square' : mp > 0 ? `${mp} up` : `${Math.abs(mp)} down`;
-    return `${G.player.name}. ${dayWords[G.day]||'Day '+(G.day+1)} of ${G.tournament.name} — singles against ${opp}. You are ${mpStr}.${atmoAdd}`;
+    const _sLabel = G.tournament.sessionLabels?.[G.session] || `Day ${G.session+1}`;
+    return `${G.player.name}. ${_sLabel} of ${G.tournament.name} — singles against ${opp}. You are ${mpStr}.${atmoAdd}`;
   }
 
   const scoreStr = G.yourScore===0?'level par':G.yourScore<0?`${G.yourScore} under par`:`+${G.yourScore} over par`;
@@ -2985,7 +2995,7 @@ async function endHole() {
   const hole=G.tournament.holes[G.holeIdx];
   const diff=G.holeStrokes-hole.par;
   G.yourScore+=diff;
-  G.holeResults.push({day:G.day,holeId:hole.id,score:G.holeStrokes,par:hole.par,diff});
+  G.holeResults.push({day:G.day,session:G.session,holeId:hole.id,score:G.holeStrokes,par:hole.par,diff});
 
   // Temperament profile — composure delta based on hole result and current streak
   const _tp = G.player.temperamentProfile || 'LEVELHEADED';
@@ -3000,9 +3010,9 @@ async function endHole() {
 
   // Match play update — capture before mutating for commentary
   let mpCtx = null;
-  if (G.tournament.type === 'ryder' && G.player.matchPlayDays) {
-    const mpDay = G.player.matchPlayDays[G.day];
-    if (mpDay && !MatchPlayService.isDayAbsent(G.player, G.day)) {
+  if (G.tournament.type === 'ryder') {
+    const mpDay = G.player.matchPlaySessions?.[G.session] ?? G.player.matchPlayDays?.[G.session];
+    if (mpDay && !MatchPlayService.isSessionAbsent(G.player, G.session)) {
       const oppScore = mpDay.opponentHoleScores[G.holeIdx];
       const holeResult = G.holeStrokes < oppScore ? 'won' : G.holeStrokes > oppScore ? 'lost' : 'halved';
       if (G.holeStrokes < oppScore)      G.matchPlayScore++;
@@ -3032,9 +3042,18 @@ async function endHole() {
   document.getElementById('shot-wrap').style.display='none';
 
   const isLastHole=G.holeIdx+1>=G.holesPerDay;
-  const isLastDay=G.day+1>=G.tournament.days;
+  const totalSessions = G.tournament.sessions || G.tournament.days;
+  const isLastSession = G.tournament.type==='ryder' ? G.session+1>=totalSessions : G.day+1>=G.tournament.days;
   const nxt=document.getElementById('next-btn');
-  nxt.textContent=isLastHole?(isLastDay?'Final Results →':`End of Day ${G.day+1} →`):'Next Hole →';
+  if (!isLastHole) {
+    nxt.textContent='Next Hole →';
+  } else if (isLastSession) {
+    nxt.textContent='Final Results →';
+  } else if (G.tournament.type==='ryder') {
+    nxt.textContent=`${G.tournament.sessionLabels?.[G.session+1]||'Next Session'} →`;
+  } else {
+    nxt.textContent=`End of Day ${G.day+1} →`;
+  }
 
   // Ryder Cup: panel reacts to the hole result before Next Hole button appears
   if (mpCtx) {
@@ -3071,7 +3090,7 @@ async function getMatchPlayCommentary(yourScore, holePar, mpCtx) {
                  : mpCtx.format === 'FOURBALLS' ? 'fourballs (best ball)' : 'singles';
   const partnerNote = (mpCtx.format !== 'SINGLES' && mpCtx.partner) ? ` (${G.player.name} partnered with ${mpCtx.partner})` : '';
 
-  const mpDay = G.player.matchPlayDays?.[G.day];
+  const mpDay = G.player.matchPlaySessions?.[G.session] ?? G.player.matchPlayDays?.[G.session];
   const histResultLine = mpDay?.historicalResult
     ? `HISTORICAL RESULT OF THIS MATCH: ${mpDay.historicalResult}`
     : '';
@@ -3116,7 +3135,7 @@ Return ONLY valid JSON:
       feed.appendChild(el);
     });
   } catch(e) {
-    feed.innerHTML = '';
+    feed.innerHTML = '<div class="loading-bar" style="color:var(--danger-hi)">Commentary signal lost.</div>';
   }
 }
 
@@ -3126,15 +3145,16 @@ function showInflightLeaderboard() {
   if (G.tournament.type !== 'ryder') { lb.classList.add('hidden'); return; }
 
   const rows = MatchPlayService.buildInflightLeaderboard(
-    G.tournament, G.day, G.holeIdx, G.matchPlayScore, G.player.name
+    G.tournament, G.session, G.holeIdx, G.matchPlayScore, G.player.name
   );
   if (!rows || !rows.length) { lb.classList.add('hidden'); return; }
 
   const userLiveLine = MatchPlayService.formatLive(G.matchPlayScore);
-  const mpDay = G.player.matchPlayDays?.[G.day];
+  const mpDay = G.player.matchPlaySessions?.[G.session] ?? G.player.matchPlayDays?.[G.session];
   const oppName = mpDay?.opponent || 'Opponent';
 
-  let html = `<div class="inflight-lb-title">▸ MATCH PLAY — HOLE ${G.holeIdx + 1} OF ${G.holesPerDay}</div>`;
+  const inflightLabel = G.tournament.sessionLabels?.[G.session] || `Session ${G.session+1}`;
+  let html = `<div class="inflight-lb-title">▸ ${inflightLabel} — HOLE ${G.holeIdx + 1} OF ${G.holesPerDay}</div>`;
 
   // User's own match row
   const userScoreCls = G.matchPlayScore === 0 ? 'as' : G.matchPlayScore > 0 ? 'pos' : 'neg';
@@ -3156,12 +3176,14 @@ function showInflightLeaderboard() {
 function advanceGame() {
   document.getElementById('next-wrap').classList.add('hidden');
   G.holeIdx++;
-  if(G.holeIdx>=G.holesPerDay) endDay();
-  else loadHole();
+  if(G.holeIdx>=G.holesPerDay) {
+    if (G.tournament.type === 'ryder') endSession();
+    else endDay();
+  } else loadHole();
 }
 
 // ═══════════════════════════════════════════
-// DAY END
+// DAY / SESSION END
 // ═══════════════════════════════════════════
 function endDay() {
   simulateField();
@@ -3174,6 +3196,62 @@ function endDay() {
   getDaySummary();
 }
 
+function endSession() {
+  const t = G.tournament;
+  const totalSessions = t.sessions || t.days;
+  const isLast = G.session+1 >= totalSessions;
+  const sessionLabel = t.sessionLabels?.[G.session] || `Session ${G.session+1}`;
+
+  // Accumulate team score
+  const holesPlayed = G.holeResults.filter(r => r.session === G.session).length;
+  const holesLeft = G.holesPerDay - holesPlayed;
+  const sessionData = MatchPlayService.buildEndOfSessionLeaderboard(t, G.session, G.matchPlayScore, holesLeft, G.player.name, G.player.team||'EUR');
+  if (sessionData) {
+    MatchPlayService.addSessionToTeamScore(G.teamScore, sessionData.eurTotal, sessionData.usaTotal);
+  }
+
+  document.getElementById('de-title').textContent=`${sessionLabel} — ${t.name}`;
+  document.getElementById('de-sub').textContent=`${t.course} · ${t.year} · EUR ${G.teamScore.EUR%1===0?G.teamScore.EUR:G.teamScore.EUR.toFixed(1)} – USA ${G.teamScore.USA%1===0?G.teamScore.USA:G.teamScore.USA.toFixed(1)}`;
+
+  if (isLast) {
+    document.getElementById('de-btn').textContent='Final Results →';
+  } else {
+    const nextLabel = t.sessionLabels?.[G.session+1] || `Session ${G.session+2}`;
+    document.getElementById('de-btn').textContent=`${nextLabel} →`;
+  }
+
+  document.getElementById('de-leaderboard').innerHTML=buildRyderEndOfSessionLeaderboard(sessionData);
+  showScreen('dayend');
+  getDaySummary();
+}
+
+function showRestScreen(session) {
+  const t = G.tournament;
+  const totalSessions = t.sessions || t.days;
+  const isLast = session+1 >= totalSessions;
+  const data = MatchPlayService.buildRestScreenData(t, session);
+
+  // Accumulate team score from parallel matches only (user is absent)
+  if (data) {
+    MatchPlayService.addSessionToTeamScore(G.teamScore, data.eurTotal, data.usaTotal);
+  }
+
+  document.getElementById('de-title').textContent=`${data?.title||`Session ${session+1}`} — You are resting`;
+  document.getElementById('de-sub').textContent=`${t.course} · ${t.year} · EUR ${G.teamScore.EUR%1===0?G.teamScore.EUR:G.teamScore.EUR.toFixed(1)} – USA ${G.teamScore.USA%1===0?G.teamScore.USA:G.teamScore.USA.toFixed(1)}`;
+  document.getElementById('de-commentary').innerHTML=`<div class="bubble"><div class="bav">💤</div><div class="bbody"><div class="bname">Rest</div><div class="btext">You are not playing this session. Here are the results from the course.</div></div></div>`;
+  document.getElementById('de-loading').classList.add('hidden');
+
+  if (isLast) {
+    document.getElementById('de-btn').textContent='Final Results →';
+  } else {
+    const nextLabel = t.sessionLabels?.[session+1] || `Session ${session+2}`;
+    document.getElementById('de-btn').textContent=`${nextLabel} →`;
+  }
+
+  document.getElementById('de-leaderboard').innerHTML=buildRyderRestLeaderboard(data);
+  showScreen('dayend');
+}
+
 function simulateField() {
   const t=G.tournament;
   t.field.forEach(f=>{G.fieldScores[f.name]=f.scores[G.day]||0;});
@@ -3182,7 +3260,7 @@ function simulateField() {
 }
 
 function buildLeaderboard() {
-  if (G.tournament.type === 'ryder') return buildRyderEndOfDayLeaderboard();
+  if (G.tournament.type === 'ryder') return buildRyderEndOfSessionLeaderboard();
   const t=G.tournament; const p=G.player;
   let rows=[];
   t.players.forEach(pl=>{ if(pl.id!==p.id) rows.push({name:pl.name,score:G.fieldScores[pl.name]||0,hist:pl.historicalScores[G.day]||0,you:false}); });
@@ -3220,21 +3298,25 @@ function buildLeaderboard() {
   return html+'</div>';
 }
 
-function buildRyderEndOfDayLeaderboard() {
-  const t=G.tournament; const p=G.player;
-  const holesPlayed=G.holeResults.filter(r=>r.day===G.day).length;
-  const holesLeft=G.holesPerDay-holesPlayed;
-  const data=MatchPlayService.buildEndOfDayLeaderboard(t, G.day, G.matchPlayScore, holesLeft, p.name, p.team||'EUR');
+function buildRyderEndOfSessionLeaderboard(data) {
+  const t=G.tournament;
+  if (!data) {
+    const p=G.player;
+    const holesPlayed=G.holeResults.filter(r=>r.session===G.session).length;
+    const holesLeft=G.holesPerDay-holesPlayed;
+    data=MatchPlayService.buildEndOfSessionLeaderboard(t, G.session, G.matchPlayScore, holesLeft, p.name, p.team||'EUR');
+  }
   if (!data) return '';
 
   const cls=t.lbClass;
   const eurPts=data.eurTotal%1===0?data.eurTotal:data.eurTotal.toFixed(1);
   const usaPts=data.usaTotal%1===0?data.usaTotal:data.usaTotal.toFixed(1);
   const wc=data.eurTotal>data.usaTotal?'neg':data.eurTotal<data.usaTotal?'pos':'ev';
+  const sessionLabel = t.sessionLabels?.[G.session] || `Session ${G.session+1}`;
 
   let html=`<div class="${cls}">
     <div class="lb-title-bar">
-      <div class="lbt">Day ${G.day+1} Points</div>
+      <div class="lbt">${sessionLabel} Points</div>
       <div class="lbs">${t.name} · ${t.year}</div>
     </div>
     <div class="ryd-totals">
@@ -3250,6 +3332,40 @@ function buildRyderEndOfDayLeaderboard() {
     const ptLabel=m.winner==='HALVED'?'½ · ½':m.winner==='EUR'?'EUR':'USA';
     const ptCls=m.winner==='EUR'?'neg':m.winner==='USA'?'pos':'ev';
     html+=`<div class="lb-row${m.isUser?' you':''}" style="grid-template-columns:1fr 80px 52px">
+      <div class="lbr-name">${m.pair}</div>
+      <div class="lbr-score" style="text-align:center;font-size:12px">${m.result}</div>
+      <div class="lbr-diff ${ptCls}" style="text-align:right">${ptLabel}</div>
+    </div>`;
+  });
+  return html+'</div>';
+}
+
+function buildRyderRestLeaderboard(data) {
+  if (!data) return '';
+  const t=G.tournament;
+  const cls=t.lbClass;
+  const eurPts=data.eurTotal%1===0?data.eurTotal:data.eurTotal.toFixed(1);
+  const usaPts=data.usaTotal%1===0?data.usaTotal:data.usaTotal.toFixed(1);
+  const wc=data.eurTotal>data.usaTotal?'neg':data.eurTotal<data.usaTotal?'pos':'ev';
+
+  let html=`<div class="${cls}">
+    <div class="lb-title-bar">
+      <div class="lbt">${data.title} Points</div>
+      <div class="lbs">${t.name} · ${t.year}</div>
+    </div>
+    <div class="ryd-totals">
+      <div class="ryd-team eur">EUR <span class="${wc==='neg'?'neg':''}">${eurPts}</span></div>
+      <div class="ryd-sep">–</div>
+      <div class="ryd-team usa">USA <span class="${wc==='pos'?'pos':''}">${usaPts}</span></div>
+    </div>
+    <div class="lb-header-row" style="grid-template-columns:1fr 80px 52px">
+      <div>Match</div><div style="text-align:center">Result</div><div style="text-align:right">Pt</div>
+    </div>`;
+
+  data.matches.forEach(m=>{
+    const ptLabel=m.winner==='HALVED'?'½ · ½':m.winner==='EUR'?'EUR':'USA';
+    const ptCls=m.winner==='EUR'?'neg':m.winner==='USA'?'pos':'ev';
+    html+=`<div class="lb-row" style="grid-template-columns:1fr 80px 52px">
       <div class="lbr-name">${m.pair}</div>
       <div class="lbr-score" style="text-align:center;font-size:12px">${m.result}</div>
       <div class="lbr-diff ${ptCls}" style="text-align:right">${ptLabel}</div>
@@ -3291,11 +3407,25 @@ async function getDaySummary() {
 }
 
 function continueTournament() {
-  G.day++;
-  G.holeIdx=0;
-  G.matchPlayScore=0; // reset match play score for new day's match
-  if(G.day>=G.tournament.days){showFinal();return;}
-  showScreen('game');loadHole();
+  if (G.tournament.type === 'ryder') {
+    G.session++;
+    G.holeIdx=0;
+    G.matchPlayScore=0;
+    const totalSessions = G.tournament.sessions || G.tournament.days;
+    if (G.session >= totalSessions) { showFinal(); return; }
+    if (MatchPlayService.isSessionAbsent(G.player, G.session)) {
+      showRestScreen(G.session);
+    } else {
+      showScreen('game'); loadHole();
+    }
+  } else {
+    G.day++;
+    G.session=G.day;
+    G.holeIdx=0;
+    G.matchPlayScore=0;
+    if(G.day>=G.tournament.days){showFinal();return;}
+    showScreen('game');loadHole();
+  }
 }
 
 // ═══════════════════════════════════════════
@@ -3311,7 +3441,7 @@ function updateHUD() {
     const mpText = mp === 0 ? 'AS' : mp > 0 ? `${mp} UP` : `${Math.abs(mp)} DN`;
     el.textContent = mpText;
     el.className = 'hud-score' + (mp > 0 ? ' neg' : mp < 0 ? ' pos' : '');
-    const mpDay = G.player.matchPlayDays?.[G.day];
+    const mpDay = G.player.matchPlaySessions?.[G.session] ?? G.player.matchPlayDays?.[G.session];
     if (lbl && mpDay) {
       const fmt = mpDay.format || 'SINGLES';
       const oppShort = mpDay.opponent.replace(' / ', '/');
@@ -3327,8 +3457,9 @@ function updateHUD() {
         ? `${G.player.name} & ${mpDay.partner.split(' ').pop()}`
         : G.player.name;
     }
-    const hs=G.player.historicalScores[G.day]||0;
-    document.getElementById('hud-ghost').textContent=`Historical: ${hs===0?'E':hs>0?'+'+hs:hs}`;
+    const eurT=G.teamScore.EUR; const usaT=G.teamScore.USA;
+    const eurPts=eurT%1===0?eurT:eurT.toFixed(1); const usaPts=usaT%1===0?usaT:usaT.toFixed(1);
+    document.getElementById('hud-ghost').textContent=`EUR ${eurPts} – USA ${usaPts}`;
   } else {
     const s=G.yourScore;
     el.textContent=s===0?'E':s>0?`+${s}`:`${s}`;
@@ -3338,7 +3469,9 @@ function updateHUD() {
     document.getElementById('hud-ghost').textContent=`Historical: ${hs===0?'E':hs>0?'+'+hs:hs}`;
   }
 
-  document.getElementById('hud-day').textContent=`Day ${G.day+1} of ${G.tournament.days}`;
+  const totalSessionsHud = G.tournament.sessions || G.tournament.days;
+  const hudSessionLabel = isRyder ? (G.tournament.sessionLabels?.[G.session]||`Session ${G.session+1}`) : `Day ${G.day+1} of ${G.tournament.days}`;
+  document.getElementById('hud-day').textContent=isRyder?`${hudSessionLabel} (${G.session+1}/${totalSessionsHud})`:`Day ${G.day+1} of ${G.tournament.days}`;
   document.getElementById('hud-hole-n').textContent=`Hole ${G.holeIdx+1} of ${G.holesPerDay}`;
   updateComposure();
 }
@@ -3423,7 +3556,7 @@ function showScreen(name) {
 function resetGame() {
   const savedPanel=[...G.selectedPanel]; // persist panel across sessions
   document.body.className='';
-  G={tournament:null,player:null,atmosphere:"NORMAL",selectedPanel:savedPanel,day:0,holeIdx:0,holesPerDay:3,yourScore:0,holeResults:[],phase:"tee",holeStrokes:0,currentShot:null,isRolling:false,composure:10,streak:0,fieldScores:{},history:[],rollHistory:{1:0,2:0,3:0,4:0,5:0,6:0},lastChoiceLabel:null,characterFiles:{},fortuneActive:false,angerActive:false,angerShots:0,illnessActive:false,illnessHoles:0,tempThresholdMod:0,tempThresholdHoles:0,tempSkillBonus:false,tempSkillHoles:0,isDead:false,causeOfDeath:null,collapseNode:null,collapseChipOutAvailable:true,clothing:{trousers:true,glove:true,shoes:true,hat:true,shirt:true},panelState:{runningJokes:[],playerNickname:null,lastInsult:null,atmosphere_escalation:0,panelFeuds:{},momentsMentioned:[]}};
+  G={tournament:null,player:null,atmosphere:"NORMAL",selectedPanel:savedPanel,day:0,session:0,holeIdx:0,holesPerDay:3,yourScore:0,holeResults:[],matchPlayScore:0,teamScore:{EUR:0,USA:0},phase:"tee",holeStrokes:0,currentShot:null,isRolling:false,composure:10,streak:0,fieldScores:{},history:[],rollHistory:{1:0,2:0,3:0,4:0,5:0,6:0},lastChoiceLabel:null,characterFiles:{},fortuneActive:false,angerActive:false,angerShots:0,illnessActive:false,illnessHoles:0,tempThresholdMod:0,tempThresholdHoles:0,tempSkillBonus:false,tempSkillHoles:0,isDead:false,causeOfDeath:null,collapseNode:null,collapseChipOutAvailable:true,clothing:{trousers:true,glove:true,shoes:true,hat:true,shirt:true},panelState:{runningJokes:[],playerNickname:null,lastInsult:null,atmosphere_escalation:0,panelFeuds:{},momentsMentioned:[]}};
   document.querySelectorAll('.tc').forEach(c=>c.classList.remove('selected'));
   document.querySelectorAll('.player-btn').forEach(b=>b.classList.remove('selected'));
   document.getElementById('player-area').classList.add('hidden');
@@ -4159,7 +4292,7 @@ function getCollapseRollDesc(nextNode) {
 
 function endCollapseHole(diff) {
   G.yourScore += diff;
-  G.holeResults.push({ day: G.day, holeId: 'c18', score: G.holeStrokes, par: 4, diff });
+  G.holeResults.push({ day: G.day, session: G.session, holeId: 'c18', score: G.holeStrokes, par: 4, diff });
   updateHUD();
   const words = { '-1':'BIRDIE', '0':'PAR', '1':'BOGEY', '2':'DOUBLE', '3':'+3' };
   const word = words[String(diff)] || `+${diff}`;

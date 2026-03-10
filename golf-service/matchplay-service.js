@@ -22,10 +22,11 @@ const MatchPlayService = (() => {
   // Build match play context for a given state
   function buildContext(state) {
     if (!state.tournament || state.tournament.type !== 'ryder') return null;
-    const mpDay = state.player.matchPlayDays?.[state.day];
+    const session = state.session ?? state.day;
+    const mpDay = state.player.matchPlaySessions?.[session] ?? state.player.matchPlayDays?.[session];
     if (!mpDay || mpDay.format === 'ABSENT') return null;
 
-    const holesPlayed = state.holeResults.filter(r => r.day === state.day).length;
+    const holesPlayed = state.holeResults.filter(r => (r.session ?? r.day) === session).length;
     const holesLeft = state.holesPerDay - holesPlayed;
 
     return {
@@ -47,7 +48,8 @@ const MatchPlayService = (() => {
     const ctx = buildContext(state);
     if (!ctx) return null;
 
-    const dayWords = ['first', 'second', 'third'];
+    const session = state.session ?? state.day;
+    const sessionLabel = state.tournament.sessionLabels?.[session] || `Day ${(state.day ?? session) + 1}`;
     const fmtLabel = ctx.format === 'FOURSOMES' ? 'foursomes (alternate shot)'
       : ctx.format === 'FOURBALLS' ? 'fourballs (best ball)'
       : 'singles';
@@ -65,7 +67,7 @@ const MatchPlayService = (() => {
     };
     const atmoAdd = atmoMap[state.atmosphere] || '';
 
-    return `${state.player.name}. ${dayWords[state.day] || 'Day ' + (state.day + 1)} of ${state.tournament.name} — ${fmtLabel}${partnerNote} against ${ctx.opponent}. ${ctx.liveLine}${holesNote}. ${teamNote}${histNote}${atmoAdd}`;
+    return `${state.player.name}. ${sessionLabel} of ${state.tournament.name} — ${fmtLabel}${partnerNote} against ${ctx.opponent}. ${ctx.liveLine}${holesNote}. ${teamNote}${histNote}${atmoAdd}`;
   }
 
   // Build in-flight leaderboard across all parallel matches for a Ryder Cup day
@@ -182,6 +184,123 @@ TEAM: ${mpCtx.team} — this point matters for the overall Cup.`;
     return player.matchPlayDays?.[day]?.format === 'ABSENT';
   }
 
+  // ── BL-112: 5-session structure ──────────────────────────────────────────────
+
+  // Return the index of the first matchPlaySession that is not ABSENT.
+  // Returns 0 if the player has no matchPlaySessions.
+  function firstActiveSession(player) {
+    const sessions = player.matchPlaySessions;
+    if (!sessions || !sessions.length) return 0;
+    const idx = sessions.findIndex(s => s.format !== 'ABSENT');
+    return idx === -1 ? 0 : idx;
+  }
+
+  // Returns true if the player's matchPlaySessions entry for this session is ABSENT.
+  function isSessionAbsent(player, session) {
+    return player.matchPlaySessions?.[session]?.format === 'ABSENT';
+  }
+
+  // Add a session's EUR/USA points to a running team score object.
+  // teamScore: { EUR: number, USA: number } — mutated in place, also returned.
+  function addSessionToTeamScore(teamScore, sessionEUR, sessionUSA) {
+    teamScore.EUR += sessionEUR;
+    teamScore.USA += sessionUSA;
+    return teamScore;
+  }
+
+  // Build end-of-session points table for a Ryder Cup session.
+  // User's match is always added as an explicit row (not detected by name in pm).
+  // If playerName is null, only parallelMatches rows are returned (rest screen use).
+  // Returns { eurTotal, usaTotal, matches: [{ pair, result, winner, isUser }] }
+  function buildEndOfSessionLeaderboard(tournament, session, userMatchScore, holesLeft, playerName, playerTeam) {
+    if (!tournament || tournament.type !== 'ryder') return null;
+    const pm = tournament.parallelMatches?.[session];
+    if (!pm || !pm.length) return null;
+
+    let eurTotal = 0, usaTotal = 0;
+
+    // All rows from parallelMatches are other matches (not the user's)
+    const matches = pm.map(m => {
+      const allPlayers = tournament.players || [];
+      const sessionKey = 'matchPlaySessions';
+      const dayKey = 'matchPlayDays';
+      const matched = allPlayers.find(p => {
+        const mpd = p[sessionKey]?.[session] || p[dayKey]?.[session];
+        if (!mpd || mpd.format === 'ABSENT') return false;
+        const sur = p.name.split(' ').pop();
+        return new RegExp(sur, 'i').test(m.match);
+      });
+
+      let winner, result;
+      if (matched) {
+        const mpd = matched.matchPlaySessions?.[session] || matched.matchPlayDays?.[session];
+        const sur = matched.name.split(' ').pop();
+        winner = parseHistoricalResult(mpd.historicalResult, sur, matched.team || 'EUR');
+        result = mpd.historicalResult || 'Halved';
+      } else {
+        const lastScore = m.scores?.[m.scores.length - 1] ?? 0;
+        const teamA = m.teamA || 'EUR';
+        const teamB = teamA === 'EUR' ? 'USA' : 'EUR';
+        if (lastScore === 0) { winner = 'HALVED'; result = 'Halved'; }
+        else if (lastScore > 0) { winner = teamA; result = formatResult(lastScore, 0); }
+        else { winner = teamB; result = formatResult(Math.abs(lastScore), 0); }
+      }
+
+      if (winner === 'HALVED') { eurTotal += 0.5; usaTotal += 0.5; }
+      else if (winner === 'EUR') eurTotal += 1;
+      else usaTotal += 1;
+
+      return { pair: m.match, result, winner, isUser: false };
+    });
+
+    // Add user's own match as explicit row
+    if (playerName) {
+      let userWinner, userResult;
+      if (userMatchScore === 0 && holesLeft === 0) {
+        userWinner = 'HALVED'; userResult = 'Halved';
+      } else if (userMatchScore === 0 && holesLeft > 0) {
+        // match still in progress — treat as halved for leaderboard
+        userWinner = 'HALVED'; userResult = formatLive(userMatchScore);
+      } else {
+        userResult = formatResult(userMatchScore, holesLeft);
+        userWinner = userMatchScore > 0 ? playerTeam : (playerTeam === 'EUR' ? 'USA' : 'EUR');
+      }
+      if (userWinner === 'HALVED') { eurTotal += 0.5; usaTotal += 0.5; }
+      else if (userWinner === 'EUR') eurTotal += 1;
+      else usaTotal += 1;
+      matches.push({ pair: playerName, result: userResult, winner: userWinner, isUser: true });
+    }
+
+    return { eurTotal, usaTotal, matches };
+  }
+
+  // Build rest-screen data for a session the player is ABSENT from.
+  // Uses the final hole score from each parallel match's scores array.
+  // Returns { title, eurTotal, usaTotal, matches: [{ pair, result, winner, isUser: false }] }
+  function buildRestScreenData(tournament, session) {
+    if (!tournament || tournament.type !== 'ryder') return null;
+    const pm = tournament.parallelMatches?.[session];
+    if (!pm || !pm.length) return null;
+    const title = tournament.sessionLabels?.[session] || `Session ${session + 1}`;
+
+    let eurTotal = 0, usaTotal = 0;
+    const matches = pm.map(m => {
+      const lastScore = m.scores?.[m.scores.length - 1] ?? 0;
+      const teamA = m.teamA || 'EUR';
+      const teamB = teamA === 'EUR' ? 'USA' : 'EUR';
+      let winner, result;
+      if (lastScore === 0) { winner = 'HALVED'; result = 'Halved'; }
+      else if (lastScore > 0) { winner = teamA; result = formatResult(lastScore, 0); }
+      else { winner = teamB; result = formatResult(Math.abs(lastScore), 0); }
+      if (winner === 'HALVED') { eurTotal += 0.5; usaTotal += 0.5; }
+      else if (winner === 'EUR') eurTotal += 1;
+      else usaTotal += 1;
+      return { pair: m.match, result, winner, isUser: false };
+    });
+
+    return { title, eurTotal, usaTotal, matches };
+  }
+
   return {
     formatLive,
     formatResult,
@@ -193,6 +312,12 @@ TEAM: ${mpCtx.team} — this point matters for the overall Cup.`;
     buildEndOfDayLeaderboard,
     firstActiveDay,
     isDayAbsent,
+    // BL-112 session API
+    firstActiveSession,
+    isSessionAbsent,
+    addSessionToTeamScore,
+    buildEndOfSessionLeaderboard,
+    buildRestScreenData,
   };
 
 })();
