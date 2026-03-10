@@ -305,6 +305,20 @@ For items that represent a product hypothesis, add after the CD3 line:
 - CD3: UBV=7 TC=1 RR=1 → CoD=9, Dur=5, **CD3=1.8**
 - Status: OPEN
 
+### BL-049 — Wise Sir Nick: sandwich gate wound + insult vocabulary
+- Epic: Sir Nick Character Depth
+- **Wound:** Sandwich gate — 2008 Ryder Cup Valhalla. Faldo was European captain. A British photographer with a zoom lens caught him showing handwritten foursomes pairings (just initials) to Henrik Stenson during the practice round. At the press conference Faldo claimed the paper was a team sandwich order: "who wants tuna, who wants the beef, who wants the ham." Flaw: only 11 initials, Jiménez missing. Reporter pointed it out. Faldo: "Put my name down, then." Every pairing on the note appeared in the actual lineup the next morning. Europe lost 16½–11½. Ian Poulter: "Faldo is talking about someone being useless at the 2008 Ryder Cup. That's the Ryder Cup where *he* was captain."
+- **Comedy mechanic:** Sir Nick's insult vocabulary uses sandwich language — bad opponents/shots get "rotten filling", "mouldy bread", "soggy crust", "wrong sauce", "terrible combination", "accoutrements entirely wrong." Other panel members know about the sandwich gate and can needle him with it (tuna/beef/ham references, "what's on the menu today Nick" etc.)
+- **Wound trigger:** any mention of Ryder Cup captaincy, 2008, Valhalla, Poulter, Garcia, or "pairings" fires the wound.
+- CD3: UBV=7 TC=1 RR=1 → CoD=9, Dur=4, **CD3=2.3**
+- Status: OPEN
+
+### BL-050 — Golf Adventure: 2008 Ryder Cup Valhalla (Faldo's disaster)
+- Epic: Ryder Cup Rollout
+- Faldo's catastrophic captaincy. USA win 16½–11½. Sandwich gate, botched opening ceremony introductions (potato joke for Harrington, confused McDowell's nationality, called Hansen "Stenson"), bottom-loaded singles order, Azinger outmanoeuvred him tactically. Players: Faldo (captain/protagonist — plays as an actual character), Poulter (emotional engine of the European team despite the captaincy). Sky/NBC.
+- CD3: UBV=7 TC=3 RR=1 → CoD=11, Dur=4, **CD3=2.8**
+- Status: OPEN
+
 ### BL-033 — Golf Adventure: Tournament picker decade-panel UI
 - Scope: Golf Adventure tournament picker only — the main panel list grows unwieldy as BL-031/032 land
 - Replace flat tournament list with collapsible decade sections within Golf Adventure: 1970s, 1980s, 1990s, 2000s, 2010s + Ryder Cup (separate always-visible section, outside decades)

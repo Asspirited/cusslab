@@ -1950,6 +1950,58 @@ const TOURNAMENTS = [
 
 ,
 
+  // ── 2011 US Open — Congressional Country Club ─────────────────────────────────────────
+  {
+    id:"congressional_2011", year:2011, eraClass:"era-2011-us", lbClass:"lb-2011-us",
+    name:"Eight",
+    course:"Congressional Country Club", country:"Bethesda, Maryland",
+    type:"major", badge:"badge-major", days:4,
+    lore:"Rory McIlroy was 22 years old. Three months earlier he had walked off Augusta National having led the Masters by four shots going into Sunday, shot 80, and handed the jacket to Charl Schwartzel. At Congressional he played four rounds of golf that suggested he had been storing all of it — every Masters grimace, every dressing room silence — and was now converting it at compound interest. He led every round. He won by eight. He set the US Open scoring record at -16. He finished with a round of 66 to put the number beyond argument. Jason Day was eight shots behind in second and never felt close. Rory walked off the 18th green 22 years old and absolutely certain.",
+    players:[
+      { id:"rory_mcilroy_2011", name:"Rory McIlroy", abbr:"ROR",
+        temperamentProfile:"PEAKER",
+        temperamentProfileSecondary:"ICEBERG",
+        bottle:9, ego:8, temperament:8, shame:3,
+        driving:10, irons:10, short_game:9, putting:9, recovery:9, bunkers:9, course_management:9,
+        desc:"22 years old. Has just converted the most complete US Open performance in decades. Everything he felt at Augusta is in this number. He did not collapse at Congressional. He obliterated it.",
+        wound:"Augusta 2011. Led by four going into Sunday. Shot 80. Left the course before the ceremony. Has not discussed it publicly in depth. Congressional is his answer to it — not a statement, just a scorecard.",
+        historicalScores:[-5,-10,-14,-16] },
+      { id:"jason_day_2011", name:"Jason Day", abbr:"DAY",
+        temperamentProfile:"LEVELHEADED",
+        temperamentProfileSecondary:"PEAKER",
+        bottle:8, ego:6, temperament:8, shame:3,
+        driving:9, irons:8, short_game:9, putting:9, recovery:8, bunkers:8, course_management:9,
+        desc:"Second by eight shots. Played well all week. Never had a chance. Sometimes the gap between second and first is a story in itself and sometimes it just isn't.",
+        wound:"The runner-up at two majors before he won one. Congressional was the first. Came close enough to see how far away he was.",
+        historicalScores:[-2,-5,-7,-8] },
+    ],
+    field:[
+      {name:"Robert Garrigus",   scores:[-1,-4,-6,-6]},
+      {name:"Kevin Chappell",    scores:[0,-3,-5,-6]},
+      {name:"Y.E. Yang",         scores:[0,-2,-4,-5]},
+      {name:"Lee Westwood",      scores:[0,-2,-4,-5]},
+    ],
+    holes:[
+      {id:"cc10_2011", name:"10th — Amen Corner North", par:3, yards:218, hazard:"Lake Olmstead left and beyond green, no bailout, wind off the water unpredictable",
+       lore:"The 10th at Congressional is a long par 3 over water. In the final round Rory stood on that tee at -14, the tournament already a procession. He hit a six-iron to twelve feet and made birdie. The gallery made noise. Rory acknowledged it once, briefly, then walked to the next tee.",
+       incidents:["Rory hit a six-iron to twelve feet on 10 in the final round and made birdie to go -15.","The lake left of the 10th claimed four tee shots in the first round alone.","At -14 through nine holes of the final round, McIlroy was playing an exhibition. The question was only how low he would go.","The wind off Lake Olmstead makes the carry distance unpredictable. Rory played a slight draw and let the wind do the rest."],
+       events:["birdie","lake_carry","procession_builds","gallery_building"], pressureRating:3,
+       modifiers:{atmosphereNote:"10th at Congressional. Par 3. Lake left. Rory is already -14. He's not under pressure. He is the pressure. He makes birdie anyway."}},
+      {id:"cc16_2011", name:"16th — The Long Grind",   par:4, yards:446, hazard:"Fairway bunkers both sides at 280, approach uphill to tight green, right misses into rough",
+       lore:"By the 16th in the final round the mathematics were settled. Rory's lead was eight. Day was playing for second and not getting it back. The 16th at Congressional is a hole that demands respect even when the tournament is won, and Rory gave it exactly what it required.",
+       incidents:["McIlroy striped a three-wood down the 16th, leaving a wedge approach.","He hit the green and two-putted. The scoreboard did not change. It didn't need to.","Day birdied 16 to get to -8. He was still eight behind. Some facts are unarguable.","The fairway bunkers on 16 were in play for most of the field all week. Rory did not visit one all four days."],
+       events:["lead_holds","day_birdie","gap_visible","scoreboard_final"], pressureRating:3,
+       modifiers:{atmosphereNote:"16th. Final round. Congressional. The tournament has been decided for four hours. Rory makes par. The number stays at -16. Eight shots is eight shots."}},
+      {id:"cc18_2011", name:"18th — The Coronation",  par:4, yards:480, hazard:"Fairway narrows, bunker right, gallery already filling the banks before he reaches the tee",
+       lore:"Rory McIlroy walked up the 18th fairway at Congressional in the final round of the 2011 US Open at 22 years old, eight shots clear, having shot 66 for the day, -16 for the week. He made par. He held the trophy. He was asked about Augusta. He said: 'It's the best thing that ever happened to me.' The gallery believed him.",
+       incidents:["Rory drove the 18th into the fairway, hit his approach to the middle of the green, and two-putted.","The gallery banks on 18 at Congressional were standing ten-deep before he reached the tee.","He signed for 66-67-68-67 at Congressional. The winning total of 268 set the US Open scoring record.","When asked about the Masters collapse, McIlroy said it was the best thing that ever happened to him. He seemed to mean it.","He was 22 years, 67 days old. The youngest US Open winner since Bobby Jones in 1923."],
+       events:["final_hole","trophy","coronation","augusta_closed","youngest_since_jones"], pressureRating:3,
+       modifiers:{atmosphereNote:"18th. Congressional. Final round. Rory needs par. He makes it. The US Open scoring record is his. He is 22 years old. Augusta is over. Eight is the number."}},
+    ]
+  }
+
+,
+
   // ── 2011 Open Championship — Royal St George's ────────────────────────────────────────
   {
     id:"sandwich_2011", year:2011, eraClass:"era-2011", lbClass:"lb-2011",
