@@ -1315,6 +1315,16 @@ Status: CLOSED
 - **Tags:** bug, rod-caught, missing-scenario, dom-state-not-tested, three-amigos-skipped, false-green
 - **Status:** Closed — Session 7
 
+## WL-097
+- **Item:** Left-hand nav panel unresponsive — context locked to right panel
+- **Symptom:** Mouse in left nav panel but interaction doesn't register — nav groups won't expand, tabs won't switch. Right panel still has focus/pointer lock. Requires click in right panel first to release, then left nav works.
+- **Suspected cause:** Pre-existing UX bug — focus/pointer context not released from right panel after interaction. Likely a missing `pointer-events` reset or focus trap in the right panel. Recurs across sessions.
+- **Session date:** 2026-03-10 (reported; pre-existing)
+- **Time lost:** Low per instance, recurring nuisance
+- **Cost impact:** Low — workaround is one click to release focus
+- **Tags:** bug, ux, focus-trap, rod-caught, recurring
+- **Status:** Open — fix deferred, logged for later investigation
+
 ## WL-096
 - **Item:** Bespoke Material function broken — "Enter a sentence to build from" with no sentences
 - **Symptom:** User fills all data fields in Bespoke Material, system shows "Enter a sentence to build from" but no sentences are available to select from — flow is blocked
