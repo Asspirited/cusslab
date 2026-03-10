@@ -1,40 +1,41 @@
 # Shared Session State
 # Written by session-closedown.md step 8b. Overwritten each close.
 # Read at startup step 3. Included in session-ref.md for Claude.ai.
-Last updated: 2026-03-10 by Claude Code (corrected — write failed at closedown)
-Last commit: 71a7c45 — Session closedown 2026-03-10
+Last updated: 2026-03-10 by Claude Code
+Last commit: 34f12ae — BL-035: WatchBack sofa commentary strip — UI wiring complete
 
 ## What shipped this session
-- **Process**: RAISE NEW WORK SEQUENCE — trigger + sequence in session-insession.md
-- **Process**: Clean seam protocol for proactive session close (WL-087 closed)
-- **Process**: BL-032 sub-items → individual BL-036..BL-047; Epic label in schema
-- **BL-009**: Mode 2 moment type expansion — 8 new options Football/Golf/LongRoom
-- **BL-002**: FOOD_TERMS tripled across 3 axes; Faldo Ginsters adjective+location variation
-- **BL-003**: HYPO_BASE 11→42 entries, 4 pools, all panel-agnostic
-- **BL-034**: Dual temperament profiles — CLOSED (earlier in session, pre-compact)
-- **BL-036**: Oakmont 1994 US Open — The American Crowd (Monty/Els, era-1994)
-- **BL-037/038/044**: 2005 Masters, Winged Foot 2006, Carnoustie 2007 — CLOSED (pre-compact)
-- **BL-039**: Pebble Beach 2000 US Open — Fifteen (Tiger +15, era-2000-us)
-- **BL-028**: Design resolved — play AS celebrity; use existing panel members; Pro-Am and Dunhill deferred (special format research needed); simpler formats (Shell's/Alliss/Skins) first; CD3 revised to 1.1
+- BL-043: 2011 Open Sandwich (Darren Clarke) — "The Long Wait" — tournament data + era-2011 CSS
+- BL-041: 2011 US Open Congressional (Rory McIlroy) — "Eight" — tournament data + era-2011-us CSS
+- BL-040: 2000 Open St Andrews (Tiger) — "The Tiger Slam" — tournament data + era-2000 CSS
+- BL-049: Sir Nick Faldo — Sandwich Gate wound + insult vocabulary (Pool 6, cross-panel needling)
+- BL-035: WatchBack sofa commentary strip — FULL FEATURE COMPLETE
+  - Logic layer: getSofaCommentator, getHistoricalDivergence, selectReactionMode, COLTART_SOFA_POOLS (pipeline/logic.js)
+  - Gherkin: specs/golf-adventure-watchback.feature (4 scenarios incl. outline with 5 examples)
+  - UI: sofa strip HTML div + CSS in golf-adventure.html
+  - Inline JS: constants + functions + startGame detection + endHole update after each hole
+- BL-028: Era palette note (Shell's 60s-70s Kodachrome), format complexity note for Pro-Am/Dunhill
+- BL-048 raised: Round selection (final round only OR all 4), CD3=1.8
+- BL-050 raised: 2008 Ryder Cup Valhalla (Faldo's disaster), CD3=2.8
+- Process: "Fix order — impact first, cosmetic last" rule added to INVESTIGATE AND RESOLVE
 
-## Open waste items
-- WL-MODE-001: Design-session protocol gap — Status: Open
-- WL-MODE-002: Darts character debt (Rod Harrington, Bobby George) — Status: Open
-- WL-068: Claude Code Windows bugs (upstream) — Status: Open
+## Open waste items (WL numbers)
+- WL-MODE-001: design-session audit gap — Status: Open
+- WL-MODE-002: darts character debt (Rod Harrington/Bobby George) — Status: Open
 
 ## Backlog top 3 by CD3
-- BL-040 (CD3=4.7): 2000 Open St Andrews — Tiger Grand Slam
-- BL-041 (CD3=4.7): 2011 US Open Congressional — Rory 8-shot win
-- BL-043 (CD3=4.7): 2011 Open Sandwich — Darren Clarke
+- BL-050 (CD3=2.8): 2008 Ryder Cup Valhalla (Faldo's disaster) — OPEN
+- BL-048 (CD3=1.8): Round selection — final round only OR all 4 — OPEN
+- BL-028 (CD3=1.1): Shell's Wonderful World + Pro-Am/Dunhill formats — OPEN (design refined, deferred)
 
 ## Protocol status this session
-- Session startup: followed (continued from compacted session)
-- Gherkin gate: N/A — all changes data-only
-- TDD: N/A — no new code paths
-- Pipeline: GREEN — 454/454 unit, 9/9 golf-sim
+- Session startup: followed
+- Gherkin gate: followed — WatchBack Gherkin written and approved before TDD
+- TDD: followed
+- Pipeline: GREEN — 472/472 unit tests, all Gherkin passing
 
 ## Carry-forward notes
-- Celebrity pro-am research agent (a530f57bc3559b430) dispatched — check /tmp when next session starts
-- BL-028 next step: simpler formats first (Shell's Wonderful World, A Round with Alliss, Skins Game); Pro-Am and Dunhill deferred pending format research
-- Player plays AS celebrity; existing non-golfer panel members are the celebrity characters
-- Forcing function counter resets: next session starts at 0 items / 0 pipeline runs
+- BL-035 Phase 2 not started: two sofa commentators reacting to each other when both match (Faldo + Poulter at Valhalla will need this when BL-050 is built)
+- COLTART_SOFA_POOLS only has valderrama_1997 — next sofa commentator needs BL-050 tournament data first
+- tournaments.js: check tournament-level id field is consistent (used by updateSofaStrip as G.tournament.id)
+- Unit test count: 472
