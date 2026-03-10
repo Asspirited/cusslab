@@ -1290,11 +1290,12 @@
   <div class="nav-group active" id="ng-misadventure">
     <div class="nav-group-header" onclick="toggleNavGroup('misadventure')">
       <span class="nav-group-icon">🏴</span> LITTLE MISADVENTURE
-      <span class="nav-group-count">2</span>
+      <span class="nav-group-count">3</span>
     </div>
     <div class="nav-items" id="ni-misadventure">
       <div class="tab active" onclick="switchTab(event,'golfadventure')"><span class="tab-icon">🏌️</span>Relive Golfing Greatness</div>
       <div class="tab" onclick="switchTab(event,'pubnavigator')"><span class="tab-icon">🍺</span>Survive a Friday night at...</div>
+      <div class="tab" onclick="switchTab(event,'qleeks')"><span class="tab-icon">🐸</span>Quntum Leeks</div>
     </div>
   </div>
 
@@ -1302,10 +1303,14 @@
   <div class="nav-group" id="ng-comedy">
     <div class="nav-group-header" onclick="toggleNavGroup('comedy')">
       <span class="nav-group-icon">🎭</span> COMEDY ROOM
-      <span class="nav-group-count">1</span>
+      <span class="nav-group-count">5</span>
     </div>
     <div class="nav-items" id="ni-comedy">
       <div class="tab" onclick="switchTab(event,'comedyroom')"><span class="tab-icon">🎤</span>The Comedy Room</div>
+      <div class="tab" onclick="switchTab(event,'housenameoracle')"><span class="tab-icon">🔮</span>The House Name Oracle</div>
+      <div class="tab" onclick="switchTab(event,'roastroom')"><span class="tab-icon">🔥</span>The Roast Room</div>
+      <div class="tab" onclick="switchTab(event,'writingroom')"><span class="tab-icon">✍️</span>The Writing Room</div>
+      <div class="tab" onclick="switchTab(event,'souness-cat')"><span class="tab-icon">🔬</span>Souness's Cat</div>
     </div>
   </div>
 
@@ -1313,14 +1318,13 @@
   <div class="nav-group" id="ng-sports">
     <div class="nav-group-header" onclick="toggleNavGroup('sports')">
       <span class="nav-group-icon">⛳</span> 19TH HOLE
-      <span class="nav-group-count">3</span>
+      <span class="nav-group-count">4</span>
     </div>
     <div class="nav-items" id="ni-sports">
       <div class="tab" onclick="switchTab(event,'football')"><span class="tab-icon">⚽</span>Post Game Cunditry</div>
       <div class="tab" onclick="switchTab(event,'golf')"><span class="tab-icon">⛳</span>The 19th Hole</div>
       <div class="tab" onclick="switchTab(event,'darts')"><span class="tab-icon">🎯</span>Watching the Oche</div>
       <div class="tab" onclick="switchTab(event,'cricket')"><span class="tab-icon">🏏</span>The Long Room</div>
-      <div class="tab" onclick="switchTab(event,'souness-cat')"><span class="tab-icon">🔬</span>Souness's Cat</div>
     </div>
   </div>
 
@@ -1342,7 +1346,7 @@
   <div class="nav-group" id="ng-play">
     <div class="nav-group-header" onclick="toggleNavGroup('play')">
       <span class="nav-group-icon">🎮</span> PLAY
-      <span class="nav-group-count">6</span>
+      <span class="nav-group-count">5</span>
     </div>
     <div class="nav-items" id="ni-play">
       <div class="tab" onclick="switchTab(event,'roastbattle')"><span class="tab-icon">🥊</span>Roast Battle</div>
@@ -1350,7 +1354,6 @@
       <div class="tab" onclick="switchTab(event,'topcnuts')"><span class="tab-icon">👑</span>Rogues' Gallery</div>
       <div class="tab" onclick="switchTab(event,'comedylab')"><span class="tab-icon">🎲</span>Comedy Lab</div>
       <div class="tab" onclick="switchTab(event,'trumps')"><span class="tab-icon">⚔️</span>Dimension Duel</div>
-      <div class="tab" onclick="switchTab(event,'qleeks')"><span class="tab-icon">🐸</span>Quntum Leeks</div>
     </div>
   </div>
 
@@ -2034,15 +2037,6 @@
   <div class="panel-title">🎭 The Comedy Room</div>
   <div class="panel-desc">Not the stage. Not the boardroom. The room where the real conversation happens. Eight comedians, philosophers, and one cosmologist who has mostly made peace with the keyboards. You say something. They take it apart. Then they take each other apart. Then someone says something true.</div>
 
-  <!-- Mode tabs -->
-  <div style="display:flex;gap:8px;margin-bottom:20px;">
-    <button id="cr-tab-standard" class="btn-secondary" onclick="ComedyRoom.switchMode('into-the-room')" style="flex:1;font-size:13px;padding:8px 12px;border-color:var(--accent);color:var(--accent);">Into The Room</button>
-    <button id="cr-tab-oracle" class="btn-secondary" onclick="ComedyRoom.switchMode('house-name-oracle')" style="flex:1;font-size:13px;padding:8px 12px;">The House Name Oracle</button>
-    <button id="cr-tab-roast" class="btn-secondary" onclick="ComedyRoom.switchMode('roast-room')" style="flex:1;font-size:13px;padding:8px 12px;">The Roast Room</button>
-    <button id="cr-tab-writing" class="btn-secondary" onclick="ComedyRoom.switchMode('writing-room')" style="flex:1;font-size:13px;padding:8px 12px;">The Writing Room</button>
-  </div>
-
-  <!-- Standard view -->
   <div id="cr-standard-view">
     <div style="margin-bottom:20px;">
       <label>What do you want to put in front of them</label>
@@ -2080,62 +2074,71 @@
       <button class="btn-secondary" onclick="ComedyRoom.present()" style="margin-top:12px;">ROUND AGAIN 🔄</button>
     </div>
   </div>
+</div>
 
-  <!-- Roast Room view -->
-  <div id="cr-roast-view" style="display:none;">
-    <div style="margin-bottom:16px;">
-      <label>What do you want roasted</label>
-      <input type="text" id="cr-roast-title" placeholder="A book. A magazine. A publication. Anything with a title." maxlength="120" autocomplete="off">
-    </div>
-    <button class="btn" onclick="RoastRoom.submit()" id="cr-roast-btn" disabled>ROAST IT 🔥</button>
-    <div id="cr-roast-output" style="display:none;margin-top:24px;">
-      <div id="cr-roast-responses"></div>
-      <button class="btn-secondary" onclick="RoastRoom.reroll()" style="margin-top:16px;">Re-roll 🎲</button>
-    </div>
+<!-- ============ THE ROAST ROOM ============ -->
+<div class="panel" id="panel-roastroom">
+  <div class="panel-title">🔥 The Roast Room</div>
+  <div class="panel-desc">Five authors. One title. Total destruction. They will not be gentle.</div>
+
+  <div style="margin-bottom:16px;">
+    <label>What do you want roasted</label>
+    <input type="text" id="cr-roast-title" placeholder="A book. A magazine. A publication. Anything with a title." maxlength="120" autocomplete="off">
+  </div>
+  <button class="btn" onclick="RoastRoom.submit()" id="cr-roast-btn" disabled>ROAST IT 🔥</button>
+  <div id="cr-roast-output" style="display:none;margin-top:24px;">
+    <div id="cr-roast-responses"></div>
+    <button class="btn-secondary" onclick="RoastRoom.reroll()" style="margin-top:16px;">Re-roll 🎲</button>
+  </div>
+</div>
+
+<!-- ============ THE WRITING ROOM ============ -->
+<div class="panel" id="panel-writingroom">
+  <div class="panel-title">✍️ The Writing Room</div>
+  <div class="panel-desc">Three authors discuss anything. In sequence. Each one aware of what came before.</div>
+
+  <div style="margin-bottom:16px;">
+    <label>What do you want them to discuss</label>
+    <input type="text" id="cr-writing-topic" placeholder="A corporate away day. The rules of cricket. A children's birthday party. Anything." maxlength="200" autocomplete="off">
+  </div>
+  <button class="btn" onclick="WritingRoom.submit()" id="cr-writing-btn" disabled>DISCUSS IT ✍️</button>
+  <div id="cr-writing-output" style="display:none;margin-top:24px;">
+    <div id="cr-writing-responses"></div>
+    <button class="btn-secondary" onclick="WritingRoom.reroll()" style="margin-top:16px;">Re-roll 🎲</button>
+  </div>
+</div>
+
+<!-- ============ THE HOUSE NAME ORACLE ============ -->
+<div class="panel" id="panel-housenameoracle">
+  <div class="panel-title">🔮 The House Name Oracle</div>
+  <div class="panel-desc">Phil Spencer. Kirstie Allsopp. Dion Dublin. A UK postcode. Three house names. One of them is unhinged.</div>
+
+  <div style="margin-bottom:16px;">
+    <label>UK postcode district or Irish routing key</label>
+    <input type="text" id="cr-oracle-code" placeholder="e.g. SW1A, LS1, M1, D02, A65" maxlength="10" autocomplete="off" spellcheck="false" style="text-transform:uppercase;" oninput="this.value=this.value.toUpperCase()">
   </div>
 
-  <!-- Writing Room view -->
-  <div id="cr-writing-view" style="display:none;">
-    <div style="margin-bottom:16px;">
-      <label>What do you want them to discuss</label>
-      <input type="text" id="cr-writing-topic" placeholder="A corporate away day. The rules of cricket. A children's birthday party. Anything." maxlength="200" autocomplete="off">
-    </div>
-    <button class="btn" onclick="WritingRoom.submit()" id="cr-writing-btn" disabled>DISCUSS IT ✍️</button>
-    <div id="cr-writing-output" style="display:none;margin-top:24px;">
-      <div id="cr-writing-responses"></div>
-      <button class="btn-secondary" onclick="WritingRoom.reroll()" style="margin-top:16px;">Re-roll 🎲</button>
-    </div>
+  <div style="margin-bottom:20px;">
+    <label>Oracle voice <span style="color:var(--accent);font-size:12px;">* required</span></label>
+    <select id="cr-oracle-voice">
+      <option value="">— select an archetype —</option>
+      <option value="Elegist">Elegist — mournful, past-focused</option>
+      <option value="Rogue">Rogue — innuendo, double entendre</option>
+      <option value="DarkOracle">DarkOracle — sincere delivery of grim facts</option>
+      <option value="Booster">Booster — relentlessly positive about grim realities</option>
+      <option value="Snob">Snob — aspirational, slightly too effortful</option>
+      <option value="Anarchist">Anarchist — political, angry, accurate</option>
+      <option value="Mystic">Mystic — ley lines, ancient energies, UFO-confident</option>
+      <option value="Local">Local — hyper-specific, assumes insider knowledge</option>
+    </select>
   </div>
 
-  <!-- Oracle view -->
-  <div id="cr-oracle-view" style="display:none;">
-    <div style="margin-bottom:16px;">
-      <label>UK postcode district or Irish routing key</label>
-      <input type="text" id="cr-oracle-code" placeholder="e.g. SW1A, LS1, M1, D02, A65" maxlength="10" autocomplete="off" spellcheck="false" style="text-transform:uppercase;" oninput="this.value=this.value.toUpperCase()">
-    </div>
+  <button class="btn" onclick="HouseNameOracle.submit()" id="cr-oracle-btn">CONSULT THE ORACLE 🔮</button>
 
-    <div style="margin-bottom:20px;">
-      <label>Oracle voice <span style="color:var(--accent);font-size:12px;">* required</span></label>
-      <select id="cr-oracle-voice">
-        <option value="">— select an archetype —</option>
-        <option value="Elegist">Elegist — mournful, past-focused</option>
-        <option value="Rogue">Rogue — innuendo, double entendre</option>
-        <option value="DarkOracle">DarkOracle — sincere delivery of grim facts</option>
-        <option value="Booster">Booster — relentlessly positive about grim realities</option>
-        <option value="Snob">Snob — aspirational, slightly too effortful</option>
-        <option value="Anarchist">Anarchist — political, angry, accurate</option>
-        <option value="Mystic">Mystic — ley lines, ancient energies, UFO-confident</option>
-        <option value="Local">Local — hyper-specific, assumes insider knowledge</option>
-      </select>
-    </div>
-
-    <button class="btn" onclick="HouseNameOracle.submit()" id="cr-oracle-btn">CONSULT THE ORACLE 🔮</button>
-
-    <div id="cr-oracle-output" style="display:none;margin-top:24px;">
-      <div id="cr-oracle-conversation"></div>
-      <div id="cr-oracle-names" style="margin-top:20px;"></div>
-      <button class="btn-secondary" onclick="HouseNameOracle.submit()" style="margin-top:12px;">CONSULT AGAIN 🔮</button>
-    </div>
+  <div id="cr-oracle-output" style="display:none;margin-top:24px;">
+    <div id="cr-oracle-conversation"></div>
+    <div id="cr-oracle-names" style="margin-top:20px;"></div>
+    <button class="btn-secondary" onclick="HouseNameOracle.submit()" style="margin-top:12px;">CONSULT AGAIN 🔮</button>
   </div>
 </div>
 
@@ -4322,10 +4325,10 @@ const App = (() => {
       title: 'HECKLER\'S',
       pageTitle: 'Heckler\'s — The Comedy Panel',
       slogans: CONSULTANT_SLOGANS,
-      tabs: ['golfadventure','pubnavigator','comedyroom','boardroom','football','golf','darts','cricket','souness-cat',
+      tabs: ['golfadventure','pubnavigator','qleeks','comedyroom','housenameoracle','roastroom','writingroom','souness-cat','boardroom','football','golf','darts','cricket',
              'bills','joketest','clash','roulette','professionals','ironic',
              'comscience','evolution','blend','experiment',
-             'roastbattle','dinner','topcnuts','comedylab','trumps','qleeks',
+             'roastbattle','dinner','topcnuts','comedylab','trumps',
              'premise','charlens','bizcard','training',
              'localiser','generator','historian','sentence','it','polls',
              'settings'],
@@ -4372,15 +4375,17 @@ const App = (() => {
     // BOARDROOM
     boardroom:'boardroom',
     // COMEDY ROOM
-    comedyroom:'comedy',
+    comedyroom:'comedy', housenameoracle:'comedy', roastroom:'comedy', writingroom:'comedy', 'souness-cat':'comedy',
     // 19TH HOLE
-    football:'sports', golf:'sports', darts:'sports', cricket:'sports', 'souness-cat':'sports',
+    football:'sports', golf:'sports', darts:'sports', cricket:'sports',
     // THE PANEL
     bills:'personas', joketest:'personas', clash:'personas', roulette:'personas', professionals:'personas', ironic:'personas',
     // LEARN
     comscience:'research', evolution:'research', blend:'research', experiment:'research',
     // PLAY
-    roastbattle:'play', dinner:'play', topcnuts:'play', comedylab:'play', trumps:'play', qleeks:'play',
+    roastbattle:'play', dinner:'play', topcnuts:'play', comedylab:'play', trumps:'play',
+    // LITTLE MISADVENTURE
+    qleeks:'misadventure',
     // BUILD
     premise:'generate', charlens:'generate', bizcard:'generate', training:'generate',
     // ARCHIVE
@@ -10743,29 +10748,7 @@ HYPOCHONDRIA RESPONSE: Default silence. You have been feeling like this for year
     if (body) { body.style.color = ''; body.style.fontStyle = ''; body.textContent = text || '…'; }
   }
 
-  function switchMode(mode) {
-    sessionStorage.setItem('cr-mode', mode);
-    const isOracle  = mode === 'house-name-oracle';
-    const isRoast   = mode === 'roast-room';
-    const isWriting = mode === 'writing-room';
-    const isStandard = !isOracle && !isRoast && !isWriting;
-    document.getElementById('cr-standard-view').style.display = isStandard ? '' : 'none';
-    document.getElementById('cr-oracle-view').style.display   = isOracle   ? '' : 'none';
-    document.getElementById('cr-roast-view').style.display    = isRoast    ? '' : 'none';
-    document.getElementById('cr-writing-view').style.display  = isWriting  ? '' : 'none';
-    const activeStyle   = 'border-color:var(--accent);color:var(--accent);';
-    const inactiveStyle = '';
-    document.getElementById('cr-tab-standard').style.cssText = isStandard  ? activeStyle : inactiveStyle;
-    document.getElementById('cr-tab-oracle').style.cssText   = isOracle    ? activeStyle : inactiveStyle;
-    document.getElementById('cr-tab-roast').style.cssText    = isRoast     ? activeStyle : inactiveStyle;
-    document.getElementById('cr-tab-writing').style.cssText  = isWriting   ? activeStyle : inactiveStyle;
-    if (isStandard) {
-      const out = document.getElementById('cr-output');
-      if (out) out.style.display = 'none';
-    }
-  }
-
-  return { present, switchMode };
+  return { present };
 })();
 
 // ── Roast Room — BL-095 ──────────────────────────────────────────────────────

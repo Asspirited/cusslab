@@ -27,10 +27,10 @@ const USER_MESSAGES = {
 const NAV_GROUPS = {
   personas:      ['Ask The Panel','Joke Test','Expert Clash','The Wheel','Professionals',"Isn't It Ironic?"],
   boardroom:     ['Present to the Boardroom'],
-  comedy:        ['The Comedy Room'],
-  sports:        ['The Pub After The Match', 'The 19th Hole'],
-  play:          ['Roast Battle','Dinner Party',"Rogues' Gallery",'Comedy Lab','Dimension Duel','Quntum Leeks'],
-  misadventure:  ['Relive Golfing Greatness', 'Survive a Friday night at...'],
+  comedy:        ['The Comedy Room','The House Name Oracle','The Roast Room','The Writing Room',"Souness's Cat"],
+  sports:        ['Post Game Cunditry', 'The 19th Hole', 'Watching the Oche', 'The Long Room'],
+  play:          ['Roast Battle','Dinner Party',"Rogues' Gallery",'Comedy Lab','Dimension Duel'],
+  misadventure:  ['Relive Golfing Greatness', 'Survive a Friday night at...', 'Quntum Leeks'],
 };
 
 
@@ -6559,6 +6559,7 @@ function makeSteps(ctx) {
 
     [/^the user is on the Comedy Room$/, () => { ctx._panel = 'comedyroom'; }],
     [/^the Oracle mode is active$/, () => { ctx._oracleMode = true; }],
+    [/^the user is on the House Name Oracle panel$/, () => { ctx._panel = 'housenameoracle'; }],
 
     [/^the user enters "([^"]*)" in the Oracle location field$/, (code) => {
       ctx._oracleInput = code;
