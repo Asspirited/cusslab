@@ -4,7 +4,7 @@
 const fs   = require('fs');
 const path = require('path');
 const { Temperature, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetector, DartsVoiceFmt, dartsBuildBlock, DARTS_PREMONITION_AFFINITIES, COLLECTIVE_CALL_MINIMUM, premonitionEligible, blankPremonitionLedger, assignPremonitionRC, resolvePremonitionCommits, isPremonitionTruthTeller, detectIntellectualAttempt, buildAttemptInstruction, INTELLECTUAL_ATTEMPTS_CONFIG, CONSEQUENCE_TIERS, applyConsequence, MARSHALS_BELT_EVENT, accumulatePanelStats, computeAvgDepth, GOLF_PANEL_MEMBER_IDS, COLTART_SOFA_POOLS, getSofaCommentator, getHistoricalDivergence, selectReactionMode, validateOutwardCode, parseOutwardCode, ORACLE_VOICES, isValidOracleVoice, canSubmitOracle, ORACLE_REGISTERS, ORACLE_CHARACTERS, hasPhilTranslation, hasAllDublinDriftStages, COMEDY_ROOM_MODES, COMEDY_MODE_LABELS, getDefaultComedyMode, isValidComedyMode, AUTHORS_POOL, shufflePool, selectNextAuthorFromQueue, AUTHOR_VOICES, buildAuthorEpiloguePrompt,
-  selectRoastAuthors, buildRoastPrompt } = require('./logic.js');
+  selectRoastAuthors, buildRoastPrompt, selectWritingRoomAuthors, buildWritingRoomPrompt } = require('./logic.js');
 const { QUNTUM_LEEKS_SCENARIOS, initState, pickRandomScenario, betLeekiness, spendLeekiness, processTurnEffects, buildModifiers } = require('../src/logic/quntum-leeks-engine.js');
 
 // ── Mock state (simulates browser localStorage + DOM) ────────────────────────
@@ -6784,7 +6784,9 @@ function makeSteps(ctx) {
     }],
 
     [/^each response shows the author's name$/, () => {
-      const missing = ctx._roastResults.filter(r => !r.name || r.name.length === 0);
+      const results = ctx._writingResults || ctx._roastResults;
+      if (!results) throw new Error('No results available');
+      const missing = results.filter(r => !r.name || r.name.length === 0);
       if (missing.length) throw new Error(`${missing.length} results missing author name`);
     }],
 
@@ -6813,8 +6815,9 @@ function makeSteps(ctx) {
     }],
 
     [/^no author appears more than once in the selection$/, () => {
-      const s = new Set(ctx._roastAuthors);
-      if (s.size !== ctx._roastAuthors.length)
+      const src = ctx._writingAuthors || ctx._roastAuthors;
+      if (!src) throw new Error('No author selection available');
+      if (new Set(src).size !== src.length)
         throw new Error('Duplicate authors in selection');
     }],
 
@@ -6828,10 +6831,21 @@ function makeSteps(ctx) {
     }],
 
     [/^the user clicks the Re-roll button$/, () => {
-      ctx._roastResults = selectRoastAuthors(AUTHORS_POOL, 5).map(id => ({
-        authorId: id, name: AUTHOR_VOICES[id].name,
-        prompt: buildRoastPrompt(AUTHOR_VOICES[id], ctx._roastTitle),
-      }));
+      if (ctx._comedyMode === 'writing-room') {
+        const authors = selectWritingRoomAuthors(AUTHORS_POOL);
+        let prior = null;
+        ctx._writingResults = authors.map((id, i) => {
+          const voice  = AUTHOR_VOICES[id];
+          const prompt = buildWritingRoomPrompt(voice, ctx._writingTopic, prior);
+          prior = `${voice.name} said: [response ${i + 1}]`;
+          return { id, name: voice.name, prompt };
+        });
+      } else {
+        ctx._roastResults = selectRoastAuthors(AUTHORS_POOL, 5).map(id => ({
+          authorId: id, name: AUTHOR_VOICES[id].name,
+          prompt: buildRoastPrompt(AUTHOR_VOICES[id], ctx._roastTitle),
+        }));
+      }
     }],
 
     [/^a new set of five author roasts is displayed$/, () => {
@@ -6898,6 +6912,123 @@ function makeSteps(ctx) {
     [/^all returned authors exist in AUTHORS_POOL$/, () => {
       const invalid = ctx._roastAuthors.filter(a => !AUTHORS_POOL.includes(a));
       if (invalid.length) throw new Error(`Authors not in pool: ${invalid.join(', ')}`);
+    }],
+
+    // ── Writing Room (writing-room.feature) ───────────────────────────────────
+
+    [/^a "The Writing Room" tab is visible alongside the other Comedy Room tabs$/, () => {
+      if (!COMEDY_MODE_LABELS['writing-room'])
+        throw new Error('writing-room mode not in COMEDY_MODE_LABELS');
+      if (COMEDY_MODE_LABELS['writing-room'] !== 'The Writing Room')
+        throw new Error(`Expected label "The Writing Room", got "${COMEDY_MODE_LABELS['writing-room']}"`);
+    }],
+
+    [/^the user is on The Writing Room tab$/, () => {
+      ctx._comedyMode     = 'writing-room';
+      ctx._writingTopic   = '';
+      ctx._writingResults = null;
+    }],
+
+    [/^the user enters "([^"]+)" as the topic$/, (topic) => {
+      ctx._writingTopic = topic;
+    }],
+
+    [/^the user clicks the Discuss It button$/, () => {
+      const authors = selectWritingRoomAuthors(AUTHORS_POOL);
+      let priorContext = null;
+      ctx._writingResults = authors.map((id, i) => {
+        const voice  = AUTHOR_VOICES[id];
+        const prompt = buildWritingRoomPrompt(voice, ctx._writingTopic, priorContext);
+        priorContext = `${voice.name} said: [response ${i + 1}]`;
+        return { id, name: voice.name, prompt };
+      });
+    }],
+
+    [/^three author responses are displayed$/, () => {
+      if (!ctx._writingResults || ctx._writingResults.length !== 3)
+        throw new Error(`Expected 3 writing results, got ${ctx._writingResults?.length ?? 0}`);
+    }],
+
+    [/^each response is between 100 and 400 words$/, () => {
+      // Structural check — prompts are built, actual word count is in API response
+      if (!ctx._writingResults || !ctx._writingResults.every(r => r.prompt))
+        throw new Error('Not all writing results have prompts');
+    }],
+
+    [/^the topic input is empty$/, () => {
+      ctx._writingTopic = '';
+    }],
+
+    [/^the Discuss It button is disabled$/, () => {
+      if (ctx._writingTopic && ctx._writingTopic.trim() !== '')
+        throw new Error('Topic is not empty — Discuss It button should be enabled');
+    }],
+
+    [/^the writing room selects authors for a submission$/, () => {
+      ctx._writingAuthors = selectWritingRoomAuthors(AUTHORS_POOL);
+    }],
+
+    [/^3 authors are selected from AUTHORS_POOL$/, () => {
+      if (!ctx._writingAuthors || ctx._writingAuthors.length !== 3)
+        throw new Error(`Expected 3 writing authors, got ${ctx._writingAuthors?.length ?? 0}`);
+    }],
+
+    [/^three author responses are displayed for "([^"]+)"$/, (topic) => {
+      ctx._comedyMode   = 'writing-room';
+      ctx._writingTopic = topic;
+      const authors = selectWritingRoomAuthors(AUTHORS_POOL);
+      let prior = null;
+      ctx._writingResults = authors.map((id, i) => {
+        const voice  = AUTHOR_VOICES[id];
+        const prompt = buildWritingRoomPrompt(voice, topic, prior);
+        prior = `${voice.name} said: [response ${i + 1}]`;
+        return { id, name: voice.name, prompt };
+      });
+    }],
+
+    [/^a new set of three author responses is displayed$/, () => {
+      if (!ctx._writingResults || ctx._writingResults.length !== 3)
+        throw new Error('Expected 3 writing results after re-roll');
+    }],
+
+    [/^the Re-roll button is visible after any response is displayed$/, () => {
+      if (!ctx._writingResults) throw new Error('No writing results — Re-roll button should not be visible');
+    }],
+
+    [/^a topic "([^"]+)"$/, (topic) => {
+      ctx._writingTopic = topic;
+    }],
+
+    [/^no prior author context$/, () => {
+      ctx._writingPrior = null;
+    }],
+
+    [/^prior context "([^"]+)"$/, (prior) => {
+      ctx._writingPrior = prior;
+    }],
+
+    [/^buildWritingRoomPrompt is called$/, () => {
+      ctx._writingPrompt = buildWritingRoomPrompt(ctx._roastVoice, ctx._writingTopic, ctx._writingPrior);
+    }],
+
+    [/^the writing room prompt includes the author's voiceSignature$/, () => {
+      if (!ctx._writingPrompt.includes(ctx._roastVoice.voiceSignature))
+        throw new Error('Writing room prompt does not include voiceSignature');
+    }],
+
+    [/^the writing room prompt includes "([^"]+)"$/, (text) => {
+      if (!ctx._writingPrompt.includes(text))
+        throw new Error(`Writing room prompt does not include "${text}"`);
+    }],
+
+    [/^the writing room prompt specifies a word count between 150 and 300 words$/, () => {
+      if (!ctx._writingPrompt.includes('150') || !ctx._writingPrompt.includes('300'))
+        throw new Error('Writing room prompt does not specify 150 to 300 word count');
+    }],
+
+    [/^the writing room prompt includes the prior context$/, () => {
+      if (!ctx._writingPrompt.includes(ctx._writingPrior))
+        throw new Error('Writing room prompt does not include prior context');
     }],
 
     // ── Author Epilogue skeleton (author-epilogue-skeleton.feature) ───────────

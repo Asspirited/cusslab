@@ -524,11 +524,12 @@ function hasAllDublinDriftStages(text) {
 
 // ── Comedy Room mode switcher (BL-053) ────────────────────────────────────────
 
-const COMEDY_ROOM_MODES = ['into-the-room', 'house-name-oracle', 'roast-room'];
+const COMEDY_ROOM_MODES = ['into-the-room', 'house-name-oracle', 'roast-room', 'writing-room'];
 const COMEDY_MODE_LABELS = {
   'into-the-room':     'Into The Room',
   'house-name-oracle': 'The House Name Oracle',
   'roast-room':        'The Roast Room',
+  'writing-room':      'The Writing Room',
 };
 
 function getDefaultComedyMode() {
@@ -624,6 +625,20 @@ function buildRoastPrompt(authorVoice, title) {
   return `You are ${authorVoice.name}. Write a 100 to 150 word roast or critique of "${title}" in your distinctive voice.\n\nYour voice: ${authorVoice.voiceSignature}\n\nDraw on what you know about this title. If it is unfamiliar, infer from the title alone — do not admit ignorance. Write now. Do not break character. Do not explain your style.`;
 }
 
+// ── Writing Room — BL-059 ─────────────────────────────────────────────────────
+
+function selectWritingRoomAuthors(pool) {
+  const shuffled = shufflePool(pool);
+  return shuffled.slice(0, Math.min(3, shuffled.length));
+}
+
+function buildWritingRoomPrompt(authorVoice, topic, priorContext) {
+  const prior = priorContext
+    ? `\n\nOther authors have already weighed in:\n${priorContext}\n\nNow it is your turn. Respond to the topic — and, if you wish, to what has been said.`
+    : '\n\nYou are first. Write now.';
+  return `You are ${authorVoice.name}. Write 150 to 300 words on the following topic in your distinctive voice.\n\nYour voice: ${authorVoice.voiceSignature}\n\nTopic: "${topic}"${prior} Do not break character. Do not explain your style.`;
+}
+
 module.exports = {
   maskKey, isValidKey, shouldUpdateInput,
   Temperature,
@@ -646,4 +661,5 @@ module.exports = {
   AUTHORS_POOL, shufflePool, selectNextAuthorFromQueue,
   AUTHOR_VOICES, buildAuthorEpiloguePrompt,
   selectRoastAuthors, buildRoastPrompt,
+  selectWritingRoomAuthors, buildWritingRoomPrompt,
 };

@@ -1,7 +1,7 @@
 // Unit test runner — tests pure functions in pipeline/logic.js
 // Run: node pipeline/unit-runner.js
 
-const { maskKey, isValidKey, shouldUpdateInput, Temperature, makeWoundDetector, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetector, DartsVoiceFmt, dartsBuildBlock, DARTS_PREMONITION_AFFINITIES, COLLECTIVE_CALL_MINIMUM, premonitionEligible, blankPremonitionLedger, assignPremonitionRC, resolvePremonitionCommits, isPremonitionTruthTeller, detectIntellectualAttempt, buildAttemptInstruction, INTELLECTUAL_ATTEMPTS_CONFIG, SOUNESS_CAT_PRE_EXISTING, SOUNESS_CAT_IDS, getAllPairs, getPairTone, allPairsHaveToneAndNote, teslaHasNoWarmOrSolidary, pairToneIsSymmetrical, noConflictingTones, CONSEQUENCE_TIERS, applyConsequence, MARSHALS_BELT_EVENT, accumulatePanelStats, computeAvgDepth, GOLF_PANEL_MEMBER_IDS, COLTART_SOFA_POOLS, getSofaCommentator, getHistoricalDivergence, selectReactionMode, validateOutwardCode, parseOutwardCode, ORACLE_VOICES, isValidOracleVoice, canSubmitOracle, ORACLE_REGISTERS, ORACLE_CHARACTERS, hasPhilTranslation, hasAllDublinDriftStages, COMEDY_ROOM_MODES, COMEDY_MODE_LABELS, getDefaultComedyMode, isValidComedyMode, AUTHOR_VOICES, buildAuthorEpiloguePrompt, AUTHORS_POOL, shufflePool, selectNextAuthorFromQueue, selectRoastAuthors, buildRoastPrompt } = require('./logic.js');
+const { maskKey, isValidKey, shouldUpdateInput, Temperature, makeWoundDetector, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetector, DartsVoiceFmt, dartsBuildBlock, DARTS_PREMONITION_AFFINITIES, COLLECTIVE_CALL_MINIMUM, premonitionEligible, blankPremonitionLedger, assignPremonitionRC, resolvePremonitionCommits, isPremonitionTruthTeller, detectIntellectualAttempt, buildAttemptInstruction, INTELLECTUAL_ATTEMPTS_CONFIG, SOUNESS_CAT_PRE_EXISTING, SOUNESS_CAT_IDS, getAllPairs, getPairTone, allPairsHaveToneAndNote, teslaHasNoWarmOrSolidary, pairToneIsSymmetrical, noConflictingTones, CONSEQUENCE_TIERS, applyConsequence, MARSHALS_BELT_EVENT, accumulatePanelStats, computeAvgDepth, GOLF_PANEL_MEMBER_IDS, COLTART_SOFA_POOLS, getSofaCommentator, getHistoricalDivergence, selectReactionMode, validateOutwardCode, parseOutwardCode, ORACLE_VOICES, isValidOracleVoice, canSubmitOracle, ORACLE_REGISTERS, ORACLE_CHARACTERS, hasPhilTranslation, hasAllDublinDriftStages, COMEDY_ROOM_MODES, COMEDY_MODE_LABELS, getDefaultComedyMode, isValidComedyMode, AUTHOR_VOICES, buildAuthorEpiloguePrompt, AUTHORS_POOL, shufflePool, selectNextAuthorFromQueue, selectRoastAuthors, buildRoastPrompt, selectWritingRoomAuthors, buildWritingRoomPrompt } = require('./logic.js');
 
 let passed = 0;
 let failed = 0;
@@ -1167,7 +1167,7 @@ assert('hasAllDublinDriftStages: returns false on empty string',
 
 // ── Comedy Room mode switcher (BL-053) ───────────────────────────────────────
 assert('COMEDY_ROOM_MODES is an array',                    Array.isArray(COMEDY_ROOM_MODES), true);
-assert('COMEDY_ROOM_MODES has exactly 3 entries',          COMEDY_ROOM_MODES.length, 3);
+assert('COMEDY_ROOM_MODES has exactly 4 entries',          COMEDY_ROOM_MODES.length, 4);
 assert('COMEDY_ROOM_MODES contains into-the-room',         COMEDY_ROOM_MODES.includes('into-the-room'), true);
 assert('COMEDY_ROOM_MODES contains house-name-oracle',     COMEDY_ROOM_MODES.includes('house-name-oracle'), true);
 
@@ -1257,6 +1257,29 @@ assert('buildRoastPrompt includes voiceSignature',         _rPrompt.includes(_rV
 assert('buildRoastPrompt includes the title',              _rPrompt.includes('Hello magazine'), true);
 assert('buildRoastPrompt includes 150 word ceiling',       _rPrompt.includes('150'), true);
 assert('buildRoastPrompt includes ignorance instruction',  _rPrompt.includes('do not admit ignorance'), true);
+
+// ── Writing Room — BL-059 ─────────────────────────────────────────────────────
+
+const _wrAuthors = selectWritingRoomAuthors(AUTHORS_POOL);
+assert('selectWritingRoomAuthors returns 3 authors',       _wrAuthors.length, 3);
+assert('selectWritingRoomAuthors returns distinct authors', new Set(_wrAuthors).size, 3);
+assert('selectWritingRoomAuthors authors exist in pool',   _wrAuthors.every(a => AUTHORS_POOL.includes(a)), true);
+assert('selectWritingRoomAuthors caps at pool size',       selectWritingRoomAuthors(['hemingway', 'mccarthy']).length, 2);
+
+const _wrVoice       = AUTHOR_VOICES.hemingway;
+const _wrPromptFirst = buildWritingRoomPrompt(_wrVoice, 'a corporate away day', null);
+assert('buildWritingRoomPrompt includes author name',      _wrPromptFirst.includes('Ernest Hemingway'), true);
+assert('buildWritingRoomPrompt includes voiceSignature',   _wrPromptFirst.includes(_wrVoice.voiceSignature), true);
+assert('buildWritingRoomPrompt includes the topic',        _wrPromptFirst.includes('a corporate away day'), true);
+assert('buildWritingRoomPrompt specifies 150 word floor',  _wrPromptFirst.includes('150'), true);
+assert('buildWritingRoomPrompt specifies 300 word ceiling', _wrPromptFirst.includes('300'), true);
+assert('buildWritingRoomPrompt no prior context when null', !_wrPromptFirst.includes('have already weighed in'), true);
+
+const _wrPromptSecond = buildWritingRoomPrompt(AUTHOR_VOICES.pratchett, 'a corporate away day', 'Hemingway has already said his piece');
+assert('buildWritingRoomPrompt includes prior context',    _wrPromptSecond.includes('Hemingway has already said his piece'), true);
+
+assert('COMEDY_MODE_LABELS writing-room',                  COMEDY_MODE_LABELS['writing-room'], 'The Writing Room');
+assert('isValidComedyMode: writing-room is valid',         isValidComedyMode('writing-room'), true);
 
 // ── Results ──────────────────────────────────────────────────────────────────
 

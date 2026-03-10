@@ -2024,6 +2024,7 @@
     <button id="cr-tab-standard" class="btn-secondary" onclick="ComedyRoom.switchMode('into-the-room')" style="flex:1;font-size:13px;padding:8px 12px;border-color:var(--accent);color:var(--accent);">Into The Room</button>
     <button id="cr-tab-oracle" class="btn-secondary" onclick="ComedyRoom.switchMode('house-name-oracle')" style="flex:1;font-size:13px;padding:8px 12px;">The House Name Oracle</button>
     <button id="cr-tab-roast" class="btn-secondary" onclick="ComedyRoom.switchMode('roast-room')" style="flex:1;font-size:13px;padding:8px 12px;">The Roast Room</button>
+    <button id="cr-tab-writing" class="btn-secondary" onclick="ComedyRoom.switchMode('writing-room')" style="flex:1;font-size:13px;padding:8px 12px;">The Writing Room</button>
   </div>
 
   <!-- Standard view -->
@@ -2075,6 +2076,19 @@
     <div id="cr-roast-output" style="display:none;margin-top:24px;">
       <div id="cr-roast-responses"></div>
       <button class="btn-secondary" onclick="RoastRoom.reroll()" style="margin-top:16px;">Re-roll 🎲</button>
+    </div>
+  </div>
+
+  <!-- Writing Room view -->
+  <div id="cr-writing-view" style="display:none;">
+    <div style="margin-bottom:16px;">
+      <label>What do you want them to discuss</label>
+      <input type="text" id="cr-writing-topic" placeholder="A corporate away day. The rules of cricket. A children's birthday party. Anything." maxlength="200" autocomplete="off">
+    </div>
+    <button class="btn" onclick="WritingRoom.submit()" id="cr-writing-btn" disabled>DISCUSS IT ✍️</button>
+    <div id="cr-writing-output" style="display:none;margin-top:24px;">
+      <div id="cr-writing-responses"></div>
+      <button class="btn-secondary" onclick="WritingRoom.reroll()" style="margin-top:16px;">Re-roll 🎲</button>
     </div>
   </div>
 
@@ -10696,17 +10710,21 @@ HYPOCHONDRIA RESPONSE: Default silence. You have been feeling like this for year
 
   function switchMode(mode) {
     sessionStorage.setItem('cr-mode', mode);
-    const isOracle = mode === 'house-name-oracle';
-    const isRoast  = mode === 'roast-room';
-    document.getElementById('cr-standard-view').style.display = (!isOracle && !isRoast) ? '' : 'none';
-    document.getElementById('cr-oracle-view').style.display   = isOracle  ? '' : 'none';
-    document.getElementById('cr-roast-view').style.display    = isRoast   ? '' : 'none';
+    const isOracle  = mode === 'house-name-oracle';
+    const isRoast   = mode === 'roast-room';
+    const isWriting = mode === 'writing-room';
+    const isStandard = !isOracle && !isRoast && !isWriting;
+    document.getElementById('cr-standard-view').style.display = isStandard ? '' : 'none';
+    document.getElementById('cr-oracle-view').style.display   = isOracle   ? '' : 'none';
+    document.getElementById('cr-roast-view').style.display    = isRoast    ? '' : 'none';
+    document.getElementById('cr-writing-view').style.display  = isWriting  ? '' : 'none';
     const activeStyle   = 'border-color:var(--accent);color:var(--accent);';
     const inactiveStyle = '';
-    document.getElementById('cr-tab-standard').style.cssText = (!isOracle && !isRoast) ? activeStyle : inactiveStyle;
-    document.getElementById('cr-tab-oracle').style.cssText   = isOracle  ? activeStyle : inactiveStyle;
-    document.getElementById('cr-tab-roast').style.cssText    = isRoast   ? activeStyle : inactiveStyle;
-    if (!isOracle && !isRoast) {
+    document.getElementById('cr-tab-standard').style.cssText = isStandard  ? activeStyle : inactiveStyle;
+    document.getElementById('cr-tab-oracle').style.cssText   = isOracle    ? activeStyle : inactiveStyle;
+    document.getElementById('cr-tab-roast').style.cssText    = isRoast     ? activeStyle : inactiveStyle;
+    document.getElementById('cr-tab-writing').style.cssText  = isWriting   ? activeStyle : inactiveStyle;
+    if (isStandard) {
       const out = document.getElementById('cr-output');
       if (out) out.style.display = 'none';
     }
@@ -10798,6 +10816,99 @@ const RoastRoom = (() => {
   document.addEventListener('DOMContentLoaded', () => {
     const input = document.getElementById('cr-roast-title');
     const btn   = document.getElementById('cr-roast-btn');
+    if (input && btn) {
+      input.addEventListener('input', () => { btn.disabled = !input.value.trim(); });
+    }
+  });
+
+  return { submit, reroll };
+})();
+
+// ============================================================
+// MODULE: WritingRoom — The Writing Room (BL-059)
+// ============================================================
+const WritingRoom = (() => {
+  const WR_AUTHORS_POOL = ['hemingway', 'mccarthy', 'tolkien', 'patterson', 'pratchett', 'wodehouse', 'austen'];
+  const WR_AUTHOR_VOICES = {
+    hemingway: { name: 'Ernest Hemingway',  voiceSignature: 'Short sentences. The iceberg theory. What is not said matters more than what is. Masculine stoicism. The pause is the point. Nothing decorative. The thing that happened is stated once and not explained.' },
+    mccarthy:  { name: 'Cormac McCarthy',   voiceSignature: 'No quotation marks. No chapters. Biblical register mixed with stark American vernacular. Long sentences without punctuation that accumulate like weather. Violence and grace treated identically. The land endures. Men do not.' },
+    tolkien:   { name: 'J.R.R. Tolkien',    voiceSignature: 'Epic mythic scope. Elvish names for everything. Ancestral lineage established in appendix. Maps included. The topic has a history of three thousand years and we will cover all of it. The relevant term is given in Quenya.' },
+    patterson: { name: 'James Patterson',   voiceSignature: 'Short chapters. Everything is URGENT. Something is wrong. He did not know yet how wrong. Chapter 7: three sentences. Chapter 8: two. The pace does not stop. Possibly cannot stop. Each sentence is its own chapter. Some chapters are one sentence. Several are one word.' },
+    pratchett: { name: 'Terry Pratchett',   voiceSignature: 'Footnotes deployed as weapons. Satire so affectionate it hurts. Truth delivered sideways. Genuine warmth disguised as absurdism. Death is present at every corporate event. He has opinions. *Footnote: He has many opinions.*' },
+    wodehouse: { name: 'P.G. Wodehouse',    voiceSignature: "Bertie Wooster is present. He should not be. Jeeves is also present. He has a plan. He has not shared it yet. The situation is grave. It will get worse before it gets better. It will get better only because of Jeeves. Bertie will take credit." },
+    austen:    { name: 'Jane Austen',        voiceSignature: 'Social comedy of exquisite precision. Manners observed and found wanting. Irony so dry it requires no acknowledgement. What is said and what is meant are separated by an ocean of implication. The committee has been noted.' },
+  };
+
+  function _shuffle(pool) {
+    const arr = [...pool];
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  function _selectAuthors() {
+    return _shuffle(WR_AUTHORS_POOL).slice(0, 3);
+  }
+
+  function _buildPrompt(voice, topic, priorContext) {
+    const prior = priorContext
+      ? `\n\nOther authors have already weighed in:\n${priorContext}\n\nNow it is your turn. Respond to the topic — and, if you wish, to what has been said.`
+      : '\n\nYou are first. Write now.';
+    return `You are ${voice.name}. Write 150 to 300 words on the following topic in your distinctive voice.\n\nYour voice: ${voice.voiceSignature}\n\nTopic: "${topic}"${prior} Do not break character. Do not explain your style.`;
+  }
+
+  async function _fetchResponse(voice, topic, priorContext) {
+    const r    = await hcFetch({ model: 'claude-haiku-4-5-20251001', max_tokens: 600, messages: [{ role: 'user', content: _buildPrompt(voice, topic, priorContext) }] });
+    const data = await r.json();
+    return data.content?.[0]?.text || '';
+  }
+
+  function _renderResults(results) {
+    const container = document.getElementById('cr-writing-responses');
+    container.innerHTML = results.map(({ name, text }) => `
+      <div style="margin-bottom:24px;padding:20px 24px;background:rgba(255,255,255,0.04);border-radius:8px;border:1px solid var(--border);">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:2px;color:var(--accent);margin-bottom:10px;">${name.toUpperCase()}</div>
+        <div style="font-size:15px;line-height:1.75;white-space:pre-wrap;color:var(--fg);">${text}</div>
+      </div>
+    `).join('');
+    document.getElementById('cr-writing-output').style.display = '';
+  }
+
+  async function _run() {
+    const topic = document.getElementById('cr-writing-topic').value.trim();
+    if (!topic) return;
+    const btn = document.getElementById('cr-writing-btn');
+    btn.disabled = true;
+    btn.textContent = 'WRITING… ✍️';
+    document.getElementById('cr-writing-output').style.display = 'none';
+    try {
+      const authors = _selectAuthors();
+      const results = [];
+      let priorContext = null;
+      for (const id of authors) {
+        const voice = WR_AUTHOR_VOICES[id];
+        const text  = await _fetchResponse(voice, topic, priorContext);
+        results.push({ name: voice.name, text });
+        priorContext = (priorContext ? priorContext + '\n\n' : '') + `${voice.name}: ${text}`;
+      }
+      _renderResults(results);
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'DISCUSS IT ✍️';
+    }
+  }
+
+  function submit() { return _run(); }
+  function reroll()  {
+    document.getElementById('cr-writing-output').style.display = 'none';
+    return _run();
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const input = document.getElementById('cr-writing-topic');
+    const btn   = document.getElementById('cr-writing-btn');
     if (input && btn) {
       input.addEventListener('input', () => { btn.disabled = !input.value.trim(); });
     }
