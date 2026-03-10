@@ -1,5 +1,8 @@
 Feature: Watch Back — sofa commentary strip for panel members present at tournament
 
+  Background:
+    Given the golf adventure data modules are loaded
+
   Scenario: Sofa strip activates when a panel member was present at the tournament
     Given GOLF_PANEL_MEMBER_IDS contains "coltart_97"
     And the tournament "valderrama_1997" has a player with id "coltart_97"
