@@ -1,5 +1,6 @@
 // Unit test runner — tests pure functions in pipeline/logic.js
 // Run: node pipeline/unit-runner.js
+const { lintStepDuplicates } = require('./lint-steps.js');
 
 const { maskKey, isValidKey, shouldUpdateInput, Temperature, makeWoundDetector, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetector, DartsVoiceFmt, dartsBuildBlock, DARTS_PREMONITION_AFFINITIES, COLLECTIVE_CALL_MINIMUM, premonitionEligible, blankPremonitionLedger, assignPremonitionRC, resolvePremonitionCommits, isPremonitionTruthTeller, detectIntellectualAttempt, buildAttemptInstruction, INTELLECTUAL_ATTEMPTS_CONFIG, SOUNESS_CAT_PRE_EXISTING, SOUNESS_CAT_IDS, getAllPairs, getPairTone, allPairsHaveToneAndNote, teslaHasNoWarmOrSolidary, pairToneIsSymmetrical, noConflictingTones, CONSEQUENCE_TIERS, applyConsequence, MARSHALS_BELT_EVENT, accumulatePanelStats, computeAvgDepth, GOLF_PANEL_MEMBER_IDS, COLTART_SOFA_POOLS, getSofaCommentator, getHistoricalDivergence, selectReactionMode, validateOutwardCode, parseOutwardCode, ORACLE_VOICES, isValidOracleVoice, canSubmitOracle, ORACLE_REGISTERS, ORACLE_CHARACTERS, hasPhilTranslation, hasAllDublinDriftStages, COMEDY_ROOM_MODES, COMEDY_MODE_LABELS, getDefaultComedyMode, isValidComedyMode, AUTHOR_VOICES, buildAuthorEpiloguePrompt, AUTHORS_POOL, shufflePool, selectNextAuthorFromQueue, selectRoastAuthors, buildRoastPrompt, selectWritingRoomAuthors, buildWritingRoomPrompt } = require('./logic.js');
 
@@ -1280,6 +1281,22 @@ assert('buildWritingRoomPrompt includes prior context',    _wrPromptSecond.inclu
 
 assert('COMEDY_MODE_LABELS writing-room',                  COMEDY_MODE_LABELS['writing-room'], 'The Writing Room');
 assert('isValidComedyMode: writing-room is valid',         isValidComedyMode('writing-room'), true);
+
+// ── lintStepDuplicates (BL-098) ──────────────────────────────────────────────
+const _lintClean = lintStepDuplicates([[/^foo$/, ()=>{}], [/^bar$/, ()=>{}]]);
+assert('lintStepDuplicates: clean list returns no collisions', _lintClean.length, 0);
+
+const _lintOne = lintStepDuplicates([[/^foo$/, ()=>{}], [/^foo$/, ()=>{}], [/^bar$/, ()=>{}]]);
+assert('lintStepDuplicates: one duplicate pattern returns 1 collision', _lintOne.length, 1);
+assert('lintStepDuplicates: collision pattern is correct', _lintOne[0].pattern, '^foo$');
+assert('lintStepDuplicates: collision count is 2', _lintOne[0].count, 2);
+
+const _lintTwo = lintStepDuplicates([[/^foo$/, ()=>{}], [/^foo$/, ()=>{}], [/^bar$/, ()=>{}], [/^bar$/, ()=>{}]]);
+assert('lintStepDuplicates: two duplicate patterns returns 2 collisions', _lintTwo.length, 2);
+
+const _lintThree = lintStepDuplicates([[/^foo$/, ()=>{}], [/^foo$/, ()=>{}], [/^foo$/, ()=>{}]]);
+assert('lintStepDuplicates: three occurrences counts as 1 collision', _lintThree.length, 1);
+assert('lintStepDuplicates: three occurrences count is 3', _lintThree[0].count, 3);
 
 // ── Results ──────────────────────────────────────────────────────────────────
 

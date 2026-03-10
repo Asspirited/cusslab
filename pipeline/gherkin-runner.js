@@ -6,6 +6,7 @@ const path = require('path');
 const { Temperature, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetector, DartsVoiceFmt, dartsBuildBlock, DARTS_PREMONITION_AFFINITIES, COLLECTIVE_CALL_MINIMUM, premonitionEligible, blankPremonitionLedger, assignPremonitionRC, resolvePremonitionCommits, isPremonitionTruthTeller, detectIntellectualAttempt, buildAttemptInstruction, INTELLECTUAL_ATTEMPTS_CONFIG, CONSEQUENCE_TIERS, applyConsequence, MARSHALS_BELT_EVENT, accumulatePanelStats, computeAvgDepth, GOLF_PANEL_MEMBER_IDS, COLTART_SOFA_POOLS, getSofaCommentator, getHistoricalDivergence, selectReactionMode, validateOutwardCode, parseOutwardCode, ORACLE_VOICES, isValidOracleVoice, canSubmitOracle, ORACLE_REGISTERS, ORACLE_CHARACTERS, hasPhilTranslation, hasAllDublinDriftStages, COMEDY_ROOM_MODES, COMEDY_MODE_LABELS, getDefaultComedyMode, isValidComedyMode, AUTHORS_POOL, shufflePool, selectNextAuthorFromQueue, AUTHOR_VOICES, buildAuthorEpiloguePrompt,
   selectRoastAuthors, buildRoastPrompt, selectWritingRoomAuthors, buildWritingRoomPrompt } = require('./logic.js');
 const { QUNTUM_LEEKS_SCENARIOS, initState, pickRandomScenario, betLeekiness, spendLeekiness, processTurnEffects, buildModifiers } = require('../src/logic/quntum-leeks-engine.js');
+const { lintStepDuplicates } = require('./lint-steps.js');
 
 // ── Mock state (simulates browser localStorage + DOM) ────────────────────────
 
@@ -3795,6 +3796,37 @@ function makeSteps(ctx) {
     [/^suggestion cards with category "([^"]+)" have the blush colour class$/, (cat) => { if (!(ctx._suggestionCards||[]).some(c=>c.category===cat)) throw new Error('No cards with category '+cat); }],
     [/^at least one suggestion card has category "([^"]+)"$/, (cat) => { if (!(ctx._suggestionCards||[]).some(c=>c.category===cat)) throw new Error('No card with category '+cat); }],
 
+    // ── GHERKIN LINT (BL-098) ────────────────────────────────────────────────
+    [/^a step list with no duplicate patterns$/, () => {
+      ctx._lintSteps = [[/^foo$/, ()=>{}], [/^bar$/, ()=>{}], [/^baz$/, ()=>{}]];
+    }],
+    [/^a step list where one pattern appears twice$/, () => {
+      ctx._lintSteps = [[/^foo$/, ()=>{}], [/^foo$/, ()=>{}], [/^bar$/, ()=>{}]];
+    }],
+    [/^a step list where two different patterns each appear twice$/, () => {
+      ctx._lintSteps = [[/^foo$/, ()=>{}], [/^foo$/, ()=>{}], [/^bar$/, ()=>{}], [/^bar$/, ()=>{}]];
+    }],
+    [/^a step list where one pattern appears three times$/, () => {
+      ctx._lintSteps = [[/^foo$/, ()=>{}], [/^foo$/, ()=>{}], [/^foo$/, ()=>{}]];
+    }],
+    [/^lintStepDuplicates is called$/, () => {
+      const { lintStepDuplicates } = require('./lint-steps.js');
+      ctx._lintResult = lintStepDuplicates(ctx._lintSteps || []);
+    }],
+    [/^the lint result is empty$/, () => {
+      if (ctx._lintResult.length !== 0) throw new Error('Expected 0 collisions, got ' + ctx._lintResult.length);
+    }],
+    [/^the lint result contains (\d+) collision(?:s)?$/, (n) => {
+      if (ctx._lintResult.length !== parseInt(n)) throw new Error('Expected ' + n + ' collision(s), got ' + ctx._lintResult.length);
+    }],
+    [/^the collision pattern matches the duplicated regex$/, () => {
+      if (!ctx._lintResult[0]?.pattern) throw new Error('No collision pattern found');
+      if (ctx._lintResult[0].pattern !== '^foo$') throw new Error('Expected collision pattern ^foo$, got ' + ctx._lintResult[0].pattern);
+    }],
+    [/^the collision count is (\d+)$/, (n) => {
+      if (ctx._lintResult[0]?.count !== parseInt(n)) throw new Error('Expected collision count ' + n + ', got ' + ctx._lintResult[0]?.count);
+    }],
+
     // ── SPORTS PANEL SUGGESTION CARDS (BL-100) ────────────────────────────────
     [/^the Football panel is in qanda mode$/, () => {
       const pool = [
@@ -7357,6 +7389,15 @@ function parseBackground(text) {
 
 const specsDir = path.join(__dirname, '..', 'specs');
 const files    = fs.readdirSync(specsDir).filter(f => f.endsWith('.feature'));
+
+// ── Step namespace lint ───────────────────────────────────────────────────────
+const _lintCollisions = lintStepDuplicates(makeSteps({}));
+if (_lintCollisions.length > 0) {
+  console.log(`\n  ⚠ Duplicate step patterns (${_lintCollisions.length}):`);
+  for (const { pattern, count } of _lintCollisions) {
+    console.log(`    /${pattern}/ — ${count} definitions`);
+  }
+}
 
 let totalPass  = 0;
 let totalFail  = 0;

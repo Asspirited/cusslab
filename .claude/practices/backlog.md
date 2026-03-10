@@ -936,4 +936,4 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Recurring waste: WL-099, WL-100, WL-103 all caused by identical regex patterns across features silently shadowing each other. First-match wins; the wrong step fires; pipeline may appear green while behaviour is untested.
 - Fix: add a lint pass to gherkin-runner.js (or a separate script) that detects duplicate regex patterns across all step definitions and fails with a clear error naming the collision. Could also enforce a naming convention: steps containing `"([^"]+)"` must be prefixed with a feature-specific noun.
 - CD3: UBV=2 TC=3 RR=4 → CoD=9, Dur=2, **CD3=4.5**
-- Status: OPEN — raised 2026-03-10
+- Status: CLOSED — 2026-03-10. lintStepDuplicates() in pipeline/lint-steps.js; integrated into gherkin-runner.js startup; 6 unit tests + 4 Gherkin scenarios. First run found 11 existing duplicate patterns — now visible, not silent.
