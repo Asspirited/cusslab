@@ -88,10 +88,10 @@ Feature: Ryder Cup Player Selection
   ## Data shape — matchPlayDays
 
   @players-data
-  Scenario: Every Ryder Cup player has matchPlayDays for all 3 days
+  Scenario: Every Ryder Cup player has matchPlaySessions for all 5 sessions
     When the tournament catalogue is inspected
-    Then every player in every Ryder Cup tournament has a "matchPlayDays" array with exactly 3 entries
-    And every matchPlayDay has a non-empty "format"
+    Then every player in every Ryder Cup tournament has a "matchPlaySessions" array with exactly 5 entries
+    And every matchPlaySession has a non-empty "format"
 
   @players-data
   Scenario: Active matchPlayDays have opponent and historical result
