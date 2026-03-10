@@ -1950,6 +1950,58 @@ const TOURNAMENTS = [
 
 ,
 
+  // ── 2000 Open Championship — St Andrews ───────────────────────────────────────────────
+  {
+    id:"st_andrews_2000", year:2000, eraClass:"era-2000", lbClass:"lb-2000",
+    name:"The Tiger Slam",
+    course:"The Old Course, St Andrews", country:"St Andrews, Fife, Scotland",
+    type:"major", badge:"badge-major", days:4,
+    lore:"Tiger Woods completed the Career Grand Slam at St Andrews in July 2000. He was 24. He shot 67-66-67-69 for 269, 19 under par, and won by eight shots. The Old Course has 112 bunkers. Tiger visited none of them across four rounds. The course that has humbled every generation of golfer for six hundred years stood back and watched. Colin Montgomerie played four rounds in front of galleries who adored him and shot -8, eleven shots behind. The BBC commentary team ran out of comparisons around Friday afternoon and spent the rest of the week describing what they were watching rather than explaining it.",
+    players:[
+      { id:"tiger_woods_standrews", name:"Tiger Woods", abbr:"TIG",
+        temperamentProfile:"ICEBERG",
+        temperamentProfileSecondary:"PEAKER",
+        bottle:10, ego:10, temperament:10, shame:1,
+        driving:10, irons:10, short_game:10, putting:10, recovery:10, bunkers:10, course_management:10, shot_variation:10,
+        desc:"Completing the Career Grand Slam at 24. Has won the Masters, US Open, Open Championship, and PGA Championship. This is the third of four majors in thirteen months. The Old Course has 112 bunkers. He is visiting none of them.",
+        wound:"No wound. Tiger in the year 2000 is what golf looks like when it is working perfectly and there is nothing left to fix.",
+        historicalScores:[-5,-11,-16,-19] },
+      { id:"colin_montgomerie_2000", name:"Colin Montgomerie", abbr:"MON",
+        temperamentProfile:"COMBUSTIBLE",
+        temperamentProfileSecondary:"STREAKY",
+        bottle:7, ego:8, temperament:6, shame:5,
+        driving:8, irons:9, short_game:8, putting:8, recovery:7, bunkers:7, course_management:9,
+        desc:"Playing in front of galleries who love him at the home of golf. Seven European Order of Merits and no major. He is -8 for the week and eleven shots behind Tiger. The crowd does not care about the gap. They are just glad he is here.",
+        wound:"Seven consecutive European Tour Order of Merit titles. No major. Oakmont 1994. Now St Andrews 2000. The galleries keep coming. The trophy keeps going elsewhere.",
+        historicalScores:[-2,-5,-7,-8] },
+    ],
+    field:[
+      {name:"David Duval",       scores:[-2,-5,-8,-11]},
+      {name:"Thomas Bjørn",      scores:[-1,-4,-7,-11]},
+      {name:"Ernie Els",         scores:[-1,-4,-7,-11]},
+      {name:"Stuart Appleby",    scores:[0,-3,-6,-10]},
+    ],
+    holes:[
+      {id:"sa1_2000",  name:"1st — The Burn",      par:4, yards:376, hazard:"Swilcan Burn runs across in front of the green — miss short and you're wet",
+       lore:"The 1st at St Andrews is the widest fairway in championship golf — it shares its space with the 18th and runs straight towards the town. There is no obvious danger. Tiger hit his opening tee shot down the middle on Thursday, as he did on Friday, Saturday, and Sunday. The Swilcan Burn in front of the green claimed two approach shots in the first round from players who were nervous. Tiger was not nervous.",
+       incidents:["Tiger hit the 1st fairway with a driver in all four rounds. None of his approach shots found the burn.","The 1st fairway at St Andrews is so wide it was once used as a public road. It still functions as one during the winter.","Montgomerie made birdie on the 1st in round three to a gallery roar that was heard on the 18th green. He smiled. He was still nine behind.","The Swilcan Burn in front of the 1st green is eighteen inches deep at its centre. It has ended more Open Championship ambitions than any bunker on the course."],
+       events:["opening_drive","burn_hazard","monty_birdie","gallery_roar"], pressureRating:2,
+       modifiers:{atmosphereNote:"1st at St Andrews. The widest fairway in major golf. Tiger drives it down the middle. The Burn waits in front of the green. He carries it. The Old Course offers nothing and he takes everything."}},
+      {id:"sa17_2000", name:"17th — The Road Hole", par:4, yards:495, hazard:"Road Hole bunker left of green — almost impossible escape; road and stone wall hard right and behind",
+       lore:"The Road Hole is the most famous par 4 in golf. The tee shot must be threaded over the corner of the Old Course Hotel on the left. The approach must find a narrow green flanked by the Road Hole bunker on the left and the road and stone wall to the right. Jean Van de Velde won't be back until 1999 but every player this week knows what it can do. Tiger found the green four times. He made four pars. He did not go near the bunker.",
+       incidents:["The Road Hole bunker on 17 is so deep the flagstick disappears below ground level when placed in certain positions.","Tiger hit a long iron approach to the 17th green in the final round, leaving twelve feet for par. He made it.","David Duval made bogey on 17 in the final round as the road claimed his approach. He finished at -11, eight behind.","Montgomerie stood on the 17th tee in round four and acknowledged the gallery for the first time all day. He made par. The gallery made a noise disproportionate to a par."],
+       events:["road_hole","bunker_avoided","road_hazard","gallery_monty"], pressureRating:5,
+       modifiers:{thresholdAdd:2, atmosphereNote:"17th at St Andrews. The Road Hole. The bunker is to the left. The road is to the right. Tiger threads it to the green. He has not been in a bunker all week. He is not starting now."}},
+      {id:"sa18_2000", name:"18th — Valley of Sin",  par:4, yards:357, hazard:"Valley of Sin — large hollow across the front of the green; miss short and you chip from the dip",
+       lore:"Tiger crossed the Swilcan Bridge on the 18th fairway on Sunday afternoon knowing he had completed the Career Grand Slam. He was 24 years old. The Valley of Sin in front of the 18th green was the last obstacle. He pitched past it and two-putted. The Claret Jug was presented on the 18th green of the Old Course while the BBC ran out of words. He held the trophy and looked at the scoreboard and the scoreboard said -19 and there were eight shots between him and the next name and this was the home of golf and that was that.",
+       incidents:["Tiger crossed the Swilcan Bridge for the last time at -19 for the tournament, eight shots clear.","The Valley of Sin in front of the 18th has swallowed par saves and championship hopes for a century. Tiger pitched past it.","His final round of 69 included zero bogeys and three birdies. He was more careful than he needed to be.","Tiger Woods became the fifth player to complete the Career Grand Slam and the youngest by fourteen years.","He never visited a single one of the 112 bunkers on the Old Course in four rounds of the Open Championship.","The BBC commentary team fell silent for six seconds when the final putt dropped. This is not something that happened before or after."],
+       events:["swilcan_bridge","valley_of_sin","claret_jug","career_grand_slam","no_bunkers","bbc_silence"], pressureRating:3,
+       modifiers:{atmosphereNote:"18th at St Andrews. Sunday. Tiger crosses the Swilcan Bridge. The Valley of Sin is ahead. He pitches past it. He two-putts. The Career Grand Slam is complete. He is 24. He has never been in a bunker all week. The BBC goes quiet."}},
+    ]
+  }
+
+,
+
   // ── 2011 US Open — Congressional Country Club ─────────────────────────────────────────
   {
     id:"congressional_2011", year:2011, eraClass:"era-2011-us", lbClass:"lb-2011-us",
