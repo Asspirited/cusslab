@@ -308,10 +308,11 @@ Source: Ohno — Toyota Production System; Meadows — Thinking in Systems
 1. Form an improvement hypothesis (see `.claude/practices/hypothesis-driven.md`):
    "If we [do X], then [observable outcome] because [root cause from Analyze]."
 2. State the falsifier: "We will know we were wrong if [counter-signal]."
-3. Apply the minimum fix — no gold-plating around a bug fix (Beck — XP; Poppendieck — Lean).
-4. If new behaviour is introduced: Gherkin gate applies.
+3. **Fix order — impact first, cosmetic last.** When multiple issues are identified, fix in order of impact — not discovery order, not ease. A broken sync file outranks a stale comment count. A broken game flow outranks a misnamed variable. Never fix the easy thing first just because it's easy.
+4. Apply the minimum fix — no gold-plating around a bug fix (Beck — XP; Poppendieck — Lean).
+5. If new behaviour is introduced: Gherkin gate applies.
    If fix restores existing contract only: guard + WL closure sufficient.
-5. Source: Beck — XP (simplest thing that works); Fowler — Refactoring (change safely)
+6. Source: Beck — XP (simplest thing that works); Fowler — Refactoring (change safely)
 
 **C — CHECK (verify the fix)**
 1. Pipeline green before any commit. No exceptions.
@@ -532,7 +533,7 @@ DORA: delivery health is the prerequisite for a fast outer loop — Forsgren / K
 .claude/practices/auth-ops.md      — auth/deploy work
 specs/                             — all Gherkin lives here
 docs/                              — all character files live here
-pipeline/unit-runner.js            — all unit tests (403 assertions)
+pipeline/unit-runner.js            — all unit tests (454 assertions)
 pipeline/logic.js                  — pure functions under test
 pipeline/gherkin-runner.js         — Gherkin step definitions
 .claude/practices/hypothesis-driven.md — outer loop: hypothesis card, AARRR, pivot/persevere
