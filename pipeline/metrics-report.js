@@ -10,7 +10,7 @@ const path = require('path');
 const ROOT         = path.join(__dirname, '..');
 const METRICS_DIR  = path.join(ROOT, 'metrics');
 const BUILDS_FILE  = path.join(METRICS_DIR, 'builds.jsonl');
-const DEFECTS_FILE = path.join(METRICS_DIR, 'defects.jsonl');
+const WASTE_LOG    = path.join(ROOT, '.claude', 'practices', 'waste-log.md');
 
 // ── JSONL reader ──────────────────────────────────────────────────────────────
 
@@ -23,10 +23,44 @@ function readJsonl(file) {
     .filter(Boolean);
 }
 
+// ── Waste log bug reader ───────────────────────────────────────────────────────
+// Reads WL entries tagged with "bug" from waste-log.md.
+// Each entry: { id, rodCaught, pipelineCaught, open, falseGreen }
+
+function readBugsFromWasteLog() {
+  if (!fs.existsSync(WASTE_LOG)) return [];
+  const lines = fs.readFileSync(WASTE_LOG, 'utf8').split('\n');
+  const bugs = [];
+  let current = null;
+
+  for (const line of lines) {
+    const wlMatch = line.match(/^## (WL-\d+)/);
+    if (wlMatch) {
+      if (current) bugs.push(current);
+      current = { id: wlMatch[1], rodCaught: false, pipelineCaught: false, open: true, falseGreen: false };
+      continue;
+    }
+    if (!current) continue;
+    const tagsMatch = line.match(/\*\*Tags:\*\*\s*(.+)/);
+    if (tagsMatch) {
+      const tags = tagsMatch[1].toLowerCase();
+      if (!tags.includes('bug')) { current = null; continue; } // not a bug entry — discard
+      current.rodCaught      = tags.includes('rod-caught');
+      current.pipelineCaught = tags.includes('pipeline-caught');
+      current.falseGreen     = tags.includes('false-green');
+    }
+    if (line.match(/\*\*Status:\*\*.*Closed/i) && current) {
+      current.open = false;
+    }
+  }
+  if (current) bugs.push(current);
+  return bugs.filter(b => b.rodCaught || b.pipelineCaught); // only confirmed bug entries
+}
+
 // ── Load data ─────────────────────────────────────────────────────────────────
 
-const builds  = readJsonl(BUILDS_FILE);
-const defects = readJsonl(DEFECTS_FILE);
+const builds = readJsonl(BUILDS_FILE);
+const bugs   = readBugsFromWasteLog();
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -75,43 +109,13 @@ const flaky = stepKeys.filter(k => {
   return fails > 1;
 });
 
-// ── DEFECT TRENDS ─────────────────────────────────────────────────────────────
+// ── DEFECT TRENDS — sourced from waste-log.md (tag: bug) ─────────────────────
 
-const totalDefects    = defects.length;
-const rodCaught       = defects.filter(d => d.discoveredBy === 'rod').length;
-const pipelineCaught  = defects.filter(d => d.discoveredBy === 'pipeline').length;
-const openDefects     = defects.filter(d => d.fixedSession === null);
-const closedDefects   = defects.filter(d => d.fixedSession !== null);
-
-const leadTimes = closedDefects.map(d => d.fixedSession - d.discoveredSession);
-const avgLeadTime = leadTimes.length ? (leadTimes.reduce((a,b)=>a+b,0)/leadTimes.length).toFixed(1) : 'n/a';
-
-// ── CRITICALITY BREAKDOWN ─────────────────────────────────────────────────────
-
-const critCounts = { high: 0, medium: 0, low: 0 };
-defects.forEach(d => { if (critCounts[d.criticality] !== undefined) critCounts[d.criticality]++; });
-
-// ── ROOT CAUSE PATTERNS ───────────────────────────────────────────────────────
-
-const rcMap = {};
-defects.forEach(d => {
-  const key = `${d.rootCause?.category} / ${d.rootCause?.subcategory}`;
-  rcMap[key] = (rcMap[key] || 0) + 1;
-});
-const rcEntries = Object.entries(rcMap).sort((a, b) => b[1] - a[1]);
-const RECUR_THRESHOLD = 3; // taxonomy validationRules.recurrenceFlag
-
-// ── PROCESS FAILURES ──────────────────────────────────────────────────────────
-
-const pfMap = {};
-defects.forEach(d => (d.processFailures || []).forEach(pf => {
-  pfMap[pf] = (pfMap[pf] || 0) + 1;
-}));
-const pfEntries = Object.entries(pfMap).sort((a, b) => b[1] - a[1]);
-
-// ── FALSE GREENS ──────────────────────────────────────────────────────────────
-
-const totalFalseGreens = defects.reduce((sum, d) => sum + (d.falseGreens || 0), 0);
+const totalBugs       = bugs.length;
+const rodCaught       = bugs.filter(b => b.rodCaught).length;
+const pipelineCaught  = bugs.filter(b => b.pipelineCaught).length;
+const openBugs        = bugs.filter(b => b.open);
+const totalFalseGreens = bugs.filter(b => b.falseGreen).length;
 
 // ── OUTPUT ────────────────────────────────────────────────────────────────────
 
@@ -140,44 +144,15 @@ if (totalBuilds === 0) {
 }
 
 // Defect Trends
-console.log('\n  Defect Trends');
+console.log('\n  Defect Trends  (source: waste-log.md — tag: bug)');
 console.log(`  ${D}`);
-if (totalDefects === 0) {
-  console.log('  No defect records yet.');
+if (totalBugs === 0) {
+  console.log('  No bug entries in waste log yet.');
 } else {
-  console.log(`  Total bugs logged:         ${totalDefects}`);
-  console.log(`  Rod-caught:                ${pct(rodCaught, totalDefects)}  (${rodCaught}/${totalDefects})`);
-  console.log(`  Pipeline-caught:           ${pct(pipelineCaught, totalDefects)}  (${pipelineCaught}/${totalDefects})`);
-  console.log(`  Open:                      ${openDefects.length}${openDefects.length ? '  (' + openDefects.map(d=>d.id).join(', ') + ')' : ''}`);
-  console.log(`  Avg lead time (closed):    ${avgLeadTime} session${avgLeadTime !== '1.0' && avgLeadTime !== 'n/a' ? 's' : ''}`);
-}
-
-// Criticality Breakdown
-console.log('\n  Criticality Breakdown');
-console.log(`  ${D}`);
-console.log(`  high:      ${critCounts.high}`);
-console.log(`  medium:    ${critCounts.medium}`);
-console.log(`  low:       ${critCounts.low}`);
-
-// Root Cause Patterns
-console.log('\n  Root Cause Patterns');
-console.log(`  ${D}`);
-if (!rcEntries.length) {
-  console.log('  No defect records yet.');
-} else {
-  for (const [key, count] of rcEntries) {
-    const flag = count >= RECUR_THRESHOLD ? '  [recurring ▲]' : '';
-    console.log(`  ${key}:  ${count}${flag}`);
-  }
-}
-
-// Process Failures
-if (pfEntries.length) {
-  console.log('\n  Process Failures');
-  console.log(`  ${D}`);
-  for (const [pf, count] of pfEntries) {
-    console.log(`  ${pf}:  ${count}`);
-  }
+  console.log(`  Total bugs logged:         ${totalBugs}`);
+  console.log(`  Rod-caught:                ${pct(rodCaught, totalBugs)}  (${rodCaught}/${totalBugs})`);
+  console.log(`  Pipeline-caught:           ${pct(pipelineCaught, totalBugs)}  (${pipelineCaught}/${totalBugs})`);
+  console.log(`  Open:                      ${openBugs.length}${openBugs.length ? '  (' + openBugs.map(b=>b.id).join(', ') + ')' : ''}`);
 }
 
 // False Greens

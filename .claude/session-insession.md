@@ -365,6 +365,11 @@ No sub-items. No BL-NNN-X. Every item is a first-class BL or WL entry with its o
 3. Run pipeline — confirm tests failing for the right reason
 4. Report which tests are red and why
 5. On Rod's go → IMPLEMENTATION SEQUENCE
+6. **GAP CHECK** — after tests green, before BDD CLOSE:
+   Scan all exports in pipeline/logic.js. For each export, ask: is there at least one
+   behavioral test in unit-runner.js that would fail if this function's behaviour changed?
+   "Is a function" and "returns a string" are not behavioral tests — they test type, not output.
+   Add missing behavioral tests now, before moving on. Do not defer gap-fill to a later session.
 
 ### IMPLEMENTATION SEQUENCE — green the tests
 1. Write minimum implementation to green the unit tests
@@ -533,7 +538,7 @@ DORA: delivery health is the prerequisite for a fast outer loop — Forsgren / K
 .claude/practices/auth-ops.md      — auth/deploy work
 specs/                             — all Gherkin lives here
 docs/                              — all character files live here
-pipeline/unit-runner.js            — all unit tests (454 assertions)
+pipeline/unit-runner.js            — all unit tests (count live: run pipeline)
 pipeline/logic.js                  — pure functions under test
 pipeline/gherkin-runner.js         — Gherkin step definitions
 .claude/practices/hypothesis-driven.md — outer loop: hypothesis card, AARRR, pivot/persevere

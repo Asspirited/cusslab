@@ -1255,6 +1255,66 @@ Status: CLOSED
 - **Fix:** Clean seam protocol added to session-insession.md this session — defines valid stop points and makes forcing function recurrent (not one-time). Counter resets after each clean stop, not after Rod says continue.
 - **Status:** Closed — 2026-03-10 (c76e4b7): PROACTIVE SESSION CLOSE SEQUENCE added
 
+## WL-089
+- **Item:** Bills panel crashes with undefined prompt on first API call
+- **Symptom:** Runtime TypeError on first call — prompt was undefined, not caught before API dispatch
+- **Suspected cause:** Test confirmed code — tests written after implementation, did not cover undefined prompt path
+- **Session date:** ~Session 2 (early project)
+- **Time lost:** ~30 min
+- **Cost impact:** Medium
+- **Tags:** bug, rod-caught, test-confirmed-code, written-after-implementation
+- **Status:** Closed — Session 2
+
+## WL-090
+- **Item:** App crash on startup after settings panel changes
+- **Symptom:** White screen on load after saving settings — state initialisation order broken
+- **Suspected cause:** Test confirmed code — wrote tests after implementation, missed startup sequence dependency
+- **Session date:** ~Session 3
+- **Time lost:** ~30 min
+- **Cost impact:** Medium
+- **Tags:** bug, rod-caught, test-confirmed-code, written-after-implementation
+- **Status:** Closed — Session 3
+
+## WL-091
+- **Item:** Submit buttons not connected to API call handlers
+- **Symptom:** Clicking submit had no effect — event handler not wired
+- **Suspected cause:** Test confirmed code — no test asserted button invoked the handler
+- **Session date:** ~Session 4
+- **Time lost:** ~20 min
+- **Cost impact:** Medium
+- **Tags:** bug, rod-caught, test-confirmed-code, written-after-implementation
+- **Status:** Closed — Session 4
+
+## WL-092
+- **Item:** Empty catch block swallows HTTP errors in API module
+- **Symptom:** Silent failures — errors swallowed, no user feedback on API failure
+- **Suspected cause:** Test confirmed code — catch block existed but was empty; no test asserted error propagation
+- **Session date:** ~Session 5 (fixed session 6)
+- **Time lost:** ~45 min
+- **Cost impact:** Medium
+- **Tags:** bug, rod-caught, test-confirmed-code, written-after-implementation
+- **Status:** Closed — Session 6
+
+## WL-093
+- **Item:** Generic API error message shown on all failure types
+- **Symptom:** User sees same unhelpful error regardless of network/auth/rate-limit failure
+- **Suspected cause:** Test confirmed code — Gherkin written reactively after Rod reported it
+- **Session date:** ~Session 6 (fixed session 294)
+- **Time lost:** ~1 hour (long tail — lived unfixed for ~288 sessions)
+- **Cost impact:** Medium
+- **Tags:** bug, rod-caught, test-confirmed-code, gherkin-written-reactively
+- **Status:** Closed — Session 294
+
+## WL-094
+- **Item:** API key input reverts to old value after saving
+- **Symptom:** Settings panel showed old key after save — DOM state not updated
+- **Suspected cause:** Missing scenario — three-amigos skipped; scenario tested mock not DOM; false green × 2
+- **Session date:** ~Session 7
+- **Time lost:** ~1 hour
+- **Cost impact:** High
+- **Tags:** bug, rod-caught, missing-scenario, dom-state-not-tested, three-amigos-skipped, false-green
+- **Status:** Closed — Session 7
+
 ## WL-088
 - **Item:** No failures in BL-035 UI wiring continuation session
 - **Symptom:** N/A — clean run

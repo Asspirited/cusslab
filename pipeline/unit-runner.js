@@ -1,7 +1,7 @@
 // Unit test runner — tests pure functions in pipeline/logic.js
 // Run: node pipeline/unit-runner.js
 
-const { maskKey, isValidKey, shouldUpdateInput, Temperature, makeWoundDetector, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetector, DartsVoiceFmt, dartsBuildBlock, DARTS_PREMONITION_AFFINITIES, COLLECTIVE_CALL_MINIMUM, premonitionEligible, blankPremonitionLedger, assignPremonitionRC, resolvePremonitionCommits, isPremonitionTruthTeller, detectIntellectualAttempt, buildAttemptInstruction, INTELLECTUAL_ATTEMPTS_CONFIG, SOUNESS_CAT_PRE_EXISTING, SOUNESS_CAT_IDS, getAllPairs, getPairTone, allPairsHaveToneAndNote, teslaHasNoWarmOrSolidary, pairToneIsSymmetrical, noConflictingTones, CONSEQUENCE_TIERS, applyConsequence, MARSHALS_BELT_EVENT, accumulatePanelStats, computeAvgDepth, getSofaCommentator, getHistoricalDivergence, selectReactionMode } = require('./logic.js');
+const { maskKey, isValidKey, shouldUpdateInput, Temperature, makeWoundDetector, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetector, DartsVoiceFmt, dartsBuildBlock, DARTS_PREMONITION_AFFINITIES, COLLECTIVE_CALL_MINIMUM, premonitionEligible, blankPremonitionLedger, assignPremonitionRC, resolvePremonitionCommits, isPremonitionTruthTeller, detectIntellectualAttempt, buildAttemptInstruction, INTELLECTUAL_ATTEMPTS_CONFIG, SOUNESS_CAT_PRE_EXISTING, SOUNESS_CAT_IDS, getAllPairs, getPairTone, allPairsHaveToneAndNote, teslaHasNoWarmOrSolidary, pairToneIsSymmetrical, noConflictingTones, CONSEQUENCE_TIERS, applyConsequence, MARSHALS_BELT_EVENT, accumulatePanelStats, computeAvgDepth, GOLF_PANEL_MEMBER_IDS, COLTART_SOFA_POOLS, getSofaCommentator, getHistoricalDivergence, selectReactionMode } = require('./logic.js');
 
 let passed = 0;
 let failed = 0;
@@ -977,6 +977,93 @@ assert('selectReactionMode: BEWILDERMENT for CLEAR',
 
 assert('selectReactionMode: IGNORANCE for EXTREME',
   selectReactionMode('EXTREME'), 'IGNORANCE');
+
+// ── DartsVoiceFmt — behavioral content tests ──────────────────────────────────
+// Guards against content regressions in character-specific wound/hostile/non-hostile branches.
+
+const _noState     = { woundActivated: false, debtLedger: { owed: [], owes: [] } };
+const _woundState  = { woundActivated: true,  debtLedger: { owed: [], owes: [] } };
+const _hostile     = [{ id: 'x', name: 'TestPlayer', stance: { temperature: 'hostile', trigger: 'test trigger' } }];
+const _nonHostile  = [{ id: 'x', name: 'TestPlayer', stance: { temperature: 'cooling', trigger: 'test trigger' } }];
+
+// All characters: empty when no notable state
+DARTS_CHAR_IDS.forEach(id => {
+  assert(`DartsVoiceFmt.${id} returns empty string when no notable state`,
+    DartsVoiceFmt[id]([], _noState), '');
+});
+
+// mardle — "Ha —" on hostile; wound line mentions "deserved"
+assert('DartsVoiceFmt.mardle: hostile branch includes "Ha —"',
+  DartsVoiceFmt.mardle(_hostile, _noState).includes('Ha —'), true);
+assert('DartsVoiceFmt.mardle: wound line includes "probably deserved it"',
+  DartsVoiceFmt.mardle([], _woundState).includes('probably deserved it'), true);
+
+// bristow — no "Ha —", just straight; wound line "That's a fact"
+assert('DartsVoiceFmt.bristow: hostile branch does not use "Ha —"',
+  DartsVoiceFmt.bristow(_hostile, _noState).includes('Ha —'), false);
+assert('DartsVoiceFmt.bristow: wound line includes "That\'s a fact"',
+  DartsVoiceFmt.bristow([], _woundState).includes("That's a fact"), true);
+
+// taylor — wound mentions "I'll deal with it"
+assert('DartsVoiceFmt.taylor: wound line includes "I\'ll deal with it"',
+  DartsVoiceFmt.taylor([], _woundState).includes("I'll deal with it"), true);
+
+// lowe — wound line is "(pause)"
+assert('DartsVoiceFmt.lowe: wound line includes "(pause)"',
+  DartsVoiceFmt.lowe([], _woundState).includes('(pause)'), true);
+
+// george — hostile: "Oh now, look —"; wound: "Lovely, brilliant"
+assert('DartsVoiceFmt.george: hostile branch includes "Oh now, look —"',
+  DartsVoiceFmt.george(_hostile, _noState).includes('Oh now, look —'), true);
+assert('DartsVoiceFmt.george: wound line includes "Lovely, brilliant"',
+  DartsVoiceFmt.george([], _woundState).includes('Lovely, brilliant'), true);
+
+// waddell — non-hostile ends with ". Aye."; hostile uses "Aye —"; wound: "cathedral still stands"
+assert('DartsVoiceFmt.waddell: non-hostile includes ". Aye."',
+  DartsVoiceFmt.waddell(_nonHostile, _noState).includes('. Aye.'), true);
+assert('DartsVoiceFmt.waddell: hostile branch includes "Aye —"',
+  DartsVoiceFmt.waddell(_hostile, _noState).includes('Aye —'), true);
+assert('DartsVoiceFmt.waddell: wound line includes "cathedral still stands"',
+  DartsVoiceFmt.waddell([], _woundState).includes('cathedral still stands'), true);
+
+// part — wound: "Moving on"
+assert('DartsVoiceFmt.part: wound line includes "Moving on"',
+  DartsVoiceFmt.part([], _woundState).includes('Moving on'), true);
+
+// studd — non-hostile: "Magnifico"; hostile: "And listen —"; wound: "enthusiastically"
+assert('DartsVoiceFmt.studd: non-hostile includes "Magnifico"',
+  DartsVoiceFmt.studd(_nonHostile, _noState).includes('Magnifico'), true);
+assert('DartsVoiceFmt.studd: hostile branch includes "And listen —"',
+  DartsVoiceFmt.studd(_hostile, _noState).includes('And listen —'), true);
+assert('DartsVoiceFmt.studd: wound line includes "enthusiastically"',
+  DartsVoiceFmt.studd([], _woundState).includes('enthusiastically'), true);
+
+// pyke — wound: "competition continues"
+assert('DartsVoiceFmt.pyke: wound line includes "competition continues"',
+  DartsVoiceFmt.pyke([], _woundState).includes('competition continues'), true);
+
+// ── GOLF_PANEL_MEMBER_IDS — structural guard ──────────────────────────────────
+
+assert('GOLF_PANEL_MEMBER_IDS is an array',
+  Array.isArray(GOLF_PANEL_MEMBER_IDS), true);
+
+assert('GOLF_PANEL_MEMBER_IDS contains coltart_97',
+  GOLF_PANEL_MEMBER_IDS.includes('coltart_97'), true);
+
+// ── COLTART_SOFA_POOLS — structural guard ─────────────────────────────────────
+
+assert('COLTART_SOFA_POOLS has valderrama_1997 entry',
+  typeof COLTART_SOFA_POOLS.valderrama_1997, 'object');
+
+const _vPool = COLTART_SOFA_POOLS.valderrama_1997;
+['CONFIRMATION','PERTURBED','BEWILDERMENT','IGNORANCE','ENDORSEMENT'].forEach(mode => {
+  assert(`COLTART_SOFA_POOLS.valderrama_1997 has ${mode} pool`,
+    Array.isArray(_vPool[mode]), true);
+  assert(`COLTART_SOFA_POOLS.valderrama_1997.${mode} has at least one entry`,
+    _vPool[mode].length >= 1, true);
+  assert(`COLTART_SOFA_POOLS.valderrama_1997.${mode}[0] is a string`,
+    typeof _vPool[mode][0], 'string');
+});
 
 // ── Results ──────────────────────────────────────────────────────────────────
 
