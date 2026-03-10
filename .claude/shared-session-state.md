@@ -2,38 +2,45 @@
 # Written by session-closedown.md step 8b. Overwritten each close.
 # Read at startup step 3. Included in session-ref.md for Claude.ai.
 Last updated: 2026-03-10 by Claude Code
-Last commit: 4c41bac — Session closedown 2026-03-10
+Last commit: 57e23e5 — Session closedown 2026-03-10 — BL-112 Golf Ryder 5-session
 
 ## What shipped this session
-- BL-095: The Roast Room — Comedy Room tab 3. 5 randomly selected authors roast any user-submitted title simultaneously. selectRoastAuthors() + buildRoastPrompt() in logic.js. Full RoastRoom IIFE in index.html.
-- BL-059: The Writing Room — Comedy Room tab 4. 3 randomly selected authors discuss any topic in sequence; each author aware of prior responses. selectWritingRoomAuthors() + buildWritingRoomPrompt() in logic.js. WritingRoom IIFE in index.html.
-- BL-093: Bug fix — panelRating() now bridges to self-training persistent store via Training.logPanelRating(). Panel thumbs-up/down now count toward 5-rating threshold.
-- Hot fix: hcFetch → API.call in RoastRoom and WritingRoom (hcFetch does not exist in this codebase).
+- BL-112: Ryder Cup restructured from 3 days to 5 sessions
+  - All 10 Ryder Cup tournaments: `days:3` → `sessions:5` + `sessionLabels:[5 labels]`
+  - All players: `matchPlayDays[3]` → `matchPlaySessions[5]` (Day 2 AM/PM as ABSENT or real data per player)
+  - `parallelMatches` expanded from 3 arrays to 5 per tournament (Day 2 AM/PM with placeholder generic data)
+  - MatchPlayService: 5 new functions (firstActiveSession, isSessionAbsent, addSessionToTeamScore, buildEndOfSessionLeaderboard, buildRestScreenData); buildContext + buildSituation updated to use session index
+  - golf-adventure.html: G.session (0–4 for Ryder), G.teamScore:{EUR,USA}, endSession(), showRestScreen(), session labels in HUD / next-button / hole ordinal
+  - WL-109 fixed: user's match always counted in EUR/USA totals (no longer relies on pm name detection)
+  - WL-110 fixed: getMatchPlayCommentary catch block shows "Commentary signal lost." not blank
+  - Gherkin: golf-ryder-sessions.feature (23 scenarios); golf-adventure-players.feature updated (matchPlaySessions[5])
+  - Pipeline: 1455/1455 GREEN
 
-## Comedy Room state
+## Comedy Room state (unchanged this session)
 Comedy Room: 4 tabs — Into The Room / House Name Oracle / The Roast Room / The Writing Room.
 AUTHORS_POOL: ['hemingway', 'mccarthy', 'tolkien', 'patterson', 'pratchett', 'wodehouse', 'austen']
 Character files: canonical feature-agnostic model in characters/*.md for all 7 authors.
-Thompson (BL-068) parked — not yet in pool.
 
 ## Open waste items (WL numbers)
 - WL-MODE-001: design-session audit gap — Status: Open
 - WL-MODE-002: darts character debt (Rod Harrington/Bobby George) — Status: Open
-- WL-103: Gherkin step collision roast/writing room (recurring) — Status: Closed this session
+- WL-096: open bug — Status: Open (details in waste-log.md)
+- WL-097: open bug — Status: Open (details in waste-log.md)
 
 ## Backlog top 3 by CD3
-- BL-098 (CD3=4.5): Gherkin step namespace collision lint check — OPEN
-- BL-094 (CD3=3.5): Self-Training: rating buttons missing from most panel outputs — OPEN, unblocked
-- BL-051 (CD3=3.25): Distribution: domain + SEO + PWA — OPEN
+- BL-107 (CD3=11.0): Nostradamus character spec: juxtaposition mechanic with Sun Tzu — OPEN
+- BL-105 (CD3=7.5): Hardmen reaction panel (Roy Keane, Vinny Jones, Nostradamus) — OPEN
+- BL-106 (CD3=5.5): Sun Tzu general advisory mode (post-pub validation) — OPEN
 
 ## Protocol status this session
-- Session startup: followed
-- Gherkin gate: followed on all 3 features
-- TDD: followed
-- Pipeline: GREEN — 642/642 units, 1405/1405 gherkin passing
-- Checkpoint: 3 BL items closed, user ended session at checkpoint
+- Session startup: followed (continued from previous context — startup completed in prior session)
+- Gherkin gate: followed — golf-ryder-sessions.feature written and approved by Rod ("y") before implementation
+- TDD: followed — Gherkin failing for right reason confirmed before service code written
+- Pipeline: GREEN — 1455/1455 Gherkin, 654/654 units
 
 ## Carry-forward notes
-- Recurring gherkin step shadowing (3rd time): BL-098 raised for lint fix. Pattern: identical regex in two features — first match wins silently. Prefix steps with domain noun.
-- hcFetch does not exist — correct API pattern is API.call(systemPrompt, userMessage, maxTokens).
-- BL-094 is next natural pick-up after BL-098 (or can run in parallel).
+- Golf Adventure Ryder Cup 5-session model is live and pushed.
+- Day 2 AM/PM parallelMatch data is placeholder (generic EUR pair A vs USA pair A) — real historical data is a future data-addition task (no new code paths needed per CONTENT vs CODE rule)
+- `golf-data/tournaments.js.bak` left in working directory (untracked) — safe to delete next session
+- BL-022 (Ryder Cup "Be Any Player" mode) references matchPlayDays — needs updating to matchPlaySessions when that item is actioned
+- DORA failure rate 22% — all confirmed flaky infrastructure steps, not regressions
