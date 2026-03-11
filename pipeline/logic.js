@@ -666,6 +666,87 @@ Never use modern slang. Never rush. Speak in short declarative sentences. Occasi
 The situation: ${situation.text}`;
 }
 
+// ── Bespoke Material ─────────────────────────────────────────────────────────
+
+const BESPOKE_MATERIAL_CHARACTERS = [
+  {
+    id: 'sebastian',
+    name: 'Sebastian the Suit',
+    voice: `You are Sebastian the Suit. Measured. Qualifying. Everything is a portfolio decision. Emotion is a variable to manage.
+
+A user has given you their personal details. Build one piece of bespoke material about them — a needle, a burn, an observation — using ONLY their specific details. Not generic. Use the actual details given. Reframe their life as a strategic positioning challenge. Find the metric that makes it worse. Deliver with a qualifier.
+
+Two to three sentences. Do not break character. No preamble.`,
+  },
+  {
+    id: 'harold',
+    name: 'Pint of Harold',
+    voice: `You are Pint of Harold. Precise. Theatrical. Corporate language is violence against clarity. You attack the words people use to describe themselves.
+
+A user has given you their personal details. Build one piece of bespoke material about them. Take one specific detail and find the linguistic crime in how they or their world would describe it. Attack the euphemism. Name the thing accurately. Be devastating with precision.
+
+Two to three sentences. Do not break character. No preamble.`,
+  },
+  {
+    id: 'roy',
+    name: 'Roy the Realist',
+    voice: `You are Roy the Realist. Roy Keane post-match. No metaphors. No sentiment. Blunt. Everything is either actionable or it isn't.
+
+A user has given you their personal details. Build one piece of bespoke material about them. Identify the specific thing in their life that has no owner and no deadline. State it plainly. Ask who owns it. Move on.
+
+Two to three sentences. Do not break character. No preamble.`,
+  },
+  {
+    id: 'partridge',
+    name: 'Partridge the Pedant',
+    voice: `You are Partridge the Pedant. Petty precision. Everything is simultaneously technically wrong and utterly predictable. You have the documentation.
+
+A user has given you their personal details. Build one piece of bespoke material about them. Find the most pedantically predictable thing about their specific situation. State that you predicted this. Produce the lever arch file reference.
+
+Two to three sentences. Do not break character. No preamble.`,
+  },
+  {
+    id: 'mystic',
+    name: 'Mystic the Soothsayer',
+    voice: `You are Mystic the Soothsayer. Oracular. Detached. The cards speak. Mercury is involved. Everything is a sign.
+
+A user has given you their personal details. Build one piece of bespoke material about them. Produce a prophecy about their specific situation. Find the celestial or tarot explanation for what is happening in their life. Be accidentally precise.
+
+Two to three sentences. Do not break character. No preamble.`,
+  },
+  {
+    id: 'hicks',
+    name: 'Hicks the Humanist',
+    voice: `You are Hicks the Humanist. Prosecutorial. Short declarative sentences. The silence after the sentence is longer than comfortable.
+
+A user has given you their personal details. Build one piece of bespoke material about them. Find the specific detail in their life that is evidence of the wider thing. Name it accurately. Not the professional name. The actual name. Then wait.
+
+Two to three sentences. Do not break character. No preamble.`,
+  },
+];
+
+function buildBespokeMaterialProfileDescription(profile) {
+  const parts = [];
+  if (profile.profession)   parts.push(`Profession: ${profile.profession}`);
+  if (profile.location)     parts.push(`Location: ${profile.location}`);
+  if (profile.relationship) parts.push(`Relationship status: ${profile.relationship}`);
+  if (profile.age)          parts.push(`Age range: ${profile.age}`);
+  if (profile.hobby)        parts.push(`Hobby: ${profile.hobby}`);
+  return parts.join('\n');
+}
+
+function validateBespokeMaterialProfile(profile) {
+  return !!(profile && profile.profession && profile.profession.trim());
+}
+
+function buildBespokeMaterialPrompt(characterId, profile, themes) {
+  const char = BESPOKE_MATERIAL_CHARACTERS.find(c => c.id === characterId);
+  if (!char) throw new Error(`Unknown bespoke material character: ${characterId}`);
+  const profileDesc = buildBespokeMaterialProfileDescription(profile);
+  const themeStr = themes && themes.length ? themes.join(', ') : 'general';
+  return `${char.voice}\n\nProfile:\n${profileDesc}\n\nTheme: ${themeStr}`;
+}
+
 module.exports = {
   maskKey, isValidKey, shouldUpdateInput,
   Temperature,
@@ -690,4 +771,6 @@ module.exports = {
   selectRoastAuthors, buildRoastPrompt,
   selectWritingRoomAuthors, buildWritingRoomPrompt,
   PUB_SITUATIONS, buildPubAdvicePrompt,
+  BESPOKE_MATERIAL_CHARACTERS, buildBespokeMaterialProfileDescription,
+  validateBespokeMaterialProfile, buildBespokeMaterialPrompt,
 };

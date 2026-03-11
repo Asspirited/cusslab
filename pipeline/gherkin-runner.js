@@ -5,7 +5,9 @@ const fs   = require('fs');
 const path = require('path');
 const { Temperature, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetector, DartsVoiceFmt, dartsBuildBlock, DARTS_PREMONITION_AFFINITIES, COLLECTIVE_CALL_MINIMUM, premonitionEligible, blankPremonitionLedger, assignPremonitionRC, resolvePremonitionCommits, isPremonitionTruthTeller, detectIntellectualAttempt, buildAttemptInstruction, INTELLECTUAL_ATTEMPTS_CONFIG, CONSEQUENCE_TIERS, applyConsequence, MARSHALS_BELT_EVENT, accumulatePanelStats, computeAvgDepth, GOLF_PANEL_MEMBER_IDS, COLTART_SOFA_POOLS, getSofaCommentator, getHistoricalDivergence, selectReactionMode, validateOutwardCode, parseOutwardCode, ORACLE_VOICES, isValidOracleVoice, canSubmitOracle, ORACLE_REGISTERS, ORACLE_CHARACTERS, hasPhilTranslation, hasAllDublinDriftStages, COMEDY_ROOM_MODES, COMEDY_MODE_LABELS, getDefaultComedyMode, isValidComedyMode, AUTHORS_POOL, shufflePool, selectNextAuthorFromQueue, AUTHOR_VOICES, buildAuthorEpiloguePrompt,
   selectRoastAuthors, buildRoastPrompt, selectWritingRoomAuthors, buildWritingRoomPrompt,
-  PUB_SITUATIONS, buildPubAdvicePrompt } = require('./logic.js');
+  PUB_SITUATIONS, buildPubAdvicePrompt,
+  BESPOKE_MATERIAL_CHARACTERS, buildBespokeMaterialProfileDescription,
+  validateBespokeMaterialProfile, buildBespokeMaterialPrompt } = require('./logic.js');
 const { QUNTUM_LEEKS_SCENARIOS, initState, pickRandomScenario, betLeekiness, spendLeekiness, processTurnEffects, buildModifiers } = require('../src/logic/quntum-leeks-engine.js');
 const { initGameState, appendToHistory, incrementTurn, buildModifierBlock } = require('../src/logic/ff-engine.js');
 const { PUB_CRAWL_SCENES, getAllScenes, getPubScene, getActiveAdvisor, initPubCrawl, resolveChoice, determineOutcome, checkLederhosen, buildAdvisorPrompt, ADVISOR_IDS } = require('../src/logic/pub-navigator-engine.js');
@@ -7410,6 +7412,101 @@ function makeSteps(ctx) {
     [/^the writing room prompt includes the prior context$/, () => {
       if (!ctx._writingPrompt.includes(ctx._writingPrior))
         throw new Error('Writing room prompt does not include prior context');
+    }],
+
+    // ── Bespoke Material (bespoke-material.feature) ───────────────────────────
+
+    [/^a bespoke material profile with profession "([^"]+)" and location "([^"]+)"$/, (prof, loc) => {
+      ctx._bespokeProfile = { profession: prof, location: loc };
+    }],
+
+    [/^a bespoke material profile with profession "([^"]+)"$/, (prof) => {
+      ctx._bespokeProfile = { ...(ctx._bespokeProfile || {}), profession: prof };
+    }],
+
+    [/^a bespoke material profile with no profession$/, () => {
+      ctx._bespokeProfile = { profession: '', location: 'Leeds' };
+    }],
+
+    [/^the bespoke profile location is "([^"]+)"$/, (val) => {
+      ctx._bespokeProfile = { ...ctx._bespokeProfile, location: val };
+    }],
+
+    [/^the bespoke profile relationship is "([^"]+)"$/, (val) => {
+      ctx._bespokeProfile = { ...ctx._bespokeProfile, relationship: val };
+    }],
+
+    [/^the bespoke profile age is "([^"]+)"$/, (val) => {
+      ctx._bespokeProfile = { ...ctx._bespokeProfile, age: val };
+    }],
+
+    [/^the bespoke profile hobby is "([^"]+)"$/, (val) => {
+      ctx._bespokeProfile = { ...ctx._bespokeProfile, hobby: val };
+    }],
+
+    [/^the selected bespoke themes are "([^"]+)"$/, (themes) => {
+      ctx._bespokeThemes = themes.split(',').map(t => t.trim());
+    }],
+
+    [/^I build the bespoke profile description$/, () => {
+      ctx._bespokeProfileDesc = buildBespokeMaterialProfileDescription(ctx._bespokeProfile);
+    }],
+
+    [/^the bespoke profile description includes "([^"]+)"$/, (text) => {
+      if (!ctx._bespokeProfileDesc.includes(text))
+        throw new Error(`Bespoke profile description does not include "${text}": ${ctx._bespokeProfileDesc}`);
+    }],
+
+    [/^the bespoke profile description does not include "([^"]+)"$/, (text) => {
+      if (ctx._bespokeProfileDesc.toLowerCase().includes(text.toLowerCase()))
+        throw new Error(`Bespoke profile description should not include "${text}": ${ctx._bespokeProfileDesc}`);
+    }],
+
+    [/^I validate the bespoke material profile$/, () => {
+      ctx._bespokeValid = validateBespokeMaterialProfile(ctx._bespokeProfile);
+    }],
+
+    [/^the bespoke material profile is valid$/, () => {
+      if (!ctx._bespokeValid) throw new Error('Expected bespoke profile to be valid');
+    }],
+
+    [/^the bespoke material profile is invalid$/, () => {
+      if (ctx._bespokeValid) throw new Error('Expected bespoke profile to be invalid');
+    }],
+
+    [/^I build prompts for all bespoke material characters$/, () => {
+      ctx._bespokePrompts = {};
+      for (const char of BESPOKE_MATERIAL_CHARACTERS) {
+        ctx._bespokePrompts[char.id] = buildBespokeMaterialPrompt(char.id, ctx._bespokeProfile, ctx._bespokeThemes || []);
+      }
+    }],
+
+    [/^bespoke prompts exist for sebastian, harold, roy, partridge, mystic, and hicks$/, () => {
+      const required = ['sebastian', 'harold', 'roy', 'partridge', 'mystic', 'hicks'];
+      for (const id of required) {
+        if (!ctx._bespokePrompts[id]) throw new Error(`No bespoke prompt for character: ${id}`);
+      }
+    }],
+
+    [/^I build the bespoke material prompt for character "([^"]+)"$/, (charId) => {
+      ctx._bespokeLastPromptId = charId;
+      ctx[`_bespokePrompt_${charId}`] = buildBespokeMaterialPrompt(charId, ctx._bespokeProfile, ctx._bespokeThemes || []);
+    }],
+
+    [/^the bespoke material prompt includes "([^"]+)"$/, (text) => {
+      const id  = ctx._bespokeLastPromptId;
+      const key = `_bespokePrompt_${id}`;
+      if (!ctx[key]) throw new Error(`No bespoke prompt for last character "${id}"`);
+      if (!ctx[key].includes(text))
+        throw new Error(`Bespoke prompt for "${id}" does not include "${text}"`);
+    }],
+
+    [/^the harold and mystic bespoke prompts are different$/, () => {
+      const h = ctx._bespokePrompt_harold;
+      const m = ctx._bespokePrompt_mystic;
+      if (!h) throw new Error('No harold bespoke prompt in context');
+      if (!m) throw new Error('No mystic bespoke prompt in context');
+      if (h === m) throw new Error('harold and mystic bespoke prompts are identical');
     }],
 
     // ── Author Epilogue skeleton (author-epilogue-skeleton.feature) ───────────
