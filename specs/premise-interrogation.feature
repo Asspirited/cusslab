@@ -94,8 +94,8 @@ Feature: Premise Interrogation — BL-116
     And CANONICAL_CHARS has an entry for "russell"
     And each entry has a prompt, name, icon, colour, and bg
 
+  @claude
   Scenario: Mode 2 runs all active panel characters sequentially
-    @claude
     Given a premise "Everyone is slightly relieved when plans get cancelled"
     When the user runs Mode 2
     Then responses are fetched for all characters in the active panel
