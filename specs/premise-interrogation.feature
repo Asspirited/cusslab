@@ -56,8 +56,8 @@ Feature: Premise Interrogation — BL-116
     Then a toast warns "Select at least one framework."
     And no API call is made
 
+  @claude
   Scenario: Each selected framework produces one API call and one output block
-    @claude
     Given a premise "Everyone is slightly relieved when plans get cancelled"
     And the user has selected "Popper — Falsifiability" and "Pre-mortem"
     When the user runs Mode 1
