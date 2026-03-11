@@ -1327,13 +1327,13 @@ Status: CLOSED
 
 ## WL-096
 - **Item:** Bespoke Material function broken — "Enter a sentence to build from" with no sentences
-- **Symptom:** User fills all data fields in Bespoke Material, system shows "Enter a sentence to build from" but no sentences are available to select from — flow is blocked
-- **Suspected cause:** Unknown — likely a missing data source, empty pool, or conditional rendering bug that hides the sentence input without providing an alternative path
+- **Symptom:** User fills all data fields in Bespoke Material (sb-profession, sb-location, sb-relationship, sb-age, sb-hobby), clicks BUILD IT → shows toast "Enter a sentence to build from." Feature completely non-functional.
+- **Root cause (confirmed 2026-03-11):** Module-panel mismatch. `SentenceBuilder.run()` reads `sb-input` and `.sb-chip.selected` — neither exist in the Bespoke Material panel HTML. Panel has different form fields that SentenceBuilder never reads.
 - **Session date:** 2026-03-10
-- **Time lost:** Not yet investigated
+- **Time lost:** Not yet investigated (fix deferred)
 - **Cost impact:** Medium — feature is silently unusable
-- **Tags:** bug, rod-caught, broken-flow, ui
-- **Status:** Open — log only this session, fix deferred
+- **Tags:** `#bug` `#rod-caught` `#broken-flow` `#module-mismatch`
+- **Status:** Open — Three Amigos required before fix. Options: A) write a handler that reads the form fields and calls AI directly; B) replace panel HTML to match SentenceBuilder chip-selection concept.
 
 ## WL-095
 - **Item:** Claude.ai design session context not captured to Claude Code filesystem
@@ -1589,3 +1589,42 @@ Status: CLOSED
 - **Tags:** `#ui-audit` `#skin-tabs` `#new-tab`
 - **Status:** Closed — added pubcrawl to CONSULTANT_SKIN_TABS (gherkin-runner.js line 60) and tabs array (index.html line ~4392)
 - **5 Whys root cause:** New tab delivery has 3 sync points (nav HTML, NAV_GROUP_MAP, CONSULTANT_SKIN_TABS) with no checklist. Third point is easy to miss. Consider adding a "new tab checklist" to CLAUDE.md or bdd.md.
+
+## WL-120
+- **Item:** PubCrawl IIFE cascade crash — `window.PubCrawlScenes.PUB_CRAWL_SCENES` unguarded at IIFE definition time
+- **Symptom:** Entire inline script aborted from line 11142. HouseNameOracle, QuantumLeeks, App.init() all never executed — 5 features broken simultaneously.
+- **Suspected cause:** `const SCENES = window.PubCrawlScenes.PUB_CRAWL_SCENES` — chained property access at IIFE top level with no null guard. If external script failed to set `window.PubCrawlScenes`, this threw synchronously and aborted the entire inline `<script>` block from that line.
+- **Session date:** 2026-03-11
+- **Time lost:** ~45 min (4th occurrence, persistent across sessions)
+- **Cost impact:** High — broke HouseNameOracle, QuantumLeeks, RoastRoom visibility (App.init not called), WritingRoom visibility, PubCrawl
+- **Tags:** `#browser-only` `#cascade-crash` `#pub-crawl` `#silent-failure` `#false-progress` `#rod-caught`
+- **Status:** Closed 2026-03-11 — changed to `(window.PubCrawlScenes || {}).PUB_CRAWL_SCENES || []`. Corresponding ENGINE guard: `window.PubNavigatorEngine || {}`. New UI audit check 11 added to catch this pattern permanently.
+- **5 Whys root cause:** Classic script IIFEs share a single inline `<script>` block. Any unguarded `window.X.Y` at IIFE definition time is a live bomb — if `X` is undefined, the whole script dies. Pattern was invisible to the pipeline (static analysis passed, Node tests passed). Fix: guard all chained window access. Detect with new audit check 11.
+
+---
+
+## WL-121
+- **Item:** Quntum Leeks `leap()` — scenario immediately overwritten by `initState()`
+- **Symptom:** Every leap threw "Cannot read properties of undefined (reading 'name')" on `sc.name`. Feature completely broken.
+- **Suspected cause:** Two lines in wrong order: `_state.scenario = keys[...]` (line 16580) then `_state = QuntumLeeksEngine.initState()` (line 16581). `initState()` returns `{ scenario: null, ... }`, overwriting the assignment. `SCENARIOS[null]` is `undefined`.
+- **Session date:** 2026-03-11
+- **Time lost:** ~10 min
+- **Cost impact:** Medium
+- **Tags:** `#quntum-leeks` `#state-management` `#ordering` `#rod-caught`
+- **Status:** Closed 2026-03-11 — swapped lines: `initState()` first, then `_state.scenario = ...`
+- **5 Whys root cause:** No Gherkin scenario tested `leap()` state ordering. Unit tests confirmed module structure but not that scenario was preserved through the init call. Add Gherkin: "Given player leaps, Then a scenario is active" to cover this.
+
+---
+
+## WL-122
+- **Item:** UI audit passes 11/11 while 5+ features broken in production
+- **Symptom:** Rod reports broken features that pipeline does not detect. Same bugs recur across sessions.
+- **Suspected cause:** UI audit is static HTML analysis only. Cannot detect: runtime module-init failures, unguarded window global access in IIFEs, modules defined after a crash point, wrong-order logic bugs.
+- **Session date:** 2026-03-11
+- **Time lost:** Multiple sessions — this is the systemic gap enabling WL-119, WL-120, WL-121 to reach production undetected
+- **Cost impact:** High (recurring)
+- **Tags:** `#ui-audit` `#pipeline-gap` `#false-progress` `#systemic`
+- **Status:** Partially mitigated 2026-03-11 — added checks 11+12 to ui-audit.js for unguarded window chain access (inline and external). Remaining gap: logic ordering bugs (Quntum Leeks type), element-ID mismatch (WL-096 type), and runtime module-init failures still not caught. Raise BL item for getElementById cross-reference check.
+- **5 Whys root cause:** Static analysis cannot replace runtime execution. The pipeline needs a real browser simulation (not Node mock) or at minimum: (1) pattern-based guards for the crash classes we've seen, (2) full getElementById cross-ref, (3) Gherkin coverage of submit paths end-to-end. Checks 11+12 address (1). (2) and (3) are open.
+
+---
