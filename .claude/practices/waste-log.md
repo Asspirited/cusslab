@@ -1513,7 +1513,7 @@ Status: CLOSED
 - **Time lost:** ~10 min investigation
 - **Cost impact:** Low
 - **Tags:** `#golf` `#ryder-cup` `#layout` `#css` `#day-end`
-- **Status:** Open
+- **Status:** Closed — moved `de-leaderboard` inside `day-end-wrap` before `panel-discussion`; removed `border-top:none` from `panel-discussion`, added `margin-top:12px`. Scores visible first, commentary loads below.
 
 ## WL-113
 - **Item:** Ryder Cup overall match score not prominently displayed
@@ -1523,7 +1523,7 @@ Status: CLOSED
 - **Time lost:** ~5 min investigation
 - **Cost impact:** Medium — confusing core match play scoring
 - **Tags:** `#golf` `#ryder-cup` `#scores` `#ux` `#leaderboard`
-- **Status:** Open
+- **Status:** Closed — `ryd-totals` now shows `G.teamScore` as "Overall Match Score" (primary, large); session points in small `ryd-session-pts` subtitle below. Same fix applied to `buildRyderRestLeaderboard`. commit bcb1b50.
 
 ## WL-112
 - **Item:** pubcrawl tab missing from CONSULTANT_SKIN_TABS — UI audit RED

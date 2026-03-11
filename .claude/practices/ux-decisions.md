@@ -107,3 +107,15 @@ Job: "Show me something genuinely interesting about language."
 **Decision:** "— Heckler, on X" and "— Heckler" attribution removed entirely from slogan pools. Room-voice lines stay anonymous — the room has a voice; it does not need a byline. Panel character descriptions have the character name baked into the quote body ("Hicks. You'll want to agree with everything he says..."). Character-voiced quotes keep attribution to the character + uncertainty caveat. Pool interleaved so attributed and anonymous quotes alternate.
 
 **Rationale:** "Heckler on X" read as a brand congratulating itself. If a line is strong enough it doesn't need a name attached. If it isn't strong enough, attribution won't save it.
+
+## 2026-03-10 — Ryder Cup day-end screen layout: outcome before commentary
+
+**Decision:** On the Ryder Cup day-end screen, the match score leaderboard (`de-leaderboard`) appears BEFORE the commentary panel (`panel-discussion`). Previously the leaderboard was after `day-end-wrap`, placing commentary above scores in the DOM flow. The new order inside `day-end-wrap` is: (1) day-end-header, (2) de-leaderboard, (3) panel-discussion.
+
+**Rationale:** Leaderboard renders synchronously; commentary loads asynchronously. User saw an empty commentary area first, then scores below — unintuitive. Outcome (scores) should be the first thing the user reads; commentary is supplementary colour. The "job to be done" at session end is "what happened in the match" not "what did the panel say."
+
+## 2026-03-10 — Ryder Cup overall score prominence
+
+**Decision:** `buildRyderEndOfSessionLeaderboard()` and `buildRyderRestLeaderboard()` show `G.teamScore.EUR`/`G.teamScore.USA` (cumulative running total) as the primary large display in `ryd-totals`, labelled "Overall Match Score". Session-only points appear as a secondary small line below (`ryd-session-pts`). Previously only session points were shown at that size; running total was buried in 11px muted `de-sub` text.
+
+**Rationale:** Users read the largest number as the score. Session-only points in large type caused "3-2 after 3 days" confusion (WL-113). Overall score is the meaningful number; session breakdown is context.

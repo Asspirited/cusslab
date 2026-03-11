@@ -96,7 +96,7 @@ This is the handoff from the other Claude. If file doesn't exist: note it and co
 
 **Then:** Read `.claude/practices/waste-log.md` — last 5 entries only, report any with Status: OPEN.
 
-Current open items as of 2026-03-10 (session 4): WL-MODE-001 (design-session audit gap), WL-MODE-002 (darts character debt: Rod Harrington/Bobby George). Recurring: auth failures (WL-060, 066). Recurring gherkin step shadowing: WL-099, WL-100, WL-103 (lint fix BL-098 now CLOSED). WL-111: transform script comment-parsing bug (closed same session).
+Current open items as of 2026-03-10 (session 5): WL-MODE-001 (design-session audit gap), WL-MODE-002 (darts character debt: Rod Harrington/Bobby George), WL-096, WL-097. WL-113 (Ryder score) and WL-114 (commentary layout) CLOSED same session.
 
 ---
 
@@ -110,18 +110,24 @@ For each open product-bet item, ask:
 - Is there a falsifier — something that would tell us we were wrong?
 Full outer loop: `.claude/practices/hypothesis-driven.md`
 
-Current top 3 as of 2026-03-10 (session 4 post close):
+Current top 3 as of 2026-03-10 (session 5 post close):
 - BL-107 Nostradamus character spec: juxtaposition mechanic with Sun Tzu (CD3=11.0) — OPEN
 - BL-105 Hardmen reaction panel (Roy Keane, Vinny Jones, Nostradamus) (CD3=7.5) — OPEN
 - BL-106 Sun Tzu general advisory mode (post-pub validation) (CD3=5.5) — OPEN
 
-Recently closed (2026-03-10 session 4):
-- BL-112: Ryder Cup 5-session structure, team score tracking, user match in totals (WL-109 + WL-110 fixed)
+Recently closed (2026-03-10 session 5):
+- BL-109: FF shared engine extracted — initGameState, appendToHistory, incrementTurn, buildModifierBlock
+- BL-110: Friday Pub Crawl Misadventure — Mode B live (8 scenes, 4 advisors, lederhosen)
+- WL-113: Ryder Cup overall score display fixed — running total now primary in leaderboard
+- WL-114: Commentary layout fixed — leaderboard before commentary in day-end screen
+
+BL-113 OPEN: Unexpected outfit mechanic (generalised lederhosen) — Three Amigos needed before any work
 
 Comedy Room now has 4 tabs: Into The Room / House Name Oracle / The Roast Room / The Writing Room.
 AUTHORS_POOL: 7 authors (hemingway, mccarthy, tolkien, patterson, pratchett, wodehouse, austen).
 Character files for all 7 authors: feature-agnostic canonical model in characters/*.md.
-Golf Adventure: Ryder Cup now 5-session model (matchPlaySessions[5], sessions:5, sessionLabels). G.session + G.teamScore in state. All 10 Ryder Cup tournaments updated.
+Golf Adventure: Ryder Cup now 5-session model. Overall match score shown prominently (G.teamScore, "Overall Match Score" label). Leaderboard appears before commentary in day-end screen.
+Little Misadventure: Friday Pub Crawl Misadventure (Mode B) now live — 8 real pub locations, 4 advisors (Sun Tzu/Nostradamus/Chuck/Buddha), lederhosen easter egg. Shared FF engine (ff-engine.js) used by Pub Crawl, Quntum Leeks, Golf Adventure.
 
 Agree with Rod which item is being worked this session BEFORE opening any code file.
 
