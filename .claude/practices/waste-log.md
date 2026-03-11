@@ -1504,3 +1504,34 @@ Status: CLOSED
 - **Cost impact:** Low — pipeline caught it, corrected in the same session
 - **Tags:** `#transform-script` `#comment-parsing` `#tournaments-js` `#ryder-cup`
 - **Status:** Closed — manually fixed Brookline 1999 parallelMatches in tournaments.js. Script is one-time-use so no code change made.
+
+## WL-114
+- **Item:** Golf adventure commentary layout — squashed/overlaid by leaderboard
+- **Symptom:** On Ryder Cup day-end screen, commentary bubbles appear sandwiched between header and leaderboard table. Leaderboard renders synchronously below `day-end-wrap`; commentary loads async inside `day-end-wrap`. Visual order puts commentary before scores which is counter-intuitive.
+- **Suspected cause:** `de-leaderboard` positioned after `day-end-wrap` in HTML (commentary inside wrap, leaderboard outside). When leaderboard is long, commentary appears "squashed" above it. Fix: move `de-leaderboard` inside `day-end-wrap` before `panel-discussion`.
+- **Session date:** 2026-03-10
+- **Time lost:** ~10 min investigation
+- **Cost impact:** Low
+- **Tags:** `#golf` `#ryder-cup` `#layout` `#css` `#day-end`
+- **Status:** Open
+
+## WL-113
+- **Item:** Ryder Cup overall match score not prominently displayed
+- **Symptom:** After each session, `ryd-totals` in leaderboard shows session-only EUR/USA points. Running total (`G.teamScore`) only appears in `de-sub` subtitle at 11px muted text. Rod reads session points as cumulative, leading to "3-2 after 3 days" confusion.
+- **Suspected cause:** `buildRyderEndOfSessionLeaderboard()` uses `data.eurTotal`/`data.usaTotal` (session points) for `ryd-totals`, not `G.teamScore.EUR`/`G.teamScore.USA` (cumulative). Running total exists and is calculated correctly but is visually buried.
+- **Session date:** 2026-03-10
+- **Time lost:** ~5 min investigation
+- **Cost impact:** Medium — confusing core match play scoring
+- **Tags:** `#golf` `#ryder-cup` `#scores` `#ux` `#leaderboard`
+- **Status:** Open
+
+## WL-112
+- **Item:** pubcrawl tab missing from CONSULTANT_SKIN_TABS — UI audit RED
+- **Symptom:** Pipeline RED after adding Friday Pub Crawl Misadventure tab to nav. UI audit check "All nav-linked panels are in consultant skin tabs" failed: missing `pubcrawl`.
+- **Suspected cause:** Adding a new tab to index.html nav requires two additional sync points: CONSULTANT_SKIN_TABS in gherkin-runner.js AND the skin tabs array in index.html. No checklist prompts this.
+- **Session date:** 2026-03-10
+- **Time lost:** ~2 min
+- **Cost impact:** Low
+- **Tags:** `#ui-audit` `#skin-tabs` `#new-tab`
+- **Status:** Closed — added pubcrawl to CONSULTANT_SKIN_TABS (gherkin-runner.js line 60) and tabs array (index.html line ~4392)
+- **5 Whys root cause:** New tab delivery has 3 sync points (nav HTML, NAV_GROUP_MAP, CONSULTANT_SKIN_TABS) with no checklist. Third point is easy to miss. Consider adding a "new tab checklist" to CLAUDE.md or bdd.md.

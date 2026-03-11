@@ -1469,13 +1469,14 @@ body {
 ═══════════════════════════════════════════ */
 .day-end-wrap { margin: 20px 0; }
 /* Ryder Cup end-of-day points table */
-.ryd-totals { display:flex; justify-content:center; align-items:center; gap:24px; padding:14px 18px 12px; font-size:22px; font-weight:700; letter-spacing:0.08em; }
+.ryd-totals { display:flex; justify-content:center; align-items:center; gap:24px; padding:14px 18px 8px; font-size:22px; font-weight:700; letter-spacing:0.08em; }
 .ryd-team { display:flex; align-items:baseline; gap:8px; }
 .ryd-team.eur { color:#6ab0ff; }
 .ryd-team.usa { color:#ffb060; }
 .ryd-team span.neg { color:#4dff9a; font-size:26px; }
 .ryd-team span.pos { color:#ff6060; font-size:26px; }
 .ryd-sep { color:var(--muted); font-size:18px; }
+.ryd-session-pts { text-align:center; font-family:var(--font-mono); font-size:11px; color:var(--muted); letter-spacing:0.15em; padding:0 18px 12px; text-transform:uppercase; }
 
 .day-end-header {
   background: var(--surface);
@@ -1486,7 +1487,7 @@ body {
 }
 .day-end-title { font-family: var(--font-display); font-size: 32px; letter-spacing: 0.15em; color: var(--accent-bright); line-height: 1; }
 .day-end-sub { font-family: var(--font-mono); font-size: 11px; color: var(--muted); letter-spacing: 0.22em; margin-top: 4px; text-transform: uppercase; }
-.panel-discussion { background: var(--card); border: 1px solid var(--border); border-top: none; padding: 16px 18px; margin-bottom: 0; }
+.panel-discussion { background: var(--card); border: 1px solid var(--border); padding: 16px 18px; margin-top: 12px; margin-bottom: 0; }
 
 /* ═══════════════════════════════════════════
    FINAL SCREEN
@@ -1885,6 +1886,7 @@ body {
       <div class="day-end-title" id="de-title">End of Day 1</div>
       <div class="day-end-sub" id="de-sub">The panel have gathered</div>
     </div>
+    <div id="de-leaderboard"></div>
     <div class="panel-discussion">
       <div class="loading-bar hidden" id="de-loading">
         <div class="dots"><span></span><span></span><span></span></div>
@@ -1893,7 +1895,6 @@ body {
       <div class="commentary" id="de-commentary"></div>
     </div>
   </div>
-  <div id="de-leaderboard"></div>
   <div class="center mt16">
     <button class="btn btn-accent" id="de-btn" onclick="continueTournament()">Day 2 →</button>
   </div>
@@ -3311,19 +3312,22 @@ function buildRyderEndOfSessionLeaderboard(data) {
   const cls=t.lbClass;
   const eurPts=data.eurTotal%1===0?data.eurTotal:data.eurTotal.toFixed(1);
   const usaPts=data.usaTotal%1===0?data.usaTotal:data.usaTotal.toFixed(1);
-  const wc=data.eurTotal>data.usaTotal?'neg':data.eurTotal<data.usaTotal?'pos':'ev';
   const sessionLabel = t.sessionLabels?.[G.session] || `Session ${G.session+1}`;
+  const totalEUR=G.teamScore.EUR%1===0?G.teamScore.EUR:G.teamScore.EUR.toFixed(1);
+  const totalUSA=G.teamScore.USA%1===0?G.teamScore.USA:G.teamScore.USA.toFixed(1);
+  const twc=G.teamScore.EUR>G.teamScore.USA?'neg':G.teamScore.EUR<G.teamScore.USA?'pos':'ev';
 
   let html=`<div class="${cls}">
     <div class="lb-title-bar">
-      <div class="lbt">${sessionLabel} Points</div>
+      <div class="lbt">Overall Match Score</div>
       <div class="lbs">${t.name} · ${t.year}</div>
     </div>
     <div class="ryd-totals">
-      <div class="ryd-team eur">EUR <span class="${wc==='neg'?'neg':''}">${eurPts}</span></div>
+      <div class="ryd-team eur">EUR <span class="${twc==='neg'?'neg':''}">${totalEUR}</span></div>
       <div class="ryd-sep">–</div>
-      <div class="ryd-team usa">USA <span class="${wc==='pos'?'pos':''}">${usaPts}</span></div>
+      <div class="ryd-team usa">USA <span class="${twc==='pos'?'pos':''}">${totalUSA}</span></div>
     </div>
+    <div class="ryd-session-pts">${sessionLabel}: EUR ${eurPts} – USA ${usaPts}</div>
     <div class="lb-header-row" style="grid-template-columns:1fr 80px 52px">
       <div>Match</div><div style="text-align:center">Result</div><div style="text-align:right">Pt</div>
     </div>`;
@@ -3346,18 +3350,21 @@ function buildRyderRestLeaderboard(data) {
   const cls=t.lbClass;
   const eurPts=data.eurTotal%1===0?data.eurTotal:data.eurTotal.toFixed(1);
   const usaPts=data.usaTotal%1===0?data.usaTotal:data.usaTotal.toFixed(1);
-  const wc=data.eurTotal>data.usaTotal?'neg':data.eurTotal<data.usaTotal?'pos':'ev';
+  const totalEUR=G.teamScore.EUR%1===0?G.teamScore.EUR:G.teamScore.EUR.toFixed(1);
+  const totalUSA=G.teamScore.USA%1===0?G.teamScore.USA:G.teamScore.USA.toFixed(1);
+  const twc=G.teamScore.EUR>G.teamScore.USA?'neg':G.teamScore.EUR<G.teamScore.USA?'pos':'ev';
 
   let html=`<div class="${cls}">
     <div class="lb-title-bar">
-      <div class="lbt">${data.title} Points</div>
+      <div class="lbt">Overall Match Score</div>
       <div class="lbs">${t.name} · ${t.year}</div>
     </div>
     <div class="ryd-totals">
-      <div class="ryd-team eur">EUR <span class="${wc==='neg'?'neg':''}">${eurPts}</span></div>
+      <div class="ryd-team eur">EUR <span class="${twc==='neg'?'neg':''}">${totalEUR}</span></div>
       <div class="ryd-sep">–</div>
-      <div class="ryd-team usa">USA <span class="${wc==='pos'?'pos':''}">${usaPts}</span></div>
+      <div class="ryd-team usa">USA <span class="${twc==='pos'?'pos':''}">${totalUSA}</span></div>
     </div>
+    <div class="ryd-session-pts">${data.title}: EUR ${eurPts} – USA ${usaPts}</div>
     <div class="lb-header-row" style="grid-template-columns:1fr 80px 52px">
       <div>Match</div><div style="text-align:center">Result</div><div style="text-align:right">Pt</div>
     </div>`;
