@@ -108,8 +108,8 @@ Feature: Premise Interrogation — BL-116
     Then later characters receive prior responses as context
     And relationship dynamics from character specs inform the interactions
 
+  @claude
   Scenario: Character responses reflect canonical voice
-    @claude
     Given Mode 2 has run on any premise
     Then Cox situates the premise in cosmic or geological time
     And Adams contains a subordinate clause before the main landing
