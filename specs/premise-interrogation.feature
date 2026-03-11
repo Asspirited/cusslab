@@ -42,11 +42,13 @@ Feature: Premise Interrogation — BL-116
     Then it contains exactly 10 frameworks
     And the framework ids are "socratic", "popper", "black-hat", "kahneman", "premortem", "five-whys", "made-to-stick", "voss", "inversion", "steel-man"
 
+  @claude
   Scenario: Framework selector displays all ten options with descriptions
     Given the Premise Interrogation panel is loaded
     Then the framework selector displays all ten framework options
     And each framework has a name and a one-line description
 
+  @claude
   Scenario: User must select at least one framework before running Mode 1
     Given a premise has been entered
     And no frameworks are selected
