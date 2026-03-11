@@ -964,7 +964,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Adams: Bills panel prompt is decent but shallow — no wound, no relationship dynamics, no opener variety
 - Deliverable: two canonical character spec objects (wound, worldview, method, relationships, opener variety) that can be dropped into any panel — BL-116, Souness's Cat extension, or standalone
 - CD3: UBV=6 TC=6 RR=3 → CoD=15, Dur=2, **CD3=7.5**
-- Status: OPEN — raised 2026-03-11
+- Status: CLOSED — 2026-03-11 (8df9574). characters/adams.md created (full spec: Salmon of Doubt wound, DEAD_IN_PANEL_WORLD, Occam inversion, subordinate clause method, opener variety, escalation arc, bullshit protocol, all panel relationships). characters/cox.md → v2.0 (Adams/Feynman/Russell relationships added). Gates BL-116.
 
 ### BL-114 — Consolidate skin tab list: single source of truth
 - **Root cause of WL-112 and WL-118 pattern:** `SKIN_CONFIGS.consultant.tabs` in `index.html` and `CONSULTANT_SKIN_TABS` in `pipeline/gherkin-runner.js` are two independent copies of the same list. Adding a new tab requires updating both. Missing either causes a pipeline failure (WL-112) or a feature gap.
