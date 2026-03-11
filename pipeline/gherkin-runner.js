@@ -25,10 +25,15 @@ const USER_MESSAGES = {
 };
 
 
+// Premise Interrogation config — BL-116 placeholders. Replace with real values on implementation.
+const PI_FRAMEWORKS   = ['socratic','popper','black-hat','kahneman','premortem','five-whys','made-to-stick','voss','inversion','steel-man'];
+const PI_PANEL_CHARS  = ['cox','adams','feynman','russell'];
+const PI_PANEL_MAX    = 6;
+
 // Nav tabs present in each nav group — mirrors index.html structure
 const NAV_GROUPS = {
   personas:      ['Ask The Panel','Joke Test','Expert Clash','The Wheel','Professionals',"Isn't It Ironic?"],
-  boardroom:     ['Present to the Boardroom'],
+  boardroom:     ['Present to the Boardroom', 'Premise Interrogation'],
   comedy:        ['The Comedy Room','The House Name Oracle','The Roast Room','The Writing Room',"Souness's Cat"],
   sports:        ['Post Game Cunditry', 'The 19th Hole', 'Watching the Oche', 'The Long Room'],
   play:          ['Roast Battle','Dinner Party',"Rogues' Gallery",'Comedy Lab','Dimension Duel'],
@@ -58,7 +63,7 @@ const CONSULTANT_SKIN_TABS = [
   'bills','joketest','clash','roulette','professionals','ironic',
   'comscience','evolution','blend','experiment',
   'roastbattle','dinner','topcnuts','comedylab','trumps','qleeks','pubcrawl',
-  'premise','charlens','bizcard','training',
+  'premise','premise-interrogation','charlens','bizcard','training',
   'localiser','generator','historian','sentence','it','polls',
 ];
 const SCIENCE_SKIN_TABS = [
@@ -7843,6 +7848,88 @@ function makeSteps(ctx) {
       const hasB = lines.some(l => l === 'Modifier B');
       if (!hasA || !hasB)
         throw new Error(`Expected each modifier on its own line. Got: ${JSON.stringify(lines)}`);
+    }],
+
+    // ── Premise Interrogation (premise-interrogation.feature) — BL-116 ─────────
+
+    [/^the Premise Interrogation panel is active under Boardroom$/, () => {
+      // Background — structural check deferred to individual scenarios
+    }],
+
+    [/^I load the premise interrogation framework config$/, () => {
+      ctx._piFrameworks = PI_FRAMEWORKS;
+    }],
+
+    [/^it contains exactly 10 frameworks$/, () => {
+      if (!ctx._piFrameworks || ctx._piFrameworks.length !== 10)
+        throw new Error(`Expected 10 frameworks, got ${(ctx._piFrameworks || []).length}`);
+    }],
+
+    [/^the framework ids are (.+)$/, (rawIds) => {
+      const expected = rawIds.match(/"([^"]+)"/g).map(s => s.replace(/"/g, ''));
+      const actual   = ctx._piFrameworks || [];
+      const missing  = expected.filter(id => !actual.includes(id));
+      if (missing.length)
+        throw new Error(`Missing framework ids: ${missing.join(', ')}`);
+    }],
+
+    [/^I load the premise interrogation panel config$/, () => {
+      ctx._piPanelChars = PI_PANEL_CHARS;
+      ctx._piPanelMax   = PI_PANEL_MAX;
+    }],
+
+    [/^the default panel contains exactly (\d+) characters$/, (n) => {
+      const expected = parseInt(n, 10);
+      if (!ctx._piPanelChars || ctx._piPanelChars.length !== expected)
+        throw new Error(`Expected ${expected} panel characters, got ${(ctx._piPanelChars || []).length}`);
+    }],
+
+    [/^the panel includes "([^"]+)"$/, (id) => {
+      if (!ctx._piPanelChars || !ctx._piPanelChars.includes(id))
+        throw new Error(`Expected panel to include "${id}" but got: ${JSON.stringify(ctx._piPanelChars)}`);
+    }],
+
+    [/^the panel max capacity is (\d+)$/, (n) => {
+      const expected = parseInt(n, 10);
+      if (ctx._piPanelMax !== expected)
+        throw new Error(`Expected panel max ${expected}, got ${ctx._piPanelMax}`);
+    }],
+
+    [/^I load CANONICAL_CHARS$/, () => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      ctx._canonicalCharsHtml = html;
+    }],
+
+    [/^CANONICAL_CHARS has an entry for "([^"]+)"$/, (id) => {
+      // Check that CANONICAL_CHARS object contains the id key
+      const pattern = new RegExp(`CANONICAL_CHARS\\s*=\\s*\\{[\\s\\S]*?\\b${id}\\s*:\\s*\\{`);
+      if (!pattern.test(ctx._canonicalCharsHtml))
+        throw new Error(`CANONICAL_CHARS missing entry for "${id}"`);
+    }],
+
+    [/^each entry has a prompt, name, icon, colour, and bg$/, () => {
+      const html = ctx._canonicalCharsHtml;
+      const ids = ['cox', 'adams', 'russell'];
+      for (const id of ids) {
+        // Find the CANONICAL_CHARS block for this id and check fields exist within ~3000 chars of the key
+        const keyIdx = html.indexOf(`CANONICAL_CHARS`);
+        const idIdx  = html.indexOf(`  ${id}:`, keyIdx);
+        if (idIdx === -1) throw new Error(`CANONICAL_CHARS.${id} block not found`);
+        const snippet = html.slice(idIdx, idIdx + 3000);
+        for (const field of ['prompt', 'name:', 'icon:', 'colour:', 'bg:']) {
+          if (!snippet.includes(field))
+            throw new Error(`CANONICAL_CHARS.${id} missing field: ${field}`);
+        }
+      }
+    }],
+
+    [/^I inspect the nav group for boardroom$/, () => {
+      ctx._piNavGroup = NAV_GROUPS['boardroom'] || [];
+    }],
+
+    [/^it contains "([^"]+)"$/, (label) => {
+      if (!ctx._piNavGroup.includes(label))
+        throw new Error(`Nav group boardroom does not contain "${label}". Has: ${JSON.stringify(ctx._piNavGroup)}`);
     }],
 
   ];

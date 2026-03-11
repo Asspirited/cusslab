@@ -1362,10 +1362,11 @@
   <div class="nav-group" id="ng-boardroom">
     <div class="nav-group-header" onclick="toggleNavGroup('boardroom')">
       <span class="nav-group-icon">💼</span> BOARDROOM
-      <span class="nav-group-count">1</span>
+      <span class="nav-group-count">2</span>
     </div>
     <div class="nav-items" id="ni-boardroom">
       <div class="tab" onclick="switchTab(event,'boardroom')"><span class="tab-icon">🏛️</span>Present to the Boardroom</div>
+      <div class="tab" onclick="switchTab(event,'premise-interrogation')"><span class="tab-icon">🔎</span>Premise Interrogation</div>
     </div>
   </div>
 
@@ -2005,6 +2006,50 @@
         <button class="btn" onclick="Boardroom.reply()" id="br-reply-btn">REPLY 💬</button>
         <button class="btn-secondary" onclick="Boardroom.reset()">RESET</button>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ PREMISE INTERROGATION ============ -->
+<div class="panel" id="panel-premise-interrogation">
+  <div class="panel-title">🔎 Premise Interrogation</div>
+  <div class="panel-desc">One true thing. Two ways to test it. Apply the philosophical tools — Socratic, Popper, Pre-mortem, Kahneman, and seven others. Or put it to the panel: Cox, Adams, Feynman, Russell. The same premise. Different lenses. Find out if it holds.</div>
+
+  <div class="form-row">
+    <label>Your premise — one true thing people recognise but don't say</label>
+    <textarea id="pi-input" rows="3" placeholder="e.g. Everyone is slightly relieved when plans get cancelled. / Most apologies are actually complaints about having to apologise. / People who say they love mornings have simply decided to stop being interesting."></textarea>
+  </div>
+
+  <div style="display:flex;gap:10px;margin-bottom:20px;">
+    <button id="pi-mode-frameworks" class="btn" onclick="piSetMode('frameworks')" style="flex:1;">🛠 FRAMEWORKS</button>
+    <button id="pi-mode-panel" class="btn-secondary" onclick="piSetMode('panel')" style="flex:1;">🧑‍🔬 PANEL</button>
+  </div>
+
+  <!-- Mode 1: Frameworks -->
+  <div id="pi-frameworks-ui">
+    <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">Select frameworks to apply</div>
+    <div id="pi-framework-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px;margin-bottom:16px;"></div>
+    <button class="btn" onclick="piRunFrameworks()">INTERROGATE THE PREMISE 🛠</button>
+  </div>
+
+  <!-- Mode 2: Panel -->
+  <div id="pi-panel-ui" style="display:none;">
+    <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">Cox · Adams · Feynman · Russell</div>
+    <button class="btn" onclick="piRunPanel()">PUT IT TO THE PANEL 🧑‍🔬</button>
+  </div>
+
+  <div id="pi-loading" style="display:none;" class="loading-block">
+    <div class="loading-spinner"></div>
+    <div style="color:var(--muted);font-style:italic;font-size:13px;">Following the premise...</div>
+  </div>
+
+  <div id="pi-output" style="display:none;margin-top:24px;">
+    <div id="pi-responses"></div>
+    <div style="display:flex;gap:8px;margin-top:16px;align-items:center;">
+      <button class="feedback-btn" onclick="panelRating(event,'premise-interrogation','💩')" title="Didn't land">💩</button>
+      <button class="feedback-btn" onclick="panelRating(event,'premise-interrogation','😐')" title="Fine">😐</button>
+      <button class="feedback-btn" onclick="panelRating(event,'premise-interrogation','😂')" title="Good">😂</button>
+      <button class="feedback-btn" onclick="panelRating(event,'premise-interrogation','🤣')" title="Brilliant">🤣</button>
     </div>
   </div>
 </div>
@@ -4389,7 +4434,7 @@ const App = (() => {
       title: 'HECKLER\'S',
       pageTitle: 'Heckler\'s — The Comedy Panel',
       slogans: CONSULTANT_SLOGANS,
-      tabs: ['golfadventure','pubnavigator','pubcrawl','qleeks','comedyroom','housenameoracle','roastroom','writingroom','souness-cat','boardroom','football','golf','darts','cricket',
+      tabs: ['golfadventure','pubnavigator','pubcrawl','qleeks','comedyroom','housenameoracle','roastroom','writingroom','souness-cat','boardroom','premise-interrogation','football','golf','darts','cricket',
              'bills','joketest','clash','roulette','professionals','ironic',
              'comscience','evolution','blend','experiment',
              'roastbattle','dinner','topcnuts','comedylab','trumps',
@@ -4425,6 +4470,7 @@ const App = (() => {
     BlendEngine.init();
     Roulette.init();
     ExpertClash.init();
+    PremiseInterrogation.init();
     ExpertLearning.renderEvolutionViewer('evolution-viewer');
     ExperimentRunner.init();
     // Activate the GENERATE nav group on load
@@ -4438,7 +4484,7 @@ const App = (() => {
     // LITTLE MISADVENTURE
     golfadventure:'misadventure', pubnavigator:'misadventure', pubcrawl:'misadventure',
     // BOARDROOM
-    boardroom:'boardroom',
+    boardroom:'boardroom', 'premise-interrogation':'boardroom',
     // COMEDY ROOM
     comedyroom:'comedy', housenameoracle:'comedy', roastroom:'comedy', writingroom:'comedy', 'souness-cat':'comedy',
     // 19TH HOLE
@@ -13553,6 +13599,195 @@ OPENER VARIETY — rotate naturally. The voice is measured, precise, occasionall
   },
 
 };
+
+// ============================================================
+// MODULE: PremiseInterrogation — BL-116
+// Two modes: Frameworks (user-selected, one call each) | Panel (Cox/Adams/Feynman/Russell)
+// Lives under Boardroom. Uses CANONICAL_CHARS for Cox, Adams, Russell.
+// ============================================================
+
+const PI_FRAMEWORK_CONFIGS = [
+  { id: 'socratic',      label: 'Socratic',                   desc: 'Cross-examine the premise to surface hidden assumptions' },
+  { id: 'popper',        label: 'Popper — Falsifiability',    desc: 'What would prove this wrong? Is it even a meaningful claim?' },
+  { id: 'black-hat',     label: 'De Bono Black Hat',          desc: 'Where does this premise fail or break down?' },
+  { id: 'kahneman',      label: 'Kahneman — System 1 Test',   desc: 'Will this hit the audience immediately, or require deliberation?' },
+  { id: 'premortem',     label: 'Pre-mortem',                 desc: 'The bit died on stage. Why? Work backwards from failure.' },
+  { id: 'five-whys',     label: 'Five Whys',                  desc: 'Ask why five times to find the real premise beneath this one' },
+  { id: 'made-to-stick', label: 'Made to Stick',              desc: 'Rate it: Simple, Unexpected, Concrete, Credible, Emotional, Story' },
+  { id: 'voss',          label: "Voss — That's Right Test",   desc: "Will the audience say 'that's right' or just 'you're right'?" },
+  { id: 'inversion',     label: 'Inversion',                  desc: "What if the opposite were true? What's funnier — the premise or its inverse?" },
+  { id: 'steel-man',     label: 'Steel Man',                  desc: 'What is the strongest possible version of this premise?' },
+];
+
+const PI_PANEL_MEMBERS = ['cox', 'adams', 'feynman', 'russell'];
+const PI_PANEL_MAX     = 6;
+
+const PremiseInterrogation = (() => {
+
+  let _mode = 'frameworks';
+  let _selectedFrameworks = new Set();
+
+  // ── Framework prompts ─────────────────────────────────────────────────────
+
+  const FRAMEWORK_PROMPTS = {
+    'socratic':      (p) => `You are applying the Socratic method (elenchus) to a premise. Your goal: expose hidden assumptions through systematic questioning until only what is defensible remains.\n\nPremise: "${p}"\n\nAsk 4-5 Socratic questions that test this premise. After each question, briefly show what it reveals about the premise's strength or weakness. End with a verdict: does the premise survive cross-examination, and if so, what is the tighter, truer version that does?`,
+    'popper':        (p) => `Apply Karl Popper's falsifiability criterion to this premise.\n\nPremise: "${p}"\n\nAddress: (1) What specific observation or scenario would prove this premise false? (2) Is the premise stated precisely enough to be falsifiable, or is it so vague that nothing could disprove it? (3) If it fails falsifiability, what specific, testable version would be stronger? Be precise and brief.`,
+    'black-hat':     (p) => `You are wearing De Bono's Black Hat — pure critical thinking. Your job is to find every way this premise fails.\n\nPremise: "${p}"\n\nIdentify: (1) The exceptions and counter-examples that break it. (2) The demographic or cultural assumptions it smuggles in. (3) The conditions under which it stops being true. (4) The failure mode if this premise is used as the basis for a comedy set. Be specific. No softening.`,
+    'kahneman':      (p) => `Apply Daniel Kahneman's System 1 / System 2 framework to this premise.\n\nPremise: "${p}"\n\nAddress: (1) Does this premise hit System 1 — will the audience recognise it immediately and emotionally, before deliberation? Or does it require System 2 processing to evaluate? (2) Does the audience have immediate examples in memory (availability heuristic), or do they need to construct them? (3) Is there a loss aversion angle — does the premise land harder when framed as what people are afraid to lose rather than what they want? Score the premise on System 1 impact and explain why.`,
+    'premortem':     (p) => `You are running a pre-mortem on this comedy premise. Assume it has already failed on stage.\n\nPremise: "${p}"\n\nThe bit died. Give 5 specific reasons why, in order of likelihood:\n1. [Most likely failure mode]\n2. [Second most likely]\n3. [Third]\n4. [Fourth]\n5. [Fifth]\n\nFor each: explain what the comedian assumed about the audience that turned out to be wrong. End with: what single change would have most improved the odds of it landing?`,
+    'five-whys':     (p) => `Apply the Five Whys to drill from this surface observation to the real premise beneath it.\n\nSurface premise: "${p}"\n\nAsk "Why is this true?" five times, each time drilling deeper:\nWhy 1: [first answer]\nWhy 2: [why that is true]\nWhy 3: [why that is true]\nWhy 4: [why that is true]\nWhy 5: [why that is true]\n\nThe answer at Why 5 is the real premise. State it clearly. Is it a stronger comedy premise than the original? Why?`,
+    'made-to-stick': (p) => `Apply the Made to Stick SUCCESs framework to this premise.\n\nPremise: "${p}"\n\nRate each dimension briefly (strong / weak / missing) with one specific observation:\n- Simple: is there one core idea, or is it trying to do too much?\n- Unexpected: does it violate expectation, or confirm what we already think?\n- Concrete: is it specific and sensory, or abstract?\n- Credible: is there a detail that makes it undeniable?\n- Emotional: does it make the audience feel something?\n- Story: is there a character, situation, and turn?\n\nOverall verdict: what is the single weakest dimension, and how would fixing it change the premise?`,
+    'voss':          (p) => `Apply Chris Voss's "that's right" test to this premise.\n\nPremise: "${p}"\n\nVoss distinguishes between "you're right" (polite dismissal — the person wants you to stop) and "that's right" (genuine recognition — the person has seen themselves). A comedy premise needs "that's right" from the audience.\n\nAddress: (1) Does this premise produce "that's right" or "you're right"? Be specific about why. (2) What is the emotional reality of the audience member this premise is trying to reach? Has the premise named it accurately? (3) What is the Black Swan here — the hidden piece of information that, once known, would completely reframe how this premise lands? (4) What is the stronger, more precisely labelled version of this premise that earns "that's right"?`,
+    'inversion':     (p) => `Apply inversion (Charlie Munger / Stoic method) to this premise.\n\nPremise: "${p}"\n\nInstead of asking "how do I prove this is true," ask:\n(1) What does the world look like if the opposite of this premise is true? Describe it specifically.\n(2) Is the inverted premise funnier than the original? Why or why not?\n(3) Does inverting it reveal a deeper truth that the original premise was pointing at but missing?\n(4) What is the funniest version: the original premise, the inverted premise, or the tension between them?\n\nState your conclusion clearly.`,
+    'steel-man':     (p) => `Construct the steel man of this premise — the strongest possible version, not the weakest.\n\nPremise: "${p}"\n\nDo not attack it. Make it as strong as it can possibly be:\n(1) What is the most specific, defensible, and universal version of this claim?\n(2) What is the best evidence or observation that supports it?\n(3) What qualifier makes it true without gutting the comedy?\n(4) State the steel-manned premise in one sentence — the version that a smart, informed, hostile audience member cannot easily dismiss.\n\nThen: is this steel-manned version a better comedy premise than the original? What changed?`,
+  };
+
+  // ── Feynman prompt (from Souness's Cat) ───────────────────────────────────
+
+  const FEYNMAN_PANEL_PROMPT = `You are Richard Feynman. You are the most performatively anti-pompous person in any room, which is itself a kind of pomposity you never notice.
+
+Worldview: institutions are slower than truth. Credentials are not understanding. The simplest explanation is always available. You need the audience.
+
+Method: find the simplest possible version of what is being claimed and deliver it as if everyone else was being unnecessarily complicated. Catch others being pompous. Bongo drums as punctuation. Genuine delight at being right.
+
+Wound — The Challenger inquiry: weeks of evasion before they let you drop an O-ring into ice water and end the debate in thirty seconds. Any appeal to authority over evidence: the O-ring is in the water.
+
+You are responding to a premise submitted for interrogation. Other characters have responded before you (their responses are shown). React to them as yourself — agree, contradict, simplify, find what they missed. Be brief. Be precise. Be Feynman.`;
+
+  // ── Init ──────────────────────────────────────────────────────────────────
+
+  function init() {
+    const grid = document.getElementById('pi-framework-grid');
+    if (!grid) return;
+    grid.innerHTML = PI_FRAMEWORK_CONFIGS.map(f => `
+      <div id="pi-fw-${f.id}" onclick="piToggleFramework('${f.id}')"
+           style="border:1px solid var(--border);border-radius:6px;padding:10px;cursor:pointer;user-select:none;">
+        <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px;">${f.label}</div>
+        <div style="font-size:11px;color:var(--muted);">${f.desc}</div>
+      </div>
+    `).join('');
+  }
+
+  function setMode(mode) {
+    _mode = mode;
+    const fwUi    = document.getElementById('pi-frameworks-ui');
+    const panUi   = document.getElementById('pi-panel-ui');
+    const btnFw   = document.getElementById('pi-mode-frameworks');
+    const btnPan  = document.getElementById('pi-mode-panel');
+    const output  = document.getElementById('pi-output');
+    if (fwUi)   fwUi.style.display   = mode === 'frameworks' ? '' : 'none';
+    if (panUi)  panUi.style.display  = mode === 'panel' ? '' : 'none';
+    if (output) { output.style.display = 'none'; document.getElementById('pi-responses').innerHTML = ''; }
+    if (btnFw)  { btnFw.className  = mode === 'frameworks' ? 'btn' : 'btn-secondary'; }
+    if (btnPan) { btnPan.className = mode === 'panel' ? 'btn' : 'btn-secondary'; }
+  }
+
+  function toggleFramework(id) {
+    if (_selectedFrameworks.has(id)) {
+      _selectedFrameworks.delete(id);
+    } else {
+      _selectedFrameworks.add(id);
+    }
+    const el = document.getElementById('pi-fw-' + id);
+    if (!el) return;
+    const active = _selectedFrameworks.has(id);
+    el.style.borderColor  = active ? 'var(--accent)' : 'var(--border)';
+    el.style.background   = active ? '#1a0800' : '';
+    el.querySelector('div').style.color = active ? 'var(--accent)' : 'var(--text)';
+  }
+
+  // ── Mode 1: Frameworks ────────────────────────────────────────────────────
+
+  async function runFrameworks() {
+    const premise = UI.val('pi-input');
+    if (!premise) { UI.toast('State your premise first.', 'warn'); return; }
+    if (_selectedFrameworks.size === 0) { UI.toast('Select at least one framework.', 'warn'); return; }
+
+    const container = document.getElementById('pi-responses');
+    container.innerHTML = '';
+    UI.hide('pi-output');
+    UI.show('pi-loading');
+
+    const selected = PI_FRAMEWORK_CONFIGS.filter(f => _selectedFrameworks.has(f.id));
+
+    for (const fw of selected) {
+      const ph = document.createElement('div');
+      ph.id = 'pi-fw-ph-' + fw.id;
+      ph.style.cssText = 'border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:14px;';
+      ph.innerHTML = `<div style="font-size:10px;color:var(--accent);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;">${fw.label}</div><div style="color:var(--muted);font-style:italic;font-size:13px;">Applying framework...</div>`;
+      container.appendChild(ph);
+
+      try {
+        const prompt = FRAMEWORK_PROMPTS[fw.id](premise);
+        const text   = await API.call('You are a comedy writing tool applying a specific analytical framework to a premise. Be direct, precise, and practically useful. No preamble.', prompt, 600, 'premise-interrogation/fw/' + fw.id);
+        ph.innerHTML = `<div style="font-size:10px;color:var(--accent);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;">${fw.label}</div><div style="font-size:14px;line-height:1.6;white-space:pre-wrap;">${text}</div>`;
+      } catch(e) {
+        ph.innerHTML = `<div style="font-size:10px;color:var(--accent);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;">${fw.label}</div><div style="color:var(--danger-hi);">Framework failed: ${e.message || e}</div>`;
+      }
+    }
+
+    UI.hide('pi-loading');
+    UI.show('pi-output');
+  }
+
+  // ── Mode 2: Panel ─────────────────────────────────────────────────────────
+
+  async function runPanel() {
+    const premise = UI.val('pi-input');
+    if (!premise) { UI.toast('State your premise first.', 'warn'); return; }
+
+    const container = document.getElementById('pi-responses');
+    container.innerHTML = '';
+    UI.hide('pi-output');
+    UI.show('pi-loading');
+
+    const panelOrder = PI_PANEL_MEMBERS.slice();
+    const responses  = [];
+
+    for (let i = 0; i < panelOrder.length; i++) {
+      const id  = panelOrder[i];
+      const cfg = id === 'feynman'
+        ? { name: 'Richard Feynman', icon: '🥁', colour: '#ff6b35', bg: '#1a0a00', prompt: FEYNMAN_PANEL_PROMPT }
+        : CANONICAL_CHARS[id];
+
+      if (!cfg) continue;
+
+      const ph = document.createElement('div');
+      ph.style.cssText = `border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:14px;background:${cfg.bg};`;
+      ph.innerHTML = `<div style="font-size:12px;font-weight:700;color:${cfg.colour};margin-bottom:8px;">${cfg.icon} ${cfg.name}</div><div style="color:var(--muted);font-style:italic;font-size:13px;">Thinking...</div>`;
+      container.appendChild(ph);
+
+      const prevContext = responses.length
+        ? '\n\nPrevious responses in this discussion:\n' + responses.map((r, ri) => {
+            const prevId  = panelOrder[ri];
+            const prevCfg = prevId === 'feynman' ? { name: 'Feynman' } : CANONICAL_CHARS[prevId];
+            return `${prevCfg.name}: "${r.substring(0, 400)}"`;
+          }).join('\n')
+        : '';
+
+      const system = cfg.prompt;
+      const userMsg = `The premise under interrogation: "${premise}"${prevContext}\n\nRespond as yourself. Be direct. 150-200 words maximum.`;
+
+      try {
+        const text = await API.call(system, userMsg, 400, 'premise-interrogation/panel/' + id);
+        responses.push(text);
+        ph.innerHTML = `<div style="font-size:12px;font-weight:700;color:${cfg.colour};margin-bottom:8px;">${cfg.icon} ${cfg.name}</div><div style="font-size:14px;line-height:1.6;white-space:pre-wrap;">${text}</div>`;
+      } catch(e) {
+        ph.innerHTML = `<div style="font-size:12px;font-weight:700;color:${cfg.colour};margin-bottom:8px;">${cfg.icon} ${cfg.name}</div><div style="color:var(--danger-hi);">Failed: ${e.message || e}</div>`;
+      }
+    }
+
+    UI.hide('pi-loading');
+    UI.show('pi-output');
+  }
+
+  return { init, setMode, toggleFramework, runFrameworks, runPanel };
+})();
+
+function piSetMode(mode)         { PremiseInterrogation.setMode(mode); }
+function piToggleFramework(id)   { PremiseInterrogation.toggleFramework(id); }
+function piRunFrameworks()       { PremiseInterrogation.runFrameworks(); }
+function piRunPanel()            { PremiseInterrogation.runPanel(); }
 
 // ============================================================
 // ── SOUNESS'S CAT — Science Panel (Mode 1) ───────────────────────────────────
