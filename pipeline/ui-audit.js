@@ -104,6 +104,32 @@ if (scriptMatch) {
 }
 check('Main script has no syntax errors', syntaxOk, syntaxDetail);
 
+// 10. Module-style onclick calls inside dynamically-rendered HTML have global function wrappers
+// Rationale: innerHTML template literals render buttons at runtime. Any onclick="ModuleName.method()"
+// inside a template literal is dynamically rendered. If a JS error occurs inside the called function,
+// it fails silently without try/catch. And in some browser contexts, const module variables may not
+// be accessible from event handler scope. Every module used this way must have global function
+// wrappers AND surface errors. (WL-118 — PubCrawl had no wrappers; startScene errors were silent)
+//
+// Detection: find onclick="[UpperCase]" patterns inside backtick template literals in the script.
+const scriptBlock = html.slice(html.indexOf('<script>'), html.lastIndexOf('</script>'));
+const templateModuleOnclicks = [];
+const btPattern = /`([^`]+)`/g;
+let btMatch;
+while ((btMatch = btPattern.exec(scriptBlock)) !== null) {
+  for (const mm of btMatch[1].matchAll(/onclick="([A-Z][A-Za-z]+)\./g)) {
+    templateModuleOnclicks.push(mm[1]);
+  }
+}
+const uniqueTemplateModules = [...new Set(templateModuleOnclicks)];
+const templateModulesWithoutWrappers = uniqueTemplateModules.filter(mod => {
+  const wrapperPattern = new RegExp(`function \\w+\\s*\\([^)]*\\)\\s*\\{\\s*${mod}\\.`);
+  return !wrapperPattern.test(html);
+});
+check('Dynamically-rendered onclick calls have global function wrappers',
+  templateModulesWithoutWrappers.length === 0,
+  templateModulesWithoutWrappers.length ? `no wrappers for: ${templateModulesWithoutWrappers.join(', ')}` : '');
+
 // ── Summary ───────────────────────────────────────────────────────────────────
 
 const total = passed + failed;

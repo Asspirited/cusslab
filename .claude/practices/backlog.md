@@ -935,6 +935,14 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - CD3: UBV=8 TC=3 RR=4 → CoD=15, Dur=3, **CD3=5.0**
 - Status: OPEN — raised 2026-03-10
 
+### BL-114 — Consolidate skin tab list: single source of truth
+- **Root cause of WL-112 and WL-118 pattern:** `SKIN_CONFIGS.consultant.tabs` in `index.html` and `CONSULTANT_SKIN_TABS` in `pipeline/gherkin-runner.js` are two independent copies of the same list. Adding a new tab requires updating both. Missing either causes a pipeline failure (WL-112) or a feature gap.
+- **Fix:** `gherkin-runner.js` should extract the consultant tab list from `index.html` at runtime (same approach `ui-audit.js` already uses via `skinMatch` regex) rather than maintaining its own hardcoded array.
+- **Out of scope:** Do not change `SKIN_CONFIGS` in `index.html` — that remains the single source. Only the gherkin runner's copy is removed.
+- **Risk:** Gherkin runner currently uses `CONSULTANT_SKIN_TABS` for test scoping. Verify all usages before removing.
+- CD3: UBV=2 TC=6 RR=8 → CoD=16, Dur=2, **CD3=8.0**
+- Status: OPEN — raised 2026-03-11
+
 ### BL-006 — pipeline @claude skip count reduction
 - 400+ scenarios @claude-tagged (manual / behavioural)
 - First candidates: watching-oche-mode1 suggestion card shuffle, panel-slots cross-panel invariants

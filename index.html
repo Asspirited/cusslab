@@ -9201,6 +9201,9 @@ function runWorkout()                { Training.runWorkout(); }
 function addToDictionary()           { Training.addToDictionary(); }
 function generateInsights()          { Training.generateInsights(); }
 
+// Pub Navigator
+function pnSelectSituation(id)       { PubNavigator.selectSituation(id); }
+
 // Pub Crawl
 function pcStartScene(id)            { PubCrawl.startScene(id); }
 function pcChoose(idx)               { PubCrawl.choose(idx); }
@@ -11050,7 +11053,7 @@ The situation: ${situation.text}`;
     const container = document.getElementById('pn-situations');
     if (!container) return;
     container.innerHTML = PUB_SITUATIONS.map(s => `
-      <button class="btn-secondary pn-situation-btn" onclick="PubNavigator.selectSituation('${s.id}')"
+      <button class="btn-secondary pn-situation-btn" onclick="pnSelectSituation('${s.id}')"
         style="text-align:left;padding:14px 18px;font-size:0.95rem;line-height:1.5;width:100%;cursor:pointer;">
         ${s.text}
       </button>`).join('');
