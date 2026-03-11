@@ -6642,7 +6642,7 @@ ${Score.TARGET_VECTOR_PROMPT}
 
 JSON only: { "variations": [ { "level": "Observation|Admission|Escalation|Commitment|Nuclear", "phrase": "...", "why": "1 sentence on what step this takes", "premise_scores": { "true": N, "relatable": N, "unsaid": N }, "scores": { impactful, insulting, creative, bizarre, tuneful, rhythmical, comedy, truth_anchor, compression, character_gap }, "target_direction": "...", "target_type": "...", "target_clarity": N } ] }`;
 
-    const result = await API.callJSON(system, `Premise: "${premise}"`, 900, null);
+    const result = await API.callJSON(system, `Premise: "${premise}"`, 2000, null);
     UI.hide('premise-loading');
 
     if (!result?.variations?.length) { UI.toast('Premise engine failed. Try rephrasing it as a simpler truth.', 'error'); return; }

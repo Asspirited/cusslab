@@ -1525,6 +1525,17 @@ Status: CLOSED
 - **Tags:** `#golf` `#ryder-cup` `#scores` `#ux` `#leaderboard`
 - **Status:** Closed — `ryd-totals` now shows `G.teamScore` as "Overall Match Score" (primary, large); session points in small `ryd-session-pts` subtitle below. Same fix applied to `buildRyderRestLeaderboard`. commit bcb1b50.
 
+## WL-117
+- **Item:** Premise Engine always shows "Premise engine failed. Try rephrasing it as a simpler truth."
+- **Symptom:** Every premise submission shows the failure toast immediately. Feature completely non-functional.
+- **Suspected cause:** `callJSON` called with `max_tokens: 900`. Response requires 5 variations × (10 comedy scores + 3 premise scores + target vector + phrase + why) ≈ 1200–1600 tokens. Response truncated → JSON parse fails → `null` fallback returned → `!result?.variations?.length` true → toast fires.
+- **Session date:** 2026-03-11
+- **Time lost:** 0 (exploratory test discovery)
+- **Cost impact:** High — feature completely broken
+- **Tags:** `#premise-engine` `#token-limit` `#json-parse` `#rod-caught`
+- **5 Whys root cause:** Token budget set to 900 for a response schema with 5 deeply nested objects. No test checks that the engine actually returns parseable output. Gherkin/unit tests confirm shape but not token adequacy.
+- **Status:** Fixed 2026-03-11 — increased max_tokens from 900 to 2000
+
 ## WL-116
 - **Item:** Roast Battle auto-advances to next round after 2.5s — not enough time to read Claude's response or judge scores
 - **Symptom:** Rod couldn't read Claude's roast before the judge section disappeared and next round input appeared. Final screen appeared without seeing round results.
