@@ -118,26 +118,26 @@ Feature: Premise Interrogation — BL-116
 
   # ── UI BEHAVIOUR ──────────────────────────────────────────────────────────────
 
+  @claude
   Scenario: Mode toggle has two labelled options
-    @claude
     Given the panel is loaded
     Then a mode toggle shows "FRAMEWORKS" and "PANEL" options
     And the active mode is visually distinguished
 
+  @claude
   Scenario: Switching modes clears previous output
-    @claude
     Given Mode 1 has produced output
     When the user switches to Mode 2
     Then Mode 1 output is hidden
     And Mode 2 output area is shown empty until run
 
+  @claude
   Scenario: Loading state shown while responses are being fetched
-    @claude
     Given the user triggers Mode 1 or Mode 2
     Then a loading indicator is shown until the first response arrives
 
+  @claude
   Scenario: Feedback row present after either mode produces output
-    @claude
     Given Mode 1 or Mode 2 has produced output
     Then a feedback row with emoji ratings is visible
 
