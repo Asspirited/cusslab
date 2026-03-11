@@ -935,6 +935,26 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - CD3: UBV=8 TC=3 RR=4 → CoD=15, Dur=3, **CD3=5.0**
 - Status: OPEN — raised 2026-03-10
 
+### BL-116 — Premise Interrogation feature: scientist/philosopher panel for premise validation
+- New panel (or mode within Premise Engine) where scientist/philosopher characters interrogate a submitted premise using their natural framework
+- Characters: Prof Cox (falsifiability + cosmic scale), Douglas Adams (inversion + Occam), Feynman (find the real variable + Five Whys), + 1 more TBD (Carl Sagan or Voss)
+- **Feature shape confirmed (2026-03-11):** Two modes on the same panel, same input goes to both:
+  - Mode 1: Framework mode — apply the tools/techniques (Socratic, De Bono, Popper, Kahneman, Voss, Made to Stick, etc.) to interrogate the premise
+  - Mode 2: Panel mode — same premise goes to the scientist/philosopher character panel; each character responds as themselves
+  - Both modes visible together, easy to switch, same premise input drives both
+- Framework mapping: each character maps to 1-2 of the validated frameworks from research (Socratic, De Bono, Popper, Kahneman, Voss, Made to Stick, Cialdini etc.)
+- Depends on BL-115 (character specs) being done first
+- CD3: UBV=7 TC=5 RR=3 → CoD=15, Dur=5, **CD3=3.0**
+- Status: OPEN — raised 2026-03-11. Three Amigos pending.
+
+### BL-115 — Deep character specs: Prof Cox and Douglas Adams (Souness's Cat depth)
+- Both characters exist in the codebase but at insufficient depth for premise interrogation or any new panel role
+- Cox: has timescales/equations/D:Ream wound but lacks inter-character relationships and wound treatment at Souness's Cat quality
+- Adams: Bills panel prompt is decent but shallow — no wound, no relationship dynamics, no opener variety
+- Deliverable: two canonical character spec objects (wound, worldview, method, relationships, opener variety) that can be dropped into any panel — BL-116, Souness's Cat extension, or standalone
+- CD3: UBV=6 TC=6 RR=3 → CoD=15, Dur=2, **CD3=7.5**
+- Status: OPEN — raised 2026-03-11
+
 ### BL-114 — Consolidate skin tab list: single source of truth
 - **Root cause of WL-112 and WL-118 pattern:** `SKIN_CONFIGS.consultant.tabs` in `index.html` and `CONSULTANT_SKIN_TABS` in `pipeline/gherkin-runner.js` are two independent copies of the same list. Adding a new tab requires updating both. Missing either causes a pipeline failure (WL-112) or a feature gap.
 - **Fix:** `gherkin-runner.js` should extract the consultant tab list from `index.html` at runtime (same approach `ui-audit.js` already uses via `skinMatch` regex) rather than maintaining its own hardcoded array.
