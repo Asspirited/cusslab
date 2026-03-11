@@ -14,18 +14,21 @@ Feature: Premise Interrogation — BL-116
 
   # ── SHARED INPUT ──────────────────────────────────────────────────────────────
 
+  @claude
   Scenario: Premise input required before Mode 1 runs
     Given no premise has been entered
     When the user triggers Mode 1
     Then a toast warns "State your premise first."
     And no API call is made
 
+  @claude
   Scenario: Premise input required before Mode 2 runs
     Given no premise has been entered
     When the user triggers Mode 2
     Then a toast warns "State your premise first."
     And no API call is made
 
+  @claude
   Scenario: Same premise input drives both modes
     Given a premise "Everyone is slightly relieved when plans get cancelled"
     When the user runs Mode 1 with selected frameworks
