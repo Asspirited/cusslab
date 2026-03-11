@@ -6,7 +6,7 @@
 const { PUB_CRAWL_SCENES } =
   typeof require !== 'undefined'
     ? require('../data/pub-crawl-scenes.js')
-    : { PUB_CRAWL_SCENES: window.PubCrawlScenes.PUB_CRAWL_SCENES };
+    : { PUB_CRAWL_SCENES: (window.PubCrawlScenes || {}).PUB_CRAWL_SCENES || [] };
 
 // Alias to avoid const-vs-function redeclaration collision in browser global scope
 // (ff-engine.js declares these as `function` — a `const` of the same name throws SyntaxError)

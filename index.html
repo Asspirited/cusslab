@@ -3852,9 +3852,9 @@
 <script src="src/logic/lie-engine.js"></script>
 <script src="src/data/quntum-leeks-scenarios.js"></script>
 <script src="src/logic/quntum-leeks-engine.js"></script>
-<script src="src/logic/ff-engine.js?v=2"></script>
-<script src="src/data/pub-crawl-scenes.js?v=2"></script>
-<script src="src/logic/pub-navigator-engine.js?v=2"></script>
+<script src="src/logic/ff-engine.js"></script>
+<script src="src/data/pub-crawl-scenes.js"></script>
+<script src="src/logic/pub-navigator-engine.js"></script>
 
 <script>
 // ============================================================
@@ -11221,7 +11221,8 @@ const PubCrawl = (() => {
   // ── Local mirrors of engine data (browser context — no require) ──────────
 
   const SCENES = (window.PubCrawlScenes || {}).PUB_CRAWL_SCENES || [];
-  const ENGINE = window.PubNavigatorEngine || {};
+  // ENGINE looked up at call-time (not load-time) to survive any external-script delay
+  function getEngine() { return window.PubNavigatorEngine || null; }
 
   const ADVISOR_LABELS = {
     'sun-tzu':     'Sun Tzu advises',
@@ -11256,9 +11257,10 @@ const PubCrawl = (() => {
   // ── Scene start ───────────────────────────────────────────────────────────
 
   function startScene(sceneId) {
+    if (!getEngine()) { UI.toast('Pub Crawl engine not loaded — hold Ctrl+Shift+R to force-refresh', 'error'); return; }
     try {
-    _state = ENGINE.initPubCrawl(sceneId);
-    const scene = ENGINE.getPubScene(sceneId);
+    _state = getEngine().initPubCrawl(sceneId);
+    const scene = getEngine().getPubScene(sceneId);
 
     document.getElementById('pc-scene-select').style.display = 'none';
     document.getElementById('pc-outcome-screen').style.display = 'none';
@@ -11283,7 +11285,7 @@ const PubCrawl = (() => {
   // ── Beat rendering ────────────────────────────────────────────────────────
 
   function _renderBeat() {
-    const scene  = ENGINE.getPubScene(_state.sceneId);
+    const scene  = getEngine().getPubScene(_state.sceneId);
     const beat   = scene.beats[_state.turnCount];
     if (!beat) return;
 
@@ -11302,11 +11304,11 @@ const PubCrawl = (() => {
   async function choose(choiceIdx) {
     if (!_state || _state.done) return;
 
-    const scene      = ENGINE.getPubScene(_state.sceneId);
+    const scene      = getEngine().getPubScene(_state.sceneId);
     const beat       = scene.beats[_state.turnCount];
     const choiceLabel = beat.choices[choiceIdx].label;
 
-    ENGINE.resolveChoice(_state, choiceIdx);
+    getEngine().resolveChoice(_state, choiceIdx);
     _updatePressure();
 
     if (_state.done) {
@@ -11322,14 +11324,14 @@ const PubCrawl = (() => {
   // ── Advisor response ──────────────────────────────────────────────────────
 
   async function _fetchAdvisorResponse(choiceLabel) {
-    const advisorId = ENGINE.getActiveAdvisor(_state, _currentTopic);
+    const advisorId = getEngine().getActiveAdvisor(_state, _currentTopic);
     _currentTopic = null;
 
     document.getElementById('pc-advisor-loading').style.display = 'block';
     document.getElementById('pc-advisor-response').style.display = 'none';
 
-    const prompt = ENGINE.buildAdvisorPrompt(advisorId, _state.sceneId, choiceLabel, _state);
-    const userMsg = `Scene: ${ENGINE.getPubScene(_state.sceneId).name}. The player chose: "${choiceLabel}"`;
+    const prompt = getEngine().buildAdvisorPrompt(advisorId, _state.sceneId, choiceLabel, _state);
+    const userMsg = `Scene: ${getEngine().getPubScene(_state.sceneId).name}. The player chose: "${choiceLabel}"`;
 
     try {
       const text = await API.call(prompt, userMsg, 300, 'pub-crawl/advice');
@@ -11351,7 +11353,7 @@ const PubCrawl = (() => {
     document.getElementById('pc-active-scene').style.display = 'none';
     document.getElementById('pc-input-area').style.display = 'none';
 
-    const outcome      = ENGINE.determineOutcome(_state.pressure);
+    const outcome      = getEngine().determineOutcome(_state.pressure);
     const outcomeLabel = OUTCOME_LABELS[outcome];
 
     const badge = document.getElementById('pc-outcome-badge');
@@ -11417,7 +11419,7 @@ const PubCrawl = (() => {
   function handleInput(val) {
     if (!_state) return;
     const wasLeder = _state.lederhosen;
-    ENGINE.checkLederhosen(_state, val);
+    getEngine().checkLederhosen(_state, val);
     if (!wasLeder && _state.lederhosen) {
       document.getElementById('pc-lederhosen-badge').style.display = 'block';
     }
