@@ -130,6 +130,40 @@ check('Dynamically-rendered onclick calls have global function wrappers',
   templateModulesWithoutWrappers.length === 0,
   templateModulesWithoutWrappers.length ? `no wrappers for: ${templateModulesWithoutWrappers.join(', ')}` : '');
 
+// 11. No unguarded chained window global access in inline script
+// Why: `const X = window.Foo.Bar` at IIFE definition time crashes the ENTIRE script if
+//      window.Foo is undefined — taking out every module defined after it (cascade crash).
+// Safe pattern: `(window.Foo || {}).Bar` or `window.Foo && window.Foo.Bar`
+// Root cause of WL-119 cascade: window.PubCrawlScenes.PUB_CRAWL_SCENES unguarded.
+const unguardedChainsInline = [];
+const chainReInline = /const\s+\w+\s*=\s*window\.([A-Z]\w+)\.([A-Za-z_]\w*)/g;
+let cwInlineMatch;
+while ((cwInlineMatch = chainReInline.exec(scriptBlock)) !== null) {
+  unguardedChainsInline.push(cwInlineMatch[0].replace(/\s+/g, ' ').trim());
+}
+check('No unguarded chained window global access in inline script',
+  unguardedChainsInline.length === 0,
+  unguardedChainsInline.length ? unguardedChainsInline.join('; ') : '');
+
+// 12. External local JS files: no unguarded chained window global access
+// Why: if an external script accesses window.X.Y at module top level, and window.X is not yet set
+//      (e.g. because a dependency script threw), the external script throws and its own window global
+//      is never set — which then cascades back into the inline script (ENGINE=undefined pattern).
+// Safe pattern: `(window.Foo || {}).Bar` or local variable guarded with `|| {}`
+const extScriptSrcs = [...html.matchAll(/<script\s+src="(src\/[^"?]+\.js)[^"]*"/g)].map(m => m[1]);
+const unguardedChainsExt = [];
+for (const src of extScriptSrcs) {
+  try {
+    const content = fs.readFileSync(path.join(__dirname, '..', src), 'utf8');
+    for (const m of content.matchAll(/const\s+\w+\s*=\s*window\.([A-Z]\w+)\.([A-Za-z_]\w*)/g)) {
+      unguardedChainsExt.push(`${src}: ${m[0].replace(/\s+/g, ' ').trim()}`);
+    }
+  } catch { /* file not found — skip */ }
+}
+check('External JS files: no unguarded chained window global access',
+  unguardedChainsExt.length === 0,
+  unguardedChainsExt.length ? unguardedChainsExt.join('; ') : '');
+
 // ── Summary ───────────────────────────────────────────────────────────────────
 
 const total = passed + failed;
