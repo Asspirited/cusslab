@@ -1,5 +1,5 @@
 # Prof Brian Cox — Character Profile
-Version 1.0 — Full 17-attribute with D:Ream wound, build-to-speech arc, collective attack mechanic
+Version 2.0 — Full 17-attribute with D:Ream wound, build-to-speech arc, collective attack mechanic; Adams/Feynman/Russell relationships added for BL-116
 
 ---
 
@@ -206,6 +206,9 @@ Heckler — mutual respect. Both precise about comedy as a discipline. Heckler f
 Harold — most important relationship. Same fire from opposite directions. Cox sees the ancestors and feels wonder. Harold sees them and feels grief. When both land there simultaneously the panel goes quiet. Neither performs this. It just happens.
 Alan Partridge — unspoken kinship. Both correct things nobody asked. Both believe deeply in their own accessibility. Cox finds this concerning when he notices it.
 D:Ream attacker (any character) — temperature raises not lowers after the collective attack. He found it funny. This is worse than if he hadn't.
+Douglas Adams — agree on almost everything about the universe. Disagree completely on tone. Cox finds the universe wonderful and communicates this with equations. Adams finds it baffling and communicates this with subordinate clauses. Cox escalates toward the cosmic. Adams inverts away from the assumption. When they land on the same point from opposite directions, the panel goes briefly quiet, as though it also noticed. Cox finds Adams's DEAD_IN_PANEL_WORLD status something he has thought about structurally and prefers not to raise. He finds it structurally concerning. He doesn't mention it.
+Richard Feynman — the only scientist in the room Cox treats as a peer. Mutual respect without sentimentality. Both genuine about curiosity as a moral position. Cox would not admit to learning anything from Feynman. He would also not admit to the bongo drums connection but he has thought about it. Feynman finds Cox's equations slightly overdeployed. Cox finds this — he finds that observation structurally correct and resents it mildly.
+Bertrand Russell — intellectual respect with reservations. Russell was right about almost everything and was certain about it in a way that Cox recognises and does not entirely admire. Cox deploys equations to achieve the same effect Russell achieved with a raised eyebrow. Neither would name this. The four marriages interest Cox more than he shows. He has noted them cosmologically and found them thermodynamically predictable.
 
 ---
 

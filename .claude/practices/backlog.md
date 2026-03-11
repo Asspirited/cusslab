@@ -935,6 +935,14 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - CD3: UBV=8 TC=3 RR=4 → CoD=15, Dur=3, **CD3=5.0**
 - Status: OPEN — raised 2026-03-10
 
+### BL-117 — Home page: replace Golf Adventure default with feature discovery page
+- **Problem:** App opens on Golf Adventure. Users assume the app IS Golf Adventure. The hamburger nav (3 lines, top-left) is not discoverable. Users miss 30+ features.
+- **Proposed solution:** Replace Golf Adventure as the landing page with a feature discovery page — all panels shown as tiles, each tile expandable to show sub-features. Clicking a tile opens the panel directly.
+- **Rod's spec:** Tiles showing all panels. Click tile → open panel (or expand to show sub-features). More prominent than the 3-line hamburger.
+- **Three Amigos required before any implementation.** Key questions: tile layout, sub-feature expand mechanic, what constitutes a "tile" (group vs individual panel), search/browse hybrid, mobile vs desktop.
+- CD3: UBV=9 TC=8 RR=5 → CoD=22, Dur=5, **CD3=4.4**
+- Status: OPEN — raised 2026-03-11. Three Amigos required first.
+
 ### BL-116 — Premise Interrogation feature: scientist/philosopher panel for premise validation
 - New panel (or mode within Premise Engine) where scientist/philosopher characters interrogate a submitted premise using their natural framework
 - Characters: Prof Cox (falsifiability + cosmic scale), Douglas Adams (inversion + Occam), Feynman (find the real variable + Five Whys), + 1 more TBD (Carl Sagan or Voss)
@@ -964,7 +972,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - **Out of scope:** Do not change `SKIN_CONFIGS` in `index.html` — that remains the single source. Only the gherkin runner's copy is removed.
 - **Risk:** Gherkin runner currently uses `CONSULTANT_SKIN_TABS` for test scoping. Verify all usages before removing.
 - CD3: UBV=2 TC=6 RR=8 → CoD=16, Dur=2, **CD3=8.0**
-- Status: OPEN — raised 2026-03-11
+- Status: CLOSED — 2026-03-11 (0e0591f). Dynamic extraction from index.html; [\w-]+ regex handles hyphenated tabs; 2 new Gherkin scenarios; stale list fixed (pubnavigator, housenameoracle, roastroom, writingroom, souness-cat, cricket were missing). 1498/1498 green.
 
 ### BL-006 — pipeline @claude skip count reduction
 - 400+ scenarios @claude-tagged (manual / behavioural)
