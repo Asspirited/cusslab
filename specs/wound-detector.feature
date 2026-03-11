@@ -22,6 +22,9 @@ Feature: WoundDetector Abstraction
       | faldo      | sunesson      |
       | faldo      | tiger         |
       | faldo      | norman        |
+      | faldo      | tuna          |
+      | faldo      | valhalla      |
+      | faldo      | poulter       |
       | dougherty  | give up       |
       | roe        | parnevik      |
       | roe        | painkillers   |
