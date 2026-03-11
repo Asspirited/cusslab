@@ -1,6 +1,6 @@
 # Session Startup — Heckler and Cox
 # Read this first. Everything else is referenced from here.
-# Last updated: 2026-03-10
+# Last updated: 2026-03-11
 
 ---
 
@@ -96,7 +96,7 @@ This is the handoff from the other Claude. If file doesn't exist: note it and co
 
 **Then:** Read `.claude/practices/waste-log.md` — last 5 entries only, report any with Status: OPEN.
 
-Current open items as of 2026-03-10 (session 5): WL-MODE-001 (design-session audit gap), WL-MODE-002 (darts character debt: Rod Harrington/Bobby George), WL-096, WL-097. WL-113 (Ryder score) and WL-114 (commentary layout) CLOSED same session.
+Current open items as of 2026-03-11 (session 6): WL-122 (UI audit gap — partially mitigated), WL-123 (context overflow). WL-120 (PubCrawl cascade crash), WL-121 (Quntum Leeks scenario overwrite), WL-096 (Bespoke Material) — all CLOSED this session.
 
 ---
 
@@ -110,24 +110,22 @@ For each open product-bet item, ask:
 - Is there a falsifier — something that would tell us we were wrong?
 Full outer loop: `.claude/practices/hypothesis-driven.md`
 
-Current top 3 as of 2026-03-10 (session 5 post close):
-- BL-107 Nostradamus character spec: juxtaposition mechanic with Sun Tzu (CD3=11.0) — OPEN
-- BL-105 Hardmen reaction panel (Roy Keane, Vinny Jones, Nostradamus) (CD3=7.5) — OPEN
-- BL-106 Sun Tzu general advisory mode (post-pub validation) (CD3=5.5) — OPEN
+Current top 3 as of 2026-03-11 (session 6 post close):
+- BL-118 Pipeline: runtime browser test for external-script window globals (CD3=6.0) — OPEN
+- BL-117 Home page: replace Golf Adventure default with feature discovery page (CD3=4.4) — OPEN
+- BL-116 Premise Interrogation feature: scientist/philosopher panel (CD3=TBD) — OPEN (Three Amigos needed)
 
-Recently closed (2026-03-10 session 5):
-- BL-109: FF shared engine extracted — initGameState, appendToHistory, incrementTurn, buildModifierBlock
-- BL-110: Friday Pub Crawl Misadventure — Mode B live (8 scenes, 4 advisors, lederhosen)
-- WL-113: Ryder Cup overall score display fixed — running total now primary in leaderboard
-- WL-114: Commentary layout fixed — leaderboard before commentary in day-end screen
+Recently closed (2026-03-11 session 6):
+- WL-096 (Bespoke Material): SentenceBuilder.run() rewritten, bespoke-material.feature 8 scenarios passing
+- WL-120 (PubCrawl cascade crash): fixed
+- WL-121 (Quntum Leeks scenario overwrite): fixed
+- WL-124 (PubCrawl ENGINE.initPubCrawl): guard + runtime getEngine() + cache busters removed — commit 3b4821a
 
-BL-113 OPEN: Unexpected outfit mechanic (generalised lederhosen) — Three Amigos needed before any work
-
-Comedy Room now has 4 tabs: Into The Room / House Name Oracle / The Roast Room / The Writing Room.
+Bruce Lee added to all 6 panels (Boardroom, Comedy Room, Football, Golf, Darts, Cricket) as test character. See docs/characters-bruce-lee.md. Not permanent — Rod's call after testing.
+Comedy Room has 4 standalone panels: Into The Room / House Name Oracle / The Roast Room / The Writing Room.
 AUTHORS_POOL: 7 authors (hemingway, mccarthy, tolkien, patterson, pratchett, wodehouse, austen).
-Character files for all 7 authors: feature-agnostic canonical model in characters/*.md.
-Golf Adventure: Ryder Cup now 5-session model. Overall match score shown prominently (G.teamScore, "Overall Match Score" label). Leaderboard appears before commentary in day-end screen.
-Little Misadventure: Friday Pub Crawl Misadventure (Mode B) now live — 8 real pub locations, 4 advisors (Sun Tzu/Nostradamus/Chuck/Buddha), lederhosen easter egg. Shared FF engine (ff-engine.js) used by Pub Crawl, Quntum Leeks, Golf Adventure.
+Golf Adventure: Ryder Cup 5-session model with leaderboard + overall match score.
+Little Misadventure: Friday Pub Crawl Misadventure (Mode B) live — 8 locations, 4 advisors, lederhosen easter egg. External scripts (ff-engine.js, pub-crawl-scenes.js, pub-navigator-engine.js) use ETag caching (no ?v= query strings).
 
 Agree with Rod which item is being worked this session BEFORE opening any code file.
 
@@ -148,6 +146,26 @@ If clearly dead or superseded → move to ARCHIVED with one-line reason.
 
 Report: "Ideas board: N unreviewed, N promoted, N archived."
 Do not spend more than 2 minutes on this step. It is a scan, not a design session.
+
+---
+
+### 4c. COMBINED OPEN ITEMS — BL + WL, sorted by CD3
+
+Read open BL items from `.claude/practices/backlog.md` and open WL items from `.claude/practices/waste-log.md`.
+
+Produce one combined table:
+
+**BL items** — extract all `Status: OPEN` entries, sort descending by CD3.
+Format each row: `CD3 | BL-NNN — title | blocker or note`
+
+**WL items** — extract all `Status: Open` entries (case-insensitive), list after BL items.
+Format each row: `WL-NNN — title | urgency (High/Medium/Low)`
+
+Flag any blockers that have since been resolved (blocked item's dependency now CLOSED → mark **now unblocked**).
+
+Output the table, then confirm the session top 3 BL by CD3 and the highest-urgency open WL.
+
+Do not spend more than 3 minutes on this step — scan and report, do not analyse or design.
 
 ---
 

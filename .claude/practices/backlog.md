@@ -1001,6 +1001,15 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - CD3: UBV=9 TC=8 RR=5 → CoD=22, Dur=5, **CD3=4.4**
 - Status: OPEN — raised 2026-03-11. Three Amigos required first.
 
+### BL-118 — Pipeline: runtime browser test for external-script window globals
+- Root cause of WL-124 (PubCrawl broken 6+ sessions): external scripts (ff-engine.js, pub-crawl-scenes.js, pub-navigator-engine.js) set window globals that unit tests and browser-sim cannot detect as missing. If any external script throws, window.PubNavigatorEngine is never set — pipeline stays GREEN while the feature is broken in production.
+- Fix: add a pipeline check that loads index.html in a real browser context (jsdom + script execution, or playwright) and asserts that all expected window globals are set after page load: window.PubNavigatorEngine, window.PubCrawlScenes, window.FFEngine, window.QuntumLeeksEngine, etc.
+- Minimum viable: extend browser-sim to inject the external script content and verify the window globals. Playwright (headless browser) is the robust option.
+- Three Amigos needed: agree scope (which globals, jsdom vs playwright, CI vs local-only), then Gherkin.
+- Feature: process
+- CD3: UBV=7 TC=8 RR=9 → CoD=24, Dur=4, **CD3=6.0**
+- Status: OPEN — raised 2026-03-11. WL-124 root cause. Three Amigos required.
+
 ### BL-116 — Premise Interrogation feature: scientist/philosopher panel for premise validation
 - New panel (or mode within Premise Engine) where scientist/philosopher characters interrogate a submitted premise using their natural framework
 - Characters: Prof Cox (falsifiability + cosmic scale), Douglas Adams (inversion + Occam), Feynman (find the real variable + Five Whys), + 1 more TBD (Carl Sagan or Voss)

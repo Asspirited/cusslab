@@ -1333,7 +1333,7 @@ Status: CLOSED
 - **Time lost:** Not yet investigated (fix deferred)
 - **Cost impact:** Medium — feature is silently unusable
 - **Tags:** `#bug` `#rod-caught` `#broken-flow` `#module-mismatch`
-- **Status:** Open — Three Amigos required before fix. Options: A) write a handler that reads the form fields and calls AI directly; B) replace panel HTML to match SentenceBuilder chip-selection concept.
+- **Status:** Closed 2026-03-11 — Option A chosen. SentenceBuilder.run() rewritten to read sb-profession/sb-location/sb-relationship/sb-age/sb-hobby and dispatch parallel API calls to all 6 Boardroom characters. 8 Gherkin scenarios added. Commit 2bd0bd2.
 
 ## WL-095
 - **Item:** Claude.ai design session context not captured to Claude Code filesystem
@@ -1628,3 +1628,30 @@ Status: CLOSED
 - **5 Whys root cause:** Static analysis cannot replace runtime execution. The pipeline needs a real browser simulation (not Node mock) or at minimum: (1) pattern-based guards for the crash classes we've seen, (2) full getElementById cross-ref, (3) Gherkin coverage of submit paths end-to-end. Checks 11+12 address (1). (2) and (3) are open.
 
 ---
+
+---
+
+### WL-123
+**Item:** Session context overflow mid-session — Bruce Lee work carried into continuation session
+**Symptom:** Context limit hit during the session covering PubCrawl fix, Gherkin for bespoke-material, and start of Bruce Lee addition. Session had to be continued in a new context window.
+**Suspected cause:** Large inline sessions with many file reads of index.html (16K+ lines) are context-expensive. Session was doing repair + new Gherkin + panel data additions in one run.
+**Session:** 2026-03-11
+**Time lost:** ~15 min (summary reconstruction, context reload)
+**Cost impact:** Medium (extra tokens for summary read + context re-establishment)
+**Delay:** 0 (work completed in continuation)
+**Tags:** `#context-recovery` `#save-rod-money`
+**Status:** open — mitigate by splitting large sessions; read index.html sections rather than whole file where possible
+
+---
+
+### WL-124
+**Item:** PubCrawl "ENGINE.initPubCrawl is not a function" — recurring bug, 6+ sessions
+**Symptom:** Clicking a pub scene gives "Failed to start scene: ENGINE.initPubCrawl is not a function". Caused by window.PubNavigatorEngine never being set.
+**Suspected cause:** (1) pub-navigator-engine.js line 9 had unguarded window.PubCrawlScenes access — could throw before setting window.PubNavigatorEngine. (2) Hardcoded ?v=2 cache busters meant browser served stale cached version of the script (with the old bug) even after fixes were pushed.
+**Session:** 2026-03-11
+**Time lost:** 45+ min across 3+ sessions
+**Cost impact:** High (repeated debugging, Rod frustration)
+**Delay:** PubCrawl unusable for multiple sessions
+**Tags:** `#false-progress` `#repeated-work` `#regression`
+**Status:** Closed — commit 3b4821a. Three fixes: (1) guard added to line 9, (2) ENGINE replaced with runtime getEngine(), (3) hardcoded ?v= cache busters removed.
+**Root lesson:** External scripts that set window globals are invisible to unit tests and browser-sim pipeline. Runtime guard + ETag caching prevents silent failures.
