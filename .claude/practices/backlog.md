@@ -311,7 +311,7 @@ For items that represent a product hypothesis, add after the CD3 line:
 - **Comedy mechanic:** Sir Nick's insult vocabulary uses sandwich language — bad opponents/shots get "rotten filling", "mouldy bread", "soggy crust", "wrong sauce", "terrible combination", "accoutrements entirely wrong." Other panel members know about the sandwich gate and can needle him with it (tuna/beef/ham references, "what's on the menu today Nick" etc.)
 - **Wound trigger:** any mention of Ryder Cup captaincy, 2008, Valhalla, Poulter, Garcia, or "pairings" fires the wound.
 - CD3: UBV=7 TC=1 RR=1 → CoD=9, Dur=4, **CD3=2.3**
-- Status: OPEN
+- Status: CLOSED — 2026-03-11: tuna/beef/ham/poulter/valhalla/2008/captaincy/pairings triggers added to GOLF_WOUNDS; FALDO_CLARIFICATION wound response; sandwich insult vocabulary (6 items); cross-panel needles for Radar/McGinley/Roe; 1496/1496 Gherkin green.
 
 ### BL-059 — The Writing Room: authors as a standalone Comedy Room panel
 - Epic: Author Epilogue
@@ -731,7 +731,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - New Comedy Room mode. Input: UK/Irish outward code + mandatory OracleVoice archetype (Elegist/Rogue/DarkOracle/Booster/Snob/Anarchist/Mystic/Local). Oracle researches the location (topography, history, IMD, famous people, wrong attribution, political stance, proximity). Phil Spencer, Kirstie Allsopp, Dion Dublin have a conversation about the research and converge (or don't) on a name. Output: three house names in three registers (Dignified/Knowing/Unhinged) each with Oracle rationale.
 - See notes/2026-03-10-house-name-oracle.md for full design spec.
 - CD3: UBV=8 TC=2 RR=1 → CoD=11, Dur=8, **CD3=1.375**
-- Status: OPEN — Gherkin approved 2026-03-10, TDD in progress
+- Status: CLOSED — 2026-03-11: implementation already complete; 28/28 Gherkin green. Backlog status lagged.
 
 ### BL-052 — Homepage quotes: random character attribution + uncertainty disclaimer
 - Epic: Brand Polish
@@ -938,10 +938,13 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 ### BL-116 — Premise Interrogation feature: scientist/philosopher panel for premise validation
 - New panel (or mode within Premise Engine) where scientist/philosopher characters interrogate a submitted premise using their natural framework
 - Characters: Prof Cox (falsifiability + cosmic scale), Douglas Adams (inversion + Occam), Feynman (find the real variable + Five Whys), + 1 more TBD (Carl Sagan or Voss)
-- **Feature shape confirmed (2026-03-11):** Two modes on the same panel, same input goes to both:
-  - Mode 1: Framework mode — apply the tools/techniques (Socratic, De Bono, Popper, Kahneman, Voss, Made to Stick, etc.) to interrogate the premise
-  - Mode 2: Panel mode — same premise goes to the scientist/philosopher character panel; each character responds as themselves
-  - Both modes visible together, easy to switch, same premise input drives both
+- **Feature shape confirmed (2026-03-11):**
+  - Two modes, one panel, one premise input drives both
+  - Mode 1: user selects frameworks; each produces a distinct output block
+  - Mode 2: all four characters (Cox, Adams, Feynman, Russell) always run; characters interact strongly with each other (see previous responses, react/contradict/build — like Souness's Cat relationship dynamics)
+  - Architecture flexible: character list will grow; select-up-to-6 pattern (like other panels) once more characters added
+  - Framework calls: one API call per selected framework, sequential (cleaner focused output)
+  - Panel placement: under Boardroom section, alongside "Present to the Board"
 - Framework mapping: each character maps to 1-2 of the validated frameworks from research (Socratic, De Bono, Popper, Kahneman, Voss, Made to Stick, Cialdini etc.)
 - Depends on BL-115 (character specs) being done first
 - CD3: UBV=7 TC=5 RR=3 → CoD=15, Dur=5, **CD3=3.0**

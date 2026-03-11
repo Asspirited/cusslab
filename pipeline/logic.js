@@ -76,7 +76,7 @@ function makeWoundDetector(woundData) {
 const GOLF_WOUNDS_DATA = {
   coltart:   ['valderrama', 'seve', 'westwood', 'cameraman', 'three and two', '3 and 2', 'brookline'],
   mcginley:  ['gobshite', 'wheelhouse'],
-  faldo:     ['fanny', 'sunesson', 'leadbetter', 'swing change', 'remodel', 'tiger', 'norman'],
+  faldo:     ['fanny', 'sunesson', 'leadbetter', 'swing change', 'remodel', 'tiger', 'norman', 'tuna', 'beef', 'ham', 'poulter', 'valhalla', '2008', 'captaincy', 'pairings', 'captain'],
   dougherty: ["can't improve", 'give up', 'defeatist', 'never get better'],
   murray:    ["doesn't matter", 'not important', 'move on', 'insignificant'],
   henni:     ["don't answer that", 'skip that', 'ignore that question'],
