@@ -875,7 +875,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Juxtaposition: Sun Tzu acts before the event; Nostradamus claims to have predicted it. Nostradamus is useless hindsight voiced with complete prophetic confidence.
 - Design detail in notes/2026-03-10-sun-tzu-pub-navigator.md; Nostradamus also doubles in hardmen panel (BL-105).
 - CD3: UBV=5 TC=4 RR=2 → CoD=11, Dur=1, **CD3=11.0**
-- Status: OPEN — character file pending commit (waiting on file transfer from Claude.ai)
+- Status: CLOSED — 2026-03-11: characters/nostradamus.md fully written; juxtaposition mechanic with Sun Tzu codified (Sun Tzu acts before, Nostradamus confirms after); epistemological argument; five-movement response structure; three wounds; all four advisor relationships; hardmen panel dynamics with Keane/Vinny; scene-specific notes (Scotia Bar, Horseshoe, Oktoberfest); opener variety including rare "I know" opener; hard rules.
 
 ### BL-108 — Bruce Lee character spec: fifth advisor candidate
 - Epic: Sun Tzu Pub Navigator
