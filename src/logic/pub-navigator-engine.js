@@ -13,7 +13,7 @@ const { PUB_CRAWL_SCENES } =
 const _FF =
   typeof require !== 'undefined'
     ? require('./ff-engine.js')
-    : window.FFEngine;
+    : (window.FFEngine || {});
 const _initGameState   = _FF.initGameState;
 const _appendToHistory = _FF.appendToHistory;
 const _incrementTurn   = _FF.incrementTurn;

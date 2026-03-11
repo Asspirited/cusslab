@@ -11139,8 +11139,8 @@ const PubCrawl = (() => {
 
   // ── Local mirrors of engine data (browser context — no require) ──────────
 
-  const SCENES = window.PubCrawlScenes.PUB_CRAWL_SCENES;
-  const ENGINE = window.PubNavigatorEngine;
+  const SCENES = (window.PubCrawlScenes || {}).PUB_CRAWL_SCENES || [];
+  const ENGINE = window.PubNavigatorEngine || {};
 
   const ADVISOR_LABELS = {
     'sun-tzu':     'Sun Tzu advises',
@@ -16577,8 +16577,8 @@ RESPONSE FORMAT — return ONLY valid JSON, no text outside it:
 
   async function leap() {
     const keys = Object.keys(SCENARIOS);
-    _state.scenario    = keys[Math.floor(Math.random() * keys.length)];
     _state = QuntumLeeksEngine.initState();
+    _state.scenario    = keys[Math.floor(Math.random() * keys.length)];
 
     const thread = document.getElementById('ql-thread');
     if (thread) thread.innerHTML = '';
