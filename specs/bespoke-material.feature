@@ -6,30 +6,24 @@ Feature: Bespoke Material — panel delivers character-voiced material from user
   # ── Profile building ──────────────────────────────────────────────────────
 
   Scenario: Full profile produces a profile description with all fields
-    Given a bespoke material profile with:
-      | profession    | middle manager    |
-      | location      | Slough            |
-      | relationship  | Unhappily married |
-      | age           | 46-55             |
-      | hobby         | birdwatching      |
+    Given a bespoke material profile with profession "middle manager"
+    And the bespoke profile location is "Slough"
+    And the bespoke profile relationship is "Unhappily married"
+    And the bespoke profile age is "46-55"
+    And the bespoke profile hobby is "birdwatching"
     When I build the bespoke profile description
-    Then the profile description includes "middle manager"
-    And the profile description includes "Slough"
-    And the profile description includes "Unhappily married"
-    And the profile description includes "46-55"
-    And the profile description includes "birdwatching"
+    Then the bespoke profile description includes "middle manager"
+    And the bespoke profile description includes "Slough"
+    And the bespoke profile description includes "Unhappily married"
+    And the bespoke profile description includes "46-55"
+    And the bespoke profile description includes "birdwatching"
 
   Scenario: Partial profile omits blank fields
-    Given a bespoke material profile with:
-      | profession    | nurse |
-      | location      |       |
-      | relationship  |       |
-      | age           |       |
-      | hobby         |       |
+    Given a bespoke material profile with profession "nurse"
     When I build the bespoke profile description
-    Then the profile description includes "nurse"
-    And the profile description does not include "location"
-    And the profile description does not include "age"
+    Then the bespoke profile description includes "nurse"
+    And the bespoke profile description does not include "location"
+    And the bespoke profile description does not include "age"
 
   # ── Validation ────────────────────────────────────────────────────────────
 
@@ -54,18 +48,18 @@ Feature: Bespoke Material — panel delivers character-voiced material from user
     Given a bespoke material profile with profession "accountant"
     And the selected bespoke themes are "Self-deprecating"
     When I build prompts for all bespoke material characters
-    Then prompts exist for sebastian, harold, roy, partridge, mystic, and hicks
+    Then bespoke prompts exist for sebastian, harold, roy, partridge, mystic, and hicks
 
-  Scenario: Each character prompt includes the user profile
+  Scenario: Character prompt includes the user profile
     Given a bespoke material profile with profession "accountant" and location "Leeds"
     And the selected bespoke themes are "Boss insult"
     When I build the bespoke material prompt for character "roy"
-    Then the prompt includes "accountant"
-    And the prompt includes "Leeds"
-    And the prompt includes "Boss insult"
+    Then the bespoke material prompt includes "accountant"
+    And the bespoke material prompt includes "Leeds"
+    And the bespoke material prompt includes "Boss insult"
 
   Scenario: Character prompts carry distinct voice signatures
     Given a bespoke material profile with profession "accountant"
     When I build the bespoke material prompt for character "harold"
     And I build the bespoke material prompt for character "mystic"
-    Then the harold prompt and mystic prompt are different
+    Then the harold and mystic bespoke prompts are different
