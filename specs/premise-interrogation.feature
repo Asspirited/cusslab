@@ -102,8 +102,8 @@ Feature: Premise Interrogation — BL-116
     And each character response is rendered with name, icon, and colour
     And responses render sequentially as each completes
 
+  @claude
   Scenario: Later characters receive prior responses as context
-    @claude
     Given Mode 2 has run with at least two characters
     Then later characters receive prior responses as context
     And relationship dynamics from character specs inform the interactions
