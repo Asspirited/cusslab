@@ -18,6 +18,16 @@ Report final scorecard. If RED: fix before closing. No session ends on a red pip
 
 ---
 
+### 1b. FEATURE ACTIVITY REPORT (run after pipeline — one line per feature)
+
+```bash
+bash .claude/scripts/feature-report.sh
+```
+
+Report the table in session summary. Highlight any feature with high open-WL count or zero closed-BL this session.
+
+---
+
 ### 2. WASTE LOG (mandatory — append before closing)
 
 Read `.claude/practices/waste-log.md` — last entry number.

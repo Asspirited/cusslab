@@ -7929,6 +7929,27 @@ function makeSteps(ctx) {
         throw new Error(`Nav group boardroom does not contain "${label}". Has: ${JSON.stringify(ctx._piNavGroup)}`);
     }],
 
+    // ── Feature report — BL-102 ───────────────────────────────────────────────
+    [/^I run the feature report$/, () => {
+      const { execSync } = require('child_process');
+      const scriptPath = path.join(__dirname, '..', '.claude/scripts/feature-report.sh');
+      try {
+        ctx._frOutput   = execSync(`bash "${scriptPath}"`, { encoding: 'utf8' });
+        ctx._frExitCode = 0;
+      } catch (e) {
+        ctx._frOutput   = (e.stdout || '') + (e.stderr || '');
+        ctx._frExitCode = e.status || 1;
+      }
+    }],
+    [/^the exit code is (\d+)$/, (code) => {
+      if (ctx._frExitCode !== parseInt(code, 10))
+        throw new Error(`Expected exit code ${code}, got ${ctx._frExitCode}. Output:\n${ctx._frOutput}`);
+    }],
+    [/^the output contains "([^"]+)"$/, (text) => {
+      if (!ctx._frOutput || !ctx._frOutput.includes(text))
+        throw new Error(`Output does not contain "${text}".\nGot:\n${(ctx._frOutput || '').slice(0, 300)}`);
+    }],
+
     // ── Pipeline infra — BL-114 single source of truth ─────────────────────
     [/^the gherkin runner is loaded$/, () => { /* CONSULTANT_SKIN_TABS populated at module load */ }],
 

@@ -18,6 +18,9 @@ Every open item is scored when possible:
 
 Items are sorted by CD3 within each section. Rescore when scope changes.
 Every item has its own BL-NNN number. No sub-items (BL-032-1 etc.) ever.
+- **Feature** — (optional) canonical label for feature-activity reporting. Set on every new item.
+  Canonical labels: `golf-adventure` · `pub-navigator` · `comedy-room` · `sports-19th-hole` · `darts` · `cricket` · `quntum-leeks` · `boardroom` · `play` · `learn` · `platform` · `process`
+  Script: `bash .claude/scripts/feature-report.sh`
 
 ## Hypothesis Card (optional — for product bets, not pure tech debt)
 
@@ -144,6 +147,7 @@ For items that represent a product hypothesis, add after the CD3 line:
   1. **2016 Hazeltine** — USA 17–11. Europe collapse. Rory visibly furious throughout.
   2. **2021 Whistling Straits** — USA 19–9. Biggest US win in 40 years. Patrick Reed/Rory dynamic.
 - Kiawah 1991 and Brookline 1999 already in.
+- Feature: golf-adventure
 - CD3: UBV=6 TC=1 RR=1 → CoD=8, Dur=5 per tournament, **CD3=1.6**
 - Status: OPEN
 
@@ -152,6 +156,7 @@ For items that represent a product hypothesis, add after the CD3 line:
   1. **1969 Royal Birkdale** — Nicklaus concedes Jacklin's putt. Greatest gesture in golf. 16–16 halved.
   2. **1953 Wentworth** — Hogan's only Ryder Cup. USA win but Hogan's presence is the story.
   3. **1933 Southport & Ainsdale** — GB&I win (rare). Easterbrook holes on the last.
+- Feature: golf-adventure
 - CD3: UBV=5 TC=1 RR=1 → CoD=7, Dur=5 per tournament, **CD3=1.4**
 - Status: OPEN
 
@@ -159,6 +164,7 @@ For items that represent a product hypothesis, add after the CD3 line:
 - Lowest priority. Treat as historical artefact, not competitive drama.
   1. **1927 Worcester CC** — inaugural Ryder Cup. Hagen captains USA. Ted Ray captains GB.
   2. **1929 Moortown** — GB win. Compston beats Hagen 6&4 in singles.
+- Feature: golf-adventure
 - CD3: UBV=4 TC=1 RR=1 → CoD=6, Dur=5 per tournament, **CD3=1.2**
 - Status: OPEN
 
@@ -174,6 +180,7 @@ For items that represent a product hypothesis, add after the CD3 line:
 - **Celebrity research:** Research agent dispatched 2026-03-10 for Bill Murray, Michael Jordan, Hugh Grant, Samuel L Jackson, Chris Martin, Terry Wogan, Shane Warne, Gary Lineker incidents at Pebble Beach and Dunhill Links.
 - **Era palette note (2026-03-10):** Shell's Wonderful World of Golf ran 1962–1970 (original series), revived 1994–2003. Era CSS should lean into 1960s–70s technicolour: oversaturated, warm, slightly garish — not the clean broadcast look of modern eras. Think Kodachrome rather than HD.
 - **Format complexity (2026-03-10):** AT&T Pebble Beach Pro-Am and Alfred Dunhill Links both use special tournament formats (pro-am scoring, multi-course rotation across Kingsbarns/Carnoustie/St Andrews) that require dedicated research and design before implementation. Shell's Wonderful World, A Round with Alliss, and The Skins Game are simpler one-off formats — do those first. Pro-Am and Dunhill saved for later.
+- Feature: golf-adventure
 - CD3: UBV=6 TC=2 RR=1 → CoD=9, Dur=8, **CD3=1.1** — revised up for format research and design cost on Pro-Am/Dunhill
 - Status: OPEN — celebrity research in progress; start with simpler formats (Shell's/Alliss/Skins); Pro-Am and Dunhill deferred pending format research
 
@@ -254,24 +261,28 @@ For items that represent a product hypothesis, add after the CD3 line:
 ### BL-040 — Golf Adventure: 2000 Open St Andrews (Tiger Grand Slam)
 - Epic: Modern Majors Tier 2
 - Tiger completes Career Grand Slam (never visited a bunker). 19-under. Monty as great Scottish foil with crowd. BBC. Players: Tiger (protagonist), Monty (crowd favourite).
+- Feature: golf-adventure
 - CD3: UBV=8 TC=5 RR=1 → CoD=14, Dur=3, **CD3=4.7**
 - Status: OPEN
 
 ### BL-041 — Golf Adventure: 2011 US Open Congressional (Rory 8-shot)
 - Epic: Modern Majors Tier 2
 - Rory McIlroy 8-shot win at 22. After Masters collapse. Utterly dominant. NBC. Players: Rory (protagonist), Jason Day (distant second).
+- Feature: golf-adventure
 - CD3: UBV=8 TC=5 RR=1 → CoD=14, Dur=3, **CD3=4.7**
 - Status: OPEN
 
 ### BL-042 — Golf Adventure: 2002 Open Muirfield (Els 4-way playoff)
 - Epic: Modern Majors Tier 2
 - 4-man playoff (Els, Elkington, Levet, Appleby). Els wins. Thomas Levet falls over after hole-in-one celebrations. BBC. Players: Els (protagonist), Levet (comedy foil).
+- Feature: golf-adventure
 - CD3: UBV=7 TC=5 RR=1 → CoD=13, Dur=3, **CD3=4.3**
 - Status: OPEN
 
 ### BL-043 — Golf Adventure: 2011 Open Sandwich (Darren Clarke)
 - Epic: Modern Majors Tier 2
 - Clarke wins three weeks after anniversary of wife Heather's death. Emotional. Sky. Players: Clarke (protagonist), Phil Mickelson / Dustin Johnson (foils).
+- Feature: golf-adventure
 - CD3: UBV=8 TC=5 RR=1 → CoD=14, Dur=3, **CD3=4.7**
 - Status: OPEN
 
@@ -284,18 +295,21 @@ For items that represent a product hypothesis, add after the CD3 line:
 ### BL-045 — Golf Adventure: 2012 PGA Kiawah (Rory dominant)
 - Epic: Modern Majors Tier 2
 - Rory McIlroy dominant. 8-shot win. Ryder Cup backdrop (Ocean Course). Players: Rory (protagonist).
+- Feature: golf-adventure
 - CD3: UBV=7 TC=4 RR=1 → CoD=12, Dur=3, **CD3=4.0**
 - Status: OPEN
 
 ### BL-046 — Golf Adventure: 2004 Masters (Phil's first major)
 - Epic: Modern Majors Tier 2
 - Phil Mickelson's first major after 0-for-46. Arms in air on 18. Ernie Els misses short putt on 18 to tie. CBS.
+- Feature: golf-adventure
 - CD3: UBV=7 TC=4 RR=1 → CoD=12, Dur=3, **CD3=4.0**
 - Status: OPEN
 
 ### BL-047 — Golf Adventure: 2012 Masters (Bubba Watson)
 - Epic: Modern Majors Tier 2
 - Bubba Watson punch hook from pine straw on 10 in playoff. Weeps at the hole. CBS. Players: Bubba (protagonist), Louis Oosthuizen (foil).
+- Feature: golf-adventure
 - CD3: UBV=7 TC=4 RR=1 → CoD=12, Dur=3, **CD3=4.0**
 - Status: OPEN
 
@@ -358,6 +372,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Depends on: BL-061 (pool mechanics)
 - Voice: no punctuation, biblical register, dust, nihilism. Structural tell: the ball rolled. Everything
   was dust. The sun did not care. Wound: briefly attempts punctuation, gives up mid-summary.
+- Feature: comedy-room
 - CD3: UBV=6 TC=2 RR=1 → CoD=9, Dur=2, **CD3=4.5**
 - Status: OPEN
 
@@ -366,6 +381,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Depends on: BL-061
 - Voice: mythic scope, Elvish, appendices, ancestral lineage. Structural tell: the appendix is longer
   than the summary. Wound: insists on naming the course in Elvish before describing any shots.
+- Feature: comedy-room
 - CD3: UBV=6 TC=2 RR=1 → CoD=9, Dur=2, **CD3=4.5**
 - Status: OPEN
 
@@ -374,6 +390,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Depends on: BL-061
 - Voice: short chapters, everything DRAMATIC, pace pace pace. Structural tell: chapter numbers for
   every sentence. Wound: novel has 94 chapters. Closing: a cliffhanger about the 19th hole.
+- Feature: comedy-room
 - CD3: UBV=6 TC=2 RR=1 → CoD=9, Dur=2, **CD3=4.5**
 - Status: OPEN
 
@@ -382,6 +399,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Depends on: BL-061
 - Voice: footnotes, satire, truth disguised as comedy. Structural tell: *A FOOTNOTE ABOUT THE PHYSICS
   OF GOLF BALLS.* Death plays off scratch. Nobody will acknowledge this. Wound: the footnote is longer.
+- Feature: comedy-room
 - CD3: UBV=6 TC=2 RR=1 → CoD=9, Dur=2, **CD3=4.5**
 - Status: OPEN
 
@@ -390,6 +408,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Depends on: BL-061
 - Voice: Jeeves, gentle chaos, upper-class incompetence. Structural tell: Bertie wanders in uninvited.
   Wound: Bertie's handicap. It is not improving. Jeeves has opinions on this that he does not share.
+- Feature: comedy-room
 - CD3: UBV=6 TC=2 RR=1 → CoD=9, Dur=2, **CD3=4.5**
 - Status: OPEN
 
@@ -398,6 +417,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Depends on: BL-061
 - Voice: social comedy, manners, sly observation. Structural tell: "It is a truth universally
   acknowledged…" Wound: the club secretary's conduct. It has been noted. It will not be forgotten.
+- Feature: comedy-room
 - CD3: UBV=6 TC=2 RR=1 → CoD=9, Dur=2, **CD3=4.5**
 - Status: OPEN
 
@@ -406,6 +426,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Depends on: BL-061
 - Voice: gonzo, paranoid, political, drugs. Structural tell: "We were somewhere around the 7th hole
   when the drugs began to take hold." Wound: the caddie. The caddie was no longer human.
+- Feature: comedy-room
 - CD3: UBV=6 TC=2 RR=1 → CoD=9, Dur=2, **CD3=4.5**
 - Status: OPEN
 
@@ -414,6 +435,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Depends on: BL-061
 - Voice: hardboiled, noir, Los Angeles similes. Structural tell: the green was as smooth as a lie told
   by a man who'd told better ones. Wound: the woman watching from the clubhouse. She knows something.
+- Feature: comedy-room
 - CD3: UBV=6 TC=2 RR=1 → CoD=9, Dur=2, **CD3=4.5**
 - Status: OPEN
 
@@ -423,6 +445,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Existing panel character. Needs epilogue prompt template only (no new character file).
 - Voice: every shot is an epigram. Suffering is merely bad taste. The ball knows it's being watched.
   Structural tell: the closing epigram is better than everything that preceded it. Wound: the rough.
+- Feature: comedy-room
 - CD3: UBV=5 TC=2 RR=1 → CoD=8, Dur=2, **CD3=4.0**
 - Status: OPEN
 
@@ -431,6 +454,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Depends on: BL-061
 - Voice: suspects everywhere, the reveal, Poirot. Structural tell: Poirot has known since the 3rd hole.
   He merely waited for the confession. Wound: the alibi for the missed putt doesn't hold up.
+- Feature: comedy-room
 - CD3: UBV=5 TC=2 RR=1 → CoD=8, Dur=2, **CD3=4.0**
 - Status: OPEN
 
@@ -439,6 +463,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Depends on: BL-061
 - Voice: wizarding lens + extended commentary on themes. Structural tell: everyone is sorted into houses.
   Wound: the game is inadvertently problematic on several levels she would like to address at length.
+- Feature: comedy-room
 - CD3: UBV=5 TC=2 RR=1 → CoD=8, Dur=2, **CD3=4.0**
 - Status: OPEN
 
@@ -447,6 +472,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Depends on: BL-061
 - Voice: every sentence a cliffhanger, symbols, codes, the Vatican. Structural tell: the symbol on the
   scorecard was not a birdie. It was a warning. Wound: the caddie knew about the Priory of the Tee.
+- Feature: comedy-room
 - CD3: UBV=5 TC=2 RR=1 → CoD=8, Dur=2, **CD3=4.0**
 - Status: OPEN
 
@@ -456,6 +482,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Existing panel character (Slightly Squiffy Blyton). Needs epilogue prompt template only.
 - Voice: Famous Five adventure. The rough is a secret passage. Everyone is jolly or a villain.
   Has had a couple. Structural tell: there is a mystery. It involves the greenkeeper.
+- Feature: comedy-room
 - CD3: UBV=5 TC=2 RR=1 → CoD=8, Dur=2, **CD3=4.0**
 - Status: OPEN
 
@@ -464,6 +491,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Depends on: BL-061
 - Voice: rational, systematic, Three Laws applied. Structural tell: Three Laws of Golf. The caddie is
   a robot. It cannot harm a golfer except through incorrect club selection. Wound: the First Law fails.
+- Feature: comedy-room
 - CD3: UBV=5 TC=2 RR=1 → CoD=8, Dur=2, **CD3=4.0**
 - Status: OPEN
 
@@ -472,6 +500,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Depends on: BL-061
 - Voice: vast, philosophical, suffering as meaning. Structural tell: one round = 600 pages of context.
   The birdie at the 7th is a microcosm of the human condition. Wound: the character on the bench.
+- Feature: comedy-room
 - CD3: UBV=4 TC=2 RR=1 → CoD=7, Dur=2, **CD3=3.5**
 - Status: OPEN
 
@@ -480,6 +509,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Depends on: BL-061
 - Voice: gothic, moors, passion, unspoken feeling. Structural tell: the rough is the moors. Someone
   brooding is in the bunker. It begins to rain with intent. Wound: Mr Rochester. He is always there.
+- Feature: comedy-room
 - CD3: UBV=4 TC=2 RR=1 → CoD=7, Dur=2, **CD3=3.5**
 - Status: OPEN
 
@@ -488,6 +518,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Depends on: BL-061
 - Voice: paranoid, espionage, nobody is who they say. Structural tell: everyone at the club is working
   for someone else. The caddie has a past. The scorecard was a message. Wound: the mole.
+- Feature: comedy-room
 - CD3: UBV=4 TC=2 RR=1 → CoD=7, Dur=2, **CD3=3.5**
 - Status: OPEN
 
@@ -496,6 +527,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Depends on: BL-061
 - Voice: adventure, vast scale, raw masculinity. Structural tell: impossible distances. Someone is
   hunting something. The game takes place across a continent. Wound: the lion on the 16th.
+- Feature: comedy-room
 - CD3: UBV=4 TC=2 RR=1 → CoD=7, Dur=2, **CD3=3.5**
 - Status: OPEN
 
@@ -504,6 +536,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Depends on: BL-061
 - Voice: shameless, self-aggrandising, economical with truth. Structural tell: he had never lost a round
   of golf, he told himself. This was not entirely true. It was not true at all. Wound: the scoreboard.
+- Feature: comedy-room
 - CD3: UBV=4 TC=2 RR=1 → CoD=7, Dur=2, **CD3=3.5**
 - Status: OPEN
 
@@ -512,6 +545,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Depends on: BL-061
 - Voice: romance, heaving bosoms, pastel, eternal love. Structural tell: her heart fluttered as he
   approached the 18th hole. His grip was masterful. Wound: his handicap. It was seven. Irresistible.
+- Feature: comedy-room
 - CD3: UBV=4 TC=2 RR=1 → CoD=7, Dur=2, **CD3=3.5**
 - Status: OPEN
 
@@ -524,6 +558,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
   He is the most serious man in the room. The comedy is an accident of observation.
   Closing register: a maxim that sounds invented but might not be. Probably is.
 - "The reports of my eagle were greatly exaggerated."
+- Feature: comedy-room
 - CD3: UBV=6 TC=2 RR=1 → CoD=9, Dur=2, **CD3=4.5**
 - Status: OPEN — raised 2026-03-10
 
@@ -535,6 +570,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
   The golf course had always been fine. Something about the bunker on the 7th wasn't fine.
   Wound: the constant question of whether it is literary or genre. It is both. He is tired of this.
   Closing register: the thing you thought was resolved is still there. It is always still there.
+- Feature: comedy-room
 - CD3: UBV=6 TC=2 RR=1 → CoD=9, Dur=2, **CD3=4.5**
 - Status: OPEN — raised 2026-03-10
 
@@ -546,6 +582,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
   arrives mid-summary and the player addresses the gallery directly. Wound: everyone quotes him
   wrong, and always the obvious ones. The good lines never get used. He has noted this.
   Closing register: "Exeunt all, pursued by a par five."
+- Feature: comedy-room
 - CD3: UBV=6 TC=2 RR=1 → CoD=9, Dur=2, **CD3=4.5**
 - Status: OPEN — raised 2026-03-10
 
@@ -557,6 +594,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
   captain." Structural tell: events recorded with monastic precision and complete moral gravity.
   Wound: the scribes. They keep abbreviating. The full account requires twelve volumes.
   Closing register: the illuminated manuscript note in the margin — barely legible, entirely correct.
+- Feature: comedy-room
 - CD3: UBV=6 TC=2 RR=1 → CoD=9, Dur=2, **CD3=4.5**
 - Status: OPEN — raised 2026-03-10
 
@@ -568,6 +606,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
   Structural tell: the ordinary thing described until something wrong is inside it.
   Wound: being grouped with King. He got there first, in several important respects.
   Closing register: whatever was in the bunker is still there.
+- Feature: comedy-room
 - CD3: UBV=5 TC=2 RR=1 → CoD=8, Dur=2, **CD3=4.0**
 - Status: OPEN — raised 2026-03-10
 
@@ -579,6 +618,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
   frankly, erotic. The caddie has a past and a body. Wound: being called a guilty pleasure.
   She was a serious student of human ambition. The books were research.
   Closing register: the birdie was just the beginning.
+- Feature: comedy-room
 - CD3: UBV=6 TC=2 RR=1 → CoD=9, Dur=2, **CD3=4.5**
 - Status: OPEN — raised 2026-03-10
 
@@ -601,6 +641,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
   profile. Without button coverage, users cannot rate even if the storage bug (BL-093) is fixed.
 - Fix: audit all panel output areas; add rating row (at minimum thumbs up/down) post-output in each.
   Three Amigos needed: decide rating UI pattern before implementation to ensure consistency.
+- Feature: platform
 - CD3: UBV=7 TC=3 RR=4 → CoD=14, Dur=4, **CD3=3.5**
 - Status: OPEN — raised 2026-03-10. BL-093 shipped 2026-03-10 — no longer blocked.
 
@@ -621,30 +662,35 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Depends on: BL-060 + BL-061 (Phase 1 proven); blocked until Phase 1 complete
 - Trigger Author Epilogue from Football Moment end state. Same pool, different context prompt.
 - SPIDR-D: extending data scope from Golf Adventure to Football.
+- Feature: comedy-room
 - CD3: UBV=6 TC=1 RR=1 → CoD=8, Dur=2, **CD3=4.0**
 - Status: OPEN — blocked on BL-060/061
 
 ### BL-083 — Author Epilogue: Phase 2 — Darts integration
 - Epic: Author Epilogue
 - Depends on: BL-082
+- Feature: comedy-room
 - CD3: UBV=6 TC=1 RR=1 → CoD=8, Dur=2, **CD3=4.0**
 - Status: OPEN — blocked on BL-082
 
 ### BL-084 — Author Epilogue: Phase 2 — Cricket Long Room integration
 - Epic: Author Epilogue
 - Depends on: BL-082
+- Feature: comedy-room
 - CD3: UBV=6 TC=1 RR=1 → CoD=8, Dur=2, **CD3=4.0**
 - Status: OPEN — blocked on BL-082
 
 ### BL-085 — Author Epilogue: Phase 2 — Oracle conversation integration
 - Epic: Author Epilogue
 - Depends on: BL-082; Oracle must have a session narrative to summarise
+- Feature: comedy-room
 - CD3: UBV=6 TC=1 RR=1 → CoD=8, Dur=2, **CD3=4.0**
 - Status: OPEN — blocked on BL-082
 
 ### BL-086 — Author Epilogue: Phase 2 — Boardroom session integration
 - Epic: Author Epilogue
 - Depends on: BL-082
+- Feature: comedy-room
 - CD3: UBV=6 TC=1 RR=1 → CoD=8, Dur=2, **CD3=4.0**
 - Status: OPEN — blocked on BL-082
 
@@ -698,12 +744,14 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - **Phase 2 (moderate cost):** PWA — manifest.json + service worker. iOS/Android "Add to Home Screen" install, offline caching. Feels native, no App Store needed.
 - **Phase 3 (high cost, validate demand first):** Native app store wrapper (Capacitor/React Native). Only justified if Phase 1+2 prove audience exists.
 - Recommend: discuss Phase 1 first — it costs almost nothing and unblocks organic discovery before Phase 2.
+- Feature: platform
 - CD3: UBV=8 TC=3 RR=2 → CoD=13, Dur=4, **CD3=3.25**
 - Status: OPEN — design discussion needed before any implementation
 
 ### BL-057 — Homepage quotes: Colemanballs and real sporting gaffes pool
 - Epic: Brand Polish
 - Add a dedicated pool of real Colemanballs-style quotes (David Coleman, Ron Atkinson, Murray Walker, Des Lynam, Peter Alliss, John Motson, Barry Davies) plus genuine sporting howlers attributed to real people with caveats. These sit alongside the character pool or form their own rotation. Could also add famous non-sporting foot-in-mouth quotes (Ratner, Prescott, etc.).
+- Feature: platform
 - CD3: UBV=4 TC=1 RR=1 → CoD=6, Dur=3, **CD3=2.0**
 - Status: OPEN — logged 2026-03-10, no implementation scope yet
 
@@ -723,6 +771,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Current Expert Evolution feature applied to one context. Apply the same mechanic to Sports panels (golf, football, darts) for different attributes (technique evolution, tactical thinking, commentary style over career arc).
 - Longer-term goal: extract into a standalone panel-agnostic engine that can model attribute evolution for any character across any panel, industry, or domain.
 - Needs scoping conversation before CD3 can be scored properly.
+- Feature: platform
 - CD3: TBD — scoping required
 - Status: OPEN — logged only, no implementation scope yet
 
@@ -736,12 +785,14 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 ### BL-052 — Homepage quotes: random character attribution + uncertainty disclaimer
 - Epic: Brand Polish
 - Quotes displayed at the top of the app should reference cusslab characters randomly. Each quote attributed to a character followed by a disclaimer in parentheses: (possibly) / (probably) / (yeah....maybe) / (almost certainly) / (according to them) etc. Rotates on load.
+- Feature: platform
 - CD3: UBV=3 TC=1 RR=1 → CoD=5, Dur=2, **CD3=2.5**
 - Status: OPEN
 
 ### BL-050 — Golf Adventure: 2008 Ryder Cup Valhalla (Faldo's disaster)
 - Epic: Ryder Cup Rollout
 - Faldo's catastrophic captaincy. USA win 16½–11½. Sandwich gate, botched opening ceremony introductions (potato joke for Harrington, confused McDowell's nationality, called Hansen "Stenson"), bottom-loaded singles order, Azinger outmanoeuvred him tactically. Players: Faldo (captain/protagonist — plays as an actual character), Poulter (emotional engine of the European team despite the captaincy). Sky/NBC.
+- Feature: golf-adventure
 - CD3: UBV=7 TC=3 RR=1 → CoD=11, Dur=4, **CD3=2.8**
 - Status: OPEN
 
@@ -834,6 +885,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Phase 2: Backfill `Feature:` on all open WL items and BL items (last 20 closed BL items minimum).
 - Phase 3: Script in `.claude/scripts/feature-report.sh` — reads backlog.md and waste-log.md, counts by feature label. Outputs: open BL per feature, closed BL per feature, WL entries per feature (overall + last session). Two sections: ALL TIME and LATEST SESSION.
 - Phase 4: Add to session-closedown.md step — run `feature-report.sh` and include output in session summary.
+- Feature: process
 - CD3: UBV=6 TC=4 RR=5 → CoD=15, Dur=3, **CD3=5.0**
 - Status: OPEN — raised 2026-03-10
 
@@ -859,6 +911,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Second hypothesis, post-Mode A. Roy Keane and Vinny Jones react to pub situations alongside Nostradamus.
 - Depends on: BL-104 (Mode A validates the format). Do not build before Mode A is confirmed working.
 - Character files: characters/roy-keane.md, characters/vinny-jones.md (written, pending commit)
+- Feature: pub-navigator
 - CD3: UBV=7 TC=5 RR=3 → CoD=15, Dur=2, **CD3=7.5**
 - Status: OPEN — blocked on BL-104
 
@@ -866,6 +919,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Epic: Sun Tzu Pub Navigator
 - After pub context proven: Sun Tzu answers any question (not just pub situations). Principle → application → warning applied universally.
 - Depends on: BL-104 (voice validated in pub context first)
+- Feature: pub-navigator
 - CD3: UBV=6 TC=3 RR=2 → CoD=11, Dur=2, **CD3=5.5**
 - Status: OPEN — blocked on BL-104
 
@@ -882,8 +936,9 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Modern Sun Tzu — physical/philosophical, may join or replace one of the quartet.
 - Not yet written. Needs spec session before any implementation.
 - Depends on: BL-104 (Mode A validated — do we need a fifth?)
+- Feature: pub-navigator
 - CD3: UBV=5 TC=3 RR=2 → CoD=10, Dur=2, **CD3=5.0**
-- Status: OPEN — spec not yet written
+- Status: CLOSED — 2026-03-11 (e47daf4). characters/bruce-lee.md: Kato wound, DEAD_IN_PANEL_WORLD, Be Water mechanic, Sun Tzu/Chuck/Nostradamus/Buddha relationships, full advisor spec for pub navigator fifth seat.
 
 ### BL-109 — FF shared engine extraction (Quntum Leeks + Golf Adventure → shared module)
 - Epic: Sun Tzu Pub Navigator
@@ -908,6 +963,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Player discovers it gradually then all at once. Each advisor reacts differently (design in notes/2026-03-10-sun-tzu-pub-navigator.md).
 - Requires cross-scene state persistence — architectural question for Three Amigos.
 - Depends on: BL-109 (shared engine), BL-110 (scene library)
+- Feature: pub-navigator
 - CD3: UBV=8 TC=3 RR=4 → CoD=15, Dur=3, **CD3=5.0**
 - Status: PARTIALLY CLOSED — 2026-03-10. Lederhosen flag delivered in BL-110 (Oktoberfest pressure threshold + universal easter egg "wear/put on lederhosen"). Cross-scene persistence (McSorley's reaction etc.) and per-advisor lederhosen reactions are the remaining scope — see BL-113.
 
@@ -932,6 +988,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Lederhosen (existing) becomes one instance of this pattern.
 - Requires: Three Amigos to agree outfit pool, discovery triggers, per-advisor reaction templates. Design in notes before any Gherkin.
 - Depends on: BL-110 (pub crawl must exist), BL-111 partial (lederhosen already live as prototype)
+- Feature: pub-navigator
 - CD3: UBV=8 TC=3 RR=4 → CoD=15, Dur=3, **CD3=5.0**
 - Status: OPEN — raised 2026-03-10
 
@@ -940,6 +997,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - **Proposed solution:** Replace Golf Adventure as the landing page with a feature discovery page — all panels shown as tiles, each tile expandable to show sub-features. Clicking a tile opens the panel directly.
 - **Rod's spec:** Tiles showing all panels. Click tile → open panel (or expand to show sub-features). More prominent than the 3-line hamburger.
 - **Three Amigos required before any implementation.** Key questions: tile layout, sub-feature expand mechanic, what constitutes a "tile" (group vs individual panel), search/browse hybrid, mobile vs desktop.
+- Feature: platform
 - CD3: UBV=9 TC=8 RR=5 → CoD=22, Dur=5, **CD3=4.4**
 - Status: OPEN — raised 2026-03-11. Three Amigos required first.
 
@@ -955,6 +1013,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
   - Panel placement: under Boardroom section, alongside "Present to the Board"
 - Framework mapping: each character maps to 1-2 of the validated frameworks from research (Socratic, De Bono, Popper, Kahneman, Voss, Made to Stick, Cialdini etc.)
 - Depends on BL-115 (character specs) being done first
+- Feature: boardroom
 - CD3: UBV=7 TC=5 RR=3 → CoD=15, Dur=5, **CD3=3.0**
 - Status: OPEN — raised 2026-03-11. Three Amigos pending.
 
@@ -963,6 +1022,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Cox: has timescales/equations/D:Ream wound but lacks inter-character relationships and wound treatment at Souness's Cat quality
 - Adams: Bills panel prompt is decent but shallow — no wound, no relationship dynamics, no opener variety
 - Deliverable: two canonical character spec objects (wound, worldview, method, relationships, opener variety) that can be dropped into any panel — BL-116, Souness's Cat extension, or standalone
+- Feature: process
 - CD3: UBV=6 TC=6 RR=3 → CoD=15, Dur=2, **CD3=7.5**
 - Status: CLOSED — 2026-03-11 (8df9574). characters/adams.md created (full spec: Salmon of Doubt wound, DEAD_IN_PANEL_WORLD, Occam inversion, subordinate clause method, opener variety, escalation arc, bullshit protocol, all panel relationships). characters/cox.md → v2.0 (Adams/Feynman/Russell relationships added). Gates BL-116.
 
@@ -971,12 +1031,14 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - **Fix:** `gherkin-runner.js` should extract the consultant tab list from `index.html` at runtime (same approach `ui-audit.js` already uses via `skinMatch` regex) rather than maintaining its own hardcoded array.
 - **Out of scope:** Do not change `SKIN_CONFIGS` in `index.html` — that remains the single source. Only the gherkin runner's copy is removed.
 - **Risk:** Gherkin runner currently uses `CONSULTANT_SKIN_TABS` for test scoping. Verify all usages before removing.
+- Feature: platform
 - CD3: UBV=2 TC=6 RR=8 → CoD=16, Dur=2, **CD3=8.0**
 - Status: CLOSED — 2026-03-11 (0e0591f). Dynamic extraction from index.html; [\w-]+ regex handles hyphenated tabs; 2 new Gherkin scenarios; stale list fixed (pubnavigator, housenameoracle, roastroom, writingroom, souness-cat, cricket were missing). 1498/1498 green.
 
 ### BL-006 — pipeline @claude skip count reduction
 - 400+ scenarios @claude-tagged (manual / behavioural)
 - First candidates: watching-oche-mode1 suggestion card shuffle, panel-slots cross-panel invariants
+- Feature: platform
 - CD3: UBV=3 TC=2 RR=5 → CoD=10, Dur=6, **CD3=1.67**
 - Status: OPEN — ongoing
 
@@ -1043,6 +1105,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
   and logic layers. Established in TEMPLATE.md 2026-03-10.
 - Files in scope: all ~30 pre-author files (radar.md, faldo.md, coltart.md, souness.md, etc.)
 - Author files (tolkien/patterson/pratchett/wodehouse/austen) already compliant — done this session.
+- Feature: process
 - CD3: UBV=4 TC=3 RR=6 → CoD=13, Dur=4, **CD3=3.25**
 - Status: OPEN — raised 2026-03-10
 
@@ -1057,6 +1120,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Requires: either a pre-scored affinity table (author × genre type) or a pre-flight LLM call
   that scores affinities before selecting the 5. Pre-scored table is cheaper and faster.
 - Depends on: BL-095 (Roast Room must exist first)
+- Feature: comedy-room
 - CD3: UBV=6 TC=1 RR=1 → CoD=8, Dur=3, **CD3=2.7**
 - Status: OPEN — raised 2026-03-10, blocked on BL-095
 
