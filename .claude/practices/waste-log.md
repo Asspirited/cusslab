@@ -1525,6 +1525,27 @@ Status: CLOSED
 - **Tags:** `#golf` `#ryder-cup` `#scores` `#ux` `#leaderboard`
 - **Status:** Closed — `ryd-totals` now shows `G.teamScore` as "Overall Match Score" (primary, large); session points in small `ryd-session-pts` subtitle below. Same fix applied to `buildRyderRestLeaderboard`. commit bcb1b50.
 
+## WL-116
+- **Item:** Roast Battle auto-advances to next round after 2.5s — not enough time to read Claude's response or judge scores
+- **Symptom:** Rod couldn't read Claude's roast before the judge section disappeared and next round input appeared. Final screen appeared without seeing round results.
+- **Suspected cause:** `submitRoast()` uses `setTimeout(..., 2500)` to hide judge section and advance. No user-controlled "continue" step. 1800ms `_endBattle` timer also too short after round 3.
+- **Session date:** 2026-03-11
+- **Time lost:** 0 (exploratory test discovery)
+- **Cost impact:** Medium — core game mechanic unreadable; scoring perceived as suspect
+- **Tags:** `#roast-battle` `#ux` `#timing` `#rod-caught`
+- **Status:** Fixed 2026-03-11 — replaced auto-advance setTimeout with "NEXT ROUND →" / "SEE FINAL RESULT" button in judge section
+
+## WL-115
+- **Item:** Friday Pub Crawl Misadventure panel shows empty venue list — no scenes rendered, no way to start
+- **Symptom:** Rod selected Pub Crawl tab, saw description "Choose your location" but no venue buttons. Nothing to click.
+- **Suspected cause:** `PubCrawl.init()` was never added to `App.init()`. The `pc-scene-list` div is populated by `PubCrawl.init()` but it was omitted when BL-110 was delivered.
+- **Session date:** 2026-03-11
+- **Time lost:** 0 (exploratory test discovery)
+- **Cost impact:** High — entire feature inaccessible
+- **Tags:** `#pub-crawl` `#init` `#rod-caught` `#missing-init`
+- **5 Whys root cause:** New module `PubCrawl` was built and its `init()` written, but no checklist or test covers "does the module appear in `App.init()`?" UI audit checks tab presence in nav and skin tabs but not that modules are initialised.
+- **Status:** Fixed 2026-03-11 — added `PubCrawl.init()` to `App.init()`
+
 ## WL-112
 - **Item:** pubcrawl tab missing from CONSULTANT_SKIN_TABS — UI audit RED
 - **Symptom:** Pipeline RED after adding Friday Pub Crawl Misadventure tab to nav. UI audit check "All nav-linked panels are in consultant skin tabs" failed: missing `pubcrawl`.

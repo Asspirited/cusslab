@@ -4415,6 +4415,7 @@ const App = (() => {
     _startSlogans('consultant');
     API.initKeyUI(); switchTab({currentTarget:document.querySelector('[onclick*="golfadventure"]')}, 'golfadventure');
     RoastBattle.initScenarios();
+    PubCrawl.init();
     TopCnuts.init();
     Polls.load(0);
     ComedyLab.init();
@@ -6006,17 +6007,17 @@ const RoastBattle = (() => {
       _updateScoreDisplay();
 
       if (round >= 3) {
-        setTimeout(_endBattle, 1800);
+        _appendContinueButton('SEE FINAL RESULT 🏆', _endBattle);
       } else {
         State.set('roast.round', round + 1);
-        setTimeout(() => {
+        _appendContinueButton('NEXT ROUND →', () => {
           UI.hide('roast-judge-section');
           UI.show('roast-input-area');
           const inp = document.getElementById('roast-user-input');
           if (inp) inp.value = '';
           UI.setDisabled('roast-submit-btn', false);
           _updateScoreDisplay();
-        }, 2500);
+        });
       }
     } catch(e) {
       UI.hide('roast-claude-thinking');
@@ -6070,6 +6071,18 @@ const RoastBattle = (() => {
           <div style="font-size:13px;color:var(--muted);margin-top:4px;">${judgeResult.judgment || ''}</div>
         </div>
       </div>`;
+  }
+
+  function _appendContinueButton(label, action) {
+    const judgeEl = document.getElementById('roast-judge-section');
+    if (!judgeEl) return;
+    const btn = document.createElement('button');
+    btn.className = 'btn';
+    btn.textContent = label;
+    btn.style.marginTop = '14px';
+    btn.style.width = '100%';
+    btn.onclick = () => { btn.remove(); action(); };
+    judgeEl.appendChild(btn);
   }
 
   async function _endBattle() {
