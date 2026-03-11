@@ -1,45 +1,38 @@
 # Shared Session State
 # Written by session-closedown.md step 8b. Overwritten each close.
 # Read at startup step 3. Included in session-ref.md for Claude.ai.
-Last updated: 2026-03-10 by Claude Code
-Last commit: 855c8d0 — Session closedown 2026-03-10 — BL-109/110 Pub Crawl + WL-113/114 Golf fixes
+Last updated: 2026-03-11 by Claude Code
+Last commit: 3b4821a — Fix PubCrawl engine not loading: guard + runtime lookup
 
 ## What shipped this session
-- BL-109: FF shared engine (ff-engine.js) — initGameState, appendToHistory, incrementTurn, buildModifierBlock. 9 Gherkin + 15 unit tests.
-- BL-110: Friday Pub Crawl Misadventure (Mode B) — live on GitHub Pages. 8 real pub locations, 4 advisors (Sun Tzu/Nostradamus/Chuck Norris/Buddha), pressure system, 4 outcome tiers, lederhosen easter egg. 24 Gherkin + 38 unit tests. New tab in Little Misadventure section.
-- WL-113 fixed: Ryder Cup overall match score now shown prominently in leaderboard (G.teamScore as "Overall Match Score", large; session-only points in small subtitle). commit bcb1b50.
-- WL-114 fixed: Commentary layout fixed — de-leaderboard moved before panel-discussion inside day-end-wrap. Outcome visible first, commentary loads below. commit bcb1b50.
-
-## Pub Crawl architecture (new this session)
-- src/logic/ff-engine.js: shared FF engine, no DOM/API, used by Pub Crawl + Quntum Leeks + Golf Adventure
-- src/data/pub-crawl-scenes.js: 8 scene definitions (id, name, location, beats[4], choices[4], worstOutcome)
-- src/logic/pub-navigator-engine.js: pub crawl game engine (initPubCrawl, resolveChoice, determineOutcome, getActiveAdvisor, buildAdvisorPrompt, checkLederhosen)
-- Advisors: ADVISOR_VOICES with character prompts; TOPIC_TRIGGERS routes physical→chuck-norris, philosophical→buddha, strategic→sun-tzu, outcome→nostradamus
-- New scripts in index.html: ff-engine.js, pub-crawl-scenes.js, pub-navigator-engine.js
-- pubcrawl tab added to NAV_GROUP_MAP (misadventure) and CONSULTANT_SKIN_TABS
+- Bruce Lee added to all 6 panels (Boardroom, Comedy Room, Football, Golf, Darts, Cricket) as TEST character. docs/characters-bruce-lee.md created.
+- WL-096 (Bespoke Material): SentenceBuilder.run() completely rewritten to read existing form fields; bespoke-material.feature with 8 Gherkin scenarios — all passing. Logic functions in pipeline/logic.js; step defs in gherkin-runner.js.
+- WL-120: PubCrawl cascade crash fixed (unguarded window.PubCrawlScenes.PUB_CRAWL_SCENES in inline script)
+- WL-121: Quntum Leeks scenario overwrite fixed (initState() then assignment, not assignment then initState())
+- WL-122: UI audit checks 11+12 added (unguarded window.X.Y pattern detection)
+- WL-124: PubCrawl ENGINE.initPubCrawl recurring bug FIXED — 3 changes: (1) guard in pub-navigator-engine.js line 9, (2) ENGINE replaced with getEngine() runtime lookup in index.html, (3) hardcoded ?v= cache busters removed from script tags
 
 ## Open waste items (WL numbers)
-- WL-MODE-001: design-session audit gap — Status: Open
-- WL-MODE-002: darts character debt (Rod Harrington/Bobby George) — Status: Open
-- WL-096: open bug — Status: Open (details in waste-log.md)
-- WL-097: open bug — Status: Open (details in waste-log.md)
+- WL-097: [check waste-log.md for detail] — Status: Open
+- WL-122: UI audit gap partially mitigated — open for runtime browser tests — Status: Open
+- WL-123: Context overflow session break — Status: Open (process habit)
 
 ## Backlog top 3 by CD3
-- BL-107 (CD3=11.0): Nostradamus character spec: juxtaposition mechanic with Sun Tzu — OPEN
-- BL-105 (CD3=7.5): Hardmen reaction panel (Roy Keane, Vinny Jones, Nostradamus) — OPEN
-- BL-106 (CD3=5.5): Sun Tzu general advisory mode (post-pub validation) — OPEN
+- BL-118 (CD3=6.0): Pipeline — runtime browser test for external-script window globals
+- BL-117 (CD3=4.4): Home page — feature discovery page replacing Golf Adventure default
+- BL-116 (CD3=TBD): Premise Interrogation — scientist/philosopher panel
 
 ## Protocol status this session
-- Session startup: followed (continuation from prior session — startup was done in prior run)
-- Gherkin gate: followed — ff-engine.feature approved by Rod, friday-pub-crawl.feature approved by Rod
-- TDD: followed — Gherkin failing confirmed before implementation for both BL-109 and BL-110
-- Pipeline: GREEN — 707/707 units, 1488/1488 Gherkin, canary OK
+- Session startup: followed (continuation session — startup done in prior context)
+- Gherkin gate: followed — bespoke-material.feature written and approved before implementation
+- TDD: followed
+- Pipeline: GREEN — 707/707 unit tests, 13/13 audit, 7/7 browser-sim, Gherkin passing
 
 ## Carry-forward notes
-- BL-113 OPEN: Unexpected outfit mechanic (generalise lederhosen). Needs Three Amigos before any work. No Gherkin written yet.
-- BL-105, BL-106 blocked on BL-104 (Mode A voice validation). BL-104 has partial closure; advisors in pub crawl Mode B are its validation path.
-- golf-data/tournaments.js.bak untracked in working directory — safe to delete next session
-- BL-022 (Ryder Cup "Be Any Player") references matchPlayDays — update to matchPlaySessions when actioned
-- Day 2 AM/PM parallelMatch data is placeholder (generic EUR/USA pairs) — real historical data is data-only addition, no new Gherkin needed
-- DORA failure rate 22% — all confirmed flaky infrastructure, not regressions
-- 8 bugs logged: 100% rod-caught, 0% pipeline-caught — instrumentation gap noted
+- Bruce Lee is TEST ONLY — Rod needs to test him across all panels and decide: keep, specialise, or remove. See docs/characters-bruce-lee.md.
+- PubCrawl fix deployed (3b4821a). Rod needs a hard-refresh once (Ctrl+Shift+R) to clear old cached pub-navigator-engine.js?v=2 from browser cache.
+- BL-118 is the priority process item — 0% pipeline-caught bugs (all Rod-caught) is the pattern to break. Three Amigos needed before implementation.
+- WL-097 still open — check waste-log.md for details.
+- comedy-room has 32 open BL items, 0 closed this session — no comedy work done in session 6.
+- DORA: 21% pipeline failure rate, 1 false green. Flaky steps: uiAudit, browserSim, unitTests, gherkin.
+- UI testing rethink: BL-118 is the backlog item. Three Amigos before any code.
