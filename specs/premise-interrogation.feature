@@ -66,8 +66,8 @@ Feature: Premise Interrogation — BL-116
     And the output contains one block labelled "Pre-mortem"
     And each block contains a text response addressing the premise
 
+  @claude
   Scenario: Framework blocks render sequentially as each call completes
-    @claude
     Given the user has selected three frameworks
     When the user runs Mode 1
     Then the first block appears before the second
