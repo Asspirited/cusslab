@@ -56,16 +56,13 @@ const HIDDEN_NAV_TABS = ['settings'];
 // Quantum Leeks — Ziggy character options, mirrors ql-ziggy-char select in index.html
 const QL_ZIGGY_CHARS = ['Sir Nick Faldo','Wayne Riley','Bill Hicks','Graeme Souness','Prof Brian Cox'];
 
-// Skin tab configs — mirrors SKIN_CONFIGS in index.html. Must stay in sync.
-// _applySkin() hides any tab NOT in this list. Missing = panel tab disappears on skin toggle.
-const CONSULTANT_SKIN_TABS = [
-  'golfadventure','comedyroom','boardroom','football','golf','darts',
-  'bills','joketest','clash','roulette','professionals','ironic',
-  'comscience','evolution','blend','experiment',
-  'roastbattle','dinner','topcnuts','comedylab','trumps','qleeks','pubcrawl',
-  'premise','premise-interrogation','charlens','bizcard','training',
-  'localiser','generator','historian','sentence','it','polls',
-];
+// Skin tab configs — extracted from SKIN_CONFIGS.consultant.tabs in index.html at runtime.
+// Single source of truth: index.html. No manual sync required (BL-114).
+const _indexHtml = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+const _skinMatch = _indexHtml.match(/consultant:\s*\{[^}]*tabs:\s*\[([^\]]+)\]/s);
+const CONSULTANT_SKIN_TABS = _skinMatch
+  ? _skinMatch[1].match(/'([\w-]+)'/g).map(s => s.replace(/'/g, ''))
+  : [];
 const SCIENCE_SKIN_TABS = [
   'experiment','evolution','comscience','blend','bills','joketest',
   'clash','roastbattle','training','premise','charlens','dinner','bizcard',
@@ -7930,6 +7927,30 @@ function makeSteps(ctx) {
     [/^it contains "([^"]+)"$/, (label) => {
       if (!ctx._piNavGroup.includes(label))
         throw new Error(`Nav group boardroom does not contain "${label}". Has: ${JSON.stringify(ctx._piNavGroup)}`);
+    }],
+
+    // ── Pipeline infra — BL-114 single source of truth ─────────────────────
+    [/^the gherkin runner is loaded$/, () => { /* CONSULTANT_SKIN_TABS populated at module load */ }],
+
+    [/^the consultant skin tab list is non-empty$/, () => {
+      if (CONSULTANT_SKIN_TABS.length === 0)
+        throw new Error('CONSULTANT_SKIN_TABS is empty — extraction from index.html failed');
+    }],
+
+    [/^the tab list includes "([^"]+)"$/, (tab) => {
+      if (!CONSULTANT_SKIN_TABS.includes(tab))
+        throw new Error(`CONSULTANT_SKIN_TABS missing "${tab}" — extraction may be broken`);
+    }],
+
+    [/^the consultant tab list matches the tabs in SKIN_CONFIGS in index\.html$/, () => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      const m = html.match(/consultant:\s*\{[^}]*tabs:\s*\[([^\]]+)\]/s);
+      const expected = m ? m[1].match(/'([\w-]+)'/g).map(s => s.replace(/'/g, '')) : [];
+      if (expected.length === 0) throw new Error('Could not extract tabs from index.html in step');
+      const missing = expected.filter(t => !CONSULTANT_SKIN_TABS.includes(t));
+      const extra   = CONSULTANT_SKIN_TABS.filter(t => !expected.includes(t));
+      if (missing.length || extra.length)
+        throw new Error(`Tab mismatch — missing: [${missing}], extra: [${extra}]`);
     }],
 
   ];

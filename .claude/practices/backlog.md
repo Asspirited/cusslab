@@ -303,7 +303,7 @@ For items that represent a product hypothesis, add after the CD3 line:
 - Option at tournament start: play the full 4 rounds or jump straight to the final round with historical scores loaded for rounds 1–3.
 - Enables quick plays of the key dramatic round without replaying the whole tournament.
 - CD3: UBV=7 TC=1 RR=1 → CoD=9, Dur=5, **CD3=1.8**
-- Status: OPEN
+- Status: CLOSED — 2026-03-11 Rod decision: not required, removed from backlog
 
 ### BL-049 — Wise Sir Nick: sandwich gate wound + insult vocabulary
 - Epic: Sir Nick Character Depth
