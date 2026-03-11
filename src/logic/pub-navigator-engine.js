@@ -8,10 +8,15 @@ const { PUB_CRAWL_SCENES } =
     ? require('../data/pub-crawl-scenes.js')
     : { PUB_CRAWL_SCENES: window.PubCrawlScenes.PUB_CRAWL_SCENES };
 
-const { initGameState, appendToHistory, incrementTurn } =
+// Alias to avoid const-vs-function redeclaration collision in browser global scope
+// (ff-engine.js declares these as `function` — a `const` of the same name throws SyntaxError)
+const _FF =
   typeof require !== 'undefined'
     ? require('./ff-engine.js')
-    : { initGameState: window.FFEngine.initGameState, appendToHistory: window.FFEngine.appendToHistory, incrementTurn: window.FFEngine.incrementTurn };
+    : window.FFEngine;
+const _initGameState   = _FF.initGameState;
+const _appendToHistory = _FF.appendToHistory;
+const _incrementTurn   = _FF.incrementTurn;
 
 // ── Advisors ──────────────────────────────────────────────────────────────────
 
@@ -93,7 +98,7 @@ function getActiveAdvisor(state, topic) {
 // ── State management ──────────────────────────────────────────────────────────
 
 function initPubCrawl(sceneId) {
-  return initGameState({
+  return _initGameState({
     sceneId,
     pressure:     0,
     advisorOrder: shuffleAdvisors(),
@@ -110,8 +115,8 @@ function resolveChoice(state, choiceIdx) {
   const choice = beat.choices[choiceIdx];
 
   state.pressure += choice.pressure;
-  appendToHistory(state, { beat: state.turnCount, choice: choice.label, pressure: state.pressure }, 20);
-  incrementTurn(state);
+  _appendToHistory(state, { beat: state.turnCount, choice: choice.label, pressure: state.pressure }, 20);
+  _incrementTurn(state);
 
   if (state.sceneId === 'hofbrau-oktoberfest' && state.pressure >= 8) {
     state.lederhosen = true;

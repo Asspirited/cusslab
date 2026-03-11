@@ -1568,6 +1568,17 @@ Status: CLOSED
 - **5 Whys root cause:** New module `PubCrawl` was built and its `init()` written, but no checklist or test covers "does the module appear in `App.init()`?" UI audit checks tab presence in nav and skin tabs but not that modules are initialised.
 - **Status:** Fixed 2026-03-11 — added `PubCrawl.init()` to `App.init()`
 
+## WL-119
+- **Item:** pub-navigator-engine.js silently fails to load in browser — window.PubNavigatorEngine never set
+- **Symptom:** PubCrawl.startScene throws "Cannot read properties of undefined (reading 'initPubCrawl')". Passes all Node.js tests and pipeline.
+- **Suspected cause:** `pub-navigator-engine.js` destructured `const { initGameState, appendToHistory, incrementTurn }` at top level. `ff-engine.js` (loaded first) declares these as top-level `function` declarations, which become global properties. In the browser global scope, a `const` binding for an already-declared `function` name is a SyntaxError — causing `pub-navigator-engine.js` to abort before `window.PubNavigatorEngine = _pubNavExports` was reached. Node.js is immune because each `require()` has its own module scope.
+- **Session date:** 2026-03-11
+- **Time lost:** ~20 min
+- **Cost impact:** Medium
+- **Tags:** `#browser-only` `#scope-collision` `#pub-crawl` `#silent-failure` `#const-redeclaration`
+- **Status:** Closed — renamed destructured bindings to `_initGameState`, `_appendToHistory`, `_incrementTurn` via a single `_FF` reference to avoid the collision.
+- **5 Whys root cause:** Node.js module scope masks browser global-scope const/function collision. Pipeline cannot catch browser-only SyntaxErrors. External scripts loaded via `<script src>` all share the global scope; ff-engine.js pollutes it with function declarations that pub-navigator-engine.js then tried to re-bind as const. Add "no top-level const bindings that match function names from other external scripts" to external script authoring conventions.
+
 ## WL-112
 - **Item:** pubcrawl tab missing from CONSULTANT_SKIN_TABS — UI audit RED
 - **Symptom:** Pipeline RED after adding Friday Pub Crawl Misadventure tab to nav. UI audit check "All nav-linked panels are in consultant skin tabs" failed: missing `pubcrawl`.
