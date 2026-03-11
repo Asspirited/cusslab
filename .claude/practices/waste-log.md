@@ -1525,6 +1525,17 @@ Status: CLOSED
 - **Tags:** `#golf` `#ryder-cup` `#scores` `#ux` `#leaderboard`
 - **Status:** Closed — `ryd-totals` now shows `G.teamScore` as "Overall Match Score" (primary, large); session points in small `ryd-session-pts` subtitle below. Same fix applied to `buildRyderRestLeaderboard`. commit bcb1b50.
 
+## WL-118
+- **Item:** PubCrawl missing from global function wrappers — venue buttons unresponsive; startScene errors die silently
+- **Symptom:** Clicking any venue button did nothing. No visual change, no error shown to user.
+- **Suspected cause:** Every module that needs onclick calls uses `function` declaration wrappers (lines 9120+) — these ARE `window` properties. `PubCrawl` was never added to this section. Dynamically-rendered `onclick="PubCrawl.startScene(...)"` either fails to find `const PubCrawl` in event handler scope, or the call succeeds but `startScene` throws silently (no try/catch). Either way, result is silent failure.
+- **Session date:** 2026-03-11
+- **Time lost:** ~15 min diagnosis (could not test in browser; no error surfacing)
+- **Cost impact:** High — feature completely non-functional after init fix appeared to work
+- **Tags:** `#pub-crawl` `#global-wrappers` `#silent-failure` `#onclick` `#architecture`
+- **5 Whys root cause:** (1) No global wrappers written for PubCrawl on delivery. (2) No test validates that module onclick handlers fire in a browser context. (3) Silent errors in startScene made diagnosis impossible remotely. (4) No browser-smoke-test in pipeline. (5) Delivery cycle has no "global wrappers" checklist item.
+- **Status:** Fixed 2026-03-11 — added pcStartScene/pcChoose/pcRestart/pcSamePub/pcHandleInput wrappers; updated all onclick references; added try/catch to startScene
+
 ## WL-117
 - **Item:** Premise Engine always shows "Premise engine failed. Try rephrasing it as a simpler truth."
 - **Symptom:** Every premise submission shows the failure toast immediately. Feature completely non-functional.
