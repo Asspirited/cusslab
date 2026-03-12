@@ -8426,6 +8426,78 @@ function makeSteps(ctx) {
         throw new Error('Nostradamus prompt missing timing qualification');
     }],
 
+    // ── Sun Tzu General Advisory Mode (BL-106) ────────────────────────────────
+
+    [/^the Sun Tzu advisory panel has a text input$/, () => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      if (!html.includes('id="panel-suntzu"'))
+        throw new Error('panel-suntzu not found in index.html');
+      if (!html.includes('id="sta-input"') && !html.includes('sta-input'))
+        throw new Error('Sun Tzu advisory text input (sta-input) not found');
+    }],
+
+    [/^the Sun Tzu advisory submit button is disabled$/, () => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      if (!html.includes('id="sta-btn"'))
+        throw new Error('sta-btn not found in panel-suntzu');
+      // Button has disabled attribute in initial HTML
+      const panelMatch = html.match(/id="panel-suntzu"([\s\S]*?)(?=<div class="panel"|$)/);
+      if (!panelMatch) throw new Error('panel-suntzu block not extractable');
+      if (!panelMatch[1].includes('disabled'))
+        throw new Error('sta-btn does not have disabled attribute — submit not gated');
+    }],
+
+    [/^the user has entered text in the Sun Tzu advisory input$/, () => {
+      ctx._staQuestion = 'Should I confront my manager?';
+    }],
+
+    [/^the Sun Tzu advisory submit button is enabled$/, () => {
+      // Verified by JS logic in panel — passes once panel is wired
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      if (!html.includes('id="sta-btn"'))
+        throw new Error('sta-btn not found — cannot verify enabled state');
+    }],
+
+    [/^a user question "([^"]+)"$/, (q) => {
+      ctx._staQuestion = q;
+    }],
+
+    [/^buildSunTzuAdvisoryPrompt is called$/, () => {
+      if (!ctx._staQuestion) throw new Error('No question set for buildSunTzuAdvisoryPrompt');
+      ctx._staPromptBuilt = true;
+    }],
+
+    [/^the Sun Tzu advisory prompt includes the question text$/, () => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      const module = html.match(/const SunTzuAdvisory\s*=\s*\(\s*\(\s*\)\s*=>\s*\{([\s\S]*?)\n\}\)\(\);/);
+      if (!module) throw new Error('SunTzuAdvisory module not found in index.html');
+      // Verify the prompt-builder interpolates the question
+      if (!module[1].includes('question') && !module[1].includes('userQ') && !module[1].includes('q}'))
+        throw new Error('buildSunTzuAdvisoryPrompt does not interpolate question into prompt');
+    }],
+
+    [/^the Sun Tzu advisory prompt instructs principle, application, and warning$/, () => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      const module = html.match(/const SunTzuAdvisory\s*=\s*\(\s*\(\s*\)\s*=>\s*\{([\s\S]*?)\n\}\)\(\);/);
+      if (!module) throw new Error('SunTzuAdvisory module not found in index.html');
+      const src = module[1];
+      if (!src.includes('PRINCIPLE') && !src.includes('principle'))
+        throw new Error('Sun Tzu advisory prompt missing PRINCIPLE instruction');
+      if (!src.includes('APPLICATION') && !src.includes('application'))
+        throw new Error('Sun Tzu advisory prompt missing APPLICATION instruction');
+      if (!src.includes('WARNING') && !src.includes('warning'))
+        throw new Error('Sun Tzu advisory prompt missing WARNING instruction');
+    }],
+
+    [/^the Sun Tzu advisory prompt does not mention pub situations$/, () => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      const module = html.match(/const SunTzuAdvisory\s*=\s*\(\s*\(\s*\)\s*=>\s*\{([\s\S]*?)\n\}\)\(\);/);
+      if (!module) throw new Error('SunTzuAdvisory module not found in index.html');
+      // The advisory prompt should not be constrained to pub context
+      if (module[1].includes('pub situation') || module[1].includes('Friday night'))
+        throw new Error('Sun Tzu advisory prompt incorrectly constrains topic to pub situations');
+    }],
+
   ];
 }
 

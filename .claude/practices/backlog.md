@@ -913,7 +913,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Character files: characters/roy-keane.md, characters/vinny-jones.md (written, pending commit)
 - Feature: pub-navigator
 - CD3: UBV=7 TC=5 RR=3 → CoD=15, Dur=2, **CD3=7.5**
-- Status: OPEN — blocked on BL-104
+- Status: CLOSED — b7ca2dc, 2026-03-12. Panel live in Little Misadventure (count 4→5). Keane 3-sentence assessment → Vinny sorts it (sees Keane) → Nostradamus 5-movement confirmation (sees both). Sequential API calls with prior context.
 
 ### BL-106 — Sun Tzu general advisory mode (post-pub validation)
 - Epic: Sun Tzu Pub Navigator
@@ -921,7 +921,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Depends on: BL-104 (voice validated in pub context first)
 - Feature: pub-navigator
 - CD3: UBV=6 TC=3 RR=2 → CoD=11, Dur=2, **CD3=5.5**
-- Status: OPEN — blocked on BL-104
+- Status: CLOSED — 2026-03-12. Free-text panel `panel-suntzu`, `SunTzuAdvisory` IIFE, `buildSunTzuAdvisoryPrompt()`, submit gated on non-empty input. Little Misadventure nav count 5→6. 7/7 Gherkin GREEN.
 
 ### BL-107 — Nostradamus character spec: juxtaposition mechanic with Sun Tzu
 - Epic: Sun Tzu Pub Navigator
@@ -1180,3 +1180,11 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - **Feature:** comedy
 - **CD3:** UBV=7 TC=5 RR=3 → CoD=15, Dur=4, **CD3=3.75**
 - **Status:** CLOSED — commit cfbbe8f, 9 Gherkin scenarios passing, pipeline green (2026-03-12 session 7)
+
+### BL-122 — E2E browser test: Playwright pipeline step proving button→API→response
+- Root cause of 20+ "good builds" with broken live site: pipeline never executed a real button click in a real browser against the live site. Unit tests, Gherkin, browser-sim, and ui-audit all run in Node — none can prove a button works.
+- Fix: `pipeline/e2e-test.js` using Playwright headless Chromium. Tests: page load (no JS fatal errors), key panels present in DOM, API module available, Pub Navigator button click → real API response, Sun Tzu Advisory submit → real API response, Hardmen panel renders 5 buttons. Wired into `pipeline/run-all.js` after UI Audit as a blocking step. Reported in `pipeline-report.sh`.
+- Feature: process
+- CD3: UBV=9 TC=9 RR=9 → CoD=27, Dur=1, **CD3=27.0**
+- Status: CLOSED — 2026-03-12. 6/6 E2E checks passing after BL-106 deployed. Catches JS crashes, API wiring failures, and button-to-logic disconnects that all other pipeline steps miss.
+

@@ -1303,13 +1303,14 @@
   <div class="nav-group active" id="ng-misadventure">
     <div class="nav-group-header" onclick="toggleNavGroup('misadventure')">
       <span class="nav-group-icon">🏴</span> LITTLE MISADVENTURE
-      <span class="nav-group-count">5</span>
+      <span class="nav-group-count">6</span>
     </div>
     <div class="nav-items" id="ni-misadventure">
       <div class="tab active" onclick="switchTab(event,'golfadventure')"><span class="tab-icon">🏌️</span>Relive Golfing Greatness</div>
       <div class="tab" onclick="switchTab(event,'pubnavigator')"><span class="tab-icon">🍺</span>Survive a Friday night at...</div>
       <div class="tab" onclick="switchTab(event,'pubcrawl')"><span class="tab-icon">🍻</span>Friday Pub Crawl Misadventure</div>
       <div class="tab" onclick="switchTab(event,'hardmen')"><span class="tab-icon">😤</span>The Hardmen</div>
+      <div class="tab" onclick="switchTab(event,'suntzu')"><span class="tab-icon">⚔️</span>Ask Sun Tzu</div>
       <div class="tab" onclick="switchTab(event,'qleeks')"><span class="tab-icon">🐸</span>Quntum Leeks</div>
     </div>
   </div>
@@ -2204,6 +2205,31 @@
     <button class="btn-secondary" onclick="Hardmen.reset()" style="margin-top:12px;">Different situation 🔄</button>
   </div>
   <div id="hm-loading" style="display:none;color:var(--muted);font-size:0.9rem;padding:16px 0;">The panel is convening…</div>
+</div>
+
+<div class="panel" id="panel-suntzu">
+  <div class="panel-title">⚔️ Ask Sun Tzu</div>
+  <div class="panel-desc" style="margin-bottom:24px;">Any question. Any situation. The Art of War applies universally. The wisdom is genuine. The context is yours.</div>
+
+  <div style="margin-bottom:16px;">
+    <label>What is your situation</label>
+    <textarea id="sta-input" rows="3" placeholder="A difficult conversation. A career decision. A family dispute. Anything." maxlength="400" oninput="SunTzuAdvisory.onInput()"></textarea>
+  </div>
+
+  <button class="btn" id="sta-btn" onclick="SunTzuAdvisory.submit()" disabled>ASK THE GENERAL ⚔️</button>
+
+  <div id="sta-output" style="display:none;margin-top:24px;">
+    <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;">Sun Tzu advises</div>
+    <div id="sta-response-body" class="bills-response-body" style="white-space:pre-wrap;line-height:1.75;"></div>
+    <div style="display:flex;gap:8px;margin-top:16px;align-items:center;">
+      <button class="feedback-btn" onclick="panelRating(event,'suntzu','💩')" title="Didn't land">💩</button>
+      <button class="feedback-btn" onclick="panelRating(event,'suntzu','😐')" title="Fine">😐</button>
+      <button class="feedback-btn" onclick="panelRating(event,'suntzu','😂')" title="Good">😂</button>
+      <button class="feedback-btn" onclick="panelRating(event,'suntzu','🤣')" title="Brilliant">🤣</button>
+    </div>
+    <button class="btn-secondary" onclick="SunTzuAdvisory.reset()" style="margin-top:12px;">Ask again 🔄</button>
+  </div>
+  <div id="sta-loading" style="display:none;color:var(--muted);font-size:0.9rem;padding:16px 0;">Consulting the ancient texts…</div>
 </div>
 
 <div class="panel" id="panel-comedyroom">
@@ -4537,7 +4563,7 @@ const App = (() => {
       title: 'HECKLER\'S',
       pageTitle: 'Heckler\'s — The Comedy Panel',
       slogans: CONSULTANT_SLOGANS,
-      tabs: ['home','golfadventure','pubnavigator','pubcrawl','hardmen','qleeks','comedyroom','housenameoracle','roastroom','writingroom','souness-cat','philsopoly','boardroom','premise-interrogation','football','golf','darts','cricket',
+      tabs: ['home','golfadventure','pubnavigator','pubcrawl','hardmen','suntzu','qleeks','comedyroom','housenameoracle','roastroom','writingroom','souness-cat','philsopoly','boardroom','premise-interrogation','football','golf','darts','cricket',
              'bills','joketest','clash','roulette','professionals','ironic',
              'comscience','evolution','blend','experiment',
              'roastbattle','dinner','topcnuts','comedylab','trumps',
@@ -4585,7 +4611,7 @@ const App = (() => {
   const _NAV_GROUP_MAP = {
     settings:'personas', home:'personas',
     // LITTLE MISADVENTURE
-    golfadventure:'misadventure', pubnavigator:'misadventure', pubcrawl:'misadventure', hardmen:'misadventure',
+    golfadventure:'misadventure', pubnavigator:'misadventure', pubcrawl:'misadventure', hardmen:'misadventure', suntzu:'misadventure',
     // BOARDROOM
     boardroom:'boardroom', 'premise-interrogation':'boardroom',
     // COMEDY ROOM
@@ -9394,6 +9420,7 @@ function generateInsights()          { Training.generateInsights(); }
 // Pub Navigator
 function pnSelectSituation(id)       { PubNavigator.selectSituation(id); }
 function hmSelectSituation(id)       { Hardmen.selectSituation(id); }
+// SunTzuAdvisory — no bridge needed (calls module directly via oninput/onclick)
 
 // Pub Crawl
 function pcStartScene(id)            { PubCrawl.startScene(id); }
@@ -11319,6 +11346,73 @@ The situation: ${situation.text}`;
   document.addEventListener('DOMContentLoaded', init);
 
   return { init, selectSituation };
+})();
+
+// ============================================================
+// MODULE: SunTzuAdvisory — General advisory mode (BL-106)
+// Any question. Principle → Application → Warning.
+// ============================================================
+const SunTzuAdvisory = (() => {
+
+  function buildSunTzuAdvisoryPrompt(question) {
+    return `You are Sun Tzu. Ancient Chinese military strategist. Author of The Art of War.
+
+The user brings you a situation. It may be personal, professional, social, or philosophical. Apply your framework with complete seriousness. The wisdom is genuine. The context is theirs. That is not your concern.
+
+Respond in exactly three movements:
+
+PRINCIPLE — a short aphorism. One or two sentences. The tactical truth that governs this situation. It should feel universal, not tailored.
+APPLICATION — how the principle applies to the specific situation before you. Precise. Concrete. What the general does.
+WARNING — what happens if the principle is ignored. State it as fact, not prediction.
+
+Never use modern slang. Never rush. Speak in short declarative sentences. Occasionally use "one" to mean "you". The situation may be small. Treat it as if it is not.
+
+The situation: ${question}`;
+  }
+
+  function onInput() {
+    const val = (document.getElementById('sta-input') || {}).value || '';
+    const btn = document.getElementById('sta-btn');
+    if (btn) btn.disabled = val.trim().length === 0;
+  }
+
+  async function submit() {
+    const input = document.getElementById('sta-input');
+    const question = (input && input.value || '').trim();
+    if (!question) return;
+
+    document.getElementById('sta-output').style.display = 'none';
+    document.getElementById('sta-loading').style.display = 'block';
+    document.getElementById('sta-btn').disabled = true;
+
+    try {
+      const text = await API.call(
+        buildSunTzuAdvisoryPrompt(question),
+        `The situation: ${question}`,
+        400,
+        'sun-tzu/advisory'
+      );
+      document.getElementById('sta-response-body').textContent = text;
+      document.getElementById('sta-output').style.display = 'block';
+    } catch (e) {
+      document.getElementById('sta-response-body').textContent = 'The general is unavailable. Try again.';
+      document.getElementById('sta-output').style.display = 'block';
+    } finally {
+      document.getElementById('sta-loading').style.display = 'none';
+      const btn = document.getElementById('sta-btn');
+      if (btn) btn.disabled = false;
+    }
+  }
+
+  function reset() {
+    const input = document.getElementById('sta-input');
+    if (input) input.value = '';
+    document.getElementById('sta-output').style.display = 'none';
+    const btn = document.getElementById('sta-btn');
+    if (btn) btn.disabled = true;
+  }
+
+  return { buildSunTzuAdvisoryPrompt, onInput, submit, reset };
 })();
 
 // ============================================================

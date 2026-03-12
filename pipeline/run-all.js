@@ -37,6 +37,7 @@ const STEPS = [
   { key: 'workerCanary',      label: 'Worker Canary',       script: 'pipeline/worker-canary.js' },
   { key: 'golfAdventureSim',  label: 'Golf Adventure Sim',  script: 'pipeline/golf-adventure-sim.js',  warnOnly: true },
   { key: 'uiAudit',    label: 'UI Audit',    script: 'pipeline/ui-audit.js'    },
+  { key: 'e2eTest',    label: 'E2E Tests',   script: 'pipeline/e2e-test.js'    },
   { key: 'browserSim', label: 'Browser Sim', script: 'pipeline/browser-sim.js' },
   { key: 'unitTests',  label: 'Unit Tests',  script: 'pipeline/unit-runner.js' },
   { key: 'gherkin',    label: 'Gherkin',     script: 'pipeline/gherkin-runner.js' },
@@ -71,6 +72,11 @@ function parseStepOutput(key, stdout) {
       return { passed: pass, failed: total - pass };
     }
     return { passed: 0, failed: 0 };
+  }
+  if (key === 'e2eTest') {
+    const m = stdout.match(/E2E:\s+(\d+)\/(\d+)/);
+    if (m) return { violations: parseInt(m[2], 10) - parseInt(m[1], 10) };
+    return { violations: 0 };
   }
   if (key === 'coverage') {
     const sm = stdout.match(/Statement coverage:\s+([\d.]+)%/);

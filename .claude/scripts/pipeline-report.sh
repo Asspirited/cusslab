@@ -11,7 +11,7 @@ cd /home/rodent/cusslab
 OUTPUT=$(npm run pipeline 2>&1)
 EXIT_CODE=$?
 
-echo "$OUTPUT" | grep -E "(Tests|Gherkin|canary|passing|failing|statements|branches)" | head -20
+echo "$OUTPUT" | grep -E "(Tests|Gherkin|E2E|canary|passing|failing|statements|branches)" | head -20
 
 if [ $EXIT_CODE -ne 0 ]; then
   echo "PIPELINE RED"
