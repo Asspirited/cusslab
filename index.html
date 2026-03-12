@@ -3851,7 +3851,7 @@
 <script src="src/logic/premonition-engine.js"></script>
 <script src="src/logic/lie-engine.js"></script>
 <script src="src/data/quntum-leeks-scenarios.js"></script>
-<script src="src/logic/quntum-leeks-engine.js"></script>
+<script src="src/logic/quntum-leeks-engine.js?v=2"></script>
 <script src="src/logic/ff-engine.js"></script>
 <script src="src/data/pub-crawl-scenes.js"></script>
 <script src="src/logic/pub-navigator-engine.js"></script>
@@ -11023,6 +11023,8 @@ const RoastRoom = (() => {
         authors.map(async id => ({ name: ROAST_AUTHOR_VOICES[id].name, text: await _fetchRoast(ROAST_AUTHOR_VOICES[id], title) }))
       );
       _renderResults(title, results);
+    } catch(e) {
+      UI.toast(e.userMessage || e.message || 'Roast failed — please try again.', 'error');
     } finally {
       btn.disabled = false;
       btn.textContent = 'ROAST IT 🔥';
@@ -11122,6 +11124,8 @@ const WritingRoom = (() => {
         priorContext = (priorContext ? priorContext + '\n\n' : '') + `${voice.name}: ${text}`;
       }
       _renderResults(results);
+    } catch(e) {
+      UI.toast(e.userMessage || e.message || 'Writing failed — please try again.', 'error');
     } finally {
       btn.disabled = false;
       btn.textContent = 'DISCUSS IT ✍️';
@@ -16734,28 +16738,29 @@ RESPONSE FORMAT — return ONLY valid JSON, no text outside it:
   }
 
   async function leap() {
-    const keys = Object.keys(SCENARIOS);
-    _state = QuntumLeeksEngine.initState();
-    _state.scenario    = keys[Math.floor(Math.random() * keys.length)];
-
-    const thread = document.getElementById('ql-thread');
-    if (thread) thread.innerHTML = '';
-
-    UI.show('ql-output');
-    UI.show('ql-prob-bar');
-    UI.show('ql-stats-bar');
-    _updateStats();
-    UI.hide('ql-reply-area');
-    UI.setDisabled('ql-leap-btn', true);
-    UI.show('ql-thinking');
-
-    const sc = SCENARIOS[_state.scenario];
-    _append(`<div style="text-align:center;padding:24px;font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--accent);letter-spacing:2px;">
-      ${sc.name}<br>
-      <span style="font-size:13px;color:var(--muted);font-family:sans-serif;letter-spacing:1px;">${sc.period}</span>
-    </div>`);
-
     try {
+      if (!window.QuntumLeeksEngine) throw new Error('Quntum Leeks engine not loaded — hard-refresh the page (Ctrl+Shift+R)');
+      const keys = Object.keys(SCENARIOS);
+      _state = QuntumLeeksEngine.initState();
+      _state.scenario    = keys[Math.floor(Math.random() * keys.length)];
+
+      const thread = document.getElementById('ql-thread');
+      if (thread) thread.innerHTML = '';
+
+      UI.show('ql-output');
+      UI.show('ql-prob-bar');
+      UI.show('ql-stats-bar');
+      _updateStats();
+      UI.hide('ql-reply-area');
+      UI.setDisabled('ql-leap-btn', true);
+      UI.show('ql-thinking');
+
+      const sc = SCENARIOS[_state.scenario];
+      _append(`<div style="text-align:center;padding:24px;font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--accent);letter-spacing:2px;">
+        ${sc.name}<br>
+        <span style="font-size:13px;color:var(--muted);font-family:sans-serif;letter-spacing:1px;">${sc.period}</span>
+      </div>`);
+
       const data = await _runTurn('', true);
       if (data.leaped) {
         _state.leaped = true;
