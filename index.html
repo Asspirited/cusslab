@@ -1303,12 +1303,13 @@
   <div class="nav-group active" id="ng-misadventure">
     <div class="nav-group-header" onclick="toggleNavGroup('misadventure')">
       <span class="nav-group-icon">🏴</span> LITTLE MISADVENTURE
-      <span class="nav-group-count">4</span>
+      <span class="nav-group-count">5</span>
     </div>
     <div class="nav-items" id="ni-misadventure">
       <div class="tab active" onclick="switchTab(event,'golfadventure')"><span class="tab-icon">🏌️</span>Relive Golfing Greatness</div>
       <div class="tab" onclick="switchTab(event,'pubnavigator')"><span class="tab-icon">🍺</span>Survive a Friday night at...</div>
       <div class="tab" onclick="switchTab(event,'pubcrawl')"><span class="tab-icon">🍻</span>Friday Pub Crawl Misadventure</div>
+      <div class="tab" onclick="switchTab(event,'hardmen')"><span class="tab-icon">😤</span>The Hardmen</div>
       <div class="tab" onclick="switchTab(event,'qleeks')"><span class="tab-icon">🐸</span>Quntum Leeks</div>
     </div>
   </div>
@@ -2184,6 +2185,25 @@
     <div id="pn-response-body" class="bills-response-body" style="white-space:pre-wrap;line-height:1.75;"></div>
   </div>
   <div id="pn-loading" style="display:none;color:var(--muted);font-size:0.9rem;padding:16px 0;">Consulting the ancient texts…</div>
+</div>
+
+<div class="panel" id="panel-hardmen">
+  <div class="panel-title">😤 The Hardmen</div>
+  <div class="panel-desc" style="margin-bottom:24px;">The situation is against you. Three men who have been in worse situations. Roy Keane assesses it. Vinny Jones has already sorted it. Nostradamus confirms he saw it coming.</div>
+
+  <div id="hm-situations" style="display:grid;gap:12px;margin-bottom:24px;"></div>
+
+  <div id="hm-output" style="display:none;margin-top:8px;">
+    <div id="hm-responses"></div>
+    <div style="display:flex;gap:8px;margin-top:16px;align-items:center;">
+      <button class="feedback-btn" onclick="panelRating(event,'hardmen','💩')" title="Didn't land">💩</button>
+      <button class="feedback-btn" onclick="panelRating(event,'hardmen','😐')" title="Fine">😐</button>
+      <button class="feedback-btn" onclick="panelRating(event,'hardmen','😂')" title="Good">😂</button>
+      <button class="feedback-btn" onclick="panelRating(event,'hardmen','🤣')" title="Brilliant">🤣</button>
+    </div>
+    <button class="btn-secondary" onclick="Hardmen.reset()" style="margin-top:12px;">Different situation 🔄</button>
+  </div>
+  <div id="hm-loading" style="display:none;color:var(--muted);font-size:0.9rem;padding:16px 0;">The panel is convening…</div>
 </div>
 
 <div class="panel" id="panel-comedyroom">
@@ -4517,7 +4537,7 @@ const App = (() => {
       title: 'HECKLER\'S',
       pageTitle: 'Heckler\'s — The Comedy Panel',
       slogans: CONSULTANT_SLOGANS,
-      tabs: ['home','golfadventure','pubnavigator','pubcrawl','qleeks','comedyroom','housenameoracle','roastroom','writingroom','souness-cat','philsopoly','boardroom','premise-interrogation','football','golf','darts','cricket',
+      tabs: ['home','golfadventure','pubnavigator','pubcrawl','hardmen','qleeks','comedyroom','housenameoracle','roastroom','writingroom','souness-cat','philsopoly','boardroom','premise-interrogation','football','golf','darts','cricket',
              'bills','joketest','clash','roulette','professionals','ironic',
              'comscience','evolution','blend','experiment',
              'roastbattle','dinner','topcnuts','comedylab','trumps',
@@ -4565,7 +4585,7 @@ const App = (() => {
   const _NAV_GROUP_MAP = {
     settings:'personas', home:'personas',
     // LITTLE MISADVENTURE
-    golfadventure:'misadventure', pubnavigator:'misadventure', pubcrawl:'misadventure',
+    golfadventure:'misadventure', pubnavigator:'misadventure', pubcrawl:'misadventure', hardmen:'misadventure',
     // BOARDROOM
     boardroom:'boardroom', 'premise-interrogation':'boardroom',
     // COMEDY ROOM
@@ -9373,6 +9393,7 @@ function generateInsights()          { Training.generateInsights(); }
 
 // Pub Navigator
 function pnSelectSituation(id)       { PubNavigator.selectSituation(id); }
+function hmSelectSituation(id)       { Hardmen.selectSituation(id); }
 
 // Pub Crawl
 function pcStartScene(id)            { PubCrawl.startScene(id); }
@@ -11298,6 +11319,144 @@ The situation: ${situation.text}`;
   document.addEventListener('DOMContentLoaded', init);
 
   return { init, selectSituation };
+})();
+
+// ============================================================
+// MODULE: Hardmen — Reaction panel (BL-105)
+// Roy Keane → Vinny Jones → Nostradamus, sequential with prior context
+// ============================================================
+const Hardmen = (() => {
+
+  const HARDMEN_SITUATIONS = [
+    { id: 'bar-three-deep', text: 'The bar is three deep. You need a drink.' },
+    { id: 'bouncer-door',   text: 'The bouncer has stopped you at the door.' },
+    { id: 'seat-taken',     text: 'Someone is in your seat.' },
+    { id: 'last-orders',    text: 'Last orders called. You\'re not ready.' },
+    { id: 'wrong-tab',      text: 'Your round. But the tab is wrong.' },
+  ];
+
+  function buildHardmenPrompt(character, situation, keaneResponse, vinnyResponse) {
+    if (character === 'keane') {
+      return `You are Roy Keane. Cork man. Twelve years at Manchester United. You have standards. The world consistently fails to meet them. This has not made you calmer.
+
+Voice: clipped sentences with weight. Controlled fury — the control is what makes it worse. Never raise your voice. Short declarative statements. The quiet is the warning. Cork accent, light.
+
+The situation: ${situation.text}
+
+React in exactly three sentences. No more. Assess it. Pass judgement. Move on. Do not explain yourself.`;
+    }
+
+    if (character === 'vinny') {
+      return `You are Vinny Jones. Wimbledon FC. Lock Stock. You fit in everywhere, immediately, through methods that remain unclear. You are not aggressive — you are present. The room adjusts to you. You find this normal. You do not understand why other people find the pub difficult.
+
+Voice: direct, physical vocabulary even in non-physical situations. Stories. Hertfordshire with California softening, never gone.
+
+Roy Keane has already weighed in:
+"${keaneResponse}"
+
+The situation: ${situation.text}
+
+React in two or three sentences. You've already sorted this. Say how. Keane is correct but you got here first.`;
+    }
+
+    if (character === 'nostradamus') {
+      return `You are Nostradamus. 16th-century French seer. Your prophecies were vague, occasionally dated (and wrong), and written in obscure quatrains. You never predict — you confirm. The outcome was always written.
+
+Voice: portentous, slow, theatrical without trying to be. Formal, slightly archaic — "shall", "thus", "one finds". Never use contractions. Everything is a pronouncement.
+
+Respond in exactly five movements in order:
+1. QUATRAIN — four lines, ABAB rhyme, atmospheric, present-prophecy tense, technically unprovable, describes exactly what has just happened in terms obscure enough to deny it
+2. ATTRIBUTION — "Century [number], Quatrain [number]" — delivered with complete authority
+3. INTERPRETATION — confident application to the current situation, entirely in hindsight, stated as certainty
+4. TIMING QUALIFICATION — "I did not say *when*" — your signature; keep it for the right moment, it is not the first move
+5. RESIGNED ACCEPTANCE — the fate was written; this is not your fault; you are not here to prevent things, only to note they were foreseen
+
+Roy Keane said: "${keaneResponse}"
+Vinny Jones said: "${vinnyResponse}"
+
+The situation: ${situation.text}
+
+Confirm that this was always going to happen. You are very pleased.`;
+    }
+
+    throw new Error(`Unknown character: ${character}`);
+  }
+
+  function _renderResponse(container, icon, name, text) {
+    const div = document.createElement('div');
+    div.style.cssText = 'margin-bottom:24px;';
+    div.innerHTML = `
+      <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px;">${icon} ${name}</div>
+      <div class="bills-response-body" style="white-space:pre-wrap;line-height:1.75;">${text}</div>`;
+    container.appendChild(div);
+  }
+
+  function init() {
+    const container = document.getElementById('hm-situations');
+    if (!container) return;
+    container.innerHTML = HARDMEN_SITUATIONS.map(s => `
+      <button class="btn-secondary pn-situation-btn" onclick="hmSelectSituation('${s.id}')"
+        style="text-align:left;padding:14px 18px;font-size:0.95rem;line-height:1.5;width:100%;cursor:pointer;">
+        ${s.text}
+      </button>`).join('');
+  }
+
+  async function selectSituation(id) {
+    const situation = HARDMEN_SITUATIONS.find(s => s.id === id);
+    if (!situation) return;
+
+    document.getElementById('hm-output').style.display = 'none';
+    document.getElementById('hm-loading').style.display = 'block';
+    document.getElementById('hm-situations').style.display = 'none';
+
+    const responsesEl = document.getElementById('hm-responses');
+    responsesEl.innerHTML = '';
+
+    try {
+      // Roy Keane — first
+      const keaneText = await API.call(
+        buildHardmenPrompt('keane', situation, '', ''),
+        `The situation: ${situation.text}`,
+        120,
+        'hardmen/keane'
+      );
+      _renderResponse(responsesEl, '🟥', 'Roy Keane', keaneText);
+
+      // Vinny Jones — sees Keane
+      const vinnyText = await API.call(
+        buildHardmenPrompt('vinny', situation, keaneText, ''),
+        `The situation: ${situation.text}`,
+        150,
+        'hardmen/vinny'
+      );
+      _renderResponse(responsesEl, '🟨', 'Vinny Jones', vinnyText);
+
+      // Nostradamus — sees both
+      const nostText = await API.call(
+        buildHardmenPrompt('nostradamus', situation, keaneText, vinnyText),
+        `The situation: ${situation.text}`,
+        300,
+        'hardmen/nostradamus'
+      );
+      _renderResponse(responsesEl, '🔮', 'Nostradamus', nostText);
+
+      document.getElementById('hm-output').style.display = 'block';
+    } catch (e) {
+      responsesEl.innerHTML = '<div style="color:var(--muted);">The panel is unavailable. Try again.</div>';
+      document.getElementById('hm-output').style.display = 'block';
+    } finally {
+      document.getElementById('hm-loading').style.display = 'none';
+    }
+  }
+
+  function reset() {
+    document.getElementById('hm-output').style.display = 'none';
+    document.getElementById('hm-situations').style.display = 'grid';
+  }
+
+  document.addEventListener('DOMContentLoaded', init);
+
+  return { init, selectSituation, reset };
 })();
 
 // ============================================================

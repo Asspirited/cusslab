@@ -8351,6 +8351,81 @@ function makeSteps(ctx) {
         throw new Error('po-output not found — response area not implemented');
     }],
 
+    // ── Hardmen reaction panel (BL-105) ────────────────────────────────────────
+
+    [/^the hardmen situation list contains (\d+) entries$/, (n) => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      const module = html.match(/const Hardmen\s*=\s*\(\s*\(\s*\)\s*=>\s*\{([\s\S]*?)\n\}\)\(\);/);
+      if (!module) throw new Error('Hardmen module not found in index.html');
+      const listMatch = module[1].match(/const HARDMEN_SITUATIONS\s*=\s*\[([\s\S]*?)\];/);
+      if (!listMatch) throw new Error('HARDMEN_SITUATIONS not found in Hardmen module');
+      const count = (listMatch[1].match(/\{/g) || []).length;
+      if (count !== parseInt(n, 10))
+        throw new Error(`Expected ${n} situations, found ${count}`);
+    }],
+
+    [/^the hardmen panel includes "([^"]+)"$/, (name) => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      const module = html.match(/const Hardmen\s*=\s*\(\s*\(\s*\)\s*=>\s*\{([\s\S]*?)\n\}\)\(\);/);
+      if (!module) throw new Error('Hardmen module not found in index.html');
+      if (!module[1].includes(name))
+        throw new Error(`Hardmen module missing "${name}"`);
+    }],
+
+    [/^buildHardmenPrompt is called for "([^"]+)"$/, (character) => {
+      ctx._hardmenCharacter = character;
+    }],
+
+    [/^the Keane prompt instructs clipped sentences and controlled fury$/, () => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      const module = html.match(/const Hardmen\s*=\s*\(\s*\(\s*\)\s*=>\s*\{([\s\S]*?)\n\}\)\(\);/);
+      if (!module) throw new Error('Hardmen module not found in index.html');
+      if (!module[1].includes('clipped') && !module[1].includes('short sentences'))
+        throw new Error('Keane prompt does not instruct clipped/short sentence voice');
+      if (!module[1].includes('fury') && !module[1].includes('furious') && !module[1].includes('controlled'))
+        throw new Error('Keane prompt does not mention controlled fury');
+    }],
+
+    [/^a prior Keane response "([^"]+)"$/, (response) => {
+      ctx._hardmenKeaneResponse = response;
+    }],
+
+    [/^a prior Vinny response "([^"]+)"$/, (response) => {
+      ctx._hardmenVinnyResponse = response;
+    }],
+
+    [/^the Vinny prompt includes the prior Keane response$/, () => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      const module = html.match(/const Hardmen\s*=\s*\(\s*\(\s*\)\s*=>\s*\{([\s\S]*?)\n\}\)\(\);/);
+      if (!module) throw new Error('Hardmen module not found in index.html');
+      // Verify the prompt-builder references prior context
+      if (!module[1].includes('keaneResponse') && !module[1].includes('priorKeane') && !module[1].includes('keane_response'))
+        throw new Error('Vinny prompt-builder does not reference prior Keane response');
+    }],
+
+    [/^the Nostradamus prompt includes both prior responses$/, () => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      const module = html.match(/const Hardmen\s*=\s*\(\s*\(\s*\)\s*=>\s*\{([\s\S]*?)\n\}\)\(\);/);
+      if (!module) throw new Error('Hardmen module not found in index.html');
+      if (!module[1].includes('keaneResponse') && !module[1].includes('priorKeane'))
+        throw new Error('Nostradamus prompt-builder does not reference prior Keane response');
+      if (!module[1].includes('vinnyResponse') && !module[1].includes('priorVinny'))
+        throw new Error('Nostradamus prompt-builder does not reference prior Vinny response');
+    }],
+
+    [/^the Nostradamus prompt instructs quatrain, attribution, interpretation, timing qualification, and resigned acceptance$/, () => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      const module = html.match(/const Hardmen\s*=\s*\(\s*\(\s*\)\s*=>\s*\{([\s\S]*?)\n\}\)\(\);/);
+      if (!module) throw new Error('Hardmen module not found in index.html');
+      const src = module[1];
+      if (!src.includes('Quatrain') && !src.includes('quatrain'))
+        throw new Error('Nostradamus prompt missing quatrain instruction');
+      if (!src.includes('Century') && !src.includes('attribution'))
+        throw new Error('Nostradamus prompt missing attribution instruction');
+      if (!src.includes('did not say') && !src.includes('timing'))
+        throw new Error('Nostradamus prompt missing timing qualification');
+    }],
+
   ];
 }
 
