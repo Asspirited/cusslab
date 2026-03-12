@@ -259,6 +259,7 @@ Reference library — read the relevant file before the relevant step:
 | `.claude/practices/retrospectives.md` | Session end, retro triggers |
 | `.claude/practices/ux-decisions.md` | UI changes, new design decisions |
 | `.claude/practices/panel-slots.md` | Panel slot mechanics |
+| `.claude/practices/testing-standards.md` | Before designing any new test, adding external scripts, or writing API calls |
 | `.claude/practices/backlog.md` | Backlog adds, CD3 scoring, prioritisation |
 | `.claude/practices/waste-log.md` | Every bug, every failure, session end |
 
