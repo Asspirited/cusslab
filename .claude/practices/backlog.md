@@ -999,7 +999,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - **Three Amigos required before any implementation.** Key questions: tile layout, sub-feature expand mechanic, what constitutes a "tile" (group vs individual panel), search/browse hybrid, mobile vs desktop.
 - Feature: platform
 - CD3: UBV=9 TC=8 RR=5 → CoD=22, Dur=5, **CD3=4.4**
-- Status: OPEN — raised 2026-03-11. Three Amigos required first.
+- Status: CLOSED — commit 30517a9, 2026-03-12. 6 Gherkin scenarios passing. Mobile-first tile grid, 5 tiles, data-tile-name/desc attributes, switchTab null guard, App.init defaults to home.
 
 ### BL-118 — Pipeline: runtime browser test for external-script window globals
 - Root cause of WL-124 (PubCrawl broken 6+ sessions): external scripts (ff-engine.js, pub-crawl-scenes.js, pub-navigator-engine.js) set window globals that unit tests and browser-sim cannot detect as missing. If any external script throws, window.PubNavigatorEngine is never set — pipeline stays GREEN while the feature is broken in production.
