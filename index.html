@@ -1303,14 +1303,13 @@
   <div class="nav-group active" id="ng-misadventure">
     <div class="nav-group-header" onclick="toggleNavGroup('misadventure')">
       <span class="nav-group-icon">🏴</span> LITTLE MISADVENTURE
-      <span class="nav-group-count">6</span>
+      <span class="nav-group-count">5</span>
     </div>
     <div class="nav-items" id="ni-misadventure">
       <div class="tab active" onclick="switchTab(event,'golfadventure')"><span class="tab-icon">🏌️</span>Relive Golfing Greatness</div>
       <div class="tab" onclick="switchTab(event,'pubnavigator')"><span class="tab-icon">🍺</span>Survive a Friday night at...</div>
       <div class="tab" onclick="switchTab(event,'pubcrawl')"><span class="tab-icon">🍻</span>Friday Pub Crawl Misadventure</div>
       <div class="tab" onclick="switchTab(event,'hardmen')"><span class="tab-icon">😤</span>The Hardmen</div>
-      <div class="tab" onclick="switchTab(event,'suntzu')"><span class="tab-icon">⚔️</span>Ask Sun Tzu</div>
       <div class="tab" onclick="switchTab(event,'qleeks')"><span class="tab-icon">🐸</span>Quntum Leeks</div>
     </div>
   </div>
@@ -1319,15 +1318,27 @@
   <div class="nav-group" id="ng-comedy">
     <div class="nav-group-header" onclick="toggleNavGroup('comedy')">
       <span class="nav-group-icon">🎭</span> COMEDY ROOM
-      <span class="nav-group-count">6</span>
+      <span class="nav-group-count">4</span>
     </div>
     <div class="nav-items" id="ni-comedy">
       <div class="tab" onclick="switchTab(event,'comedyroom')"><span class="tab-icon">🎤</span>The Comedy Room</div>
       <div class="tab" onclick="switchTab(event,'housenameoracle')"><span class="tab-icon">🔮</span>The House Name Oracle</div>
       <div class="tab" onclick="switchTab(event,'roastroom')"><span class="tab-icon">🔥</span>The Roast Room</div>
       <div class="tab" onclick="switchTab(event,'writingroom')"><span class="tab-icon">✍️</span>The Writing Room</div>
+    </div>
+  </div>
+
+  <!-- ── THOUGHT SHOWERS ── -->
+  <div class="nav-group" id="ng-showers">
+    <div class="nav-group-header" onclick="toggleNavGroup('showers')">
+      <span class="nav-group-icon">🚿</span> THOUGHT SHOWERS
+      <span class="nav-group-count">4</span>
+    </div>
+    <div class="nav-items" id="ni-showers">
       <div class="tab" onclick="switchTab(event,'souness-cat')"><span class="tab-icon">🔬</span>Souness's Cat</div>
       <div class="tab" onclick="switchTab(event,'philsopoly')"><span class="tab-icon">🎲</span>Phil's-opoly</div>
+      <div class="tab" onclick="switchTab(event,'suntzu')"><span class="tab-icon">⚔️</span>Ask Sun Tzu</div>
+      <div class="tab" onclick="switchTab(event,'premise-interrogation')"><span class="tab-icon">🔎</span>Premise Interrogation</div>
     </div>
   </div>
 
@@ -1378,11 +1389,10 @@
   <div class="nav-group" id="ng-boardroom">
     <div class="nav-group-header" onclick="toggleNavGroup('boardroom')">
       <span class="nav-group-icon">💼</span> BOARDROOM
-      <span class="nav-group-count">2</span>
+      <span class="nav-group-count">1</span>
     </div>
     <div class="nav-items" id="ni-boardroom">
       <div class="tab" onclick="switchTab(event,'boardroom')"><span class="tab-icon">🏛️</span>Present to the Boardroom</div>
-      <div class="tab" onclick="switchTab(event,'premise-interrogation')"><span class="tab-icon">🔎</span>Premise Interrogation</div>
     </div>
   </div>
 
@@ -4611,11 +4621,13 @@ const App = (() => {
   const _NAV_GROUP_MAP = {
     settings:'personas', home:'personas',
     // LITTLE MISADVENTURE
-    golfadventure:'misadventure', pubnavigator:'misadventure', pubcrawl:'misadventure', hardmen:'misadventure', suntzu:'misadventure',
+    golfadventure:'misadventure', pubnavigator:'misadventure', pubcrawl:'misadventure', hardmen:'misadventure',
     // BOARDROOM
-    boardroom:'boardroom', 'premise-interrogation':'boardroom',
+    boardroom:'boardroom',
     // COMEDY ROOM
-    comedyroom:'comedy', housenameoracle:'comedy', roastroom:'comedy', writingroom:'comedy', 'souness-cat':'comedy', philsopoly:'comedy',
+    comedyroom:'comedy', housenameoracle:'comedy', roastroom:'comedy', writingroom:'comedy',
+    // THOUGHT SHOWERS
+    'souness-cat':'showers', philsopoly:'showers', suntzu:'showers', 'premise-interrogation':'showers',
     // 19TH HOLE
     football:'sports', golf:'sports', darts:'sports', cricket:'sports',
     // THE PANEL

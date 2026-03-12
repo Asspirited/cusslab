@@ -35,8 +35,9 @@ const PI_PANEL_MAX    = 6;
 // Nav tabs present in each nav group — mirrors index.html structure
 const NAV_GROUPS = {
   personas:      ['Ask The Panel','Joke Test','Expert Clash','The Wheel','Professionals',"Isn't It Ironic?"],
-  boardroom:     ['Present to the Boardroom', 'Premise Interrogation'],
-  comedy:        ['The Comedy Room','The House Name Oracle','The Roast Room','The Writing Room',"Souness's Cat"],
+  boardroom:     ['Present to the Boardroom'],
+  comedy:        ['The Comedy Room','The House Name Oracle','The Roast Room','The Writing Room'],
+  showers:       ["Souness's Cat","Phil's-opoly",'Ask Sun Tzu','Premise Interrogation'],
   sports:        ['Post Game Cunditry', 'The 19th Hole', 'Watching the Oche', 'The Long Room'],
   play:          ['Roast Battle','Dinner Party',"Rogues' Gallery",'Comedy Lab','Dimension Duel'],
   misadventure:  ['Relive Golfing Greatness', 'Survive a Friday night at...', 'Friday Pub Crawl Misadventure', 'Quntum Leeks'],
@@ -877,6 +878,12 @@ function makeSteps(ctx) {
       (label) => {
         const group = NAV_GROUPS['comedy'] || [];
         if (!group.includes(label)) throw new Error(`nav: expected "${label}" in comedy group, got [${group.join(', ')}]`);
+      }],
+
+    [/^"([^"]+)" should be in the THOUGHT SHOWERS nav group$/,
+      (label) => {
+        const group = NAV_GROUPS['showers'] || [];
+        if (!group.includes(label)) throw new Error(`nav: expected "${label}" in showers group, got [${group.join(', ')}]`);
       }],
 
     [/^"([^"]+)" should be in the 19TH HOLE nav group$/,
@@ -7946,7 +7953,7 @@ function makeSteps(ctx) {
 
     // ── Premise Interrogation (premise-interrogation.feature) — BL-116 ─────────
 
-    [/^the Premise Interrogation panel is active under Boardroom$/, () => {
+    [/^the Premise Interrogation panel is active under Thought Showers$/, () => {
       // Background — structural check deferred to individual scenarios
     }],
 
@@ -8019,6 +8026,10 @@ function makeSteps(ctx) {
 
     [/^I inspect the nav group for boardroom$/, () => {
       ctx._piNavGroup = NAV_GROUPS['boardroom'] || [];
+    }],
+
+    [/^I inspect the nav group for thought showers$/, () => {
+      ctx._piNavGroup = NAV_GROUPS['showers'] || [];
     }],
 
     [/^it contains "([^"]+)"$/, (label) => {
