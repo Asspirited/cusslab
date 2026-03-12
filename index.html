@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Heckler &amp; Cox</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Permanent+Marker&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Permanent+Marker&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Playfair+Display:wght@700;900&display=swap');
 
   :root {
     --bg: #0d0d0d;
@@ -1255,11 +1255,11 @@
   /* ── Landing page tile grid — BL-117 ── */
   .home-tile-grid { display:grid; grid-template-columns:1fr; gap:16px; margin-top:24px; }
   @media (min-width:600px) { .home-tile-grid { grid-template-columns:1fr 1fr; } }
-  .home-tile { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:24px 20px; cursor:pointer; transition:border-color 0.15s, background 0.15s; display:flex; flex-direction:column; gap:10px; text-align:left; width:100%; }
-  .home-tile:hover { border-color:var(--accent); background:rgba(255,102,51,0.06); }
-  .home-tile-icon { font-size:28px; line-height:1; }
-  .home-tile-name { font-family:'Bebas Neue',sans-serif; font-size:20px; letter-spacing:2px; color:var(--fg); }
-  .home-tile-desc { font-size:13px; color:var(--muted); line-height:1.6; }
+  .home-tile { background:#0d0d0d; border:2px solid #3a2e00; border-radius:10px; padding:24px 20px; cursor:pointer; transition:border-color 0.2s, box-shadow 0.2s, background 0.2s; display:flex; flex-direction:column; gap:10px; text-align:left; width:100%; }
+  .home-tile:hover { border-color:#FFD700; background:#111100; box-shadow:0 0 18px rgba(255,215,0,0.18); }
+  .home-tile-icon { font-size:30px; line-height:1; }
+  .home-tile-name { font-family:'Playfair Display',Georgia,serif; font-size:26px; font-weight:900; line-height:1.15; color:#FFD700; letter-spacing:0.5px; }
+  .home-tile-desc { font-size:13px; color:#a09060; line-height:1.6; }
 </style>
 <!-- Privacy-friendly analytics by Plausible -->
 <script async src="https://plausible.io/js/pa-3tqLQEYn3QaktBXhJk3QC.js"></script>
