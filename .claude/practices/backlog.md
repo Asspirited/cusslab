@@ -1147,7 +1147,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - This IS pipeline-runnable without a browser — pure static analysis.
 - Feature: process
 - CD3: UBV=8 TC=10 RR=10 → CoD=28, Dur=2, **CD3=14.0**
-- Status: OPEN — raised 2026-03-12 from WL-125. Three Amigos: scope is clear, Gherkin next.
+- Status: CLOSED — implemented as ui-audit check 15 (commit 7f1e7f0, 2026-03-12). Static analysis: reads all external JS files, extracts all-caps top-level const names, fails if any name appears in more than one file. 16/16 ui-audit checks passing.
 
 
 ---
@@ -1160,3 +1160,23 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 **CD3:** TBD — Three Amigos needed before scoring
 **Status:** OPEN — Three Amigos needed
 **Acceptance criteria:** TBD (Three Amigos)
+
+---
+
+### BL-121 — Phil's-opoly: Comedy Room philosophy panel
+- **Epic:** Comedy Room
+- **Concept:** New Comedy Room mode. A panel of philosophers (and Tufnell) react to any topic/question the user submits. Suggestion cards + free text input. Characters engage in an interactive discussion with each other — not just responding to the user, but reacting to each other's contributions.
+- **Characters at launch (priority build):**
+  - **Phil Tufnell (Tuffers)** — "The Tuffers Version of Events" (named mechanic). Runs any topic through his own experience, half-remembered recent events, and tenuous analogies. Horrifically ill-informed, often inappropriate, never deliberate — pure incompetence. Delivers with full confidence and expects it to land. Puppy-who-shat-on-the-floor energy: damage done, unaware of damage, still wants the tickle. Zero self-awareness. Zero malice. Distinct from Long Room Tufnell. Full brief: `notes/2026-03-09-phils-opoly.md`
+  - **Diogenes** — barrel, told Alexander to move, won't explain the barrel. Urinated on people who annoyed him. Provocateur. Self-sufficient to the point of contempt. Reacts to Tufnell by ignoring him entirely.
+  - **Shane MacGowan** — most well-read person in the room. Wreckage is the mask. DEAD_IN_PANEL_WORLD mechanic (same as Waddell/Bristow — nobody mentions it, pure bathos). Finds Tufnell's wrong answers oddly resonant.
+  - **Mike Skinner** — accidental philosophy. Grand Don't Come For Free as metaphysics. Wound: massively over-evaluating ordinary life — which is every philosopher's wound. Finds Tufnell's wrong answers accidentally profound.
+  - **Nostradamus** — prophetic, useless hindsight, already in Pub Navigator quartet. Cross-panel character. Reacts to Tufnell: predicted it, very pleased.
+  - **Bertrand Russell** — 4 marriages, jailed pacifist, Nobel for Literature (mildly insulting), wrote to Stalin with full confidence. Already specced (Premise Interrogation). Attempts to correct Tufnell with increasing despair.
+- **Full roster at launch** (user selects 2–5): Tufnell, Diogenes, MacGowan, Skinner, Nostradamus, Russell, George Carlin (Curious George), Douglas Adams (Unparanoid Android), Bill Hicks (Hicks the Humanist), Oscar Wilde (Wildest of Oscars). All have full character files — no additional research needed. Future: Socrates, Plato, Nietzsche, Wittgenstein, Schrödinger. Notes: `notes/2026-03-09-phils-opoly.md`
+- **Placement:** Comedy Room (new mode tab alongside Into The Room, Roast Room, etc.)
+- **UX:** Suggestion cards (like 19th Hole mode 1) + free text field → interactive panel discussion
+- **Three Amigos:** COMPLETE (2026-03-12 session 7)
+- **Feature:** comedy
+- **CD3:** UBV=7 TC=5 RR=3 → CoD=15, Dur=4, **CD3=3.75**
+- **Status:** OPEN — Gherkin approved (10-character roster), pipeline verification pending (2026-03-12 session 7)

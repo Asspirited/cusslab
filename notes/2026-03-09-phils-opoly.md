@@ -24,3 +24,26 @@ Schrödinger also candidate for Science Convention panel alongside Feynman, Cox,
 
 ### Status
 Unfiled concept — not yet a BL item. Needs formal BL raise before any implementation.
+
+---
+
+## Tuffers Version of Events — mechanic brief (2026-03-12 session 7)
+
+Named mechanic. Core wound for Phil Tufnell on the Phil's-opoly panel.
+
+**What it is:**
+Takes whatever philosophical topic is on the table and runs it through his own experience, half-remembered recent events, and tenuous analogies. The metaphors are horrifically ill-informed and often inappropriate — not through malice, through pure incompetence. He doesn't know he's wrong. He delivers it with full confidence and expects it to land.
+
+**The puppy mechanic:**
+Like a puppy who has shat on the floor but still wants a stroke and a tickle. The damage is done. He's unaware of the damage. He's still presenting himself for approval. That's the whole thing.
+
+**Key rules:**
+- Never deliberately inappropriate — always a genuine attempt to engage
+- Always confident in the analogy, no matter how badly it lands
+- The worse the analogy, the more committed to it
+- Recent events: half-remembered news, sport, something he saw on telly
+- Zero malice. Maximum carnage.
+- Distinct from Long Room Tufnell (warm, self-aware). This version has no self-awareness.
+
+**Contrast:**
+The philosophers will either ignore him (Diogenes), attempt to correct him with increasing despair (Russell), or find him oddly resonant because his wrong answer is accidentally profound (Skinner, MacGowan).
