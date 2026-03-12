@@ -1024,7 +1024,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Depends on BL-115 (character specs) being done first
 - Feature: boardroom
 - CD3: UBV=7 TC=5 RR=3 → CoD=15, Dur=5, **CD3=3.0**
-- Status: OPEN — raised 2026-03-11. Three Amigos pending.
+- Status: CLOSED — commit f8a8e7b (2026-03-11). Full implementation: 10 frameworks (Mode 1), 4-character panel Cox/Adams/Feynman/Russell with sequential context (Mode 2). CANONICAL_CHARS, PI_FRAMEWORK_CONFIGS, PI_PANEL_MEMBERS all live. All non-@claude Gherkin passing.
 
 ### BL-115 — Deep character specs: Prof Cox and Douglas Adams (Souness's Cat depth)
 - Both characters exist in the codebase but at insufficient depth for premise interrogation or any new panel role

@@ -1653,8 +1653,8 @@ Status: CLOSED
 **Cost impact:** High (repeated debugging, Rod frustration)
 **Delay:** PubCrawl unusable for multiple sessions
 **Tags:** `#false-progress` `#repeated-work` `#regression`
-**Status:** Closed — commit 3b4821a. Three fixes: (1) guard added to line 9, (2) ENGINE replaced with runtime getEngine(), (3) hardcoded ?v= cache busters removed.
-**Root lesson:** External scripts that set window globals are invisible to unit tests and browser-sim pipeline. Runtime guard + ETag caching prevents silent failures.
+**Status:** CLOSED — commit 3b4821a. Three fixes: (1) guard added to line 9, (2) ENGINE replaced with runtime getEngine(), (3) hardcoded ?v= cache busters removed. Pipeline gap covered by BL-118 (external-globals.feature, commit 0ec38f6, 2026-03-12).
+**Root lesson:** External scripts that set window globals are invisible to unit tests and browser-sim pipeline. Runtime guard + ETag caching prevents silent failures. Now covered by vm.createContext check.
 
 ---
 
@@ -1668,7 +1668,7 @@ Status: CLOSED
 **Cost impact:** High — multiple sessions of Rod catching bugs instead of product work
 **Delay:** 1 session of feature work lost
 **Tags:** `#false-progress` `#regression` `#yak-shaving`
-**Status:** CLOSED — fix commit 24b2cc4; WL-125 drives BL-119 (cross-script browser scope test)
+**Status:** CLOSED — fix commit 24b2cc4; WL-125 drives BL-119 (cross-script browser scope test). External globals now covered by BL-118 (external-globals.feature, commit 0ec38f6).
 
 ---
 
