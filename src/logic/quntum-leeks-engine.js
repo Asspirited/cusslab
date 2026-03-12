@@ -4,10 +4,10 @@
 // index.html loads this after src/data/quntum-leeks-scenarios.js.
 // QuantumLeeks IIFE in index.html calls these functions, owns the mutable _state.
 
-const { QUNTUM_LEEKS_SCENARIOS } =
+const _QUNTUM_LEEKS_SCENARIOS =
   typeof require !== 'undefined'
-    ? require('../data/quntum-leeks-scenarios.js')
-    : { QUNTUM_LEEKS_SCENARIOS: window.QUNTUM_LEEKS_SCENARIOS };
+    ? require('../data/quntum-leeks-scenarios.js').QUNTUM_LEEKS_SCENARIOS
+    : window.QUNTUM_LEEKS_SCENARIOS;
 
 /**
  * Returns a fresh default game state object.
@@ -41,7 +41,7 @@ function initState() {
  * Returns the key string (not the scenario object).
  */
 function pickRandomScenario() {
-  const keys = Object.keys(QUNTUM_LEEKS_SCENARIOS);
+  const keys = Object.keys(_QUNTUM_LEEKS_SCENARIOS);
   return keys[Math.floor(Math.random() * keys.length)];
 }
 
@@ -129,7 +129,7 @@ function buildModifiers(state) {
 }
 
 const _qlEngineExports = {
-  QUNTUM_LEEKS_SCENARIOS,
+  QUNTUM_LEEKS_SCENARIOS: _QUNTUM_LEEKS_SCENARIOS,
   initState,
   pickRandomScenario,
   betLeekiness,

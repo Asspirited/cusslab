@@ -4889,7 +4889,7 @@ const SentenceBuilder = (() => {
       const results = await Promise.all(
         _CHARACTERS.map(async char => ({
           name: char.name,
-          text: await API.call(_buildPrompt(char, profile, themes), '', 200),
+          text: await API.call(_buildPrompt(char, profile, themes), 'Respond now.', 200),
         }))
       );
 
@@ -10996,7 +10996,7 @@ const RoastRoom = (() => {
   }
 
   async function _fetchRoast(voice, title) {
-    return await API.call(_buildPrompt(voice, title), '', 300);
+    return await API.call(_buildPrompt(voice, title), 'Write now.', 300);
   }
 
   function _renderResults(title, results) {
@@ -11090,7 +11090,7 @@ const WritingRoom = (() => {
   }
 
   async function _fetchResponse(voice, topic, priorContext) {
-    return await API.call(_buildPrompt(voice, topic, priorContext), '', 600);
+    return await API.call(_buildPrompt(voice, topic, priorContext), 'Write now.', 600);
   }
 
   function _renderResults(results) {
@@ -11546,7 +11546,7 @@ The Oracle's own disclaimer: "The Oracle's sources are ancient and not entirely 
 
     const codeRe  = /^[A-Z]{1,2}[0-9]{1,2}[A-Z]?$/;
     if (!codeRe.test(code)) {
-      alert('Enter a valid UK postcode district or Irish routing key (e.g. SW1A, LS1, D02)');
+      UI.toast('Enter a valid UK postcode district or Irish routing key (e.g. SW1A, LS1, D02)', 'warn');
       return;
     }
     if (!voice) {
@@ -11556,23 +11556,18 @@ The Oracle's own disclaimer: "The Oracle's sources are ancient and not entirely 
       return;
     }
 
-    const key = API.getKey();
-    if (!key) { UI.showNoKey(); return; }
-
     _setLoading(true);
     document.getElementById('cr-oracle-output').style.display = 'none';
 
     try {
       const prompt = _buildPrompt(code, voice);
-      const raw = await API.call([{ role: 'user', content: prompt }], 0.9);
-      const jsonMatch = raw.match(/\{[\s\S]*\}/);
-      if (!jsonMatch) throw new Error('No JSON in Oracle response');
-      const data = JSON.parse(jsonMatch[0]);
+      const data = await API.callJSON(prompt, 'Generate the Oracle response now.', 2000, null, 'oracle');
+      if (!data) throw new Error('No JSON in Oracle response');
       _renderConversation(data);
       document.getElementById('cr-oracle-output').style.display = '';
     } catch (e) {
       console.error('Oracle error:', e);
-      alert('The Oracle is unavailable. Try again shortly.');
+      UI.toast('The Oracle is unavailable. Try again shortly.', 'error');
     } finally {
       _setLoading(false);
     }

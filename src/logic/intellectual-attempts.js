@@ -6,8 +6,8 @@ const _iaData = typeof require !== 'undefined'
   ? require('../data/intellectual-attempts-config.js')
   : { ATTEMPT_KEYWORDS: window.ATTEMPT_KEYWORDS, INTELLECTUAL_ATTEMPTS_CONFIG: window.INTELLECTUAL_ATTEMPTS_CONFIG };
 
-const ATTEMPT_KEYWORDS           = _iaData.ATTEMPT_KEYWORDS;
-const INTELLECTUAL_ATTEMPTS_CONFIG = _iaData.INTELLECTUAL_ATTEMPTS_CONFIG;
+const _ATTEMPT_KEYWORDS           = _iaData.ATTEMPT_KEYWORDS;
+const _INTELLECTUAL_ATTEMPTS_CONFIG = _iaData.INTELLECTUAL_ATTEMPTS_CONFIG;
 
 /**
  * Detects an intellectual attempt type from input text.
@@ -15,8 +15,8 @@ const INTELLECTUAL_ATTEMPTS_CONFIG = _iaData.INTELLECTUAL_ATTEMPTS_CONFIG;
  */
 function detectIntellectualAttempt(inputText) {
   const lower = (inputText || '').toLowerCase();
-  for (const keyword of Object.keys(ATTEMPT_KEYWORDS)) {
-    if (lower.includes(keyword)) return ATTEMPT_KEYWORDS[keyword];
+  for (const keyword of Object.keys(_ATTEMPT_KEYWORDS)) {
+    if (lower.includes(keyword)) return _ATTEMPT_KEYWORDS[keyword];
   }
   return null;
 }
@@ -37,7 +37,7 @@ function buildAttemptInstruction(characterConfig, attemptType) {
  * Returns the augmented system prompt, or the original if no injection applies.
  */
 function inject(panelId, characterId, systemPrompt, attemptType) {
-  const panelConfig = INTELLECTUAL_ATTEMPTS_CONFIG[panelId];
+  const panelConfig = _INTELLECTUAL_ATTEMPTS_CONFIG[panelId];
   if (!panelConfig) return systemPrompt;
   const charConfig = panelConfig[characterId];
   if (!charConfig) return systemPrompt;
@@ -46,8 +46,8 @@ function inject(panelId, characterId, systemPrompt, attemptType) {
 }
 
 const _iaExports = {
-  ATTEMPT_KEYWORDS,
-  INTELLECTUAL_ATTEMPTS_CONFIG,
+  ATTEMPT_KEYWORDS: _ATTEMPT_KEYWORDS,
+  INTELLECTUAL_ATTEMPTS_CONFIG: _INTELLECTUAL_ATTEMPTS_CONFIG,
   detectIntellectualAttempt,
   buildAttemptInstruction,
   inject,

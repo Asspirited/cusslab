@@ -3,10 +3,10 @@
 // Uses ff-engine.js shared primitives.
 // No DOM, no API, no fetch.
 
-const { PUB_CRAWL_SCENES } =
+const _PUB_CRAWL_SCENES =
   typeof require !== 'undefined'
-    ? require('../data/pub-crawl-scenes.js')
-    : { PUB_CRAWL_SCENES: (window.PubCrawlScenes || {}).PUB_CRAWL_SCENES || [] };
+    ? require('../data/pub-crawl-scenes.js').PUB_CRAWL_SCENES
+    : (window.PubCrawlScenes || {}).PUB_CRAWL_SCENES || [];
 
 // Alias to avoid const-vs-function redeclaration collision in browser global scope
 // (ff-engine.js declares these as `function` — a `const` of the same name throws SyntaxError)
@@ -72,11 +72,11 @@ Respond with what is actually happening here — the underlying truth. Then, if 
 // ── Scene access ──────────────────────────────────────────────────────────────
 
 function getAllScenes() {
-  return PUB_CRAWL_SCENES;
+  return _PUB_CRAWL_SCENES;
 }
 
 function getPubScene(sceneId) {
-  return PUB_CRAWL_SCENES.find(s => s.id === sceneId);
+  return _PUB_CRAWL_SCENES.find(s => s.id === sceneId);
 }
 
 // ── Advisor management ────────────────────────────────────────────────────────
@@ -168,7 +168,7 @@ The player just chose: "${choiceLabel}"${lederhosenNote}`;
 // ── Exports ───────────────────────────────────────────────────────────────────
 
 const _pubNavExports = {
-  PUB_CRAWL_SCENES,
+  PUB_CRAWL_SCENES: _PUB_CRAWL_SCENES,
   ADVISOR_IDS,
   TOPIC_TRIGGERS,
   ADVISOR_VOICES,
