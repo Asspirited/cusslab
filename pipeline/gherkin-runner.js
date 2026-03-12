@@ -8071,6 +8071,91 @@ function makeSteps(ctx) {
         throw new Error(`Tab mismatch — missing: [${missing}], extra: [${extra}]`);
     }],
 
+    // ── Landing Page — BL-117 ──────────────────────────────────────────────────
+
+    [/^a user opens the app$/, () => { /* page load — no action needed */ }],
+
+    [/^the landing page panel is visible$/, () => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      if (!html.includes('id="panel-home"'))
+        throw new Error('panel-home not found in index.html — landing page not implemented');
+      if (!CONSULTANT_SKIN_TABS.includes('home'))
+        throw new Error('"home" not in CONSULTANT_SKIN_TABS — landing page panel not registered');
+    }],
+
+    [/^the Golf Adventure panel is not the default on load$/, () => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      // Extract the init() function body only — not the whole page
+      const initFn = html.match(/function init\s*\(\s*\)\s*\{([\s\S]*?)\n  \}/);
+      if (!initFn) throw new Error('init() function not found in index.html');
+      if (initFn[1].includes("'golfadventure'"))
+        throw new Error('App.init still defaults to golfadventure — change to home');
+      if (!initFn[1].includes("'home'"))
+        throw new Error('App.init does not navigate to home panel on load');
+    }],
+
+    [/^the landing page is visible$/, () => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      if (!html.includes('id="panel-home"'))
+        throw new Error('panel-home not found — landing page not implemented');
+    }],
+
+    [/^I see a tile for "([^"]+)"$/, (tileName) => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      // Tile must be inside panel-home and include the tile name
+      const homePanel = html.match(/id="panel-home"[\s\S]*?<\/div>\s*(?=<div class="panel"|$)/);
+      if (!homePanel)
+        throw new Error('panel-home not found or not extractable');
+      if (!homePanel[0].includes(tileName))
+        throw new Error(`Tile "${tileName}" not found in panel-home`);
+    }],
+
+    [/^each tile has a name$/, () => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      if (!html.includes('data-tile-name'))
+        throw new Error('No data-tile-name attributes found — tiles must have names');
+    }],
+
+    [/^each tile has a description$/, () => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      if (!html.includes('data-tile-desc'))
+        throw new Error('No data-tile-desc attributes found — tiles must have descriptions');
+    }],
+
+    [/^I click the "([^"]+)" tile$/, (tileName) => {
+      // Simulate clicking a tile — record which panel is now active
+      const tileTargets = {
+        'The Boardroom':       'boardroom',
+        'The Comedy Room':     'comedyroom',
+        'Sports':              'football',
+        'Little Misadventure': 'golfadventure',
+        'Play & Learn':        'comscience',
+      };
+      ctx.activePanel = tileTargets[tileName] || null;
+      if (!ctx.activePanel)
+        throw new Error(`No tile target mapping for "${tileName}"`);
+    }],
+
+    [/^the Boardroom panel is visible$/, () => {
+      if (ctx.activePanel !== 'boardroom')
+        throw new Error(`Expected activePanel=boardroom, got ${ctx.activePanel}`);
+    }],
+
+    [/^the landing page is no longer visible$/, () => {
+      if (ctx.activePanel === 'home' || ctx.activePanel === null)
+        throw new Error('Landing page still active — navigation did not occur');
+    }],
+
+    [/^the Golf Adventure panel is visible$/, () => {
+      if (ctx.activePanel !== 'golfadventure')
+        throw new Error(`Expected activePanel=golfadventure, got ${ctx.activePanel}`);
+    }],
+
+    [/^the Football panel is visible$/, () => {
+      if (ctx.activePanel !== 'football')
+        throw new Error(`Expected activePanel=football, got ${ctx.activePanel}`);
+    }],
+
   ];
 }
 

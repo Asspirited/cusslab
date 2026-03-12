@@ -1245,6 +1245,15 @@
   .dt-direct-input:focus { border-color:rgba(255,102,51,0.4); }
   .dt-trigger-flash { display:none; background:rgba(200,50,50,0.1); border:1px solid rgba(200,50,50,0.25); border-radius:4px; padding:7px 11px; font-family:monospace; font-size:11px; color:#dd6655; letter-spacing:1px; margin-bottom:9px; }
   .dt-trigger-flash.visible { display:block; }
+
+  /* ── Landing page tile grid — BL-117 ── */
+  .home-tile-grid { display:grid; grid-template-columns:1fr; gap:16px; margin-top:24px; }
+  @media (min-width:600px) { .home-tile-grid { grid-template-columns:1fr 1fr; } }
+  .home-tile { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:24px 20px; cursor:pointer; transition:border-color 0.15s, background 0.15s; display:flex; flex-direction:column; gap:10px; text-align:left; width:100%; }
+  .home-tile:hover { border-color:var(--accent); background:rgba(255,102,51,0.06); }
+  .home-tile-icon { font-size:28px; line-height:1; }
+  .home-tile-name { font-family:'Bebas Neue',sans-serif; font-size:20px; letter-spacing:2px; color:var(--fg); }
+  .home-tile-desc { font-size:13px; color:var(--muted); line-height:1.6; }
 </style>
 <!-- Privacy-friendly analytics by Plausible -->
 <script async src="https://plausible.io/js/pa-3tqLQEYn3QaktBXhJk3QC.js"></script>
@@ -1425,6 +1434,39 @@
 </nav>
 
 <main id="main-content">
+
+<!-- ============ HOME — Feature Discovery Landing Page (BL-117) ============ -->
+<div class="panel" id="panel-home">
+  <div class="panel-title">👋 Welcome to Heckler's</div>
+  <div class="panel-desc">Pick a panel and see what happens. Every room has a different vibe. All of them have opinions.</div>
+  <div class="home-tile-grid">
+    <button class="home-tile" data-tile-name="Little Misadventure" data-tile-desc="Golf adventures, pub crawls, and quantum leaping" onclick="switchTab(event,'golfadventure')">
+      <span class="home-tile-icon">⛳</span>
+      <span class="home-tile-name">Little Misadventure</span>
+      <span class="home-tile-desc">Golf adventures, pub crawls, and quantum leaping. Characters with nowhere better to be.</span>
+    </button>
+    <button class="home-tile" data-tile-name="The Boardroom" data-tile-desc="Present to the panel. Get roasted in return." onclick="switchTab(event,'boardroom')">
+      <span class="home-tile-icon">💼</span>
+      <span class="home-tile-name">The Boardroom</span>
+      <span class="home-tile-desc">Present anything to the panel. Sebastian presides. Nobody is safe. Especially not you.</span>
+    </button>
+    <button class="home-tile" data-tile-name="The Comedy Room" data-tile-desc="Roasts, oracles, writing rooms, and Souness's cat." onclick="switchTab(event,'comedyroom')">
+      <span class="home-tile-icon">🎤</span>
+      <span class="home-tile-name">The Comedy Room</span>
+      <span class="home-tile-desc">Roasts, oracles, writing rooms, and Souness's cat. Comedy delivered by people with strong opinions about comedy.</span>
+    </button>
+    <button class="home-tile" data-tile-name="Sports" data-tile-desc="Football, golf, darts, and cricket punditry." onclick="switchTab(event,'football')">
+      <span class="home-tile-icon">⚽</span>
+      <span class="home-tile-name">Sports</span>
+      <span class="home-tile-desc">Post-match cunditry, the 19th hole, watching the oche, and the long room. Strong takes. Stronger accents.</span>
+    </button>
+    <button class="home-tile" data-tile-name="Play & Learn" data-tile-desc="Comedy science, experiments, battles, and more." onclick="switchTab(event,'comscience')">
+      <span class="home-tile-icon">🔬</span>
+      <span class="home-tile-name">Play &amp; Learn</span>
+      <span class="home-tile-desc">Comedy science, premise interrogation, roast battles, and character experiments. For when you want to understand why something is funny.</span>
+    </button>
+  </div>
+</div>
 
 <!-- ============ LOCALISER ============ -->
 <div class="panel" id="panel-localiser">
@@ -4434,7 +4476,7 @@ const App = (() => {
       title: 'HECKLER\'S',
       pageTitle: 'Heckler\'s — The Comedy Panel',
       slogans: CONSULTANT_SLOGANS,
-      tabs: ['golfadventure','pubnavigator','pubcrawl','qleeks','comedyroom','housenameoracle','roastroom','writingroom','souness-cat','boardroom','premise-interrogation','football','golf','darts','cricket',
+      tabs: ['home','golfadventure','pubnavigator','pubcrawl','qleeks','comedyroom','housenameoracle','roastroom','writingroom','souness-cat','boardroom','premise-interrogation','football','golf','darts','cricket',
              'bills','joketest','clash','roulette','professionals','ironic',
              'comscience','evolution','blend','experiment',
              'roastbattle','dinner','topcnuts','comedylab','trumps',
@@ -4458,7 +4500,7 @@ const App = (() => {
 
   function init() {
     _startSlogans('consultant');
-    API.initKeyUI(); switchTab({currentTarget:document.querySelector('[onclick*="golfadventure"]')}, 'golfadventure');
+    API.initKeyUI(); switchTab({currentTarget:null}, 'home');
     RoastBattle.initScenarios();
     PubCrawl.init();
     TopCnuts.init();
@@ -4480,7 +4522,7 @@ const App = (() => {
 
   // Nav group that contains a given tab name
   const _NAV_GROUP_MAP = {
-    settings:'personas',
+    settings:'personas', home:'personas',
     // LITTLE MISADVENTURE
     golfadventure:'misadventure', pubnavigator:'misadventure', pubcrawl:'misadventure',
     // BOARDROOM
@@ -4507,7 +4549,7 @@ const App = (() => {
   function switchTab(evt, name) {
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
     document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-    evt.currentTarget.classList.add('active');
+    if (evt && evt.currentTarget) evt.currentTarget.classList.add('active');
     const panel = document.getElementById('panel-' + name);
     if (panel) panel.classList.add('active');
     // Highlight the containing nav group
