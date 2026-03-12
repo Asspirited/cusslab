@@ -1008,7 +1008,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Three Amigos needed: agree scope (which globals, jsdom vs playwright, CI vs local-only), then Gherkin.
 - Feature: process
 - CD3: UBV=7 TC=8 RR=9 → CoD=24, Dur=4, **CD3=6.0**
-- Status: OPEN — raised 2026-03-11. WL-124 root cause. Three Amigos required.
+- Status: OPEN — raised 2026-03-11. WL-124, WL-125, WL-126, WL-127 all root-cause this gap. Three Amigos required. URGENCY RAISED: app was unusable for a full session (2026-03-12) due to this gap. CD3 TC raised to 10.
 
 ### BL-116 — Premise Interrogation feature: scientist/philosopher panel for premise validation
 - New panel (or mode within Premise Engine) where scientist/philosopher characters interrogate a submitted premise using their natural framework
@@ -1139,3 +1139,13 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Fix: add a lint pass to gherkin-runner.js (or a separate script) that detects duplicate regex patterns across all step definitions and fails with a clear error naming the collision. Could also enforce a naming convention: steps containing `"([^"]+)"` must be prefixed with a feature-specific noun.
 - CD3: UBV=2 TC=3 RR=4 → CoD=9, Dur=2, **CD3=4.5**
 - Status: CLOSED — 2026-03-10. lintStepDuplicates() in pipeline/lint-steps.js; integrated into gherkin-runner.js startup; 6 unit tests + 4 Gherkin scenarios. First run found 11 existing duplicate patterns — now visible, not silent.
+
+### BL-119 — Pipeline: cross-script browser-scope const collision detector
+- WL-125 root cause: engine files redeclare top-level `const` names that data/config files already declared. Crashes only in browser (shared classic-script scope) — never in Node (module scope). Pipeline runs GREEN. App is broken.
+- Fix: Node-based static analysis check in ui-audit.js or new script. Extract all top-level `const` declarations from every `<script src>` file. Assert uniqueness across all of them. Any duplicate name = fail.
+- Implementation: read all src/ js files listed in `<script src>` tags in index.html. For each, extract `const \w+` declarations at top level (not inside functions/classes). Build a name → [files] map. Flag any name appearing in more than one file.
+- This IS pipeline-runnable without a browser — pure static analysis.
+- Feature: process
+- CD3: UBV=8 TC=10 RR=10 → CoD=28, Dur=2, **CD3=14.0**
+- Status: OPEN — raised 2026-03-12 from WL-125. Three Amigos: scope is clear, Gherkin next.
+

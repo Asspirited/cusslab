@@ -1655,3 +1655,45 @@ Status: CLOSED
 **Tags:** `#false-progress` `#repeated-work` `#regression`
 **Status:** Closed — commit 3b4821a. Three fixes: (1) guard added to line 9, (2) ENGINE replaced with runtime getEngine(), (3) hardcoded ?v= cache busters removed.
 **Root lesson:** External scripts that set window globals are invisible to unit tests and browser-sim pipeline. Runtime guard + ETag caching prevents silent failures.
+
+---
+
+### WL-125
+**Item:** SyntaxError cascade — external engine scripts redeclared top-level consts from data/config scripts
+**Symptom:** Pub Crawl showed "engine not loaded" toast even after hard refresh. QuntumLeeks dead. IntellectualAttempts dead. Other panels unaffected (different scope).
+**Suspected cause:** Browser classic-script scope: all `const` at top level of any script share one global lexical scope. `intellectual-attempts.js` declared `const ATTEMPT_KEYWORDS` — already declared in `intellectual-attempts-config.js`. Same pattern in `quntum-leeks-engine.js` and `pub-navigator-engine.js`. Node avoids this because `require()` gives each file its own module scope — so pipeline passes GREEN while browser crashes.
+**Root cause (5 Whys):** Why broken in browser but not Node? Node = module scope. Browser classic script = shared scope. Why not caught by pipeline? Pipeline runs in Node. Why not caught by ui-audit? ui-audit checks structure, not cross-file runtime. Why not caught by browser-sim? browser-sim is also Node-based. Why not added as a test when the pattern was first introduced? No browser-scope test existed (BL-118 gap).
+**Session:** 2026-03-12
+**Time lost:** ~1 session (app unusable since 2026-03-11 deploy)
+**Cost impact:** High — multiple sessions of Rod catching bugs instead of product work
+**Delay:** 1 session of feature work lost
+**Tags:** `#false-progress` `#regression` `#yak-shaving`
+**Status:** CLOSED — fix commit 24b2cc4; WL-125 drives BL-119 (cross-script browser scope test)
+
+---
+
+### WL-126
+**Item:** Empty string user message sent to Anthropic API → HTTP 400 across 3 panels
+**Symptom:** Roast Room, Writing Room, Bespoke Material buttons clicked — API returned 400 "user messages must have non-empty content"
+**Suspected cause:** Prompts structured as system-only (all instructions in system prompt, `''` as user message). API enforces non-empty user message content.
+**Root cause:** Pattern introduced when refactoring prompts — `API.call(systemPrompt, '', maxTokens)` — not caught because pipeline never makes live API calls.
+**Session:** 2026-03-12
+**Time lost:** ~15 min diagnosis, part of WL-125 session loss
+**Cost impact:** Medium
+**Delay:** Combined with WL-125: 1 session
+**Tags:** `#false-progress` `#regression`
+**Status:** CLOSED — fix commit 24b2cc4; replaced `''` with `'Respond now.'` / `'Write now.'`
+
+---
+
+### WL-127
+**Item:** Oracle using stale API.call signature (array + number args) + raw alert() calls
+**Symptom:** "The Oracle is unavailable. Try again shortly." Chrome popup. Oracle completely non-functional.
+**Suspected cause:** Oracle submit() written for a prior API.call signature (messages array + temperature). After API module was refactored to `(systemPrompt, userMessage, maxTokens)`, Oracle was never updated. Alert calls also missed by no-alert audit.
+**Session:** 2026-03-12
+**Time lost:** Part of WL-125 session loss
+**Cost impact:** Low (Oracle was broken but non-critical path)
+**Delay:** Unknown — Oracle may have been broken for multiple sessions
+**Tags:** `#false-progress` `#regression` `#knowledge-loss`
+**Status:** CLOSED — fix commit 24b2cc4; migrated to API.callJSON, replaced alert() with UI.toast()
+

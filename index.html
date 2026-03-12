@@ -12239,7 +12239,7 @@ Never say "Be water, my friend." It has been said. Once was correct.`,
 
   async function callMoment() {
     const momentType = (document.getElementById('fb-moment') || {}).value;
-    if (!momentType) { alert('Select a moment first.'); return; }
+    if (!momentType) { UI.toast('Select a moment first.', 'warn'); return; }
     const situation = ((document.getElementById('fb-situation') || {}).value || '').trim();
     const label = FB_MOMENT_LABELS[momentType] || momentType;
     const prompt = situation ? `${label} — ${situation}` : label;
@@ -13580,7 +13580,7 @@ Never say "Be water, my friend." It has been said. Once was correct.`,
 
   async function callMoment() {
     const momentType = (document.getElementById('gf-moment') || {}).value;
-    if (!momentType) { alert('Select a moment first.'); return; }
+    if (!momentType) { UI.toast('Select a moment first.', 'warn'); return; }
     const situation = ((document.getElementById('gf-situation') || {}).value || '').trim();
     const label = GF_MOMENT_LABELS[momentType] || momentType;
     const prompt = situation ? `${label} — ${situation}` : label;
@@ -16270,7 +16270,7 @@ Never name the move.`;
 
   async function callMoment() {
     const momentType = (document.getElementById('lr-moment') || {}).value;
-    if (!momentType) { alert('Select a moment first.'); return; }
+    if (!momentType) { UI.toast('Select a moment first.', 'warn'); return; }
     const situation = ((document.getElementById('lr-situation') || {}).value || '').trim();
     const label = LR_MOMENT_LABELS[momentType] || momentType;
     const prompt = situation ? `${label} — ${situation}` : label;

@@ -164,6 +164,48 @@ check('External JS files: no unguarded chained window global access',
   unguardedChainsExt.length === 0,
   unguardedChainsExt.length ? unguardedChainsExt.join('; ') : '');
 
+// 13. No raw alert() calls in inline script
+// Why: alert() creates a browser modal that blocks execution, cannot be styled, and
+//      bypasses UI.toast(). All user-facing errors must use UI.toast().
+//      Root cause of WL-127: Oracle used alert() — appeared as Chrome "from cusslab..." popup.
+// Strip single-line comments before searching so comment text doesn't match
+const scriptBlockNoComments = scriptBlock.replace(/\/\/[^\n]*/g, '');
+const alertCalls = [...scriptBlockNoComments.matchAll(/\balert\s*\(/g)];
+check('No raw alert() calls in inline script',
+  alertCalls.length === 0,
+  alertCalls.length ? `${alertCalls.length} alert() call(s) found — replace with UI.toast()` : '');
+
+// 14. No empty string user message in API.call / API.callJSON
+// Why: Anthropic API returns HTTP 400 if messages[0].content is ''.
+//      Root cause of WL-126: SentenceBuilder, RoastRoom, WritingRoom all sent ''.
+//      Pattern: API.call(anything, '', N) or API.callJSON(anything, '', N)
+const emptyUserMsgCalls = [...scriptBlock.matchAll(/API\.(?:call|callJSON)\s*\([^,]+,\s*''\s*,/g)];
+check('No empty string user message in API calls',
+  emptyUserMsgCalls.length === 0,
+  emptyUserMsgCalls.length ? `${emptyUserMsgCalls.length} API call(s) with empty user message — replace '' with 'Respond now.' or put content in user message` : '');
+
+// 15. External JS files: no top-level const name collision (browser scope)
+// Why: classic <script> tags share one global lexical scope. const X in file A and
+//      const X in file B = SyntaxError: already declared. Crashes file B entirely.
+//      Only happens in browser (Node uses module scope). Pipeline is Node → false green.
+//      Root cause of WL-125: ATTEMPT_KEYWORDS, QUNTUM_LEEKS_SCENARIOS, PUB_CRAWL_SCENES all collided.
+const topLevelConsts = new Map(); // name → [files]
+const topLevelConstRe = /^const\s+([A-Z_][A-Z0-9_]*)\s*=/gm; // all-caps = data constant pattern
+for (const src of extScriptSrcs) {
+  try {
+    const content = fs.readFileSync(path.join(__dirname, '..', src), 'utf8');
+    for (const m of content.matchAll(topLevelConstRe)) {
+      const name = m[1];
+      if (!topLevelConsts.has(name)) topLevelConsts.set(name, []);
+      topLevelConsts.get(name).push(src);
+    }
+  } catch { /* file not found — skip */ }
+}
+const collisions = [...topLevelConsts.entries()].filter(([, files]) => files.length > 1);
+check('External JS files: no top-level const name collisions (browser scope)',
+  collisions.length === 0,
+  collisions.length ? collisions.map(([n, f]) => `${n}: ${f.join(', ')}`).join('; ') : '');
+
 // ── Summary ───────────────────────────────────────────────────────────────────
 
 const total = passed + failed;
