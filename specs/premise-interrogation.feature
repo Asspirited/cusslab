@@ -141,6 +141,6 @@ Feature: Premise Interrogation — BL-116
     Given Mode 1 or Mode 2 has produced output
     Then a feedback row with emoji ratings is visible
 
-  Scenario: Panel appears under Boardroom section in navigation
-    When I inspect the nav group for boardroom
+  Scenario: Panel appears under Thought Showers section in navigation
+    When I inspect the nav group for thought showers
     Then it contains "Premise Interrogation"
