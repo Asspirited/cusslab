@@ -1008,7 +1008,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Three Amigos needed: agree scope (which globals, jsdom vs playwright, CI vs local-only), then Gherkin.
 - Feature: process
 - CD3: UBV=7 TC=8 RR=9 → CoD=24, Dur=4, **CD3=6.0**
-- Status: OPEN — raised 2026-03-11. WL-124, WL-125, WL-126, WL-127 all root-cause this gap. Three Amigos required. URGENCY RAISED: app was unusable for a full session (2026-03-12) due to this gap. CD3 TC raised to 10.
+- Status: CLOSED — Node vm.createContext approach (zero new deps). 5 Gherkin scenarios, external-globals.feature. Executes all 5 external scripts in dependency order, asserts QuntumLeeksEngine, FFEngine, PubCrawlScenes, PubNavigatorEngine. Pipeline green (2026-03-12 session 7).
 
 ### BL-116 — Premise Interrogation feature: scientist/philosopher panel for premise validation
 - New panel (or mode within Premise Engine) where scientist/philosopher characters interrogate a submitted premise using their natural framework

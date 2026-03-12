@@ -8156,6 +8156,60 @@ function makeSteps(ctx) {
         throw new Error(`Expected activePanel=football, got ${ctx.activePanel}`);
     }],
 
+    // ── External-globals — BL-118 ─────────────────────────────────────────────
+    // Execute external scripts in a Node vm context, assert window globals are set.
+    // Catches syntax errors, runtime errors, and missing assignments in src/ files.
+
+    [/^the external scripts are executed in a browser-like context$/, () => {
+      const vm = require('vm');
+      const ROOT = path.join(__dirname, '..');
+      // Minimal browser-like context — just enough for the scripts to run
+      const fakeWindow = {};
+      const context = vm.createContext({
+        window: fakeWindow,
+        console,
+        setTimeout: () => 0,
+        clearTimeout: () => {},
+        setInterval: () => 0,
+        clearInterval: () => {},
+      });
+      // External scripts in dependency order (matches index.html load order)
+      const SCRIPTS = [
+        'src/data/quntum-leeks-scenarios.js',
+        'src/logic/quntum-leeks-engine.js',
+        'src/logic/ff-engine.js',
+        'src/data/pub-crawl-scenes.js',
+        'src/logic/pub-navigator-engine.js',
+      ];
+      for (const rel of SCRIPTS) {
+        const full = path.join(ROOT, rel);
+        if (!fs.existsSync(full)) throw new Error(`External script not found: ${rel}`);
+        const code = fs.readFileSync(full, 'utf8');
+        try {
+          vm.runInContext(code, context);
+        } catch (e) {
+          throw new Error(`Runtime error in ${rel}: ${e.message}`);
+        }
+      }
+      ctx._vmWindow = fakeWindow;
+    }],
+
+    [/^window\.(\w+) is defined$/, (globalName) => {
+      if (!ctx._vmWindow) throw new Error('vm context not initialised — Background step must run first');
+      if (!ctx._vmWindow[globalName])
+        throw new Error(`window.${globalName} is not defined after script execution`);
+    }],
+
+    [/^window\.PubNavigatorEngine depends on window\.PubCrawlScenes and window\.FFEngine which are already defined$/, () => {
+      if (!ctx._vmWindow) throw new Error('vm context not initialised — Background step must run first');
+      if (!ctx._vmWindow.PubCrawlScenes)
+        throw new Error('window.PubCrawlScenes not set — PubNavigatorEngine dependency broken');
+      if (!ctx._vmWindow.FFEngine)
+        throw new Error('window.FFEngine not set — PubNavigatorEngine dependency broken');
+      if (!ctx._vmWindow.PubNavigatorEngine)
+        throw new Error('window.PubNavigatorEngine not set after dependencies were loaded');
+    }],
+
     // ── Panel registration generic steps ──────────────────────────────────────
 
     [/^"([^"]+)" is in the consultant skin tabs$/, (tabId) => {
