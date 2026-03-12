@@ -1179,4 +1179,4 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - **Three Amigos:** COMPLETE (2026-03-12 session 7)
 - **Feature:** comedy
 - **CD3:** UBV=7 TC=5 RR=3 → CoD=15, Dur=4, **CD3=3.75**
-- **Status:** OPEN — Gherkin approved (10-character roster), pipeline verification pending (2026-03-12 session 7)
+- **Status:** CLOSED — commit cfbbe8f, 9 Gherkin scenarios passing, pipeline green (2026-03-12 session 7)
