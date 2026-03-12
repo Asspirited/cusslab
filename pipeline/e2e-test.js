@@ -5,10 +5,8 @@
 // Run: node pipeline/e2e-test.js
 // Exit 0 = all checks pass. Exit 1 = one or more failures.
 
-// Ensure local libs are available for Playwright Chromium in WSL
-const LOCAL_LIBS = '/home/rodent/locallibs/usr/lib/x86_64-linux-gnu';
-process.env.LD_LIBRARY_PATH = LOCAL_LIBS + (process.env.LD_LIBRARY_PATH ? ':' + process.env.LD_LIBRARY_PATH : '');
-
+// Playwright Chromium requires local libs on WSL — set via run-all.js spawnEnv or manually:
+// export LD_LIBRARY_PATH="/home/rodent/locallibs/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH"
 const { chromium } = require('playwright');
 
 const LIVE_URL    = 'https://asspirited.github.io/cusslab';

@@ -103,9 +103,22 @@ for (const step of STEPS) {
 
   const stepStart = Date.now();
 
+  // E2E tests need: LD_LIBRARY_PATH for Playwright Chromium libs, large buffer for browser output, longer timeout
+  const isE2E = step.key === 'e2eTest';
+  const spawnEnv = { ...process.env };
+  if (isE2E) {
+    const localLibs = '/home/rodent/locallibs/usr/lib/x86_64-linux-gnu';
+    spawnEnv.LD_LIBRARY_PATH = process.env.LD_LIBRARY_PATH
+      ? `${localLibs}:${process.env.LD_LIBRARY_PATH}`
+      : localLibs;
+  }
+
   const proc = spawnSync('node', [path.join(ROOT, step.script)], {
     stdio: ['inherit', 'pipe', 'pipe'],
     encoding: 'utf8',
+    env: spawnEnv,
+    maxBuffer: isE2E ? 10 * 1024 * 1024 : 5 * 1024 * 1024,  // 10MB for e2e (browser logs), 5MB otherwise
+    timeout: isE2E ? 180000 : 120000,                          // 3min for e2e, 2min otherwise
   });
 
   const durationMs = Date.now() - stepStart;
