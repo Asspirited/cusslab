@@ -50,6 +50,17 @@ For every scope idea, tech debt item, bug, or enhancement that came up this sess
 
 ---
 
+### 3a. BACKLOG + WASTE LOG STATS (run after step 3)
+
+```bash
+node pipeline/backlog-report.js
+```
+
+Report: open BL count, open WL count, close rate, top open items by CD3.
+Include in session summary. No action required — observe only.
+
+---
+
 ### 3b. IDEAS BOARD REVIEW (capture and confirm — 60 seconds)
 
 Read `.claude/practices/ideas.md`.
