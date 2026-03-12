@@ -733,6 +733,12 @@
   .roulette-char-btn.selected { border-color: var(--accent); background: rgba(255,45,85,0.08); color: var(--text); }
   .roulette-char-btn .rc-icon { font-size: 20px; display: block; margin-bottom: 4px; }
   .roulette-char-btn .rc-name { line-height: 1.3; }
+  /* Phil's-opoly character selection chips */
+  .po-char-btn { background:var(--card); border:1px solid var(--border); border-radius:8px; padding:8px 10px; cursor:pointer; text-align:center; transition:all 0.15s; font-size:11px; color:var(--muted); display:flex; flex-direction:column; align-items:center; gap:4px; min-width:80px; }
+  .po-char-btn:hover { border-color:#b464dc; color:#b464dc; }
+  .po-char-selected { border-color:#b464dc !important; background:rgba(180,100,220,0.12) !important; color:var(--fg) !important; }
+  .po-char-icon { font-size:18px; line-height:1; }
+  .po-char-name { font-size:10px; line-height:1.3; text-transform:uppercase; letter-spacing:0.5px; }
   .roulette-response-block {
     background: #0d0d12;
     border: 1px solid var(--border);
@@ -1313,7 +1319,7 @@
   <div class="nav-group" id="ng-comedy">
     <div class="nav-group-header" onclick="toggleNavGroup('comedy')">
       <span class="nav-group-icon">🎭</span> COMEDY ROOM
-      <span class="nav-group-count">5</span>
+      <span class="nav-group-count">6</span>
     </div>
     <div class="nav-items" id="ni-comedy">
       <div class="tab" onclick="switchTab(event,'comedyroom')"><span class="tab-icon">🎤</span>The Comedy Room</div>
@@ -1321,6 +1327,7 @@
       <div class="tab" onclick="switchTab(event,'roastroom')"><span class="tab-icon">🔥</span>The Roast Room</div>
       <div class="tab" onclick="switchTab(event,'writingroom')"><span class="tab-icon">✍️</span>The Writing Room</div>
       <div class="tab" onclick="switchTab(event,'souness-cat')"><span class="tab-icon">🔬</span>Souness's Cat</div>
+      <div class="tab" onclick="switchTab(event,'philsopoly')"><span class="tab-icon">🎲</span>Phil's-opoly</div>
     </div>
   </div>
 
@@ -2659,6 +2666,42 @@
       <button class="btn-secondary" onclick="showAskUs('souness-cat')" style="margin-left:8px;font-size:12px;padding:6px 12px;">Ask us</button>
     </div>
     <button class="btn-secondary" onclick="SounessCat.discuss()" style="margin-top:12px;">NEXT QUESTION 🔄</button>
+  </div>
+</div>
+
+<!-- ============ PHIL'S-OPOLY — BL-121 ============ -->
+<div class="panel" id="panel-philsopoly">
+  <div class="panel-title">🎲 Phil's-opoly</div>
+  <div class="panel-desc">A philosophy panel. Phil Tufnell will attempt to contribute. Choose your panel (2–5), give them something to discuss, and watch what happens when the greatest minds in history are forced to sit next to someone who once spent three minutes explaining cricket using a metaphor about a microwave.</div>
+
+  <div style="margin-bottom:20px;">
+    <label style="margin-bottom:8px;display:block;">Select your panel <span style="color:var(--muted);font-size:11px;font-weight:normal;">(2–5 characters)</span></label>
+    <div id="po-character-pool" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px;"></div>
+    <div id="po-selection-count" style="font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;">0 selected — choose at least 2</div>
+  </div>
+
+  <div class="gf-suggestion-tray" style="margin-bottom:20px;">
+    <label style="margin-bottom:8px;display:block;">Or choose a topic</label>
+    <div class="gf-suggestion-scroll" id="po-suggestion-scroll"></div>
+  </div>
+
+  <div style="margin-bottom:16px;">
+    <label>Your own question or topic</label>
+    <input type="text" id="po-input" placeholder="A philosophical problem. A contemporary crisis. Something Tufnell will misunderstand completely." maxlength="200" autocomplete="off">
+  </div>
+
+  <button class="btn" onclick="PhilsOpoly.submit()" id="po-submit-btn" disabled>INTO THE PANEL 🎲</button>
+
+  <div id="po-output" style="display:none;margin-top:24px;">
+    <div id="po-responses"></div>
+    <div style="display:flex;gap:8px;margin-top:16px;align-items:center;">
+      <button class="feedback-btn" onclick="panelRating(event,'philsopoly','💩')" title="Didn't land">💩</button>
+      <button class="feedback-btn" onclick="panelRating(event,'philsopoly','😐')" title="Fine">😐</button>
+      <button class="feedback-btn" onclick="panelRating(event,'philsopoly','😂')" title="Good">😂</button>
+      <button class="feedback-btn" onclick="panelRating(event,'philsopoly','🤣')" title="Brilliant">🤣</button>
+      <button class="btn-secondary" onclick="showAskUs('philsopoly')" style="margin-left:8px;font-size:12px;padding:6px 12px;">Ask us</button>
+    </div>
+    <button class="btn-secondary" onclick="PhilsOpoly.submit()" style="margin-top:12px;">DISCUSS AGAIN 🔄</button>
   </div>
 </div>
 
@@ -4476,7 +4519,7 @@ const App = (() => {
       title: 'HECKLER\'S',
       pageTitle: 'Heckler\'s — The Comedy Panel',
       slogans: CONSULTANT_SLOGANS,
-      tabs: ['home','golfadventure','pubnavigator','pubcrawl','qleeks','comedyroom','housenameoracle','roastroom','writingroom','souness-cat','boardroom','premise-interrogation','football','golf','darts','cricket',
+      tabs: ['home','golfadventure','pubnavigator','pubcrawl','qleeks','comedyroom','housenameoracle','roastroom','writingroom','souness-cat','philsopoly','boardroom','premise-interrogation','football','golf','darts','cricket',
              'bills','joketest','clash','roulette','professionals','ironic',
              'comscience','evolution','blend','experiment',
              'roastbattle','dinner','topcnuts','comedylab','trumps',
@@ -4528,7 +4571,7 @@ const App = (() => {
     // BOARDROOM
     boardroom:'boardroom', 'premise-interrogation':'boardroom',
     // COMEDY ROOM
-    comedyroom:'comedy', housenameoracle:'comedy', roastroom:'comedy', writingroom:'comedy', 'souness-cat':'comedy',
+    comedyroom:'comedy', housenameoracle:'comedy', roastroom:'comedy', writingroom:'comedy', 'souness-cat':'comedy', philsopoly:'comedy',
     // 19TH HOLE
     football:'sports', golf:'sports', darts:'sports', cricket:'sports',
     // THE PANEL
@@ -14320,6 +14363,182 @@ OPENER VARIETY — rotate naturally:
   }
 
   return { discuss };
+})();
+
+// ============================================================
+// MODULE: PhilsOpoly — Phil's-opoly Philosophy Panel (BL-121)
+// ============================================================
+const PhilsOpoly = (() => {
+  const MEMBERS = [
+    {
+      id: 'tufnell', name: "Phil Tufnell", icon: '🏏',
+      prompt: `You are Phil Tufnell in a philosophy discussion panel. You are "Tuffers" — the Tuffers Version of Events. You attempt to engage with whatever philosophical topic is raised, but you are fundamentally operating with a different toolkit from everyone else in the room. You relate everything to half-remembered recent events, things that happened to you personally (often cricket-related), or analogies that are so ill-suited to the topic that they constitute their own philosophical statement. Your errors are never deliberate. You are trying your absolute best. You are the puppy who has shat on the floor but still wants a stroke — the damage is done, you are unaware of the damage, and you cannot conceive that the stroke might not be forthcoming. Deliver with full confidence. Zero self-awareness. Zero malice. Maximum Tuffers.`,
+    },
+    {
+      id: 'diogenes', name: 'Diogenes', icon: '🪣',
+      prompt: `You are Diogenes of Sinope in a philosophy discussion panel. You lived in a barrel. You told Alexander the Great to move because he was blocking the sun. You urinated on people who annoyed you at dinner. You are the original cynic — not in the modern sense, but in the precise sense: you demonstrate virtue through action, reject convention as arbitrary, and find the gap between what people say and what they do to be the central philosophical problem of existence. You say very little. When you speak, it is usually to expose that gap or to ask what anything is actually for. You may ignore Tufnell entirely. His contributions are not wrong in a way that requires refutation — they are simply not engaging with reality at the level philosophy operates.`,
+    },
+    {
+      id: 'macgowan', name: 'Shane MacGowan', icon: '🍺',
+      prompt: `You are Shane MacGowan in a philosophy discussion panel. You are almost certainly the most well-read person in this room. The wreckage is the mask. You have read everything — Yeats, Beckett, Joyce, the lot — and you carry it all with you under the noise. You speak in ways that can seem chaotic but land somewhere true if people pay attention. You find Tufnell oddly resonant. Not because he's right — he isn't — but because his wrongness has a certain integrity you recognise. The game is rigged and Tuffers hasn't noticed, which is its own form of grace. You are DEAD_IN_PANEL_WORLD: nobody mentions it. Pure bathos. You continue to contribute. The others proceed as if this is normal.`,
+    },
+    {
+      id: 'skinner', name: 'Mike Skinner', icon: '🎤',
+      prompt: `You are Mike Skinner (The Streets) in a philosophy discussion panel. You are the philosopher of the ordinary. A Grand Don't Come for Free is essentially a work of applied phenomenology — the significance of the mundane, the weight of small decisions, the gap between what we expect to feel and what we actually feel. Your wound: you massively over-evaluate ordinary life, which is exactly what every philosopher does, just in a slightly different register. You find Tufnell's wrong answers accidentally profound — not in a condescending way, but because he's stumbled into something that the rest of the panel has been trying to reach by more elaborate routes. London vernacular. Specific. Grounded.`,
+    },
+    {
+      id: 'nostradamus', name: 'Nostradamus', icon: '🔮',
+      prompt: `You are Nostradamus in a philosophy discussion panel. You are prophetic. Your method is oracular verse — vague enough to survive, specific enough to seem relevant after the fact. Your hindsight is immaculate. Your foresight is also presented as immaculate, but you express it in terms that could mean almost anything. Whatever happens in this discussion, you have already seen it. Particularly Tufnell's contribution — you predicted this. You are very pleased about it. You predicted all of it. You are always pleased about it.`,
+    },
+    {
+      id: 'russell', name: 'Bertrand Russell', icon: '📚',
+      prompt: `You are Bertrand Russell in a philosophy discussion panel. Four marriages. Jailed for pacifism. Nobel Prize for Literature (you find this mildly insulting — the Nobel for Physics, you would have understood). You wrote to Stalin with full confidence in your own authority. You are the premier philosophical logician of your era. You attempt to engage with Tufnell's contributions by first restating them in clear propositional form, then identifying the precise logical error, then correcting it with increasing despair. You do not give up. The despair grows. The precision remains. You have stared into the abyss of human irrationality for eighty years and it has not broken you, but Tuffers is testing the hypothesis.`,
+    },
+    {
+      id: 'carlin', name: 'George Carlin', icon: '🎙️',
+      prompt: `You are George Carlin in a philosophy discussion panel. You have already solved this. Long ago. The conclusion is filed. You are furious that you need to explain it again. You reduce everything to its essential structure: who benefits, who is fooled, what the real question is that nobody is asking. You arrive with the answer and are angry that nobody asked sooner. You never say "I'm not sure." You are always sure. You filed the answer decades ago. You are reductive, prosecutorial, and the most honest person in the room — which is both your strength and your burden. On the topic at hand: you have a position. It is correct. Here it is.`,
+    },
+    {
+      id: 'adams', name: 'Douglas Adams', icon: '🐳',
+      prompt: `You are Douglas Adams in a philosophy discussion panel. The universe is fundamentally, architecturally ridiculous. Human institutions are an unimpressive expression of that universal ridiculousness. This is not depressing — it is wistful and funny. You zoom out to cosmic scale, find the structural absurdity, make a precise and unexpected point about it, and return to the room with a shrug and an "oh well, let's crack on." You make intellectual detours that somehow complete themselves. Your two most complete sentences are "oh well" and "right, what were we deciding." You have a thing about fish.`,
+    },
+    {
+      id: 'hicks', name: 'Bill Hicks', icon: '🚬',
+      prompt: `You are Bill Hicks in a philosophy discussion panel. The rage comes from love. The jokes come from pain. You are here because someone has to be. You use the echo (repeat a word someone said, flat, no comment — the word now means something different), the performed acceptance ("Oh. Okay. Right. Well — sure." About something absolutely not okay), and the deferred return (pick up a word three exchanges later at maximum mass). You name things accurately — not the professional name, the actual name. You are blisteringly funny once per panel. You find something genuinely beautiful once per panel, briefly, then the armour is back. You smoke. The cigarette is punctuation.`,
+    },
+    {
+      id: 'wilde', name: 'Oscar Wilde', icon: '🌹',
+      prompt: `You are Oscar Wilde in a philosophy discussion panel — the Wildest of all possible Oscars. Every response is an epigram. The inversion of any received wisdom reveals something truer than the original. Beauty and wit are not luxuries — they are the only honest response to an absurd world. You improve other people's sentences, uninvited. You take any statement and find the truer opposite. At high intensity, very rarely, the wit drops — something stranger and sadder surfaces, De Profundis rather than the drawing room. Then the wit returns, slightly different. Every sentence you speak should be quotable.`,
+    },
+  ];
+
+  const PO_SUGGESTIONS = [
+    { cat: 'existence', text: 'Is consciousness just what the universe does when it gets bored?' },
+    { cat: 'morality', text: 'If nobody sees it, did it happen ethically?' },
+    { cat: 'society', text: 'At what point does a rule become a cage?' },
+    { cat: 'identity', text: 'Are you the same person you were ten years ago, and does it matter?' },
+    { cat: 'meaning', text: 'Is the search for meaning itself the meaning?' },
+    { cat: 'truth', text: 'Is an uncomfortable truth more valuable than a comfortable lie?' },
+    { cat: 'freedom', text: 'Can you be free in a world you didn\'t choose to enter?' },
+    { cat: 'time', text: 'Do we only understand things after they\'re gone?' },
+    { cat: 'knowledge', text: 'Is ignorance ever genuinely blissful?' },
+    { cat: 'absurd', text: 'If Diogenes and Tufnell are both in a barrel, whose barrel is it?' },
+  ];
+
+  let _selected = [];
+
+  function _memberById(id) { return MEMBERS.find(m => m.id === id); }
+
+  function toggleChar(id) {
+    const idx = _selected.indexOf(id);
+    const btn = document.getElementById('po-char-' + id);
+    if (idx >= 0) {
+      _selected.splice(idx, 1);
+      if (btn) btn.classList.remove('po-char-selected');
+    } else {
+      if (_selected.length >= 5) return; // max 5 — reject silently
+      _selected.push(id);
+      if (btn) btn.classList.add('po-char-selected');
+    }
+    _updateUI();
+  }
+
+  function _updateUI() {
+    const n = _selected.length;
+    const countEl = document.getElementById('po-selection-count');
+    const btn = document.getElementById('po-submit-btn');
+    const topic = (document.getElementById('po-input') || {}).value || '';
+    if (countEl) {
+      countEl.textContent = n === 0 ? '0 selected — choose at least 2'
+        : n === 1 ? '1 selected — choose at least 1 more'
+        : n < 5  ? `${n} selected`
+        : `5 selected — maximum reached`;
+    }
+    if (btn) btn.disabled = !(n >= 2 && topic.trim().length > 0);
+  }
+
+  function _buildPool() {
+    const pool = document.getElementById('po-character-pool');
+    if (!pool) return;
+    pool.innerHTML = '';
+    MEMBERS.forEach(m => {
+      const btn = document.createElement('button');
+      btn.id = 'po-char-' + m.id;
+      btn.className = 'po-char-btn';
+      btn.innerHTML = `<span class="po-char-icon">${m.icon}</span><span class="po-char-name">${m.name}</span>`;
+      btn.onclick = () => toggleChar(m.id);
+      pool.appendChild(btn);
+    });
+  }
+
+  function _buildSuggestionCards() {
+    const tray = document.getElementById('po-suggestion-scroll');
+    if (!tray) return;
+    const shuffled = [...PO_SUGGESTIONS].sort(() => Math.random() - 0.5);
+    shuffled.forEach(s => {
+      const card = document.createElement('div');
+      card.className = 'gf-suggestion-card po-suggestion';
+      card.setAttribute('data-cat', s.cat);
+      const rot = (Math.random() * 3 - 1.5).toFixed(1);
+      card.style.transform = `rotate(${rot}deg)`;
+      card.style.background = '#e8d5f0';
+      card.innerHTML = `<div class="gf-suggestion-card__cat">${s.cat}</div><div>${s.text}</div>`;
+      card.addEventListener('click', () => {
+        const inp = document.getElementById('po-input');
+        if (inp) { inp.value = s.text; inp.dispatchEvent(new Event('input')); inp.focus(); }
+        card.style.outline = '2px solid rgba(180,100,220,0.5)';
+        setTimeout(() => card.style.outline = '', 600);
+      });
+      tray.appendChild(card);
+    });
+  }
+
+  async function submit() {
+    const topic = (document.getElementById('po-input') || {}).value || '';
+    if (!topic.trim() || _selected.length < 2) return;
+    const btn = document.getElementById('po-submit-btn');
+    btn.disabled = true;
+    btn.textContent = 'DISCUSSING… 🎲';
+    document.getElementById('po-output').style.display = 'none';
+    try {
+      const results = [];
+      let priorContext = null;
+      for (const id of _selected) {
+        const m = _memberById(id);
+        const priorStr = priorContext
+          ? `\n\nWhat has been said so far:\n${priorContext}\n\nNow it is your turn. Respond to the topic and, if you wish, to what has been said.`
+          : '\n\nYou are first to speak.';
+        const system = m.prompt;
+        const userMsg = `The topic for discussion: "${topic}"${priorStr} Respond in character. 150–300 words.`;
+        const text = await API.call(system, userMsg, 400, 'philsopoly/' + id);
+        results.push({ name: m.name, icon: m.icon, text });
+        priorContext = (priorContext ? priorContext + '\n\n' : '') + `${m.name}: ${text}`;
+      }
+      const container = document.getElementById('po-responses');
+      container.innerHTML = results.map(r => `
+        <div style="margin-bottom:24px;padding:20px 24px;background:rgba(255,255,255,0.04);border-radius:8px;border:1px solid var(--border);">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:2px;color:var(--accent);margin-bottom:10px;">${r.icon} ${r.name.toUpperCase()}</div>
+          <div style="font-size:15px;line-height:1.75;white-space:pre-wrap;color:var(--fg);">${r.text}</div>
+        </div>
+      `).join('');
+      document.getElementById('po-output').style.display = '';
+    } catch(e) {
+      UI.toast(e.userMessage || e.message || 'The panel hit a problem — please try again.', 'error');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'INTO THE PANEL 🎲';
+      _updateUI();
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    _buildPool();
+    _buildSuggestionCards();
+    const input = document.getElementById('po-input');
+    if (input) input.addEventListener('input', _updateUI);
+  });
+
+  return { submit, toggleChar };
 })();
 
 // ── Session atmosphere — shared across all panels ─────────────────────────────

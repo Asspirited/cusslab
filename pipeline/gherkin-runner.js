@@ -8165,9 +8165,9 @@ function makeSteps(ctx) {
 
     [/^"([^"]+)" is registered in the nav group map$/, (tabId) => {
       const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
-      const mapMatch = html.match(/_NAV_GROUP_MAP\s*=\s*\{([^}]+)\}/);
+      const mapMatch = html.match(/_NAV_GROUP_MAP\s*=\s*\{([\s\S]*?)\};/);
       if (!mapMatch) throw new Error('_NAV_GROUP_MAP not found in index.html');
-      if (!mapMatch[1].includes(`'${tabId}'`) && !mapMatch[1].includes(`"${tabId}"`))
+      if (!mapMatch[1].includes(`'${tabId}'`) && !mapMatch[1].includes(`"${tabId}"`) && !mapMatch[1].includes(tabId + ':'))
         throw new Error(`"${tabId}" not found in _NAV_GROUP_MAP`);
     }],
 
@@ -8187,9 +8187,10 @@ function makeSteps(ctx) {
 
     [/^the roster includes "([^"]+)"$/, (name) => {
       const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
-      const panel = html.match(/id="panel-philsopoly"[\s\S]*?(?=<div class="panel"|<\/main>)/);
-      if (!panel) throw new Error('panel-philsopoly not extractable');
-      if (!panel[0].includes(name))
+      // Characters are built dynamically from MEMBERS array — check JS source
+      const module = html.match(/const PhilsOpoly\s*=\s*\(\s*\(\s*\)\s*=>\s*\{([\s\S]*?)\n\}\)\(\);/);
+      if (!module) throw new Error('PhilsOpoly module not found in index.html');
+      if (!module[1].includes(name))
         throw new Error(`Phil's-opoly roster missing "${name}"`);
     }],
 
@@ -8224,15 +8225,21 @@ function makeSteps(ctx) {
 
     [/^I see at least 3 Phil's-opoly suggestion cards$/, () => {
       const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
-      const cards = (html.match(/class="[^"]*po-suggestion[^"]*"/g) || []);
-      if (cards.length < 3)
-        throw new Error(`Expected ≥3 Phil's-opoly suggestion cards, found ${cards.length}`);
+      // Cards built dynamically from PO_SUGGESTIONS — check JS source for the array
+      const module = html.match(/const PhilsOpoly\s*=\s*\(\s*\(\s*\)\s*=>\s*\{([\s\S]*?)\n\}\)\(\);/);
+      if (!module) throw new Error('PhilsOpoly module not found');
+      const entries = (module[1].match(/\{\s*cat:/g) || []);
+      if (entries.length < 3)
+        throw new Error(`Expected ≥3 Phil's-opoly suggestion entries, found ${entries.length}`);
     }],
 
     [/^each Phil's-opoly suggestion card has a topic label$/, () => {
       const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      // Cards use gf-suggestion-card__cat for the label — check that class is used in buildSuggestionCards
       if (!html.includes('po-suggestion'))
-        throw new Error('No po-suggestion cards found in panel-philsopoly');
+        throw new Error('po-suggestion class not found — suggestion cards not implemented');
+      if (!html.includes('gf-suggestion-card__cat'))
+        throw new Error('gf-suggestion-card__cat not found — topic label not implemented');
     }],
 
     [/^the Phil's-opoly submit button is disabled$/, () => {
