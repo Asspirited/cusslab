@@ -10,7 +10,7 @@ Feature: Premise Interrogation — BL-116
   So that I can validate, sharpen, and stress-test it before committing to it
 
   Background:
-    Given the Premise Interrogation panel is active under Boardroom
+    Given the Premise Interrogation panel is active under Thought Showers
 
   # ── SHARED INPUT ──────────────────────────────────────────────────────────────
 
