@@ -16,6 +16,10 @@ Feature: Phil's-opoly — Comedy Room Philosophy Panel — BL-121
     And the roster includes "Mike Skinner"
     And the roster includes "Nostradamus"
     And the roster includes "Bertrand Russell"
+    And the roster includes "George Carlin"
+    And the roster includes "Douglas Adams"
+    And the roster includes "Bill Hicks"
+    And the roster includes "Oscar Wilde"
 
   Scenario: User must select between 2 and 5 characters
     Given the Phil's-opoly panel is visible
