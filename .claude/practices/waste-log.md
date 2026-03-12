@@ -1697,3 +1697,29 @@ Status: CLOSED
 **Tags:** `#false-progress` `#regression` `#knowledge-loss`
 **Status:** CLOSED — fix commit 24b2cc4; migrated to API.callJSON, replaced alert() with UI.toast()
 
+
+---
+
+### WL-128
+**Item:** Quntum Leeks leap() — critical init code outside try/catch → silent failure
+**Symptom:** Clicking LEAP IN did nothing. No toast, no output. button stayed inert.
+**Suspected cause:** `QuntumLeeksEngine.initState()` and `Object.keys(SCENARIOS)` were BEFORE the try/catch block in leap(). If `window.QuntumLeeksEngine` was undefined (due to cached old engine file with SyntaxError from WL-125), the TypeError threw and propagated as an unhandled rejection. No user-visible feedback.
+**Root cause:** try/catch only wrapped the `await _runTurn()` portion, not the synchronous setup. Combined with browser cache serving old broken quntum-leeks-engine.js.
+**Session:** 2026-03-12
+**Time lost:** ~15 min (follow-on to WL-125 cache issue)
+**Cost impact:** Low (follow-on fix)
+**Tags:** `#regression` `#silent-failure`
+**Status:** CLOSED — commit 20afec7: wrapped entire leap() body in try/catch; added window.QuntumLeeksEngine guard; added ?v=2 cache-bust to quntum-leeks-engine.js
+
+---
+
+### WL-129
+**Item:** Writing Room and Roast Room — API errors swallowed silently (no catch block)
+**Symptom:** Writing Room button changed to "WRITING… ✍️" and stayed there (waiting for API). Any API error (timeout, 400, network) was silently lost. No UI.toast. Button eventually reset via finally but user saw nothing.
+**Suspected cause:** Both modules had `try { ... } finally { resetBtn }` but no `catch(e) { UI.toast() }`. Error propagated as unhandled rejection.
+**Root cause:** Missing catch block. Same pattern as WL-128 — error handling gap in async functions.
+**Session:** 2026-03-12
+**Time lost:** ~10 min
+**Cost impact:** Low (UI fix)
+**Tags:** `#silent-failure` `#ux`
+**Status:** CLOSED — commit 20afec7: added catch(e) { UI.toast(...) } to WritingRoom._run() and RoastRoom.submit()

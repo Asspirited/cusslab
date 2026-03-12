@@ -1149,3 +1149,14 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - CD3: UBV=8 TC=10 RR=10 → CoD=28, Dur=2, **CD3=14.0**
 - Status: OPEN — raised 2026-03-12 from WL-125. Three Amigos: scope is clear, Gherkin next.
 
+
+---
+
+### BL-120 — Left sidebar: resizable/expandable panel for truncated nav text
+**Epic:** UX / Navigation
+**What:** The left navigation sidebar truncates long panel names. Rod cannot read full labels. Need either a fixed wider sidebar, a user-draggable resize handle, or a tooltip on hover.
+**Why:** Usability — text truncation hides navigation options. Direct barrier to product use.
+**Source:** Rod (2026-03-12 session 7)
+**CD3:** TBD — Three Amigos needed before scoring
+**Status:** OPEN — Three Amigos needed
+**Acceptance criteria:** TBD (Three Amigos)
