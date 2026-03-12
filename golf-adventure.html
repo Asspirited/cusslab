@@ -2978,7 +2978,6 @@ function advancePhase(quality) {
   const next=(type)=>{ G.phase=type; loadShots(type); document.getElementById('shot-wrap').style.display='block'; };
 
   document.getElementById('result-area').innerHTML='';
-  document.getElementById('commentary').innerHTML='';
 
   if(G.phase==='tee'){
     if(hole.par===3){ if(quality==='miracle'){finish();return;} G.phase='par3'; next('par3'); }

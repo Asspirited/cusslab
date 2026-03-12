@@ -1723,3 +1723,28 @@ Status: CLOSED
 **Cost impact:** Low (UI fix)
 **Tags:** `#silent-failure` `#ux`
 **Status:** CLOSED — commit 20afec7: added catch(e) { UI.toast(...) } to WritingRoom._run() and RoastRoom.submit()
+
+---
+
+### WL-130
+**Item:** Golf Adventure — commentary bubbles cleared after 600ms, never readable between shots
+**Symptom:** Commentary from panel appears briefly after each shot then immediately disappears as next shot phase loads. User reported "commentator comments still don't get printed out between shots."
+**Root cause:** `advancePhase()` contained `document.getElementById('commentary').innerHTML=''` which fired 600ms after commentary rendered (via `setTimeout(()=>advancePhase(quality),600)`). Bubbles have CSS animation delays (last one at 360ms) — by the time the last bubble finishes animating in, it's already being cleared. The clearing was unnecessary: `getCommentary()` replaces the commentary div with a loading indicator at its own start, so no pre-empty is needed.
+**Session:** 2026-03-12
+**Time lost:** Unknown (feature effectively unusable for unknown number of sessions)
+**Cost impact:** Low (one-line fix)
+**Tags:** `#rod-caught` `#silent-failure` `#ux`
+**Status:** CLOSED — removed `document.getElementById('commentary').innerHTML=''` from `advancePhase()` in golf-adventure.html. Pipeline green.
+
+---
+
+### WL-131
+**Item:** Character dullness — characters leading with "X is right/wrong" and "I've watched this back" across panels
+**Symptom:** Characters responding generically — "X is right/wrong" as opener, "I've watched this back" used by characters who shouldn't use it. Voices sound dry and reactive rather than distinctive.
+**Root cause:** REACTIVITY OBLIGATION in football panel (TURN_RULES RULE 2: "Every response must open by reacting to the previous speaker's last sentence") and equivalent boardroom instruction ("React to the specific last thing said") forces every response to begin with a reaction regardless of whether the character cares about what was said. Model picks simplest reaction: "X is right/wrong." "I've watched this back" is Neville's opener and Carragher's mimic target but bleeds to other characters because the reactive instruction makes it appear generally available.
+**Root cause (deeper):** Characters should primarily arrive with their own angle, reacting only when something genuinely interests or provokes them. The current instruction treats reactivity as the default instead of the exception.
+**Session:** 2026-03-12
+**Time lost:** Quality degradation across multiple sessions
+**Cost impact:** Medium (product quality — core product promise)
+**Tags:** `#rod-caught` `#character-quality` `#prompt-engineering`
+**Status:** Open — Three Amigos needed before touching TURN_RULES / interactionModel. Fix direction agreed: change RULE 2 from mandatory obligation to conditional (react when genuinely interested/provoked, default to own angle otherwise).
