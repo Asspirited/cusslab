@@ -1157,9 +1157,9 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 **What:** The left navigation sidebar truncates long panel names. Rod cannot read full labels. Need either a fixed wider sidebar, a user-draggable resize handle, or a tooltip on hover.
 **Why:** Usability — text truncation hides navigation options. Direct barrier to product use.
 **Source:** Rod (2026-03-12 session 7)
-**CD3:** TBD — Three Amigos needed before scoring
-**Status:** OPEN — Three Amigos needed
-**Acceptance criteria:** TBD (Three Amigos)
+**CD3:** UBV=4 TC=2 RR=3 → CoD=9, Dur=1, **CD3=9.0**
+**Status:** CLOSED — commit (next), Three Amigos: fixed wider + wrap (Option A)
+**Acceptance criteria:** All tab labels readable without truncation on desktop — ✅
 
 ---
 
