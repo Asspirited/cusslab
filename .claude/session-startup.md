@@ -96,7 +96,7 @@ This is the handoff from the other Claude. If file doesn't exist: note it and co
 
 **Then:** Read `.claude/practices/waste-log.md` — last 5 entries only, report any with Status: OPEN.
 
-Current open items as of 2026-03-13 (session 8): WL-131 (character dullness — Three Amigos needed), WL-132 (gherkin step window size — CLOSED same session).
+Current open items as of 2026-03-13 (session 9): WL-131 (character dullness — Three Amigos needed), WL-136 (UI audit doesn't check IIFE return completeness — pipeline gap).
 
 ---
 
@@ -110,21 +110,25 @@ For each open product-bet item, ask:
 - Is there a falsifier — something that would tell us we were wrong?
 Full outer loop: `.claude/practices/hypothesis-driven.md`
 
-Current top 3 as of 2026-03-13 (session 8 post close):
+Current top 3 as of 2026-03-13 (session 9 post close):
 - BL-007 Claude Code Windows install bugs (CD3=5.0) — OPEN
 - BL-102 Feature activity report labelling (CD3=5.0) — OPEN
 - BL-113 Unexpected outfit mechanic (CD3=5.0) — OPEN
 
-Recently closed (2026-03-13 session 8):
-- BL-123 The Final Furlong horse racing panel — 7 chars, Mode 1+2, DEAD_IN_PANEL_WORLD — commit f75a4a4
-- BL-124 Nav: panel group landing page (raised, not yet implemented)
+Recently closed (2026-03-13 session 9):
+- BL-130 The Crucible Corner snooker panel — 9 members, Mode 1 Q&A + Mode 2 Frame Sim — commit ecd00a2
+- BL-128 Pub Crawl UX pressure feedback (delta display, zone bands, explainer) — commit 5238677
+- BL-126 UI onclick wiring test coverage (nav home tiles) — commit 8e7ef6b
 
 Open product bets under discussion:
-- BL-124 Nav group landing page (CD3=7.3) — Rod requested 2026-03-13
+- BL-125 Final Furlong Mode 2 jockey rivalry (Three Amigos needed)
+- BL-129 Pub Crawl free-text input (Three Amigos needed on design)
 - WL-131 Character dullness (Three Amigos needed)
+- WL-136 UI audit IIFE return completeness check (pipeline gap — open)
 
-Sports panels: Football, Golf, Darts (Watching the Oche), Cricket (The Long Room), Horse Racing (The Final Furlong).
+Sports panels: Football, Golf, Darts (Watching the Oche), Cricket (The Long Room), Horse Racing (The Final Furlong), Snooker (The Crucible Corner).
 The Final Furlong: Alan Brazil hosts, 4 of 6 rotating: McCririck, McGrath, Alastair Down, O'Sullevan, Walsh, Chapman. McCririck + O'Sullevan are DEAD_IN_PANEL_WORLD.
+The Crucible Corner: Jimmy White hosts, 4 of 8 rotating: Steve Davis, John Virgo, Dennis Taylor, Ronnie O'Sullivan, Willie Thorne, Ray Reardon, John Parrott, Mark Williams. Thorne + Reardon are DEAD_IN_PANEL_WORLD. Data: src/data/crucible-corner-data.js. Character files: characters/*.md.
 Bruce Lee: in Boardroom, Comedy Room, Football, Golf, Darts, Cricket. Not permanent.
 Comedy Room: 4 panels: Into The Room / House Name Oracle / The Roast Room / The Writing Room.
 AUTHORS_POOL: 7 authors (hemingway, mccarthy, tolkien, patterson, pratchett, wodehouse, austen).

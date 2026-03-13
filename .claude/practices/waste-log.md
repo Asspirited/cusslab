@@ -1749,6 +1749,38 @@ Status: CLOSED
 **Tags:** `#rod-caught` `#character-quality` `#prompt-engineering`
 **Status:** Open — Three Amigos needed before touching TURN_RULES / interactionModel. Fix direction agreed: change RULE 2 from mandatory obligation to conditional (react when genuinely interested/provoked, default to own angle otherwise).
 
+### WL-137
+**Item:** Gherkin step defs searched IIFE HTML slice for member data in external data file
+**Symptom:** 17 Crucible Corner scenarios failing — steps searched `html.slice(snStart, snStart+25000)` for `id: 'jimmy_white'` etc., but SNOOKER_MEMBERS lives in `crucible-corner-data.js` (separate file), not inlined in the IIFE. All member inclusion, field, and prompt-specific steps failed.
+**Root cause:** Step def pattern from earlier panels (Golf, Racing) inlined all data in the IIFE. Crucible Corner externalised data to a data file following the final-furlong-data.js pattern, but step defs were written using the old inline-search pattern.
+**Session:** 2026-03-13 (context continuation)
+**Time lost:** Zero — caught at pipeline before any push
+**Cost impact:** None
+**Tags:** `#step-def-pattern` `#data-file` `#pipeline-caught`
+**Status:** Closed — step defs updated to use `require('../src/data/crucible-corner-data.js')` for all member checks. Commit b90da5d.
+
+---
+
+### WL-136
+**Item:** UI audit does not check IIFE return objects — missing exports go undetected until Rod hits them
+**Symptom:** `Racing.continueRace()` was undefined in the live app because `continueRace` was not included in the IIFE return statement. The button rendered, the wrapper existed, but the function call was a no-op. The UI audit (WL-118 pattern) checks for global wrapper functions but does NOT check that the function is actually exported from its IIFE.
+**Root cause:** UI audit checks `function hrContinueRace()` exists in index.html but does not verify `Racing.continueRace` resolves to a function (i.e., that the IIFE return includes it).
+**Session:** 2026-03-13
+**Time lost:** Rod caught in product testing
+**Cost impact:** Low — one-line fix once found
+**Tags:** `#rod-caught` `#ui-audit` `#false-green` `#iife-return`
+**Status:** Open — add pipeline check that verifies each global wrapper's IIFE target is in the corresponding return statement
+
+### WL-135
+**Item:** Racing Mode 2 — Continue button did nothing after commentary (continueRace missing from IIFE return)
+**Symptom:** After making a riding choice, commentary appeared correctly and "NEXT STAGE →" button rendered, but clicking it did nothing. `Racing.continueRace` was undefined.
+**Root cause:** `continueRace` function was defined inside the Racing IIFE but not included in the `return { ... }` statement. The global wrapper `hrContinueRace()` called `Racing.continueRace()` which silently resolved to undefined.
+**Session:** 2026-03-13
+**Time lost:** Caught by Rod in product testing
+**Cost impact:** Low — one-line fix
+**Tags:** `#rod-caught` `#race-sim` `#iife-return` `#false-green`
+**Status:** CLOSED — commit to follow. `continueRace` added to Racing return statement.
+
 ### WL-134
 **Item:** Pub Crawl — no positive/negative outcome feedback after action choices
 **Symptom:** User makes a choice in the pub crawl but gets no indication of whether the action helped or hurt their progress. Nielsen heuristic violation: visibility of system status (#1) and feedback (#3).

@@ -1289,6 +1289,6 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Description: New sports panel for snooker, following the Final Furlong structure (Mode 1: Q&A with suggestion cards; Mode 2: match/frame simulation). Characters and Mode 2 game mechanics TBD — Three Amigos session required. Candidate characters: Steve Davis, John Virgo, Dennis Taylor, Ronnie O'Sullivan, Willie Thorne (DEAD_IN_PANEL_WORLD), Ray Reardon (DEAD_IN_PANEL_WORLD), John Parrott, Mark Williams. Mode 2 ideas: frame scoring, shot selection (safety/pot/snooker), risk vs reward, commentary from the panel. Rod raised 2026-03-13.
 - Feature: sports
 - CD3: UBV=7 TC=6 RR=5 → CoD=18, Dur=5, **CD3=3.6**
-- Status: OPEN — raised 2026-03-13. Needs Three Amigos before any Gherkin.
+- Status: CLOSED — delivered 2026-03-13, commit b90da5d. 9 members (Jimmy White host, 8 rotating, 2 DEAD_IN_PANEL_WORLD), Mode 1 Q&A with 14 suggestion cards, Mode 2 Frame Simulation with 7 reds × 7 spins × 5 positions. 1662/1662 Gherkin passing.
 - Epic: Sports Panels
 
