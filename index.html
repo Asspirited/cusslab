@@ -1354,6 +1354,7 @@
       <div class="tab" onclick="switchTab(event,'darts')"><span class="tab-icon">🎯</span>Watching the Oche</div>
       <div class="tab" onclick="switchTab(event,'cricket')"><span class="tab-icon">🏏</span>The Long Room</div>
       <div class="tab" onclick="switchTab(event,'racing')"><span class="tab-icon">🏇</span>The Final Furlong</div>
+      <div class="tab" onclick="switchTab(event,'snooker')"><span class="tab-icon">🎱</span>The Crucible Corner</div>
     </div>
   </div>
 
@@ -2828,6 +2829,60 @@
   </div>
 </div>
 
+<!-- ============ THE CRUCIBLE CORNER (SNOOKER) ============ -->
+<div class="panel" id="panel-snooker">
+  <div class="panel-title">🎱 The Crucible Corner</div>
+
+  <!-- Mode tabs -->
+  <div style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;">
+    <button id="sn-tab-qanda" class="btn" onclick="Snooker.switchMode('qanda')" style="flex:1;">Q&amp;A</button>
+    <button id="sn-tab-frame" class="btn-secondary" onclick="Snooker.switchMode('frame')" style="flex:1;">Frame Simulation</button>
+  </div>
+
+  <!-- Mode 1: Q&A -->
+  <div id="sn-qanda-view">
+    <div id="sn-suggestion-tray" class="gf-suggestion-tray" style="margin-bottom:16px;"></div>
+    <textarea id="sn-input" class="gf-input" placeholder="Ask the panel anything about snooker…" rows="3" style="margin-bottom:10px;"></textarea>
+    <button class="btn" onclick="Snooker.discuss()" id="sn-submit-btn">ASK THE PANEL 🎱</button>
+    <div id="sn-loading" style="display:none;color:var(--muted);font-size:0.9rem;padding:12px 0;">The panel assembles…</div>
+    <div id="sn-responses" style="margin-top:16px;"></div>
+    <div style="display:flex;gap:8px;margin-top:16px;align-items:center;">
+      <button class="feedback-btn" onclick="panelRating(event,'snooker','💩')" title="Didn't land">💩</button>
+      <button class="feedback-btn" onclick="panelRating(event,'snooker','😐')" title="Fine">😐</button>
+      <button class="feedback-btn" onclick="panelRating(event,'snooker','😂')" title="Good">😂</button>
+      <button class="feedback-btn" onclick="panelRating(event,'snooker','🤣')" title="Brilliant">🤣</button>
+    </div>
+    <button class="btn-secondary" onclick="Snooker.nextRound()" style="margin-top:12px;">NEXT ROUND 🔄</button>
+  </div>
+
+  <!-- Mode 2: Frame Simulation -->
+  <div id="sn-frame-view" style="display:none;">
+
+    <!-- Frame setup -->
+    <div id="sn-frame-setup">
+      <div class="panel-title" style="font-size:1rem;margin-bottom:12px;">Choose your frame position</div>
+      <div id="sn-frame-position-desc" style="color:var(--text-secondary);font-size:0.9rem;line-height:1.6;padding:14px 16px;background:var(--surface);border:1px solid var(--border);border-radius:6px;margin-bottom:16px;"></div>
+      <button id="sn-start-frame" class="btn" onclick="Snooker.startFrame()" style="width:100%;">TO THE TABLE 🎱</button>
+    </div>
+
+    <!-- Shot phase -->
+    <div id="sn-shot-phase" style="display:none;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <div id="sn-break-display" style="font-size:1.2rem;font-weight:700;color:var(--accent);"></div>
+        <div id="sn-reds-remaining" style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;"></div>
+      </div>
+      <div id="sn-shot-situation" style="color:var(--text-secondary);font-size:0.9rem;line-height:1.6;padding:12px 16px;background:var(--surface);border:1px solid var(--border);border-radius:6px;margin-bottom:14px;"></div>
+      <div id="sn-red-options" style="display:grid;gap:8px;margin-bottom:12px;"></div>
+      <div id="sn-spin-options" style="display:none;display:grid;gap:8px;margin-bottom:12px;"></div>
+      <div id="sn-colour-options" style="display:none;display:grid;gap:8px;margin-bottom:12px;"></div>
+      <div id="sn-shot-loading" style="display:none;color:var(--muted);font-size:0.9rem;padding:12px 0;">The panel reacts…</div>
+      <div id="sn-shot-commentary" style="margin-bottom:16px;"></div>
+      <div id="sn-frame-result" style="display:none;"></div>
+    </div>
+
+  </div>
+</div>
+
 <!-- ============ SOUNESS'S CAT (SCIENCE) ============ -->
 <div class="panel" id="panel-souness-cat">
   <div class="panel-title">🔬 Souness's Cat</div>
@@ -4124,6 +4179,7 @@
 <script src="src/data/pub-crawl-scenes.js"></script>
 <script src="src/logic/pub-navigator-engine.js"></script>
 <script src="src/data/final-furlong-data.js"></script>
+<script src="src/data/crucible-corner-data.js"></script>
 
 <script>
 // ============================================================
@@ -4703,7 +4759,7 @@ const App = (() => {
       title: 'HECKLER\'S',
       pageTitle: 'Heckler\'s — The Comedy Panel',
       slogans: CONSULTANT_SLOGANS,
-      tabs: ['home','golfadventure','pubnavigator','pubcrawl','hardmen','suntzu','qleeks','comedyroom','housenameoracle','roastroom','writingroom','souness-cat','philsopoly','boardroom','premise-interrogation','football','golf','darts','cricket','racing',
+      tabs: ['home','golfadventure','pubnavigator','pubcrawl','hardmen','suntzu','qleeks','comedyroom','housenameoracle','roastroom','writingroom','souness-cat','philsopoly','boardroom','premise-interrogation','football','golf','darts','cricket','racing','snooker',
              'bills','joketest','clash','roulette','professionals','ironic',
              'comscience','evolution','blend','experiment',
              'roastbattle','dinner','topcnuts','comedylab','trumps',
@@ -4759,7 +4815,7 @@ const App = (() => {
     // THOUGHT SHOWERS
     'souness-cat':'showers', philsopoly:'showers', suntzu:'showers', 'premise-interrogation':'showers',
     // 19TH HOLE
-    football:'sports', golf:'sports', darts:'sports', cricket:'sports', racing:'sports',
+    football:'sports', golf:'sports', darts:'sports', cricket:'sports', racing:'sports', snooker:'sports',
     // THE PANEL
     bills:'personas', joketest:'personas', clash:'personas', roulette:'personas', professionals:'personas', ironic:'personas',
     // LEARN
@@ -4784,6 +4840,7 @@ const App = (() => {
       { id: 'darts',    label: 'Watching the Oche',   icon: '🎯', desc: 'Mardle, Bristow, Taylor. The Frankenstein wound. The treble five.' },
       { id: 'cricket',  label: 'The Long Room',       icon: '🏏', desc: 'Blofeld, commentary, and the game played with maximum circumlocution.' },
       { id: 'racing',   label: 'The Final Furlong',   icon: '🏇', desc: 'Brazil hosts. Walsh rides. McCririck is here. O\'Sullevan is also here.' },
+      { id: 'snooker',  label: 'The Crucible Corner', icon: '🎱', desc: 'White hosts. Davis explains. Virgo does a trick. Reardon and Thorne are also somehow here.' },
     ],
     comedy: [
       { id: 'comedyroom',      label: 'Into The Room',      icon: '🎤', desc: 'Hicks, Lee, Carr, Lumley, Connolly. Five comedians. One topic. No agreement.' },
@@ -17683,7 +17740,7 @@ McCririck died July 2019. O'Sullevan died October 2015. Both are present in this
     if (mode === 'ingame') assignRace(); else discuss();
   }
 
-  return { discuss, callMoment, switchMode, nextRound, assignRace, selectJockey, startRace, makeRidingChoice, handleEventChoice, finishRace, resetReputation };
+  return { discuss, callMoment, switchMode, nextRound, assignRace, selectJockey, startRace, makeRidingChoice, continueRace, handleEventChoice, finishRace, resetReputation };
 })();
 
 // ── RACING ANCHOR READBACK ─────────────────────────────────────────────────────
@@ -17750,6 +17807,282 @@ function hrShowAnchorReadback(name, question) {
 
 // ── RACING INIT ───────────────────────────────────────────────────────────────
 hrLoadName();
+
+// ============================================================
+// MODULE: Snooker — The Crucible Corner
+// ============================================================
+
+const Snooker = (() => {
+
+  // ── Members ───────────────────────────────────────────────────────────────
+
+  const HOST_ID = 'jimmy_white';
+  const ALL_SNOOKER_ROTATING = SNOOKER_MEMBERS.filter(m => m.id !== HOST_ID).map(m => m.id);
+
+  const SNOOKER_TURN_RULES_TEXT = SNOOKER_TURN_RULES.join('\n');
+
+  function _memberById(id) { return SNOOKER_MEMBERS.find(m => m.id === id); }
+
+  function _snookerPick4() {
+    const pool = [...ALL_SNOOKER_ROTATING].sort(() => Math.random() - 0.5);
+    return pool.slice(0, 4);
+  }
+
+  // ── Helpers ───────────────────────────────────────────────────────────────
+
+  function _snSet(id, html) { const el = document.getElementById(id); if (el) el.innerHTML = html; }
+  function _snShow(id) { const el = document.getElementById(id); if (el) el.style.display = ''; }
+  function _snHide(id) { const el = document.getElementById(id); if (el) el.style.display = 'none'; }
+
+  // ── Mode switching ────────────────────────────────────────────────────────
+
+  let _currentMode = 'qanda';
+
+  function switchMode(mode) {
+    _currentMode = mode;
+    if (mode === 'qanda') {
+      _snShow('sn-qanda-view');
+      _snHide('sn-frame-view');
+      document.getElementById('sn-tab-qanda')?.classList.replace('btn-secondary', 'btn');
+      document.getElementById('sn-tab-frame')?.classList.replace('btn', 'btn-secondary');
+    } else {
+      _snHide('sn-qanda-view');
+      _snShow('sn-frame-view');
+      document.getElementById('sn-tab-frame')?.classList.replace('btn-secondary', 'btn');
+      document.getElementById('sn-tab-qanda')?.classList.replace('btn', 'btn-secondary');
+      _initFrameSetup();
+    }
+  }
+
+  // ── Mode 1 — Q&A ─────────────────────────────────────────────────────────
+
+  let _snBusy = false;
+
+  function _buildSuggestions() {
+    const tray = document.getElementById('sn-suggestion-tray');
+    if (!tray) return;
+    const shuffled = [...SNOOKER_SUGGESTIONS].sort(() => Math.random() - 0.5);
+    shuffled.forEach(s => {
+      const card = document.createElement('div');
+      card.className = 'gf-suggestion-card';
+      card.setAttribute('data-cat', s.category);
+      const rot = (Math.random() * 3 - 1.5).toFixed(1);
+      card.style.transform = `rotate(${rot}deg)`;
+      card.innerHTML = `<div class="gf-suggestion-card__cat">${s.category}</div><div>${s.text}</div>`;
+      card.addEventListener('click', () => {
+        const inp = document.getElementById('sn-input');
+        if (inp) { inp.value = s.text; inp.focus(); }
+        card.style.outline = '2px solid rgba(100,180,255,0.5)';
+        setTimeout(() => card.style.outline = '', 600);
+      });
+      tray.appendChild(card);
+    });
+  }
+
+  async function discuss() {
+    if (_snBusy) return;
+    const question = (document.getElementById('sn-input')?.value || '').trim();
+    if (!question) return;
+    _snBusy = true;
+
+    const btn = document.getElementById('sn-submit-btn');
+    if (btn) { btn.disabled = true; btn.textContent = 'DISCUSSING… 🎱'; }
+    _snShow('sn-loading');
+    _snSet('sn-responses', '');
+
+    const ORDER = [HOST_ID, ..._snookerPick4()];
+    const responses = [];
+
+    for (const memberId of ORDER) {
+      const m = _memberById(memberId);
+      if (!m) continue;
+      const prior = responses.length
+        ? `\n\nWhat has been said so far:\n${responses.map(r => `${r.name}: ${r.text}`).join('\n\n')}\n\nNow it is your turn.`
+        : '\n\nYou speak first.';
+      const sys = `${m.prompt}\n\nPANEL RULES:\n${SNOOKER_TURN_RULES_TEXT}`;
+      const msg = `The question: "${question}"${prior} Respond in character. 120–220 words.`;
+      try {
+        const text = await API.call(sys, msg, 350, 'snooker/discuss');
+        responses.push({ name: m.name, text });
+      } catch (e) {
+        responses.push({ name: m.name, text: '…' });
+      }
+    }
+
+    _snHide('sn-loading');
+    _snSet('sn-responses', responses.map(r =>
+      `<div class="bills-response" style="margin-bottom:20px;">
+        <div class="bills-response-speaker">${r.name.toUpperCase()}</div>
+        <div class="bills-response-body" style="white-space:pre-wrap;">${r.text}</div>
+      </div>`
+    ).join(''));
+
+    if (btn) { btn.disabled = false; btn.textContent = 'ASK THE PANEL 🎱'; }
+    _snBusy = false;
+
+    HCSession.logPanelRun('snooker', ORDER, responses.length);
+  }
+
+  function nextRound() {
+    const inp = document.getElementById('sn-input');
+    if (inp) inp.value = '';
+    _snSet('sn-responses', '');
+    const btn = document.getElementById('sn-submit-btn');
+    if (btn) { btn.disabled = false; btn.textContent = 'ASK THE PANEL 🎱'; }
+    _snBusy = false;
+  }
+
+  // ── Mode 2 — Frame Simulation ─────────────────────────────────────────────
+
+  let _snFramePos   = null;
+  let _snBreak      = 0;
+  let _snSelectedRed = null;
+
+  function _initFrameSetup() {
+    _snFramePos = FRAME_POSITIONS[Math.floor(Math.random() * FRAME_POSITIONS.length)];
+    _snSet('sn-frame-position-desc', `<strong>${_snFramePos.reds_remaining} reds remaining</strong> — ${_snFramePos.desc}<br><em style="color:var(--muted);font-size:0.85rem;">${_snFramePos.flavour}</em>`);
+    _snShow('sn-frame-setup');
+    _snHide('sn-shot-phase');
+  }
+
+  function startFrame() {
+    _snBreak = 0;
+    _snSelectedRed = null;
+    _snHide('sn-frame-setup');
+    _snHide('sn-frame-result');
+    _snSet('sn-shot-commentary', '');
+    _snSet('sn-break-display', 'Break: 0');
+    _snSet('sn-reds-remaining', `${_snFramePos.reds_remaining} reds remaining`);
+    _snSet('sn-shot-situation', 'Select a red to go for:');
+    _snShow('sn-shot-phase');
+    _renderRedOptions();
+  }
+
+  function _renderRedOptions() {
+    _snSet('sn-spin-options', '');
+    document.getElementById('sn-spin-options').style.display = 'none';
+    document.getElementById('sn-colour-options').style.display = 'none';
+    _snSet('sn-red-options', RED_OPTIONS.map(r =>
+      `<button class="btn-secondary sn-choice-btn" onclick="snSelectRed('${r.id}')"
+        style="text-align:left;padding:10px 14px;">
+        <span style="font-weight:700;">${r.label}</span>
+        <span style="font-size:11px;color:var(--muted);margin-left:6px;">[${r.difficulty}]</span>
+      </button>`
+    ).join(''));
+    document.getElementById('sn-red-options').style.display = 'grid';
+  }
+
+  function selectRed(redId) {
+    _snSelectedRed = RED_OPTIONS.find(r => r.id === redId);
+    if (!_snSelectedRed) return;
+    document.querySelectorAll('.sn-choice-btn').forEach(b => b.disabled = true);
+    _snSet('sn-shot-situation', `Red chosen: <strong>${_snSelectedRed.label}</strong><br>Now select your spin:`);
+    document.getElementById('sn-red-options').style.display = 'none';
+    _snSet('sn-spin-options', SPIN_OPTIONS.map(s =>
+      `<button class="btn-secondary sn-choice-btn" onclick="snSelectSpin('${s.id}')"
+        style="text-align:left;padding:10px 14px;">
+        <span style="font-weight:700;">${s.label}</span>
+      </button>`
+    ).join(''));
+    document.getElementById('sn-spin-options').style.display = 'grid';
+  }
+
+  async function selectSpin(spinId) {
+    const spin = SPIN_OPTIONS.find(s => s.id === spinId);
+    if (!spin || !_snSelectedRed) return;
+    document.querySelectorAll('.sn-choice-btn').forEach(b => b.disabled = true);
+
+    const successChance = Math.max(0.1, Math.min(0.98, _snSelectedRed.success_probability + spin.success_modifier));
+    const potted = Math.random() < successChance;
+
+    const context = `Snooker frame. Player went for: "${_snSelectedRed.label}" with "${spin.label}". ${potted ? 'The pot went in!' : 'The pot was missed.'} Commentary hook: ${_snSelectedRed.commentary_hook} Spin note: ${spin.commentary_hook}`;
+    _snShow('sn-shot-loading');
+    _snSet('sn-shot-commentary', '');
+
+    const panelIds = [HOST_ID, ..._snookerPick4().slice(0, 2)];
+    const commentLines = [];
+    for (const memberId of panelIds) {
+      const m = _memberById(memberId);
+      if (!m) continue;
+      const sys = `${m.prompt}\n\nPANEL RULES:\n${SNOOKER_TURN_RULES_TEXT}`;
+      const msg = `${context} React briefly in character. 40–80 words.`;
+      try {
+        const text = await API.call(sys, msg, 150, 'snooker/frame');
+        commentLines.push(`<div class="bills-response" style="margin-bottom:12px;"><div class="bills-response-speaker">${m.name.toUpperCase()}</div><div class="bills-response-body">${text}</div></div>`);
+      } catch(e) {
+        commentLines.push(`<div class="bills-response"><div class="bills-response-speaker">${m.name.toUpperCase()}</div><div class="bills-response-body">…</div></div>`);
+      }
+    }
+    _snHide('sn-shot-loading');
+    _snSet('sn-shot-commentary', commentLines.join(''));
+
+    document.getElementById('sn-spin-options').style.display = 'none';
+
+    if (potted) {
+      _snBreak += 1;
+      _snSet('sn-break-display', `Break: ${_snBreak}`);
+      _snSet('sn-shot-situation', `Red potted! Break: ${_snBreak}. Now select a colour:`);
+      _renderColourOptions();
+    } else {
+      _snSet('sn-shot-situation', `Missed. Break of ${_snBreak} ends.`);
+      _showFrameResult();
+    }
+  }
+
+  function _renderColourOptions() {
+    document.getElementById('sn-red-options').style.display = 'none';
+    document.getElementById('sn-colour-options').style.display = 'grid';
+    _snSet('sn-colour-options', Object.entries(COLOUR_VALUES).map(([col, val]) =>
+      `<button class="btn-secondary sn-choice-btn" onclick="snSelectColour('${col}')"
+        style="text-align:left;padding:10px 14px;">
+        <span style="font-weight:700;text-transform:capitalize;">${col}</span>
+        <span style="font-size:11px;color:var(--muted);margin-left:6px;">(${val} points)</span>
+      </button>`
+    ).join(''));
+  }
+
+  function selectColour(colour) {
+    const val = COLOUR_VALUES[colour];
+    if (!val) return;
+    _snBreak += val;
+    _snSet('sn-break-display', `Break: ${_snBreak}`);
+    document.getElementById('sn-colour-options').style.display = 'none';
+    _snSet('sn-shot-situation', `${colour.charAt(0).toUpperCase() + colour.slice(1)} potted. Break: ${_snBreak}. Choose next red:`);
+    _renderRedOptions();
+  }
+
+  function _showFrameResult() {
+    let badge, msg;
+    if (_snBreak >= 100) { badge = '💯 CENTURY BREAK'; msg = 'The crowd rises. The panel is momentarily speechless.'; }
+    else if (_snBreak >= 50) { badge = '⭐ HALF CENTURY'; msg = 'A solid contribution. The panel approves.'; }
+    else if (_snBreak >= 20) { badge = '🎱 DECENT BREAK'; msg = 'Not bad. Davis would do it differently but still.'; }
+    else { badge = '🤷 MODEST EFFORT'; msg = `Break of ${_snBreak}. The balls weren\'t kind.`; }
+
+    _snSet('sn-frame-result',
+      `<div style="padding:20px;background:var(--surface);border:1px solid var(--border);border-radius:8px;text-align:center;margin-top:12px;">
+        <div style="font-size:1.3rem;font-weight:700;color:var(--accent);margin-bottom:8px;">${badge}</div>
+        <div style="color:var(--text-secondary);">${msg}</div>
+        <div style="margin-top:16px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+          <button class="btn" onclick="Snooker.startFrame()">Try Again 🎱</button>
+          <button class="btn-secondary" onclick="Snooker.switchMode('qanda')">Back to Q&amp;A</button>
+        </div>
+      </div>`
+    );
+    _snShow('sn-frame-result');
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    _buildSuggestions();
+  });
+
+  return { discuss, switchMode, nextRound, startFrame, selectRed, selectSpin, selectColour };
+
+})();
+
+// ── SNOOKER GLOBAL WRAPPERS ────────────────────────────────────────────────────
+function snSelectRed(id)     { Snooker.selectRed(id); }
+function snSelectSpin(id)    { Snooker.selectSpin(id); }
+function snSelectColour(col) { Snooker.selectColour(col); }
 
 // ============================================================
 // MODULE: Quntum Leeks
