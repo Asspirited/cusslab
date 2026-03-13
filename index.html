@@ -9605,6 +9605,7 @@ function showGroupLanding(key)       { App.showGroupLanding(key); }
 function hrSelectJockey(id)          { Racing.selectJockey(id); }
 function hrMakeRidingChoice(id)      { Racing.makeRidingChoice(id); }
 function hrHandleEventChoice(idx)    { Racing.handleEventChoice(idx); }
+function hrContinueRace()            { Racing.continueRace(); }
 
 // Comedy Science
 function showScienceSection(id, btn) { ComedyScience.showSection(id, btn); }
@@ -17488,7 +17489,7 @@ McCririck died July 2019. O'Sullevan died October 2015. Both are present in this
     const choice  = choices.find(c => c.id === choiceId);
     if (!choice) return;
 
-    // Disable choice buttons
+    // Disable choice buttons while commentary fires
     document.querySelectorAll('.hr-choice-btn').forEach(b => { b.disabled = true; });
     _hrBusy = true;
 
@@ -17496,17 +17497,27 @@ McCririck died July 2019. O'Sullevan died October 2015. Both are present in this
     _hrScore += choice.base_delta + jMod;
 
     // Fire stage commentary
+    const isLast = _hrStageIdx >= 3;
     const context = `RACE SIM — ${_hrRace.name}, stage ${stage}. The jockey chose: "${choice.label}" (${choice.risk} risk). Jockey: ${_hrJockey.name} (${_hrJockey.risk_profile}). Horse: ${_hrHorse.name}. Stage flavour: ${_hrRace.stage_flavour[stage]}. Running score: ${_hrScore}.`;
     await _hrRaceCommentary(context, 'hr-stage-commentary', 3);
 
     _hrBusy = false;
 
     // Check for special event
-    const events = SPECIAL_EVENTS;
-    const fired = events.find(e => !_hrPendingEvent && Math.random() < e.fire_probability);
-    if (fired && _hrStageIdx < 3) {
-      _hrPendingEvent = fired;
-      _hrShowSpecialEvent(fired);
+    const fired = SPECIAL_EVENTS.find(e => !_hrPendingEvent && Math.random() < e.fire_probability);
+
+    // Replace choices with Continue button — commentary stays visible until user advances
+    const continueLabel = isLast ? 'TO THE FINISH 🏁' : (fired ? 'RACE INCIDENT →' : 'NEXT STAGE →');
+    _hrSet('hr-riding-choices',
+      `<button class="btn" onclick="hrContinueRace()" style="width:100%;margin-top:8px;">${continueLabel}</button>`
+    );
+
+    if (fired && !isLast) _hrPendingEvent = fired;
+  }
+
+  function continueRace() {
+    if (_hrPendingEvent) {
+      _hrShowSpecialEvent(_hrPendingEvent);
     } else {
       _hrAdvanceStage();
     }
