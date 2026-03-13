@@ -4191,12 +4191,12 @@ function makeSteps(ctx) {
         throw new Error('Racing textarea does not match card text');
     }],
 
-    [/^the user clicks the "Race Moment" mode tab$/, () => {
+    [/^the user clicks the "Race (?:Moment|Simulation)" mode tab$/, () => {
       ctx._racingMode = 'ingame';
     }],
 
-    [/^the Race Moment mode view is visible$/, () => {
-      if (ctx._racingMode !== 'ingame') throw new Error(`Race Moment mode not visible — mode is "${ctx._racingMode}"`);
+    [/^the Race (?:Moment|Simulation) mode view is visible$/, () => {
+      if (ctx._racingMode !== 'ingame') throw new Error(`Race Simulation mode not visible — mode is "${ctx._racingMode}"`);
     }],
 
     [/^the Q&A mode view is hidden$/, () => {
@@ -4205,44 +4205,18 @@ function makeSteps(ctx) {
 
     [/^the racing panel is in ingame mode$/, () => {
       ctx._racingMode = 'ingame';
-      ctx._hrMomentSelected = null;
     }],
 
-    [/^the race moment selector contains (\d+) options$/, (n) => {
+    [/^the race setup panel is visible$/, () => {
       const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
-      const start = html.indexOf('id="hr-moment"');
-      if (start < 0) throw new Error('hr-moment select not found in index.html');
-      const block = html.slice(start, start + 1000);
-      const count = (block.match(/<option/g) || []).length;
-      // subtract blank/placeholder option if present
-      const nonBlank = (block.match(/<option value="[A-Z_]+"/g) || []).length;
-      if (nonBlank !== parseInt(n))
-        throw new Error(`Expected ${n} non-blank moment options, found ${nonBlank}`);
+      if (!html.includes('id="hr-race-setup"'))
+        throw new Error('hr-race-setup not found in index.html');
     }],
 
-    [/^the race moment selector includes "([^"]+)"$/, (val) => {
+    [/^the start race button exists$/, () => {
       const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
-      const start = html.indexOf('id="hr-moment"');
-      if (start < 0) throw new Error('hr-moment select not found in index.html');
-      const block = html.slice(start, start + 1000);
-      if (!block.includes(`value="${val}"`))
-        throw new Error(`Moment type "${val}" not found in hr-moment select`);
-    }],
-
-    [/^no moment type is selected$/, () => {
-      ctx._hrMomentSelected = '';
-    }],
-
-    [/^the Race Moment button is disabled$/, () => {
-      if (ctx._hrMomentSelected) throw new Error('Race Moment button should be disabled — a moment is selected');
-    }],
-
-    [/^the user selects "([^"]+)" from the moment selector$/, (val) => {
-      ctx._hrMomentSelected = val;
-    }],
-
-    [/^the Race Moment button is enabled$/, () => {
-      if (!ctx._hrMomentSelected) throw new Error('Race Moment button should be enabled — no moment selected');
+      if (!html.includes('id="hr-start-race"'))
+        throw new Error('hr-start-race button not found in index.html');
     }],
 
     [/^a racing panel Q&A discussion has completed$/, () => {

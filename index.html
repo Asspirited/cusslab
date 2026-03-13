@@ -2747,53 +2747,55 @@
     </div>
   </div>
 
-  <!-- At The Track mode (Mode 2) -->
+  <!-- Race Simulation mode (Mode 2) -->
   <div id="hr-ingame-view" style="display:none;">
-    <div style="margin-bottom:14px;">
-      <label style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);display:block;margin-bottom:4px;">Race context (optional)</label>
-      <input type="text" id="hr-situation" placeholder="e.g. Gold Cup, last fence, 3-1 favourite" style="width:100%;box-sizing:border-box;padding:8px;background:var(--card);border:1px solid var(--border);border-radius:4px;color:var(--text);font-size:14px;">
-    </div>
-    <div style="margin-bottom:16px;">
-      <label>Race moment</label>
-      <select id="hr-moment" style="width:100%;padding:10px;background:var(--card);border:1px solid var(--border);border-radius:4px;color:var(--text);font-size:14px;">
-        <option value="">-- Select moment --</option>
-        <option value="PHOTO_FINISH">Photo finish</option>
-        <option value="STEWARDS_ENQUIRY">Stewards' enquiry</option>
-        <option value="LAST_FENCE_FALL">Last fence fall</option>
-        <option value="SHOCK_WINNER">Shock outsider wins</option>
-        <option value="WITHDRAWAL">Pre-race withdrawal</option>
-        <option value="RECORD_TIME">Record-breaking time</option>
-      </select>
-    </div>
-    <button class="btn" onclick="Racing.callMoment()" id="hr-moment-btn" disabled>AT THE TRACK 🏇</button>
+    <div id="hr-race-sim">
 
-    <!-- Race Simulation (Mode 2b) — hidden until full implementation -->
-    <div id="hr-race-sim" style="display:none;">
+      <!-- SETUP PHASE -->
       <div id="hr-race-setup">
-        <div id="hr-race-banner"></div>
-        <div id="hr-horse-card"></div>
-        <div id="hr-jockey-selector"></div>
-        <div id="hr-odds-board"></div>
-        <button id="hr-start-race" class="btn" disabled>START RACE 🏇</button>
+        <div id="hr-race-banner" style="margin-bottom:16px;padding:14px;background:var(--card);border:1px solid var(--border);border-radius:6px;"></div>
+        <div id="hr-horse-card" style="margin-bottom:16px;padding:14px;background:var(--card);border:1px solid var(--accent);border-radius:6px;"></div>
+
+        <div style="margin-bottom:12px;">
+          <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:8px;">Choose your jockey</div>
+          <div id="hr-jockey-selector" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;"></div>
+        </div>
+
+        <div id="hr-odds-board" style="margin-bottom:16px;font-size:12px;color:var(--muted);"></div>
+        <div id="hr-rep-bar" style="margin-bottom:16px;font-size:12px;color:var(--muted);"></div>
+
+        <button id="hr-start-race" class="btn" disabled onclick="Racing.startRace()">TO THE GATE 🏇</button>
       </div>
+
+      <!-- STAGE PHASE -->
       <div id="hr-race-stage" style="display:none;">
-        <div id="hr-stage-header"></div>
-        <div id="hr-stage-context"></div>
-        <div id="hr-riding-choices"></div>
+        <div id="hr-stage-header" style="margin-bottom:8px;font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--accent);font-weight:700;"></div>
+        <div id="hr-stage-context" style="margin-bottom:14px;font-size:14px;color:var(--muted);line-height:1.6;font-style:italic;"></div>
+        <div id="hr-riding-choices" style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px;"></div>
         <div id="hr-stage-commentary"></div>
       </div>
-      <div id="hr-special-event" style="display:none;">
-        <div id="hr-event-description"></div>
-        <div id="hr-event-choices"></div>
+
+      <!-- SPECIAL EVENT PHASE -->
+      <div id="hr-special-event" style="display:none;padding:14px;background:var(--card);border:1px solid #ff9800;border-radius:6px;margin-bottom:16px;">
+        <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#ff9800;margin-bottom:6px;">⚡ Race Incident</div>
+        <div id="hr-event-description" style="margin-bottom:14px;font-size:14px;line-height:1.6;"></div>
+        <div id="hr-event-choices" style="display:flex;flex-direction:column;gap:8px;"></div>
       </div>
+
+      <!-- RESULT PHASE -->
       <div id="hr-race-result" style="display:none;">
-        <div id="hr-result-banner"></div>
-        <div id="hr-result-commentary"></div>
-        <div id="hr-reputation-update"></div>
-        <button id="hr-new-race" class="btn">NEW RACE</button>
+        <div id="hr-result-banner" style="margin-bottom:16px;padding:20px;background:var(--card);border-radius:6px;text-align:center;"></div>
+        <div id="hr-reputation-update" style="margin-bottom:16px;padding:12px;background:var(--card);border-radius:6px;font-size:13px;text-align:center;"></div>
+        <div id="hr-result-commentary" style="margin-bottom:16px;"></div>
+        <button id="hr-new-race" class="btn" onclick="Racing.assignRace()">NEW RACE</button>
       </div>
+
     </div>
   </div>
+
+  <!-- hidden input retained for compatibility -->
+  <input type="hidden" id="hr-moment" value="">
+  <input type="hidden" id="hr-moment-btn" value="">
 
   <div id="hr-output" style="display:none;margin-top:24px;">
     <div id="hr-responses"></div>
@@ -4103,6 +4105,7 @@
 <script src="src/logic/ff-engine.js"></script>
 <script src="src/data/pub-crawl-scenes.js"></script>
 <script src="src/logic/pub-navigator-engine.js"></script>
+<script src="src/data/final-furlong-data.js"></script>
 
 <script>
 // ============================================================
@@ -9595,6 +9598,10 @@ function toggleNavGroup(key)         { App.toggleNavGroup(key); }
 function openMobileNav()             { App.openMobileNav(); }
 function closeMobileNav()            { App.closeMobileNav(); }
 function showGroupLanding(key)       { App.showGroupLanding(key); }
+// Racing — global wrappers for dynamically-rendered onclick handlers (WL-118 pattern)
+function hrSelectJockey(id)          { Racing.selectJockey(id); }
+function hrMakeRidingChoice(id)      { Racing.makeRidingChoice(id); }
+function hrHandleEventChoice(idx)    { Racing.handleEventChoice(idx); }
 
 // Comedy Science
 function showScienceSection(id, btn) { ComedyScience.showSection(id, btn); }
@@ -17351,18 +17358,265 @@ McCririck died July 2019. O'Sullevan died October 2015. Both are present in this
     HCSession.logPanelRun('racing', ORDER, responses.length);
   }
 
-  async function callMoment() {
-    const momentType = (document.getElementById('hr-moment') || {}).value;
-    if (!momentType) { UI.toast('Select a race moment first.', 'warn'); return; }
-    const situation = ((document.getElementById('hr-situation') || {}).value || '').trim();
-    const label = HR_MOMENT_LABELS[momentType] || momentType;
-    const prompt = situation ? `${label} — ${situation}` : label;
-    const inp = document.getElementById('hr-input');
-    if (inp) inp.value = prompt;
-    UI.setDisabled('hr-moment-btn', true);
-    await discuss();
-    UI.setDisabled('hr-moment-btn', false);
+  // ── RACE SIMULATION STATE ────────────────────────────────────────────────────
+  let _hrRace    = null;
+  let _hrHorse   = null;
+  let _hrJockey  = null;
+  let _hrScore   = 0;
+  let _hrStageIdx = 0;
+  const _hrStages = ['START', 'MID', 'THREE_OUT', 'FINISH'];
+  let _hrPendingEvent = null;
+  let _hrBusy   = false;
+
+  function _hrGetRep() {
+    return parseInt(localStorage.getItem(HR_REPUTATION_CONFIG.STORAGE_KEY) || '0', 10);
   }
+  function _hrSaveRep(n) {
+    localStorage.setItem(HR_REPUTATION_CONFIG.STORAGE_KEY, String(n));
+  }
+  function _hrGetTier(rep) {
+    return HR_REPUTATION_CONFIG.tiers.find(t => rep >= t.min && rep <= t.max) || HR_REPUTATION_CONFIG.tiers[0];
+  }
+
+  function _hrShow(id) { const el = document.getElementById(id); if (el) el.style.display = ''; }
+  function _hrHide(id) { const el = document.getElementById(id); if (el) el.style.display = 'none'; }
+  function _hrSet(id, html) { const el = document.getElementById(id); if (el) el.innerHTML = html; }
+
+  function assignRace() {
+    const rep  = _hrGetRep();
+    const tier = _hrGetTier(rep);
+
+    // Pick a random race
+    _hrRace = RACE_POOL[Math.floor(Math.random() * RACE_POOL.length)];
+
+    // Filter horses by allowed tiers for this rep tier
+    const eligible = HORSE_POOL.filter(h => tier.horse_tiers.includes(h.tier));
+    _hrHorse = eligible[Math.floor(Math.random() * eligible.length)] || HORSE_POOL[0];
+
+    _hrJockey  = null;
+    _hrScore   = 0;
+    _hrStageIdx = 0;
+
+    // Render race banner
+    _hrSet('hr-race-banner', `
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:4px;">Today's Race</div>
+      <div style="font-size:20px;font-weight:900;color:var(--accent);margin-bottom:4px;">${_hrRace.name}</div>
+      <div style="font-size:13px;color:var(--muted);">${_hrRace.course} · ${_hrRace.distance} · ${_hrRace.going} · ${_hrRace.field_size} runners</div>
+    `);
+
+    // Render horse card
+    _hrSet('hr-horse-card', `
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--accent);margin-bottom:4px;">Your Mount</div>
+      <div style="font-size:18px;font-weight:900;color:var(--text);margin-bottom:2px;">${_hrHorse.name}</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">SP: ${_hrHorse.sp} · ${_hrHorse.tier} · ${_hrHorse.going_preference} ground · ${_hrHorse.distance}</div>
+      <div style="font-size:13px;color:var(--text);line-height:1.6;">${_hrHorse.personality}</div>
+    `);
+
+    // Render jockey selector
+    const jHtml = JOCKEY_PROFILES.map(j =>
+      `<button class="hr-jockey-btn" id="hrj-${j.id}" onclick="hrSelectJockey('${j.id}')"
+        style="background:var(--card);border:1px solid var(--border);border-radius:6px;padding:10px;cursor:pointer;text-align:left;">
+        <div style="font-weight:700;font-size:13px;color:var(--text);">${j.name}</div>
+        <div style="font-size:11px;color:var(--muted);">${j.risk_profile} · ${j.going_bonus} ground</div>
+      </button>`
+    ).join('');
+    _hrSet('hr-jockey-selector', jHtml);
+
+    // Rep bar
+    const tierLabel = tier.label;
+    _hrSet('hr-rep-bar', `Reputation: <strong>${rep} pts</strong> — <span style="color:var(--accent);">${tierLabel}</span>`);
+
+    // Reset start button
+    const startBtn = document.getElementById('hr-start-race');
+    if (startBtn) startBtn.disabled = true;
+
+    _hrShow('hr-race-setup');
+    _hrHide('hr-race-stage');
+    _hrHide('hr-special-event');
+    _hrHide('hr-race-result');
+  }
+
+  function selectJockey(id) {
+    _hrJockey = JOCKEY_PROFILES.find(j => j.id === id) || null;
+    // Highlight selected
+    document.querySelectorAll('.hr-jockey-btn').forEach(b => {
+      b.style.borderColor = 'var(--border)';
+      b.style.color = 'var(--text)';
+    });
+    const sel = document.getElementById('hrj-' + id);
+    if (sel) { sel.style.borderColor = 'var(--accent)'; }
+    const startBtn = document.getElementById('hr-start-race');
+    if (startBtn) startBtn.disabled = false;
+  }
+
+  function startRace() {
+    if (!_hrJockey) { UI.toast('Choose a jockey first.', 'warn'); return; }
+    _hrScore = 0;
+    _hrStageIdx = 0;
+    _hrHide('hr-race-setup');
+    _hrShowStage(0);
+  }
+
+  function _hrShowStage(idx) {
+    const stage = _hrStages[idx];
+    const choices = RIDING_CHOICES[stage];
+
+    _hrSet('hr-stage-header', `Stage ${idx + 1} of 4 — ${stage.replace('_', ' ')}`);
+    _hrSet('hr-stage-context', _hrRace.stage_flavour[stage] || '');
+
+    const cHtml = choices.map(c =>
+      `<button class="btn hr-choice-btn" onclick="hrMakeRidingChoice('${c.id}')"
+        style="text-align:left;padding:10px 14px;background:var(--card);border:1px solid var(--border);">
+        <span style="font-weight:700;">${c.label}</span>
+        <span style="font-size:11px;color:var(--muted);margin-left:8px;">[${c.risk}]</span>
+      </button>`
+    ).join('');
+    _hrSet('hr-riding-choices', cHtml);
+    _hrSet('hr-stage-commentary', '');
+
+    _hrShow('hr-race-stage');
+    _hrHide('hr-special-event');
+  }
+
+  async function makeRidingChoice(choiceId) {
+    if (_hrBusy) return;
+    const stage   = _hrStages[_hrStageIdx];
+    const choices = RIDING_CHOICES[stage];
+    const choice  = choices.find(c => c.id === choiceId);
+    if (!choice) return;
+
+    // Disable choice buttons
+    document.querySelectorAll('.hr-choice-btn').forEach(b => { b.disabled = true; });
+    _hrBusy = true;
+
+    const jMod = choice.jockey_modifier[_hrJockey.risk_profile] || 0;
+    _hrScore += choice.base_delta + jMod;
+
+    // Fire stage commentary
+    const context = `RACE SIM — ${_hrRace.name}, stage ${stage}. The jockey chose: "${choice.label}" (${choice.risk} risk). Jockey: ${_hrJockey.name} (${_hrJockey.risk_profile}). Horse: ${_hrHorse.name}. Stage flavour: ${_hrRace.stage_flavour[stage]}. Running score: ${_hrScore}.`;
+    await _hrRaceCommentary(context, 'hr-stage-commentary', 3);
+
+    _hrBusy = false;
+
+    // Check for special event
+    const events = SPECIAL_EVENTS;
+    const fired = events.find(e => !_hrPendingEvent && Math.random() < e.fire_probability);
+    if (fired && _hrStageIdx < 3) {
+      _hrPendingEvent = fired;
+      _hrShowSpecialEvent(fired);
+    } else {
+      _hrAdvanceStage();
+    }
+  }
+
+  function _hrShowSpecialEvent(event) {
+    _hrSet('hr-event-description', `<strong>${event.label}</strong><br><span style="color:var(--muted);">${event.description}</span>`);
+    const cHtml = event.choices.map((c, i) =>
+      `<button class="btn" onclick="hrHandleEventChoice(${i})"
+        style="text-align:left;padding:10px 14px;background:var(--card);border:1px solid #ff9800;">
+        ${c.label}
+      </button>`
+    ).join('');
+    _hrSet('hr-event-choices', cHtml);
+    _hrShow('hr-special-event');
+  }
+
+  function handleEventChoice(idx) {
+    if (!_hrPendingEvent) return;
+    const c = _hrPendingEvent.choices[idx];
+    _hrScore += c.score_delta;
+    _hrPendingEvent = null;
+    _hrHide('hr-special-event');
+    _hrAdvanceStage();
+  }
+
+  function _hrAdvanceStage() {
+    _hrStageIdx++;
+    if (_hrStageIdx >= 4) {
+      finishRace();
+    } else {
+      _hrShowStage(_hrStageIdx);
+    }
+  }
+
+  async function finishRace() {
+    let result;
+    if (_hrScore >= HR_RESULT_THRESHOLDS.WIN)       result = 'WIN';
+    else if (_hrScore >= HR_RESULT_THRESHOLDS.PLACED) result = 'PLACED';
+    else if (_hrScore >= HR_RESULT_THRESHOLDS.MID_FIELD) result = 'MID_FIELD';
+    else result = 'LAST';
+
+    const rep    = _hrGetRep();
+    const earned = HR_REPUTATION_CONFIG.rewards[result];
+    const newRep = rep + earned;
+    _hrSaveRep(newRep);
+    const newTier = _hrGetTier(newRep);
+
+    const resultLabels = { WIN: '🏆 WINNER', PLACED: '🥈 PLACED', MID_FIELD: '🐴 MID-FIELD', LAST: '🪣 LAST' };
+    const resultColour = { WIN: '#FFD700', PLACED: '#a0a0a0', MID_FIELD: '#ff9800', LAST: '#e91e63' };
+
+    _hrHide('hr-race-stage');
+    _hrShow('hr-race-result');
+    _hrSet('hr-result-banner', `
+      <div style="font-size:32px;margin-bottom:6px;">${resultLabels[result]}</div>
+      <div style="font-size:14px;color:var(--muted);">${_hrHorse.name} · ${_hrRace.name} · Score: ${_hrScore}</div>
+    `);
+    _hrSet('hr-reputation-update', `
+      +${earned} reputation pts → <strong>${newRep} pts total</strong> — <span style="color:var(--accent);">${newTier.label}</span>
+    `);
+
+    // Full panel result commentary
+    const context = `RACE RESULT — ${_hrRace.name}. Horse: ${_hrHorse.name}. Jockey: ${_hrJockey.name}. Result: ${result}. Score: ${_hrScore}. React to the result with your character's full personality. Brazil announces the result first.`;
+    await _hrRaceCommentary(context, 'hr-result-commentary', 5);
+  }
+
+  async function _hrRaceCommentary(context, containerId, speakerCount) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    container.innerHTML = '';
+
+    const rotatingOrder = _pick4().slice(0, speakerCount - 1);
+    const ORDER = ['brazil', ...rotatingOrder].slice(0, speakerCount);
+
+    const responses = [];
+    for (let i = 0; i < ORDER.length; i++) {
+      const member = MEMBERS.find(m => m.id === ORDER[i]);
+      const pid = 'hrr-' + containerId + '-' + i;
+      container.insertAdjacentHTML('beforeend', _placeholder(pid, member));
+
+      const prev = responses.map((r, idx) => {
+        const m = MEMBERS.find(m => m.id === ORDER[idx]);
+        return `${m.name.toUpperCase()}: "${r.substring(0, 200)}"`;
+      }).join('\n');
+
+      const lastBeat = responses.length
+        ? responses[responses.length - 1].slice(-150)
+        : '';
+
+      const system = TURN_RULES + '\n\n' + member.prompt
+        + (i > 0 ? `\n\nPrevious:\n${prev}` : '');
+
+      const prompt = i === 0
+        ? `${context}\n\nYou are the host. React to the outcome. 2 sentences max.`
+        : `${context}\n\nLast said: "${lastBeat}"\n\nReact in character. One or two sentences.`;
+
+      try {
+        const resp = await API.call(system, prompt, 200, 'racing/' + member.id);
+        responses.push(resp);
+        _fill(pid, member, resp);
+      } catch (e) {
+        _fill(pid, member, e.userMessage || 'Request failed.');
+      }
+    }
+  }
+
+  function resetReputation() {
+    localStorage.removeItem(HR_REPUTATION_CONFIG.STORAGE_KEY);
+    UI.toast('Reputation reset to zero.', 'info');
+    assignRace();
+  }
+
+  function callMoment() { /* Race Moment mode superseded by Race Simulation — retained for module interface */ }
 
   function switchMode(mode) {
     sessionStorage.setItem('hr-mode', mode);
@@ -17375,14 +17629,15 @@ McCririck died July 2019. O'Sullevan died October 2015. Both are present in this
     document.getElementById('hr-tab-ingame').style.cssText = isIngame ? activeStyle   : inactiveStyle;
     const out = document.getElementById('hr-output');
     if (out) out.style.display = 'none';
+    if (isIngame) assignRace();
   }
 
   function nextRound() {
     const mode = sessionStorage.getItem('hr-mode') || 'qanda';
-    if (mode === 'ingame') callMoment(); else discuss();
+    if (mode === 'ingame') assignRace(); else discuss();
   }
 
-  return { discuss, callMoment, switchMode, nextRound };
+  return { discuss, callMoment, switchMode, nextRound, assignRace, selectJockey, startRace, makeRidingChoice, handleEventChoice, finishRace, resetReputation };
 })();
 
 // ── RACING ANCHOR READBACK ─────────────────────────────────────────────────────
