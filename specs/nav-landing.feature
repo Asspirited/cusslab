@@ -19,7 +19,7 @@ Feature: Nav Group Landing Page
 
   Scenario: Clicking a panel tile enters that panel
     Given the group landing page is visible for "sports"
-    When the user clicks the "Football" tile
+    When the user clicks the "Post Game Cunditry" tile
     Then the Football panel content is shown
     And the group landing page is hidden
 
