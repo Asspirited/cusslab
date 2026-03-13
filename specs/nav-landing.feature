@@ -60,3 +60,21 @@ Feature: Nav Group Landing Page
     Given the viewport is desktop width
     When the user clicks a nav group header
     Then the group landing page is shown
+
+  # ── HOME TILE ONCLICK WIRING (BL-126) ─────────────────────────────────────
+
+  Scenario: Sports home tile calls showGroupLanding not switchTab
+    Then the "Sports" home tile onclick calls "showGroupLanding"
+    And the "Sports" home tile onclick does not call "switchTab"
+
+  Scenario: Comedy home tile calls showGroupLanding not switchTab
+    Then the "The Comedy Room" home tile onclick calls "showGroupLanding"
+    And the "The Comedy Room" home tile onclick does not call "switchTab"
+
+  Scenario: Little Misadventure home tile calls showGroupLanding not switchTab
+    Then the "Little Misadventure" home tile onclick calls "showGroupLanding"
+    And the "Little Misadventure" home tile onclick does not call "switchTab"
+
+  Scenario: Play and Learn home tile calls showGroupLanding not switchTab
+    Then the "Play & Learn" home tile onclick calls "showGroupLanding"
+    And the "Play & Learn" home tile onclick does not call "switchTab"
