@@ -59,6 +59,7 @@ Feature: The Final Furlong — Horse Racing Panel
       | osullevan     |
       | ruby_walsh    |
       | matt_chapman  |
+      | dettori       |
 
   Scenario: Alan Brazil prompt references his football background
     Given the racing panel member "alan_brazil"
