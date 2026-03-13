@@ -17,7 +17,7 @@ Feature: The Final Furlong — Horse Racing Panel
 
   # ── PANEL MEMBERS ──────────────────────────────────────────────
 
-  Scenario: Racing panel includes all 7 members
+  Scenario: Racing panel includes all 8 members
     Then the racing panel includes "alan_brazil"
     And the racing panel includes "mccririck"
     And the racing panel includes "mcgrath"
@@ -25,6 +25,7 @@ Feature: The Final Furlong — Horse Racing Panel
     And the racing panel includes "osullevan"
     And the racing panel includes "ruby_walsh"
     And the racing panel includes "matt_chapman"
+    And the racing panel includes "dettori"
 
   Scenario: Alan Brazil is the host and always opens discussion
     Given a racing panel discussion is triggered
