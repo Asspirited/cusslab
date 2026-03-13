@@ -34,7 +34,7 @@ Feature: The Final Furlong — Horse Racing Panel
   Scenario: Four rotating members speak after Brazil
     Given a racing panel discussion is triggered
     Then exactly 4 members from the rotating pool speak after Brazil
-    And all 4 are drawn from the non-host panel members
+    And all 4 are drawn from the 7 non-host panel members
 
   Scenario: DEAD_IN_PANEL_WORLD — McCririck and O'Sullevan are present
     Then "mccririck" is present in the racing panel member list
