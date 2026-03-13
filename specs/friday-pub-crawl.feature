@@ -141,3 +141,35 @@ Feature: Friday Pub Crawl Misadventure — Mode B engine
     And pub crawl lederhosen is manually activated
     When I build the pub crawl advisor prompt for "chuck-norris" after choosing "Order another Maß"
     Then the pub crawl advisor prompt includes "lederhosen"
+
+  # ── Pressure feedback and game-goal clarity (BL-128) ─────────────────────────
+
+  Scenario: A pressure explainer is visible during a scene
+    Given the pub crawl panel is active
+    Then the pressure explainer element is present
+    And the pressure explainer text mentions lower pressure or escape
+
+  Scenario: Pressure bar has zone threshold markers
+    Given the pub crawl panel is active
+    Then the pressure bar zone markers element is present
+    And it has a marker labelled "ESCAPE"
+    And it has a marker labelled "EJECTED"
+    And it has a marker labelled "WORST"
+
+  Scenario: A pressure delta element exists in the active scene
+    Given the pub crawl panel is active
+    Then the pressure delta element is present in the active scene
+
+  Scenario: Pressure zone status label exists
+    Given the pub crawl panel is active
+    Then the pressure zone label element is present
+
+  Scenario: The pressure zone label reflects the escape zone at low pressure
+    Given an initialised pub crawl at "rising-sun-basingstoke"
+    When the pub crawl pressure is set to 2
+    Then the pressure zone label reflects the escape zone
+
+  Scenario: The pressure zone label reflects the danger zone at high pressure
+    Given an initialised pub crawl at "rising-sun-basingstoke"
+    When the pub crawl pressure is set to 10
+    Then the pressure zone label reflects the danger zone
