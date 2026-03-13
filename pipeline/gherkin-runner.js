@@ -8909,6 +8909,27 @@ function makeSteps(ctx) {
         throw new Error('toggleNavGroup does not call showGroupLanding — desktop landing not wired');
     }],
 
+    // BL-126 — home tile onclick wiring checks
+    [/^the "([^"]+)" home tile onclick calls "([^"]+)"$/, (tileName, fn) => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      const escaped = tileName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const tileRe = new RegExp(`data-tile-name="${escaped}"[^>]*onclick="([^"]+)"`);
+      const m = html.match(tileRe);
+      if (!m) throw new Error(`Home tile with data-tile-name="${tileName}" not found`);
+      if (!m[1].includes(fn))
+        throw new Error(`Home tile "${tileName}" onclick "${m[1]}" does not call "${fn}"`);
+    }],
+
+    [/^the "([^"]+)" home tile onclick does not call "([^"]+)"$/, (tileName, fn) => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      const escaped = tileName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const tileRe = new RegExp(`data-tile-name="${escaped}"[^>]*onclick="([^"]+)"`);
+      const m = html.match(tileRe);
+      if (!m) throw new Error(`Home tile with data-tile-name="${tileName}" not found`);
+      if (m[1].includes(fn))
+        throw new Error(`Home tile "${tileName}" onclick "${m[1]}" must NOT call "${fn}"`);
+    }],
+
     // ── FINAL FURLONG — RACE SIMULATION (Mode 2) ─────────────────────────────
 
     // Background / setup

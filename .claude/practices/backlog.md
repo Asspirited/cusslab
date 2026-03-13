@@ -1240,7 +1240,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Description: After implementing BL-124 (nav group landing page), the home page tiles for Sports, Comedy, Little Misadventure were still calling switchTab() directly, skipping the group landing. Rod caught this manually. Automated pipeline (Gherkin, E2E, browser sim) did not catch it. Root cause: no UI test coverage for home-tile onclick behaviour. The pipeline has a structural gap — it tests that elements exist and functions exist, but does not test onclick wiring.
 - Feature: platform / testing
 - CD3: UBV=7 TC=8 RR=8 → CoD=23, Dur=4, **CD3=5.75**
-- Status: OPEN — raised 2026-03-13
+- Status: CLOSED — commit to follow (2026-03-13)
 - Epic: UI Test Coverage
 - Root cause (5-Whys): Home tiles wired to switchTab() → not updated when BL-124 changed routing. Browser sim tests existence of elements but not onclick values. Gherkin tests landing function but not that home tiles call it.
 - Proposed fix: Add browser-sim or Gherkin step that verifies multi-panel group home tiles call showGroupLanding(), not switchTab(). Also add steps checking that onclick wiring matches expected function for all home tiles.
@@ -1262,7 +1262,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
   Drives: WL-134 (no positive/negative feedback). Raised after Rod review 2026-03-13.
 - Feature: pub-navigator
 - CD3: UBV=8 TC=7 RR=6 → CoD=21, Dur=3, **CD3=7.0**
-- Status: OPEN — raised 2026-03-13
+- Status: CLOSED — commit 5238677 (2026-03-13)
 - Epic: Pub Crawl UX
 
 ---
