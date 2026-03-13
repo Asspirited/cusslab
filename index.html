@@ -1453,6 +1453,18 @@
 
 <main id="main-content">
 
+<!-- ============ GROUP LANDING — Nav Group Sub-Feature List (BL-124) ======== -->
+<div id="nav-back-bar" style="display:none;margin-bottom:8px;">
+  <button id="nav-back-btn" onclick="App.goBackToGroupLanding()" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:13px;padding:0;display:flex;align-items:center;gap:6px;">
+    <span>←</span> <span id="nav-back-label">Back</span>
+  </button>
+</div>
+
+<div class="panel" id="panel-landing">
+  <div class="panel-title" id="landing-group-title"></div>
+  <div class="home-tile-grid" id="landing-tiles"></div>
+</div>
+
 <!-- ============ HOME — Feature Discovery Landing Page (BL-117) ============ -->
 <div class="panel" id="panel-home">
   <div class="panel-title">👋 Welcome to Heckler's</div>
@@ -4742,6 +4754,118 @@ const App = (() => {
 
   };
 
+  // ── GROUP LANDING PANELS (BL-124) ──────────────────────────────────────────
+  // Defines the tiles shown when a user clicks a nav group header.
+  const _NAV_GROUP_PANELS = {
+    sports: [
+      { id: 'football', label: 'Post Game Cunditry',  icon: '⚽', desc: 'The panel that never shuts up. Big opinions. Poor self-awareness. Perfect.' },
+      { id: 'golf',     label: 'The 19th Hole',       icon: '⛳', desc: 'Radar, Sir Nick, and Faldo. Opinions on the swing. Opinions on each other.' },
+      { id: 'darts',    label: 'Watching the Oche',   icon: '🎯', desc: 'Mardle, Bristow, Taylor. The Frankenstein wound. The treble five.' },
+      { id: 'cricket',  label: 'The Long Room',       icon: '🏏', desc: 'Blofeld, commentary, and the game played with maximum circumlocution.' },
+      { id: 'racing',   label: 'The Final Furlong',   icon: '🏇', desc: 'Brazil hosts. Walsh rides. McCririck is here. O\'Sullevan is also here.' },
+    ],
+    comedy: [
+      { id: 'comedyroom',      label: 'Into The Room',      icon: '🎤', desc: 'Hicks, Lee, Carr, Lumley, Connolly. Five comedians. One topic. No agreement.' },
+      { id: 'housenameoracle', label: 'House Name Oracle',  icon: '🔮', desc: 'Submit an address. Receive a name. Some are excellent. Some are crimes.' },
+      { id: 'roastroom',       label: 'The Roast Room',     icon: '🔥', desc: 'Target confirmed. Panel assembled. No survivors.' },
+      { id: 'writingroom',     label: 'The Writing Room',   icon: '✍️', desc: 'Three authors. One topic. Hemingway says less. Pratchett says more.' },
+    ],
+    showers: [
+      { id: 'souness-cat',           label: "Souness's Cat",        icon: '🔬', desc: 'Is the cat alive? Souness is not sure. The cat has opinions about Souness.' },
+      { id: 'philsopoly',            label: "Phil's-opoly",         icon: '🎲', desc: 'Monopoly. Trosses. Philosophy. These should not be combined. They are.' },
+      { id: 'suntzu',                label: 'Ask Sun Tzu',          icon: '⚔️', desc: 'The Art of War applied to whatever you\'re worried about today.' },
+      { id: 'premise-interrogation', label: 'Premise Interrogation', icon: '🔎', desc: 'Submit a premise. The panel finds every hole in it.' },
+    ],
+    misadventure: [
+      { id: 'golfadventure', label: 'Relive Golfing Greatness',       icon: '🏌️', desc: 'The Ryder Cup. Five sessions. Seve, Faldo, Ballesteros. A leaderboard.' },
+      { id: 'pubnavigator',  label: 'Survive a Friday Night at...',   icon: '🍺', desc: 'Pick a venue. Receive a survival guide. Accuracy not guaranteed.' },
+      { id: 'pubcrawl',      label: 'Friday Pub Crawl Misadventure',  icon: '🍻', desc: 'The crawl begins. Decisions are made. Some are regretted.' },
+      { id: 'hardmen',       label: 'The Hardmen',                    icon: '😤', desc: 'Vinnie, Roy Keane, Nobby, Chopper. What hard men think about things.' },
+      { id: 'qleeks',        label: 'Quntum Leeks',                   icon: '🐸', desc: 'Ziggy has a mission. Al has a hologram. The leap continues.' },
+    ],
+    boardroom: [
+      { id: 'boardroom', label: 'The Boardroom', icon: '💼', desc: 'Sebastian presides. Pint of Harold dissents. Cox explains quantum things. Nobody agrees.' },
+    ],
+    research: [
+      { id: 'comscience',  label: 'Comedy Science',      icon: '🧠', desc: 'The science of what makes something funny. Results vary.' },
+      { id: 'evolution',   label: 'Evolution',           icon: '🔬', desc: 'Track how a joke changes across iterations.' },
+      { id: 'blend',       label: 'Blend',               icon: '⚗️', desc: 'Combine two things. See what emerges.' },
+      { id: 'experiment',  label: 'Experiment',          icon: '🧪', desc: 'Control group. Variable. Hypothesis. Comedy.' },
+    ],
+    play: [
+      { id: 'roastbattle', label: 'Roast Battle',  icon: '🥊', desc: 'Two comedians. One microphone. The audience decides.' },
+      { id: 'dinner',      label: 'Dinner Party',  icon: '🍽️', desc: 'Seat twelve people who should not be near each other.' },
+      { id: 'topcnuts',    label: 'Top C-Nuts',    icon: '🃏', desc: 'Top Trumps. But for comedians. And worse.' },
+      { id: 'comedylab',   label: 'Comedy Lab',    icon: '🔭', desc: 'Experiments in structured absurdity.' },
+      { id: 'trumps',      label: 'Trumps',        icon: '♠️', desc: 'The classic format. The unclassic content.' },
+    ],
+    generate: [
+      { id: 'premise',   label: 'Premise Generator', icon: '💡', desc: 'The beginning. Everything else follows.' },
+      { id: 'charlens',  label: 'Charlens',           icon: '📝', desc: 'Characters and scenes. The basic units.' },
+      { id: 'bizcard',   label: 'Biz Card',           icon: '💳', desc: 'Credentials for characters who need them.' },
+      { id: 'training',  label: 'Training',           icon: '📚', desc: 'Improve the machine. Or confuse it.' },
+    ],
+    analyse: [
+      { id: 'localiser',  label: 'Localiser',  icon: '🌍', desc: 'Translate comedy for a different audience.' },
+      { id: 'generator',  label: 'Generator',  icon: '⚙️', desc: 'Produce variations at scale.' },
+      { id: 'historian',  label: 'Historian',  icon: '📜', desc: 'The archive. What was said. When.' },
+      { id: 'sentence',   label: 'Sentence',   icon: '✂️', desc: 'One sentence. The whole story.' },
+      { id: 'it',         label: 'IT Dept',    icon: '💻', desc: 'Support tickets for problems that don\'t exist.' },
+      { id: 'polls',      label: 'Polls',      icon: '📊', desc: 'What the audience thinks. Mostly wrong.' },
+    ],
+  };
+
+  // State for group landing back navigation
+  const _navLandingState = { currentGroup: null };
+
+  function showGroupLanding(key) {
+    const panels = _NAV_GROUP_PANELS[key];
+    if (!panels) return;
+
+    // Deactivate all tabs and panels
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+
+    // Highlight nav group
+    document.querySelectorAll('.nav-group').forEach(g => g.classList.remove('active'));
+    const grpEl = document.getElementById('ng-' + key);
+    if (grpEl) grpEl.classList.add('active');
+
+    // Hide back bar on the landing itself
+    const backBar = document.getElementById('nav-back-bar');
+    if (backBar) backBar.style.display = 'none';
+
+    // Populate landing
+    const groupNames = {
+      sports:'Sports', comedy:'Comedy Room', showers:'Thought Showers',
+      misadventure:'Little Misadventure', boardroom:'The Boardroom',
+      research:'Learn', play:'Play', generate:'Build', analyse:'Archive', personas:'The Panel',
+    };
+    const titleEl  = document.getElementById('landing-group-title');
+    const tilesEl  = document.getElementById('landing-tiles');
+    if (titleEl) titleEl.textContent = groupNames[key] || key;
+    if (tilesEl) {
+      tilesEl.innerHTML = panels.map(p =>
+        `<button class="home-tile" onclick="switchTab(null,'${p.id}')">` +
+        `<span class="home-tile-icon">${p.icon}</span>` +
+        `<span class="home-tile-name">${p.label}</span>` +
+        `<span class="home-tile-desc">${p.desc}</span>` +
+        `</button>`
+      ).join('');
+    }
+
+    _navLandingState.currentGroup = key;
+
+    const landingPanel = document.getElementById('panel-landing');
+    if (landingPanel) landingPanel.classList.add('active');
+  }
+
+  function goBackToGroupLanding() {
+    if (_navLandingState.currentGroup) {
+      showGroupLanding(_navLandingState.currentGroup);
+    }
+  }
+
   function switchTab(evt, name) {
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
     document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
@@ -4755,11 +4879,32 @@ const App = (() => {
       const grpEl = document.getElementById('ng-' + groupKey);
       if (grpEl) grpEl.classList.add('active');
     }
+    // Show back bar if this group has a landing page
+    const backBar = document.getElementById('nav-back-bar');
+    const backLabel = document.getElementById('nav-back-label');
+    if (backBar && _NAV_GROUP_PANELS[groupKey]) {
+      _navLandingState.currentGroup = groupKey;
+      const groupNames = {
+        sports:'Sports', comedy:'Comedy Room', showers:'Thought Showers',
+        misadventure:'Little Misadventure', boardroom:'The Boardroom',
+        research:'Learn', play:'Play', generate:'Build', analyse:'Archive', personas:'The Panel',
+      };
+      if (backLabel) backLabel.textContent = groupNames[groupKey] || groupKey;
+      backBar.style.display = '';
+    } else if (backBar) {
+      backBar.style.display = 'none';
+    }
     // Close mobile drawer after navigation
     closeMobileNav();
   }
 
   function toggleNavGroup(key) {
+    if (_NAV_GROUP_PANELS[key]) {
+      showGroupLanding(key);
+      if (window.innerWidth <= 768) closeMobileNav();
+      return;
+    }
+    // Fallback mobile accordion for groups without a landing config
     if (window.innerWidth > 768) return;
     const target = document.getElementById('ng-' + key);
     if (!target) return;
@@ -4850,7 +4995,7 @@ const App = (() => {
     }, 6000);
   }
 
-  return { init, switchTab, toggleSkin, toggleNavGroup, openMobileNav, closeMobileNav };
+  return { init, switchTab, toggleSkin, toggleNavGroup, openMobileNav, closeMobileNav, showGroupLanding, goBackToGroupLanding };
 })();
 
 // ============================================================
@@ -9449,6 +9594,7 @@ function toggleSkin()                { App.toggleSkin(); }
 function toggleNavGroup(key)         { App.toggleNavGroup(key); }
 function openMobileNav()             { App.openMobileNav(); }
 function closeMobileNav()            { App.closeMobileNav(); }
+function showGroupLanding(key)       { App.showGroupLanding(key); }
 
 // Comedy Science
 function showScienceSection(id, btn) { ComedyScience.showSection(id, btn); }

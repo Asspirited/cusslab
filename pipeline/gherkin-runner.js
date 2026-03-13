@@ -537,6 +537,28 @@ const SCHEMA_DEFAULTS = {
     "delta": 2
   }
 };
+// ── Nav landing helper ────────────────────────────────────────────────────────
+function _extractNavGroupPanels(html, group) {
+  // Extract _NAV_GROUP_PANELS[group] entries from index.html source
+  const mapStart = html.indexOf('const _NAV_GROUP_PANELS = {');
+  if (mapStart === -1) return null;
+  const mapEnd = html.indexOf('\n  };\n', mapStart);
+  const mapSrc = html.slice(mapStart, mapEnd + 10);
+  // Find the group block: "group: [" ... "],"
+  const groupRe = new RegExp(group + '\\s*:\\s*\\[([\\s\\S]*?)\\]\\s*,', '');
+  const gm = mapSrc.match(groupRe);
+  if (!gm) return null;
+  const block = gm[1];
+  // Extract { id: 'x', label: 'y', icon: 'z' } entries
+  const entryRe = /id:\s*'([^']+)'[^}]*label:\s*'([^']+)'[^}]*icon:\s*'([^']+)'/g;
+  const panels = [];
+  let em;
+  while ((em = entryRe.exec(block)) !== null) {
+    panels.push({ id: em[1], label: em[2], icon: em[3] });
+  }
+  return panels;
+}
+
 function makeSteps(ctx) {
   // ── Skin toggle state (per scenario) ──────────────────────────────────────
   let currentSkinTabs = CONSULTANT_SKIN_TABS; // default on load is consultant
@@ -8779,6 +8801,85 @@ function makeSteps(ctx) {
       // The advisory prompt should not be constrained to pub context
       if (module[1].includes('pub situation') || module[1].includes('Friday night'))
         throw new Error('Sun Tzu advisory prompt incorrectly constrains topic to pub situations');
+    }],
+
+    // ── NAV GROUP LANDING PAGE (BL-124) ──────────────────────────────────────
+
+    [/^the application is loaded$/, () => { ctx._appLoaded = true; }],
+    [/^the user clicks a nav group header$/, () => { ctx._navGroupClicked = 'sports'; }],
+    [/^the group landing page is visible$/, () => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      if (!html.includes('id="panel-landing"'))
+        throw new Error('panel-landing element not found in index.html');
+      if (!html.includes('showGroupLanding'))
+        throw new Error('showGroupLanding function not found in index.html');
+    }],
+    [/^no panel content is shown$/, () => { /* structural — showGroupLanding deactivates all panels */ }],
+    [/^the user has clicked the "([^"]+)" nav group$/, (group) => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      const panels = _extractNavGroupPanels(html, group);
+      if (!panels || panels.length === 0)
+        throw new Error(`_NAV_GROUP_PANELS does not define panels for group "${group}"`);
+      ctx._navGroupClicked = group;
+      ctx._navGroupPanels  = panels;
+    }],
+    [/^the landing page shows a tile for each panel in the group$/, () => {
+      if (!ctx._navGroupPanels || ctx._navGroupPanels.length === 0)
+        throw new Error('No group panels in context — click a group first');
+      // Verify each panel has id, label, icon
+      for (const p of ctx._navGroupPanels) {
+        if (!p.id)    throw new Error(`Panel in group ${ctx._navGroupClicked} missing id`);
+        if (!p.label) throw new Error(`Panel "${p.id}" missing label`);
+        if (!p.icon)  throw new Error(`Panel "${p.id}" missing icon`);
+      }
+    }],
+    [/^the group landing page is visible for "([^"]+)"$/, (group) => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      const panels = _extractNavGroupPanels(html, group);
+      if (!panels || panels.length === 0)
+        throw new Error(`_NAV_GROUP_PANELS does not define panels for group "${group}"`);
+      ctx._navGroupClicked = group;
+      ctx._navGroupPanels  = panels;
+    }],
+    [/^the user clicks the "([^"]+)" tile$/, (label) => {
+      const panels = ctx._navGroupPanels || [];
+      const p = panels.find(x => x.label === label);
+      if (!p) throw new Error(`No tile "${label}" in group ${ctx._navGroupClicked}`);
+      ctx._navActivePanelId = p.id;
+    }],
+    [/^the Football panel content is shown$/, () => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      if (!html.includes('id="panel-football"'))
+        throw new Error('panel-football not found in index.html');
+    }],
+    [/^the group landing page is hidden$/, () => { /* structural — switchTab deactivates panel-landing */ }],
+    [/^clicking "([^"]+)" shows a landing page$/, (group) => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      const panels = _extractNavGroupPanels(html, group);
+      if (!panels || panels.length === 0)
+        throw new Error(`_NAV_GROUP_PANELS does not define panels for group "${group}"`);
+    }],
+    [/^the landing page includes a tile for "([^"]+)"$/, (label) => {
+      const panels = ctx._navGroupPanels || [];
+      if (!panels.find(p => p.label === label))
+        throw new Error(`No tile "${label}" found in group ${ctx._navGroupClicked || '?'}. Tiles: ${panels.map(p => p.label).join(', ')}`);
+    }],
+    [/^the user is in a panel within the "([^"]+)" group$/, (group) => {
+      ctx._navGroupClicked = group;
+    }],
+    [/^the user clicks the back button$/, () => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      if (!html.includes('nav-back-btn') && !html.includes('goBackToGroupLanding'))
+        throw new Error('Back button (nav-back-btn / goBackToGroupLanding) not found in index.html');
+    }],
+    [/^the viewport is desktop width$/, () => { ctx._viewportDesktop = true; }],
+    [/^the group landing page is shown$/, () => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      // toggleNavGroup must NOT have unconditional mobile-only return for groups with landing
+      const start = html.indexOf('function toggleNavGroup(key)');
+      const fn = html.slice(start, start + 600);
+      if (!fn.includes('showGroupLanding'))
+        throw new Error('toggleNavGroup does not call showGroupLanding — desktop landing not wired');
     }],
 
     // ── FINAL FURLONG — RACE SIMULATION (Mode 2) ─────────────────────────────
