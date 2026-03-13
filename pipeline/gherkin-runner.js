@@ -4020,7 +4020,7 @@ function makeSteps(ctx) {
         throw new Error(`Racing _pick4() does not select 4 rotating members`);
     }],
 
-    [/^all 4 are drawn from the non-host panel members$/, () => {
+    [/^all 4 are drawn from the (?:\d+ )?non-host panel members$/, () => {
       const iife = ctx._racingIife || '';
       if (!iife.includes('ALL_ROTATING'))
         throw new Error(`Racing does not define ALL_ROTATING pool`);
