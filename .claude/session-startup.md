@@ -1,6 +1,6 @@
 # Session Startup — Heckler and Cox
 # Read this first. Everything else is referenced from here.
-# Last updated: 2026-03-11
+# Last updated: 2026-03-13
 
 ---
 
@@ -96,7 +96,7 @@ This is the handoff from the other Claude. If file doesn't exist: note it and co
 
 **Then:** Read `.claude/practices/waste-log.md` — last 5 entries only, report any with Status: OPEN.
 
-Current open items as of 2026-03-11 (session 6): WL-122 (UI audit gap — partially mitigated), WL-123 (context overflow). WL-120 (PubCrawl cascade crash), WL-121 (Quntum Leeks scenario overwrite), WL-096 (Bespoke Material) — all CLOSED this session.
+Current open items as of 2026-03-13 (session 8): WL-131 (character dullness — Three Amigos needed), WL-132 (gherkin step window size — CLOSED same session).
 
 ---
 
@@ -110,22 +110,26 @@ For each open product-bet item, ask:
 - Is there a falsifier — something that would tell us we were wrong?
 Full outer loop: `.claude/practices/hypothesis-driven.md`
 
-Current top 3 as of 2026-03-11 (session 6 post close):
-- BL-118 Pipeline: runtime browser test for external-script window globals (CD3=6.0) — OPEN
-- BL-117 Home page: replace Golf Adventure default with feature discovery page (CD3=4.4) — OPEN
-- BL-116 Premise Interrogation feature: scientist/philosopher panel (CD3=TBD) — OPEN (Three Amigos needed)
+Current top 3 as of 2026-03-13 (session 8 post close):
+- BL-007 Claude Code Windows install bugs (CD3=5.0) — OPEN
+- BL-102 Feature activity report labelling (CD3=5.0) — OPEN
+- BL-113 Unexpected outfit mechanic (CD3=5.0) — OPEN
 
-Recently closed (2026-03-11 session 6):
-- WL-096 (Bespoke Material): SentenceBuilder.run() rewritten, bespoke-material.feature 8 scenarios passing
-- WL-120 (PubCrawl cascade crash): fixed
-- WL-121 (Quntum Leeks scenario overwrite): fixed
-- WL-124 (PubCrawl ENGINE.initPubCrawl): guard + runtime getEngine() + cache busters removed — commit 3b4821a
+Recently closed (2026-03-13 session 8):
+- BL-123 The Final Furlong horse racing panel — 7 chars, Mode 1+2, DEAD_IN_PANEL_WORLD — commit f75a4a4
+- BL-124 Nav: panel group landing page (raised, not yet implemented)
 
-Bruce Lee added to all 6 panels (Boardroom, Comedy Room, Football, Golf, Darts, Cricket) as test character. See docs/characters-bruce-lee.md. Not permanent — Rod's call after testing.
-Comedy Room has 4 standalone panels: Into The Room / House Name Oracle / The Roast Room / The Writing Room.
+Open product bets under discussion:
+- BL-124 Nav group landing page (CD3=7.3) — Rod requested 2026-03-13
+- WL-131 Character dullness (Three Amigos needed)
+
+Sports panels: Football, Golf, Darts (Watching the Oche), Cricket (The Long Room), Horse Racing (The Final Furlong).
+The Final Furlong: Alan Brazil hosts, 4 of 6 rotating: McCririck, McGrath, Alastair Down, O'Sullevan, Walsh, Chapman. McCririck + O'Sullevan are DEAD_IN_PANEL_WORLD.
+Bruce Lee: in Boardroom, Comedy Room, Football, Golf, Darts, Cricket. Not permanent.
+Comedy Room: 4 panels: Into The Room / House Name Oracle / The Roast Room / The Writing Room.
 AUTHORS_POOL: 7 authors (hemingway, mccarthy, tolkien, patterson, pratchett, wodehouse, austen).
 Golf Adventure: Ryder Cup 5-session model with leaderboard + overall match score.
-Little Misadventure: Friday Pub Crawl Misadventure (Mode B) live — 8 locations, 4 advisors, lederhosen easter egg. External scripts (ff-engine.js, pub-crawl-scenes.js, pub-navigator-engine.js) use ETag caching (no ?v= query strings).
+Little Misadventure: Friday Pub Crawl, Pub Navigator, Quntum Leeks. External scripts use ETag caching.
 
 Agree with Rod which item is being worked this session BEFORE opening any code file.
 

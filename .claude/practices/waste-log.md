@@ -1748,3 +1748,13 @@ Status: CLOSED
 **Cost impact:** Medium (product quality — core product promise)
 **Tags:** `#rod-caught` `#character-quality` `#prompt-engineering`
 **Status:** Open — Three Amigos needed before touching TURN_RULES / interactionModel. Fix direction agreed: change RULE 2 from mandatory obligation to conditional (react when genuinely interested/provoked, default to own angle otherwise).
+
+### WL-132
+**Item:** Step definition slice window too small — racing IIFE step defs failed on first pass
+**Symptom:** `slice(0, N)` windows in gherkin step definitions too small to reach discuss() and _pick4() functions; brazil member ID is 'brazil' not 'alan_brazil' causing lookup mismatches; TURN_RULES case-sensitive check failed ('nobody' vs 'Nobody').
+**Root cause:** Step definitions written speculatively from summary context rather than from reading the actual IIFE. Mapping between Gherkin member IDs ('alan_brazil') and implementation IDs ('brazil') not established before writing steps.
+**Session:** 2026-03-13
+**Time lost:** ~30 minutes (3 debug cycles)
+**Cost impact:** Low (caught in same session, no user-visible regression)
+**Tags:** `#gherkin` `#step-definitions` `#self-caused`
+**Status:** Closed — fixed same session. Pattern: when writing step defs for a large IIFE, verify member IDs and function structure from actual code before writing lookups.

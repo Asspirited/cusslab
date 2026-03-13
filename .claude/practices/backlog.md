@@ -1188,3 +1188,23 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - CD3: UBV=9 TC=9 RR=9 → CoD=27, Dur=1, **CD3=27.0**
 - Status: CLOSED — 2026-03-12. 6/6 E2E checks passing after BL-106 deployed. Catches JS crashes, API wiring failures, and button-to-logic disconnects that all other pipeline steps miss.
 
+
+---
+
+### BL-123 — The Final Furlong: horse racing panel
+
+- Title: The Final Furlong: horse racing panel
+- Description: New horse racing panel. Alan Brazil hosts (TalkSport, ex-Ipswich). 4 of 6 rotating experts per round: John McCririck, Jim McGrath, Alastair Down, Sir Peter O'Sullevan, Ruby Walsh, Matt Chapman. McCririck and O'Sullevan are DEAD_IN_PANEL_WORLD — present, contributing, neither death mentioned, pure bathos. Mode 1 Q&A with suggestion cards, Mode 2 Race Moment (6 types). 7 character .md files, Gherkin spec (32 scenarios), HR_SUGGESTIONS pool, HR_ANCHOR_BRAZIL readback.
+- Feature: sports
+- CD3: UBV=8 TC=8 RR=7 → CoD=23, Dur=2, **CD3=11.5**
+- Status: CLOSED — 2026-03-13. Pipeline GREEN. Pushed f75a4a4.
+
+---
+
+### BL-124 — Nav: panel group landing page (sub-feature list before entering a panel)
+
+- Title: Nav: panel group landing page (sub-feature list before entering a panel)
+- Description: When a user clicks a main nav group (Sports, Comedy, etc.), instead of dropping immediately into the first panel in the list, show a landing page that lists all sub-features within that group. User then clicks to enter the specific panel. Replaces current behaviour of auto-selecting the first tab.
+- Feature: platform
+- CD3: UBV=8 TC=7 RR=7 → CoD=22, Dur=3, **CD3=7.3**
+- Status: OPEN — raised 2026-03-13
