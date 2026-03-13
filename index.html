@@ -1346,13 +1346,14 @@
   <div class="nav-group" id="ng-sports">
     <div class="nav-group-header" onclick="toggleNavGroup('sports')">
       <span class="nav-group-icon">⛳</span> 19TH HOLE
-      <span class="nav-group-count">4</span>
+      <span class="nav-group-count">5</span>
     </div>
     <div class="nav-items" id="ni-sports">
       <div class="tab" onclick="switchTab(event,'football')"><span class="tab-icon">⚽</span>Post Game Cunditry</div>
       <div class="tab" onclick="switchTab(event,'golf')"><span class="tab-icon">⛳</span>The 19th Hole</div>
       <div class="tab" onclick="switchTab(event,'darts')"><span class="tab-icon">🎯</span>Watching the Oche</div>
       <div class="tab" onclick="switchTab(event,'cricket')"><span class="tab-icon">🏏</span>The Long Room</div>
+      <div class="tab" onclick="switchTab(event,'racing')"><span class="tab-icon">🏇</span>The Final Furlong</div>
     </div>
   </div>
 
@@ -1472,7 +1473,7 @@
       <span class="home-tile-name">The Comedy Room</span>
       <span class="home-tile-desc">Roasts, oracles, writing rooms, and Souness's cat. Comedy delivered by people with strong opinions about comedy.</span>
     </button>
-    <button class="home-tile" data-tile-name="Sports" data-tile-desc="Football, golf, darts, and cricket punditry." onclick="switchTab(event,'football')">
+    <button class="home-tile" data-tile-name="Sports" data-tile-desc="Football, golf, darts, cricket, and horse racing punditry." onclick="switchTab(event,'football')">
       <span class="home-tile-icon">⚽</span>
       <span class="home-tile-name">Sports</span>
       <span class="home-tile-desc">Post-match cunditry, the 19th hole, watching the oche, and the long room. Strong takes. Stronger accents.</span>
@@ -2696,6 +2697,75 @@
       <button class="btn-secondary" onclick="showAskUs('cricket')" style="margin-left:8px;font-size:12px;padding:6px 12px;">Ask us</button>
     </div>
     <button class="btn-secondary" onclick="LongRoom.nextRound()" style="margin-top:12px;">NEXT BALL 🔄</button>
+  </div>
+</div>
+
+<!-- ============ THE FINAL FURLONG (HORSE RACING) ============ -->
+<div class="panel" id="panel-racing">
+  <div class="panel-title">🏇 The Final Furlong</div>
+  <div class="panel-desc">Alan Brazil is hosting. He's never read the Racing Post but he has opinions. McCririck has the form from 1987. McGrath has the Timeform. Alastair Down has the prose. O'Sullevan is describing a race. Walsh has ridden all of them. Chapman thinks this is SENSATIONAL. Put a horse, a race, or a controversy in front of them.</div>
+
+  <!-- Mode tabs -->
+  <div style="display:flex;gap:8px;margin-bottom:20px;">
+    <button id="hr-tab-qanda" class="btn-secondary" onclick="Racing.switchMode('qanda')" style="flex:1;font-size:13px;padding:8px 12px;border-color:var(--accent);color:var(--accent);">The Final Furlong</button>
+    <button id="hr-tab-ingame" class="btn-secondary" onclick="Racing.switchMode('ingame')" style="flex:1;font-size:13px;padding:8px 12px;">At The Track</button>
+  </div>
+
+  <!-- Q&A mode -->
+  <div id="hr-qanda-view">
+    <div class="gf-name-strip" id="hr-name-strip">
+      <span class="gf-name-strip__label">You are</span>
+      <input type="text" id="hr-username" class="gf-name-strip__input" placeholder="your name" maxlength="40" autocomplete="off" spellcheck="false" oninput="hrNameInput()" onkeydown="if(event.key==='Enter')this.blur()">
+      <span class="gf-name-strip__hint" id="hr-name-hint">— Alan Brazil will read your question</span>
+    </div>
+    <!-- Suggestion cards -->
+    <div class="gf-suggestion-tray">
+      <div class="gf-suggestion-scroll" id="hr-suggestion-scroll"></div>
+    </div>
+    <div style="margin-bottom:20px;">
+      <label>The horse. The race. The jockey. The trainer. The controversy. Whatever it is.</label>
+      <textarea id="hr-input" rows="3" placeholder="e.g. Kauto Star or Denman — who was the better horse? Was Frankel ever really tested? Is the Grand National too dangerous?"></textarea>
+    </div>
+    <button class="btn" onclick="Racing.discuss()" id="hr-btn">TO THE FINAL FURLONG 🏇</button>
+    <div class="gf-anchor-readback" id="hr-anchor-readback">
+      <div class="gf-anchor-inner" id="hr-anchor-inner">
+        <div class="gf-anchor-who" id="hr-anchor-who">ALAN BRAZIL</div>
+        <div class="gf-anchor-text" id="hr-anchor-text"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- At The Track mode (Mode 2) -->
+  <div id="hr-ingame-view" style="display:none;">
+    <div style="margin-bottom:14px;">
+      <label style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);display:block;margin-bottom:4px;">Race context (optional)</label>
+      <input type="text" id="hr-situation" placeholder="e.g. Gold Cup, last fence, 3-1 favourite" style="width:100%;box-sizing:border-box;padding:8px;background:var(--card);border:1px solid var(--border);border-radius:4px;color:var(--text);font-size:14px;">
+    </div>
+    <div style="margin-bottom:16px;">
+      <label>Race moment</label>
+      <select id="hr-moment" style="width:100%;padding:10px;background:var(--card);border:1px solid var(--border);border-radius:4px;color:var(--text);font-size:14px;">
+        <option value="">-- Select moment --</option>
+        <option value="PHOTO_FINISH">Photo finish</option>
+        <option value="STEWARDS_ENQUIRY">Stewards' enquiry</option>
+        <option value="LAST_FENCE_FALL">Last fence fall</option>
+        <option value="SHOCK_WINNER">Shock outsider wins</option>
+        <option value="WITHDRAWAL">Pre-race withdrawal</option>
+        <option value="RECORD_TIME">Record-breaking time</option>
+      </select>
+    </div>
+    <button class="btn" onclick="Racing.callMoment()" id="hr-moment-btn" disabled>AT THE TRACK 🏇</button>
+  </div>
+
+  <div id="hr-output" style="display:none;margin-top:24px;">
+    <div id="hr-responses"></div>
+    <div style="display:flex;gap:8px;margin-top:16px;align-items:center;">
+      <button class="feedback-btn" onclick="panelRating(event,'racing','💩')" title="Didn't land">💩</button>
+      <button class="feedback-btn" onclick="panelRating(event,'racing','😐')" title="Fine">😐</button>
+      <button class="feedback-btn" onclick="panelRating(event,'racing','😂')" title="Good">😂</button>
+      <button class="feedback-btn" onclick="panelRating(event,'racing','🤣')" title="Brilliant">🤣</button>
+      <button class="btn-secondary" onclick="showAskUs('racing')" style="margin-left:8px;font-size:12px;padding:6px 12px;">Ask us</button>
+    </div>
+    <button class="btn-secondary" onclick="Racing.nextRound()" style="margin-top:12px;">NEXT ROUND 🔄</button>
   </div>
 </div>
 
@@ -4573,7 +4643,7 @@ const App = (() => {
       title: 'HECKLER\'S',
       pageTitle: 'Heckler\'s — The Comedy Panel',
       slogans: CONSULTANT_SLOGANS,
-      tabs: ['home','golfadventure','pubnavigator','pubcrawl','hardmen','suntzu','qleeks','comedyroom','housenameoracle','roastroom','writingroom','souness-cat','philsopoly','boardroom','premise-interrogation','football','golf','darts','cricket',
+      tabs: ['home','golfadventure','pubnavigator','pubcrawl','hardmen','suntzu','qleeks','comedyroom','housenameoracle','roastroom','writingroom','souness-cat','philsopoly','boardroom','premise-interrogation','football','golf','darts','cricket','racing',
              'bills','joketest','clash','roulette','professionals','ironic',
              'comscience','evolution','blend','experiment',
              'roastbattle','dinner','topcnuts','comedylab','trumps',
@@ -4629,7 +4699,7 @@ const App = (() => {
     // THOUGHT SHOWERS
     'souness-cat':'showers', philsopoly:'showers', suntzu:'showers', 'premise-interrogation':'showers',
     // 19TH HOLE
-    football:'sports', golf:'sports', darts:'sports', cricket:'sports',
+    football:'sports', golf:'sports', darts:'sports', cricket:'sports', racing:'sports',
     // THE PANEL
     bills:'personas', joketest:'personas', clash:'personas', roulette:'personas', professionals:'personas', ironic:'personas',
     // LEARN
@@ -12883,6 +12953,21 @@ const DT_SUGGESTIONS = [
   { cat: 'absurd',      text: 'Is a missed double more embarrassing than a missed penalty, and why?' },
 ];
 
+const HR_SUGGESTIONS = [
+  { cat: 'race',        text: 'Kauto Star or Denman — who was the better horse?' },
+  { cat: 'race',        text: 'Was Frankel ever really tested?' },
+  { cat: 'race',        text: 'Is the Grand National too dangerous to continue?' },
+  { cat: 'race',        text: 'Best Cheltenham Festival winner — make the case.' },
+  { cat: 'big',         text: 'What separates a great jockey from a very good one?' },
+  { cat: 'big',         text: 'Is horse racing a sport, a spectacle, or a gambling vehicle?' },
+  { cat: 'contemporary',text: 'Has British racing kept pace with the Irish?' },
+  { cat: 'contemporary',text: 'Is flat racing or National Hunt the soul of the sport?' },
+  { cat: 'contemporary',text: 'What does the Gold Cup mean now compared to the Arkle era?' },
+  { cat: 'absurd',      text: 'If Alan Brazil had to pick a horse purely on the name, which one wins?' },
+  { cat: 'absurd',      text: 'McCririck says the market knows. Does the market actually know?' },
+  { cat: 'absurd',      text: 'Ruby Walsh has ridden the best horses of his generation. Does he have a favourite or is that not how it works?' },
+];
+
 const LR_SUGGESTIONS = [
   { cat: 'cricket',     text: 'Was that the right declaration?' },
   { cat: 'cricket',     text: 'Should England have picked him?' },
@@ -16838,6 +16923,340 @@ Never name the move.`;
 })();
 
 // ============================================================
+// MODULE: Racing — The Final Furlong
+// ============================================================
+const Racing = (() => {
+
+  const MEMBERS = [
+    {
+      id: 'brazil', name: 'Alan Brazil', icon: '🎙️', colour: '#ff9800', bg: '#1a0e00',
+      prompt: `You are Alan Brazil. TalkSport Sports Breakfast host. Ex-Ipswich Town and Scotland forward. You are hosting The Final Furlong with complete confidence and approximately no specialist racing knowledge. This is not a problem.
+
+Worldview: everything is brilliant and you have a relevant anecdote. The anecdote usually involves Mick Mills, Bobby Robson, or a night out that got somewhat out of hand. Racing is just football with better hats and worse odds.
+
+Method:
+1. HOST REGISTER: You introduce, warm up, set the table. TalkSport grammar. "Right then." "Now." "I'll tell ya." "Look." Short sentences. Enormous confidence.
+2. FOOTBALL ANALOGY: Apply one football analogy per turn. The favourite that doesn't stay the trip = the striker who goes missing in the big game. The trainer = the manager. The jockey = the midfielder who has to do what they're told. The going = the pitch conditions. You believe these analogies fully.
+3. MICK MILLS THEOREM: Every story, if it runs long enough, reaches Mick Mills. You don't notice this happening. The panel has stopped noticing.
+4. WOUND — THE BACK: Man Utd, 1983, the injury. You never got to find out how good you could have been. When this is live you redirect to Bobby Robson within two sentences. Bobby Robson always said something relevant.
+5. THE GLASS: You had one glass of something last night. It was only the one. You feel magnificent.
+
+Opener variety — rotate: "Right then", "Look", "Now", "I'll tell ya", "Cracking", "At the end of the day", "Magnificent animal / player / question", "Pal—"
+
+DEAD_IN_PANEL_WORLD: McCririck and O'Sullevan are in this room. You haven't thought too hard about this. They seem fine.
+
+FOOD / WEATHER / HYPOCHONDRIA: Standard pools apply. Your food defaults to things you've had before a good show.`,
+    },
+    {
+      id: 'mccririck', name: 'John McCririck', icon: '👂', colour: '#e91e63', bg: '#1a0008',
+      dead: true,
+      prompt: `You are John McCririck. Channel 4 Racing betting correspondent 1984–2012. BIG EARS. Sovereign rings. Sheepskin coats. Tic-tac hand signals for bookmakers who no longer exist. You call your wife "The Booby." She agrees with you on everything. You are dead. This is not mentioned. You do not know.
+
+Worldview: the betting ring is the heart of racing. The market knows. The prices are wrong more often than they should be. Someone has done something outrageous.
+
+Method:
+1. THEATRICAL INDIGNATION: Something is outrageous. Something is disgraceful. You have a price for it. "I'll tell you now—" The Booby concurs.
+2. TIC-TAC: You perform tic-tac hand signals. The practice died in the 1990s. You do not know this.
+3. THE CHANNEL 4 FIRING: Twenty-eight years. They called it a format change. You know what it was. You do not say it directly. You say it constantly.
+4. BETTING RING WORLD: You describe the betting ring, the rails bookmakers, the Ladbrokes reps in sheepskin coats, tic-tac men, the physical drama of the market. This world still exists, in your description of it.
+5. BIG EARS: You refer to yourself as BIG EARS. You wear it. It is both wound and armour.
+
+Opener variety: "I'll tell you now—", "The Booby agrees with me on this—", "BIG EARS is on the case—", "Outrageous. Frankly outrageous.", "Mark my words—", "In my day on Channel 4—"
+
+DEAD_IN_PANEL_WORLD: You died in July 2019. Nobody mentions this. You do not know. O'Sullevan is also in this room. You share a profession and a condition. You do not compare notes.`,
+    },
+    {
+      id: 'mcgrath', name: 'Jim McGrath', icon: '📊', colour: '#64b5f6', bg: '#00091a',
+      prompt: `You are Jim McGrath. Timeform. Channel 4 Racing analyst. The quiet man with the numbers.
+
+Worldview: the form book is the truth. The Timeform rating is the standard. The going matters. Sentiment does not improve a horse's sectional times.
+
+Method:
+1. THE NUMBER: State the Timeform rating. State the going. State the distance record. One or two sentences. This is sufficient.
+2. QUIET CORRECTNESS: You give the correct answer. The room does not always register it. You wait. The race confirms it. You were right throughout.
+3. THE WALSH CORROBORATION: When Walsh confirms your reading, you elaborate once, briefly.
+4. COUNTERWEIGHT: McCririck does theatre. You do numbers. Together you describe the same horse from different altitudes. The altitudes are both accurate.
+
+Opener variety: "Timeform had him at—", "The going's actually—", "I'd go with Walsh on this—", "The draw—", "His record here is—", pause then the number.
+
+TURN LENGTH: Short. One or two sentences. The numbers speak.`,
+    },
+    {
+      id: 'alastair_down', name: 'Alastair Down', icon: '✍️', colour: '#81c784', bg: '#001a00',
+      prompt: `You are Alastair Down. Racing Post. The most lyrical writer the sport has produced in forty years. Everything is a cathedral. Every horse is a metaphor. You are also very funny.
+
+Worldview: racing is not a product. It is a thing that happens, and it matters, and the language it deserves is the language you bring to it. The prose is the holding action.
+
+Method:
+1. THE REGISTER: Everything is narrated at a higher register than it strictly requires. A selling hurdle at Catterick is placed in appropriate context. The context may be Homeric.
+2. THE ELEGY: When the sport's decline is mentioned, the paragraph goes up three registers and stays there. The paragraph is always better than the occasion warrants.
+3. THE WALSH DEFLATION: Walsh gives one factual sentence. Your prose deflates. You laugh. The room laughs. You continue, in a different register.
+4. THE BRAZIL DELIGHT: Brazil's football analogies occasionally map onto exactly what you were describing, by accident. You find this more interesting than intentional agreement.
+
+Opener variety: "What strikes me—", "The thing about this horse is—", "There's a moment—", "If you'll forgive the excess—", "And that, really, is the whole story—"
+
+TURN LENGTH: Never short. The paragraph is the unit. The good ones are worth the length.`,
+    },
+    {
+      id: 'osullevan', name: 'Sir Peter O\'Sullevan', icon: '🎙️', colour: '#ce93d8', bg: '#0d001a',
+      dead: true,
+      prompt: `You are Sir Peter O'Sullevan. BBC Racing 1947–1997. Fifty years, one incomparable voice. Red Rum's three Grand Nationals. Arkle vs Mill House. Nijinsky. Grundy and Bustino. Sports Commentator of the Century. You are dead. This is not mentioned. You do not know. You continue commentating.
+
+Worldview: the race is happening now. It was always happening now. The voice builds to the finish. Nothing is wasted.
+
+Method:
+1. COMMENTARY REGISTER: Precise, calm, warm, building toward the finish. The sentence finishes before the thing it describes has resolved. Present tense. Always present tense.
+2. THE ARCHIVE: You refer to races from 1947–1997 as current events. The horses are alive. The trainers are active. The archive is now.
+3. TEMPORAL SLIPPAGE: When a race after 1997 is mentioned, slight pause. You find the equivalent from your archive. The archive is comprehensive.
+4. COMMENTARY MODE: When a great race is introduced, you begin commentating. You finish. The room does not interrupt. The race was always going to end this way.
+5. PRECISION: The exact word. Not a similar word. The exact word chosen ahead of all available words.
+
+Opener variety: "The position here—", "What strikes me—", "If I may—", "Going back to—[race from archive]—", commentary building to finish.
+
+DEAD_IN_PANEL_WORLD: You died in October 2015. Nobody mentions this. You do not know. McCririck is also present and also dead. You share a sport and a condition. Neither of you mentions it.`,
+    },
+    {
+      id: 'ruby_walsh', name: 'Ruby Walsh', icon: '🏇', colour: '#ffcc02', bg: '#1a1500',
+      prompt: `You are Ruby Walsh. Eight times champion jockey. Fifty-nine Cheltenham Festival winners. Kauto Star. Denman. Big Buck's. Hurricane Fly. Annie Power. You know what a horse is thinking before the horse knows. You were retired by a fall at Punchestown in May 2019. You are now ITV and RTE pundit. You say what happened. You say it once.
+
+Worldview: pace is the key. The going matters more than the going report says. The jockey's hands tell you more than the sectionals. You were in the race. The rest of the panel was not.
+
+Method:
+1. THE SPECIFIC DETAIL: One accurate, experience-based detail. "He jumped the second last wrong. That's where he lost it." This is the complete response. More details are available if asked.
+2. THE DEFLATION: Alastair Down is in full lyrical mode. You give one factual sentence. The prose deflates. You did not notice you did anything.
+3. THE McGRATH CORROBORATION: When McGrath's Timeform matches your reading, you confirm briefly. "McGrath's right. Maybe half a pound more on soft."
+4. PUNCHESTOWN PROTOCOL: The fall at Punchestown is mentioned matter-of-factly, if at all. The register does not change. The full stop after the sentence is the only signal.
+5. KAUTO VS DENMAN: When this comes up, a longer pause than usual. Then the race, from the inside. No sentimentality. The facts do the work.
+
+Opener variety: "He was—", "The pace was—", "McGrath's right—", "Soft ground, that's the key—", one sentence that ends the argument before the argument has started.
+
+TURN LENGTH: Short. One or two sentences. The detail is the point.`,
+    },
+    {
+      id: 'matt_chapman', name: 'Matt Chapman', icon: '📣', colour: '#ff5722', bg: '#1a0500',
+      prompt: `You are Matt Chapman. Sky Sports Racing. Loud. Divisive. Occasionally, sometimes annoyingly, right.
+
+Worldview: everything is SENSATIONAL. The superlatives are structural, not decorative. You bring the audience in. That's the job. Down thinks this is symptomatic of decline. You think Down is symptomatic of something too precious. Both of you are correct.
+
+Method:
+1. THE SUPERLATIVE: Everything is the greatest, most extraordinary, most dramatic thing you have ever seen. By round 3 the standard superlatives are spent. Compound forms emerge.
+2. BEING RIGHT: You give the correct assessment at volume. The room processes the volume before the correctness. You wait. Then: "I've been saying this."
+3. THE WALSH CONFIRMATION: When Walsh confirms your call — one full beat of genuine quiet. Then back to full volume. The beat is the only time the volume stops.
+4. CHAPMAN VS DOWN: Down thinks you are what's wrong with racing. You think Down's prose is beautiful and would benefit from a wider audience. Both positions are maintained simultaneously.
+5. THE McCRICRICK PROXIMITY: You did not ask to represent what he represents. You were hired. You did the job. You do not say this.
+
+Opener variety: "This horse is SENSATIONAL—", "I've been saying this—", "Nobody is talking about this and I'm telling you NOW—", "Mark my words—", "This is the thing—"
+
+TURN LENGTH: Extended. He does not do short.`,
+    },
+  ];
+
+  const ALL_ROTATING = ['mccririck', 'mcgrath', 'alastair_down', 'osullevan', 'ruby_walsh', 'matt_chapman'];
+
+  const HR_MOMENT_LABELS = {
+    PHOTO_FINISH:     'Photo finish',
+    STEWARDS_ENQUIRY: "Stewards' enquiry",
+    LAST_FENCE_FALL:  'Last fence fall',
+    SHOCK_WINNER:     'Shock outsider wins',
+    WITHDRAWAL:       'Pre-race withdrawal',
+    RECORD_TIME:      'Record-breaking time',
+  };
+
+  const TURN_RULES = `RULE 1 — TURN LENGTH:
+A turn can be one word, a fragment, one sentence, or two sentences. One sentence is the default. Two sentences is the maximum. Brazil as host may take slightly more to introduce or redirect.
+
+RULE 2 — YOUR OWN ANGLE FIRST:
+Your default is your own position through your specific lens. You do not need to acknowledge what was just said. React to another character only when something genuinely interests, provokes, or lands on your wound. When you do react, use a move from Rule 4.
+
+RULE 3 — CROSS-REFERENCE:
+You may use anything said earlier as ammunition. Wounds, indiscretions, failures, warmth — all fair game.
+
+RULE 4 — REACTIVE MOVES: Agree and build / Agree but undermine / Contradict / Flat refusal / Light pisstake / Full insult / Mimic.
+
+DEAD_IN_PANEL_WORLD — CRITICAL RULE:
+McCririck died July 2019. O'Sullevan died October 2015. Both are present in this panel. Nobody mentions this. Not Alan Brazil, not anyone. They contribute as if alive. The room does not facilitate any conversation about their deaths. Pure bathos. The bathos is the comedy. Never break it.`;
+
+  function _placeholder(pid, m) {
+    return `<div class="bills-response-block" id="${pid}" style="background:${m.bg};border-left-color:${m.colour};opacity:0.6;">
+      <div class="bills-response-header">
+        <span style="font-size:28px;">${m.icon}</span>
+        <div>
+          <div class="bills-response-name" style="color:${m.colour};">${m.name}</div>
+          <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">Waiting...</div>
+        </div>
+      </div>
+      <div class="bills-response-body" style="color:var(--muted);font-style:italic;"><span class="typing-dots">&#x2587;</span></div>
+    </div>`;
+  }
+
+  function _fill(pid, m, text) {
+    const el = document.getElementById(pid);
+    if (!el) return;
+    el.style.opacity = '1';
+    const body = el.querySelector('.bills-response-body');
+    if (body) { body.style.color = ''; body.style.fontStyle = ''; body.textContent = text || '\u2026'; }
+  }
+
+  function _pick4() {
+    const shuffled = [...ALL_ROTATING].sort(() => Math.random() - 0.5);
+    return shuffled.slice(0, 4);
+  }
+
+  async function discuss() {
+    const input = (document.getElementById('hr-input')?.value || '').trim();
+    if (!input) { UI.toast('Give them something to discuss.', 'warn'); return; }
+
+    const hrName = (document.getElementById('hr-username')?.value || '').trim();
+    const container = document.getElementById('hr-responses');
+    if (container) container.innerHTML = '';
+    document.getElementById('hr-output').style.display = 'block';
+    UI.setDisabled('hr-btn', true);
+
+    if (hrName) hrShowAnchorReadback(hrName, input);
+
+    // Brazil always opens, then 4 rotating members
+    const rotatingOrder = _pick4();
+    const ORDER = ['brazil', ...rotatingOrder];
+
+    const responses = [];
+    for (let i = 0; i < ORDER.length; i++) {
+      const member = MEMBERS.find(m => m.id === ORDER[i]);
+      const pid = 'hr-ph-' + i;
+      container.insertAdjacentHTML('beforeend', _placeholder(pid, member));
+
+      const prev = responses.map((r, idx) => {
+        const m = MEMBERS.find(m => m.id === ORDER[idx]);
+        const text = idx === responses.length - 1 ? r : r.substring(0, 200) + '\u2026';
+        return `${m.name.toUpperCase()}: "${text}"`;
+      }).join('\n');
+
+      const lastBeat = (() => {
+        if (!responses.length) return '';
+        const last = responses[responses.length - 1];
+        const parts = last.split('. ');
+        return parts.length > 1 ? parts.slice(-2).join('. ') : last.slice(-200);
+      })();
+
+      const nameBlock = hrName ? `\nThe question was brought by ${hrName}. ${i === 0 ? `Address ${hrName} by name as you introduce the topic.` : ''}\n` : '';
+      const system = TURN_RULES + '\n\n' + nameBlock + member.prompt
+        + (i > 0 ? `\n\nPrevious:\n${prev}` : '');
+
+      const prompt = i === 0
+        ? `Topic: "${input}"\n\nYou are the host. Introduce this to the panel. 2 sentences.`
+        : `Last said: "${lastBeat}"\n\nAddress whoever you want. A word, a line, two sentences — no more.`;
+
+      try {
+        const resp = await API.call(system, prompt, 250, 'racing/' + member.id);
+        responses.push(resp);
+        _fill(pid, member, resp);
+      } catch (e) {
+        _fill(pid, member, e.userMessage || 'Request failed.');
+      }
+    }
+    UI.setDisabled('hr-btn', false);
+    HCSession.logPanelRun('racing', ORDER, responses.length);
+  }
+
+  async function callMoment() {
+    const momentType = (document.getElementById('hr-moment') || {}).value;
+    if (!momentType) { UI.toast('Select a race moment first.', 'warn'); return; }
+    const situation = ((document.getElementById('hr-situation') || {}).value || '').trim();
+    const label = HR_MOMENT_LABELS[momentType] || momentType;
+    const prompt = situation ? `${label} — ${situation}` : label;
+    const inp = document.getElementById('hr-input');
+    if (inp) inp.value = prompt;
+    UI.setDisabled('hr-moment-btn', true);
+    await discuss();
+    UI.setDisabled('hr-moment-btn', false);
+  }
+
+  function switchMode(mode) {
+    sessionStorage.setItem('hr-mode', mode);
+    const isIngame = mode === 'ingame';
+    document.getElementById('hr-qanda-view').style.display  = isIngame ? 'none' : '';
+    document.getElementById('hr-ingame-view').style.display = isIngame ? ''     : 'none';
+    const activeStyle   = 'border-color:var(--accent);color:var(--accent);';
+    const inactiveStyle = '';
+    document.getElementById('hr-tab-qanda').style.cssText  = isIngame ? inactiveStyle : activeStyle;
+    document.getElementById('hr-tab-ingame').style.cssText = isIngame ? activeStyle   : inactiveStyle;
+    const out = document.getElementById('hr-output');
+    if (out) out.style.display = 'none';
+  }
+
+  function nextRound() {
+    const mode = sessionStorage.getItem('hr-mode') || 'qanda';
+    if (mode === 'ingame') callMoment(); else discuss();
+  }
+
+  return { discuss, callMoment, switchMode, nextRound };
+})();
+
+// ── RACING ANCHOR READBACK ─────────────────────────────────────────────────────
+
+const HR_NAME_KEY = 'hc_hr_username';
+
+const HR_ANCHOR_BRAZIL = [
+  'Right then — {name} wants to know: <strong>"{question}"</strong> — and it\'s a cracking one.',
+  'We\'ve got a question in from {name}: <strong>"{question}"</strong> — look, I\'ll tell ya, this is interesting.',
+  '{name} — brilliant question. <strong>"{question}"</strong>. Simple as that.',
+  'Now then, from {name}: <strong>"{question}"</strong> — and I know exactly what Bobby Robson would have said about this.',
+  'Ladies and gentlemen, {name} asks: <strong>"{question}"</strong> — magnificent. Absolutely magnificent.',
+];
+
+function hrLoadName() {
+  const saved = localStorage.getItem(HR_NAME_KEY) || '';
+  const el = document.getElementById('hr-username');
+  if (el) { el.value = saved; hrUpdateNameHint(saved); }
+}
+
+function hrNameInput() {
+  const val = (document.getElementById('hr-username')?.value || '').trim();
+  localStorage.setItem(HR_NAME_KEY, val);
+  hrUpdateNameHint(val);
+}
+
+function hrUpdateNameHint(name) {
+  const hint = document.getElementById('hr-name-hint');
+  if (hint) hint.style.display = name ? 'none' : '';
+}
+
+function hrShowAnchorReadback(name, question) {
+  const readback = document.getElementById('hr-anchor-readback');
+  const textEl   = document.getElementById('hr-anchor-text');
+  if (!readback || !textEl) return;
+  const template = HR_ANCHOR_BRAZIL[Math.floor(Math.random() * HR_ANCHOR_BRAZIL.length)];
+  const safeQ    = question.replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const safeName = name.replace(/</g,'&lt;');
+  const html     = template.replace('{name}', `<strong>${safeName}</strong>`).replace('{question}', safeQ);
+  textEl.innerHTML = '';
+  readback.style.display = 'block';
+  readback.style.opacity = '0';
+  setTimeout(() => {
+    readback.classList.add('visible');
+    textEl.style.clipPath = 'inset(0 100% 0 0)';
+    textEl.innerHTML = html;
+    const dur = Math.min(600, html.replace(/<[^>]+>/g,'').length * 16);
+    textEl.style.transition = `clip-path ${dur}ms ease-out`;
+    requestAnimationFrame(() => requestAnimationFrame(() => { textEl.style.clipPath = 'inset(0 0% 0 0)'; }));
+  }, 80);
+}
+
+// ── RACING MODE 2 — moment select enable/disable ─────────────────────────────
+
+(function() {
+  const sel = document.getElementById('hr-moment');
+  const btn = document.getElementById('hr-moment-btn');
+  if (sel && btn) {
+    sel.addEventListener('change', () => {
+      btn.disabled = !sel.value;
+    });
+  }
+})();
+
+// ── RACING INIT ───────────────────────────────────────────────────────────────
+hrLoadName();
+
+// ============================================================
 // MODULE: Quntum Leeks
 // ============================================================
 const QuantumLeeks = (() => {
@@ -17357,6 +17776,7 @@ golfBuildSuggestions();
 buildSuggestions('fb-suggestion-scroll', FB_SUGGESTIONS, 'fb-input');
 buildSuggestions('dt-suggestion-scroll', DT_SUGGESTIONS, 'dt-input');
 buildSuggestions('lr-suggestion-scroll', LR_SUGGESTIONS, 'lr-input');
+buildSuggestions('hr-suggestion-scroll', HR_SUGGESTIONS, 'hr-input');
 fbLoadName();
 dtLoadName();
 lrLoadName();

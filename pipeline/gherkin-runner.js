@@ -38,7 +38,7 @@ const NAV_GROUPS = {
   boardroom:     ['Present to the Boardroom'],
   comedy:        ['The Comedy Room','The House Name Oracle','The Roast Room','The Writing Room'],
   showers:       ["Souness's Cat","Phil's-opoly",'Ask Sun Tzu','Premise Interrogation'],
-  sports:        ['Post Game Cunditry', 'The 19th Hole', 'Watching the Oche', 'The Long Room'],
+  sports:        ['Post Game Cunditry', 'The 19th Hole', 'Watching the Oche', 'The Long Room', 'The Final Furlong'],
   play:          ['Roast Battle','Dinner Party',"Rogues' Gallery",'Comedy Lab','Dimension Duel'],
   misadventure:  ['Relive Golfing Greatness', 'Survive a Friday night at...', 'Friday Pub Crawl Misadventure', 'Quntum Leeks'],
 };
@@ -3969,6 +3969,278 @@ function makeSteps(ctx) {
     [/^name "([^"]+)" and question "([^"]+)" are submitted$/, (name,question) => { ctx._nameStrip={value:name,error:false}; ctx._questionText=question; ctx._submitted=true; }],
     [/^name "([^"]+)" is submitted$/, (name) => { ctx._nameStrip={value:name,error:false}; ctx._submitted=true; }],
     [/^buildPromptPrefix is called$/, () => { const name=ctx._nameStrip?.value||''; const q=ctx._questionText||''; ctx._promptResult=[name,q,'Address '+name+' directly at least once','Ewen Murray has just read the question'].join(' | '); }],
+
+    // ── THE FINAL FURLONG (HORSE RACING) ──────────────────────────────────────
+
+    [/^"([^"]+)" is registered in the nav group map under "([^"]+)"$/, (tabId, group) => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      const mapMatch = html.match(/_NAV_GROUP_MAP\s*=\s*\{([\s\S]*?)\};/);
+      if (!mapMatch) throw new Error('_NAV_GROUP_MAP not found in index.html');
+      const entry = mapMatch[1];
+      const hasTabId = entry.includes(`'${tabId}'`) || entry.includes(`"${tabId}"`) || entry.includes(`${tabId}:`);
+      if (!hasTabId) throw new Error(`"${tabId}" not found in _NAV_GROUP_MAP`);
+      const hasGroup = entry.includes(`'${group}'`) || entry.includes(`"${group}"`);
+      if (!hasGroup) throw new Error(`group "${group}" not found in _NAV_GROUP_MAP near "${tabId}"`);
+    }],
+
+    [/^the racing panel tab text is "([^"]+)"$/, (label) => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      if (!html.includes(label))
+        throw new Error(`Racing panel tab label "${label}" not found in index.html`);
+    }],
+
+    [/^the racing panel includes "([^"]+)"$/, (memberId) => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      const racingStart = html.indexOf('const Racing = ');
+      const iife = html.slice(racingStart, racingStart + 20000);
+      // Brazil is stored as 'brazil' but also check for full name
+      const effectiveId = memberId === 'alan_brazil' ? 'brazil' : memberId;
+      if (!iife.includes(`id: '${effectiveId}'`) && !iife.includes(`id: "${effectiveId}"`) && !iife.includes(`Alan Brazil`))
+        throw new Error(`Racing IIFE does not include member "${memberId}"`);
+    }],
+
+    [/^a racing panel discussion is triggered$/, () => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      const racingStart = html.indexOf('const Racing = ');
+      const iife = html.slice(racingStart, racingStart + 20000);
+      ctx._racingIife = iife;
+    }],
+
+    [/^the first speaker is "([^"]+)"$/, (speakerId) => {
+      const iife = ctx._racingIife || '';
+      const discussStart = iife.indexOf('async function discuss');
+      const discussBlock = iife.slice(discussStart, discussStart + 1000);
+      if (!discussBlock.includes("'brazil'") || !discussBlock.includes('ORDER'))
+        throw new Error(`Racing discuss() does not put brazil first`);
+    }],
+
+    [/^exactly 4 members from the rotating pool speak after Brazil$/, () => {
+      const iife = ctx._racingIife || '';
+      if (!iife.includes('_pick4') || !iife.includes('slice(0, 4)'))
+        throw new Error(`Racing _pick4() does not select 4 rotating members`);
+    }],
+
+    [/^all 4 are drawn from the non-host panel members$/, () => {
+      const iife = ctx._racingIife || '';
+      if (!iife.includes('ALL_ROTATING'))
+        throw new Error(`Racing does not define ALL_ROTATING pool`);
+      const allRotStart = iife.indexOf("const ALL_ROTATING");
+      const allRotLine = iife.slice(allRotStart, allRotStart + 200);
+      if (allRotLine.includes("'brazil'"))
+        throw new Error(`brazil should not be in ALL_ROTATING`);
+    }],
+
+    [/^"([^"]+)" is present in the racing panel member list$/, (memberId) => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      const racingStart = html.indexOf('const Racing = ');
+      const iife = html.slice(racingStart, racingStart + 20000);
+      const effectiveId = memberId === 'alan_brazil' ? 'brazil' : memberId;
+      if (!iife.includes(`id: '${effectiveId}'`) && !iife.includes(`id: "${effectiveId}"`))
+        throw new Error(`Racing IIFE does not include member "${memberId}"`);
+    }],
+
+    [/^the racing turn rules include a hard rule against mentioning panel member deaths$/, () => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      const racingStart = html.indexOf('const Racing = ');
+      const iife = html.slice(racingStart, racingStart + 20000);
+      const turnStart = iife.indexOf('TURN_RULES');
+      const turnBlock = iife.slice(turnStart, turnStart + 1000);
+      if (!turnBlock.includes('DEAD_IN_PANEL_WORLD') || !turnBlock.toLowerCase().includes('nobody mentions'))
+        throw new Error(`Racing TURN_RULES does not include DEAD_IN_PANEL_WORLD hard rule`);
+    }],
+
+    [/^the racing panel member "([^"]+)"$/, (memberId) => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      const racingStart = html.indexOf('const Racing = ');
+      const iife = html.slice(racingStart, racingStart + 20000);
+      const effectiveId = memberId === 'alan_brazil' ? 'brazil' : memberId;
+      if (!iife.includes(`id: '${effectiveId}'`) && !iife.includes(`id: "${effectiveId}"`))
+        throw new Error(`Racing IIFE does not include member "${memberId}"`);
+      ctx._racingMember = effectiveId;
+      ctx._racingIife = iife;
+    }],
+
+    [/^their entry has a non-empty "([^"]+)"$/, (field) => {
+      const iife = ctx._racingIife || '';
+      const memberId = ctx._racingMember || '';
+      const memberStart = iife.indexOf(`id: '${memberId}'`);
+      if (memberStart < 0) throw new Error(`Member "${memberId}" not found in IIFE`);
+      const memberBlock = iife.slice(memberStart, memberStart + 3000);
+      if (!memberBlock.includes(`${field}:`))
+        throw new Error(`Member "${memberId}" missing field "${field}"`);
+    }],
+
+    [/^his prompt mentions Ipswich or football$/, () => {
+      const iife = ctx._racingIife || '';
+      const memberStart = iife.indexOf(`id: 'brazil'`);
+      const memberBlock = iife.slice(memberStart, memberStart + 3000);
+      if (!memberBlock.toLowerCase().includes('ipswich') && !memberBlock.toLowerCase().includes('football'))
+        throw new Error(`Brazil prompt does not mention Ipswich or football`);
+    }],
+
+    [/^his prompt includes reference to anecdotes from his playing days$/, () => {
+      const iife = ctx._racingIife || '';
+      const memberStart = iife.indexOf(`id: 'brazil'`);
+      const memberBlock = iife.slice(memberStart, memberStart + 3000);
+      if (!memberBlock.includes('Mick Mills') && !memberBlock.includes('Bobby Robson'))
+        throw new Error(`Brazil prompt does not reference Mick Mills or Bobby Robson`);
+    }],
+
+    [/^his prompt mentions the betting ring or tic-tac$/, () => {
+      const iife = ctx._racingIife || '';
+      const memberStart = iife.indexOf(`id: 'mccririck'`);
+      const memberBlock = iife.slice(memberStart, memberStart + 3000);
+      if (!memberBlock.toLowerCase().includes('betting ring') && !memberBlock.toLowerCase().includes('tic-tac'))
+        throw new Error(`McCririck prompt does not mention betting ring or tic-tac`);
+    }],
+
+    [/^his prompt mentions BBC or commentary$/, () => {
+      const iife = ctx._racingIife || '';
+      const memberStart = iife.indexOf(`id: 'osullevan'`);
+      const memberBlock = iife.slice(memberStart, memberStart + 3000);
+      if (!memberBlock.includes('BBC') && !memberBlock.toLowerCase().includes('commentat'))
+        throw new Error(`O'Sullevan prompt does not mention BBC or commentary`);
+    }],
+
+    [/^his prompt mentions riding or the saddle$/, () => {
+      const iife = ctx._racingIife || '';
+      const memberStart = iife.indexOf(`id: 'ruby_walsh'`);
+      const memberBlock = iife.slice(memberStart, memberStart + 3000);
+      if (!memberBlock.toLowerCase().includes('rode') && !memberBlock.toLowerCase().includes('saddle') && !memberBlock.toLowerCase().includes('jockey'))
+        throw new Error(`Walsh prompt does not mention riding or the saddle`);
+    }],
+
+    [/^the racing panel is active$/, () => {
+      ctx._racingMode = ctx._racingMode || 'qanda';
+      ctx._racingPanelActive = true;
+    }],
+
+    [/^the Q&A mode view is visible$/, () => {
+      if (ctx._racingMode !== 'qanda') throw new Error(`Racing mode is "${ctx._racingMode}", expected "qanda"`);
+    }],
+
+    [/^the Race Moment mode view is hidden$/, () => {
+      if (ctx._racingMode === 'ingame') throw new Error(`Race Moment mode should be hidden but mode is "ingame"`);
+    }],
+
+    [/^the racing panel is in qanda mode$/, () => {
+      const pool = [
+        {cat:'race',text:'Kauto Star or Denman — who was the better horse?'},
+        {cat:'race',text:'Was Frankel ever really tested?'},
+        {cat:'race',text:'Is the Grand National too dangerous to continue?'},
+        {cat:'race',text:'Best Cheltenham Festival winner — make the case.'},
+        {cat:'big',text:'What separates a great jockey from a very good one?'},
+        {cat:'big',text:'Is horse racing a sport, a spectacle, or a gambling vehicle?'},
+        {cat:'contemporary',text:'Has British racing kept pace with the Irish?'},
+        {cat:'contemporary',text:'Is flat racing or National Hunt the soul of the sport?'},
+        {cat:'contemporary',text:'What does the Gold Cup mean now compared to the Arkle era?'},
+        {cat:'absurd',text:'If Alan Brazil had to pick a horse purely on the name, which one wins?'},
+        {cat:'absurd',text:"McCririck says the market knows. Does the market actually know?"},
+        {cat:'absurd',text:'Ruby Walsh has ridden the best horses of his generation. Does he have a favourite or is that not how it works?'},
+      ];
+      ctx._hrPool = pool;
+      ctx._hrSuggestions = [...pool].sort(() => Math.random() - 0.5);
+      ctx._racingMode = 'qanda';
+    }],
+
+    [/^the racing suggestion tray is visible$/, () => {
+      if (!ctx._hrSuggestions?.length) throw new Error('Racing suggestion tray is empty');
+    }],
+
+    [/^the racing suggestion tray contains at least (\d+) cards$/, (n) => {
+      if ((ctx._hrSuggestions||[]).length < parseInt(n))
+        throw new Error(`Expected >=${n} racing cards, got ${(ctx._hrSuggestions||[]).length}`);
+    }],
+
+    [/^at least one racing suggestion card has category "([^"]+)"$/, (cat) => {
+      if (!(ctx._hrSuggestions||[]).some(c => c.cat === cat))
+        throw new Error(`No racing suggestion card with category "${cat}"`);
+    }],
+
+    [/^the user clicks a racing suggestion card$/, () => {
+      const card = ctx._hrSuggestions?.[0];
+      if (!card) throw new Error('No racing suggestion cards');
+      ctx._hrClickedCard = card;
+      ctx._hrTextarea = card.text;
+    }],
+
+    [/^the racing textarea contains the card text$/, () => {
+      if (ctx._hrTextarea !== ctx._hrClickedCard?.text)
+        throw new Error('Racing textarea does not match card text');
+    }],
+
+    [/^the user clicks the "Race Moment" mode tab$/, () => {
+      ctx._racingMode = 'ingame';
+    }],
+
+    [/^the Race Moment mode view is visible$/, () => {
+      if (ctx._racingMode !== 'ingame') throw new Error(`Race Moment mode not visible — mode is "${ctx._racingMode}"`);
+    }],
+
+    [/^the Q&A mode view is hidden$/, () => {
+      if (ctx._racingMode === 'qanda') throw new Error(`Q&A mode should be hidden but mode is "qanda"`);
+    }],
+
+    [/^the racing panel is in ingame mode$/, () => {
+      ctx._racingMode = 'ingame';
+      ctx._hrMomentSelected = null;
+    }],
+
+    [/^the race moment selector contains (\d+) options$/, (n) => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      const start = html.indexOf('id="hr-moment"');
+      if (start < 0) throw new Error('hr-moment select not found in index.html');
+      const block = html.slice(start, start + 1000);
+      const count = (block.match(/<option/g) || []).length;
+      // subtract blank/placeholder option if present
+      const nonBlank = (block.match(/<option value="[A-Z_]+"/g) || []).length;
+      if (nonBlank !== parseInt(n))
+        throw new Error(`Expected ${n} non-blank moment options, found ${nonBlank}`);
+    }],
+
+    [/^the race moment selector includes "([^"]+)"$/, (val) => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      const start = html.indexOf('id="hr-moment"');
+      if (start < 0) throw new Error('hr-moment select not found in index.html');
+      const block = html.slice(start, start + 1000);
+      if (!block.includes(`value="${val}"`))
+        throw new Error(`Moment type "${val}" not found in hr-moment select`);
+    }],
+
+    [/^no moment type is selected$/, () => {
+      ctx._hrMomentSelected = '';
+    }],
+
+    [/^the Race Moment button is disabled$/, () => {
+      if (ctx._hrMomentSelected) throw new Error('Race Moment button should be disabled — a moment is selected');
+    }],
+
+    [/^the user selects "([^"]+)" from the moment selector$/, (val) => {
+      ctx._hrMomentSelected = val;
+    }],
+
+    [/^the Race Moment button is enabled$/, () => {
+      if (!ctx._hrMomentSelected) throw new Error('Race Moment button should be enabled — no moment selected');
+    }],
+
+    [/^a racing panel Q&A discussion has completed$/, () => {
+      ctx._racingAnchorReadback = 'Alan Brazil';
+    }],
+
+    [/^the anchor readback is attributed to Alan Brazil$/, () => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      if (!html.includes('HR_ANCHOR_BRAZIL'))
+        throw new Error('HR_ANCHOR_BRAZIL anchor readback pool not found in index.html');
+    }],
+
+    [/^the Racing module exports "([^"]+)"$/, (fn) => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      const racingStart = html.indexOf('const Racing = ');
+      const returnStart = html.indexOf('return {', racingStart);
+      const returnBlock = html.slice(returnStart, returnStart + 300);
+      if (!returnBlock.includes(fn))
+        throw new Error(`Racing module does not export "${fn}"`);
+    }],
 
     // ── OCHE DRAW ─────────────────────────────────────────────────────────────
     [/^I open the character selection screen$/, () => { ctx._dtDraw=ctx._dtDraw||new Set(); ctx._dtSelectionOpen=true; }],
