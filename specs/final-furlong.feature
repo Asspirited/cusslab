@@ -108,36 +108,18 @@ Feature: The Final Furlong — Horse Racing Panel
     When the user clicks a racing suggestion card
     Then the racing textarea contains the card text
 
-  # ── MODE 2 — RACE MOMENT ───────────────────────────────────────
+  # ── MODE 2 — RACE SIMULATION ────────────────────────────────────
 
-  Scenario: Racing panel can be switched to Race Moment mode
+  Scenario: Racing panel can be switched to Race Simulation mode
     Given the racing panel is active
-    When the user clicks the "Race Moment" mode tab
-    Then the Race Moment mode view is visible
+    When the user clicks the "Race Simulation" mode tab
+    Then the Race Simulation mode view is visible
     And the Q&A mode view is hidden
 
-  Scenario: Race Moment selector contains exactly 6 moment types
+  Scenario: Race Simulation mode shows the race setup UI
     Given the racing panel is in ingame mode
-    Then the race moment selector contains 6 options
-
-  Scenario: Race Moment selector includes expected moment types
-    Given the racing panel is in ingame mode
-    Then the race moment selector includes "PHOTO_FINISH"
-    And the race moment selector includes "STEWARDS_ENQUIRY"
-    And the race moment selector includes "LAST_FENCE_FALL"
-    And the race moment selector includes "SHOCK_WINNER"
-    And the race moment selector includes "WITHDRAWAL"
-    And the race moment selector includes "RECORD_TIME"
-
-  Scenario: Race Moment button is disabled until a moment is selected
-    Given the racing panel is in ingame mode
-    And no moment type is selected
-    Then the Race Moment button is disabled
-
-  Scenario: Race Moment button enables when a moment is selected
-    Given the racing panel is in ingame mode
-    When the user selects "PHOTO_FINISH" from the moment selector
-    Then the Race Moment button is enabled
+    Then the race setup panel is visible
+    And the start race button exists
 
   # ── ANCHOR READBACK ────────────────────────────────────────────
 
