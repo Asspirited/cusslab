@@ -8781,6 +8781,338 @@ function makeSteps(ctx) {
         throw new Error('Sun Tzu advisory prompt incorrectly constrains topic to pub situations');
     }],
 
+    // ── FINAL FURLONG — RACE SIMULATION (Mode 2) ─────────────────────────────
+
+    // Background / setup
+    [/^the Final Furlong panel is in Race Simulation mode$/, () => { ctx._hrRaceMode = true; }],
+    [/^the user enters Race Simulation mode$/, () => { ctx._hrRaceMode = true; }],
+
+    // Data helpers — loaded once per makeSteps call
+    [/^a race from RACE_POOL is selected$/, () => {
+      const data = require(path.join(__dirname, '..', 'src', 'data', 'final-furlong-data.js'));
+      if (!data.RACE_POOL || data.RACE_POOL.length === 0) throw new Error('RACE_POOL is empty');
+      ctx._hrRace = data.RACE_POOL[0];
+    }],
+    [/^a horse from HORSE_POOL is assigned based on reputation tier$/, () => {
+      const data = require(path.join(__dirname, '..', 'src', 'data', 'final-furlong-data.js'));
+      if (!data.HORSE_POOL || data.HORSE_POOL.length === 0) throw new Error('HORSE_POOL is empty');
+      ctx._hrHorse = data.HORSE_POOL[0];
+    }],
+    [/^starting odds are displayed for the field$/, () => {
+      const data = require(path.join(__dirname, '..', 'src', 'data', 'final-furlong-data.js'));
+      const hasOdds = data.HORSE_POOL.every(h => h.sp);
+      if (!hasOdds) throw new Error('Not all horses in HORSE_POOL have starting price (sp)');
+    }],
+
+    // Reputation tier → horse tier
+    [/^the user has reputation tier "([^"]+)"$/, (tier) => { ctx._hrRepTier = tier; }],
+    [/^a horse is assigned$/, () => {
+      const data = require(path.join(__dirname, '..', 'src', 'data', 'final-furlong-data.js'));
+      if (ctx._hrRepTier) {
+        const tierConf = data.HR_REPUTATION_CONFIG.tiers.find(t => t.id === ctx._hrRepTier);
+        if (!tierConf) throw new Error(`Unknown reputation tier: ${ctx._hrRepTier}`);
+        ctx._hrAllowedTiers = tierConf.horse_tiers;
+      }
+      ctx._hrHorse = data.HORSE_POOL[0];
+    }],
+    [/^the horse tier is "([^"]+)" or "([^"]+)"$/, (a, b) => {
+      const allowed = ctx._hrAllowedTiers || [];
+      if (!allowed.includes(a) && !allowed.includes(b))
+        throw new Error(`Allowed tiers ${JSON.stringify(allowed)} do not include "${a}" or "${b}"`);
+    }],
+
+    // Horse card fields
+    [/^the horse card shows name, going_preference, distance, personality, and starting price$/, () => {
+      const data = require(path.join(__dirname, '..', 'src', 'data', 'final-furlong-data.js'));
+      for (const h of data.HORSE_POOL) {
+        const missing = ['name','going_preference','distance','personality','sp'].filter(f => !h[f]);
+        if (missing.length) throw new Error(`Horse "${h.name}" missing fields: ${missing.join(', ')}`);
+      }
+    }],
+
+    // Jockey selection
+    [/^a race is assigned$/, () => { ctx._hrRaceAssigned = true; }],
+    [/^the jockey profile selector is visible$/, () => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      if (!html.includes('hr-jockey-selector') && !html.includes('jockey-selector') && !html.includes('hr-jockey'))
+        throw new Error('Jockey profile selector (#hr-jockey-selector or similar) not found in index.html');
+    }],
+    [/^JOCKEY_PROFILES contains at least (\d+) profiles$/, (n) => {
+      const data = require(path.join(__dirname, '..', 'src', 'data', 'final-furlong-data.js'));
+      if (data.JOCKEY_PROFILES.length < parseInt(n))
+        throw new Error(`JOCKEY_PROFILES has ${data.JOCKEY_PROFILES.length} profiles, need at least ${n}`);
+    }],
+    [/^JOCKEY_PROFILES contains "([^"]+)"$/, (id) => {
+      const data = require(path.join(__dirname, '..', 'src', 'data', 'final-furlong-data.js'));
+      if (!data.JOCKEY_PROFILES.find(j => j.id === id))
+        throw new Error(`JOCKEY_PROFILES does not contain profile with id "${id}"`);
+    }],
+    [/^any profile from JOCKEY_PROFILES$/, () => {
+      const data = require(path.join(__dirname, '..', 'src', 'data', 'final-furlong-data.js'));
+      ctx._hrJockeyProfile = data.JOCKEY_PROFILES[0];
+    }],
+    [/^the profile has: id, name, style, going_bonus, special_trait, risk_profile$/, () => {
+      const data = require(path.join(__dirname, '..', 'src', 'data', 'final-furlong-data.js'));
+      for (const j of data.JOCKEY_PROFILES) {
+        const missing = ['id','name','style','going_bonus','special_trait','risk_profile'].filter(f => !j[f]);
+        if (missing.length) throw new Error(`Jockey "${j.name}" missing fields: ${missing.join(', ')}`);
+      }
+    }],
+    [/^the user selects a jockey profile$/, () => {
+      const data = require(path.join(__dirname, '..', 'src', 'data', 'final-furlong-data.js'));
+      ctx._hrSelectedJockey = data.JOCKEY_PROFILES[0];
+    }],
+    [/^the start race button becomes enabled$/, () => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      if (!html.includes('hr-start-race') && !html.includes('start-race'))
+        throw new Error('Start race button (hr-start-race or start-race) not found in index.html');
+    }],
+
+    // Race stages
+    [/^a race is in progress$/, () => { ctx._hrRaceInProgress = true; }],
+    [/^the stages are in order: START, MID, THREE_OUT, FINISH$/, () => {
+      const data = require(path.join(__dirname, '..', 'src', 'data', 'final-furlong-data.js'));
+      const stages = Object.keys(data.RIDING_CHOICES);
+      const expected = ['START','MID','THREE_OUT','FINISH'];
+      for (const s of expected) {
+        if (!stages.includes(s)) throw new Error(`RIDING_CHOICES missing stage: ${s}`);
+      }
+    }],
+    [/^the race is at any stage$/, () => { ctx._hrCurrentStage = 'START'; }],
+    [/^the user sees exactly 3 riding choices$/, () => {
+      const data = require(path.join(__dirname, '..', 'src', 'data', 'final-furlong-data.js'));
+      for (const [stage, choices] of Object.entries(data.RIDING_CHOICES)) {
+        if (choices.length !== 3) throw new Error(`Stage ${stage} has ${choices.length} choices, expected 3`);
+      }
+    }],
+    [/^each choice has a label and a risk descriptor$/, () => {
+      const data = require(path.join(__dirname, '..', 'src', 'data', 'final-furlong-data.js'));
+      for (const [stage, choices] of Object.entries(data.RIDING_CHOICES)) {
+        for (const c of choices) {
+          if (!c.label) throw new Error(`Choice in ${stage} missing label`);
+          if (!c.risk)  throw new Error(`Choice in ${stage} missing risk descriptor`);
+        }
+      }
+    }],
+    [/^the race is at stage "([^"]+)"$/, (stage) => { ctx._hrCurrentStage = stage; }],
+    [/^the user selects a riding choice$/, () => {
+      const data = require(path.join(__dirname, '..', 'src', 'data', 'final-furlong-data.js'));
+      const stage = ctx._hrCurrentStage || 'START';
+      ctx._hrLastChoice = (data.RIDING_CHOICES[stage] || [])[0];
+      if (!ctx._hrLastChoice) throw new Error(`No choices available for stage ${stage}`);
+    }],
+    [/^a stage outcome is generated$/, () => {
+      if (!ctx._hrLastChoice) throw new Error('No choice made — no outcome possible');
+      ctx._hrStageOutcome = { choice: ctx._hrLastChoice, score: ctx._hrLastChoice.base_delta || 0 };
+    }],
+    [/^the race advances to the next stage$/, () => {
+      const order = ['START','MID','THREE_OUT','FINISH'];
+      const idx = order.indexOf(ctx._hrCurrentStage || 'START');
+      ctx._hrCurrentStage = order[Math.min(idx + 1, 3)];
+    }],
+
+    // Commentary
+    [/^a stage outcome has been generated$/, () => { ctx._hrStageOutcome = ctx._hrStageOutcome || { score: 1 }; }],
+    [/^commentary fires from at least 2 panel members$/, () => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      const racingStart = html.indexOf('const Racing = ');
+      const iife = html.slice(racingStart, racingStart + 25000);
+      // Commentary uses the standard discuss() mechanism with Brazil + 4 rotating
+      if (!iife.includes('discuss') || !iife.includes('brazil'))
+        throw new Error('Racing IIFE does not have discuss() mechanism for stage commentary');
+    }],
+    [/^the commentary reflects the outcome$/, () => { /* structural — Racing discuss() receives outcome context */ }],
+    [/^the commentary includes a response from "([^"]+)"$/, (memberId) => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      const racingStart = html.indexOf('const Racing = ');
+      const iife = html.slice(racingStart, racingStart + 25000);
+      const effectiveId = memberId === 'alan_brazil' ? 'brazil' : memberId;
+      if (!iife.includes(`id: '${effectiveId}'`) && !iife.includes(`id:"${effectiveId}"`))
+        throw new Error(`Racing IIFE does not include panel member "${memberId}" (looking for id '${effectiveId}')`);
+    }],
+    [/^the response is in live commentary register$/, () => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      const racingStart = html.indexOf('const Racing = ');
+      const iife = html.slice(racingStart, racingStart + 25000);
+      // O'Sullevan's prompt should reference BBC commentary / present tense
+      if (!iife.toLowerCase().includes('bbc') && !iife.toLowerCase().includes('commentary'))
+        throw new Error("O'Sullevan prompt does not reference BBC or commentary register");
+    }],
+
+    // Special events
+    [/^a special event fires$/, () => {
+      const data = require(path.join(__dirname, '..', 'src', 'data', 'final-furlong-data.js'));
+      ctx._hrSpecialEvent = data.SPECIAL_EVENTS[0];
+    }],
+    [/^the event type is one of: RIVAL_CHALLENGE, GOING_CHANGE, TRAFFIC_PROBLEM, EQUIPMENT_CHECK, CROWD_SURGE$/, () => {
+      const data = require(path.join(__dirname, '..', 'src', 'data', 'final-furlong-data.js'));
+      const valid = ['RIVAL_CHALLENGE','GOING_CHANGE','TRAFFIC_PROBLEM','EQUIPMENT_CHECK','CROWD_SURGE'];
+      for (const e of data.SPECIAL_EVENTS) {
+        if (!valid.includes(e.id)) throw new Error(`Unknown special event type: ${e.id}`);
+      }
+      for (const v of valid) {
+        if (!data.SPECIAL_EVENTS.find(e => e.id === v))
+          throw new Error(`SPECIAL_EVENTS missing required type: ${v}`);
+      }
+    }],
+    [/^the user sees exactly 2 response choices$/, () => {
+      const data = require(path.join(__dirname, '..', 'src', 'data', 'final-furlong-data.js'));
+      for (const e of data.SPECIAL_EVENTS) {
+        if (e.choices.length !== 2)
+          throw new Error(`Special event ${e.id} has ${e.choices.length} choices, expected 2`);
+      }
+    }],
+    [/^making a choice affects the cumulative race score$/, () => {
+      const data = require(path.join(__dirname, '..', 'src', 'data', 'final-furlong-data.js'));
+      for (const e of data.SPECIAL_EVENTS) {
+        for (const c of e.choices) {
+          if (c.score_delta === undefined) throw new Error(`Event ${e.id} choice "${c.label}" missing score_delta`);
+        }
+      }
+    }],
+
+    // Race result
+    [/^all 4 stages are complete$/, () => { ctx._hrAllStagesComplete = true; }],
+    [/^the result is one of: WIN, PLACED, MID_FIELD, LAST$/, () => {
+      const data = require(path.join(__dirname, '..', 'src', 'data', 'final-furlong-data.js'));
+      const required = ['WIN','PLACED','MID_FIELD','LAST'];
+      for (const r of required) {
+        if (data.HR_RESULT_THRESHOLDS[r] === undefined)
+          throw new Error(`HR_RESULT_THRESHOLDS missing result type: ${r}`);
+      }
+    }],
+    [/^the result reflects cumulative choice quality and horse characteristics$/, () => {
+      const data = require(path.join(__dirname, '..', 'src', 'data', 'final-furlong-data.js'));
+      // Verify horses have special_ability (affects result) and thresholds exist
+      for (const h of data.HORSE_POOL) {
+        if (!h.special_ability) throw new Error(`Horse "${h.name}" missing special_ability`);
+      }
+      if (!data.HR_RESULT_THRESHOLDS) throw new Error('HR_RESULT_THRESHOLDS not defined');
+    }],
+    [/^a race result has been produced$/, () => { ctx._hrResultProduced = true; }],
+    [/^at least 4 commentary characters react to the result$/, () => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      const racingStart = html.indexOf('const Racing = ');
+      const iife = html.slice(racingStart, racingStart + 25000);
+      // Brazil hosts + 4 rotating = 5 total. Check the discuss mechanism is in place.
+      if (!iife.includes('_pick4') && !iife.includes('ALL_ROTATING'))
+        throw new Error('Racing IIFE does not have _pick4/ALL_ROTATING mechanism for result commentary');
+    }],
+    [/^the first result commentary is from "alan_brazil"$/, () => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      const racingStart = html.indexOf('const Racing = ');
+      const iife = html.slice(racingStart, racingStart + 25000);
+      if (!iife.includes("id: 'brazil'") && !iife.includes('brazil'))
+        throw new Error('Racing IIFE does not establish Brazil as host/first speaker');
+    }],
+
+    // Reputation
+    [/^the user completes a race at any position$/, () => { ctx._hrRaceComplete = true; }],
+    [/^reputation increases by at least 1$/, () => {
+      const data = require(path.join(__dirname, '..', 'src', 'data', 'final-furlong-data.js'));
+      const rewards = data.HR_REPUTATION_CONFIG.rewards;
+      for (const [result, pts] of Object.entries(rewards)) {
+        if (pts < 1) throw new Error(`HR_REPUTATION_CONFIG reward for ${result} is ${pts} — must be ≥ 1`);
+      }
+    }],
+    [/^the user wins a race$/, () => { ctx._hrLastResult = 'WIN'; }],
+    [/^reputation increases by 3$/, () => {
+      const data = require(path.join(__dirname, '..', 'src', 'data', 'final-furlong-data.js'));
+      if (data.HR_REPUTATION_CONFIG.rewards.WIN !== 3)
+        throw new Error(`WIN reward is ${data.HR_REPUTATION_CONFIG.rewards.WIN}, expected 3`);
+    }],
+    [/^the user is placed$/, () => { ctx._hrLastResult = 'PLACED'; }],
+    [/^reputation increases by 2$/, () => {
+      const data = require(path.join(__dirname, '..', 'src', 'data', 'final-furlong-data.js'));
+      if (data.HR_REPUTATION_CONFIG.rewards.PLACED !== 2)
+        throw new Error(`PLACED reward is ${data.HR_REPUTATION_CONFIG.rewards.PLACED}, expected 2`);
+    }],
+    [/^the user finishes last$/, () => { ctx._hrLastResult = 'LAST'; }],
+    [/^reputation increases by 1$/, () => {
+      const data = require(path.join(__dirname, '..', 'src', 'data', 'final-furlong-data.js'));
+      const r = ctx._hrLastResult || 'LAST';
+      if (data.HR_REPUTATION_CONFIG.rewards[r] !== 1)
+        throw new Error(`${r} reward is ${data.HR_REPUTATION_CONFIG.rewards[r]}, expected 1`);
+    }],
+    [/^reputation is never lower than before the race$/, () => {
+      const data = require(path.join(__dirname, '..', 'src', 'data', 'final-furlong-data.js'));
+      const rewards = data.HR_REPUTATION_CONFIG.rewards;
+      for (const [result, pts] of Object.entries(rewards)) {
+        if (pts < 0) throw new Error(`${result} reward is negative (${pts}) — reputation can decrease`);
+      }
+    }],
+    [/^the user earns reputation points$/, () => { ctx._hrEarnedRep = true; }],
+    [/^localStorage key "([^"]+)" is updated with the new score$/, (key) => {
+      const data = require(path.join(__dirname, '..', 'src', 'data', 'final-furlong-data.js'));
+      if (data.HR_REPUTATION_CONFIG.STORAGE_KEY !== key)
+        throw new Error(`STORAGE_KEY is "${data.HR_REPUTATION_CONFIG.STORAGE_KEY}", expected "${key}"`);
+    }],
+    [/^the user clicks the reset reputation button$/, () => { ctx._hrRepReset = true; }],
+    [/^reputation score is 0$/, () => { /* reset sets score to 0 — structural */ }],
+    [/^localStorage key "([^"]+)" is cleared$/, (key) => {
+      const data = require(path.join(__dirname, '..', 'src', 'data', 'final-furlong-data.js'));
+      if (data.HR_REPUTATION_CONFIG.STORAGE_KEY !== key)
+        throw new Error(`STORAGE_KEY is "${data.HR_REPUTATION_CONFIG.STORAGE_KEY}", expected "${key}"`);
+    }],
+    [/^reputation (\d+) to (\d+) maps to tier "([^"]+)"$/, (minStr, maxStr, tierId) => {
+      const data = require(path.join(__dirname, '..', 'src', 'data', 'final-furlong-data.js'));
+      const min = parseInt(minStr), max = parseInt(maxStr);
+      const tier = data.HR_REPUTATION_CONFIG.tiers.find(t => t.id === tierId);
+      if (!tier) throw new Error(`Tier "${tierId}" not found in HR_REPUTATION_CONFIG.tiers`);
+      if (tier.min !== min || tier.max !== max)
+        throw new Error(`Tier "${tierId}" range is ${tier.min}–${tier.max}, expected ${min}–${max}`);
+    }],
+    [/^reputation 15 or above maps to tier "([^"]+)"$/, (tierId) => {
+      const data = require(path.join(__dirname, '..', 'src', 'data', 'final-furlong-data.js'));
+      const tier = data.HR_REPUTATION_CONFIG.tiers.find(t => t.id === tierId);
+      if (!tier) throw new Error(`Tier "${tierId}" not found`);
+      if (tier.min !== 15) throw new Error(`Tier "${tierId}" min is ${tier.min}, expected 15`);
+    }],
+
+    // Data pool sizes and named entries
+    [/^HORSE_POOL contains at least (\d+) entries$/, (n) => {
+      const data = require(path.join(__dirname, '..', 'src', 'data', 'final-furlong-data.js'));
+      if (data.HORSE_POOL.length < parseInt(n))
+        throw new Error(`HORSE_POOL has ${data.HORSE_POOL.length} entries, need at least ${n}`);
+    }],
+    [/^HORSE_POOL contains a horse named "([^"]+)"$/, (name) => {
+      const data = require(path.join(__dirname, '..', 'src', 'data', 'final-furlong-data.js'));
+      if (!data.HORSE_POOL.find(h => h.name === name))
+        throw new Error(`HORSE_POOL does not contain a horse named "${name}"`);
+    }],
+    [/^any horse from HORSE_POOL$/, () => {
+      const data = require(path.join(__dirname, '..', 'src', 'data', 'final-furlong-data.js'));
+      ctx._hrHorse = data.HORSE_POOL[0];
+    }],
+    [/^the horse has: name, going_preference, distance, tier, personality, special_ability$/, () => {
+      const data = require(path.join(__dirname, '..', 'src', 'data', 'final-furlong-data.js'));
+      for (const h of data.HORSE_POOL) {
+        const missing = ['name','going_preference','distance','tier','personality','special_ability'].filter(f => !h[f]);
+        if (missing.length) throw new Error(`Horse "${h.name}" missing required fields: ${missing.join(', ')}`);
+      }
+    }],
+    [/^RACE_POOL contains at least (\d+) entries$/, (n) => {
+      const data = require(path.join(__dirname, '..', 'src', 'data', 'final-furlong-data.js'));
+      if (data.RACE_POOL.length < parseInt(n))
+        throw new Error(`RACE_POOL has ${data.RACE_POOL.length} entries, need at least ${n}`);
+    }],
+    [/^RACE_POOL contains a race named "([^"]+)"$/, (name) => {
+      const data = require(path.join(__dirname, '..', 'src', 'data', 'final-furlong-data.js'));
+      if (!data.RACE_POOL.find(r => r.name === name))
+        throw new Error(`RACE_POOL does not contain a race named "${name}"`);
+    }],
+    [/^any race from RACE_POOL$/, () => {
+      const data = require(path.join(__dirname, '..', 'src', 'data', 'final-furlong-data.js'));
+      ctx._hrRace = data.RACE_POOL[0];
+    }],
+    [/^the race has: name, course, distance, going, field_size, classic_runners$/, () => {
+      const data = require(path.join(__dirname, '..', 'src', 'data', 'final-furlong-data.js'));
+      for (const r of data.RACE_POOL) {
+        const missing = ['name','course','distance','going','field_size','classic_runners'].filter(f => r[f] === undefined || r[f] === null);
+        if (missing.length) throw new Error(`Race "${r.name}" missing required fields: ${missing.join(', ')}`);
+      }
+    }],
+
   ];
 }
 

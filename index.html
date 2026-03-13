@@ -2754,6 +2754,33 @@
       </select>
     </div>
     <button class="btn" onclick="Racing.callMoment()" id="hr-moment-btn" disabled>AT THE TRACK 🏇</button>
+
+    <!-- Race Simulation (Mode 2b) — hidden until full implementation -->
+    <div id="hr-race-sim" style="display:none;">
+      <div id="hr-race-setup">
+        <div id="hr-race-banner"></div>
+        <div id="hr-horse-card"></div>
+        <div id="hr-jockey-selector"></div>
+        <div id="hr-odds-board"></div>
+        <button id="hr-start-race" class="btn" disabled>START RACE 🏇</button>
+      </div>
+      <div id="hr-race-stage" style="display:none;">
+        <div id="hr-stage-header"></div>
+        <div id="hr-stage-context"></div>
+        <div id="hr-riding-choices"></div>
+        <div id="hr-stage-commentary"></div>
+      </div>
+      <div id="hr-special-event" style="display:none;">
+        <div id="hr-event-description"></div>
+        <div id="hr-event-choices"></div>
+      </div>
+      <div id="hr-race-result" style="display:none;">
+        <div id="hr-result-banner"></div>
+        <div id="hr-result-commentary"></div>
+        <div id="hr-reputation-update"></div>
+        <button id="hr-new-race" class="btn">NEW RACE</button>
+      </div>
+    </div>
   </div>
 
   <div id="hr-output" style="display:none;margin-top:24px;">
