@@ -1201,10 +1201,94 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 
 ---
 
+### BL-125 — Final Furlong Mode 2: jockey-to-jockey rivalry interactions
+
+- Title: Final Furlong Mode 2 — jockey rivalry: attack, defend, and steal mid-race
+- Description: Extend the Race Simulation engine with jockey-to-jockey rivalry events. Rod: "some of the interactions were to either get attacked or attack back our rivals, maybe steal their whip or cap etc." Currently Mode 2 is purely riding-choice → score delta with panel commentary and random special events. Adding rivalry mechanics would mean:
+  - AI rival jockeys present in the race (drawn from JOCKEY_PROFILES or a rival pool)
+  - Mid-race events: rival attacks you (block, barge, intimidate), you can respond (attack back, evade, ignore)
+  - Item-based interactions: steal rival's whip, knock rival's cap — both add colour/humour and affect score
+  - Panel commentary reacts to the incident (McCririck particularly)
+  This may share design patterns with ConspireEngine (escalation, wound words, relationship state) but is race-specific not a direct port. Needs Three Amigos before Gherkin.
+- Feature: sports
+- CD3: UBV=8 TC=6 RR=5 → CoD=19, Dur=4, **CD3=4.75**
+- Status: OPEN — raised 2026-03-13. Needs Three Amigos before any Gherkin.
+- Epic: Final Furlong Mode 2
+
+---
+
 ### BL-124 — Nav: panel group landing page (sub-feature list before entering a panel)
 
 - Title: Nav: panel group landing page (sub-feature list before entering a panel)
 - Description: When a user clicks a main nav group (Sports, Comedy, etc.), instead of dropping immediately into the first panel in the list, show a landing page that lists all sub-features within that group. User then clicks to enter the specific panel. Replaces current behaviour of auto-selecting the first tab.
 - Feature: platform
 - CD3: UBV=8 TC=7 RR=7 → CoD=22, Dur=3, **CD3=7.3**
+- Status: CLOSED — commit fa917de (2026-03-13)
+
+### BL-127 — Prominent back button on every screen (return to group landing)
+
+- Title: Prominent back button on every screen — return to group landing
+- Description: Every panel/screen needs a prominent, clearly visible back button that returns the user to the group landing page (or home if no group applies). The current nav-back-bar (added in BL-124) is subtle and may not be visible enough. Applies to all panels, all modes within panels, and all sub-screens (e.g. race sim stages, golf adventure session phases). Rod: "prominent in EVERY screen".
+- Feature: platform / UX
+- CD3: UBV=8 TC=8 RR=7 → CoD=23, Dur=2, **CD3=11.5**
+- Status: CLOSED — commit 2c7fa13 (2026-03-13)
+- Epic: Navigation UX
+
+### BL-126 — UI regression caught by Rod: nav home tiles bypass group landing (BL-124)
+
+- Title: UI regression caught by Rod: nav home tiles bypass group landing
+- Description: After implementing BL-124 (nav group landing page), the home page tiles for Sports, Comedy, Little Misadventure were still calling switchTab() directly, skipping the group landing. Rod caught this manually. Automated pipeline (Gherkin, E2E, browser sim) did not catch it. Root cause: no UI test coverage for home-tile onclick behaviour. The pipeline has a structural gap — it tests that elements exist and functions exist, but does not test onclick wiring.
+- Feature: platform / testing
+- CD3: UBV=7 TC=8 RR=8 → CoD=23, Dur=4, **CD3=5.75**
 - Status: OPEN — raised 2026-03-13
+- Epic: UI Test Coverage
+- Root cause (5-Whys): Home tiles wired to switchTab() → not updated when BL-124 changed routing. Browser sim tests existence of elements but not onclick values. Gherkin tests landing function but not that home tiles call it.
+- Proposed fix: Add browser-sim or Gherkin step that verifies multi-panel group home tiles call showGroupLanding(), not switchTab(). Also add steps checking that onclick wiring matches expected function for all home tiles.
+
+---
+
+### BL-128 — Pub Crawl UX: pressure feedback, threshold visibility, and game-goal clarity
+
+- Title: Pub Crawl UX — pressure delta feedback, threshold bands, and game-goal clarity
+- Description: Three related usability failures (all Nielsen violations) in Pub Crawl Mode B:
+  1. **No per-choice delta** — after making a choice, user sees no indication of how much pressure it added (+1/+2/+3/+4). Bar colour changes but no number shown. Nielsen #1 (visibility of system status).
+  2. **No threshold markers** — pressure bar shows a number but not what it means. Outcome bands (escape ≤4, ejected ≤8, worst ≤12, legendary 13+) are invisible during play. Nielsen #6 (recognition rather than recall).
+  3. **Game goal unclear** — "lower pressure = better" is never stated. Users don't know if they're winning or losing, or what they're trying to achieve. Rod: "it is very unclear what the purpose or effects of their interaction is."
+  Proposed fix:
+  - After each choice: show "+N pressure" delta in colour (green for 1, amber for 2-3, red for 4).
+  - Add band tick marks and labels on the pressure bar (ESCAPE / EJECTED / WORST zones).
+  - Add single-line explainer under the bar: "Lower = better. Stay under 5 to escape."
+  - Add contextual status text after each delta: "Still in escape zone" / "Danger zone" / etc.
+  Drives: WL-134 (no positive/negative feedback). Raised after Rod review 2026-03-13.
+- Feature: pub-navigator
+- CD3: UBV=8 TC=7 RR=6 → CoD=21, Dur=3, **CD3=7.0**
+- Status: OPEN — raised 2026-03-13
+- Epic: Pub Crawl UX
+
+---
+
+### BL-129 — Pub Crawl: visible free-text action input with game effect
+
+- Title: Pub Crawl — user can type their own action; it affects the game
+- Description: Currently `#pc-input-area` is hidden and only handles the "lederhosen" easter egg. Rod wants a visible, first-class text input where users can type their own pub crawl action instead of (or in addition to) the preset choices, and have it affect game state. Design open — Three Amigos needed before implementation:
+  - Does free text add fixed pressure (e.g. +2 = neutral midpoint)?
+  - Does the AI judge the text and return a pressure delta?
+  - Does it replace or supplement the preset choices?
+  - Does the advisor respond to it like a choice (buildAdvisorPrompt)?
+  Rod: "consider the effect user entries have on the game". Needs design agreement before touching engine.
+- Feature: pub-navigator
+- CD3: UBV=7 TC=5 RR=4 → CoD=16, Dur=4, **CD3=4.0**
+- Status: OPEN — raised 2026-03-13. Needs Three Amigos before implementation.
+- Epic: Pub Crawl UX
+
+---
+
+### BL-130 — Snooker panel: The Crucible Corner
+
+- Title: The Crucible Corner — snooker panel (Mode 1 Q&A + Mode 2 match simulation)
+- Description: New sports panel for snooker, following the Final Furlong structure (Mode 1: Q&A with suggestion cards; Mode 2: match/frame simulation). Characters and Mode 2 game mechanics TBD — Three Amigos session required. Candidate characters: Steve Davis, John Virgo, Dennis Taylor, Ronnie O'Sullivan, Willie Thorne (DEAD_IN_PANEL_WORLD), Ray Reardon (DEAD_IN_PANEL_WORLD), John Parrott, Mark Williams. Mode 2 ideas: frame scoring, shot selection (safety/pot/snooker), risk vs reward, commentary from the panel. Rod raised 2026-03-13.
+- Feature: sports
+- CD3: UBV=7 TC=6 RR=5 → CoD=18, Dur=5, **CD3=3.6**
+- Status: OPEN — raised 2026-03-13. Needs Three Amigos before any Gherkin.
+- Epic: Sports Panels
+

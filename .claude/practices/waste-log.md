@@ -1749,6 +1749,25 @@ Status: CLOSED
 **Tags:** `#rod-caught` `#character-quality` `#prompt-engineering`
 **Status:** Open — Three Amigos needed before touching TURN_RULES / interactionModel. Fix direction agreed: change RULE 2 from mandatory obligation to conditional (react when genuinely interested/provoked, default to own angle otherwise).
 
+### WL-134
+**Item:** Pub Crawl — no positive/negative outcome feedback after action choices
+**Symptom:** User makes a choice in the pub crawl but gets no indication of whether the action helped or hurt their progress. Nielsen heuristic violation: visibility of system status (#1) and feedback (#3).
+**Root cause:** To investigate — scene outcomes may not surface a clear delta indicator. Needs Nielsen/usability review before fix.
+**Session:** 2026-03-13
+**Time lost:** Caught by Rod in product testing
+**Tags:** `#pub-crawl` `#ux` `#feedback` `#nielsen`
+**Status:** Open — needs Nielsen review pass before implementation
+
+### WL-133
+**Item:** Final Furlong Mode 2 — stage commentary cleared too quickly before user reads it
+**Symptom:** Commentary fires after riding choice but is immediately wiped when the next stage or special event renders. User sees text flash and disappear.
+**Root cause:** `_hrShowStage()` calls `_hrSet('hr-stage-commentary', '')` at render time. Since `makeRidingChoice()` awaits commentary before advancing, the clear happens immediately on stage transition — no dwell time.
+**Session:** 2026-03-13
+**Time lost:** Caught by Rod in product testing
+**Cost impact:** Low — user-visible but fixable in one pass
+**Tags:** `#ui` `#race-sim` `#commentary-flow`
+**Status:** CLOSED — commit 09ad729 (2026-03-13). Fixed by replacing auto-advance with user-controlled Continue button in makeRidingChoice(); added hrContinueRace global wrapper.
+
 ### WL-132
 **Item:** Step definition slice window too small — racing IIFE step defs failed on first pass
 **Symptom:** `slice(0, N)` windows in gherkin step definitions too small to reach discuss() and _pick4() functions; brazil member ID is 'brazil' not 'alan_brazil' causing lookup mismatches; TURN_RULES case-sensitive check failed ('nobody' vs 'Nobody').
