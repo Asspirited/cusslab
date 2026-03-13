@@ -2156,14 +2156,29 @@
       <div id="pc-scene-name" style="font-size:1.1rem;font-weight:600;letter-spacing:0.05em;margin-bottom:6px;"></div>
       <div id="pc-scene-location" style="font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:12px;"></div>
       <div id="pc-scene-desc" style="color:var(--text-secondary);font-size:0.9rem;line-height:1.6;margin-bottom:16px;"></div>
-      <div style="display:flex;gap:8px;align-items:center;">
+      <div style="display:flex;gap:8px;align-items:center;margin-bottom:4px;">
         <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);">Pressure</div>
-        <div id="pc-pressure-bar" style="flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden;">
-          <div id="pc-pressure-fill" style="height:100%;width:0%;background:var(--danger);border-radius:3px;transition:width 0.4s ease;"></div>
+        <div style="flex:1;position:relative;">
+          <div id="pc-pressure-bar" style="height:6px;background:var(--border);border-radius:3px;overflow:hidden;">
+            <div id="pc-pressure-fill" style="height:100%;width:0%;background:var(--danger);border-radius:3px;transition:width 0.4s ease;"></div>
+          </div>
         </div>
-        <div id="pc-pressure-val" style="font-size:11px;color:var(--muted);min-width:30px;text-align:right;">0/16</div>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <div id="pc-pressure-val" style="font-size:11px;color:var(--muted);min-width:30px;text-align:right;">0/16</div>
+          <div id="pc-pressure-delta" style="font-size:11px;font-weight:700;min-width:28px;text-align:left;opacity:0;transition:opacity 0.3s;"></div>
+        </div>
       </div>
-      <div id="pc-lederhosen-badge" style="display:none;margin-top:8px;font-size:11px;color:#c8a000;letter-spacing:1px;text-transform:uppercase;">🥨 Lederhosen acquired</div>
+      <div id="pc-pressure-zones" style="display:flex;gap:0;margin-bottom:6px;font-size:9px;text-transform:uppercase;letter-spacing:0.8px;color:var(--muted);">
+        <div style="flex:4;color:#4caf50;">ESCAPE</div>
+        <div style="flex:4;color:#ff9800;">EJECTED</div>
+        <div style="flex:4;color:#f44336;">WORST</div>
+        <div style="flex:4;color:#9c27b0;">LEGENDARY</div>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+        <div id="pc-pressure-explainer" style="font-size:10px;color:var(--muted);">Lower is better — escape at 4 or under</div>
+        <div id="pc-pressure-zone-label" style="font-size:10px;font-weight:600;color:#4caf50;text-transform:uppercase;letter-spacing:0.8px;"></div>
+      </div>
+      <div id="pc-lederhosen-badge" style="display:none;margin-top:4px;font-size:11px;color:#c8a000;letter-spacing:1px;text-transform:uppercase;">🥨 Lederhosen acquired</div>
     </div>
 
     <div id="pc-situation" style="font-size:0.95rem;line-height:1.6;color:var(--text);padding:14px 16px;background:var(--surface);border:1px solid var(--border);border-radius:6px;margin-bottom:16px;"></div>
@@ -11912,10 +11927,12 @@ const PubCrawl = (() => {
 
     const scene      = getEngine().getPubScene(_state.sceneId);
     const beat       = scene.beats[_state.turnCount];
-    const choiceLabel = beat.choices[choiceIdx].label;
+    const choice     = beat.choices[choiceIdx];
+    const choiceLabel = choice.label;
+    const delta      = choice.pressure;
 
     getEngine().resolveChoice(_state, choiceIdx);
-    _updatePressure();
+    _updatePressure(delta);
 
     if (_state.done) {
       _showOutcome(scene);
@@ -11993,16 +12010,31 @@ const PubCrawl = (() => {
 
   // ── Pressure display ──────────────────────────────────────────────────────
 
-  function _updatePressure() {
+  function _updatePressure(delta) {
     const p = _state.pressure;
     document.getElementById('pc-pressure-val').textContent = `${p}/16`;
     document.getElementById('pc-pressure-fill').style.width = `${Math.min(100, (p / 16) * 100)}%`;
 
     const fill = document.getElementById('pc-pressure-fill');
-    if (p <= 4)       fill.style.background = '#4caf50';
-    else if (p <= 8)  fill.style.background = '#ff9800';
-    else if (p <= 12) fill.style.background = '#f44336';
-    else              fill.style.background = '#9c27b0';
+    let zoneColour, zoneName, zoneLabel;
+    if (p <= 4)       { fill.style.background = '#4caf50'; zoneColour = '#4caf50'; zoneName = 'escape';    zoneLabel = 'Escape zone'; }
+    else if (p <= 8)  { fill.style.background = '#ff9800'; zoneColour = '#ff9800'; zoneName = 'ejected';   zoneLabel = 'At risk'; }
+    else if (p <= 12) { fill.style.background = '#f44336'; zoneColour = '#f44336'; zoneName = 'worst';     zoneLabel = 'Danger zone'; }
+    else              { fill.style.background = '#9c27b0'; zoneColour = '#9c27b0'; zoneName = 'legendary'; zoneLabel = 'Beyond saving'; }
+
+    const zoneEl = document.getElementById('pc-pressure-zone-label');
+    if (zoneEl) { zoneEl.textContent = zoneLabel; zoneEl.style.color = zoneColour; }
+
+    if (delta !== undefined) {
+      const deltaEl = document.getElementById('pc-pressure-delta');
+      if (deltaEl) {
+        const col = delta <= 1 ? '#4caf50' : delta <= 3 ? '#ff9800' : '#f44336';
+        deltaEl.textContent = `+${delta}`;
+        deltaEl.style.color = col;
+        deltaEl.style.opacity = '1';
+        setTimeout(() => { deltaEl.style.opacity = '0'; }, 2500);
+      }
+    }
 
     if (_state.lederhosen) {
       document.getElementById('pc-lederhosen-badge').style.display = 'block';

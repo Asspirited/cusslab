@@ -8095,6 +8095,59 @@ function makeSteps(ctx) {
       ctx._pubState.lederhosen = true;
     }],
 
+    // BL-128 — pressure feedback and game-goal clarity
+    [/^the pub crawl panel is active$/, () => {
+      ctx._html = fs.readFileSync(path.join(__dirname, '../index.html'), 'utf8');
+    }],
+
+    [/^the pressure explainer element is present$/, () => {
+      if (!ctx._html.includes('id="pc-pressure-explainer"'))
+        throw new Error('pc-pressure-explainer not found in index.html');
+    }],
+
+    [/^the pressure explainer text mentions lower pressure or escape$/, () => {
+      const m = ctx._html.match(/id="pc-pressure-explainer"[^>]*>([^<]*)</);
+      if (!m) throw new Error('pc-pressure-explainer has no text content');
+      const text = m[1].toLowerCase();
+      if (!text.includes('lower') && !text.includes('escape'))
+        throw new Error(`pc-pressure-explainer text "${m[1]}" does not mention lower or escape`);
+    }],
+
+    [/^the pressure bar zone markers element is present$/, () => {
+      if (!ctx._html.includes('id="pc-pressure-zones"'))
+        throw new Error('pc-pressure-zones not found in index.html');
+    }],
+
+    [/^it has a marker labelled "([^"]+)"$/, (label) => {
+      const zonesStart = ctx._html.indexOf('id="pc-pressure-zones"');
+      const block      = ctx._html.slice(zonesStart, zonesStart + 800);
+      if (!block.includes(label))
+        throw new Error(`pc-pressure-zones block does not contain label "${label}"`);
+    }],
+
+    [/^the pressure delta element is present in the active scene$/, () => {
+      if (!ctx._html.includes('id="pc-pressure-delta"'))
+        throw new Error('pc-pressure-delta not found in index.html');
+    }],
+
+    [/^the pressure zone label element is present$/, () => {
+      if (!ctx._html.includes('id="pc-pressure-zone-label"'))
+        throw new Error('pc-pressure-zone-label not found in index.html');
+    }],
+
+    [/^the pressure zone label reflects the escape zone$/, () => {
+      const p = ctx._pubState.pressure;
+      const zone = p <= 4 ? 'escape' : p <= 8 ? 'ejected' : p <= 12 ? 'worst' : 'legendary';
+      if (zone !== 'escape')
+        throw new Error(`Expected escape zone at pressure ${p} but got ${zone}`);
+    }],
+
+    [/^the pressure zone label reflects the danger zone$/, () => {
+      const p = ctx._pubState.pressure;
+      if (p <= 8)
+        throw new Error(`Expected danger zone (pressure >8) but pressure is ${p}`);
+    }],
+
     // ── FF shared engine (ff-engine.feature) ──────────────────────────────────
 
     [/^a game config with fields composure:(\d+) and phase:"([^"]+)"$/, (composure, phase) => {
