@@ -1318,13 +1318,14 @@
   <div class="nav-group" id="ng-comedy">
     <div class="nav-group-header" onclick="toggleNavGroup('comedy')">
       <span class="nav-group-icon">🎭</span> COMEDY ROOM
-      <span class="nav-group-count">4</span>
+      <span class="nav-group-count">5</span>
     </div>
     <div class="nav-items" id="ni-comedy">
       <div class="tab" onclick="switchTab(event,'comedyroom')"><span class="tab-icon">🎤</span>The Comedy Room</div>
       <div class="tab" onclick="switchTab(event,'housenameoracle')"><span class="tab-icon">🔮</span>The House Name Oracle</div>
       <div class="tab" onclick="switchTab(event,'roastroom')"><span class="tab-icon">🔥</span>The Roast Room</div>
       <div class="tab" onclick="switchTab(event,'writingroom')"><span class="tab-icon">✍️</span>The Writing Room</div>
+      <div class="tab" onclick="switchTab(event,'hip_hop')"><span class="tab-icon">🎙️</span>The Spit Shelter</div>
     </div>
   </div>
 
@@ -2883,6 +2884,48 @@
   </div>
 </div>
 
+<!-- ============ THE SPIT SHELTER (HIP-HOP) ============ -->
+<div class="panel" id="panel-hip_hop">
+  <div class="panel-title">🎙️ The Spit Shelter</div>
+
+  <!-- Mode tabs -->
+  <div style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;">
+    <button id="hh-tab-qanda" class="btn" onclick="HipHop.switchMode('qanda')" style="flex:1;">Q&amp;A</button>
+    <button id="hh-tab-battle" class="btn-secondary" onclick="HipHop.switchMode('battle')" style="flex:1;">Rap Battle</button>
+  </div>
+
+  <!-- Mode 1: Q&A -->
+  <div id="hh-qanda-view">
+    <div id="hh-suggestion-tray" class="gf-suggestion-tray" style="margin-bottom:16px;"></div>
+    <textarea id="hh-input" class="gf-input" placeholder="Ask the panel anything — or paste a speech, mission statement, or lyric to roast…" rows="3" style="margin-bottom:10px;"></textarea>
+    <button class="btn" onclick="HipHop.discuss()" id="hh-submit-btn">ASK THE PANEL 🎙️</button>
+    <div id="hh-loading" style="display:none;color:var(--muted);font-size:0.9rem;padding:12px 0;">The shelter assembles…</div>
+    <div id="hh-responses" style="margin-top:16px;"></div>
+    <div style="display:flex;gap:8px;margin-top:16px;align-items:center;">
+      <button class="feedback-btn" onclick="panelRating(event,'hip_hop','💩')" title="Didn't land">💩</button>
+      <button class="feedback-btn" onclick="panelRating(event,'hip_hop','😐')" title="Fine">😐</button>
+      <button class="feedback-btn" onclick="panelRating(event,'hip_hop','😂')" title="Good">😂</button>
+      <button class="feedback-btn" onclick="panelRating(event,'hip_hop','🤣')" title="Brilliant">🤣</button>
+    </div>
+    <button class="btn-secondary" onclick="HipHop.nextRound()" style="margin-top:12px;">NEXT ROUND 🔄</button>
+  </div>
+
+  <!-- Mode 2: Rap Battle -->
+  <div id="hh-battle-view" style="display:none;">
+    <div id="hh-battle-setup">
+      <div class="panel-title" style="font-size:1rem;margin-bottom:12px;">Choose your battle brief</div>
+      <div id="hh-battle-brief-pool" style="display:grid;gap:8px;margin-bottom:16px;"></div>
+      <div style="color:var(--text-secondary);font-size:0.85rem;margin-bottom:8px;">Or write your own:</div>
+      <textarea id="hh-battle-brief" class="gf-input" placeholder="Paste a mission statement, speech, lyric, or phrase to battle over…" rows="3" style="margin-bottom:12px;"></textarea>
+      <button id="hh-start-battle" class="btn" onclick="HipHop.startBattle()" style="width:100%;" disabled>START THE BATTLE 🎙️</button>
+    </div>
+    <div id="hh-battle-loading" style="display:none;color:var(--muted);font-size:0.9rem;padding:12px 0;">Combatants selected. Battle commencing…</div>
+    <div id="hh-battle-responses" style="margin-top:16px;"></div>
+    <div id="hh-battle-verdict" style="margin-top:12px;"></div>
+    <button id="hh-new-battle-btn" class="btn-secondary" onclick="HipHop.resetBattle()" style="margin-top:12px;display:none;">NEW BATTLE 🔄</button>
+  </div>
+</div>
+
 <!-- ============ SOUNESS'S CAT (SCIENCE) ============ -->
 <div class="panel" id="panel-souness-cat">
   <div class="panel-title">🔬 Souness's Cat</div>
@@ -4180,6 +4223,7 @@
 <script src="src/logic/pub-navigator-engine.js"></script>
 <script src="src/data/final-furlong-data.js"></script>
 <script src="src/data/crucible-corner-data.js"></script>
+<script src="src/data/spit-shelter-data.js"></script>
 
 <script>
 // ============================================================
@@ -4759,7 +4803,7 @@ const App = (() => {
       title: 'HECKLER\'S',
       pageTitle: 'Heckler\'s — The Comedy Panel',
       slogans: CONSULTANT_SLOGANS,
-      tabs: ['home','golfadventure','pubnavigator','pubcrawl','hardmen','suntzu','qleeks','comedyroom','housenameoracle','roastroom','writingroom','souness-cat','philsopoly','boardroom','premise-interrogation','football','golf','darts','cricket','racing','snooker',
+      tabs: ['home','golfadventure','pubnavigator','pubcrawl','hardmen','suntzu','qleeks','comedyroom','housenameoracle','roastroom','writingroom','hip_hop','souness-cat','philsopoly','boardroom','premise-interrogation','football','golf','darts','cricket','racing','snooker',
              'bills','joketest','clash','roulette','professionals','ironic',
              'comscience','evolution','blend','experiment',
              'roastbattle','dinner','topcnuts','comedylab','trumps',
@@ -4811,7 +4855,7 @@ const App = (() => {
     // BOARDROOM
     boardroom:'boardroom',
     // COMEDY ROOM
-    comedyroom:'comedy', housenameoracle:'comedy', roastroom:'comedy', writingroom:'comedy',
+    comedyroom:'comedy', housenameoracle:'comedy', roastroom:'comedy', writingroom:'comedy', hip_hop:'comedy',
     // THOUGHT SHOWERS
     'souness-cat':'showers', philsopoly:'showers', suntzu:'showers', 'premise-interrogation':'showers',
     // 19TH HOLE
@@ -4847,6 +4891,7 @@ const App = (() => {
       { id: 'housenameoracle', label: 'House Name Oracle',  icon: '🔮', desc: 'Submit an address. Receive a name. Some are excellent. Some are crimes.' },
       { id: 'roastroom',       label: 'The Roast Room',     icon: '🔥', desc: 'Target confirmed. Panel assembled. No survivors.' },
       { id: 'writingroom',     label: 'The Writing Room',   icon: '✍️', desc: 'Three authors. One topic. Hemingway says less. Pratchett says more.' },
+      { id: 'hip_hop',         label: 'The Spit Shelter',   icon: '🎙️', desc: 'Eminem opens. Dre says nothing. Biggie and Tupac are somehow both here.' },
     ],
     showers: [
       { id: 'souness-cat',           label: "Souness's Cat",        icon: '🔬', desc: 'Is the cat alive? Souness is not sure. The cat has opinions about Souness.' },
@@ -18083,6 +18128,247 @@ const Snooker = (() => {
 function snSelectRed(id)     { Snooker.selectRed(id); }
 function snSelectSpin(id)    { Snooker.selectSpin(id); }
 function snSelectColour(col) { Snooker.selectColour(col); }
+
+// ============================================================
+// MODULE: HipHop — The Spit Shelter (BL-131)
+// ============================================================
+
+const HipHop = (() => {
+
+  // ── Members ───────────────────────────────────────────────────────────────
+
+  const ANCHOR_ID = 'eminem';
+  const ALL_HH_ROTATING = HIP_HOP_MEMBERS.filter(m => m.id !== ANCHOR_ID).map(m => m.id);
+  const TURN_RULES_TEXT = HIP_HOP_TURN_RULES.join('\n');
+
+  function _memberById(id) { return HIP_HOP_MEMBERS.find(m => m.id === id); }
+
+  function _pick4() {
+    const pool = [...ALL_HH_ROTATING].sort(() => Math.random() - 0.5);
+    return pool.slice(0, 4);
+  }
+
+  // ── Helpers ───────────────────────────────────────────────────────────────
+
+  function _set(id, html) { const el = document.getElementById(id); if (el) el.innerHTML = html; }
+  function _show(id) { const el = document.getElementById(id); if (el) el.style.display = ''; }
+  function _hide(id) { const el = document.getElementById(id); if (el) el.style.display = 'none'; }
+
+  // ── Mode switching ────────────────────────────────────────────────────────
+
+  let _currentMode = 'qanda';
+
+  function switchMode(mode) {
+    _currentMode = mode;
+    if (mode === 'qanda') {
+      _show('hh-qanda-view');
+      _hide('hh-battle-view');
+      document.getElementById('hh-tab-qanda')?.classList.replace('btn-secondary', 'btn');
+      document.getElementById('hh-tab-battle')?.classList.replace('btn', 'btn-secondary');
+    } else {
+      _hide('hh-qanda-view');
+      _show('hh-battle-view');
+      document.getElementById('hh-tab-battle')?.classList.replace('btn-secondary', 'btn');
+      document.getElementById('hh-tab-qanda')?.classList.replace('btn', 'btn-secondary');
+      _initBattleSetup();
+    }
+  }
+
+  // ── Mode 1 — Q&A ─────────────────────────────────────────────────────────
+
+  let _hhBusy = false;
+
+  function _buildSuggestions() {
+    const tray = document.getElementById('hh-suggestion-tray');
+    if (!tray) return;
+    const shuffled = [...HIP_HOP_SUGGESTIONS].sort(() => Math.random() - 0.5);
+    shuffled.forEach(s => {
+      const card = document.createElement('div');
+      card.className = 'gf-suggestion-card';
+      card.setAttribute('data-cat', s.category);
+      const rot = (Math.random() * 3 - 1.5).toFixed(1);
+      card.style.transform = `rotate(${rot}deg)`;
+      card.innerHTML = `<div class="gf-suggestion-card__cat">${s.category}</div><div>${s.text}</div>`;
+      card.addEventListener('click', () => {
+        const inp = document.getElementById('hh-input');
+        if (inp) { inp.value = s.text; inp.focus(); }
+        card.style.outline = '2px solid rgba(100,180,255,0.5)';
+        setTimeout(() => card.style.outline = '', 600);
+      });
+      tray.appendChild(card);
+    });
+  }
+
+  async function discuss() {
+    if (_hhBusy) return;
+    const question = (document.getElementById('hh-input')?.value || '').trim();
+    if (!question) return;
+    _hhBusy = true;
+
+    const btn = document.getElementById('hh-submit-btn');
+    if (btn) { btn.disabled = true; btn.textContent = 'DISCUSSING… 🎙️'; }
+    _show('hh-loading');
+    _set('hh-responses', '');
+
+    const ORDER = [ANCHOR_ID, ..._pick4()];
+    const responses = [];
+
+    for (const memberId of ORDER) {
+      const m = _memberById(memberId);
+      if (!m) continue;
+      const prior = responses.length
+        ? `\n\nWhat has been said so far:\n${responses.map(r => `${r.name}: ${r.text}`).join('\n\n')}\n\nNow it is your turn.`
+        : '\n\nYou speak first.';
+      const sys = `${m.prompt}\n\nPANEL RULES:\n${TURN_RULES_TEXT}`;
+      const msg = `The question or submission: "${question}"${prior} Respond in character. 120–220 words.`;
+      try {
+        const text = await API.call(sys, msg, 350, 'hip_hop/discuss');
+        responses.push({ name: m.name, text });
+      } catch (e) {
+        responses.push({ name: m.name, text: '…' });
+      }
+    }
+
+    _hide('hh-loading');
+    _set('hh-responses', responses.map(r =>
+      `<div class="bills-response" style="margin-bottom:20px;">
+        <div class="bills-response-speaker">${r.name.toUpperCase()}</div>
+        <div class="bills-response-body" style="white-space:pre-wrap;">${r.text}</div>
+      </div>`
+    ).join(''));
+
+    if (btn) { btn.disabled = false; btn.textContent = 'ASK THE PANEL 🎙️'; }
+    _hhBusy = false;
+
+    HCSession.logPanelRun('hip_hop', ORDER, responses.length);
+  }
+
+  function nextRound() {
+    const inp = document.getElementById('hh-input');
+    if (inp) inp.value = '';
+    _set('hh-responses', '');
+    const btn = document.getElementById('hh-submit-btn');
+    if (btn) { btn.disabled = false; btn.textContent = 'ASK THE PANEL 🎙️'; }
+    _hhBusy = false;
+  }
+
+  // ── Mode 2 — Rap Battle ───────────────────────────────────────────────────
+
+  let _battleBusy = false;
+  let _combatants  = [];
+
+  function _initBattleSetup() {
+    _set('hh-battle-responses', '');
+    _set('hh-battle-verdict', '');
+    _hide('hh-new-battle-btn');
+    _show('hh-battle-setup');
+    _hide('hh-battle-loading');
+
+    const pool = document.getElementById('hh-battle-brief-pool');
+    if (pool && !pool.hasChildNodes()) {
+      const shuffled = [...HIP_HOP_BATTLE_BRIEFS].sort(() => Math.random() - 0.5).slice(0, 4);
+      shuffled.forEach(b => {
+        const btn = document.createElement('button');
+        btn.className = 'btn-secondary';
+        btn.style.cssText = 'text-align:left;padding:10px 14px;font-size:0.85rem;';
+        btn.textContent = b.text;
+        btn.addEventListener('click', () => {
+          const inp = document.getElementById('hh-battle-brief');
+          if (inp) { inp.value = b.text; _updateBattleBtn(); }
+          pool.querySelectorAll('button').forEach(b => b.style.outline = '');
+          btn.style.outline = '2px solid rgba(100,180,255,0.5)';
+        });
+        pool.appendChild(btn);
+      });
+    }
+
+    const inp = document.getElementById('hh-battle-brief');
+    if (inp) inp.addEventListener('input', _updateBattleBtn);
+  }
+
+  function _updateBattleBtn() {
+    const inp = document.getElementById('hh-battle-brief');
+    const btn = document.getElementById('hh-start-battle');
+    if (btn) btn.disabled = !(inp?.value.trim());
+  }
+
+  function selectCombatants() {
+    const pool = [...ALL_HH_ROTATING].sort(() => Math.random() - 0.5);
+    return pool.slice(0, 2).map(id => _memberById(id));
+  }
+
+  async function startBattle() {
+    if (_battleBusy) return;
+    const brief = (document.getElementById('hh-battle-brief')?.value || '').trim();
+    if (!brief) return;
+    _battleBusy = true;
+
+    const startBtn = document.getElementById('hh-start-battle');
+    if (startBtn) startBtn.disabled = true;
+    _hide('hh-battle-setup');
+    _show('hh-battle-loading');
+    _set('hh-battle-responses', '');
+    _set('hh-battle-verdict', '');
+
+    _combatants = selectCombatants();
+    const responses = [];
+
+    for (const combatant of _combatants) {
+      const sys = `${combatant.prompt}\n\nPANEL RULES:\n${TURN_RULES_TEXT}`;
+      const msg = `RAP BATTLE BRIEF: "${brief}"\n\nDeliver your rap response to this brief. Stay in character. This is a battle — be specific, be sharp, find the angle nobody else would find. 80–160 words.`;
+      try {
+        const text = await API.call(sys, msg, 300, 'hip_hop/battle');
+        responses.push({ name: combatant.name, text });
+      } catch (e) {
+        responses.push({ name: combatant.name, text: '…' });
+      }
+    }
+
+    _hide('hh-battle-loading');
+    _set('hh-battle-responses', responses.map(r =>
+      `<div class="bills-response" style="margin-bottom:20px;">
+        <div class="bills-response-speaker">${r.name.toUpperCase()}</div>
+        <div class="bills-response-body" style="white-space:pre-wrap;">${r.text}</div>
+      </div>`
+    ).join(''));
+
+    // Eminem delivers the verdict
+    const anchor = _memberById(ANCHOR_ID);
+    const verdictSys = `${anchor.prompt}\n\nPANEL RULES:\n${TURN_RULES_TEXT}`;
+    const verdictMsg = `RAP BATTLE BRIEF: "${brief}"\n\n${_combatants[0].name} said:\n${responses[0]?.text}\n\n${_combatants[1].name} said:\n${responses[1]?.text}\n\nDeliver your verdict on this battle. Who won? Why? Be specific. 60–100 words.`;
+    try {
+      const verdictText = await API.call(verdictSys, verdictMsg, 200, 'hip_hop/verdict');
+      _set('hh-battle-verdict',
+        `<div class="bills-response" style="margin-top:16px;border-top:1px solid var(--border);padding-top:16px;">
+          <div class="bills-response-speaker">EMINEM — VERDICT</div>
+          <div class="bills-response-body" style="white-space:pre-wrap;">${verdictText}</div>
+        </div>`
+      );
+    } catch (e) { /* verdict optional */ }
+
+    _show('hh-new-battle-btn');
+    _battleBusy = false;
+
+    HCSession.logPanelRun('hip_hop', [ANCHOR_ID, ..._combatants.map(c => c.id)], responses.length);
+  }
+
+  function resetBattle() {
+    _battleBusy = false;
+    _combatants = [];
+    const pool = document.getElementById('hh-battle-brief-pool');
+    if (pool) pool.innerHTML = '';
+    const inp = document.getElementById('hh-battle-brief');
+    if (inp) inp.value = '';
+    _initBattleSetup();
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    _buildSuggestions();
+  });
+
+  return { discuss, switchMode, nextRound, startBattle, selectCombatants, resetBattle };
+
+})();
 
 // ============================================================
 // MODULE: Quntum Leeks
