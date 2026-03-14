@@ -49,7 +49,7 @@ const NAV_GROUPS = {
 // Boardroom uses charge-driven dynamic speaker selection: 3–5 speakers per round
 const PANEL_CONFIG = {
   boardroom:  { members: 7, minSpeakers: 3, maxSpeakers: 5, rounds: 5  },
-  comedyroom: { members: 8, rounds: 10 },
+  comedyroom: { members: 12, rounds: 10 },
   football:   { members: 4, rounds: null },
   golf:       { members: 8, rounds: null },
 };
@@ -7242,6 +7242,25 @@ function makeSteps(ctx) {
     [/^the rationale reflects the "([^"]+)" register$/, (register) => {
       if (!ctx._oracleVoice || !isValidOracleVoice(ctx._oracleVoice))
         throw new Error(`Oracle voice "${ctx._oracleVoice}" is not valid — cannot produce register "${register}"`);
+    }],
+
+    // ── Comedy Room new members (comedy-room-new-members.feature) ────────────────
+
+    [/^the comedy room has a member with id "([^"]+)"$/, (id) => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      const pattern = new RegExp(`id:\\s*'${id}'`);
+      if (!pattern.test(html))
+        throw new Error(`Comedy Room MEMBERS does not contain member with id "${id}"`);
+    }],
+
+    [/^the comedy room member "([^"]+)" has (?:a|an) (name|prompt|icon|colour)$/, (id, field) => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      // Find the member block containing the id, then check the field follows within 2000 chars
+      const idIdx = html.indexOf(`id: '${id}'`);
+      if (idIdx === -1) throw new Error(`Member "${id}" not found in index.html`);
+      const block = html.slice(idIdx, idIdx + 2000);
+      if (!new RegExp(`${field}:`).test(block))
+        throw new Error(`Member "${id}" is missing field "${field}"`);
     }],
 
     // ── Comedy Room mode switcher (comedy-room-mode-switcher.feature) ──────────
