@@ -10,6 +10,9 @@ Feature: Comedy Room — new members (BL-133/134/135/136/137/138)
       | chappelle |
       | pryor     |
       | louisk    |
+      | jefferies |
+      | gervais   |
+      | boyle     |
 
   Scenario Outline: New Comedy Room member has required fields
     Then the comedy room member "<id>" has a name
@@ -22,3 +25,6 @@ Feature: Comedy Room — new members (BL-133/134/135/136/137/138)
       | chappelle |
       | pryor     |
       | louisk    |
+      | jefferies |
+      | gervais   |
+      | boyle     |
