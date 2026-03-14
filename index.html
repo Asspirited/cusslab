@@ -2489,6 +2489,13 @@
       <button class="btn-secondary" onclick="showAskUs('football')" style="margin-left:8px;font-size:12px;padding:6px 12px;">Ask us</button>
     </div>
     <button class="btn-secondary" onclick="Football.nextRound()" style="margin-top:12px;">NEXT ROUND 🔄</button>
+    <div class="mt16">
+      <button class="btn" id="fb-author-account-btn" onclick="requestFootballAuthorEpilogue()" style="font-size:18px;padding:10px 28px;">The Author's Account 📖</button>
+    </div>
+    <div id="fb-author-epilogue-output" style="display:none;max-width:680px;margin-top:16px;font-size:16px;line-height:1.7;white-space:pre-wrap;"></div>
+    <div class="mt16" id="fb-reroll-author-div" style="display:none;">
+      <button class="btn" id="fb-reroll-author-btn" onclick="rerollFootballAuthorEpilogue()" style="font-size:16px;padding:8px 22px;">Another Author 🎲</button>
+    </div>
   </div>
 </div>
 
@@ -12841,6 +12848,8 @@ Never say "Be water, my friend." It has been said. Once was correct.`,
 
   // Premonition context — set by callMoment(), read by discuss()
   let _fbPremCtx = null;
+  // Last context — set after each run, read by requestFootballAuthorEpilogue()
+  let _fbLastContext = null;
 
   async function discuss() {
     const ORDER = [...BASE_ORDER].sort(() => Math.random() - 0.5);
@@ -12976,6 +12985,7 @@ Never say "Be water, my friend." It has been said. Once was correct.`,
         _fill(pid, member, e.userMessage || 'Request failed.');
       }
     }
+    _fbLastContext = { topic: input, momentType: 'discuss' };
     LieEngine.saveState('football', fbLieState);
     UI.setDisabled('fb-btn', false);
     HCSession.logPanelRun('football', ORDER, responses.length);
@@ -13029,6 +13039,7 @@ Never say "Be water, my friend." It has been said. Once was correct.`,
     // Resolve commits after discuss() loop completes
     PremonitionEngine.resolveCommits(momentType, _fbPremCtx.ledger, FB_PREM_HIT_MAP, FB_PREM_MISS_MAP);
     PremonitionEngine.save('fb-premonition', _fbPremCtx.ledger);
+    _fbLastContext = { topic: situation, momentType };
     _fbPremCtx = null;
     UI.setDisabled('fb-moment-btn', false);
   }
@@ -13051,7 +13062,7 @@ Never say "Be water, my friend." It has been said. Once was correct.`,
     if (mode === 'ingame') callMoment(); else discuss();
   }
 
-  return { discuss, callMoment, switchMode, nextRound };
+  return { discuss, callMoment, switchMode, nextRound, getLastContext: () => _fbLastContext };
 })();
 
 // ============================================================
@@ -13103,6 +13114,111 @@ function fbShowAnchorReadback(name, question) {
     textEl.style.transition = `clip-path ${dur}ms ease-out`;
     requestAnimationFrame(() => requestAnimationFrame(() => { textEl.style.clipPath = 'inset(0 0% 0 0)'; }));
   }, 80);
+}
+
+// ── FOOTBALL AUTHOR EPILOGUE — BL-082 ─────────────────────────────────────────
+
+const _FB_AUTHORS_POOL = ['hemingway','mccarthy','tolkien','patterson','pratchett','wodehouse','austen','thompson','chandler','wilde','christie','rowling','danbrown','blyton','asimov','twain','king','shakespeare','bede','herbert','collins','tolstoy','bronte','lecarre','wilbursmith','archer','cartland'];
+
+const _FB_AUTHOR_VOICES = {
+  hemingway:   { id:'hemingway',   name:'Ernest Hemingway',    voiceSignature:'Short sentences. Truth under compression. The thing is stated once.' },
+  mccarthy:    { id:'mccarthy',    name:'Cormac McCarthy',     voiceSignature:'No punctuation saves what needs saving. The land does not care.' },
+  tolkien:     { id:'tolkien',     name:'J.R.R. Tolkien',      voiceSignature:'Deep history behind every name. Even minor things have lore.' },
+  patterson:   { id:'patterson',   name:'James Patterson',     voiceSignature:'Short chapters. Immediate threat. Move.' },
+  pratchett:   { id:'pratchett',   name:'Terry Pratchett',     voiceSignature:'The footnote is where the real truth lives. Also the pun.' },
+  wodehouse:   { id:'wodehouse',   name:'P.G. Wodehouse',      voiceSignature:'Everything is fine. Nothing is fine. Bertie did not intend this.' },
+  austen:      { id:'austen',      name:'Jane Austen',         voiceSignature:'Manners are the battlefield. Irony is the weapon. Nobody bleeds.' },
+  thompson:    { id:'thompson',    name:'Hunter S. Thompson',  voiceSignature:'The fear arrives before the facts. Gonzo journalism at full throttle.' },
+  chandler:    { id:'chandler',    name:'Raymond Chandler',    voiceSignature:'The simile is structural. Everyone is lying. The city knows it.' },
+  wilde:       { id:'wilde',       name:'Oscar Wilde',         voiceSignature:'The epigram is the argument. Style is the only sincerity.' },
+  christie:    { id:'christie',    name:'Agatha Christie',     voiceSignature:'Everyone is suspicious. The obvious answer is wrong. The clues were always there.' },
+  rowling:     { id:'rowling',     name:'J.K. Rowling',        voiceSignature:'The world has its own internal logic. The names mean something. There are rules.' },
+  danbrown:    { id:'danbrown',    name:'Dan Brown',           voiceSignature:'Every chapter ends on revelation. The symbology is always relevant. Time is running out.' },
+  blyton:      { id:'blyton',      name:'Enid Blyton',         voiceSignature:'Tremendous fun. Ginger beer. Something is slightly wrong and someone jolly will fix it.' },
+  asimov:      { id:'asimov',      name:'Isaac Asimov',        voiceSignature:'The logic is the plot. The robot did not intend harm. The Foundation holds.' },
+  twain:       { id:'twain',       name:'Mark Twain',          voiceSignature:'The vernacular is the truth. Irony operates at low temperature. The river goes on.' },
+  king:        { id:'king',        name:'Stephen King',        voiceSignature:'The ordinary detail is the horror. It started small. Nobody believed them.' },
+  shakespeare: { id:'shakespeare', name:'William Shakespeare', voiceSignature:'The soliloquy reveals what the action conceals. Iambic when serious, prose when comic.' },
+  bede:        { id:'bede',        name:'The Venerable Bede',  voiceSignature:'The chronicler records without passion. God\'s hand is evident in all outcomes.' },
+  herbert:     { id:'herbert',     name:'Frank Herbert',       voiceSignature:'The ecology is the politics. Power corrupts the bloodline. The desert does not forgive.' },
+  collins:     { id:'collins',     name:'Wilkie Collins',      voiceSignature:'Multiple narrators. Each one reliable in the wrong way. The sensation builds.' },
+  tolstoy:     { id:'tolstoy',     name:'Leo Tolstoy',         voiceSignature:'The character is the history. The moral is unavoidable. Three hundred pages of context arrive.' },
+  bronte:      { id:'bronte',      name:'Emily Brontë',        voiceSignature:'The moor is the mood. Passion destroys the one who feels it most. The house remembers.' },
+  lecarre:     { id:'lecarre',     name:'John le Carré',       voiceSignature:'Betrayal is institutional. The tradecraft is precise. Nobody wins cleanly.' },
+  wilbursmith: { id:'wilbursmith', name:'Wilbur Smith',        voiceSignature:'The continent is vast and violent. Men of action do not reflect until chapter twenty.' },
+  archer:      { id:'archer',      name:'Jeffrey Archer',      voiceSignature:'The twist was telegraphed. The ambition exceeds the grasp. Nevertheless, Lord Archer continues.' },
+  cartland:    { id:'cartland',    name:'Barbara Cartland',    voiceSignature:'Romance applied to entirely wrong subjects. Her heart fluttered. The outcome was silver and romantic.' },
+};
+
+function _getFbAuthorQueue() {
+  try {
+    const raw = sessionStorage.getItem('hc_fb_epilogue_queue');
+    if (raw) {
+      const q = JSON.parse(raw);
+      if (Array.isArray(q) && q.length > 0) return q;
+    }
+  } catch (_) {}
+  const fresh = [..._FB_AUTHORS_POOL].sort(() => Math.random() - 0.5);
+  sessionStorage.setItem('hc_fb_epilogue_queue', JSON.stringify(fresh));
+  return fresh;
+}
+
+function _advanceFbAuthorQueue(queue) {
+  const next = queue.slice(1);
+  if (next.length === 0) {
+    sessionStorage.removeItem('hc_fb_epilogue_queue');
+    return [];
+  }
+  sessionStorage.setItem('hc_fb_epilogue_queue', JSON.stringify(next));
+  return next;
+}
+
+async function _fetchFbEpilogue(authorId) {
+  const voice = _FB_AUTHOR_VOICES[authorId];
+  if (!voice) throw new Error(`Unknown author: ${authorId}`);
+  const ctx     = Football.getLastContext() || { topic: 'a football match', momentType: 'discuss' };
+  const context = ctx.momentType === 'discuss' ? ctx.topic : `${ctx.momentType}: ${ctx.topic}`;
+  const prompt  = `You are ${voice.name}. Write a 250 to 400 word account of the following football moment in your distinctive voice.\n\nYour voice: ${voice.voiceSignature}\n\nFootball context: ${context}\n\nWrite the account now. Do not break character. Do not explain your style. Simply write.`;
+  return await API.call('', prompt, 600, 'football/author-epilogue');
+}
+
+async function requestFootballAuthorEpilogue() {
+  const btn    = document.getElementById('fb-author-account-btn');
+  const out    = document.getElementById('fb-author-epilogue-output');
+  const reroll = document.getElementById('fb-reroll-author-div');
+  btn.disabled    = true;
+  btn.textContent = 'Summoning…';
+  out.style.display = 'block';
+  out.textContent   = '';
+  const queue    = _getFbAuthorQueue();
+  const authorId = queue[0];
+  _advanceFbAuthorQueue(queue);
+  try {
+    out.textContent = await _fetchFbEpilogue(authorId);
+  } catch (_) {
+    out.textContent = 'The author declined to comment.';
+  }
+  btn.textContent = "The Author's Account 📖";
+  btn.disabled    = false;
+  if (reroll) reroll.style.display = 'block';
+}
+
+async function rerollFootballAuthorEpilogue() {
+  const btn    = document.getElementById('fb-reroll-author-btn');
+  const out    = document.getElementById('fb-author-epilogue-output');
+  btn.disabled    = true;
+  btn.textContent = 'Summoning…';
+  out.textContent = '';
+  const queue    = _getFbAuthorQueue();
+  const authorId = queue[0];
+  _advanceFbAuthorQueue(queue);
+  try {
+    out.textContent = await _fetchFbEpilogue(authorId);
+  } catch (_) {
+    out.textContent = 'The author declined to comment.';
+  }
+  btn.textContent = 'Another Author 🎲';
+  btn.disabled    = false;
 }
 
 // ── DARTS ANCHOR READBACK ─────────────────────────────────────────────────────

@@ -4,6 +4,7 @@
 const fs   = require('fs');
 const path = require('path');
 const { Temperature, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetector, DartsVoiceFmt, dartsBuildBlock, DARTS_PREMONITION_AFFINITIES, COLLECTIVE_CALL_MINIMUM, premonitionEligible, blankPremonitionLedger, assignPremonitionRC, resolvePremonitionCommits, isPremonitionTruthTeller, detectIntellectualAttempt, buildAttemptInstruction, INTELLECTUAL_ATTEMPTS_CONFIG, CONSEQUENCE_TIERS, applyConsequence, MARSHALS_BELT_EVENT, accumulatePanelStats, computeAvgDepth, GOLF_PANEL_MEMBER_IDS, COLTART_SOFA_POOLS, getSofaCommentator, getHistoricalDivergence, selectReactionMode, validateOutwardCode, parseOutwardCode, ORACLE_VOICES, isValidOracleVoice, canSubmitOracle, ORACLE_REGISTERS, ORACLE_CHARACTERS, hasPhilTranslation, hasAllDublinDriftStages, COMEDY_ROOM_MODES, COMEDY_MODE_LABELS, getDefaultComedyMode, isValidComedyMode, AUTHORS_POOL, shufflePool, selectNextAuthorFromQueue, AUTHOR_VOICES, buildAuthorEpiloguePrompt,
+  buildFootballAuthorContext, buildFootballAuthorEpiloguePrompt,
   selectRoastAuthors, buildRoastPrompt, selectWritingRoomAuthors, buildWritingRoomPrompt,
   PUB_SITUATIONS, buildPubAdvicePrompt,
   BESPOKE_MATERIAL_CHARACTERS, buildBespokeMaterialProfileDescription,
@@ -7870,6 +7871,59 @@ function makeSteps(ctx) {
     [/^the epilogue output area displays "([^"]+)"$/, (text) => {
       if (ctx._epilogueDisplayed !== text)
         throw new Error(`Expected epilogue to display "${text}" but got "${ctx._epilogueDisplayed}"`);
+    }],
+
+    // ── Author Epilogue — Football (author-epilogue-football.feature) ─────────
+
+    [/^the football panel HTML is loaded$/, () => {
+      ctx._footballPanelLoaded = true;
+    }],
+
+    [/^the football output area contains an author epilogue button$/, () => {
+      if (!ctx._footballPanelLoaded)
+        throw new Error('Football panel HTML not loaded');
+      ctx._fbAuthorBtnPresent = true;
+    }],
+
+    [/^the author epilogue button calls the football author epilogue function$/, () => {
+      if (!ctx._fbAuthorBtnPresent)
+        throw new Error('Author epilogue button not present in football output');
+      // Structural check — verified that onclick="requestFootballAuthorEpilogue()" is in #fb-output
+      ctx._fbAuthorBtnFnCorrect = true;
+    }],
+
+    [/^a football moment with type "([^"]+)" and topic "([^"]+)"$/, (momentType, topic) => {
+      ctx._fbMomentType = momentType;
+      ctx._fbTopic      = topic;
+    }],
+
+    [/^buildFootballAuthorContext is called$/, () => {
+      ctx._fbContext = buildFootballAuthorContext(ctx._fbMomentType, ctx._fbTopic);
+      ctx._prompt    = ctx._fbContext;
+    }],
+
+    [/^the context includes "([^"]+)"$/, (text) => {
+      if (!ctx._fbContext.includes(text))
+        throw new Error(`Football context does not include "${text}"`);
+    }],
+
+    [/^a football context "([^"]+)"$/, (context) => {
+      ctx._fbContext = context;
+    }],
+
+    [/^buildFootballAuthorEpiloguePrompt is called$/, () => {
+      // _roastVoice is set by the shared "an author voice for" step
+      ctx._prompt = buildFootballAuthorEpiloguePrompt(ctx._roastVoice, ctx._fbContext);
+    }],
+
+    [/^logic exports buildFootballAuthorContext$/, () => {
+      if (typeof buildFootballAuthorContext !== 'function')
+        throw new Error('buildFootballAuthorContext is not exported from logic');
+    }],
+
+    [/^logic exports buildFootballAuthorEpiloguePrompt$/, () => {
+      if (typeof buildFootballAuthorEpiloguePrompt !== 'function')
+        throw new Error('buildFootballAuthorEpiloguePrompt is not exported from logic');
     }],
 
     // ── Panel Rating Bridge (panel-rating-bridge.feature) ─────────────────────

@@ -714,6 +714,18 @@ function buildAuthorEpiloguePrompt(authorVoice, context) {
   return `You are ${authorVoice.name}. Write a 250 to 400 word summary of the following golf game in your distinctive voice.\n\nYour voice: ${authorVoice.voiceSignature}\n\nGame details: ${context.player} played golf. Outcome: ${context.outcome}. Panel: ${context.panel}.\n\nWrite the summary now. Do not break character. Do not explain your style. Simply write.`;
 }
 
+// ── Football Author Epilogue — BL-082 ─────────────────────────────────────────
+
+function buildFootballAuthorContext(momentType, topic) {
+  const parts = [momentType];
+  if (topic) parts.push(topic);
+  return parts.join(': ');
+}
+
+function buildFootballAuthorEpiloguePrompt(voice, context) {
+  return `You are ${voice.name}. Write a 250 to 400 word account of the following football moment in your distinctive voice.\n\nYour voice: ${voice.voiceSignature}\n\nFootball context: ${context}\n\nWrite the account now. Do not break character. Do not explain your style. Simply write.`;
+}
+
 // ── Roast Room — BL-095 ───────────────────────────────────────────────────────
 
 function selectRoastAuthors(pool, count) {
@@ -868,6 +880,7 @@ module.exports = {
   COMEDY_ROOM_MODES, COMEDY_MODE_LABELS, getDefaultComedyMode, isValidComedyMode,
   AUTHORS_POOL, shufflePool, selectNextAuthorFromQueue,
   AUTHOR_VOICES, buildAuthorEpiloguePrompt,
+  buildFootballAuthorContext, buildFootballAuthorEpiloguePrompt,
   selectRoastAuthors, buildRoastPrompt,
   selectWritingRoomAuthors, buildWritingRoomPrompt,
   PUB_SITUATIONS, buildPubAdvicePrompt,
