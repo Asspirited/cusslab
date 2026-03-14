@@ -1304,7 +1304,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Feature: spit-shelter
 - Epic: The Spit Shelter
 - CD3: UBV=9 TC=7 RR=8 → CoD=24, Dur=5, **CD3=4.8**
-- Status: OPEN — raised 2026-03-14. Gherkin required before panel code.
+- Status: CLOSED — shipped 2026-03-14. Commits: c19b943 (17 character files), 8012929 (panel IIFE, HTML, nav, data file, 42 Gherkin scenarios). 1704/1704 Gherkin green.
 
 ---
 
@@ -1315,4 +1315,4 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Feature: spit-shelter
 - Epic: The Spit Shelter
 - CD3: UBV=7 TC=8 RR=7 → CoD=22, Dur=1, **CD3=22.0**
-- Status: OPEN — raised 2026-03-14. Data-only (prompt convention) — no Gherkin gate.
+- Status: CLOSED — shipped 2026-03-14. Spec written to .claude/practices/school-mode-convention.md. All 17 Spit Shelter character files include School Mode declarations in Character Rules. Backfill candidates flagged (Cox, Bristow, Faldo).
