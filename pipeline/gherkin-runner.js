@@ -49,7 +49,7 @@ const NAV_GROUPS = {
 // Boardroom uses charge-driven dynamic speaker selection: 3–5 speakers per round
 const PANEL_CONFIG = {
   boardroom:  { members: 7, minSpeakers: 3, maxSpeakers: 5, rounds: 5  },
-  comedyroom: { members: 12, rounds: 10 },
+  comedyroom: { members: 15, rounds: 10 },
   football:   { members: 4, rounds: null },
   golf:       { members: 8, rounds: null },
 };
