@@ -263,28 +263,28 @@ For items that represent a product hypothesis, add after the CD3 line:
 - Tiger completes Career Grand Slam (never visited a bunker). 19-under. Monty as great Scottish foil with crowd. BBC. Players: Tiger (protagonist), Monty (crowd favourite).
 - Feature: golf-adventure
 - CD3: UBV=8 TC=5 RR=1 → CoD=14, Dur=3, **CD3=4.7**
-- Status: OPEN
+- Status: CLOSED — id:st_andrews_2000, era-2000/lb-2000, Tiger/Monty players, 3 holes (1st Burn, 17th Road Hole, 18th Valley of Sin). 19-under, no bunkers, BBC silence. tournaments.js.
 
 ### BL-041 — Golf Adventure: 2011 US Open Congressional (Rory 8-shot)
 - Epic: Modern Majors Tier 2
 - Rory McIlroy 8-shot win at 22. After Masters collapse. Utterly dominant. NBC. Players: Rory (protagonist), Jason Day (distant second).
 - Feature: golf-adventure
 - CD3: UBV=8 TC=5 RR=1 → CoD=14, Dur=3, **CD3=4.7**
-- Status: OPEN
+- Status: CLOSED — id:congressional_2011, era-2011-us/lb-2011-us, Rory/Jason Day players, 3 holes. 8-shot win, Augusta answer. tournaments.js.
 
 ### BL-042 — Golf Adventure: 2002 Open Muirfield (Els 4-way playoff)
 - Epic: Modern Majors Tier 2
 - 4-man playoff (Els, Elkington, Levet, Appleby). Els wins. Thomas Levet falls over after hole-in-one celebrations. BBC. Players: Els (protagonist), Levet (comedy foil).
 - Feature: golf-adventure
 - CD3: UBV=7 TC=5 RR=1 → CoD=13, Dur=3, **CD3=4.3**
-- Status: OPEN
+- Status: CLOSED — id:muirfield_2002, era-2007 reused, Els/Levet players, 3 holes (9th, 14th — the fall, 18th playoff). Levet falls over, hobbles to playoff, loses.
 
 ### BL-043 — Golf Adventure: 2011 Open Sandwich (Darren Clarke)
 - Epic: Modern Majors Tier 2
 - Clarke wins three weeks after anniversary of wife Heather's death. Emotional. Sky. Players: Clarke (protagonist), Phil Mickelson / Dustin Johnson (foils).
 - Feature: golf-adventure
 - CD3: UBV=8 TC=5 RR=1 → CoD=14, Dur=3, **CD3=4.7**
-- Status: OPEN
+- Status: CLOSED — id:sandwich_2011, era-2011/lb-2011, Clarke/Dustin Johnson players, 3 holes (4th Suez Canal, 14th, 18th Home). Clarke weeps, cigar, pint. tournaments.js.
 
 ### BL-044 — Golf Adventure: 2007 Open Carnoustie (Harrington/García)
 - Epic: Modern Majors Tier 2
@@ -297,21 +297,21 @@ For items that represent a product hypothesis, add after the CD3 line:
 - Rory McIlroy dominant. 8-shot win. Ryder Cup backdrop (Ocean Course). Players: Rory (protagonist).
 - Feature: golf-adventure
 - CD3: UBV=7 TC=4 RR=1 → CoD=12, Dur=3, **CD3=4.0**
-- Status: OPEN
+- Status: CLOSED — id:kiawah_2012_pga, era-2012 reused, Rory/David Lynn players, 3 holes (10th, 16th, 18th). Eight again. tournaments.js.
 
 ### BL-046 — Golf Adventure: 2004 Masters (Phil's first major)
 - Epic: Modern Majors Tier 2
 - Phil Mickelson's first major after 0-for-46. Arms in air on 18. Ernie Els misses short putt on 18 to tie. CBS.
 - Feature: golf-adventure
 - CD3: UBV=7 TC=4 RR=1 → CoD=12, Dur=3, **CD3=4.0**
-- Status: OPEN
+- Status: CLOSED — id:augusta_2004, era-2005 reused, Phil/Els players, 3 holes (13th, 16th, 18th). Phil drives 18 and birdies, Bones runs 50 yards, Els misses putt. tournaments.js.
 
 ### BL-047 — Golf Adventure: 2012 Masters (Bubba Watson)
 - Epic: Modern Majors Tier 2
 - Bubba Watson punch hook from pine straw on 10 in playoff. Weeps at the hole. CBS. Players: Bubba (protagonist), Louis Oosthuizen (foil).
 - Feature: golf-adventure
 - CD3: UBV=7 TC=4 RR=1 → CoD=12, Dur=3, **CD3=4.0**
-- Status: OPEN
+- Status: CLOSED — id:augusta_2012, era-2012 reused, Bubba/Oosthuizen players, 3 holes (2nd albatross, 10th pine straw, 18th playoff). The hook shot. Bubba weeps. tournaments.js.
 
 ### BL-048 — Golf Adventure: Round selection — play final round only OR all 4
 - Option at tournament start: play the full 4 rounds or jump straight to the final round with historical scores loaded for rounds 1–3.
@@ -643,7 +643,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
   Three Amigos needed: decide rating UI pattern before implementation to ensure consistency.
 - Feature: platform
 - CD3: UBV=7 TC=3 RR=4 → CoD=14, Dur=4, **CD3=3.5**
-- Status: OPEN — raised 2026-03-10. BL-093 shipped 2026-03-10 — no longer blocked.
+- Status: CLOSED — shipped 2026-03-14. Commit 3ce97fd. Boardroom, Roast Room, Writing Room, House Name Oracle, Ironic, Professionals. 19-scenario Gherkin. Remaining panels (roastbattle, comedylab, bills, old feedback() panels) deferred.
 
 ### BL-095 — The Literary Roast Room: authors roast any book / comic / magazine title you enter
 - Epic: Author Epilogue
@@ -887,7 +887,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Phase 4: Add to session-closedown.md step — run `feature-report.sh` and include output in session summary.
 - Feature: process
 - CD3: UBV=6 TC=4 RR=5 → CoD=15, Dur=3, **CD3=5.0**
-- Status: OPEN — raised 2026-03-10
+- Status: CLOSED — 2026-03-11 (910744f): feature-report.sh script, Feature: field added to BL/WL schema, 61 BL items backfilled, feature-report.feature Gherkin, closedown step 1b added.
 
 ### BL-103 — Faldo character: add Sandwich Gate wound to canonical character file
 - Sandwich Gate (2008 Ryder Cup) is the primary wound for Nick Faldo (`docs/characters-sports.md:181`) but is absent from `characters/faldo.md`. The canonical file has childhood cheese-and-pickle mechanic but not the Valhalla/pairings-note incident.

@@ -2243,6 +2243,214 @@ const TOURNAMENTS = [
     ]
   }
 
+,
+
+  // ── 2002 Open Championship — Muirfield ────────────────────────────────────────────────────
+  {
+    id:"muirfield_2002", year:2002, eraClass:"era-2007", lbClass:"lb-2008",
+    name:"Four Men and a Pratfall",
+    course:"Muirfield Golf Club", country:"Gullane, East Lothian, Scotland",
+    type:"major", badge:"badge-major", days:4,
+    lore:"Four men finished the 2002 Open Championship at -6: Ernie Els, Stuart Appleby, Steve Elkington, and Thomas Levet. The four-hole aggregate playoff began. Elkington was out first, then Appleby. Levet and Els went head-to-head. In the final round, Levet had celebrated a remarkable birdie by pumping his fist and stumbling sideways on the green — a pratfall of such perfect comic timing that the BBC commentary briefly lost the thread. He hobbled to the last playoff hole on a twisted ankle. Els made par. Levet made bogey. The Big Easy won his second Open. Thomas Levet became the most celebrated runner-up in Muirfield history, and he was fine.",
+    players:[
+      { id:"ernie_els_2002", name:"Ernie Els", abbr:"ELS",
+        temperamentProfile:"LEVELHEADED",
+        temperamentProfileSecondary:"ICEBERG",
+        bottle:9, ego:7, temperament:9, shame:2,
+        driving:9, irons:9, short_game:9, putting:9, recovery:9, bunkers:9, course_management:9,
+        desc:"The Big Easy. Two Opens, two US Opens. Links golf suits him — his swing is built for it, long and smooth with a pause at the top that seems to ignore the wind. Muirfield is a thinking man's course and he is a thinking man's golfer.",
+        wound:"Greg Norman's collapse at Augusta 1996 handed him the green jacket. He has never fully escaped the feeling that he wins the ones he has to, and sometimes the ones he shouldn't have to. The 2004 Masters will settle that.",
+        historicalScores:[-2,-4,-5,-6] },
+      { id:"thomas_levet_2002", name:"Thomas Levet", abbr:"LEV",
+        temperamentProfile:"STREAKY",
+        temperamentProfileSecondary:"COMBUSTIBLE",
+        bottle:7, ego:8, temperament:6, shame:3,
+        driving:8, irons:8, short_game:8, putting:8, recovery:7, bunkers:7, course_management:7,
+        desc:"The Frenchman who played the round of his life at Muirfield and celebrated it by falling over on the green. He hobbled into the playoff on a twisted ankle, made the lead change, lost on the last hole, and became golf's greatest comic supporting actor.",
+        wound:"He fell over. On the green. While celebrating a birdie. In the Open Championship. He is fine with it now. He is mostly fine with it now.",
+        historicalScores:[-1,-3,-5,-6] },
+    ],
+    field:[
+      {name:"Stuart Appleby",    scores:[-2,-4,-5,-6]},
+      {name:"Steve Elkington",   scores:[-1,-3,-5,-6]},
+      {name:"Retief Goosen",     scores:[0,-2,-4,-5]},
+      {name:"Gary Evans",        scores:[0,-2,-3,-5]},
+    ],
+    holes:[
+      {id:"mu9_2002",  name:"9th — The Hill",    par:5, yards:504, hazard:"fairway bunkers left and right, crosswind, rising approach",
+       lore:"Muirfield's 9th is a dogleg right par 5 that turns into the prevailing wind. The fairway bunkers are positioned precisely where the ambitious second shot lands. Levet found them on Saturday. He made birdie anyway. This established the theme of the day.",
+       incidents:["Levet was in two fairway bunkers across the four rounds and made birdie from one of them.","Els played the 9th in two-over for the week, uncharacteristically conservative — he was building a plan around the harder back nine.","Stuart Appleby eagled the 9th in the third round to briefly lead the Open Championship.","The gallery on the 9th was largely Scottish and largely with Els — they respect a man who plays the course rather than fights it."],
+       events:["fairway_bunker","links_wind","levet_bunker_birdie","appleby_eagle"], pressureRating:3,
+       modifiers:{atmosphereNote:"9th at Muirfield. Par 5. Bunkers where the ambitious land. Levet is not being cautious. Els is building a plan. The wind is from the west. It always is."}},
+      {id:"mu14_2002", name:"14th — Peesweep",   par:4, yards:449, hazard:"deep rough both sides, narrow fairway, green guarded by bunkers",
+       lore:"The 14th at Muirfield is the hole that separates the leaders from the men who were in contention at the 13th. The green is protected by bunkers that look manageable and are not. Levet made birdie here in the final round, pumped his fist, and — in what would become the defining image of the 2002 Open — caught his foot and fell sideways. He was immediately fine. The BBC took two seconds to confirm this and then chose to laugh.",
+       incidents:["Levet's celebration on the 14th green in the final round involved a fist pump, a misstep, and a full sideways stumble.","He was fine. He said so immediately. He was also now playing the back nine on a twisted ankle.","Els made par on 14 in all four rounds. Par. Every time. As if the hole had agreed to a truce.","The BBC commentator paused for six seconds before confirming Levet had risen from the green of his own accord."],
+       events:["levet_birdie","the_fall","bbc_pause","els_par"], pressureRating:4,
+       modifiers:{thresholdAdd:1, atmosphereNote:"14th at Muirfield. Levet makes birdie. Pumps his fist. Falls over. Gets up. Hobbles on. The BBC takes a moment. This is the Open Championship."}},
+      {id:"mu18_2002", name:"18th — Home",        par:4, yards:448, hazard:"rough both sides, greenside bunkers, gallery three-deep",
+       lore:"In the playoff, Thomas Levet and Ernie Els came to the 18th level. Levet, ankle taped, hobbled to the tee. Els hit his approach to twelve feet. Levet's approach ran through the green. He chipped back, missed the putt. Els two-putted for par. Els won the 2002 Open Championship. Levet shook his hand, smiled, and hopped back to the clubhouse on one leg. He remains the most entertaining runner-up in Open history.",
+       incidents:["Levet's playoff approach ran through the 18th green — a contact-too-clean mistake that cost him the championship.","Els hit a 5-iron to the 18th in the playoff and two-putted. Clean. Professional. Slightly boring, in context.","The gallery gave Levet a standing ovation as he hobbled off. He raised his hand to acknowledge them.","Levet would later say the ankle felt fine within a week. He also said the fall on 14 was the best thing that ever happened to him. He was not entirely joking."],
+       events:["playoff_18th","levet_approach_through","els_two_putt","els_wins","levet_ovation"], pressureRating:5,
+       modifiers:{thresholdAdd:2, compCost:1, atmosphereNote:"18th playoff. Levet through the green. Els twelve feet. Levet misses. Els two-putts. The Big Easy wins. Levet limps off to an ovation he entirely deserves."}},
+    ]
+  }
+
+,
+
+  // ── 2012 PGA Championship — Kiawah Island ─────────────────────────────────────────────────
+  {
+    id:"kiawah_2012_pga", year:2012, eraClass:"era-2012", lbClass:"lb-2012",
+    name:"Eight Again",
+    course:"Ocean Course, Kiawah Island Golf Resort", country:"Kiawah Island, South Carolina",
+    type:"major", badge:"badge-major", days:4,
+    lore:"Rory McIlroy was 23 years old. Thirteen months earlier he had won the US Open at Congressional by eight shots. At Kiawah Island he won the PGA Championship by eight shots. The Ocean Course is exposed to Atlantic wind on every hole — it had destroyed fields in 1991 and shredded rounds throughout the week. Rory played four rounds of 67-75-67-66 and won at -13. The 75 in the second round was the only concession to the conditions. Everything else was a statement. He became the second youngest World Number One in history and the youngest player to win two majors since Seve Ballesteros. David Lynn, a 39-year-old Englishman, finished second. Rory wasn't watching.",
+    players:[
+      { id:"rory_mcilroy_2012", name:"Rory McIlroy", abbr:"ROR",
+        temperamentProfile:"PEAKER",
+        temperamentProfileSecondary:"ICEBERG",
+        bottle:9, ego:8, temperament:9, shame:2,
+        driving:10, irons:10, short_game:9, putting:9, recovery:9, bunkers:9, course_management:9,
+        desc:"Two majors in thirteen months, both by eight. The Ocean Course is the hardest setup on tour. He has played it in thirteen-under. His second major confirms the first was not a fluke. It confirms something else — something the sport is still processing.",
+        wound:"Augusta 2011. Led by four. Shot 80. But that story is done. Congressional answered it. Kiawah buries it. He has moved on faster than the golf media.",
+        historicalScores:[-5,-8,-11,-13] },
+      { id:"david_lynn_2012", name:"David Lynn", abbr:"LYN",
+        temperamentProfile:"LEVELHEADED",
+        temperamentProfileSecondary:"STREAKY",
+        bottle:7, ego:5, temperament:7, shame:3,
+        driving:7, irons:8, short_game:8, putting:8, recovery:7, bunkers:7, course_management:8,
+        desc:"A 39-year-old journeyman pro from Sutton Coldfield who finished runner-up in a major. He played the Ocean Course brilliantly all week. He was eight shots behind. He did not look eight shots behind until you checked the scoreboard. He had the week of his life and came second in a major by a distance that suggests he was playing a different tournament.",
+        wound:"None specifically. He is David Lynn. He ran into Rory McIlroy at Kiawah. This is not a wound. This is a weather event.",
+        historicalScores:[-2,-5,-7,-5] },
+    ],
+    field:[
+      {name:"Ian Poulter",       scores:[-1,-4,-6,-5]},
+      {name:"Tiger Woods",       scores:[0,-3,-5,-4]},
+      {name:"Justin Rose",       scores:[0,-2,-4,-4]},
+      {name:"Carl Pettersson",   scores:[0,-2,-3,-4]},
+    ],
+    holes:[
+      {id:"kp10_2012", name:"10th — Ocean View",  par:4, yards:439, hazard:"Atlantic crosswind, fairway narrows at 250, approach exposed",
+       lore:"The 10th at Kiawah plays directly into the prevailing Atlantic wind. It was one of the hardest holes on the Ocean Course all week — the crosswind made club selection genuinely speculative. Rory played it in +1 for the week, which at Kiawah counts as taking it apart.",
+       incidents:["Rory played the 10th in one-over for four rounds. The Ocean Course field averaged 4.7 per hole.","Tiger Woods double-bogeyed the 10th in the final round. His week quietly ended there.","David Lynn made par on 10 in all four rounds — methodical, exactly what the hole required.","The gallery following Rory on 10 was three-deep despite the Atlantic wind. They had sunscreen and patience."],
+       events:["atlantic_wind","rory_par","tiger_double","david_lynn_par"], pressureRating:4,
+       modifiers:{atmosphereNote:"10th at Kiawah. Atlantic wind. The field is suffering. Rory plays it in one-over for the week and walks away as if this is an inconvenience, not an achievement."}},
+      {id:"kp16_2012", name:"16th — The Marsh",   par:3, yards:197, hazard:"tidal marsh left and beyond, Atlantic wind alters the carry distance significantly",
+       lore:"The 16th at Kiawah is a one-shotter that plays across tidal marshland. The wind off the Atlantic changes the carry by up to 40 yards between calm and peak gusts. In the final round, Rory hit a mid-iron to twelve feet and made birdie. The gallery roar could be heard on the 15th tee.",
+       incidents:["Rory's tee shot on 16 in the final round left twelve feet for birdie. He made it.","The flag on 16 was moving at 45 degrees throughout Sunday — visible proof that club selection was partly guesswork.","Ian Poulter made a hole-in-one on 16 in the second round. Rory, playing behind, acknowledged it at the tee. Then made birdie.","David Lynn went long on 16 in the final round, made bogey — his only concession to the back nine pressure."],
+       events:["marsh_carry","rory_birdie","poulter_ace","gallery_roar"], pressureRating:4,
+       modifiers:{atmosphereNote:"16th at Kiawah. One-shotter over marsh. The wind is making this a lottery. Rory hits it to twelve feet and birdies. He is eight shots ahead. He is still making birdies."}},
+      {id:"kp18_2012", name:"18th — The Ocean",   par:4, yards:439, hazard:"ocean right, bunkers, final gallery, full Atlantic exposure",
+       lore:"Rory McIlroy stood on the 18th tee at Kiawah Island on Sunday afternoon, eight shots clear, knowing. He played the hole the way he had played the week — direct, aggressive, unhurried. He made birdie. He raised his arms. He was 23. He had now won two majors, both by eight shots, at two of the hardest venues on the major rota. The Wanamaker Trophy was presented under a sky that had been trying to ruin the week since Thursday. Rory had not noticed.",
+       incidents:["Rory birdied the 18th to finish at -13, eight shots ahead of David Lynn.","He raised both arms on the 18th green. His caddie J.P. Fitzgerald embraced him on the fairway.","The last time the PGA Championship was at Kiawah, Bernhard Langer missed a short putt on 18. Different Sunday. Different result.","Rory's caddie J.P. Fitzgerald called it the most dominant major performance he had witnessed from the inside. He had caddied for Rory at Congressional. The bar was high."],
+       events:["rory_birdie_18","arms_raised","wanamaker_trophy","eight_shots","youngest_world_one"], pressureRating:3,
+       modifiers:{atmosphereNote:"18th at Kiawah. Sunday. Eight shots clear. Rory birdies anyway. He is 23. He has now won two majors by the same margin at the hardest venues on tour. The Wanamaker is his."}},
+    ]
+  }
+
+,
+
+  // ── 2004 Masters — Augusta National ───────────────────────────────────────────────────────
+  {
+    id:"augusta_2004", year:2004, eraClass:"era-2005", lbClass:"lb-2005",
+    name:"Zero for Forty-Seven",
+    course:"Augusta National Golf Club", country:"Augusta, Georgia",
+    type:"major", badge:"badge-major", days:4,
+    lore:"Phil Mickelson had entered 47 major championships without winning one. He had six top-six finishes at Augusta alone. His wife Amy was nine months pregnant, present at Augusta National, not watching the back nine on medical advice from herself. Phil drove the 18th fairway on Sunday. He hit his approach. He made birdie. He leapt in the air. His caddie Jim 'Bones' Mackay ran at him from 50 yards. Mickelson won his first major with a final-round 69 and a nine-under total. Ernie Els finished one shot behind having missed a birdie putt on the 18th that would have tied him. Phil walked off the green with his arms wide. The thing that was never going to happen had happened.",
+    players:[
+      { id:"phil_mickelson_2004", name:"Phil Mickelson", abbr:"PMK",
+        temperamentProfile:"COMBUSTIBLE",
+        temperamentProfileSecondary:"PEAKER",
+        bottle:8, ego:9, temperament:7, shame:5,
+        driving:9, irons:9, short_game:10, putting:9, recovery:9, bunkers:10, course_management:8,
+        desc:"Zero for forty-six going into Augusta 2004. One going out. Left-handed golfer with the most expressive short game on tour, the most enthusiastic fist pump in the sport, and a talent that had been haunted by the label 'the best player never to win a major' for a decade. Arms spread wide on the 18th green. It happened.",
+        wound:"The second place finishes. Specifically: 1999 US Open at Pinehurst where he was on-call for the birth of his daughter Amanda on his pager during the round. He finished second. He would have left mid-round if necessary. He didn't have to. He finished second. He mentions this.",
+        historicalScores:[-3,-6,-8,-9] },
+      { id:"ernie_els_2004", name:"Ernie Els", abbr:"ELS",
+        temperamentProfile:"LEVELHEADED",
+        temperamentProfileSecondary:"ICEBERG",
+        bottle:8, ego:7, temperament:9, shame:4,
+        driving:9, irons:9, short_game:9, putting:9, recovery:9, bunkers:9, course_management:9,
+        desc:"Ernie Els missed a birdie putt on the 18th green on Sunday afternoon that would have tied Phil Mickelson and forced a playoff. He had the putt. He missed it. Phil had already made birdie and was standing behind the 18th green watching. It is the polite version of a wound.",
+        wound:"Augusta 2004. The putt on 18. He doesn't discuss it at length. He says it was close. It was close.",
+        historicalScores:[-2,-5,-7,-8] },
+    ],
+    field:[
+      {name:"K.J. Choi",         scores:[-1,-4,-6,-7]},
+      {name:"Sergio Garcia",     scores:[-1,-3,-5,-7]},
+      {name:"Chris DiMarco",     scores:[0,-3,-5,-6]},
+      {name:"Paul Casey",        scores:[0,-2,-4,-5]},
+    ],
+    holes:[
+      {id:"a13_2004", name:"13th — Azalea",      par:5, yards:510, hazard:"Rae's Creek in front of green — eagle and birdie available; double bogey also available",
+       lore:"Azalea is where Augusta Sundays reveal themselves. The creek in front of the green demands a decision on every second shot — lay up or carry it. Phil Mickelson carries it. He has carried it every time at Augusta. On Sunday 2004 he made birdie, and the look on his face suggested he had been saving something.",
+       incidents:["Phil made birdie on 13 in the final round. Fist pump. Renewed conviction.","Els was in Rae's Creek on his second shot on Saturday — he walked away with bogey and a lesson.","Garcia eagled 13 in round three to briefly lead the tournament.","The gallery on 13 is three-deep every day at Augusta — the corner is the best viewing spot on the course."],
+       events:["phil_birdie_13","els_creek","garcia_eagle","gallery_azalea"], pressureRating:4,
+       modifiers:{atmosphereNote:"13th at Augusta. Phil birdies. The creek did not get him today. He is building. Something is happening and everyone who has watched Phil fail before is trying not to look."}},
+      {id:"a16_2004", name:"16th — Redbud",      par:3, yards:170, hazard:"water left, slope runs toward pin, gallery in full throat",
+       lore:"By the 16th on Sunday Phil had the lead. The par-3 16th at Augusta is the gallery hole — the green slopes and water left. Phil hit his tee shot to 15 feet. He made birdie. The crowd noise lasted until the 17th tee. Ernie Els, watching the leaderboard two holes behind, began to calculate.",
+       incidents:["Phil made birdie on 16 in the final round. The gallery erupted.","Els, playing two groups back, was at -8. He needed to birdie both finishing holes to tie.","The 16th has been the making of Tiger Woods twice. Sunday 2004 it was Phil's.","Amy Mickelson, watching from a hospitality area, had reportedly been asked by medical staff to avoid the back nine. She was watching."],
+       events:["phil_birdie_16","gallery_eruption","els_calculates","amy_watches"], pressureRating:4,
+       modifiers:{atmosphereNote:"16th at Augusta. Phil makes birdie. He's two ahead with two to play. The gallery is making a noise that carries to the 17th tee. Ernie Els, two holes back, is doing arithmetic."}},
+      {id:"a18_2004", name:"18th — Holly",       par:4, yards:465, hazard:"bunkers right, gallery three-deep, the walk up the hill",
+       lore:"Phil Mickelson hit driver on the 18th on Sunday. He shouldn't have — the safe play is a long iron. He did it anyway, and the ball found the right rough. He made birdie from there. He pumped his fist on the 18th green, jumped off the ground, and ran at Jim Mackay. He was 33 years old and had just won his first major. Amy Mickelson was on the 18th green to embrace him. Ernie Els, who had made birdie on 17, needed birdie on 18 to force a playoff. He missed the putt. Phil never knew — he was already celebrating.",
+       incidents:["Phil hit driver on 18 — aggressive choice from rough. Made birdie.","His fist pump on 18 was the most celebrated moment in Augusta that day.","Ernie Els had a birdie putt on 18 to tie. He missed it. Phil was already with Amy.","Jim 'Bones' Mackay ran 50 yards across the 18th green to reach Phil. This was not dignified. Nobody cared.","Phil's daughter Sophia would be born the following week. Amy was nine months pregnant and present.","Phil Mickelson won his first major at age 33, on his 47th major appearance. He said it felt exactly like he had always imagined, and he had imagined it a lot."],
+       events:["phil_driver_18","phil_birdie_18","fist_pump","bones_runs","els_misses","zero_to_one"], pressureRating:5,
+       modifiers:{thresholdAdd:2, compCost:1, atmosphereNote:"18th at Augusta. Phil hits driver from the right rough and makes birdie anyway. He runs at Bones. Amy is on the green. Els misses the putt behind him. Phil doesn't know. The thing that was never going to happen has happened."}},
+    ]
+  }
+
+,
+
+  // ── 2012 Masters — Augusta National ───────────────────────────────────────────────────────
+  {
+    id:"augusta_2012", year:2012, eraClass:"era-2012", lbClass:"lb-2012",
+    name:"The Pine Straw",
+    course:"Augusta National Golf Club", country:"Augusta, Georgia",
+    type:"major", badge:"badge-major", days:4,
+    lore:"Bubba Watson and Louis Oosthuizen finished regulation tied at -10 and went to a sudden-death playoff. On the second playoff hole — the 10th — Oosthuizen pulled his approach into the trees right. Watson's approach found the pine straw under the trees, 40 yards from the green, behind the pines, blocked by branches, with no direct line. He had a gap of about four feet. He took a 52-degree wedge and played a left-to-right hook with a 40-yard bend that came out of the trees, curved through the gap, and landed twelve feet from the pin. Oosthuizen made bogey. Watson two-putted for par. He wept by the hole. He had never taken a formal golf lesson in his life.",
+    players:[
+      { id:"bubba_watson_2012", name:"Bubba Watson", abbr:"BUB",
+        temperamentProfile:"COMBUSTIBLE",
+        temperamentProfileSecondary:"STREAKY",
+        bottle:7, ego:8, temperament:7, shame:4,
+        driving:10, irons:7, short_game:9, putting:8, recovery:10, bunkers:8, course_management:7,
+        desc:"Bubba Watson plays golf by feel. He has never taken a formal lesson. He shapes the ball both ways off the tee with distances that look wrong until you check the number on the rangefinder. The pine straw shot on 10 is the shot. It will be discussed until the sport stops being played.",
+        wound:"He cries when he wins. He cries when he is moved. He apologises for crying. He should not apologise. It is the most human thing about a sport that sometimes forgets to be human.",
+        historicalScores:[-3,-6,-9,-10] },
+      { id:"louis_oosthuizen_2012", name:"Louis Oosthuizen", abbr:"OOS",
+        temperamentProfile:"LEVELHEADED",
+        temperamentProfileSecondary:"ICEBERG",
+        bottle:8, ego:6, temperament:8, shame:3,
+        driving:9, irons:9, short_game:9, putting:9, recovery:8, bunkers:8, course_management:9,
+        desc:"Louis Oosthuizen won the 2010 Open Championship with a performance of such quiet elegance that the sport slightly undervalued it. At Augusta 2012 he made an albatross on the 2nd hole on Sunday that should have won him the Masters. Then Bubba happened.",
+        wound:"The albatross on 2 gave him the lead. He finished with it. Then the playoff. Then the pine straw shot. He is a gracious man. He said the right things afterwards. The shot will still be replayed at every Augusta broadcast until they both die.",
+        historicalScores:[-2,-5,-8,-10] },
+    ],
+    field:[
+      {name:"Matt Kuchar",       scores:[-1,-4,-7,-9]},
+      {name:"Peter Hanson",      scores:[-1,-3,-6,-8]},
+      {name:"Lee Westwood",      scores:[0,-3,-5,-7]},
+      {name:"Phil Mickelson",    scores:[0,-2,-5,-7]},
+    ],
+    holes:[
+      {id:"a2_2012",  name:"2nd — Pink Dogwood", par:5, yards:575, hazard:"downhill off tee, creek right of green — reachable in two, dangerous in the attempt",
+       lore:"Louis Oosthuizen made an albatross on the 2nd hole on Sunday at Augusta 2012. A two on a par-5. He holed his four-iron second shot. Augusta National went silent for a moment — the sound of 30,000 people trying to understand what they had just seen — and then roared. The CBS scoreboard showed -13 next to his name for approximately forty seconds before anyone else birdied.",
+       incidents:["Oosthuizen holed his four-iron from 252 yards for albatross on the 2nd.","The CBS graphics team had to scramble for the albatross notation — they hadn't used it in years.","The gallery reaction was: silence, then the longest sustained roar heard on Augusta's front nine that day.","Bubba Watson, playing in a different group, saw the board update. He did not change his plan. There was no plan."],
+       events:["albatross","cbs_scramble","gallery_roar","oost_leads"], pressureRating:3,
+       modifiers:{atmosphereNote:"2nd at Augusta. Sunday. Oosthuizen holes a four-iron for albatross. This is not supposed to happen. The board says -13. The CBS graphics team are sweating. Bubba is somewhere on the front nine and does not care."}},
+      {id:"a10_2012", name:"10th — Camellia",    par:4, yards:495, hazard:"severe downhill tee shot, trees right and left, approach must carry bunker",
+       lore:"The 10th at Augusta descends severely from the tee, turns left, and asks for a downhill approach to a green guarded by bunkers. In the playoff, both Bubba Watson and Louis Oosthuizen found the right side. Bubba's ball settled in the pine straw under the trees. Oosthuizen's was in the rough. Bubba assessed the lie, the gap in the branches, the distance, the slope, and the wind. He took his lob wedge. He played a shot that did not exist in any golf instruction book, because no golf instruction book would recommend it.",
+       incidents:["Bubba Watson's ball settled in pine straw under the pines on the 10th playoff hole.","He had a four-foot gap in the branches. He needed a 40-yard left-to-right hook.","His caddie Ted Scott asked 'Do you see the shot?' Bubba said 'I see it.'","The shot hooked around the trees, landed twelve feet right of the pin, stopped.","Oosthuizen made bogey. Bubba two-putted. Bubba wept by the hole before the putt."],
+       events:["pine_straw","the_gap","ted_scott","the_hook","oost_bogey","bubba_par","bubba_weeps"], pressureRating:5,
+       modifiers:{thresholdAdd:2, compCost:1, atmosphereNote:"10th at Augusta. Playoff. Bubba is in the pine straw behind the trees. He sees the shot. Nobody else does. He plays it. It works. He weeps before he has holed out. He has never taken a formal lesson. He never needed one."}},
+      {id:"a18_2012", name:"18th — Holly",       par:4, yards:465, hazard:"bunkers right, gallery, the walk up the hill",
+       lore:"The first playoff hole at Augusta in 2012 was the 18th. Both players made par. The drama was withheld. The 10th took it all. But the 18th walk up the hill — both men still level, knowing the playoff would continue, the gallery quiet — is part of the story. The tournament was not settled here. The 10th settled it. The 18th was where it was clear neither man was going to flinch.",
+       incidents:["Both Watson and Oosthuizen made par on 18 in the playoff. Both hit fairways. Both two-putted.","The crowd was quiet on the 18th — the applause polite, expectant, knowing the real hole was still coming.","Bubba Watson said after: 'I wasn't nervous on 18. I was nervous before I hit the shot on 10.'","This was arguably the first time in Augusta playoff history that the 18th hole was the less interesting of two playoff holes."],
+       events:["playoff_18","par_par","walk_up_hill","anticipation"], pressureRating:3,
+       modifiers:{atmosphereNote:"18th at Augusta. Playoff. Both make par. The crowd applauds. Neither man blinked. The real moment is on 10. Everyone knows it. The 18th is the corridor to the actual ending."}},
+    ]
+  }
+
 ];
 
 if (typeof module !== 'undefined') module.exports = { TOURNAMENTS };
