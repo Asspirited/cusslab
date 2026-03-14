@@ -1,6 +1,6 @@
-Feature: Comedy Room — Chappelle, Pryor, Louis CK (BL-133/134/135)
-  The Comedy Room gains three new members so the panel has
-  American stand-up voices alongside the existing ensemble.
+Feature: Comedy Room — new members (BL-133/134/135/136/137/138)
+  The Comedy Room gains six new members so the panel has
+  American and British stand-up voices alongside the existing ensemble.
 
   Scenario Outline: New Comedy Room member is present in the MEMBERS array
     Then the comedy room has a member with id "<id>"
