@@ -9,7 +9,7 @@ Feature: Panel rating buttons coverage — BL-094
 
     Examples:
       | panel                 |
-      | comedy                |
+      | comedyroom            |
       | football              |
       | golf                  |
       | darts                 |
