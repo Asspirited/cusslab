@@ -542,7 +542,7 @@ function isValidComedyMode(mode) {
 
 // ── Author Epilogue — BL-060 ──────────────────────────────────────────────────
 
-const AUTHORS_POOL = ['hemingway', 'mccarthy', 'tolkien', 'patterson', 'pratchett', 'wodehouse', 'austen'];
+const AUTHORS_POOL = ['hemingway', 'mccarthy', 'tolkien', 'patterson', 'pratchett', 'wodehouse', 'austen', 'thompson', 'chandler', 'wilde', 'christie', 'rowling', 'danbrown', 'blyton', 'asimov', 'twain', 'king', 'shakespeare', 'bede', 'herbert', 'collins', 'tolstoy', 'bronte', 'lecarre', 'wilbursmith', 'archer', 'cartland'];
 
 function shufflePool(pool) {
   const arr = [...pool];
@@ -607,6 +607,106 @@ const AUTHOR_VOICES = {
     voiceSignature: 'Social comedy of exquisite precision. Manners observed and found wanting. Irony so dry it requires no acknowledgement. What is said and what is meant are separated by an ocean of implication. The club secretary has been noted.',
     structuralTell: '"It is a truth universally acknowledged that a man in possession of a sand wedge must be in want of instruction." The instruction is not forthcoming. It would not be welcome.',
     wound: "The club secretary's conduct at the AGM. It has been noted. It will be remembered. There may be a letter.",
+  },
+  thompson: {
+    id: 'thompson',
+    name: 'Hunter S. Thompson',
+    voiceSignature: "Gonzo. Paranoid. First-person as weapon. We were somewhere around the 7th hole when the drugs began to take hold. The caddie is no longer entirely human. Fear and loathing applied to a sport that deserves it. The attorney has opinions. The bat country is the course.",
+  },
+  chandler: {
+    id: 'chandler',
+    name: 'Raymond Chandler',
+    voiceSignature: "Hardboiled. Los Angeles similes deployed on English grass. The green was as smooth as a lie told by a man who had told better ones. She was watching from the clubhouse. She knew something. The caddie knew something too.",
+  },
+  wilde: {
+    id: 'wilde',
+    name: 'Oscar Wilde',
+    voiceSignature: "Every shot is an epigram. Suffering is merely bad taste. The ball knows it is being watched and is performing accordingly. The rough is the social equivalent of a poorly chosen tie. The closing epigram is better than everything that preceded it.",
+  },
+  christie: {
+    id: 'christie',
+    name: 'Agatha Christie',
+    voiceSignature: "Suspects everywhere. Someone on this course is lying. Poirot examines the divot — it was made by a right-handed player, in a hurry, concealing something. The alibi for the missed putt does not hold up. Poirot has known since the 3rd hole.",
+  },
+  rowling: {
+    id: 'rowling',
+    name: 'J.K. Rowling',
+    voiceSignature: "The golf course is secretly a wizarding location. Everyone is sorted into houses. The game is inadvertently problematic on several levels she would like to address. The caddie is a house elf and she would like to clarify her position on that.",
+  },
+  danbrown: {
+    id: 'danbrown',
+    name: 'Dan Brown',
+    voiceSignature: "Every sentence is a cliffhanger. The symbol on the scorecard was not a birdie. It was a warning. Robert Langdon recognised it immediately. The caddie bag bore the mark of an ancient society. Chapter 47 is a single sentence.",
+  },
+  blyton: {
+    id: 'blyton',
+    name: 'Enid Blyton',
+    voiceSignature: "Famous Five adventure applied to golf. The rough is actually a secret passage. Julian suspects the greenkeeper is villainous and has been right before. Timmy the dog has found something in the bunker. Everyone is either jolly or a villain.",
+  },
+  asimov: {
+    id: 'asimov',
+    name: 'Isaac Asimov',
+    voiceSignature: "Rational. Systematic. The Three Laws of Golf established in paragraph one. The caddie is a positronic robot and cannot harm a golfer except through incorrect club selection — which raises questions the club has declined to address.",
+  },
+  twain: {
+    id: 'twain',
+    name: 'Mark Twain',
+    voiceSignature: "Sardonic. Aphoristic. American vernacular with the precision of a surgeon. The parenthetical aside is longer than the sentence it interrupts, and undercuts it entirely. The closing maxim sounds invented but probably isn't. The reports of his eagle were greatly exaggerated.",
+  },
+  king: {
+    id: 'king',
+    name: 'Stephen King',
+    voiceSignature: "Horror. Maine. The ordinary thing described until something wrong is inside it. The golf course was fine. It had always been fine. Something about the bunker on the 7th was not fine. The closing image: the thing you thought was resolved is still there.",
+  },
+  shakespeare: {
+    id: 'shakespeare',
+    name: 'William Shakespeare',
+    voiceSignature: "Stage directions. Dramatic prose with embedded soliloquy. Enter PLAYER, undone, holding a seven-iron. The soliloquy arrives at the 12th and does not hurry. To birdie or not to birdie. Exeunt all, pursued by a par five.",
+  },
+  bede: {
+    id: 'bede',
+    name: 'The Venerable Bede',
+    voiceSignature: "Ecclesiastical chronicle. Latin asides. In the year of our Lord two thousand and eight, upon the links of Valhalla, there came a great calamity unto the captain. Events recorded with monastic precision. The full account requires twelve volumes.",
+  },
+  herbert: {
+    id: 'herbert',
+    name: 'James Herbert',
+    voiceSignature: "British horror. Visceral. Working-class dread. The rough is not metaphorically dangerous. Something is in the bunker on the 7th that was not there yesterday. Whatever was in the bunker is still there.",
+  },
+  collins: {
+    id: 'collins',
+    name: 'Jackie Collins',
+    voiceSignature: "Hollywood glamour. Everyone is magnificently tanned. The grip is, frankly, erotic. The caddie has a past and a body. The birdie was just the beginning. She was a serious student of human ambition. The books were research.",
+  },
+  tolstoy: {
+    id: 'tolstoy',
+    name: 'Leo Tolstoy',
+    voiceSignature: "Vast. Philosophical. The birdie at the 7th is a microcosm of the human condition. Suffering is meaning. One round of golf contains all of War and Peace if examined with sufficient honesty. The character on the bench has been there since Part II.",
+  },
+  bronte: {
+    id: 'bronte',
+    name: 'Charlotte Brontë',
+    voiceSignature: "Gothic. Moors. The rough is the moors. Someone brooding is in the bunker. It begins to rain with intent. Mr Rochester is watching from the clubhouse. He has not introduced himself. He does not need to.",
+  },
+  lecarre: {
+    id: 'lecarre',
+    name: 'John le Carré',
+    voiceSignature: "Paranoid. Espionage. Nobody at this club is who they say they are. The scorecard is a message. George Smiley stands at the 12th watching. The mole is in the gallery. The Circus sent someone. They always do.",
+  },
+  wilbursmith: {
+    id: 'wilbursmith',
+    name: 'Wilbur Smith',
+    voiceSignature: "Adventure. Vast scale. Raw masculinity. Someone is hunting something. There is a lion on the 16th. There has always been a lion on the 16th. The African sky above Wentworth. The ball carries 300 yards into the indifferent wind.",
+  },
+  archer: {
+    id: 'archer',
+    name: 'Jeffrey Archer',
+    voiceSignature: "Shameless. Economical with the truth in ways that require structure and planning. He had never lost a round of golf, he told himself. This was not entirely true. It was not true at all. The Prime Minister had called to congratulate him.",
+  },
+  cartland: {
+    id: 'cartland',
+    name: 'Barbara Cartland',
+    voiceSignature: "Romance applied to entirely wrong subjects. Her heart fluttered as he approached the 18th hole. His grip was masterful. His handicap even more so. The Claret Jug was silver and she had always found silver romantic.",
   },
 };
 

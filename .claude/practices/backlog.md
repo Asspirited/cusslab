@@ -374,7 +374,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
   was dust. The sun did not care. Wound: briefly attempts punctuation, gives up mid-summary.
 - Feature: comedy-room
 - CD3: UBV=6 TC=2 RR=1 → CoD=9, Dur=2, **CD3=4.5**
-- Status: OPEN
+- Status: CLOSED — already in _AUTHORS_POOL via BL-061 delivery
 
 ### BL-063 — Author Epilogue: J.R.R. Tolkien
 - Epic: Author Epilogue
@@ -383,7 +383,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
   than the summary. Wound: insists on naming the course in Elvish before describing any shots.
 - Feature: comedy-room
 - CD3: UBV=6 TC=2 RR=1 → CoD=9, Dur=2, **CD3=4.5**
-- Status: OPEN
+- Status: CLOSED — already in _AUTHORS_POOL via BL-061 delivery
 
 ### BL-064 — Author Epilogue: James Patterson
 - Epic: Author Epilogue
@@ -392,7 +392,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
   every sentence. Wound: novel has 94 chapters. Closing: a cliffhanger about the 19th hole.
 - Feature: comedy-room
 - CD3: UBV=6 TC=2 RR=1 → CoD=9, Dur=2, **CD3=4.5**
-- Status: OPEN
+- Status: CLOSED — already in _AUTHORS_POOL via BL-061 delivery
 
 ### BL-065 — Author Epilogue: Terry Pratchett
 - Epic: Author Epilogue
@@ -401,7 +401,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
   OF GOLF BALLS.* Death plays off scratch. Nobody will acknowledge this. Wound: the footnote is longer.
 - Feature: comedy-room
 - CD3: UBV=6 TC=2 RR=1 → CoD=9, Dur=2, **CD3=4.5**
-- Status: OPEN
+- Status: CLOSED — already in _AUTHORS_POOL via BL-061 delivery
 
 ### BL-066 — Author Epilogue: P.G. Wodehouse
 - Epic: Author Epilogue
@@ -410,7 +410,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
   Wound: Bertie's handicap. It is not improving. Jeeves has opinions on this that he does not share.
 - Feature: comedy-room
 - CD3: UBV=6 TC=2 RR=1 → CoD=9, Dur=2, **CD3=4.5**
-- Status: OPEN
+- Status: CLOSED — already in _AUTHORS_POOL via BL-061 delivery
 
 ### BL-067 — Author Epilogue: Jane Austen
 - Epic: Author Epilogue
@@ -419,7 +419,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
   acknowledged…" Wound: the club secretary's conduct. It has been noted. It will not be forgotten.
 - Feature: comedy-room
 - CD3: UBV=6 TC=2 RR=1 → CoD=9, Dur=2, **CD3=4.5**
-- Status: OPEN
+- Status: CLOSED — already in _AUTHORS_POOL via BL-061 delivery
 
 ### BL-068 — Author Epilogue: Hunter S. Thompson
 - Epic: Author Epilogue
@@ -428,7 +428,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
   when the drugs began to take hold." Wound: the caddie. The caddie was no longer human.
 - Feature: comedy-room
 - CD3: UBV=6 TC=2 RR=1 → CoD=9, Dur=2, **CD3=4.5**
-- Status: OPEN
+- Status: CLOSED — id:thompson added to _AUTHORS_POOL and _AUTHOR_VOICES in golf-adventure.html + logic.js
 
 ### BL-069 — Author Epilogue: Raymond Chandler
 - Epic: Author Epilogue
@@ -437,7 +437,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
   by a man who'd told better ones. Wound: the woman watching from the clubhouse. She knows something.
 - Feature: comedy-room
 - CD3: UBV=6 TC=2 RR=1 → CoD=9, Dur=2, **CD3=4.5**
-- Status: OPEN
+- Status: CLOSED — id:chandler added to _AUTHORS_POOL and _AUTHOR_VOICES in golf-adventure.html + logic.js
 
 ### BL-070 — Author Epilogue: Oscar Wilde (existing character — epilogue template)
 - Epic: Author Epilogue
@@ -447,7 +447,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
   Structural tell: the closing epigram is better than everything that preceded it. Wound: the rough.
 - Feature: comedy-room
 - CD3: UBV=5 TC=2 RR=1 → CoD=8, Dur=2, **CD3=4.0**
-- Status: OPEN
+- Status: CLOSED — id:wilde added to _AUTHORS_POOL and _AUTHOR_VOICES in golf-adventure.html + logic.js
 
 ### BL-071 — Author Epilogue: Agatha Christie
 - Epic: Author Epilogue
@@ -456,7 +456,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
   He merely waited for the confession. Wound: the alibi for the missed putt doesn't hold up.
 - Feature: comedy-room
 - CD3: UBV=5 TC=2 RR=1 → CoD=8, Dur=2, **CD3=4.0**
-- Status: OPEN
+- Status: CLOSED — id:christie added to _AUTHORS_POOL and _AUTHOR_VOICES in golf-adventure.html + logic.js
 
 ### BL-072 — Author Epilogue: J.K. Rowling
 - Epic: Author Epilogue
@@ -465,7 +465,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
   Wound: the game is inadvertently problematic on several levels she would like to address at length.
 - Feature: comedy-room
 - CD3: UBV=5 TC=2 RR=1 → CoD=8, Dur=2, **CD3=4.0**
-- Status: OPEN
+- Status: CLOSED — id:rowling added to _AUTHORS_POOL and _AUTHOR_VOICES in golf-adventure.html + logic.js
 
 ### BL-073 — Author Epilogue: Dan Brown
 - Epic: Author Epilogue
@@ -474,7 +474,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
   scorecard was not a birdie. It was a warning. Wound: the caddie knew about the Priory of the Tee.
 - Feature: comedy-room
 - CD3: UBV=5 TC=2 RR=1 → CoD=8, Dur=2, **CD3=4.0**
-- Status: OPEN
+- Status: CLOSED — id:danbrown added to _AUTHORS_POOL and _AUTHOR_VOICES in golf-adventure.html + logic.js
 
 ### BL-074 — Author Epilogue: Enid Blyton (existing character — epilogue template)
 - Epic: Author Epilogue
@@ -484,7 +484,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
   Has had a couple. Structural tell: there is a mystery. It involves the greenkeeper.
 - Feature: comedy-room
 - CD3: UBV=5 TC=2 RR=1 → CoD=8, Dur=2, **CD3=4.0**
-- Status: OPEN
+- Status: CLOSED — id:blyton added to _AUTHORS_POOL and _AUTHOR_VOICES in golf-adventure.html + logic.js
 
 ### BL-075 — Author Epilogue: Isaac Asimov
 - Epic: Author Epilogue
@@ -493,7 +493,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
   a robot. It cannot harm a golfer except through incorrect club selection. Wound: the First Law fails.
 - Feature: comedy-room
 - CD3: UBV=5 TC=2 RR=1 → CoD=8, Dur=2, **CD3=4.0**
-- Status: OPEN
+- Status: CLOSED — id:asimov added to _AUTHORS_POOL and _AUTHOR_VOICES in golf-adventure.html + logic.js
 
 ### BL-076 — Author Epilogue: Leo Tolstoy
 - Epic: Author Epilogue
@@ -502,7 +502,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
   The birdie at the 7th is a microcosm of the human condition. Wound: the character on the bench.
 - Feature: comedy-room
 - CD3: UBV=4 TC=2 RR=1 → CoD=7, Dur=2, **CD3=3.5**
-- Status: OPEN
+- Status: CLOSED — id:tolstoy added to _AUTHORS_POOL and _AUTHOR_VOICES in golf-adventure.html + logic.js
 
 ### BL-077 — Author Epilogue: Charlotte Brontë
 - Epic: Author Epilogue
@@ -511,7 +511,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
   brooding is in the bunker. It begins to rain with intent. Wound: Mr Rochester. He is always there.
 - Feature: comedy-room
 - CD3: UBV=4 TC=2 RR=1 → CoD=7, Dur=2, **CD3=3.5**
-- Status: OPEN
+- Status: CLOSED — id:bronte added to _AUTHORS_POOL and _AUTHOR_VOICES in golf-adventure.html + logic.js
 
 ### BL-078 — Author Epilogue: John le Carré
 - Epic: Author Epilogue
@@ -520,7 +520,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
   for someone else. The caddie has a past. The scorecard was a message. Wound: the mole.
 - Feature: comedy-room
 - CD3: UBV=4 TC=2 RR=1 → CoD=7, Dur=2, **CD3=3.5**
-- Status: OPEN
+- Status: CLOSED — id:lecarre added to _AUTHORS_POOL and _AUTHOR_VOICES in golf-adventure.html + logic.js
 
 ### BL-079 — Author Epilogue: Wilbur Smith
 - Epic: Author Epilogue
@@ -529,7 +529,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
   hunting something. The game takes place across a continent. Wound: the lion on the 16th.
 - Feature: comedy-room
 - CD3: UBV=4 TC=2 RR=1 → CoD=7, Dur=2, **CD3=3.5**
-- Status: OPEN
+- Status: CLOSED — id:wilbursmith added to _AUTHORS_POOL and _AUTHOR_VOICES in golf-adventure.html + logic.js
 
 ### BL-080 — Author Epilogue: Jeffrey Archer
 - Epic: Author Epilogue
@@ -538,7 +538,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
   of golf, he told himself. This was not entirely true. It was not true at all. Wound: the scoreboard.
 - Feature: comedy-room
 - CD3: UBV=4 TC=2 RR=1 → CoD=7, Dur=2, **CD3=3.5**
-- Status: OPEN
+- Status: CLOSED — id:archer added to _AUTHORS_POOL and _AUTHOR_VOICES in golf-adventure.html + logic.js
 
 ### BL-081 — Author Epilogue: Barbara Cartland
 - Epic: Author Epilogue
@@ -547,7 +547,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
   approached the 18th hole. His grip was masterful. Wound: his handicap. It was seven. Irresistible.
 - Feature: comedy-room
 - CD3: UBV=4 TC=2 RR=1 → CoD=7, Dur=2, **CD3=3.5**
-- Status: OPEN
+- Status: CLOSED — id:cartland added to _AUTHORS_POOL and _AUTHOR_VOICES in golf-adventure.html + logic.js
 
 ### BL-087 — Author Epilogue: Mark Twain
 - Epic: Author Epilogue
@@ -560,7 +560,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - "The reports of my eagle were greatly exaggerated."
 - Feature: comedy-room
 - CD3: UBV=6 TC=2 RR=1 → CoD=9, Dur=2, **CD3=4.5**
-- Status: OPEN — raised 2026-03-10
+- Status: CLOSED — id:twain added to _AUTHORS_POOL and _AUTHOR_VOICES in golf-adventure.html + logic.js — raised 2026-03-10
 
 ### BL-088 — Author Epilogue: Stephen King
 - Epic: Author Epilogue
@@ -572,7 +572,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
   Closing register: the thing you thought was resolved is still there. It is always still there.
 - Feature: comedy-room
 - CD3: UBV=6 TC=2 RR=1 → CoD=9, Dur=2, **CD3=4.5**
-- Status: OPEN — raised 2026-03-10
+- Status: CLOSED — id:king added to _AUTHORS_POOL and _AUTHOR_VOICES in golf-adventure.html + logic.js — raised 2026-03-10
 
 ### BL-089 — Author Epilogue: William Shakespeare
 - Epic: Author Epilogue
@@ -584,7 +584,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
   Closing register: "Exeunt all, pursued by a par five."
 - Feature: comedy-room
 - CD3: UBV=6 TC=2 RR=1 → CoD=9, Dur=2, **CD3=4.5**
-- Status: OPEN — raised 2026-03-10
+- Status: CLOSED — id:shakespeare added to _AUTHORS_POOL and _AUTHOR_VOICES in golf-adventure.html + logic.js — raised 2026-03-10
 
 ### BL-090 — Author Epilogue: The Venerable Bede
 - Epic: Author Epilogue
@@ -596,7 +596,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
   Closing register: the illuminated manuscript note in the margin — barely legible, entirely correct.
 - Feature: comedy-room
 - CD3: UBV=6 TC=2 RR=1 → CoD=9, Dur=2, **CD3=4.5**
-- Status: OPEN — raised 2026-03-10
+- Status: CLOSED — id:bede added to _AUTHORS_POOL and _AUTHOR_VOICES in golf-adventure.html + logic.js — raised 2026-03-10
 
 ### BL-091 — Author Epilogue: James Herbert
 - Epic: Author Epilogue
@@ -608,7 +608,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
   Closing register: whatever was in the bunker is still there.
 - Feature: comedy-room
 - CD3: UBV=5 TC=2 RR=1 → CoD=8, Dur=2, **CD3=4.0**
-- Status: OPEN — raised 2026-03-10
+- Status: CLOSED — id:herbert added to _AUTHORS_POOL and _AUTHOR_VOICES in golf-adventure.html + logic.js — raised 2026-03-10
 
 ### BL-092 — Author Epilogue: Jackie Collins
 - Epic: Author Epilogue
@@ -620,7 +620,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
   Closing register: the birdie was just the beginning.
 - Feature: comedy-room
 - CD3: UBV=6 TC=2 RR=1 → CoD=9, Dur=2, **CD3=4.5**
-- Status: OPEN — raised 2026-03-10
+- Status: CLOSED — id:collins added to _AUTHORS_POOL and _AUTHOR_VOICES in golf-adventure.html + logic.js — raised 2026-03-10
 
 ### BL-093 — Self-Training: panel ratings disconnected from preference store
 - Epic: Self-Training
