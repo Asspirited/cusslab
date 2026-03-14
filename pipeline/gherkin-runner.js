@@ -7918,6 +7918,21 @@ function makeSteps(ctx) {
       // This step passes when the feature file is shipped (Training.logPanelRating exists in the module return)
     }],
 
+    // ── Panel Rating Buttons (panel-rating-buttons.feature) — BL-094 ──────────
+
+    [/^the "([^"]+)" panel has a panelRating feedback row$/, (panel) => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      const panelStart = html.indexOf(`id="panel-${panel}"`);
+      if (panelStart < 0) throw new Error(`Panel "panel-${panel}" not found in index.html`);
+      // Find the next panel div after this one
+      const nextPanel = html.indexOf('class="panel"', panelStart + 1);
+      const block = html.slice(panelStart, nextPanel > panelStart ? nextPanel : panelStart + 8000);
+      // Check for any panelRating call (key may differ from div ID, e.g. comedyroom div uses 'comedy' key)
+      const hasRatingBtn = block.includes(`panelRating(event,`);
+      if (!hasRatingBtn)
+        throw new Error(`Panel "${panel}" has no panelRating feedback row`);
+    }],
+
     // ── Friday Pub Crawl Misadventure (friday-pub-crawl.feature) ─────────────
 
     [/^I load all pub crawl scenes$/, () => {

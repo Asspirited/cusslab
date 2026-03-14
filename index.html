@@ -1907,6 +1907,12 @@
   <div id="ironic-output" style="display:none;margin-top:28px;">
     <div id="ironic-verdict-card"></div>
     <div id="ironic-panel-responses" style="margin-top:20px;"></div>
+    <div style="display:flex;gap:8px;margin-top:16px;align-items:center;">
+      <button class="feedback-btn" onclick="panelRating(event,'ironic','💩')" title="Didn't land">💩</button>
+      <button class="feedback-btn" onclick="panelRating(event,'ironic','😐')" title="Fine">😐</button>
+      <button class="feedback-btn" onclick="panelRating(event,'ironic','😂')" title="Good">😂</button>
+      <button class="feedback-btn" onclick="panelRating(event,'ironic','🤣')" title="Brilliant">🤣</button>
+    </div>
     <button class="btn-secondary" onclick="IronicPanel.assess()" style="margin-top:20px;">TRY ANOTHER 🔄</button>
   </div>
 </div>
@@ -2076,6 +2082,12 @@
 
   <div id="br-output" style="display:none;">
     <div id="br-thread"></div>
+    <div style="display:flex;gap:8px;margin-top:16px;align-items:center;">
+      <button class="feedback-btn" onclick="panelRating(event,'boardroom','💩')" title="Didn't land">💩</button>
+      <button class="feedback-btn" onclick="panelRating(event,'boardroom','😐')" title="Fine">😐</button>
+      <button class="feedback-btn" onclick="panelRating(event,'boardroom','😂')" title="Good">😂</button>
+      <button class="feedback-btn" onclick="panelRating(event,'boardroom','🤣')" title="Brilliant">🤣</button>
+    </div>
     <div id="br-reply-area" style="display:none;margin-top:28px;padding-top:24px;border-top:1px solid #333;">
       <label>Your reply</label>
       <textarea id="br-reply-input" rows="3" placeholder="Say something back. Challenge them. Defend yourself. Change direction. The board will respond."></textarea>
@@ -2331,6 +2343,12 @@
   <div id="cr-roast-output" style="display:none;margin-top:24px;">
     <div id="cr-roast-responses"></div>
     <button class="btn-secondary" onclick="RoastRoom.reroll()" style="margin-top:16px;">Re-roll 🎲</button>
+    <div style="display:flex;gap:8px;margin-top:16px;align-items:center;">
+      <button class="feedback-btn" onclick="panelRating(event,'roastroom','💩')" title="Didn't land">💩</button>
+      <button class="feedback-btn" onclick="panelRating(event,'roastroom','😐')" title="Fine">😐</button>
+      <button class="feedback-btn" onclick="panelRating(event,'roastroom','😂')" title="Good">😂</button>
+      <button class="feedback-btn" onclick="panelRating(event,'roastroom','🤣')" title="Brilliant">🤣</button>
+    </div>
   </div>
 </div>
 
@@ -2347,6 +2365,12 @@
   <div id="cr-writing-output" style="display:none;margin-top:24px;">
     <div id="cr-writing-responses"></div>
     <button class="btn-secondary" onclick="WritingRoom.reroll()" style="margin-top:16px;">Re-roll 🎲</button>
+    <div style="display:flex;gap:8px;margin-top:16px;align-items:center;">
+      <button class="feedback-btn" onclick="panelRating(event,'writingroom','💩')" title="Didn't land">💩</button>
+      <button class="feedback-btn" onclick="panelRating(event,'writingroom','😐')" title="Fine">😐</button>
+      <button class="feedback-btn" onclick="panelRating(event,'writingroom','😂')" title="Good">😂</button>
+      <button class="feedback-btn" onclick="panelRating(event,'writingroom','🤣')" title="Brilliant">🤣</button>
+    </div>
   </div>
 </div>
 
@@ -2381,6 +2405,12 @@
     <div id="cr-oracle-conversation"></div>
     <div id="cr-oracle-names" style="margin-top:20px;"></div>
     <button class="btn-secondary" onclick="HouseNameOracle.submit()" style="margin-top:12px;">CONSULT AGAIN 🔮</button>
+    <div style="display:flex;gap:8px;margin-top:16px;align-items:center;">
+      <button class="feedback-btn" onclick="panelRating(event,'housenameoracle','💩')" title="Didn't land">💩</button>
+      <button class="feedback-btn" onclick="panelRating(event,'housenameoracle','😐')" title="Fine">😐</button>
+      <button class="feedback-btn" onclick="panelRating(event,'housenameoracle','😂')" title="Good">😂</button>
+      <button class="feedback-btn" onclick="panelRating(event,'housenameoracle','🤣')" title="Brilliant">🤣</button>
+    </div>
   </div>
 </div>
 
@@ -3054,6 +3084,12 @@
 
   <div id="prof-output" style="display:none;margin-top:28px;">
     <div id="prof-result-card" class="prof-result-display"></div>
+    <div style="display:flex;gap:8px;margin-top:16px;align-items:center;">
+      <button class="feedback-btn" onclick="panelRating(event,'professionals','💩')" title="Didn't land">💩</button>
+      <button class="feedback-btn" onclick="panelRating(event,'professionals','😐')" title="Fine">😐</button>
+      <button class="feedback-btn" onclick="panelRating(event,'professionals','😂')" title="Good">😂</button>
+      <button class="feedback-btn" onclick="panelRating(event,'professionals','🤣')" title="Brilliant">🤣</button>
+    </div>
     <button class="btn-secondary" onclick="consultProfessional()" style="margin-top:16px;">ASK AGAIN 🔄</button>
     <button class="btn-secondary" onclick="askAllProfessionals()" style="margin-top:16px;margin-left:8px;">ASK THEM ALL 🎭</button>
   </div>
