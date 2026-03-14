@@ -74,14 +74,18 @@ Any time a bug, broken flow, missing behaviour, or quality gap is discovered —
 
 Do not filter or defer. Log it, assign the next WL number, report it. Return to current work.
 
-### TRIGGER: any new idea surfaces (Rod or Claude) — CAPTURE IMMEDIATELY to ideas.md
+### TRIGGER: any new idea surfaces (Rod or Claude) — CAPTURE IMMEDIATELY to ideas.md + Downloads
 Signal: Rod says "what if…" / "could we…" / "one day…" / "I wonder if…"
         OR Claude spots a concept that is interesting but not yet scoped enough for a BL item
         OR something emerges in conversation that doesn't have a clear "so that" clause yet
 → Add to `.claude/practices/ideas.md` UNREVIEWED section — one sentence minimum, date + source.
+→ Write snapshot to `/mnt/c/Users/roden/Downloads/idea-[slug]-[YYYY-MM-DD].md` immediately.
+  Format: one-paragraph description, source, open questions, status "UNREVIEWED — not yet a BL item".
+  Reason: ideas raised mid-session are not in the current session-ref.md — Claude.ai cannot see them
+  until the next session start. The Downloads file lets Rod upload it to Claude.ai in the same session.
 → Do NOT interrupt current work. Do NOT raise a BL item yet.
 → Do NOT add to backlog without a "so that" clause and informal Three Amigos.
-→ Announce: "Added to ideas board: [name]" — one line — then continue.
+→ Announce: "Added to ideas board: [name] — idea file in Downloads" — one line — then continue.
 The ideas board has zero barrier to entry. Capture first, judge at session start review.
 Source: Lean — pull system; options have value before they are exercised (Reinertsen)
 

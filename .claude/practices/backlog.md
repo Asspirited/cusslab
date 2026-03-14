@@ -1292,3 +1292,27 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Status: CLOSED — delivered 2026-03-13, commit b90da5d. 9 members (Jimmy White host, 8 rotating, 2 DEAD_IN_PANEL_WORLD), Mode 1 Q&A with 14 suggestion cards, Mode 2 Frame Simulation with 7 reds × 7 spins × 5 positions. 1662/1662 Gherkin passing.
 - Epic: Sports Panels
 
+
+### BL-131 — The Spit Shelter: hip-hop panel — Mode 1 Q&A + Mode 2 Rap Battle, launch 6 characters
+
+- Description: New panel. 14 characters across 4 batches (Anchors, Storytellers, Conscience Layer, UK Contingent). Format: corporate prompt roast (same mechanic as Boardroom/Comedy Room). Mode 1 = Q&A with suggestion cards. Mode 2 = Rap Battle — characters battle each other on the source material; School Mode fires naturally in the conflict. Launch panel: Eminem, Dr Dre, Biggie, Tupac, Missy Elliott, JCC. All other characters defined as data; added to rotation as Tiers 2 and 3 in follow-on BL items.
+- Dead in panel-world: Tupac Shakur, Biggie Smalls (same mechanic as Waddell/Reardon — they exist fully, the knowledge is present in their urgency).
+- School Mode mechanic (BL-132) is a prompt convention, not engine code — applies to all launch characters.
+- Placement: Comedy Room (same nav group as The Roast Room, The Writing Room). Confirmed Three Amigos 2026-03-14.
+- Research: Downloads/spit-shelter-characters-batch1–4.md. Three Amigos complete 2026-03-14 (session 10).
+- Depends on: BL-132 (School Mode spec) — write spec first, apply to character prompts in this item.
+- Feature: spit-shelter
+- Epic: The Spit Shelter
+- CD3: UBV=9 TC=7 RR=8 → CoD=24, Dur=5, **CD3=4.8**
+- Status: OPEN — raised 2026-03-14. Gherkin required before panel code.
+
+---
+
+### BL-132 — School Mode: cross-panel prompt convention (spec + apply to Spit Shelter launch)
+
+- Description: School Mode is a generalised character action with four outcomes, crossing all panels. Spec the convention, document GOAT domain declarations, write School Mode language into Spit Shelter launch character files. Flag Cox, Bristow, and Faldo as backfill candidates (no immediate BL item — add when those characters are next touched). The mechanic: character attempts to educate the panel on How It's Done. Four outcomes based on GOAT status × explanation quality: SCHOOL_SUCCESS (GOAT + good explanation — room goes quiet), SCHOOL_FUMBLE (GOAT + bad explanation — "I just do it"), SCHOOL_ATTEMPT (non-GOAT + makes sense — panel unconvinced), SCHOOL_DISASTER (non-GOAT + bad explanation — canonical: Ice T attempts to school Tupac on authenticity). Dre is the canonical SCHOOL_SUCCESS — deploys maximum twice, which is what makes it land. JCC is a special case: different category entirely, predates the panel, panel cannot argue but doesn't accept his domain's authority either.
+- Output: School Mode spec section added to .claude/practices/ or character file conventions. Each launch character file includes goatDomains and school mode behaviour in Character Rules.
+- Feature: spit-shelter
+- Epic: The Spit Shelter
+- CD3: UBV=7 TC=8 RR=7 → CoD=22, Dur=1, **CD3=22.0**
+- Status: OPEN — raised 2026-03-14. Data-only (prompt convention) — no Gherkin gate.
