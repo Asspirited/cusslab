@@ -1312,6 +1312,39 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Epic: Sports Panels
 
 
+### BL-141 — Suggestion cards: cap display at 5 + refresh button
+
+- Title: Suggestion cards — cap display at 5, add refresh button (below tray, left-aligned)
+- Description: Two UX improvements to suggestion cards across all sports panels (Football, Golf, Darts, Cricket/Long Room, Horse Racing, Snooker, Spit Shelter):
+  1. **Cap display at 5**: `buildSuggestions()` and each panel's `_buildSuggestions()` currently show ALL pool cards. Limit to 5 randomly selected cards on load.
+  2. **Refresh button**: Below each suggestion tray, left-aligned. Clicking clears tray and picks a fresh random 5 from the pool. Button text: "↻ More questions" or similar.
+- Click behaviour unchanged: clicking a card sets input value (replacing whatever was there). No card state change needed.
+- Three Amigos confirmed 2026-03-15: 5 on all panels, button below-left. Pool expansion is separate (BL-142).
+- Panels in scope: Football (FB_SUGGESTIONS), Golf (GOLF_SUGGESTIONS), Darts (DT_SUGGESTIONS), Cricket (LR_SUGGESTIONS), Horse Racing (HR_SUGGESTIONS), Snooker (SNOOKER_SUGGESTIONS in crucible-corner-data.js), Spit Shelter (spit-shelter-data.js).
+- Implementation: `buildSuggestions()` shared across Football/Golf/Darts/Cricket/Racing — one change covers 5 panels. Snooker and HipHop have IIFE-internal `_buildSuggestions()` — update separately. Refresh button rendered by `buildSuggestions()` / internal equivalent, inserted after the tray element.
+- Feature: platform / UX
+- CD3: UBV=6 TC=4 RR=3 → CoD=13, Dur=3, **CD3=4.3**
+- Status: CLOSED — commit a453112 (2026-03-15). buildSuggestions() + Snooker/HipHop IIFEs all cap at 5, refresh button below tray. CSS for .suggestion-refresh-btn. Gherkin updated across 4 feature files. Pipeline green.
+
+### BL-142 — Suggestion card pool expansion: all panels to 30 questions
+
+- Title: Expand suggestion card question pools to 30 questions per panel
+- Description: All sports panels currently have 12–14 questions. With BL-141's refresh mechanic (5 at a time), a pool of 12 only gives ~2 meaningful refreshes before repeating. Target: 30 questions per panel so a session delivers 6 unique views before cycling. Panels in scope: Football, Golf, Darts, Cricket (Long Room), Horse Racing, Snooker, Spit Shelter.
+  - Football: +18 questions (match, big, contemporary, absurd categories — keep proportions)
+  - Golf: +5 questions (already 25 — top up to 30)
+  - Darts: +18 questions
+  - Cricket: +18 questions
+  - Horse Racing: +18 questions
+  - Snooker: +16 questions (currently 14)
+  - Spit Shelter: TBD (check current pool size first)
+- Data-only change: adds entries to existing pool arrays. No new code paths. No Gherkin needed per data-addition rule.
+- Depends on: BL-141 (refresh mechanic makes pool depth worthwhile)
+- Feature: platform / UX / content
+- CD3: UBV=5 TC=2 RR=2 → CoD=9, Dur=3, **CD3=3.0**
+- Status: OPEN — raised 2026-03-15. Can proceed after BL-141 ships.
+
+---
+
 ### BL-131 — The Spit Shelter: hip-hop panel — Mode 1 Q&A + Mode 2 Rap Battle, launch 6 characters
 
 - Description: New panel. 14 characters across 4 batches (Anchors, Storytellers, Conscience Layer, UK Contingent). Format: corporate prompt roast (same mechanic as Boardroom/Comedy Room). Mode 1 = Q&A with suggestion cards. Mode 2 = Rap Battle — characters battle each other on the source material; School Mode fires naturally in the conflict. Launch panel: Eminem, Dr Dre, Biggie, Tupac, Missy Elliott, JCC. All other characters defined as data; added to rotation as Tiers 2 and 3 in follow-on BL items.
