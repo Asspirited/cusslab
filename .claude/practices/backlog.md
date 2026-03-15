@@ -1456,7 +1456,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Epic: Narrative Move Model
 - CD3: UBV=6 TC=3 RR=5 → CoD=14, Dur=1, **CD3=14.0**
 - Depends on: BL-143 CLOSED
-- Status: OPEN — raised 2026-03-15
+- Status: CLOSED — 2026-03-15. Commit b2d15cd. postureType field added to 9 Golf members (analytical: faldo/butch/mcginley, narrative: murray/dougherty/coltart, challenge: radar/roe/henni). recentMoves[] tracked per turn. Guard checks last 3 — if same register, injects REGISTER BREAK instruction. 14 Gherkin scenarios. Pipeline GREEN.
 
 ---
 
@@ -1549,3 +1549,13 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Epic: Narrative Move Model
 - CD3: UBV=7 TC=6 RR=4 → CoD=17, Dur=1, **CD3=17.0**
 - Status: CLOSED — 2026-03-15. Commit 177b573. Pipeline GREEN.
+
+---
+
+### BL-153 — Golf panel: add "Howling Mad David" — David Howell
+
+- Description: Add David Howell as a rotating Golf panel member. Character name: "Howling Mad David" (or "Howler"). David Howell — four Ryder Cup appearances, won the BMW PGA, BBC Sports presenter phase. Known for being quietly underrated, slightly intense, occasionally baffling. "Howling Mad" suggests a barely-contained quality that rarely surfaces but when it does, it does. Character voice, wounds, and NARRATIVE POSTURE block needed. postureType to be agreed at Three Amigos. Full member object added to Golf MEMBERS array and rotating BASE_ORDER. Gherkin scenarios required.
+- Feature: golf-adventure
+- Epic: Narrative Move Model
+- CD3: UBV=5 TC=2 RR=1 → CoD=8, Dur=2, **CD3=4.0**
+- Status: OPEN — raised 2026-03-15
