@@ -7083,7 +7083,7 @@ function makeSteps(ctx) {
 
     [/^no Golf character narrative posture block contains "([^"]+)"$/, (text) => {
       const iife = ctx._golfIife || '';
-      const memberIds = ['radar','faldo','mcginley','coltart','roe','murray','dougherty','henni','butch'];
+      const memberIds = ['radar','faldo','mcginley','coltart','roe','murray','dougherty','henni','butch','howell'];
       for (const charId of memberIds) {
         const memberStart = iife.indexOf(`id: '${charId}'`);
         if (memberStart < 0) continue;
