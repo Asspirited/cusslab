@@ -1445,7 +1445,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Epic: Narrative Move Model
 - CD3: UBV=8 TC=5 RR=4 → CoD=17, Dur=2, **CD3=8.5**
 - Depends on: BL-143 CLOSED
-- Status: OPEN — raised 2026-03-15
+- Status: CLOSED — 2026-03-15. Commit 74628f2. arcLog accumulation added to Golf discuss(). First sentence extracted per response, attributed by name, injected as NARRATIVE ARC SO FAR block for subsequent characters. 5 Gherkin scenarios. Pipeline GREEN.
 
 ---
 
@@ -1538,3 +1538,14 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
   - **Window:** First use in a session with overrides active
 - Depends on: none (new layer on top of existing prompt structure)
 - Status: OPEN — raised 2026-03-15
+
+---
+
+### BL-152 — Narrative posture roll-out: YOUR OWN ANGLE FIRST to Comedy Room, Science Convention, Darts, Long Room
+
+- Description: Rolled out TURN_RULES RULE 2 change (YOUR OWN ANGLE FIRST) to Comedy Room (Into The Room), Science Convention (SounessCat), Darts (Watching the Oche), Long Room (Cricket). Football left unchanged as A/B test baseline. Final Furlong (Horse Racing) was already on YOUR OWN ANGLE FIRST. Snooker and Spit Shelter use array-based TURN_RULES — different structure, out of scope.
+- Output: TURN_RULES RULE 2 updated in 4 panels. 5 Gherkin scenarios. Pipeline GREEN.
+- Feature: platform
+- Epic: Narrative Move Model
+- CD3: UBV=7 TC=6 RR=4 → CoD=17, Dur=1, **CD3=17.0**
+- Status: CLOSED — 2026-03-15. Commit 177b573. Pipeline GREEN.
