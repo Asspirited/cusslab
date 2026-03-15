@@ -4,6 +4,17 @@
 > **Mandatory:** Claude Code commits a new entry at every session end, even on disconnect.
 > Location in repo: `.claude/practices/waste-log.md`
 
+### WL-138
+**Item:** Sports panel suggestion cards invisible — sport-specific data-cat values have no CSS background rule
+**Symptom:** Suggestion cards on Football, Darts, Horse Racing, Cricket (Long Room), and Snooker panels appear as gaps or dark-on-dark invisible blocks. Cards exist in the DOM but have no background because their `data-cat` values (`match`, `darts`, `race`, `cricket`, `player`, `technique`) have no matching CSS rule. Golf panel works fine (`golf` has a rule). `absurd`, `big`, `contemporary` shared categories also work.
+**Root cause (5-Whys):** CSS `.gf-suggestion-card[data-cat=N]` rules were only written for Golf's original category set (`golf`, `big`, `contemporary`, `absurd`) plus HipHop (`legacy`, `roast`, `beef`, `craft`). Every subsequent sports panel added sport-specific category names to their pool data but never added a CSS rule. No pipeline check verifies that all `data-cat` values in a pool have CSS coverage.
+**Second bug (Snooker):** `sn-suggestion-tray` has no inner `gf-suggestion-scroll` flex div — snooker `_buildSuggestions()` appends directly to the outer tray (same structural bug as BL-140/WL-136 pre-fix). Cards don't lay out horizontally.
+**Session:** 2026-03-15 (session 11)
+**Time lost:** Unknown — bug present across multiple sessions, caught by Rod in product testing
+**Cost impact:** Medium — suggestion cards non-functional across 5 of 7 sports panels
+**Tags:** `#rod-caught` `#css` `#suggestion-cards` `#cross-panel`
+**Status:** Open — fix in progress (CSS rules + Snooker HTML/IIFE target)
+
 ### WL-136
 **Item:** Spit Shelter Q&A suggestion cards invisible + not scrolling
 **Symptom:** Cards render with no visible background (dark text on dark panel). No horizontal scroll. Looks like "nothing" to the user.

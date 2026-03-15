@@ -1164,6 +1164,12 @@
   .gf-suggestion-card[data-cat="roast"] { background:#f5e4d4; box-shadow:2px 3px 8px rgba(0,0,0,0.35); }
   .gf-suggestion-card[data-cat="beef"] { background:#f5d4d4; box-shadow:2px 3px 8px rgba(0,0,0,0.35); }
   .gf-suggestion-card[data-cat="craft"] { background:#d4f0e8; box-shadow:2px 3px 8px rgba(0,0,0,0.35); }
+  .gf-suggestion-card[data-cat="match"] { background:#f5e6b2; box-shadow:2px 3px 8px rgba(0,0,0,0.35); }
+  .gf-suggestion-card[data-cat="darts"] { background:#d4e8d4; box-shadow:2px 3px 8px rgba(0,0,0,0.35); }
+  .gf-suggestion-card[data-cat="race"] { background:#f5d4e8; box-shadow:2px 3px 8px rgba(0,0,0,0.35); }
+  .gf-suggestion-card[data-cat="cricket"] { background:#d4f0e8; box-shadow:2px 3px 8px rgba(0,0,0,0.35); }
+  .gf-suggestion-card[data-cat="player"] { background:#e8f0d4; box-shadow:2px 3px 8px rgba(0,0,0,0.35); }
+  .gf-suggestion-card[data-cat="technique"] { background:#d4e4f5; box-shadow:2px 3px 8px rgba(0,0,0,0.35); }
   .gf-suggestion-card__cat { font-size:9px; letter-spacing:1.5px; text-transform:uppercase; opacity:0.45; margin-bottom:4px; font-family:monospace; }
   .gf-anchor-readback { display:none; margin-top:14px; opacity:0; transform:translateY(-4px); transition:opacity 0.4s ease, transform 0.4s ease; }
   .gf-anchor-readback.visible { display:block; opacity:1; transform:translateY(0); }
@@ -2911,7 +2917,9 @@
 
   <!-- Mode 1: Q&A -->
   <div id="sn-qanda-view">
-    <div id="sn-suggestion-tray" class="gf-suggestion-tray" style="margin-bottom:16px;"></div>
+    <div id="sn-suggestion-tray" class="gf-suggestion-tray" style="margin-bottom:16px;">
+      <div class="gf-suggestion-scroll" id="sn-suggestion-scroll"></div>
+    </div>
     <textarea id="sn-input" class="gf-input" placeholder="Ask the panel anything about snooker…" rows="3" style="margin-bottom:10px;"></textarea>
     <button class="btn" onclick="Snooker.discuss()" id="sn-submit-btn">ASK THE PANEL 🎱</button>
     <div id="sn-loading" style="display:none;color:var(--muted);font-size:0.9rem;padding:12px 0;">The panel assembles…</div>
@@ -18452,7 +18460,7 @@ const Snooker = (() => {
   let _snBusy = false;
 
   function _buildSuggestions() {
-    const tray = document.getElementById('sn-suggestion-tray');
+    const tray = document.getElementById('sn-suggestion-scroll');
     if (!tray) return;
     const shuffled = [...SNOOKER_SUGGESTIONS].sort(() => Math.random() - 0.5);
     shuffled.forEach(s => {
