@@ -323,6 +323,7 @@ const SNOOKER_TURN_RULES = [
   'Each member speaks from their own position — do not homogenise the panel. Disagreement is encouraged.',
   'Technical snooker language is welcome: cue ball control, angles, side, stun, screw, plant, snooker, safety. The panel know what these mean.',
   'Nobody breaks character to become a neutral commentator. These are opinionated, specific people.',
+  'Do not begin your response with your own name in any format — no bold prefix, no "Name:" opener, no **Name:**. Speak directly in character.',
 ];
 
 if (typeof module !== 'undefined' && module.exports) {

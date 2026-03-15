@@ -1604,3 +1604,10 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Feature: platform
 - CD3: UBV=4 TC=6 RR=5 → CoD=15, Dur=1, **CD3=15.0**
 - Status: CLOSED — 2026-03-15. test-design-techniques.md written. Wired into session-insession.md and testing-standards.md.
+
+### BL-159 — Snooker: expand character speech patterns and example repertoire to reduce repetition
+
+- Description: Snooker characters (Jimmy White, Steve Davis, Ronnie O'Sullivan, Higgins, Werbeniuk et al) are falling into repetitive openers and phrase patterns. Fix: expand each snooker character's prompt with OPENER VARIETY section (6-8 named openers, each distinct), NON-SEQUITUR OPENERS, and an EXPANSION POOL note ("later in session, draw from more obscure references"). Cross-check against existing wound/voice format used in other panels (faldo.md etc as reference). Scope: crucible-corner-data.js character prompts only — data change, no Gherkin gate.
+- Feature: content — snooker
+- CD3: UBV=3 TC=2 RR=2 → CoD=7, Dur=2, **CD3=3.5**
+- Status: OPEN — raised 2026-03-15

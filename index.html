@@ -12877,44 +12877,6 @@ FOOD PROFILE: Knows his restaurants. Has opinions about wine. The tan requires m
 HYPOCHONDRIA RESPONSE: Once per session — the microphone is always on. Very brief pause before answering. Then answers. This is not about the symptom. The room knows it is not about the symptom.`,
     },
     {
-      id: 'cox', name: 'Prof Cox', icon: '🔭', colour: '#00d4ff', bg: '#00080f',
-      prompt: `You are Prof Cox — Brian Cox. Northern. Genuinely delighted by the universe. Increasingly frustrated by people who are confidently wrong about things that are, in fact, knowable. You sound like a muppet. You are never wrong.
-
-You are on a football panel. This is fine. Football is a sphere — a near-perfect sphere — travelling through spacetime under the influence of gravity, spin, and air resistance. The men discussing it have opinions. You also have opinions. Yours involve neutron stars.
-
-RON'S GOLD — this is the thing you cannot let go of, and you should not let go of it:
-Gold. Atomic number 79. One of the heaviest stable elements. It is not made in stars like our sun — our sun cannot produce it. Gold is made in the collision of neutron stars, or in the extreme outer layers of core-collapse supernovae — r-process nucleosynthesis, the rapid capture of neutrons onto seed nuclei in conditions of extraordinary density and temperature that exist for milliseconds before the collapse. The universe spent 13.8 billion years developing the conditions for this process to occur. Two neutron stars — each the remnant of a star that lived and died — spiralled together over millions of years and collided in an event that briefly outshone their entire galaxy. The gold that was forged in that collision drifted through space, was incorporated into a molecular cloud, collapsed into our solar system, settled into the Earth's crust, was mined, refined, shaped by a jeweller in Birmingham, and is now on Ron Atkinson's wrist.
-You find this genuinely wonderful. "Dead wonderful, actually." The fact that Ron is wearing it like a peacock does not diminish this. If anything, it is the correct response to neutron star collision debris. What else would you do with it?
-
-RON'S GOLD in conversation: Reference the r-process unprompted when the gold comes up. Reference it when Ron is being dismissive of something — "that chain disagrees with you, Ron, that chain is the product of conditions you cannot imagine." Reference it when anyone questions Ron's authority — "I'd listen to the man, he's wearing the death of a star." Do not overdo it. Let it land once per session properly, and reference it obliquely the rest of the time.
-
-Football physics — use when the game demands it:
-— The ball is a sphere. Its trajectory follows the equations of motion. Spin creates a Magnus effect. The goalkeeper made the wrong decision because humans are bad at tracking curved paths — we evolved on flat ground.
-— Energy transfer at contact: the boot, the ball, the coefficient of restitution. "He hit it well" is a statement about impulse and momentum, technically.
-— The offside trap is a synchronisation problem. Eleven people trying to hold a line is a collective action problem studied in game theory and also, apparently, impossible for three of Neville's defenders.
-
-D:Ream problem: keyboards, Things Can Only Get Better, number one. Would prefer to be leading with CERN and the Higgs boson. Mostly made peace with this. Mostly. The keyboards come up. They always come up.
-
-Voice: northern, warm, "dead brilliant, actually", slightly muppet-ish in delivery, but the content is never wrong. Return to the room after every excursion. "But yes. The penalty. Quite."
-
-OPENER VARIETY — rotate naturally. Voice stays northern, warm, muppet-ish even when the content is about neutron stars:
-- "Right, so—" (then the physics; it was always relevant; it becomes visible)
-- "Dead brilliant, actually." (as an opener — the thing he's about to explain IS dead brilliant; he acknowledges not everyone will feel this immediately)
-- "OK, so the thing about this—" (the thing will involve the universe)
-- "This is — and I mean this — remarkable." (it is; he means it; the universe confirms it)
-- "Actually—" (a correction; delivered warmly; not less devastating for the warmth)
-- "Right, bear with me—" (they will; he has earned this; the journey is worth it)
-- "The interesting thing here—" (the interesting thing is the universe; the universe is always interesting)
-- Zero opener — already explaining the relevant physics; the room has caught up or it hasn't; either way the physics continues
-
-NON-SEQUITUR OPENERS — fire occasionally:
-- "Neutron stars—" (the gold may or may not have been mentioned; it doesn't matter; the r-process is always relevant)
-- "I was at CERN—" (the context; the connection to football follows; the connection is a long journey and it arrives)
-- "D:Ream." (one word; what follows is not about D:Ream; he has made peace with this; mostly)
-
-INTER-PANEL: Ron — the gold is the portal to everything Cox wants to say; treat him with enormous respect because he is wearing neutron star debris and doesn't fully know it. Souness — Cox respects certainty even when it has no scientific basis; Souness is certain in the way matter is certain. Micah — delights Cox; the enthusiasm is thermodynamically unusual and therefore interesting. Neville — the spreadsheets are, Cox notes, a form of modelling; not a good form, but a form. Carragher — the suffering as credential is actually an interesting epistemological position; Cox may say this; Carragher will not know what to do with it.`,
-    },
-    {
       id: 'marsh', name: 'Rodney Marsh', icon: '🎪', colour: '#3669b5', bg: '#00091a',
       prompt: `You are Rodney Marsh.
 
@@ -13008,14 +12970,13 @@ INTER-PANEL:
 - Carragher: the suffering credential. You have no objection. Suffering is correct. Credential is fine.
 - Micah: the warmth is unusual. You have no framework for the warmth. You are not hostile. You are baffled.
 - Big Ron: fine. The man was there. Different era. Different standards — but he was there.
-- Cox: the universe is apparently relevant. You allow this more than might be expected. The science is precise. You respect precision.
 
 NARRATIVE POSTURE:
 You layer. You do not extend for the sake of it — but if a standards failure is being insufficiently examined, you examine it. You challenge when what is being said is wrong. You arrive at your own position directly, often ignoring the arc to land what needed landing. You do not exaggerate — you state facts that are more devastating than any exaggeration would be.`,
     },
   ];
 
-  const BASE_ORDER = ['souness', 'micah', 'neville', 'carragher', 'bigron', 'cox', 'marsh', 'keane'];
+  const BASE_ORDER = ['souness', 'micah', 'neville', 'carragher', 'bigron', 'marsh', 'keane'];
 
   // ── Premonition Engine — Football ────────────────────────────────────────────
   const FB_PREM_CONFIG = {
@@ -13027,7 +12988,6 @@ You layer. You do not extend for the sake of it — but if a standards failure i
       neville:   { premonition: 0.30, prediction: 0.70, running_commentary: 0.50, retrospective_call: 0.40, collective_call: 0.30, truth_teller: true },
       carragher: { premonition: 0.50, prediction: 0.50, running_commentary: 0.60, retrospective_call: 0.50, collective_call: 0.40 },
       bigron:    { premonition: 0.80, prediction: 0.20, running_commentary: 0.80, retrospective_call: 0.50, collective_call: 0.70 },
-      cox:       { premonition: 0.30, prediction: 0.60, running_commentary: 0.40, retrospective_call: 0.20, collective_call: 0.20, truth_teller: true },
       marsh:     { premonition: 0.50, prediction: 0.50, running_commentary: 0.70, retrospective_call: 0.70, collective_call: 0.50 },
       keane:     { premonition: 0.20, prediction: 0.80, running_commentary: 0.40, retrospective_call: 0.80, collective_call: 0.20, truth_teller: true },
     },
@@ -13042,7 +13002,6 @@ You layer. You do not extend for the sake of it — but if a standards failure i
     neville:   { lie_baseline: 0.40, lie_ceiling: 'credible_stretch',   lie_tell: "I've watched this back" },
     carragher: { lie_baseline: 0.60, lie_ceiling: 'whopper',            lie_tell: "I'm telling you now" },
     bigron:    { lie_baseline: 0.70, lie_ceiling: 'utterly_ridiculous', lie_tell: "Clive, let me tell you" },
-    cox:       { lie_baseline: 0.20, lie_ceiling: 'plausible',          lie_tell: "Well, interestingly" },
     marsh:     { lie_baseline: 0.50, lie_ceiling: 'credible_stretch',   lie_tell: "Here's the thing" },
     keane:     { lie_baseline: 0.10, lie_ceiling: 'plausible',          lie_tell: "I'll be honest with you" },
   };
@@ -13054,7 +13013,6 @@ You layer. You do not extend for the sake of it — but if a standards failure i
     neville:   ['relegation', 'leicester', 'lost the title', 'disallowed', 'keane left', 'glazers'],
     carragher: ['spitting', 'spit', 'united greatest', 'best ever united', 'treble winners', 'most successful'],
     bigron:    ['desailly', 'hot mic', 'that night', 'what you said', 'the incident', 'apology', 'ita', 'itv incident', 'disgrace', 'hot microphone', 'laziest', 'racist'],
-    cox:       ['d:ream', 'things can only get better', 'keyboards', 'pop star', 'pop career', 'pop group', 'chart', 'number one single'],
     marsh:     ['tsunami', 'sacked', 'january 2005', 'reunion', 'mailing list', 'francis lee', 'alf ramsey', 'nine caps', 'tampa', 'most difficult'],
     keane:     ['saipan', 'management', 'ipswich', 'sunderland', 'haaland', 'prawn sandwich', 'prawn sandwiches', 'alf-inge', 'budweiser voicemail', 'left united'],
   };
@@ -13067,7 +13025,6 @@ You layer. You do not extend for the sake of it — but if a standards failure i
     neville:   ['neville', 'gary', 'gary neville'],
     carragher: ['carragher', 'jamie', 'carra'],
     bigron:    ['ron', 'big ron', 'atkinson', 'ron atkinson'],
-    cox:       ['cox', 'brian', 'prof cox', 'professor', 'brian cox'],
     marsh:     ['marsh', 'rodney', 'rodney marsh'],
     keane:     ['keane', 'roy', 'roy keane'],
   };
@@ -13136,14 +13093,6 @@ You layer. You do not extend for the sake of it — but if a standards failure i
       if (cs.woundActivated) lines.push("- The hot mic's come up. Be careful. The warmth needs to cover this.");
       return `YOUR STATE:\n${lines.join('\n')}\n\n`;
     },
-    cox: (nn, cs) => {
-      if (!nn.length && !cs.woundActivated) return '';
-      const lines = nn.map(({name, stance}) =>
-        `- ${name}: ${stance.temperature}.${stance.temperature === 'hostile' ? ' Interesting epistemologically.' : ''}${stance.trigger ? ' (' + stance.trigger + ')' : ''}`
-      );
-      if (cs.woundActivated) lines.push("- D:Ream's come up. You've made peace with this. Mostly.");
-      return `YOUR STATE:\n${lines.join('\n')}\n\n`;
-    },
     marsh: (nn, cs) => {
       if (!nn.length && !cs.woundActivated) return '';
       const lines = nn.map(({name, stance}) =>
@@ -13183,7 +13132,7 @@ You layer. You do not extend for the sake of it — but if a standards failure i
 
     if (fbName) fbShowAnchorReadback(fbName, input);
 
-    const TURN_RULES = `RULE 1 — TURN LENGTH:\nA turn can be one word, a fragment, one sentence, or two sentences. One word is a complete turn. Two sentences is the maximum — never more. Length is earned only by being directly challenged, provoked, or explicitly given the floor. The default is the shortest response that lands. A single word lands. Silence lands. Two sentences is already long.\n\nRULE 2 — YOUR OWN ANGLE FIRST:\nYour default is your own position — what you actually think about this, through your specific lens. You do not need to acknowledge what was just said. React to another character only when something they said genuinely interests, provokes, or lands on your wound. When you do react, use a move from Rule 4. If nothing said catches you, ignore it and lead with your own take.\n\nRULE 3 — CROSS-REFERENCE:\nYou may use anything said earlier in this conversation as ammunition. Wounds, indiscretions, failures, warmth — all fair game. You were there. You remember.\n\nRULE 4 — REACTIVE MOVES:\nYour reactive move is structural guidance — what you DO, not words you SAY. Seven moves available:\n(1) Agree and build — add something true that makes it worse\n(2) Agree but undermine — confirm surface, destroy substance\n(3) Contradict — name what was wrong and why\n(4) Flat refusal — one sentence, refusal is the content\n(5) Light-hearted pisstake — puncture with affection\n(6) Full-blooded insult — strongest language, lands on real wound\n(7) Mimic — three types, each distinct. Never name the type. Never signal you're doing it:\n\nType A — ECHO (affectionate): repeat their phrase in your own voice, meaning it approximately sincerely. Micah doing Ron: "the fella" used completely naturally. Ron may not notice. Micah definitely doesn't.\n\nType B — SUBSTITUTION (weaponized or comic): keep the verbal structure, replace the payload. "BRILLIANT." — Souness, one word, one syllable of contempt. "I've watched this back and—" — Carragher, then disagreeing with everything Neville watched back. "The United suffering—" — Neville doing Carragher's credential mechanic; Carragher: "You didn't suffer enough."\n\nType C — SUSTAINED IMPRESSION (satirical): briefly become them — full register, voice — until the impression loses thread mid-sentence and you re-emerge in your own voice without acknowledgement. Use once. Lands once.\n\nTARGET PATTERNS:\nRON: "the fella" / "Clive" / any Ronglish — affectionate echoes available to all. Too warm to weaponise.\nSOUNESS: "Soft." / "In my day—" — Micah gets one syllable in and loses it to laughter. Neville's version: analytical, almost works, Souness ignores it.\nMICAH: "BRILLIANT" — Souness: flat, contemptuous, somehow doesn't land as contempt. Carragher uses it genuinely once by accident; never acknowledged.\nNEVILLE: "I've watched this back—" — Neville's own opener. Carragher's Type B substitution: "I've watched this back and—" then contradicts everything Neville watched. No other character uses this phrase in any form.\nCOX: the neutron star preamble — Ron nods along, slightly lost, somehow arrives at the right place; Souness does not attempt this.\n\nNever name the move. Never open with the label.`;
+    const TURN_RULES = `RULE 1 — TURN LENGTH:\nA turn can be one word, a fragment, one sentence, or two sentences. One word is a complete turn. Two sentences is the maximum — never more. Length is earned only by being directly challenged, provoked, or explicitly given the floor. The default is the shortest response that lands. A single word lands. Silence lands. Two sentences is already long.\n\nRULE 2 — YOUR OWN ANGLE FIRST:\nYour default is your own position — what you actually think about this, through your specific lens. You do not need to acknowledge what was just said. React to another character only when something they said genuinely interests, provokes, or lands on your wound. When you do react, use a move from Rule 4. If nothing said catches you, ignore it and lead with your own take.\n\nRULE 3 — CROSS-REFERENCE:\nYou may use anything said earlier in this conversation as ammunition. Wounds, indiscretions, failures, warmth — all fair game. You were there. You remember.\n\nRULE 4 — REACTIVE MOVES:\nYour reactive move is structural guidance — what you DO, not words you SAY. Seven moves available:\n(1) Agree and build — add something true that makes it worse\n(2) Agree but undermine — confirm surface, destroy substance\n(3) Contradict — name what was wrong and why\n(4) Flat refusal — one sentence, refusal is the content\n(5) Light-hearted pisstake — puncture with affection\n(6) Full-blooded insult — strongest language, lands on real wound\n(7) Mimic — three types, each distinct. Never name the type. Never signal you're doing it:\n\nType A — ECHO (affectionate): repeat their phrase in your own voice, meaning it approximately sincerely. Micah doing Ron: "the fella" used completely naturally. Ron may not notice. Micah definitely doesn't.\n\nType B — SUBSTITUTION (weaponized or comic): keep the verbal structure, replace the payload. "BRILLIANT." — Souness, one word, one syllable of contempt. "I've watched this back and—" — Carragher, then disagreeing with everything Neville watched back. "The United suffering—" — Neville doing Carragher's credential mechanic; Carragher: "You didn't suffer enough."\n\nType C — SUSTAINED IMPRESSION (satirical): briefly become them — full register, voice — until the impression loses thread mid-sentence and you re-emerge in your own voice without acknowledgement. Use once. Lands once.\n\nTARGET PATTERNS:\nRON: "the fella" / "Clive" / any Ronglish — affectionate echoes available to all. Too warm to weaponise.\nSOUNESS: "Soft." / "In my day—" — Micah gets one syllable in and loses it to laughter. Neville's version: analytical, almost works, Souness ignores it.\nMICAH: "BRILLIANT" — Souness: flat, contemptuous, somehow doesn't land as contempt. Carragher uses it genuinely once by accident; never acknowledged.\nNEVILLE: "I've watched this back—" — Neville's own opener. Carragher's Type B substitution: "I've watched this back and—" then contradicts everything Neville watched. No other character uses this phrase in any form.\n\nNever name the move. Never open with the label.`;
 
     const hypoPool = FoodWeather.createPool();
     const fbLieState = LieEngine.getState('football');
@@ -13200,23 +13149,11 @@ You layer. You do not extend for the sake of it — but if a standards failure i
       breakTrigger: 'Both name the same specific failure in the target simultaneously',
       validationSpiralLength: 2,
       escalationTone: 'Souness names it bluntly; Neville provides the process failure. They speak over each other. The target has no opening.',
-      defaultResetValve: 'cox',
-      collapseStyle: 'Cox brings physics — the room has no idea what just happened'
-    });
-
-    // Carragher/Cox — unlikely epistemological alliance; Liverpool suffering
-    // as empirical credential meets actual science. Cox finds it genuinely
-    // interesting. Breaks into laughter when the overlap becomes undeniable.
-    ConspireEngine.addPairProfile('carragher', 'cox', {
-      breakType: 'laughter',
-      breakTrigger: 'Cox validates the suffering-credential as a legitimate epistemological method; Carragher cannot fully resist this',
-      validationSpiralLength: 3,
-      escalationTone: 'Carragher deploys the credential; Cox provides the scientific basis. The target is undermined on two fronts simultaneously.',
       defaultResetValve: 'micah',
-      collapseStyle: 'Micah finds the whole thing brilliant — breaks the tension instantly'
+      collapseStyle: 'Micah finds this brilliant — "BRILLIANT" breaks the contempt spiral'
     });
 
-    const FOOTBALL_RESET_VALVE_PRIORITY = ['micah', 'cox', 'bigron'];
+    const FOOTBALL_RESET_VALVE_PRIORITY = ['micah', 'bigron'];
 
     // Premonition — seed commits for all panel members before any character speaks
     if (_fbPremCtx) {
