@@ -1,6 +1,6 @@
 # Session Startup — Heckler and Cox
 # Read this first. Everything else is referenced from here.
-# Last updated: 2026-03-13
+# Last updated: 2026-03-15
 
 ---
 
@@ -96,7 +96,7 @@ This is the handoff from the other Claude. If file doesn't exist: note it and co
 
 **Then:** Read `.claude/practices/waste-log.md` — last 5 entries only, report any with Status: OPEN.
 
-Current open items as of 2026-03-13 (session 9): WL-131 (character dullness — Three Amigos needed), WL-136 (UI audit doesn't check IIFE return completeness — pipeline gap).
+Current open items as of 2026-03-15 (session 10): WL-131 (character dullness — Three Amigos needed), WL-136 (UI audit doesn't check IIFE return completeness — pipeline gap), WL-134 (Pub Crawl outcome feedback — Nielsen gap).
 
 ---
 
@@ -110,28 +110,31 @@ For each open product-bet item, ask:
 - Is there a falsifier — something that would tell us we were wrong?
 Full outer loop: `.claude/practices/hypothesis-driven.md`
 
-Current top 3 as of 2026-03-13 (session 9 post close):
-- BL-007 Claude Code Windows install bugs (CD3=5.0) — OPEN
-- BL-102 Feature activity report labelling (CD3=5.0) — OPEN
-- BL-113 Unexpected outfit mechanic (CD3=5.0) — OPEN
+Current top 3 as of 2026-03-15 (session 10 post close):
+- BL-132 School Mode cross-panel convention (CD3=22.0) — OPEN
+- BL-128 Pub Crawl UX: pressure feedback (CD3=7.0) — OPEN
+- BL-139 Character audit: 6 with no active panel (CD3=6.0) — OPEN
 
-Recently closed (2026-03-13 session 9):
-- BL-130 The Crucible Corner snooker panel — 9 members, Mode 1 Q&A + Mode 2 Frame Sim — commit ecd00a2
-- BL-128 Pub Crawl UX pressure feedback (delta display, zone bands, explainer) — commit 5238677
-- BL-126 UI onclick wiring test coverage (nav home tiles) — commit 8e7ef6b
+Recently closed (2026-03-15 session 10):
+- BL-082 Football Author Epilogue — button + 27-author pool + queue + getLastContext() API
+- BL-133/134/135 Comedy Room: Dave Chappelle, Richard Pryor, Louis CK
+- BL-136/137/138 Comedy Room: Jim Jefferies, Ricky Gervais, Frankie Boyle
+- BL-083/084/085/086 Author Epilogue for Darts, Cricket, Oracle, Boardroom — commit dba21c1
+- BL-140 Spit Shelter Q&A: fix invisible suggestion cards + scroll — commit 618bd9c
 
 Open product bets under discussion:
 - BL-125 Final Furlong Mode 2 jockey rivalry (Three Amigos needed)
 - BL-129 Pub Crawl free-text input (Three Amigos needed on design)
 - WL-131 Character dullness (Three Amigos needed)
 - WL-136 UI audit IIFE return completeness check (pipeline gap — open)
+- WL-134 Pub Crawl: no positive/negative outcome feedback (Nielsen gap — open)
 
-Sports panels: Football, Golf, Darts (Watching the Oche), Cricket (The Long Room), Horse Racing (The Final Furlong), Snooker (The Crucible Corner).
+Sports panels: Football, Golf, Darts (Watching the Oche), Cricket (The Long Room), Horse Racing (The Final Furlong), Snooker (The Crucible Corner), Hip-Hop (The Spit Shelter).
+The Spit Shelter: Eminem anchors, 4 of 13 rotating: Dre, Biggie, Tupac, Gil Scott-Heron, Lauryn Hill, Ice Cube, Ice-T, Skepta, Dave, Stormzy, Mike Skinner, JCC, Plan B. Biggie/Tupac/Gil are DEAD_IN_PANEL_WORLD. Data: src/data/spit-shelter-data.js.
 The Final Furlong: Alan Brazil hosts, 4 of 6 rotating: McCririck, McGrath, Alastair Down, O'Sullevan, Walsh, Chapman. McCririck + O'Sullevan are DEAD_IN_PANEL_WORLD.
-The Crucible Corner: Jimmy White hosts, 4 of 8 rotating: Steve Davis, John Virgo, Dennis Taylor, Ronnie O'Sullivan, Willie Thorne, Ray Reardon, John Parrott, Mark Williams. Thorne + Reardon are DEAD_IN_PANEL_WORLD. Data: src/data/crucible-corner-data.js. Character files: characters/*.md.
-Bruce Lee: in Boardroom, Comedy Room, Football, Golf, Darts, Cricket. Not permanent.
-Comedy Room: 4 panels: Into The Room / House Name Oracle / The Roast Room / The Writing Room.
-AUTHORS_POOL: 7 authors (hemingway, mccarthy, tolkien, patterson, pratchett, wodehouse, austen).
+The Crucible Corner: Jimmy White hosts, 4 of 8 rotating: Steve Davis, John Virgo, Dennis Taylor, Ronnie O'Sullivan, Willie Thorne, Ray Reardon, John Parrott, Mark Williams. Thorne + Reardon are DEAD_IN_PANEL_WORLD. Data: src/data/crucible-corner-data.js.
+Comedy Room: 4 panels: Into The Room (15 members incl. Chappelle/Pryor/LouisK/Jefferies/Gervais/Boyle) / House Name Oracle / The Roast Room / The Writing Room.
+Author Epilogue: 27-author pool (_FB_AUTHORS_POOL + _FB_AUTHOR_VOICES) shared across Football, Golf, Darts, Cricket, Oracle, Boardroom. Each panel has getLastContext(), request/reroll global functions.
 Golf Adventure: Ryder Cup 5-session model with leaderboard + overall match score.
 Little Misadventure: Friday Pub Crawl, Pub Navigator, Quntum Leeks. External scripts use ETag caching.
 

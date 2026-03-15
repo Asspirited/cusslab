@@ -1,48 +1,34 @@
 # Shared Session State
 # Written by session-closedown.md step 8b. Overwritten each close.
 # Read at startup step 3. Included in session-ref.md for Claude.ai.
-Last updated: 2026-03-13 by Claude Code (session 9 — context continuation)
-Last commit: ecd00a2 — BL-130: Add 9 Crucible Corner character sheets
+Last updated: 2026-03-15 by Claude Code
+Last commit: 618bd9c — BL-140 Spit Shelter Q&A: fix invisible suggestion cards + scroll
 
 ## What shipped this session
-
-- **BL-130 The Crucible Corner** (snooker panel) — FULLY CLOSED
-  - 9 panel members: Jimmy White (host), Steve Davis, John Virgo, Dennis Taylor, Ronnie O'Sullivan, Willie Thorne (DEAD_IN_PANEL_WORLD), Ray Reardon (DEAD_IN_PANEL_WORLD), John Parrott, Mark Williams
-  - Mode 1 Q&A: 14 suggestion cards (match/player/technique/absurd)
-  - Mode 2 Frame Simulation: 7 reds × 7 spins × 5 positions × colour phase
-  - Data file: src/data/crucible-corner-data.js (module.exports guard for Node)
-  - Gherkin: 47 scenarios in crucible-corner.feature, all passing
-  - Character sheets: characters/*.md (all 9, following alan-brazil.md structure)
-  - commits b90da5d (code) + ecd00a2 (character sheets)
-
-- **WL-137** raised and closed: step defs searched IIFE HTML slice for data in external file — caught at pipeline, zero user impact
-
-- Previous session also shipped: BL-128 (Pub Crawl pressure feedback), BL-126 (nav onclick test coverage), WL-133/WL-135 (Racing bugs)
+- BL-082: Football Author Epilogue — 27-author pool, queue, getLastContext(), request/reroll globals, button in #fb-output
+- BL-133/134/135: Comedy Room — Dave Chappelle, Richard Pryor, Louis CK (character files + MEMBERS + BASE_ORDER)
+- BL-136/137/138: Comedy Room — Jim Jefferies, Ricky Gervais, Frankie Boyle (same pattern)
+- BL-083/084/085/086: Author Epilogue for Darts, Cricket (LongRoom), Oracle (HouseNameOracle), Boardroom — getLastContext(), _*LastContext storage, request/reroll globals, HTML buttons in output divs. Shared pool. Commit dba21c1
+- BL-140: Spit Shelter Q&A — suggestion cards were invisible (wrong CSS categories); no horizontal scroll (missing inner gf-suggestion-scroll div); both fixed + panel-desc added. Commit 618bd9c
 
 ## Open waste items (WL numbers)
-
 - WL-131: Character dullness — characters leading with "X is right/wrong" — Status: Open (Three Amigos needed)
-- WL-136: UI audit doesn't check IIFE return completeness — Status: Open (pipeline gap)
+- WL-136: UI audit doesn't check IIFE return object completeness — Status: Open (pipeline gap)
+- WL-134: Pub Crawl — no positive/negative outcome feedback after action choices — Status: Open
 
 ## Backlog top 3 by CD3
-
-- BL-007 (CD3=5.0): Claude Code Windows install bugs
-- BL-102 (CD3=5.0): Feature activity report labelling
-- BL-113 (CD3=5.0): Unexpected outfit mechanic (cross-scene item discovery)
-
-Notable open items needing Three Amigos before Gherkin:
-- BL-125 (CD3=4.75): Final Furlong Mode 2 jockey rivalry (attack/defend/steal)
-- BL-129 (CD3=4.0): Pub Crawl free-text input
+- BL-132 (CD3=22.0): School Mode cross-panel convention — spec + apply to Spit Shelter
+- BL-128 (CD3=7.0): Pub Crawl UX — pressure feedback, threshold visibility, game-goal clarity
+- BL-139 (CD3=6.0): Character audit — 6 characters have no active panel assignment
 
 ## Protocol status this session
-
-- Session startup: context continuation — startup run in prior session
-- Gherkin gate: followed
-- Pipeline: GREEN — 1662/1662 Gherkin passing, all checks clean
+- Session startup: followed (resumed from compacted context)
+- Gherkin gate: followed — multi-panel epilogue spec approved before implementation
+- TDD: followed — pipeline green before every commit
+- Pipeline: GREEN — 1744/1744 Gherkin | 707/707 unit | 16/16 UI audit | 6/6 E2E | canary OK
 
 ## Carry-forward notes
-
-- The Crucible Corner step defs use `require('../src/data/crucible-corner-data.js')` — NOT the IIFE HTML slice pattern. Any future external-data panels must follow this. See notes/2026-03-13-gherkin-external-data-pattern.md
-- Sports nav group now has 2 panels: The Final Furlong (horse racing) + The Crucible Corner (snooker). Both under sports nav tab.
-- characters/ directory now has 9 Crucible Corner .md files
-- Next likely work: BL-125 (jockey rivalry Three Amigos first) or BL-129 (pub crawl free text Three Amigos first)
+- Author Epilogue architecture: single shared pool (_FB_AUTHORS_POOL/_FB_AUTHOR_VOICES) used by all panels. Each panel has getLastContext() on its IIFE. Global functions: request<Panel>AuthorEpilogue() / reroll<Panel>AuthorEpilogue(). Queue keys: hc_fb/dt/lr/oracle/br_epilogue_queue.
+- Comedy Room now has 15 members: george, cook, oscar, hicks, jimmy, adams, blyton, cox, bruce, chappelle, pryor, louisk, jefferies, gervais, boyle.
+- Spit Shelter: panel id="panel-hip_hop". Suggestion CSS: legacy(purple), roast(orange), beef(red), craft(green). Inner scroll: id="hh-suggestion-scroll". Data: src/data/spit-shelter-data.js.
+- 6 characters with no panel decision: bruce-lee, buddha, chuck-norris, nostradamus, sun-tzu, vinny-jones. BL-139 covers this.

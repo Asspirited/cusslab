@@ -664,35 +664,35 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - SPIDR-D: extending data scope from Golf Adventure to Football.
 - Feature: comedy-room
 - CD3: UBV=6 TC=1 RR=1 → CoD=8, Dur=2, **CD3=4.0**
-- Status: OPEN — blocked on BL-060/061
+- Status: CLOSED — c31e891 (Football Author Epilogue: button in #fb-output, 27-author pool, queue management, getLastContext() API)
 
 ### BL-083 — Author Epilogue: Phase 2 — Darts integration
 - Epic: Author Epilogue
 - Depends on: BL-082
 - Feature: comedy-room
 - CD3: UBV=6 TC=1 RR=1 → CoD=8, Dur=2, **CD3=4.0**
-- Status: OPEN — blocked on BL-082
+- Status: CLOSED — dba21c1
 
 ### BL-084 — Author Epilogue: Phase 2 — Cricket Long Room integration
 - Epic: Author Epilogue
 - Depends on: BL-082
 - Feature: comedy-room
 - CD3: UBV=6 TC=1 RR=1 → CoD=8, Dur=2, **CD3=4.0**
-- Status: OPEN — blocked on BL-082
+- Status: CLOSED — dba21c1
 
 ### BL-085 — Author Epilogue: Phase 2 — Oracle conversation integration
 - Epic: Author Epilogue
 - Depends on: BL-082; Oracle must have a session narrative to summarise
 - Feature: comedy-room
 - CD3: UBV=6 TC=1 RR=1 → CoD=8, Dur=2, **CD3=4.0**
-- Status: OPEN — blocked on BL-082
+- Status: CLOSED — dba21c1
 
 ### BL-086 — Author Epilogue: Phase 2 — Boardroom session integration
 - Epic: Author Epilogue
 - Depends on: BL-082
 - Feature: comedy-room
 - CD3: UBV=6 TC=1 RR=1 → CoD=8, Dur=2, **CD3=4.0**
-- Status: OPEN — blocked on BL-082
+- Status: CLOSED — dba21c1
 
 ### BL-058 — The Author's Epilogue: post-game prose summary by random literary voice
 - Epic: Author Epilogue
@@ -1283,6 +1283,25 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 
 ---
 
+### BL-140 — Spit Shelter Q&A: fix invisible suggestion cards + horizontal scroll
+
+- Bug: suggestion cards in Q&A mode are invisible (dark text on dark background) because CSS colour rules cover categories golf/big/contemporary/absurd but HipHop uses legacy/roast/beef/craft — no matching CSS rule → transparent background.
+- Second bug: cards appended directly to `hh-suggestion-tray` outer div instead of inner `gf-suggestion-scroll` div — no flex/overflow-x horizontal layout.
+- Fix: (1) add `.gf-suggestion-card[data-cat="legacy"]`, `[data-cat="roast"]`, `[data-cat="beef"]`, `[data-cat="craft"]` CSS rules with distinct colours; (2) add `<div class="gf-suggestion-scroll" id="hh-suggestion-scroll">` inside `#hh-suggestion-tray` in HTML; (3) update `_buildSuggestions()` to target `hh-suggestion-scroll` inner div.
+- Feature: platform
+- WL: WL-136
+- CD3: UBV=5 TC=4 RR=2 → CoD=11, Dur=1, **CD3=11.0**
+- Status: CLOSED — 618bd9c
+
+### BL-139 — Character audit: 6 characters with no active panel assignment
+
+- Six character files have no `# Panel:` line and no clear active-panel wiring: `bruce-lee.md`, `buddha.md`, `chuck-norris.md`, `nostradamus.md`, `sun-tzu.md`, `vinny-jones.md`. Also: `adams.md`, `cox.md`, `alliss.md`, `souness.md`, `roy-keane.md` missing header line despite being in-panel (older format).
+- Action: for each unassigned character, decide: (a) assign to a panel with a plan, (b) mark as Author Pool only, or (c) retire. For older-format panel characters: add `# Panel:` line to match current standard.
+- Also: 7 `watching-oche-*.md` files intentionally different format — confirm and document.
+- Feature: platform
+- CD3: UBV=3 TC=1 RR=2 → CoD=6, Dur=1, **CD3=6.0**
+- Status: OPEN — raised 2026-03-15
+
 ### BL-130 — Snooker panel: The Crucible Corner
 
 - Title: The Crucible Corner — snooker panel (Mode 1 Q&A + Mode 2 match simulation)
@@ -1316,3 +1335,51 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Epic: The Spit Shelter
 - CD3: UBV=7 TC=8 RR=7 → CoD=22, Dur=1, **CD3=22.0**
 - Status: CLOSED — shipped 2026-03-14. Spec written to .claude/practices/school-mode-convention.md. All 17 Spit Shelter character files include School Mode declarations in Character Rules. Backfill candidates flagged (Cox, Bristow, Faldo).
+
+### BL-133 — Comedy Room: add Dave Chappelle
+
+- Description: Add Dave Chappelle as a Comedy Room member. Sharp social commentary, racial honesty, the bit that lands because it's true. ConspireEngine pattern: Chappelle and Hicks — both ask the question that collapses the premise; Chappelle's version arrives from lived experience, Hicks's from philosophical rage. Tension because their conclusions often converge but their methodologies are suspicious of each other.
+- Output: Character file characters/chappelle.md; Chappelle member object added to ComedyRoom MEMBERS array in index.html.
+- Feature: comedy-room
+- CD3: UBV=6 TC=2 RR=1 → CoD=9, Dur=2, **CD3=4.5**
+- Status: CLOSED — a936cee (Chappelle added to Comedy Room MEMBERS)
+
+### BL-134 — Comedy Room: add Richard Pryor
+
+- Description: Add Richard Pryor as a Comedy Room member. Confessional, raw, vulnerable — comedy from personal catastrophe. Pryor is the room's open wound. Carlin filed the system's crimes; Pryor filed his own. ConspireEngine pattern: Pryor and Hicks — Pryor surfaces the personal; Hicks responds with the structural. Pryor's wound is literal (the freebase fire). Pryor and Chappelle: generational tension — the kid who inherited the tradition doesn't always acknowledge the cost.
+- Output: Character file characters/pryor.md; Pryor member object added to ComedyRoom MEMBERS array in index.html.
+- Feature: comedy-room
+- CD3: UBV=6 TC=2 RR=1 → CoD=9, Dur=2, **CD3=4.5**
+- Status: CLOSED — a936cee (Pryor added to Comedy Room MEMBERS)
+
+### BL-135 — Comedy Room: add Louis CK
+
+- Description: Add Louis CK as a Comedy Room member. Deadpan, observational, existential dread beneath domestic comedy. The room knows about the allegations — that's the wound. His status in the room is contested. ConspireEngine pattern: Louis and Jimmy Carr — both use darkness as a mechanism; Jimmy arrives at the punchline clean; Louis circles the thing until it's unbearable. Pryor finds Louis's self-flagellation performative. Hicks would have complicated views.
+- Output: Character file characters/louisk.md; Louis CK member object added to ComedyRoom MEMBERS array in index.html.
+- Feature: comedy-room
+- CD3: UBV=6 TC=2 RR=1 → CoD=9, Dur=2, **CD3=4.5**
+- Status: CLOSED — a936cee (Louis CK added to Comedy Room MEMBERS)
+
+### BL-136 — Comedy Room: add Jim Jefferies
+
+- Description: Add Jim Jefferies as a Comedy Room member. Australian, gun control as primary mission (the Bare 2008 bit), religion, crude observational. ConspireEngine pair with Carlin: both arrive at the conclusion; Jefferies arrives via blunter instrument. Pair with Hicks: Hicks asks the philosophical question; Jefferies asks the same question then swears about it for four minutes. Jefferies and Chappelle: both have done the routine that gets pulled; different contexts; different readings of that event.
+- Output: Character file characters/jefferies.md; Jefferies member object added to ComedyRoom MEMBERS array in index.html.
+- Feature: comedy-room
+- CD3: UBV=6 TC=2 RR=1 → CoD=9, Dur=2, **CD3=4.5**
+- Status: CLOSED — 5820726 (Jefferies added to Comedy Room MEMBERS)
+
+### BL-137 — Comedy Room: add Ricky Gervais
+
+- Description: Add Ricky Gervais as a Comedy Room member. Atheism as primary operating system, celebrity as both wound and mechanism (The Office made him famous; he's been mining that ever since), the laugh at his own jokes before the room gets there. ConspireEngine pair with Jimmy Carr: both are hyper-aware that they're performing comedy at the room; Jimmy's transaction completes clean; Gervais's always has a meta-layer about the transaction itself. Pair with Louis: both circle self-knowledge; Gervais's is more defended than Louis's.
+- Output: Character file characters/gervais.md; Gervais member object added to ComedyRoom MEMBERS array in index.html.
+- Feature: comedy-room
+- CD3: UBV=6 TC=2 RR=1 → CoD=9, Dur=2, **CD3=4.5**
+- Status: CLOSED — 5820726 (Gervais added to Comedy Room MEMBERS)
+
+### BL-138 — Comedy Room: add Frankie Boyle
+
+- Description: Add Frankie Boyle as a Comedy Room member. Scottish, dark political comedy that is specific to the point of forensic, works at the register ceiling by default (never warming up), targets the specific failure not the general one. ConspireEngine pair with Chappelle: both work at the wrong-laugh/right-laugh boundary; Boyle's version is more aggressive and more interested in making the room uncomfortable than correcting the laugh. Pair with Jimmy: both use darkness; Jimmy's transaction is clean; Boyle's is deliberately not; Boyle finds Jimmy's cleanliness a form of cowardice.
+- Output: Character file characters/boyle.md; Boyle member object added to ComedyRoom MEMBERS array in index.html.
+- Feature: comedy-room
+- CD3: UBV=6 TC=2 RR=1 → CoD=9, Dur=2, **CD3=4.5**
+- Status: CLOSED — 5820726 (Frankie Boyle added to Comedy Room MEMBERS)

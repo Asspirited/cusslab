@@ -4,6 +4,25 @@
 > **Mandatory:** Claude Code commits a new entry at every session end, even on disconnect.
 > Location in repo: `.claude/practices/waste-log.md`
 
+### WL-136
+**Item:** Spit Shelter Q&A suggestion cards invisible + not scrolling
+**Symptom:** Cards render with no visible background (dark text on dark panel). No horizontal scroll. Looks like "nothing" to the user.
+**Root cause:** Two bugs: (1) CSS background rules cover categories golf/big/contemporary/absurd but HipHop categories are legacy/roast/beef/craft — no match → transparent; (2) `_buildSuggestions()` appends cards directly to outer `hh-suggestion-tray` not to an inner `gf-suggestion-scroll` div — no flex/overflow-x layout.
+**Session:** 2026-03-15
+**Time lost:** 0 (caught by Rod in product testing; not yet fixed)
+**Tags:** `#hip-hop` `#suggestion-cards` `#css` `#layout`
+**Status:** CLOSED — 618bd9c. CSS rules added; inner scroll div added; _buildSuggestions() retargeted.
+
+### WL-135
+**Item:** Context compaction mid-BL-083/084/085/086 caused re-read overhead at session resume
+**Symptom:** Session resumed from summary; had to grep for exact line numbers and re-read IIFE sections before continuing implementation.
+**Root cause:** Long session (BL-082 + 6 characters + partial BL-083/084/085/086) exhausted context window. Summary protocol worked; no regressions on resume.
+**Session:** 2026-03-15
+**Time lost:** ~10 minutes
+**Cost impact:** Low — summary was accurate; no regressions
+**Tags:** `#context-window` `#compaction`
+**Status:** Closed — summary protocol functioning as designed. No action required.
+
 ---
 
 ## Schema
