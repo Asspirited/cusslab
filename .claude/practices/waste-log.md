@@ -10,11 +10,11 @@
 
 | WL | Title | Urgency | Action needed |
 |---|---|---|---|
+| WL-041 | Mobile/tablet nav — panels not findable on small screens, no sticky sidebar | Low | Three Amigos required before any code; options: sticky sidebar / bottom nav / larger targets |
 | WL-097 | Left nav focus trap — pointer-events not released after right panel interaction | Low | Fix deferred; investigate pointer-events/focus trap in right panel |
 | WL-MODE-002 | Character debt: Bobby George, Rod Harrington (darts) — no character md files | Low | Write characters/bobby-george.md and characters/rod-harrington.md before next darts prompt work |
 | WL-123 | Session context overflow mid-session | Low | Ongoing mitigation: split large sessions; read index.html in sections |
 | WL-131 | Character dullness — "X is right/wrong" openers, "I've watched this back" bleeding | Medium | Three Amigos needed before touching TURN_RULES |
-| WL-134 | Pub Crawl — no outcome feedback after action choices | Medium | Nielsen review pass before implementation |
 | WL-136 | UI audit: IIFE return objects not checked — exports can go missing silently | High | Add pipeline check: verify each global wrapper's IIFE target is in return statement |
 
 ---
@@ -1862,7 +1862,7 @@ Status: CLOSED
 **Session:** 2026-03-13
 **Time lost:** Caught by Rod in product testing
 **Tags:** `#pub-crawl` `#ux` `#feedback` `#nielsen`
-**Status:** Open — needs Nielsen review pass before implementation
+**Status:** CLOSED 2026-03-15 (WL prune) — BL-128 CLOSED 2026-03-13; per-choice delta (+N colour-coded), zone band labels, and game-goal explainer all shipped in commit 5238677
 
 ### WL-133
 **Item:** Final Furlong Mode 2 — stage commentary cleared too quickly before user reads it
