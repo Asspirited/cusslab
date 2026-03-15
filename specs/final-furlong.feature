@@ -92,16 +92,20 @@ Feature: The Final Furlong — Horse Racing Panel
     Given the racing panel is in qanda mode
     Then the racing suggestion tray is visible
 
-  Scenario: Racing suggestion tray contains at least 10 cards
+  Scenario: Racing Q&A suggestion tray shows exactly 5 cards on load
     Given the racing panel is in qanda mode
-    Then the racing suggestion tray contains at least 10 cards
+    Then the racing suggestion tray shows exactly 5 cards
 
-  Scenario: Racing suggestion cards cover required categories
+  Scenario: Racing suggestion pool covers required categories
     Given the racing panel is in qanda mode
-    Then at least one racing suggestion card has category "race"
-    And at least one racing suggestion card has category "big"
-    And at least one racing suggestion card has category "contemporary"
-    And at least one racing suggestion card has category "absurd"
+    Then the racing pool includes at least one card with category "race"
+    And the racing pool includes at least one card with category "big"
+    And the racing pool includes at least one card with category "contemporary"
+    And the racing pool includes at least one card with category "absurd"
+
+  Scenario: A refresh button is visible below the racing suggestion tray
+    Given the racing panel is in qanda mode
+    Then a refresh button exists for the racing panel
 
   Scenario: Clicking a racing suggestion card fills the textarea
     Given the racing panel is in qanda mode
