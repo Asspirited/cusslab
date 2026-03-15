@@ -1519,4 +1519,4 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - CD3: UBV=6 TC=3 RR=3 → CoD=12, Dur=2, **CD3=6.0**
 - Hypothesis: Marsh brings a different era of footballing pundit — unapologetic, irreverent, pre-Sky era directness. Contrast with modern analytics (Neville) and rage (Keane/Souness).
 - Depends on: BL-149 (football housekeeping done first)
-- Status: OPEN — raised 2026-03-15
+- Status: CLOSED — 2026-03-15. characters/rodney-marsh.md created. Full panel member object added (id:'marsh', QPR legend, tsunami joke wound, Soccer Saturday snub, Ramsey 9 caps, Francis Lee blame). Added to BASE_ORDER, all Football config structures. Also: Bruce Lee added to WritingRoom (WR_AUTHORS_POOL + voice signature). Pipeline GREEN 1775/1775.

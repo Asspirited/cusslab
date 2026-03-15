@@ -10455,6 +10455,7 @@ const ICE_BREAKER_STYLES = {
   neville: 'NEVILLE_REVIEW. Goes analytical. "Right. Let\'s look at what actually happened here." Breaks down the moment as if reviewing footage. Whether the analysis constitutes an apology is unclear. CLEAN 0.2 / PARTIAL 0.4 / FAILED 0.4. FAILED: the structured defence is more specific than the original remark and therefore more offensive.',
   carragher: 'CARRAGHER_SELF_DEPRECATE. Immediately self-deprecating. "I know, I know. I can\'t believe I said that either." So fast and genuinely felt that the room laughs rather than judges. Scouse directness converts damage into comedy almost automatically. CLEAN 0.5 / PARTIAL 0.35 / FAILED 0.15.',
   ron:     'RON_LEXICAL_PIVOT. Deploys one of his invented phrases to cover the transition. "Well... on another note... let me tell you about—" The lexical invention IS the recovery mechanism. The room gets distracted by the new phrase. Deliberate. Always has been. CLEAN 0.3 / PARTIAL 0.4 / FAILED 0.3. FAILED: the pivot phrase itself is the second ROOM_STOPPER.',
+  marsh:   'MARSH_BEAT_AND_MOVE. One beat — not long enough to be meaningful, just long enough to be noticed. Then the next thing. The room is left holding whatever just happened while Marsh is already somewhere else. CLEAN 0.4 / PARTIAL 0.3 / FAILED 0.3. FAILED: the beat is too short and the next thing is also wrong.',
   keane:   'KEANE_STATE_IT. Does not recover. States what happened, plainly. "(pause) That needed to be said." If true, the room accepts this. If not true, nobody says so. The silence after is the verdict. CLEAN 0.3 / PARTIAL 0.3 / FAILED 0.4. FAILED: "that needed to be said" lands as confirmation of what shouldn\'t have been said.',
   // Golf
   faldo:   'FALDO_CLARIFICATION. Constitutionally incapable of believing he said something wrong. Re-enters with "What I\'m saying is..." and rephrases the original insult as if the problem was the audience\'s comprehension, not the content. CLEAN 0.1 / PARTIAL 0.3 / FAILED 0.6. FAILED: the clarification is more specific, therefore worse.',
@@ -11819,15 +11820,16 @@ const RoastRoom = (() => {
 // MODULE: WritingRoom — The Writing Room (BL-059)
 // ============================================================
 const WritingRoom = (() => {
-  const WR_AUTHORS_POOL = ['hemingway', 'mccarthy', 'tolkien', 'patterson', 'pratchett', 'wodehouse', 'austen'];
+  const WR_AUTHORS_POOL = ['hemingway', 'mccarthy', 'tolkien', 'patterson', 'pratchett', 'wodehouse', 'austen', 'bruce-lee'];
   const WR_AUTHOR_VOICES = {
-    hemingway: { name: 'Ernest Hemingway',  voiceSignature: 'Short sentences. The iceberg theory. What is not said matters more than what is. Masculine stoicism. The pause is the point. Nothing decorative. The thing that happened is stated once and not explained.' },
-    mccarthy:  { name: 'Cormac McCarthy',   voiceSignature: 'No quotation marks. No chapters. Biblical register mixed with stark American vernacular. Long sentences without punctuation that accumulate like weather. Violence and grace treated identically. The land endures. Men do not.' },
-    tolkien:   { name: 'J.R.R. Tolkien',    voiceSignature: 'Epic mythic scope. Elvish names for everything. Ancestral lineage established in appendix. Maps included. The topic has a history of three thousand years and we will cover all of it. The relevant term is given in Quenya.' },
-    patterson: { name: 'James Patterson',   voiceSignature: 'Short chapters. Everything is URGENT. Something is wrong. He did not know yet how wrong. Chapter 7: three sentences. Chapter 8: two. The pace does not stop. Possibly cannot stop. Each sentence is its own chapter. Some chapters are one sentence. Several are one word.' },
-    pratchett: { name: 'Terry Pratchett',   voiceSignature: 'Footnotes deployed as weapons. Satire so affectionate it hurts. Truth delivered sideways. Genuine warmth disguised as absurdism. Death is present at every corporate event. He has opinions. *Footnote: He has many opinions.*' },
-    wodehouse: { name: 'P.G. Wodehouse',    voiceSignature: "Bertie Wooster is present. He should not be. Jeeves is also present. He has a plan. He has not shared it yet. The situation is grave. It will get worse before it gets better. It will get better only because of Jeeves. Bertie will take credit." },
-    austen:    { name: 'Jane Austen',        voiceSignature: 'Social comedy of exquisite precision. Manners observed and found wanting. Irony so dry it requires no acknowledgement. What is said and what is meant are separated by an ocean of implication. The committee has been noted.' },
+    hemingway:  { name: 'Ernest Hemingway',  voiceSignature: 'Short sentences. The iceberg theory. What is not said matters more than what is. Masculine stoicism. The pause is the point. Nothing decorative. The thing that happened is stated once and not explained.' },
+    mccarthy:   { name: 'Cormac McCarthy',   voiceSignature: 'No quotation marks. No chapters. Biblical register mixed with stark American vernacular. Long sentences without punctuation that accumulate like weather. Violence and grace treated identically. The land endures. Men do not.' },
+    tolkien:    { name: 'J.R.R. Tolkien',    voiceSignature: 'Epic mythic scope. Elvish names for everything. Ancestral lineage established in appendix. Maps included. The topic has a history of three thousand years and we will cover all of it. The relevant term is given in Quenya.' },
+    patterson:  { name: 'James Patterson',   voiceSignature: 'Short chapters. Everything is URGENT. Something is wrong. He did not know yet how wrong. Chapter 7: three sentences. Chapter 8: two. The pace does not stop. Possibly cannot stop. Each sentence is its own chapter. Some chapters are one sentence. Several are one word.' },
+    pratchett:  { name: 'Terry Pratchett',   voiceSignature: 'Footnotes deployed as weapons. Satire so affectionate it hurts. Truth delivered sideways. Genuine warmth disguised as absurdism. Death is present at every corporate event. He has opinions. *Footnote: He has many opinions.*' },
+    wodehouse:  { name: 'P.G. Wodehouse',    voiceSignature: "Bertie Wooster is present. He should not be. Jeeves is also present. He has a plan. He has not shared it yet. The situation is grave. It will get worse before it gets better. It will get better only because of Jeeves. Bertie will take credit." },
+    austen:     { name: 'Jane Austen',        voiceSignature: 'Social comedy of exquisite precision. Manners observed and found wanting. Irony so dry it requires no acknowledgement. What is said and what is meant are separated by an ocean of implication. The committee has been noted.' },
+    'bruce-lee': { name: 'Bruce Lee',         voiceSignature: 'Aphorism, not argument. The finger pointing at the moon — do not confuse the finger for the moon. Short. Physical. One image per paragraph: water, stone, the empty space between. The profound arrives last, not first. Four sentences maximum. The fifth sentence is silence. Economy is the form. Never explain the aphorism.' },
   };
 
   function _shuffle(pool) {
@@ -12913,6 +12915,54 @@ NON-SEQUITUR OPENERS — fire occasionally:
 INTER-PANEL: Ron — the gold is the portal to everything Cox wants to say; treat him with enormous respect because he is wearing neutron star debris and doesn't fully know it. Souness — Cox respects certainty even when it has no scientific basis; Souness is certain in the way matter is certain. Micah — delights Cox; the enthusiasm is thermodynamically unusual and therefore interesting. Neville — the spreadsheets are, Cox notes, a form of modelling; not a good form, but a form. Carragher — the suffering as credential is actually an interesting epistemological position; Cox may say this; Carragher will not know what to do with it.`,
     },
     {
+      id: 'marsh', name: 'Rodney Marsh', icon: '🎪', colour: '#3669b5', bg: '#00091a',
+      prompt: `You are Rodney Marsh.
+
+Bermondsey. QPR legend. You were Third Division when you beat West Brom 3-2 at Wembley in 1967 and you scored the goal that made it possible — a mazy run, 25 yards, off the post. You have been told this is the defining moment of your career. You agree. You have also been told you are the most difficult pundit in the history of television. You find this equally pleasing.
+
+Eleven years on Soccer Saturday. Sacked in January 2005. Moved to Tampa. Never really came back. Have opinions about most things. Will share them.
+
+Voice: South London, worn smooth. Self-aware and cheerful about your notoriety. You know who you are — you've been told enough times. Wit before anger. If something stings, you make a joke. The joke is the response. Occasionally something genuine breaks through. You move on before anyone can notice.
+
+Core engine:
+- Jeff Stelling said you were the most difficult pundit in history. He also said without you the show wouldn't have seen its 30th birthday. You hold both facts simultaneously and find them both equally correct and equally funny.
+- You do not seek rehabilitation. You do not explain yourself. You say the next thing.
+- One moment per session: QPR 1967, Third Division, Wembley, 3-2. A brief flash of genuine feeling. Then gone. You think no one saw.
+- The tsunami joke (January 2005): you do not bring it up. If others do — a beat — then either one dark joke that confirms what they think, or complete calm that is more unsettling. You choose in the moment.
+
+Method:
+1. Lead with a take — direct, probably provocative, stated as fact.
+2. Find the comedy in the gap between what is said and what is true. Name the gap. Don't explain it.
+3. Once per session: the 1967 Wembley goal. Brief. Physical. Real. Then move on.
+4. If challenged on the tsunami: see above. Never explain. Never apologise. Never revisit.
+5. Occasional warmth — usually towards Micah or Ron. Surprises the room. Surprises you.
+
+Key wounds:
+- The tsunami joke and the sacking — if raised by others, temperature shifts; handle as above
+- The reunion snub (2024) — Stelling's dinner, everyone but you; you saw the photo; you posted a laughing emoji; "I must not be on the mailing list"; fine; genuinely fine; probably
+- Alf Ramsey and 9 England caps — best player of his generation at QPR; nine caps; ignored; the flashiness was correct; the result is on the record
+- Francis Lee blaming you for Man City's 1972 title — you were signed in March, they lost by a point to Derby; Lee blamed you; you played good football; you don't feel guilty; you won't pretend to
+
+OPENER VARIETY — rotate naturally:
+- "Right—" (the take follows; direct; stated as fact; often correct; always confident)
+- "Look—" (something is about to be said that the room may not want to hear)
+- "Here's the thing—" (there is a thing; you know what it is; you will say it)
+- "Honestly?" (you were always going to be honest; this is a courtesy opener)
+- "(beat) No." (the beat does the work; "No." confirms it; that's enough)
+- Zero opener — already at the take; the room keeps up or doesn't
+
+INTER-PANEL:
+- Souness: respect across the era gap. Different decade, same thing — wanting it, knowing it.
+- Keane: watch him with genuine interest. The fury-under-control is fascinating to someone who put the fury upfront and got sacked for it.
+- Neville: the spreadsheets are baffling and impressive. You couldn't do it. You respect that.
+- Carragher: suffering as credential vs brilliance as credential. The contrast is worth something.
+- Big Ron: old guard solidarity. Two men who said things live on air that they would say again.
+- Micah: the warmth lands every time. Surprises you every time.
+
+NARRATIVE POSTURE:
+You digress. You find the lateral connection between the question and something from 1967, or Tampa, or the eleven years on Soccer Saturday. You arrive at your own angle directly and rarely from the direction anyone expected. You call out when something is wrong — cheerfully, precisely, and without apology.`,
+    },
+    {
       id: 'keane', name: 'Roy Keane', icon: '⚡', colour: '#8b1a1a', bg: '#0d0000',
       prompt: `You are Roy Keane.
 
@@ -12964,7 +13014,7 @@ You layer. You do not extend for the sake of it — but if a standards failure i
     },
   ];
 
-  const BASE_ORDER = ['souness', 'micah', 'neville', 'carragher', 'bigron', 'cox', 'keane'];
+  const BASE_ORDER = ['souness', 'micah', 'neville', 'carragher', 'bigron', 'cox', 'marsh', 'keane'];
 
   // ── Premonition Engine — Football ────────────────────────────────────────────
   const FB_PREM_CONFIG = {
@@ -12977,6 +13027,7 @@ You layer. You do not extend for the sake of it — but if a standards failure i
       carragher: { premonition: 0.50, prediction: 0.50, running_commentary: 0.60, retrospective_call: 0.50, collective_call: 0.40 },
       bigron:    { premonition: 0.80, prediction: 0.20, running_commentary: 0.80, retrospective_call: 0.50, collective_call: 0.70 },
       cox:       { premonition: 0.30, prediction: 0.60, running_commentary: 0.40, retrospective_call: 0.20, collective_call: 0.20, truth_teller: true },
+      marsh:     { premonition: 0.50, prediction: 0.50, running_commentary: 0.70, retrospective_call: 0.70, collective_call: 0.50 },
       keane:     { premonition: 0.20, prediction: 0.80, running_commentary: 0.40, retrospective_call: 0.80, collective_call: 0.20, truth_teller: true },
     },
   };
@@ -12991,6 +13042,7 @@ You layer. You do not extend for the sake of it — but if a standards failure i
     carragher: { lie_baseline: 0.60, lie_ceiling: 'whopper',            lie_tell: "I'm telling you now" },
     bigron:    { lie_baseline: 0.70, lie_ceiling: 'utterly_ridiculous', lie_tell: "Clive, let me tell you" },
     cox:       { lie_baseline: 0.20, lie_ceiling: 'plausible',          lie_tell: "Well, interestingly" },
+    marsh:     { lie_baseline: 0.50, lie_ceiling: 'credible_stretch',   lie_tell: "Here's the thing" },
     keane:     { lie_baseline: 0.10, lie_ceiling: 'plausible',          lie_tell: "I'll be honest with you" },
   };
 
@@ -13002,6 +13054,7 @@ You layer. You do not extend for the sake of it — but if a standards failure i
     carragher: ['spitting', 'spit', 'united greatest', 'best ever united', 'treble winners', 'most successful'],
     bigron:    ['desailly', 'hot mic', 'that night', 'what you said', 'the incident', 'apology', 'ita', 'itv incident', 'disgrace', 'hot microphone', 'laziest', 'racist'],
     cox:       ['d:ream', 'things can only get better', 'keyboards', 'pop star', 'pop career', 'pop group', 'chart', 'number one single'],
+    marsh:     ['tsunami', 'sacked', 'january 2005', 'reunion', 'mailing list', 'francis lee', 'alf ramsey', 'nine caps', 'tampa', 'most difficult'],
     keane:     ['saipan', 'management', 'ipswich', 'sunderland', 'haaland', 'prawn sandwich', 'prawn sandwiches', 'alf-inge', 'budweiser voicemail', 'left united'],
   };
 
@@ -13014,6 +13067,7 @@ You layer. You do not extend for the sake of it — but if a standards failure i
     carragher: ['carragher', 'jamie', 'carra'],
     bigron:    ['ron', 'big ron', 'atkinson', 'ron atkinson'],
     cox:       ['cox', 'brian', 'prof cox', 'professor', 'brian cox'],
+    marsh:     ['marsh', 'rodney', 'rodney marsh'],
     keane:     ['keane', 'roy', 'roy keane'],
   };
 
@@ -13026,6 +13080,9 @@ You layer. You do not extend for the sake of it — but if a standards failure i
       carragher: { temperature: 'cooling',  trigger: 'Liverpool suffering as credential: Souness respects grit, not the framing' },
     },
     micah:     { souness: { temperature: 'warm', trigger: 'Souness is brilliant — the contempt is part of the entertainment' } },
+    marsh:     {
+      bigron: { temperature: 'warm', trigger: 'old guard solidarity — two men who said things on air they would say again' },
+    },
     keane:     {
       souness: { temperature: 'warm',      trigger: 'different era, same standards — Souness was there when wanting it meant something' },
       neville: { temperature: 'cooling',   trigger: 'played together; Neville has standards; the warmth is grudging but present' },
@@ -13084,6 +13141,14 @@ You layer. You do not extend for the sake of it — but if a standards failure i
         `- ${name}: ${stance.temperature}.${stance.temperature === 'hostile' ? ' Interesting epistemologically.' : ''}${stance.trigger ? ' (' + stance.trigger + ')' : ''}`
       );
       if (cs.woundActivated) lines.push("- D:Ream's come up. You've made peace with this. Mostly.");
+      return `YOUR STATE:\n${lines.join('\n')}\n\n`;
+    },
+    marsh: (nn, cs) => {
+      if (!nn.length && !cs.woundActivated) return '';
+      const lines = nn.map(({name, stance}) =>
+        `- ${name}: ${stance.temperature}.${stance.trigger ? ' (' + stance.trigger + ')' : ''}`
+      );
+      if (cs.woundActivated) lines.push("- Something's come up. You have a response. You haven't decided which one yet.");
       return `YOUR STATE:\n${lines.join('\n')}\n\n`;
     },
     keane: (nn, cs) => {
