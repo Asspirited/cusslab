@@ -1802,3 +1802,18 @@ Added to all 9 Golf panel members as part of BL-143: radar, faldo, mcginley, col
 Before BL-143: mandatory REACTIVITY OBLIGATION — "Every response must open by reacting to the previous speaker's last sentence."
 After BL-143: YOUR OWN ANGLE FIRST — "Lead with your own position on the question or the subject."
 Football panel already had this version before BL-143. Golf now aligned.
+BL-152 (2026-03-15): rolled out to Comedy Room, Science Convention, Darts, Long Room. Football left as A/B test baseline.
+
+### postureType
+A field on each Golf panel member object classifying their default narrative register. Three values:
+- **analytical** — faldo (build/layer), butch (diagnose), mcginley (framework)
+- **narrative** — murray (weight/history), dougherty (memory/warmth), coltart (tangent/unexpected), alliss (memory)
+- **challenge** — radar (lie), roe (weird), henni (ask)
+
+Used by the arc state guard (BL-145) to detect when 3 consecutive characters share the same register and inject a REGISTER BREAK instruction into the next character's prompt.
+
+### ConversationArc (arcLog)
+A runtime array in Golf discuss(). After each character responds, their first sentence is extracted and attributed (`"Name: [first sentence]."`) and appended to arcLog. Passed to subsequent characters as `NARRATIVE ARC SO FAR:` block. Gives characters narrative direction rather than just the last thing said. Implemented BL-144 (2026-03-15).
+
+### arc state guard (recentMoves)
+A runtime array in Golf discuss(). After each character responds, their `postureType` is pushed. Before building the next character's system prompt, the last 3 entries are checked. If all three share the same postureType value, a `REGISTER BREAK` instruction is injected. Guard is conditional on `_lastThree.length >= 3`. Implemented BL-145 (2026-03-15).

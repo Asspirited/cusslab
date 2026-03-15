@@ -1869,3 +1869,13 @@ Status: CLOSED
 **Cost impact:** Low (caught in same session, no user-visible regression)
 **Tags:** `#gherkin` `#step-definitions` `#self-caused`
 **Status:** Closed — fixed same session. Pattern: when writing step defs for a large IIFE, verify member IDs and function structure from actual code before writing lookups.
+
+### WL-145
+**Item:** `sed -i` with `\n` in pattern wiped backlog.md to 0 bytes
+**Symptom:** Attempted `sed -i 's/Status: OPEN.../Status: CLOSED/'` with newlines in the pattern. On this platform `sed -i` with `\n` in pattern matched nothing and output empty string, overwriting the file entirely. backlog.md became 0 bytes.
+**Root cause:** `sed` does not support `\n` in pattern on all platforms the same way. Using Bash to modify structured markdown files is fragile — the Edit tool exists for exactly this purpose.
+**Session:** 2026-03-15
+**Time lost:** ~3 minutes (immediate git checkout HEAD recovery)
+**Cost impact:** Low — recovered from git with no lost content
+**Tags:** `#self-caused` `#tool-misuse` `#use-edit-not-bash`
+**Status:** Closed — recovered via `git checkout HEAD -- .claude/practices/backlog.md`. Rule: never use `sed -i` on project markdown files — use the Edit tool.

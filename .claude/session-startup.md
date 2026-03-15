@@ -121,32 +121,31 @@ For each open product-bet item, ask:
 - Is there a falsifier — something that would tell us we were wrong?
 Full outer loop: `.claude/practices/hypothesis-driven.md`
 
-Current top 3 as of 2026-03-15 (session 11 post close):
-- BL-132 School Mode cross-panel convention (CD3=22.0) — OPEN
-- BL-145 Narrative Move Model: arc state guard (CD3=14.0) — OPEN
-- BL-144 Narrative Move Model: ConversationArc accumulation (CD3=8.5) — OPEN
+Current top 3 as of 2026-03-15 (session 12 post close):
+- BL-128 Pub Crawl UX: pressure feedback, threshold visibility, game-goal clarity (CD3=7.0) — OPEN
+- BL-139 Character audit: 6 characters with no active panel assignment (CD3=6.0) — OPEN
+- BL-146 Golf panel: character technical knowledge enrichment (CD3=6.0) — OPEN
 
-Recently closed (2026-03-15 session 11):
-- BL-141 Suggestion cards: cap at 5 + refresh button (from previous session)
-- BL-142 Suggestion card pool expansion to 30 questions (from previous session)
-- BL-143 Golf narrative posture — TURN_RULES RULE 2 replaced; NARRATIVE POSTURE blocks added to all 9 Golf members
-- BL-147 Football panel rename: "Post Game Cunditry" → "Post Match Cunditry"
-- BL-148 Bruce Lee removed from Football panel
-- BL-149 Roy Keane added to Football panel (full pundit character)
-- BL-150 Rodney Marsh added to Football panel; Bruce Lee added to WritingRoom
+NOTE: backlog-report.js shows BL-132 (CD3=22.0) as OPEN — this is a parser bug. BL-132 is CLOSED (shipped 2026-03-14). Do not work on BL-132.
 
-Exploratory test (BL-143): Rod ran Golf panel and reports "magnificent" — narrative arc working.
-BL-144 (ConversationArc accumulation) and BL-145 (arc state guard) are unlocked — next logical steps.
-BL-151 (per-character mode overrides) raised this session — Rod wants to set individual characters as antagonist/sycophant/weirdo/etc.
+Recently closed (2026-03-15 session 12):
+- BL-152 YOUR OWN ANGLE FIRST rolled out to Comedy Room, Science Convention, Darts, Long Room
+- BL-144 ConversationArc accumulation — Golf discuss() gets arcLog + NARRATIVE ARC SO FAR block
+- BL-145 Arc state guard — postureType register system, recentMoves[], REGISTER BREAK injection
+
+WL-145 added: sed -i wiped backlog.md — recovered from git. Rule: use Edit tool, not sed, for markdown.
 WL-136 (IIFE return check in UI audit) still OPEN — pipeline false-green risk.
-WL numbering fixed this session: duplicate WL-136 renumbered; new session entries WL-141/142/143/144.
+WL-131 (character dullness) still OPEN — Three Amigos needed.
+WL-134 (Pub Crawl outcome feedback) still OPEN — Nielsen review needed.
 
-Agreed next session (from 2026-03-15 closedown):
-- BL-144: ConversationArc accumulation — Golf panel gets running arc context — Gherkin needed
-- BL-145: Arc state guard — prevents consecutive same move type — Gherkin needed
-- BL-151: Per-character mode overrides (antagonist/sycophant/weirdo/etc) — Gherkin needed
-- Roll-out of Golf NARRATIVE POSTURE pattern to other panels — Rod confirmed "far and wide" — no BL yet, raise at session start
-- BL-140 Spit Shelter Q&A: fix invisible suggestion cards + scroll — commit 618bd9c
+BL-153 raised: David Howell ("Howling Mad David") for Golf panel (CD3=4.0).
+
+Agreed next session (from 2026-03-15 session 12 closedown):
+- BL-153: David Howell ("Howling Mad David") — Golf panel character — FIRST — Three Amigos + Gherkin needed
+- WL prune: check all open WL items, close or action anything clearable — SECOND
+- BL-128: Pub Crawl UX (pressure feedback, threshold, game-goal clarity) — CD3=7.0 — Gherkin needed
+- BL-139: Character audit (6 unassigned characters) — CD3=6.0 — Three Amigos needed
+- BL-146: Golf technical knowledge enrichment — CD3=6.0 — research spike, Three Amigos needed
 
 Open product bets under discussion:
 - BL-125 Final Furlong Mode 2 jockey rivalry (Three Amigos needed)
