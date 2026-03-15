@@ -36,6 +36,11 @@ For every failure, bug, wrong turn, or friction point this session:
 - Include: Item, Symptom, Suspected cause, Session date, Time lost, Cost impact, Tags, Status
 - If fixed this session: Status = Closed. If not: Status = Open with next action.
 
+**After adding entries:** update the `## OPEN ITEMS` index block at the top of waste-log.md.
+- Add any new Open items to the table
+- Remove any items closed this session
+- Keep the table as the single source of truth for open WL state
+
 If nothing went wrong: write one line confirming that. Do not skip the step.
 
 ---

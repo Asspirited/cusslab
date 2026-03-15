@@ -4,6 +4,21 @@
 > **Mandatory:** Claude Code commits a new entry at every session end, even on disconnect.
 > Location in repo: `.claude/practices/waste-log.md`
 
+---
+
+## OPEN ITEMS — living dashboard (update at session close)
+
+| WL | Title | Urgency | Action needed |
+|---|---|---|---|
+| WL-097 | Left nav focus trap — pointer-events not released after right panel interaction | Low | Fix deferred; investigate pointer-events/focus trap in right panel |
+| WL-MODE-002 | Character debt: Bobby George, Rod Harrington (darts) — no character md files | Low | Write characters/bobby-george.md and characters/rod-harrington.md before next darts prompt work |
+| WL-123 | Session context overflow mid-session | Low | Ongoing mitigation: split large sessions; read index.html in sections |
+| WL-131 | Character dullness — "X is right/wrong" openers, "I've watched this back" bleeding | Medium | Three Amigos needed before touching TURN_RULES |
+| WL-134 | Pub Crawl — no outcome feedback after action choices | Medium | Nielsen review pass before implementation |
+| WL-136 | UI audit: IIFE return objects not checked — exports can go missing silently | High | Add pipeline check: verify each global wrapper's IIFE target is in return statement |
+
+---
+
 ### WL-144
 **Item:** Panel rename not propagated to Gherkin spec files and step registry
 **Symptom:** Renaming "Post Game Cunditry" → "Post Match Cunditry" in index.html caused pipeline RED — nav-landing.feature and nav-restructure.feature still had the old label; gherkin-runner.js panel registry still had the old label.
@@ -176,7 +191,7 @@
 **Cost impact:** Medium — session tokens spent with zero shipped output
 **Delay:** API key security still unresolved; feature deferred indefinitely
 **Tags:** `#yak-shaving` `#save-rod-money`
-**Status:** open — Cloudflare Worker as API proxy still unimplemented; deferred pending product priority decision
+**Status:** CLOSED 2026-03-15 (WL prune) — Worker live and operational; canary GREEN every session since 2026-03-08
 
 ---
 
@@ -215,7 +230,7 @@
 **Cost impact:** Medium — lost session momentum; Rod context-switched away
 **Delay:** Unknown — session abandoned early
 **Tags:** `#api-friction`
-**Status:** open — external dependency
+**Status:** CLOSED 2026-03-15 (WL prune) — external issue; product fully operational since
 
 ---
 
@@ -267,7 +282,7 @@
 **Cost impact:** Medium — character voice improvements made to docs/ are invisible until separately wired
 **Delay:** Any docs/ edit needs a companion index.html edit to ship
 **Tags:** `#knowledge-loss` `#false-progress` `#save-rod-money`
-**Status:** open — no automatic sync; manual wiring required per character update
+**Status:** CLOSED 2026-03-15 (WL prune) — accepted design constraint; docs/ is reference, not runtime source; manual wiring is known and intentional
 
 ---
 
@@ -390,7 +405,7 @@ Entry format: copy schema above. Minimum viable entry is Item + Symptom + Tags +
 - **Cost impact:** Direct — blocked @claude tag analysis, blocked Gherkin planning
 - **Delay:** New Gherkin files deferred to next session
 - **Tags:** process-failure, tooling, claude-code-release, windows
-- **Status:** Open — Claude Code bash execution broken, no workaround available tonight
+- **Status:** CLOSED 2026-03-15 (WL prune) — resolved; Claude Code bash execution working correctly in WSL
 
 ## WL-023
 - **Item:** Claude Code bash execution broken — search tool used instead of terminal throughout session
@@ -401,7 +416,7 @@ Entry format: copy schema above. Minimum viable entry is Item + Symptom + Tags +
 - **Cost impact:** Direct — blocked @claude tag analysis, multiple failed attempts per command, Rod had to use WSL terminal directly
 - **Delay:** Quantum Leeks diagnosis delayed ~30 mins, @claude tag coverage analysis never completed via Claude Code
 - **Tags:** process-failure, tooling, claude-code-release, windows
-- **Status:** Open — Claude Code bash execution broken, workaround is WSL terminal directly
+- **Status:** CLOSED 2026-03-15 (WL prune) — resolved; working correctly in WSL
 
 ## WL-024
 - **Item:** Rod caught waste and asked for log entry — should have been proactive
@@ -467,7 +482,7 @@ Entry format: copy schema above. Minimum viable entry is Item + Symptom + Tags +
 - **Cost impact:** High — repeated re-explanation, wasted tokens, incomplete file rename requiring manual fix
 - **Delay:** Yes
 - **Tags:** naming, memory-failure, repeat-error, canonical-spelling, context-loss, session-start-protocol, file-rename
-- **Status:** Open — canonical spelling logged as CRITICAL FAILURE in memory; session-start protocol must include recent_chats before any work
+- **Status:** CLOSED 2026-03-15 (WL prune) — mitigated; session-startup.md enforces canonical spelling; not recurred in recent sessions
 
 ## WL-030
 - **Item:** Claude Code collapsing output behind ctrl+o
@@ -478,7 +493,7 @@ Entry format: copy schema above. Minimum viable entry is Item + Symptom + Tags +
 - **Cost impact:** Medium — repeated relay requests, broken flow
 - **Delay:** Yes
 - **Tags:** output, claude-code, collapsible, waste, standards-violation
-- **Status:** Open — CLAUDE CODE OUTPUT RULE must be reinforced at session start with Claude Code explicitly
+- **Status:** CLOSED 2026-03-15 (WL prune) — not exhibited in recent sessions; output renders directly in WSL Claude Code
 
 ## WL-031
 - **Item:** Gherkin produced without scenario outlines — had to be rewritten
@@ -775,7 +790,6 @@ Notes: Script is correctly installed and will track visitors. Auto-verification 
 **Cost impact:** Low (design sessions are cheap; implementation rework is expensive)
 **Delay:** Potential 1-session delay if implementation discovers structural conflicts
 **Tags:** `#knowledge-loss` `#missing-audit` `#design-risk`
-**Status:** open
 
 **5 Whys:**
 1. Why is there a risk of implementation blockers? → Specs assume a UI structure that may not match what index.html can accommodate without significant refactor.
@@ -786,6 +800,7 @@ Notes: Script is correctly installed and will track visitors. Auto-verification 
 
 **Root cause:** Session-start protocol has no design-session variant. "Design-only" sessions skip implementation but should not skip the codebase audit.
 **Corrective action:** Before any design session that will produce specs: grep codebase for relevant structural hooks. Add to CLAUDE.md as a design-session protocol step. At implementation time, read relevant index.html sections before writing any code.
+**Status:** CLOSED 2026-03-15 (WL prune) — risk did not materialise; darts fully shipped (BL-131); design-session audit now in CLAUDE.md
 
 ---
 
@@ -1084,7 +1099,7 @@ Status: CLOSED
 - **Time lost:** ~2 hours across 2 sessions
 - **Cost impact:** Medium — session startup blocked, workarounds required each time
 - **Tags:** claude-code, windows, install, git, file-picker
-- **Status:** Open — track at https://github.com/anthropics/claude-code/issues for "Class not registered" / "CLAUDE_CODE_GIT_BASH_PATH". File own issue if not already raised.
+- **Status:** CLOSED 2026-03-15 (WL prune) — Windows-specific install issue from old release; resolved; running cleanly in WSL
 
 ## WL-069
 - **Item:** Python script used to patch gherkin-runner.js and tournaments.js during BL-017
@@ -1094,7 +1109,7 @@ Status: CLOSED
 - **Time lost:** ~5 min
 - **Cost impact:** Low
 - **Tags:** python-patch, waste, CLAUDE.md-violation
-- **Status:** Open — add direct edit instruction pattern to Claude Code habits
+- **Status:** CLOSED 2026-03-15 (WL prune) — Edit tool used consistently; WL-145 reinforced the rule with a concrete example
 
 ## WL-070
 - **Item:** Hardcoded tournament count in Gherkin step definition
@@ -1135,7 +1150,7 @@ Status: CLOSED
 - **Time lost:** 0 (design cost, not a bug) — but user friction ongoing
 - **Cost impact:** Medium — user perception of breakage even when working
 - **Tags:** latency, panel, sequential-calls, ux, progressive-rendering
-- **Status:** Open — consider streaming per-member placeholder reveal; structural change out of scope today
+- **Status:** CLOSED 2026-03-15 (WL prune) — placeholder/progressive rendering pattern now implemented across Golf, Boardroom, Darts, Cricket, Snooker (WL-146)
 
 ## WL-074
 - **Item:** Die face dots in wrong positions in Golf Adventure
@@ -1407,8 +1422,7 @@ Status: CLOSED
 - **Time lost:** ~5 min (recoverable), but recurring risk every design session
 - **Cost impact:** Medium (low per session, high cumulative — any un-pasted design session is lost)
 - **Tags:** process-gap, claude-ai-sync, knowledge-loss, cross-claude-handoff, context-recovery
-- **Status:** Open — fix being applied this session: (1) trigger added to session-insession.md;
-  (2) notes/2026-03-10-house-name-oracle.md created with full Oracle design context
+- **Status:** CLOSED 2026-03-15 (WL prune) — fix applied: session-insession.md trigger + house-name-oracle.md; design context now captured to notes/ as standard practice
 
 ## WL-088
 - **Item:** No failures in BL-035 UI wiring continuation session
@@ -1502,7 +1516,7 @@ Status: CLOSED
 - **Time lost:** 0 (discovery)
 - **Cost impact:** Low (character is still functional) — Medium (wrong Ryder Cup behaviour possible; wound won't fire correctly without canonical spec)
 - **Tags:** `#character-debt` `#faldo` `#canonical-file` `#sandwich-gate`
-- **Status:** Open — add to backlog. Similar to WL-MODE-002 (darts character debt).
+- **Status:** CLOSED 2026-03-15 (WL prune) — BL-103 raised and CLOSED 2026-03-10; Sandwich Gate wound added to characters/faldo.md
 
 ## WL-105
 - **Item:** Sports panels (Football, Darts, Cricket, Long Room) missing suggestion cards — only Golf has them
@@ -1512,7 +1526,7 @@ Status: CLOSED
 - **Time lost:** 0 (discovered at startup, not mid-feature)
 - **Cost impact:** Low (discovery) — Medium (user experience: 4 panels feel incomplete)
 - **Tags:** `#feature-parity` `#sports-panels` `#rod-caught` `#usability`
-- **Status:** Open — BL-100 raised to fix
+- **Status:** CLOSED 2026-03-15 (WL prune) — BL-100 CLOSED 2026-03-10; suggestion cards on all sports panels
 
 ## WL-104
 - **Item:** Comedy Room sub-features (House Name Oracle, Roast Room, Writing Room) shipped as sub-tabs — should be top-level nav items per DDD bounded context rule
@@ -1522,7 +1536,7 @@ Status: CLOSED
 - **Time lost:** 0 (discovery) — ~1 session (3 features built in wrong location)
 - **Cost impact:** Medium — rework needed to promote 3 features to top-level panels
 - **Tags:** `#ddd-boundary` `#nav-architecture` `#rod-caught` `#usability` `#process-gap`
-- **Status:** Open — BL-099 raised to fix. Process fix: add DDD boundary check to Three Amigos prompt in CLAUDE.md/bdd.md
+- **Status:** CLOSED 2026-03-15 (WL prune) — BL-099 CLOSED 2026-03-10; sub-features promoted to top-level nav; DDD boundary check added to bdd.md
 
 ## WL-103
 - **Item:** Roast Room and Writing Room gherkin steps collide on identical regexes (recurring)

@@ -105,7 +105,7 @@ Log count: "Notes pending: N" in session opening summary.
 Report: what shipped, open WL items, protocol status, carry-forward notes.
 This is the handoff from the other Claude. If file doesn't exist: note it and continue.
 
-**Then:** Read `.claude/practices/waste-log.md` — last 5 entries only, report any with Status: OPEN.
+**Then:** Read `.claude/practices/waste-log.md` — read the `## OPEN ITEMS` index block at the top of the file. Report all items listed there.
 
 Current open items as of 2026-03-15 (session 10): WL-131 (character dullness — Three Amigos needed), WL-136 (UI audit doesn't check IIFE return completeness — pipeline gap), WL-134 (Pub Crawl outcome feedback — Nielsen gap).
 
