@@ -1171,6 +1171,8 @@
   .gf-suggestion-card[data-cat="player"] { background:#e8f0d4; box-shadow:2px 3px 8px rgba(0,0,0,0.35); }
   .gf-suggestion-card[data-cat="technique"] { background:#d4e4f5; box-shadow:2px 3px 8px rgba(0,0,0,0.35); }
   .gf-suggestion-card__cat { font-size:9px; letter-spacing:1.5px; text-transform:uppercase; opacity:0.45; margin-bottom:4px; font-family:monospace; }
+  .suggestion-refresh-btn { margin-top:8px; background:none; border:1px solid rgba(255,215,0,0.3); color:rgba(255,215,0,0.6); font-size:11px; padding:4px 10px; border-radius:3px; cursor:pointer; letter-spacing:0.5px; }
+  .suggestion-refresh-btn:hover { border-color:rgba(255,215,0,0.6); color:rgba(255,215,0,0.9); }
   .gf-anchor-readback { display:none; margin-top:14px; opacity:0; transform:translateY(-4px); transition:opacity 0.4s ease, transform 0.4s ease; }
   .gf-anchor-readback.visible { display:block; opacity:1; transform:translateY(0); }
   .gf-anchor-inner { background:var(--card); border:1px solid rgba(170,136,255,0.2); border-left:3px solid rgba(170,136,255,0.6); border-radius:4px; padding:12px 16px; }
@@ -13849,24 +13851,36 @@ const LR_SUGGESTIONS = [
 ];
 
 function buildSuggestions(scrollId, pool, inputId) {
-  const tray = document.getElementById(scrollId);
-  if (!tray) return;
-  const shuffled = [...pool].sort(() => Math.random() - 0.5);
-  shuffled.forEach(s => {
-    const card = document.createElement('div');
-    card.className = 'gf-suggestion-card';
-    card.setAttribute('data-cat', s.cat);
-    const rot = (Math.random() * 3 - 1.5).toFixed(1);
-    card.style.transform = `rotate(${rot}deg)`;
-    card.innerHTML = `<div class="gf-suggestion-card__cat">${s.cat}</div><div>${s.text}</div>`;
-    card.addEventListener('click', () => {
-      const inp = document.getElementById(inputId);
-      if (inp) { inp.value = s.text; inp.focus(); }
-      card.style.outline = '2px solid rgba(255,215,0,0.5)';
-      setTimeout(() => card.style.outline = '', 600);
+  const scroll = document.getElementById(scrollId);
+  if (!scroll) return;
+  function render() {
+    scroll.innerHTML = '';
+    const picked = [...pool].sort(() => Math.random() - 0.5).slice(0, 5);
+    picked.forEach(s => {
+      const card = document.createElement('div');
+      card.className = 'gf-suggestion-card';
+      card.setAttribute('data-cat', s.cat);
+      const rot = (Math.random() * 3 - 1.5).toFixed(1);
+      card.style.transform = `rotate(${rot}deg)`;
+      card.innerHTML = `<div class="gf-suggestion-card__cat">${s.cat}</div><div>${s.text}</div>`;
+      card.addEventListener('click', () => {
+        const inp = document.getElementById(inputId);
+        if (inp) { inp.value = s.text; inp.focus(); }
+        card.style.outline = '2px solid rgba(255,215,0,0.5)';
+        setTimeout(() => card.style.outline = '', 600);
+      });
+      scroll.appendChild(card);
     });
-    tray.appendChild(card);
-  });
+  }
+  render();
+  const outerTray = scroll.parentElement;
+  if (outerTray && !outerTray.querySelector('.suggestion-refresh-btn')) {
+    const btn = document.createElement('button');
+    btn.className = 'suggestion-refresh-btn';
+    btn.textContent = '↻ More questions';
+    btn.addEventListener('click', render);
+    outerTray.appendChild(btn);
+  }
 }
 
 function golfShowAnchorReadback(name, question) {
@@ -18462,8 +18476,9 @@ const Snooker = (() => {
   function _buildSuggestions() {
     const tray = document.getElementById('sn-suggestion-scroll');
     if (!tray) return;
-    const shuffled = [...SNOOKER_SUGGESTIONS].sort(() => Math.random() - 0.5);
-    shuffled.forEach(s => {
+    tray.innerHTML = '';
+    const picked = [...SNOOKER_SUGGESTIONS].sort(() => Math.random() - 0.5).slice(0, 5);
+    picked.forEach(s => {
       const card = document.createElement('div');
       card.className = 'gf-suggestion-card';
       card.setAttribute('data-cat', s.category);
@@ -18478,6 +18493,14 @@ const Snooker = (() => {
       });
       tray.appendChild(card);
     });
+    const outerTray = tray.parentElement;
+    if (outerTray && !outerTray.querySelector('.suggestion-refresh-btn')) {
+      const btn = document.createElement('button');
+      btn.className = 'suggestion-refresh-btn';
+      btn.textContent = '↻ More questions';
+      btn.addEventListener('click', _buildSuggestions);
+      outerTray.appendChild(btn);
+    }
   }
 
   async function discuss() {
@@ -18737,8 +18760,9 @@ const HipHop = (() => {
   function _buildSuggestions() {
     const tray = document.getElementById('hh-suggestion-scroll');
     if (!tray) return;
-    const shuffled = [...HIP_HOP_SUGGESTIONS].sort(() => Math.random() - 0.5);
-    shuffled.forEach(s => {
+    tray.innerHTML = '';
+    const picked = [...HIP_HOP_SUGGESTIONS].sort(() => Math.random() - 0.5).slice(0, 5);
+    picked.forEach(s => {
       const card = document.createElement('div');
       card.className = 'gf-suggestion-card';
       card.setAttribute('data-cat', s.category);
@@ -18753,6 +18777,14 @@ const HipHop = (() => {
       });
       tray.appendChild(card);
     });
+    const outerTray = tray.parentElement;
+    if (outerTray && !outerTray.querySelector('.suggestion-refresh-btn')) {
+      const btn = document.createElement('button');
+      btn.className = 'suggestion-refresh-btn';
+      btn.textContent = '↻ More questions';
+      btn.addEventListener('click', _buildSuggestions);
+      outerTray.appendChild(btn);
+    }
   }
 
   async function discuss() {

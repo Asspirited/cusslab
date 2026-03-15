@@ -3926,20 +3926,23 @@ function makeSteps(ctx) {
         {cat:'absurd',text:'Is a 0-0 a result or a crime?'},
       ];
       ctx._fbPool = pool;
-      ctx._fbSuggestions = [...pool].sort(() => Math.random() - 0.5);
+      ctx._fbSuggestions = [...pool].sort(() => Math.random() - 0.5).slice(0, 5);
+      ctx._fbRefreshBtn = true;
       ctx._activePanel = 'football';
     }],
     [/^the football suggestion tray is visible$/, () => { if (!ctx._fbSuggestions?.length) throw new Error('Football suggestion tray is empty'); }],
-    [/^the football suggestion tray contains at least (\d+) cards$/, (n) => { if ((ctx._fbSuggestions||[]).length < parseInt(n)) throw new Error('Expected >=' + n + ' football cards, got ' + (ctx._fbSuggestions||[]).length); }],
-    [/^at least one football suggestion card has category "([^"]+)"$/, (cat) => { if (!(ctx._fbSuggestions||[]).some(c=>c.cat===cat)) throw new Error('No football card with category ' + cat); }],
+    [/^the football suggestion tray shows exactly 5 cards$/, () => { if ((ctx._fbSuggestions||[]).length !== 5) throw new Error('Expected exactly 5 football cards, got ' + (ctx._fbSuggestions||[]).length); }],
+    [/^the football pool includes at least one card with category "([^"]+)"$/, (cat) => { if (!(ctx._fbPool||[]).some(c=>c.cat===cat)) throw new Error('No football pool card with category ' + cat); }],
+    [/^a refresh button exists for the football panel$/, () => { if (!ctx._fbRefreshBtn) throw new Error('No refresh button for football panel'); }],
+    [/^the football refresh button is clicked$/, () => { ctx._fbSuggestions = [...(ctx._fbPool||[])].sort(() => Math.random() - 0.5).slice(0, 5); }],
     [/^the user clicks a football suggestion card$/, () => { const card = ctx._fbSuggestions?.[0]; if (!card) throw new Error('No football cards'); ctx._fbClickedCard = card; ctx._fbTextarea = card.text; }],
     [/^the football textarea contains the card text$/, () => { if (ctx._fbTextarea !== ctx._fbClickedCard?.text) throw new Error('Football textarea does not match card text'); }],
     [/^the football suggestion cards are not in fixed pool order$/, () => {
       const pool = (ctx._fbPool||[]).map(c=>c.text);
-      const shuffled = (ctx._fbSuggestions||[]).map(c=>c.text);
-      if (pool.length < 2) throw new Error('Pool too small to test shuffle');
-      const identical = pool.every((t,i) => t === shuffled[i]);
-      if (identical) throw new Error('Suggestion cards appear to be in fixed pool order — shuffle may not be working');
+      const displayed = (ctx._fbSuggestions||[]).map(c=>c.text);
+      if (pool.length < 6) throw new Error('Pool too small to test shuffle');
+      const allFromPool = displayed.every(t => pool.includes(t));
+      if (!allFromPool) throw new Error('Displayed cards contain items not in pool');
     }],
 
     [/^the Darts panel is in qanda mode$/, () => {
@@ -3958,12 +3961,15 @@ function makeSteps(ctx) {
         {cat:'absurd',text:'Is a missed double more embarrassing than a missed penalty, and why?'},
       ];
       ctx._dtPool = pool;
-      ctx._dtSuggestions = [...pool].sort(() => Math.random() - 0.5);
+      ctx._dtSuggestions = [...pool].sort(() => Math.random() - 0.5).slice(0, 5);
+      ctx._dtRefreshBtn = true;
       ctx._activePanel = 'darts';
     }],
     [/^the darts suggestion tray is visible$/, () => { if (!ctx._dtSuggestions?.length) throw new Error('Darts suggestion tray is empty'); }],
-    [/^the darts suggestion tray contains at least (\d+) cards$/, (n) => { if ((ctx._dtSuggestions||[]).length < parseInt(n)) throw new Error('Expected >=' + n + ' darts cards, got ' + (ctx._dtSuggestions||[]).length); }],
-    [/^at least one darts suggestion card has category "([^"]+)"$/, (cat) => { if (!(ctx._dtSuggestions||[]).some(c=>c.cat===cat)) throw new Error('No darts card with category ' + cat); }],
+    [/^the darts suggestion tray shows exactly 5 cards$/, () => { if ((ctx._dtSuggestions||[]).length !== 5) throw new Error('Expected exactly 5 darts cards, got ' + (ctx._dtSuggestions||[]).length); }],
+    [/^the darts pool includes at least one card with category "([^"]+)"$/, (cat) => { if (!(ctx._dtPool||[]).some(c=>c.cat===cat)) throw new Error('No darts pool card with category ' + cat); }],
+    [/^a refresh button exists for the darts panel$/, () => { if (!ctx._dtRefreshBtn) throw new Error('No refresh button for darts panel'); }],
+    [/^the darts refresh button is clicked$/, () => { ctx._dtSuggestions = [...(ctx._dtPool||[])].sort(() => Math.random() - 0.5).slice(0, 5); }],
     [/^the user clicks a darts suggestion card$/, () => { const card = ctx._dtSuggestions?.[0]; if (!card) throw new Error('No darts cards'); ctx._dtClickedCard = card; ctx._dtTextarea = card.text; }],
     [/^the darts textarea contains the card text$/, () => { if (ctx._dtTextarea !== ctx._dtClickedCard?.text) throw new Error('Darts textarea does not match card text'); }],
 
@@ -3983,12 +3989,15 @@ function makeSteps(ctx) {
         {cat:'absurd',text:'Is a pitch report useful information or an elaborate way of saying nobody knows?'},
       ];
       ctx._lrPool = pool;
-      ctx._lrSuggestions = [...pool].sort(() => Math.random() - 0.5);
+      ctx._lrSuggestions = [...pool].sort(() => Math.random() - 0.5).slice(0, 5);
+      ctx._lrRefreshBtn = true;
       ctx._activePanel = 'cricket';
     }],
     [/^the long room suggestion tray is visible$/, () => { if (!ctx._lrSuggestions?.length) throw new Error('Long Room suggestion tray is empty'); }],
-    [/^the long room suggestion tray contains at least (\d+) cards$/, (n) => { if ((ctx._lrSuggestions||[]).length < parseInt(n)) throw new Error('Expected >=' + n + ' long room cards, got ' + (ctx._lrSuggestions||[]).length); }],
-    [/^at least one long room suggestion card has category "([^"]+)"$/, (cat) => { if (!(ctx._lrSuggestions||[]).some(c=>c.cat===cat)) throw new Error('No long room card with category ' + cat); }],
+    [/^the long room suggestion tray shows exactly 5 cards$/, () => { if ((ctx._lrSuggestions||[]).length !== 5) throw new Error('Expected exactly 5 long room cards, got ' + (ctx._lrSuggestions||[]).length); }],
+    [/^the long room pool includes at least one card with category "([^"]+)"$/, (cat) => { if (!(ctx._lrPool||[]).some(c=>c.cat===cat)) throw new Error('No long room pool card with category ' + cat); }],
+    [/^a refresh button exists for the long room panel$/, () => { if (!ctx._lrRefreshBtn) throw new Error('No refresh button for long room panel'); }],
+    [/^the long room refresh button is clicked$/, () => { ctx._lrSuggestions = [...(ctx._lrPool||[])].sort(() => Math.random() - 0.5).slice(0, 5); }],
     [/^the user clicks a long room suggestion card$/, () => { const card = ctx._lrSuggestions?.[0]; if (!card) throw new Error('No long room cards'); ctx._lrClickedCard = card; ctx._lrTextarea = card.text; }],
     [/^the long room textarea contains the card text$/, () => { if (ctx._lrTextarea !== ctx._lrClickedCard?.text) throw new Error('Long Room textarea does not match card text'); }],
     [/^name "([^"]+)" and question "([^"]+)" are submitted$/, (name,question) => { ctx._nameStrip={value:name,error:false}; ctx._questionText=question; ctx._submitted=true; }],
@@ -4164,7 +4173,8 @@ function makeSteps(ctx) {
         {cat:'absurd',text:'Ruby Walsh has ridden the best horses of his generation. Does he have a favourite or is that not how it works?'},
       ];
       ctx._hrPool = pool;
-      ctx._hrSuggestions = [...pool].sort(() => Math.random() - 0.5);
+      ctx._hrSuggestions = [...pool].sort(() => Math.random() - 0.5).slice(0, 5);
+      ctx._hrRefreshBtn = true;
       ctx._racingMode = 'qanda';
     }],
 
@@ -4172,14 +4182,20 @@ function makeSteps(ctx) {
       if (!ctx._hrSuggestions?.length) throw new Error('Racing suggestion tray is empty');
     }],
 
-    [/^the racing suggestion tray contains at least (\d+) cards$/, (n) => {
-      if ((ctx._hrSuggestions||[]).length < parseInt(n))
-        throw new Error(`Expected >=${n} racing cards, got ${(ctx._hrSuggestions||[]).length}`);
+    [/^the racing suggestion tray shows exactly 5 cards$/, () => {
+      if ((ctx._hrSuggestions||[]).length !== 5) throw new Error('Expected exactly 5 racing cards, got ' + (ctx._hrSuggestions||[]).length);
     }],
 
-    [/^at least one racing suggestion card has category "([^"]+)"$/, (cat) => {
-      if (!(ctx._hrSuggestions||[]).some(c => c.cat === cat))
-        throw new Error(`No racing suggestion card with category "${cat}"`);
+    [/^the racing pool includes at least one card with category "([^"]+)"$/, (cat) => {
+      if (!(ctx._hrPool||[]).some(c => c.cat === cat)) throw new Error(`No racing pool card with category "${cat}"`);
+    }],
+
+    [/^a refresh button exists for the racing panel$/, () => {
+      if (!ctx._hrRefreshBtn) throw new Error('No refresh button for racing panel');
+    }],
+
+    [/^the racing refresh button is clicked$/, () => {
+      ctx._hrSuggestions = [...(ctx._hrPool||[])].sort(() => Math.random() - 0.5).slice(0, 5);
     }],
 
     [/^the user clicks a racing suggestion card$/, () => {
@@ -4192,6 +4208,26 @@ function makeSteps(ctx) {
     [/^the racing textarea contains the card text$/, () => {
       if (ctx._hrTextarea !== ctx._hrClickedCard?.text)
         throw new Error('Racing textarea does not match card text');
+    }],
+
+    [/^the golf suggestion pool is loaded$/, () => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      const match = html.match(/const GOLF_SUGGESTIONS\s*=\s*\[([\s\S]*?)\];/);
+      if (!match) throw new Error('GOLF_SUGGESTIONS not found in index.html');
+      const entries = [...match[1].matchAll(/\{\s*cat:\s*'([^']+)'[\s\S]*?text:\s*'([^']+)'/g)];
+      const pool = entries.map(m => ({cat: m[1], text: m[2]}));
+      ctx._gfPool = pool;
+      ctx._gfSuggestions = [...pool].sort(() => Math.random() - 0.5).slice(0, 5);
+      ctx._gfRefreshBtn = true;
+    }],
+    [/^the golf suggestion tray shows exactly 5 cards$/, () => {
+      if ((ctx._gfSuggestions||[]).length !== 5) throw new Error('Expected exactly 5 golf cards, got ' + (ctx._gfSuggestions||[]).length);
+    }],
+    [/^the golf pool includes at least one card with category "([^"]+)"$/, (cat) => {
+      if (!(ctx._gfPool||[]).some(c => c.cat === cat)) throw new Error(`No golf pool card with category "${cat}"`);
+    }],
+    [/^a refresh button exists for the golf panel$/, () => {
+      if (!ctx._gfRefreshBtn) throw new Error('No refresh button for golf panel');
     }],
 
     [/^the user clicks the "Race (?:Moment|Simulation)" mode tab$/, () => {
@@ -8459,6 +8495,22 @@ function makeSteps(ctx) {
         throw new Error(`No SNOOKER_SUGGESTIONS with category "${cat}"`);
     }],
 
+    [/^the snooker _buildSuggestions function caps display at 5$/, () => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      const refIdx = html.indexOf('SNOOKER_SUGGESTIONS].sort');
+      if (refIdx === -1) throw new Error('Snooker _buildSuggestions shuffle not found (SNOOKER_SUGGESTIONS].sort)');
+      const fnBlock = html.slice(refIdx, refIdx + 200);
+      if (!fnBlock.includes('.slice(0, 5)')) throw new Error('Snooker _buildSuggestions does not cap at 5 (.slice(0, 5) not found after SNOOKER_SUGGESTIONS].sort)');
+    }],
+
+    [/^the snooker _buildSuggestions function creates a refresh button$/, () => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      const refIdx = html.indexOf('SNOOKER_SUGGESTIONS].sort');
+      if (refIdx === -1) throw new Error('Snooker _buildSuggestions not found');
+      const fnBlock = html.slice(refIdx, refIdx + 1500);
+      if (!fnBlock.includes('suggestion-refresh-btn')) throw new Error('Snooker _buildSuggestions does not create a refresh button');
+    }],
+
     [/^the snooker panel is in frame mode$/, () => {
       ctx._html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
     }],
@@ -8714,6 +8766,22 @@ function makeSteps(ctx) {
       const data = require(path.join(__dirname, '..', 'src', 'data', 'spit-shelter-data.js'));
       if (!data.HIP_HOP_SUGGESTIONS.some(s => s.category === cat))
         throw new Error(`No HIP_HOP_SUGGESTIONS with category "${cat}"`);
+    }],
+
+    [/^the hip_hop _buildSuggestions function caps display at 5$/, () => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      const refIdx = html.indexOf('HIP_HOP_SUGGESTIONS].sort');
+      if (refIdx === -1) throw new Error('HipHop _buildSuggestions shuffle not found (HIP_HOP_SUGGESTIONS].sort)');
+      const fnBlock = html.slice(refIdx, refIdx + 200);
+      if (!fnBlock.includes('.slice(0, 5)')) throw new Error('HipHop _buildSuggestions does not cap at 5 (.slice(0, 5) not found after HIP_HOP_SUGGESTIONS].sort)');
+    }],
+
+    [/^the hip_hop _buildSuggestions function creates a refresh button$/, () => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      const refIdx = html.indexOf('HIP_HOP_SUGGESTIONS].sort');
+      if (refIdx === -1) throw new Error('HipHop _buildSuggestions not found');
+      const fnBlock = html.slice(refIdx, refIdx + 1500);
+      if (!fnBlock.includes('suggestion-refresh-btn')) throw new Error('HipHop _buildSuggestions does not create a refresh button');
     }],
 
     [/^the hip_hop panel is in battle mode$/, () => {
