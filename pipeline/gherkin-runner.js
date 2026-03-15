@@ -7027,6 +7027,75 @@ function makeSteps(ctx) {
       // structural rule — satisfied by schema design. No assertion needed.
     }],
 
+    // ── BL-143 Golf Narrative Posture (specs/golf-narrative-posture.feature) ─────
+
+    [/^the Golf panel Q&A section of index\.html is loaded$/, () => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      const golfStart = html.indexOf('const Golf = (() => {');
+      if (golfStart < 0) throw new Error('Golf IIFE not found in index.html');
+      ctx._golfIife = html.slice(golfStart, golfStart + 200000);
+    }],
+
+    [/^the Golf TURN_RULES does not contain "([^"]+)"$/, (text) => {
+      const iife = ctx._golfIife || '';
+      const trStart = iife.indexOf('const TURN_RULES');
+      if (trStart < 0) throw new Error('Golf TURN_RULES not found in Golf IIFE');
+      const trBlock = iife.slice(trStart, trStart + 3000);
+      if (trBlock.includes(text))
+        throw new Error(`Golf TURN_RULES should not contain "${text}" but does`);
+    }],
+
+    [/^the Golf TURN_RULES contains "([^"]+)"$/, (text) => {
+      const iife = ctx._golfIife || '';
+      const trStart = iife.indexOf('const TURN_RULES');
+      if (trStart < 0) throw new Error('Golf TURN_RULES not found in Golf IIFE');
+      const trBlock = iife.slice(trStart, trStart + 3000);
+      if (!trBlock.includes(text))
+        throw new Error(`Golf TURN_RULES does not contain "${text}"`);
+    }],
+
+    [/^the prompt for Golf character "([^"]+)" contains a narrative posture block$/, (charId) => {
+      const iife = ctx._golfIife || '';
+      const memberStart = iife.indexOf(`id: '${charId}'`);
+      if (memberStart < 0) throw new Error(`Golf IIFE does not contain member "${charId}"`);
+      const memberBlock = iife.slice(memberStart, memberStart + 20000);
+      if (!memberBlock.includes('NARRATIVE POSTURE'))
+        throw new Error(`Character "${charId}" prompt missing NARRATIVE POSTURE block`);
+    }],
+
+    [/^the prompt for Golf character "([^"]+)" contains "([^"]+)"$/, (charId, text) => {
+      const iife = ctx._golfIife || '';
+      const memberStart = iife.indexOf(`id: '${charId}'`);
+      if (memberStart < 0) throw new Error(`Golf IIFE does not contain member "${charId}"`);
+      const memberBlock = iife.slice(memberStart, memberStart + 20000);
+      if (!memberBlock.includes(text))
+        throw new Error(`Character "${charId}" prompt does not contain "${text}"`);
+    }],
+
+    [/^the prompt for Golf character "([^"]+)" contains "([^"]+)" or "([^"]+)" or "([^"]+)"$/, (charId, a, b, c) => {
+      const iife = ctx._golfIife || '';
+      const memberStart = iife.indexOf(`id: '${charId}'`);
+      if (memberStart < 0) throw new Error(`Golf IIFE does not contain member "${charId}"`);
+      const memberBlock = iife.slice(memberStart, memberStart + 20000);
+      if (!memberBlock.includes(a) && !memberBlock.includes(b) && !memberBlock.includes(c))
+        throw new Error(`Character "${charId}" prompt does not contain "${a}", "${b}", or "${c}"`);
+    }],
+
+    [/^no Golf character narrative posture block contains "([^"]+)"$/, (text) => {
+      const iife = ctx._golfIife || '';
+      const memberIds = ['radar','faldo','mcginley','coltart','roe','murray','dougherty','henni','butch'];
+      for (const charId of memberIds) {
+        const memberStart = iife.indexOf(`id: '${charId}'`);
+        if (memberStart < 0) continue;
+        const memberBlock = iife.slice(memberStart, memberStart + 20000);
+        const postureStart = memberBlock.indexOf('NARRATIVE POSTURE');
+        if (postureStart < 0) continue;
+        const postureBlock = memberBlock.slice(postureStart, postureStart + 500);
+        if (postureBlock.includes(text))
+          throw new Error(`Character "${charId}" NARRATIVE POSTURE block contains forbidden text "${text}"`);
+      }
+    }],
+
     // ── Golf Adventure WatchBack (specs/golf-adventure-watchback.feature) ────────
 
     [/^GOLF_PANEL_MEMBER_IDS contains "([^"]+)"$/, (id) => {

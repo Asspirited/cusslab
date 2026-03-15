@@ -1768,3 +1768,37 @@ Project: **Quntum Leeks** — the misspelling is INTENTIONAL and CANONICAL.
 - Autocorrect and training data will fight this every time — resist it
 - Cost of getting this wrong: WL-029 logged 1.5 hours lost across sessions
 This is a product decision, not a typo to fix. It stays.
+
+## Narrative Move Model — Golf panel (BL-143, 2026-03-15)
+
+### NarrativeMove
+An enum of contribution archetypes that describe how a character advances the conversation arc.
+Defined 2026-03-15 for Golf panel. Not yet a code enum — expressed as prompt posture in character data.
+
+Canonical move types (walking skeleton phase — prompt posture only, no engine selection yet):
+- **LAYER**: push the current direction further, add the next layer or detail
+- **ANALOGY**: introduce a parallel from your own world — good, bad, or stretched
+- **MEMORY**: land a personal anecdote that anchors the topic in your own career
+- **WEIRD**: follow something tangentially strange — often where the profound stuff is
+- **LIE**: introduce a confident falsehood. Others may build on it, exaggerate it, or call it out.
+- **BUILD_ON_LIE**: extend a stated or obvious lie further as if it is fact
+- **EXAGGERATE**: take something real and inflate it — plausibly, then implausibly
+- **CALL_OUT**: name the lie or exaggeration explicitly. Hold the room.
+- **WRITE_OFF**: dismiss the current frame entirely. Start fresh.
+- **ARRIVE**: come at the original question from your own perspective, barely acknowledging the arc
+- **CHALLENGE**: raise the argument that hasn't been made yet (not just "you're wrong")
+
+### MoveProfile
+Per-character weighted distribution of likely NarrativeMoves. Not yet implemented as code — carried in
+NARRATIVE POSTURE prompt block in each Golf character's system prompt (walking skeleton phase).
+
+### NARRATIVE POSTURE
+A section marker in each Golf character's system prompt. Contains natural-language instructions
+describing the character's typical narrative behaviour — which moves they favour, their default posture.
+Does NOT instruct the character to react to the previous speaker.
+Added to all 9 Golf panel members as part of BL-143: radar, faldo, mcginley, coltart, roe, murray, dougherty, henni, butch.
+
+### TURN_RULES RULE 2 — Golf panel change (BL-143)
+Before BL-143: mandatory REACTIVITY OBLIGATION — "Every response must open by reacting to the previous speaker's last sentence."
+After BL-143: YOUR OWN ANGLE FIRST — "Lead with your own position on the question or the subject."
+Football panel already had this version before BL-143. Golf now aligned.

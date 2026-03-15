@@ -113,6 +113,12 @@ When a new epic is raised that involves multiple characters, panels, or distinct
 - Source: Poppendieck — Lean Software Development (small batch size); Reinertsen — Product Development Flow (WIP limits);
   Cohn — User Stories Applied (SPIDR splitting); Adzic & Evans — Fifty Quick Ideas (vertical slices, survivable experiments)
 
+### RULE: Gherkin automation — @claude tag policy (persistent, always enforced)
+1. **Never apply the `@claude` tag to a new Gherkin scenario** unless the step genuinely cannot be automated — i.e., it requires human eyes, live browser interaction, or LLM output that cannot be mechanically verified. The `@claude` tag causes the scenario to be skipped by the pipeline. If it's skipped, it's not a gate.
+2. **When writing new Gherkin as part of any BL item**: scan the feature file for any existing `@claude`-tagged scenarios that relate to the same feature or mechanic. Ask: can this now be automated given the new step defs or code paths? If yes → raise a BL item to automate it (remove @claude tag, write step defs, get GREEN). This check is mandatory — do it at BDD CLOSE.
+3. **At each BDD CLOSE**: count the @claude-tagged scenarios in the feature file. If the count did not decrease, and there were candidates for automation, flag it.
+- Reason: @claude-tagged scenarios are dark spots in the pipeline gate. Accumulated over time, they degrade confidence. Every scenario that can be automated should be automated.
+
 ### RULE: CONTINUE — message queue handling
 When Rod sends messages while I am mid-task:
 - **Default behaviour:** queue them in order, work through them after the current task completes.

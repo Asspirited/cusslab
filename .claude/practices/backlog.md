@@ -1341,7 +1341,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Depends on: BL-141 (refresh mechanic makes pool depth worthwhile)
 - Feature: platform / UX / content
 - CD3: UBV=5 TC=2 RR=2 → CoD=9, Dur=3, **CD3=3.0**
-- Status: OPEN — raised 2026-03-15. Can proceed after BL-141 ships.
+- Status: CLOSED — commit de7f75b (2026-03-15). All 7 panels at 30 questions. Data-only change. Pipeline green.
 
 ---
 
@@ -1416,3 +1416,106 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Feature: comedy-room
 - CD3: UBV=6 TC=2 RR=1 → CoD=9, Dur=2, **CD3=4.5**
 - Status: CLOSED — 5820726 (Frankie Boyle added to Comedy Room MEMBERS)
+
+---
+
+### BL-143 — Narrative Move Model: Golf panel walking skeleton (NarrativeMove + MoveProfile + TURN_RULES replacement)
+
+- Description: Introduce the NarrativeMove domain concept to the Golf panel interaction model. The current TURN_RULES RULE 2 mandates every character open by reacting to the previous speaker — this produces a transactional reaction chain with no narrative arc. The fix: replace the mandatory reaction instruction with a NarrativeMove assignment. Before each character's turn, the engine selects a move type from that character's MoveProfile (weighted distribution). The selected move type becomes a prompt instruction that governs how the character contributes. Six move types: EXTEND (push the arc further), PIVOT (sideways — new angle, same subject), CHALLENGE (raise the unmade argument), ARRIVE (come at the original question fresh, barely acknowledging what was said), DIGRESS (follow something tangentially related — where profound answers come from), UNDERMINE (question the framing not the content). Golf panel is the proof-of-concept. Three Amigos agreed 2026-03-15: Golf first, walking skeleton only — no ConversationArc accumulation yet (BL-144), no arc state guard yet (BL-145). Prompted by Rod observing that the golf panel (Nicks, Radar, Coltart, McGinley) had generative narrative arcs in early sessions that have since degraded to reaction chains.
+- Output: (1) selectNarrativeMove(characterId, moveProfile, recentMoves) in pipeline/logic.js — pure function, returns a NarrativeMove; (2) MoveProfile data added to Golf character data (radar, faldo, alliss, coltart, mcginley, price, and others as needed); (3) Golf panel prompt builder: TURN_RULES RULE 2 replaced with move type instruction; (4) Gherkin scenarios covering move selection and prompt contract.
+- Feature: golf-adventure
+- Epic: Narrative Move Model
+- CD3: UBV=9 TC=8 RR=6 → CoD=23, Dur=3, **CD3=7.7**
+- Hypothesis:
+  - **Actor:** Rod running the Golf panel Q&A
+  - **AARRR:** Retention — Rod continues using the panel because conversation is generative
+  - **Signal:** Rod's exploratory test finds narrative arcs where characters advance the story rather than react
+  - **Falsifier:** After implementation, exploratory test shows same reaction-chain behaviour as before
+  - **Window:** 1 exploratory session
+- Depends on: none (Golf-first, independent)
+- Decomposition note: BL-144 (ConversationArc accumulation), BL-145 (arc state guard) follow once walking skeleton is proven
+- Status: CLOSED — 2026-03-15. Pipeline GREEN 1775/1775. TURN_RULES RULE 2 replaced in Golf (REACTIVITY OBLIGATION → YOUR OWN ANGLE FIRST). NARRATIVE POSTURE blocks added to all 9 Golf members. BDD gate: golf-narrative-posture.feature (11 scenarios, all passing). Exploratory test pending (Rod to run live).
+
+---
+
+### BL-144 — Narrative Move Model: ConversationArc accumulation (Golf panel)
+
+- Description: Extend BL-143's NarrativeMove model with client-side ConversationArc accumulation. After each character response lands, the JS appends a 1-sentence summary of that contribution to an arc log string. The arc log is passed to each subsequent character's prompt alongside the original question. This replaces "react to the previous speaker's last sentence" with "here is where the story has gone — advance it." Walking skeleton (BL-143) must be proven first.
+- Feature: golf-adventure
+- Epic: Narrative Move Model
+- CD3: UBV=8 TC=5 RR=4 → CoD=17, Dur=2, **CD3=8.5**
+- Depends on: BL-143 CLOSED
+- Status: OPEN — raised 2026-03-15
+
+---
+
+### BL-145 — Narrative Move Model: arc state guard (prevent consecutive same move type)
+
+- Description: Extend BL-143/BL-144 with an arc state guard. If the last N moves (e.g. 3) were all the same NarrativeMove type, the engine suppresses that type for the next character's selection — forcing a different move. Prevents conversation stalling in a single register (e.g. all CHALLENGE = debate club; all ARRIVE = characters ignoring each other). Guard logic lives in selectNarrativeMove() — takes recentMoves[] as existing parameter.
+- Feature: golf-adventure
+- Epic: Narrative Move Model
+- CD3: UBV=6 TC=3 RR=5 → CoD=14, Dur=1, **CD3=14.0**
+- Depends on: BL-143 CLOSED
+- Status: OPEN — raised 2026-03-15
+
+---
+
+### BL-146 — Golf panel: character technical knowledge enrichment (research spike)
+
+- Description: Golf panel characters currently have strong personality and wound prompts but lack specific golf technical knowledge. The panel should feel like genuine experts who know the game, talk about mechanics, diagnose what the player did wrong, try to teach each other (and the user), and reference each other's careers accurately. Requires CHARACTER RESEARCH PROTOCOL for each panel member before writing prompts: real technical opinions, coaching philosophy, diagnostic lens, career-specific knowledge, what they know about each other's games. Members in scope: Faldo (ball flight, commitment, swing mechanics), Butch (coaching eye, TrackMan, what went wrong technically), Radar (execution vs theory, the Australian read), McGinley (course management matrix, Ryder Cup captaincy lens), Murray (historical weight of every technical decision), Dougherty (belief in improvement, his own playing experience), Coltart (what he'd have done differently, hole-by-hole diagnosis), Roe (weird technical tangent, usually accurate, always unexpected), Henni (the question nobody asked about the technical choice). Also: what each character knows about the others' careers — cross-knowledge for panel interactions. Output: enriched game knowledge block added to each character's prompt in index.html. Depends on BL-143 (narrative posture structure established first, so knowledge enrichment lands in the right shape).
+- Feature: golf-adventure
+- Epic: Narrative Move Model
+- CD3: UBV=8 TC=6 RR=4 → CoD=18, Dur=3, **CD3=6.0**
+- Depends on: BL-143 CLOSED
+- Status: OPEN — raised 2026-03-15
+
+---
+
+### BL-147 — Football panel rename: "Post Game Cunditry" → "Post Match Cunditry"
+
+- Description: The football panel is currently labelled "Post Game Cunditry" in the tab, panel title, and panel registry. "Post Match" is more idiomatic for football (not "Post Game" — that's American English). Simple find-replace across index.html (tab label, panel-title div, panel registry entry, module comment).
+- Output: 4 occurrences in index.html updated. No new code paths.
+- Feature: football
+- Epic: none
+- CD3: UBV=2 TC=1 RR=1 → CoD=4, Dur=0.1, **CD3=40.0**
+- Hypothesis: Labelling is more idiomatic. No falsifier — cosmetic.
+- Depends on: none
+- Status: OPEN — raised 2026-03-15
+
+---
+
+### BL-148 — Bruce Lee: remove from football panel; confirm literary/Boardroom/PhilsOpoly placement
+
+- Description: Bruce Lee currently appears in Boardroom, ComedyRoom, Football, Golf, and PhilsOpoly. Rod wants him removed from Football panel. Rod also mentioned "literary" panel — no panel by this name exists; closest is WritingRoom (authors). Needs clarification on whether Bruce should be added to WritingRoom. Boardroom and PhilsOpoly already have him. Remove from Football BASE_ORDER and member definitions only.
+- Output: Bruce Lee member object and BASE_ORDER entry removed from Football IIFE. WritingRoom: TBC after clarification.
+- Feature: football
+- Epic: none
+- CD3: UBV=3 TC=1 RR=1 → CoD=5, Dur=0.2, **CD3=25.0**
+- Depends on: none
+- Status: OPEN — raised 2026-03-15
+
+---
+
+### BL-149 — Add Roy Keane to football panel
+
+- Description: Roy Keane has a character file (characters/roy-keane.md) but it is formatted as a pub-crawl guest, not a football panel pundit. Need to build a full panel member object (id, name, icon, colour, bg, system prompt as pundit) for the Football IIFE and add him to BASE_ORDER. Panel member prompt should draw from roy-keane.md: Cork accent, clipped sentences, standards, fury-under-control, key wounds.
+- Output: Roy Keane member definition added to Football IIFE members array; added to BASE_ORDER.
+- Feature: football
+- Epic: none
+- CD3: UBV=6 TC=2 RR=2 → CoD=10, Dur=1, **CD3=10.0**
+- Hypothesis: Keane on the football panel brings standards-based comedy that Souness/Neville/Carragher don't have — different register.
+- Depends on: BL-148 (football panel housekeeping done first)
+- Status: OPEN — raised 2026-03-15
+
+---
+
+### BL-150 — Add Rodney Marsh to football panel (new character)
+
+- Description: Rodney Marsh (QPR, Man City, England; pundit; famously sacked for 1973 relegation joke; "I'm 100% committed to 50% of everything I do") has no character file. Requires CHARACTER RESEARCH PROTOCOL before implementation. Will need: character identity, voice, comedy engine, wounds, panel member object.
+- Output: characters/rodney-marsh.md created; member object added to Football IIFE; added to BASE_ORDER.
+- Feature: football
+- Epic: none
+- CD3: UBV=6 TC=3 RR=3 → CoD=12, Dur=2, **CD3=6.0**
+- Hypothesis: Marsh brings a different era of footballing pundit — unapologetic, irreverent, pre-Sky era directness. Contrast with modern analytics (Neville) and rage (Keane/Souness).
+- Depends on: BL-149 (football housekeeping done first)
+- Status: OPEN — raised 2026-03-15
