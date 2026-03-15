@@ -111,16 +111,24 @@ Feature: The Spit Shelter — Hip-Hop Panel
     Given the hip_hop panel is in qanda mode
     Then the hip_hop suggestion tray is visible
 
-  Scenario: Hip-hop suggestion tray contains at least 10 cards
+  Scenario: Hip-hop suggestion pool has at least 10 entries (supports 5-cap with refresh variety)
     Given the hip_hop panel is in qanda mode
     Then the hip_hop suggestion tray contains at least 10 cards
 
-  Scenario: Hip-hop suggestion cards cover required categories
+  Scenario: Hip-hop suggestion pool covers required categories
     Given the hip_hop panel is in qanda mode
     Then at least one hip_hop suggestion card has category "roast"
     And at least one hip_hop suggestion card has category "craft"
     And at least one hip_hop suggestion card has category "beef"
     And at least one hip_hop suggestion card has category "legacy"
+
+  Scenario: Hip-hop suggestion display is capped at 5 cards
+    Given the hip_hop panel is in qanda mode
+    Then the hip_hop _buildSuggestions function caps display at 5
+
+  Scenario: A refresh button is created by hip_hop _buildSuggestions
+    Given the hip_hop panel is in qanda mode
+    Then the hip_hop _buildSuggestions function creates a refresh button
 
   # ── MODE 2 — RAP BATTLE ─────────────────────────────────────────
 
