@@ -1,4 +1,3 @@
-@claude
 Feature: BL-143 — Narrative Move Model: Golf panel walking skeleton
 
   Background:
