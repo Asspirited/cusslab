@@ -144,6 +144,26 @@ If the number went up: explain why (new scope, not regression).
 
 ---
 
+### 5b. NEXT SESSION FEATURES (agree before closing — write to session-startup.md)
+
+Ask Rod: "What do you want to work on next session?" or, if Rod is not present, propose the top 3 by CD3 from the backlog report.
+
+For each agreed feature:
+- Confirm it has a BL number
+- Confirm any dependencies are met (e.g. BL-144 depends on BL-143 CLOSED)
+- Confirm Gherkin gate: does this feature need new scenarios before implementation? If yes — are they written and approved? If not, the session should start with Gherkin, not code.
+
+Write the agreed features to `.claude/session-startup.md` under a new section: **"Agreed next session features"**. Format:
+```
+Agreed next session (from [date] closedown):
+- BL-NNN: [title] — Gherkin ready / Gherkin needed
+- BL-NNN: [title] — Gherkin ready / Gherkin needed
+```
+
+If Rod did not specify: write "No features agreed — start next session from CD3 backlog top 3."
+
+---
+
 ### 6. SESSION-STARTUP UPDATE (if anything changed)
 
 If any of the following changed this session, update `.claude/session-startup.md`:

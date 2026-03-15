@@ -34,6 +34,17 @@ Key facts (detail in auth-ops.md):
 
 ---
 
+### 1b. LIVE BUG CHECK (before any feature work — ask Rod)
+
+Ask Rod: **"Any live bugs since last session? Anything broken or wrong in the product right now?"**
+
+If yes: treat as a live bug — run INVESTIGATE AND RESOLVE SEQUENCE before any planned feature work. Log a WL entry immediately.
+If no: proceed.
+
+Do not skip this step. A broken live product outranks all backlog CD3 scores.
+
+---
+
 ### 2. PIPELINE (confirm green before any work)
 
 ```bash
@@ -129,6 +140,12 @@ BL-144 (ConversationArc accumulation) and BL-145 (arc state guard) are unlocked 
 BL-151 (per-character mode overrides) raised this session — Rod wants to set individual characters as antagonist/sycophant/weirdo/etc.
 WL-136 (IIFE return check in UI audit) still OPEN — pipeline false-green risk.
 WL numbering fixed this session: duplicate WL-136 renumbered; new session entries WL-141/142/143/144.
+
+Agreed next session (from 2026-03-15 closedown):
+- BL-144: ConversationArc accumulation — Golf panel gets running arc context — Gherkin needed
+- BL-145: Arc state guard — prevents consecutive same move type — Gherkin needed
+- BL-151: Per-character mode overrides (antagonist/sycophant/weirdo/etc) — Gherkin needed
+- Roll-out of Golf NARRATIVE POSTURE pattern to other panels — Rod confirmed "far and wide" — no BL yet, raise at session start
 - BL-140 Spit Shelter Q&A: fix invisible suggestion cards + scroll — commit 618bd9c
 
 Open product bets under discussion:
