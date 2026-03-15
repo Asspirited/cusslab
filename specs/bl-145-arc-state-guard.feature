@@ -16,6 +16,7 @@ Feature: BL-145 — Narrative Move Model: arc state guard (Golf panel)
       | dougherty   |
       | henni       |
       | butch       |
+      | howell      |
 
   Scenario: Golf discuss() initialises a recentMoves array before the panel runs
     Then the Golf discuss function initialises a recentMoves array
