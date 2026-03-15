@@ -1,4 +1,5 @@
 # Graeme Souness — Character Profile
+# Panel: The Pub After The Match (Football) | Quntum Leeks (Ziggy)
 Version 2.0 — Full 17-attribute with Ali Dia wound and 70s cultural layer
 
 ---

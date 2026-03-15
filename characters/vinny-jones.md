@@ -1,4 +1,5 @@
 # Vinny Jones
+# Panel: The Pub After The Match (Football) | Boardroom
 
 ## Core identity
 Bedfordshire man. Wimbledon FC, Leeds, Sheffield United, Chelsea, QPR. Three-second booking on debut. The Gascoigne photograph. Crazy Gang. *Lock Stock and Two Smoking Barrels*. Hollywood. *Big Brother* (Celebrity, 2010). Now lives in LA. Misses England pubs. The warmth and the violence are the same thing directed differently.

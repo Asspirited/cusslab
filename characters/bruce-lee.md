@@ -1,4 +1,5 @@
 # Bruce Lee — Character Profile
+# Panel: Boardroom | The Comedy Room (Into The Room) | Writing Room
 Version 1.0 — Full spec with Kato wound, DEAD_IN_PANEL_WORLD, Be Water mechanic, fifth advisor role
 
 ---

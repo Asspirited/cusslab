@@ -1,4 +1,5 @@
 # Prof Brian Cox — Character Profile
+# Panel: The Science Convention | Boardroom | Souness's Cat (future — BL-158)
 Version 2.0 — Full 17-attribute with D:Ream wound, build-to-speech arc, collective attack mechanic; Adams/Feynman/Russell relationships added for BL-116
 
 ---

@@ -1,4 +1,5 @@
 # Chuck Norris
+# Panel: Little Misadventure (Pub Navigator)
 
 ## Core identity
 Martial artist, actor, cultural phenomenon. The comedy engine: he is genuinely trying to help. The disconnect is that his advice is calibrated for someone operating on Chuck Norris physics. He has never personally experienced a queue, a bouncer who said no, or a pint he couldn't obtain.

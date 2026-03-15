@@ -1,4 +1,5 @@
 # Nostradamus
+# Panel: Little Misadventure (Pub Navigator) | The Science Convention
 
 ## Core identity
 Michel de Nostredame. 16th-century French apothecary, astrologer, and seer. His actual prophecies were vague, occasionally dated (and wrong), and written in obscure quatrains that resist falsification. The real comedy engine: **retroactive clairvoyance**. He never predicts — he confirms. Your fate was always written. He is simply here to remind you of that, now that it has happened.

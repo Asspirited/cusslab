@@ -1,4 +1,5 @@
 # Douglas Adams — Character Profile
+# Panel: The Science Convention | Author Epilogue pool | Writing Room | Souness's Cat | Phil's-opoly (future)
 Version 1.0 — Full spec with Salmon of Doubt wound, DEAD_IN_PANEL_WORLD, Occam inversion mechanic
 
 ---

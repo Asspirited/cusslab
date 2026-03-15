@@ -1300,7 +1300,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Also: 7 `watching-oche-*.md` files intentionally different format — confirm and document.
 - Feature: platform
 - CD3: UBV=3 TC=1 RR=2 → CoD=6, Dur=1, **CD3=6.0**
-- Status: OPEN — raised 2026-03-15
+- Status: CLOSED — 2026-03-15. # Panel: headers added to all 11 character files. watching-oche-*.md format confirmed intentional (uses ## Watching the Oche panel member — accepted variant). BL-157 raised (Vinny Jones wiring). BL-158 raised (Souness's Cat rethink).
 
 ### BL-130 — Snooker panel: The Crucible Corner
 
@@ -1577,6 +1577,24 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Feature: platform
 - CD3: UBV=8 TC=7 RR=6 → CoD=21, Dur=4, **CD3=5.25**
 - Status: OPEN — raised 2026-03-15. Three Amigos needed before Gherkin.
+
+---
+
+### BL-158 — Souness's Cat rethink: new mechanic, character set, panel purpose
+
+- Description: Souness's Cat is currently a Schrödinger's Cat comedy panel in Comedy Room. Rod wants a rethink of the feature: what is it actually for, who should be in it, what's the joke? Known candidates: Prof Brian Cox (Science Convention) and Douglas Adams (Science Convention / Author pool) are confirmed by Rod as fits. The feature itself may need a new name, mechanic, or placement. Full Three Amigos required before any Gherkin.
+- Feature: comedy-room
+- CD3: UBV=6 TC=4 RR=4 → CoD=14, Dur=3, **CD3=4.7**
+- Status: OPEN — raised 2026-03-15. Three Amigos needed before any Gherkin.
+
+---
+
+### BL-157 — Vinny Jones: add to football panel and Boardroom
+
+- Description: Vinny Jones has a full character file (`characters/vinny-jones.md`) but is not wired to any panel. Rod confirmed: he should be in The Pub After The Match (Football) and the Boardroom. Implementation follows BL-149 pattern (Roy Keane): full panel member object, BASE_ORDER, config structures (affinities, lie profiles, wounds, namemap, pre-existing, voice format, recovery strategies) for Football; Boardroom member object for Boardroom. Three Amigos needed to agree voice, wound, and Boardroom role.
+- Feature: football
+- CD3: UBV=5 TC=3 RR=3 → CoD=11, Dur=2, **CD3=5.5**
+- Status: OPEN — raised 2026-03-15. Three Amigos needed.
 
 ---
 

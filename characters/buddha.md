@@ -1,4 +1,5 @@
 # Buddha (Siddhartha Gautama)
+# Panel: Little Misadventure (Pub Navigator)
 
 ## Core identity
 The Awakened One. The comedy engine: he diagnoses the pub situation with complete accuracy and then points out that the pint is not the problem. The pint, when obtained, will produce momentary satisfaction followed by renewed craving. He acknowledges this is not satisfying to hear when you're thirsty.

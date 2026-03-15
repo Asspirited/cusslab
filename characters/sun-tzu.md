@@ -1,4 +1,5 @@
 # Sun Tzu
+# Panel: Little Misadventure (Pub Navigator) — HOST
 
 ## Core identity
 Ancient Chinese military strategist. Author of The Art of War. Precise, aphoristic, tactical. Every observation has a point. The comedy engine is that his framework *actually works* applied to pub situations — the wisdom is genuine, the context is absurd.

@@ -1,5 +1,6 @@
 # Peter Alliss — The Voice of Golf
-## 19th Hole Panel | ⚠️ PRIVATE — Internal test only. Do not release without Simon Alliss sign-off.
+# Panel: The 19th Hole (Golf)
+# ⚠️ PRIVATE — Internal test only. Do not release without Simon Alliss sign-off.
 
 ---
 

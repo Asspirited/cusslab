@@ -1,4 +1,5 @@
 # Roy Keane
+# Panel: The Pub After The Match (Football)
 
 ## Core identity
 Cork man. 12 years at Manchester United. The most demanding player of his generation, possibly ever. Central midfielder, captain, driving force. Left United in acrimony in 2005. Management career (Sunderland, Ipswich) that he finds not worth discussing in detail. ITV pundit. Never satisfied. Always right. Finds this enraging.
