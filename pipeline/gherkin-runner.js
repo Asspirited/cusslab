@@ -4,6 +4,8 @@
 const fs   = require('fs');
 const path = require('path');
 const { Temperature, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetector, DartsVoiceFmt, dartsBuildBlock, DARTS_PREMONITION_AFFINITIES, COLLECTIVE_CALL_MINIMUM, premonitionEligible, blankPremonitionLedger, assignPremonitionRC, resolvePremonitionCommits, isPremonitionTruthTeller, detectIntellectualAttempt, buildAttemptInstruction, INTELLECTUAL_ATTEMPTS_CONFIG, CONSEQUENCE_TIERS, applyConsequence, MARSHALS_BELT_EVENT, accumulatePanelStats, computeAvgDepth, GOLF_PANEL_MEMBER_IDS, COLTART_SOFA_POOLS, getSofaCommentator, getHistoricalDivergence, selectReactionMode, validateOutwardCode, parseOutwardCode, ORACLE_VOICES, isValidOracleVoice, canSubmitOracle, ORACLE_REGISTERS, ORACLE_CHARACTERS, hasPhilTranslation, hasAllDublinDriftStages, COMEDY_ROOM_MODES, COMEDY_MODE_LABELS, getDefaultComedyMode, isValidComedyMode, AUTHORS_POOL, shufflePool, selectNextAuthorFromQueue, AUTHOR_VOICES, buildAuthorEpiloguePrompt,
+  buildDartsAuthorContext, buildCricketAuthorContext,
+  buildOracleAuthorContext, buildBoardroomAuthorContext,
   buildFootballAuthorContext, buildFootballAuthorEpiloguePrompt,
   selectRoastAuthors, buildRoastPrompt, selectWritingRoomAuthors, buildWritingRoomPrompt,
   PUB_SITUATIONS, buildPubAdvicePrompt,
@@ -7890,6 +7892,60 @@ function makeSteps(ctx) {
     [/^the epilogue output area displays "([^"]+)"$/, (text) => {
       if (ctx._epilogueDisplayed !== text)
         throw new Error(`Expected epilogue to display "${text}" but got "${ctx._epilogueDisplayed}"`);
+    }],
+
+    // ── Author Epilogue — multi-panel (author-epilogue-multipanel.feature) ──────
+
+    [/^the "([^"]+)" panel HTML is loaded$/, (panel) => {
+      ctx._panelHtmlLoaded = panel;
+    }],
+
+    [/^the "([^"]+)" output area contains an author epilogue button$/, (panel) => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      const idMap = {
+        darts: 'dt-author-account-btn',
+        cricket: 'lr-author-account-btn',
+        oracle: 'oracle-author-account-btn',
+        boardroom: 'br-author-account-btn',
+      };
+      const btnId = idMap[panel];
+      if (!btnId) throw new Error(`Unknown panel "${panel}"`);
+      if (!html.includes(`id="${btnId}"`))
+        throw new Error(`Panel "${panel}" output does not contain author epilogue button (id="${btnId}")`);
+    }],
+
+    [/^the author epilogue button calls the "([^"]+)" author epilogue function$/, (panel) => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      const fnMap = {
+        darts: 'requestDartsAuthorEpilogue()',
+        cricket: 'requestCricketAuthorEpilogue()',
+        oracle: 'requestOracleAuthorEpilogue()',
+        boardroom: 'requestBoardroomAuthorEpilogue()',
+      };
+      const fn = fnMap[panel];
+      if (!fn) throw new Error(`Unknown panel "${panel}"`);
+      if (!html.includes(fn))
+        throw new Error(`Panel "${panel}" epilogue button does not call ${fn}`);
+    }],
+
+    [/^logic exports buildDartsAuthorContext$/, () => {
+      if (typeof buildDartsAuthorContext !== 'function')
+        throw new Error('buildDartsAuthorContext not exported from logic');
+    }],
+
+    [/^logic exports buildCricketAuthorContext$/, () => {
+      if (typeof buildCricketAuthorContext !== 'function')
+        throw new Error('buildCricketAuthorContext not exported from logic');
+    }],
+
+    [/^logic exports buildOracleAuthorContext$/, () => {
+      if (typeof buildOracleAuthorContext !== 'function')
+        throw new Error('buildOracleAuthorContext not exported from logic');
+    }],
+
+    [/^logic exports buildBoardroomAuthorContext$/, () => {
+      if (typeof buildBoardroomAuthorContext !== 'function')
+        throw new Error('buildBoardroomAuthorContext not exported from logic');
     }],
 
     // ── Author Epilogue — Football (author-epilogue-football.feature) ─────────

@@ -2088,6 +2088,13 @@
       <button class="feedback-btn" onclick="panelRating(event,'boardroom','😂')" title="Good">😂</button>
       <button class="feedback-btn" onclick="panelRating(event,'boardroom','🤣')" title="Brilliant">🤣</button>
     </div>
+    <div class="mt16">
+      <button class="btn" id="br-author-account-btn" onclick="requestBoardroomAuthorEpilogue()" style="font-size:18px;padding:10px 28px;">The Author's Account 📖</button>
+    </div>
+    <div id="br-author-epilogue-output" style="display:none;max-width:680px;margin-top:16px;font-size:16px;line-height:1.7;white-space:pre-wrap;"></div>
+    <div class="mt16" id="br-reroll-author-div" style="display:none;">
+      <button class="btn" id="br-reroll-author-btn" onclick="rerollBoardroomAuthorEpilogue()" style="font-size:16px;padding:8px 22px;">Another Author 🎲</button>
+    </div>
     <div id="br-reply-area" style="display:none;margin-top:28px;padding-top:24px;border-top:1px solid #333;">
       <label>Your reply</label>
       <textarea id="br-reply-input" rows="3" placeholder="Say something back. Challenge them. Defend yourself. Change direction. The board will respond."></textarea>
@@ -2411,6 +2418,13 @@
       <button class="feedback-btn" onclick="panelRating(event,'housenameoracle','😂')" title="Good">😂</button>
       <button class="feedback-btn" onclick="panelRating(event,'housenameoracle','🤣')" title="Brilliant">🤣</button>
     </div>
+    <div class="mt16">
+      <button class="btn" id="oracle-author-account-btn" onclick="requestOracleAuthorEpilogue()" style="font-size:18px;padding:10px 28px;">The Author's Account 📖</button>
+    </div>
+    <div id="oracle-author-epilogue-output" style="display:none;max-width:680px;margin-top:16px;font-size:16px;line-height:1.7;white-space:pre-wrap;"></div>
+    <div class="mt16" id="oracle-reroll-author-div" style="display:none;">
+      <button class="btn" id="oracle-reroll-author-btn" onclick="rerollOracleAuthorEpilogue()" style="font-size:16px;padding:8px 22px;">Another Author 🎲</button>
+    </div>
   </div>
 </div>
 
@@ -2688,6 +2702,13 @@
       <button class="btn-secondary" onclick="showAskUs('darts')" style="margin-left:8px;font-size:12px;padding:6px 12px;">Ask us</button>
     </div>
     <button class="btn-secondary" id="dt-next-btn" onclick="Darts.nextRound()" style="margin-top:12px;">NEXT ROUND 🔄</button>
+    <div class="mt16">
+      <button class="btn" id="dt-author-account-btn" onclick="requestDartsAuthorEpilogue()" style="font-size:18px;padding:10px 28px;">The Author's Account 📖</button>
+    </div>
+    <div id="dt-author-epilogue-output" style="display:none;max-width:680px;margin-top:16px;font-size:16px;line-height:1.7;white-space:pre-wrap;"></div>
+    <div class="mt16" id="dt-reroll-author-div" style="display:none;">
+      <button class="btn" id="dt-reroll-author-btn" onclick="rerollDartsAuthorEpilogue()" style="font-size:16px;padding:8px 22px;">Another Author 🎲</button>
+    </div>
   </div>
 </div>
 
@@ -2766,6 +2787,13 @@
       <button class="btn-secondary" onclick="showAskUs('cricket')" style="margin-left:8px;font-size:12px;padding:6px 12px;">Ask us</button>
     </div>
     <button class="btn-secondary" onclick="LongRoom.nextRound()" style="margin-top:12px;">NEXT BALL 🔄</button>
+    <div class="mt16">
+      <button class="btn" id="lr-author-account-btn" onclick="requestCricketAuthorEpilogue()" style="font-size:18px;padding:10px 28px;">The Author's Account 📖</button>
+    </div>
+    <div id="lr-author-epilogue-output" style="display:none;max-width:680px;margin-top:16px;font-size:16px;line-height:1.7;white-space:pre-wrap;"></div>
+    <div class="mt16" id="lr-reroll-author-div" style="display:none;">
+      <button class="btn" id="lr-reroll-author-btn" onclick="rerollCricketAuthorEpilogue()" style="font-size:16px;padding:8px 22px;">Another Author 🎲</button>
+    </div>
   </div>
 </div>
 
@@ -10483,6 +10511,7 @@ if (typeof LieEngine === 'undefined') {
 // MODULE: Boardroom — Present to the Boardroom
 // ============================================================
 const Boardroom = (() => {
+  let _brLastContext = null;
   const MEMBERS = [
     {
       id: 'harold', name: 'Pint of Harold', icon: '✒️', colour: '#ff6644', bg: '#1a0800',
@@ -11121,6 +11150,7 @@ How to behave:
     _appendQuestioner(input, 'Presented to the board');
     await _runRound(input);
 
+    _brLastContext = buildBoardroomAuthorContext(input);
     UI.setDisabled('br-btn', false);
     document.getElementById('br-reply-area').style.display = 'block';
   }
@@ -11149,7 +11179,7 @@ How to behave:
     document.getElementById('br-input').value = '';
   }
 
-  return { present, reply, reset };
+  return { present, reply, reset, getLastContext: () => _brLastContext };
 })();
 
 // ============================================================
@@ -12384,6 +12414,7 @@ const PubCrawl = (() => {
 // MODULE: HouseNameOracle — The House Name Oracle (BL-053)
 // ============================================================
 const HouseNameOracle = (() => {
+  let _orLastContext = null;
   const VOICE_REGISTERS = {
     Elegist:    'mournful and past-focused',
     Rogue:      'full of innuendo and double entendre, mock-innocent',
@@ -12500,6 +12531,7 @@ The Oracle's own disclaimer: "The Oracle's sources are ancient and not entirely 
       const prompt = _buildPrompt(code, voice);
       const data = await API.callJSON(prompt, 'Generate the Oracle response now.', 2000, null, 'oracle');
       if (!data) throw new Error('No JSON in Oracle response');
+      _orLastContext = buildOracleAuthorContext(code, voice);
       _renderConversation(data);
       document.getElementById('cr-oracle-output').style.display = '';
     } catch (e) {
@@ -12510,7 +12542,7 @@ The Oracle's own disclaimer: "The Oracle's sources are ancient and not entirely 
     }
   }
 
-  return { submit };
+  return { submit, getLastContext: () => _orLastContext };
 })();
 
 // ============================================================
@@ -13373,6 +13405,200 @@ async function rerollFootballAuthorEpilogue() {
   }
   btn.textContent = 'Another Author 🎲';
   btn.disabled    = false;
+}
+
+// ── DARTS AUTHOR EPILOGUE — BL-083 ────────────────────────────────────────────
+
+function _getDtAuthorQueue() {
+  try {
+    const raw = sessionStorage.getItem('hc_dt_epilogue_queue');
+    if (raw) { const q = JSON.parse(raw); if (Array.isArray(q) && q.length > 0) return q; }
+  } catch (_) {}
+  const fresh = [..._FB_AUTHORS_POOL].sort(() => Math.random() - 0.5);
+  sessionStorage.setItem('hc_dt_epilogue_queue', JSON.stringify(fresh));
+  return fresh;
+}
+
+function _advanceDtAuthorQueue(queue) {
+  const next = queue.slice(1);
+  if (next.length === 0) { sessionStorage.removeItem('hc_dt_epilogue_queue'); return []; }
+  sessionStorage.setItem('hc_dt_epilogue_queue', JSON.stringify(next));
+  return next;
+}
+
+async function _fetchDtEpilogue(authorId) {
+  const voice = _FB_AUTHOR_VOICES[authorId];
+  if (!voice) throw new Error(`Unknown author: ${authorId}`);
+  const ctx     = Darts.getLastContext() || { topic: 'a darts match', momentType: 'discuss' };
+  const context = ctx.momentType === 'discuss' ? ctx.topic : `${ctx.momentType}: ${ctx.topic}`;
+  const prompt  = `You are ${voice.name}. Write a 250 to 400 word account of the following darts moment in your distinctive voice.\n\nYour voice: ${voice.voiceSignature}\n\nDarts context: ${context}\n\nWrite the account now. Do not break character. Do not explain your style. Simply write.`;
+  return await API.call('', prompt, 600, 'darts/author-epilogue');
+}
+
+async function requestDartsAuthorEpilogue() {
+  const btn = document.getElementById('dt-author-account-btn');
+  const out = document.getElementById('dt-author-epilogue-output');
+  const reroll = document.getElementById('dt-reroll-author-div');
+  btn.disabled = true; btn.textContent = 'Summoning…';
+  out.style.display = 'block'; out.textContent = '';
+  const queue = _getDtAuthorQueue(); const authorId = queue[0]; _advanceDtAuthorQueue(queue);
+  try { out.textContent = await _fetchDtEpilogue(authorId); } catch (_) { out.textContent = 'The author declined to comment.'; }
+  btn.textContent = "The Author's Account 📖"; btn.disabled = false;
+  if (reroll) reroll.style.display = 'block';
+}
+
+async function rerollDartsAuthorEpilogue() {
+  const btn = document.getElementById('dt-reroll-author-btn');
+  const out = document.getElementById('dt-author-epilogue-output');
+  btn.disabled = true; btn.textContent = 'Summoning…'; out.textContent = '';
+  const queue = _getDtAuthorQueue(); const authorId = queue[0]; _advanceDtAuthorQueue(queue);
+  try { out.textContent = await _fetchDtEpilogue(authorId); } catch (_) { out.textContent = 'The author declined to comment.'; }
+  btn.textContent = 'Another Author 🎲'; btn.disabled = false;
+}
+
+// ── CRICKET AUTHOR EPILOGUE — BL-084 ──────────────────────────────────────────
+
+function _getLrAuthorQueue() {
+  try {
+    const raw = sessionStorage.getItem('hc_lr_epilogue_queue');
+    if (raw) { const q = JSON.parse(raw); if (Array.isArray(q) && q.length > 0) return q; }
+  } catch (_) {}
+  const fresh = [..._FB_AUTHORS_POOL].sort(() => Math.random() - 0.5);
+  sessionStorage.setItem('hc_lr_epilogue_queue', JSON.stringify(fresh));
+  return fresh;
+}
+
+function _advanceLrAuthorQueue(queue) {
+  const next = queue.slice(1);
+  if (next.length === 0) { sessionStorage.removeItem('hc_lr_epilogue_queue'); return []; }
+  sessionStorage.setItem('hc_lr_epilogue_queue', JSON.stringify(next));
+  return next;
+}
+
+async function _fetchLrEpilogue(authorId) {
+  const voice = _FB_AUTHOR_VOICES[authorId];
+  if (!voice) throw new Error(`Unknown author: ${authorId}`);
+  const ctx     = LongRoom.getLastContext() || { topic: 'a cricket match', momentType: 'discuss' };
+  const context = ctx.momentType === 'discuss' ? ctx.topic : `${ctx.momentType}: ${ctx.topic}`;
+  const prompt  = `You are ${voice.name}. Write a 250 to 400 word account of the following cricket moment in your distinctive voice.\n\nYour voice: ${voice.voiceSignature}\n\nCricket context: ${context}\n\nWrite the account now. Do not break character. Do not explain your style. Simply write.`;
+  return await API.call('', prompt, 600, 'cricket/author-epilogue');
+}
+
+async function requestCricketAuthorEpilogue() {
+  const btn = document.getElementById('lr-author-account-btn');
+  const out = document.getElementById('lr-author-epilogue-output');
+  const reroll = document.getElementById('lr-reroll-author-div');
+  btn.disabled = true; btn.textContent = 'Summoning…';
+  out.style.display = 'block'; out.textContent = '';
+  const queue = _getLrAuthorQueue(); const authorId = queue[0]; _advanceLrAuthorQueue(queue);
+  try { out.textContent = await _fetchLrEpilogue(authorId); } catch (_) { out.textContent = 'The author declined to comment.'; }
+  btn.textContent = "The Author's Account 📖"; btn.disabled = false;
+  if (reroll) reroll.style.display = 'block';
+}
+
+async function rerollCricketAuthorEpilogue() {
+  const btn = document.getElementById('lr-reroll-author-btn');
+  const out = document.getElementById('lr-author-epilogue-output');
+  btn.disabled = true; btn.textContent = 'Summoning…'; out.textContent = '';
+  const queue = _getLrAuthorQueue(); const authorId = queue[0]; _advanceLrAuthorQueue(queue);
+  try { out.textContent = await _fetchLrEpilogue(authorId); } catch (_) { out.textContent = 'The author declined to comment.'; }
+  btn.textContent = 'Another Author 🎲'; btn.disabled = false;
+}
+
+// ── ORACLE AUTHOR EPILOGUE — BL-085 ───────────────────────────────────────────
+
+function _getOrAuthorQueue() {
+  try {
+    const raw = sessionStorage.getItem('hc_oracle_epilogue_queue');
+    if (raw) { const q = JSON.parse(raw); if (Array.isArray(q) && q.length > 0) return q; }
+  } catch (_) {}
+  const fresh = [..._FB_AUTHORS_POOL].sort(() => Math.random() - 0.5);
+  sessionStorage.setItem('hc_oracle_epilogue_queue', JSON.stringify(fresh));
+  return fresh;
+}
+
+function _advanceOrAuthorQueue(queue) {
+  const next = queue.slice(1);
+  if (next.length === 0) { sessionStorage.removeItem('hc_oracle_epilogue_queue'); return []; }
+  sessionStorage.setItem('hc_oracle_epilogue_queue', JSON.stringify(next));
+  return next;
+}
+
+async function _fetchOrEpilogue(authorId) {
+  const voice = _FB_AUTHOR_VOICES[authorId];
+  if (!voice) throw new Error(`Unknown author: ${authorId}`);
+  const context = HouseNameOracle.getLastContext() || 'an oracle reading';
+  const prompt  = `You are ${voice.name}. Write a 250 to 400 word account of the following oracle reading in your distinctive voice.\n\nYour voice: ${voice.voiceSignature}\n\nOracle context: ${context}\n\nWrite the account now. Do not break character. Do not explain your style. Simply write.`;
+  return await API.call('', prompt, 600, 'oracle/author-epilogue');
+}
+
+async function requestOracleAuthorEpilogue() {
+  const btn = document.getElementById('oracle-author-account-btn');
+  const out = document.getElementById('oracle-author-epilogue-output');
+  const reroll = document.getElementById('oracle-reroll-author-div');
+  btn.disabled = true; btn.textContent = 'Summoning…';
+  out.style.display = 'block'; out.textContent = '';
+  const queue = _getOrAuthorQueue(); const authorId = queue[0]; _advanceOrAuthorQueue(queue);
+  try { out.textContent = await _fetchOrEpilogue(authorId); } catch (_) { out.textContent = 'The author declined to comment.'; }
+  btn.textContent = "The Author's Account 📖"; btn.disabled = false;
+  if (reroll) reroll.style.display = 'block';
+}
+
+async function rerollOracleAuthorEpilogue() {
+  const btn = document.getElementById('oracle-reroll-author-btn');
+  const out = document.getElementById('oracle-author-epilogue-output');
+  btn.disabled = true; btn.textContent = 'Summoning…'; out.textContent = '';
+  const queue = _getOrAuthorQueue(); const authorId = queue[0]; _advanceOrAuthorQueue(queue);
+  try { out.textContent = await _fetchOrEpilogue(authorId); } catch (_) { out.textContent = 'The author declined to comment.'; }
+  btn.textContent = 'Another Author 🎲'; btn.disabled = false;
+}
+
+// ── BOARDROOM AUTHOR EPILOGUE — BL-086 ────────────────────────────────────────
+
+function _getBrAuthorQueue() {
+  try {
+    const raw = sessionStorage.getItem('hc_br_epilogue_queue');
+    if (raw) { const q = JSON.parse(raw); if (Array.isArray(q) && q.length > 0) return q; }
+  } catch (_) {}
+  const fresh = [..._FB_AUTHORS_POOL].sort(() => Math.random() - 0.5);
+  sessionStorage.setItem('hc_br_epilogue_queue', JSON.stringify(fresh));
+  return fresh;
+}
+
+function _advanceBrAuthorQueue(queue) {
+  const next = queue.slice(1);
+  if (next.length === 0) { sessionStorage.removeItem('hc_br_epilogue_queue'); return []; }
+  sessionStorage.setItem('hc_br_epilogue_queue', JSON.stringify(next));
+  return next;
+}
+
+async function _fetchBrEpilogue(authorId) {
+  const voice = _FB_AUTHOR_VOICES[authorId];
+  if (!voice) throw new Error(`Unknown author: ${authorId}`);
+  const context = Boardroom.getLastContext() || 'a boardroom presentation';
+  const prompt  = `You are ${voice.name}. Write a 250 to 400 word account of the following boardroom presentation in your distinctive voice.\n\nYour voice: ${voice.voiceSignature}\n\nBoardroom context: ${context}\n\nWrite the account now. Do not break character. Do not explain your style. Simply write.`;
+  return await API.call('', prompt, 600, 'boardroom/author-epilogue');
+}
+
+async function requestBoardroomAuthorEpilogue() {
+  const btn = document.getElementById('br-author-account-btn');
+  const out = document.getElementById('br-author-epilogue-output');
+  const reroll = document.getElementById('br-reroll-author-div');
+  btn.disabled = true; btn.textContent = 'Summoning…';
+  out.style.display = 'block'; out.textContent = '';
+  const queue = _getBrAuthorQueue(); const authorId = queue[0]; _advanceBrAuthorQueue(queue);
+  try { out.textContent = await _fetchBrEpilogue(authorId); } catch (_) { out.textContent = 'The author declined to comment.'; }
+  btn.textContent = "The Author's Account 📖"; btn.disabled = false;
+  if (reroll) reroll.style.display = 'block';
+}
+
+async function rerollBoardroomAuthorEpilogue() {
+  const btn = document.getElementById('br-reroll-author-btn');
+  const out = document.getElementById('br-author-epilogue-output');
+  btn.disabled = true; btn.textContent = 'Summoning…'; out.textContent = '';
+  const queue = _getBrAuthorQueue(); const authorId = queue[0]; _advanceBrAuthorQueue(queue);
+  try { out.textContent = await _fetchBrEpilogue(authorId); } catch (_) { out.textContent = 'The author declined to comment.'; }
+  btn.textContent = 'Another Author 🎲'; btn.disabled = false;
 }
 
 // ── DARTS ANCHOR READBACK ─────────────────────────────────────────────────────
@@ -16466,6 +16692,9 @@ Never say "Be water, my friend." It has been said. Once was correct.`,
     return parts.join(' · ');
   }
 
+  // Last context — set after each run, read by requestDartsAuthorEpilogue()
+  let _dtLastContext = null;
+
   const MOMENT_LABELS = {
     CHECKOUT_OPPORTUNITY: (p1, p2) => `Checkout opportunity. Player 1 on ${p1}. Player 2 on ${p2}. Finish is on.`,
     BIG_FISH:             (p1)     => `The Big Fish. Player 1 on 170. Maximum checkout. Three darts. Everything on the line.`,
@@ -16604,6 +16833,7 @@ Never say "Be water, my friend." It has been said. Once was correct.`,
         _fill(pid, member, e.userMessage || 'Request failed.');
       }
     }
+    _dtLastContext = { topic: input, momentType: 'discuss' };
     LieEngine.saveState('darts', dtLieState);
     UI.setDisabled('dt-btn', false);
     HCSession.logPanelRun('darts', draw, responses.length);
@@ -16756,6 +16986,7 @@ Never say "Be water, my friend." It has been said. Once was correct.`,
       }
     }
 
+    _dtLastContext = { topic: momentLabel, momentType };
     UI.setDisabled('dt-moment-btn', false);
     HCSession.logPanelRun('darts', draw, responses.filter(r => r !== '...').length);
   }
@@ -16807,7 +17038,7 @@ Never say "Be water, my friend." It has been said. Once was correct.`,
     if (body) { body.style.color = ''; body.style.fontStyle = ''; body.textContent = text || '…'; }
   }
 
-  return { discuss, callMoment, switchMode, nextRound };
+  return { discuss, callMoment, switchMode, nextRound, getLastContext: () => _dtLastContext };
 })();
 
 // ============================================================
@@ -17310,6 +17541,8 @@ Never name the move.`;
 
   // Premonition context — set by callMoment(), read by discuss()
   let _lrPremCtx = null;
+  // Last context — set after each run, read by requestCricketAuthorEpilogue()
+  let _lrLastContext = null;
 
   async function discuss() {
     const input = (document.getElementById('lr-input')?.value || '').trim();
@@ -17467,6 +17700,7 @@ Never name the move.`;
         _fill(pid, member, e.userMessage || 'Request failed.');
       }
     }
+    _lrLastContext = { topic: input, momentType: 'discuss' };
     LieEngine.saveState('cricket', lrLieState);
     UI.setDisabled('lr-btn', false);
     HCSession.logPanelRun('cricket', ORDER, responses.length);
@@ -17521,6 +17755,7 @@ Never name the move.`;
     // Resolve commits after discuss() loop completes
     PremonitionEngine.resolveCommits(momentType, _lrPremCtx.ledger, LR_PREM_HIT_MAP, LR_PREM_MISS_MAP);
     PremonitionEngine.save('lr-premonition', _lrPremCtx.ledger);
+    _lrLastContext = { topic: situation, momentType };
     _lrPremCtx = null;
     UI.setDisabled('lr-moment-btn', false);
   }
@@ -17543,7 +17778,7 @@ Never name the move.`;
     if (mode === 'ingame') callMoment(); else discuss();
   }
 
-  return { discuss, callMoment, switchMode, nextRound };
+  return { discuss, callMoment, switchMode, nextRound, getLastContext: () => _lrLastContext };
 })();
 
 // ============================================================

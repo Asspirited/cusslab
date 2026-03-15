@@ -714,6 +714,28 @@ function buildAuthorEpiloguePrompt(authorVoice, context) {
   return `You are ${authorVoice.name}. Write a 250 to 400 word summary of the following golf game in your distinctive voice.\n\nYour voice: ${authorVoice.voiceSignature}\n\nGame details: ${context.player} played golf. Outcome: ${context.outcome}. Panel: ${context.panel}.\n\nWrite the summary now. Do not break character. Do not explain your style. Simply write.`;
 }
 
+// ── Multi-panel Author Epilogue context builders — BL-083/084/085/086 ─────────
+
+function buildDartsAuthorContext(momentType, topic) {
+  const parts = [momentType];
+  if (topic) parts.push(topic);
+  return parts.join(': ');
+}
+
+function buildCricketAuthorContext(momentType, topic) {
+  const parts = [momentType];
+  if (topic) parts.push(topic);
+  return parts.join(': ');
+}
+
+function buildOracleAuthorContext(code, voice) {
+  return voice ? `${voice} oracle reading for ${code}` : `oracle reading for ${code}`;
+}
+
+function buildBoardroomAuthorContext(topic) {
+  return topic || 'a boardroom presentation';
+}
+
 // ── Football Author Epilogue — BL-082 ─────────────────────────────────────────
 
 function buildFootballAuthorContext(momentType, topic) {
@@ -880,6 +902,8 @@ module.exports = {
   COMEDY_ROOM_MODES, COMEDY_MODE_LABELS, getDefaultComedyMode, isValidComedyMode,
   AUTHORS_POOL, shufflePool, selectNextAuthorFromQueue,
   AUTHOR_VOICES, buildAuthorEpiloguePrompt,
+  buildDartsAuthorContext, buildCricketAuthorContext,
+  buildOracleAuthorContext, buildBoardroomAuthorContext,
   buildFootballAuthorContext, buildFootballAuthorEpiloguePrompt,
   selectRoastAuthors, buildRoastPrompt,
   selectWritingRoomAuthors, buildWritingRoomPrompt,
