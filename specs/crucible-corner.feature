@@ -94,16 +94,24 @@ Feature: The Crucible Corner — Snooker Panel
     Given the snooker panel is in qanda mode
     Then the snooker suggestion tray is visible
 
-  Scenario: Snooker suggestion tray contains at least 10 cards
+  Scenario: Snooker suggestion pool has at least 10 entries (supports 5-cap with refresh variety)
     Given the snooker panel is in qanda mode
     Then the snooker suggestion tray contains at least 10 cards
 
-  Scenario: Snooker suggestion cards cover required categories
+  Scenario: Snooker suggestion pool covers required categories
     Given the snooker panel is in qanda mode
     Then at least one snooker suggestion card has category "match"
     And at least one snooker suggestion card has category "player"
     And at least one snooker suggestion card has category "technique"
     And at least one snooker suggestion card has category "absurd"
+
+  Scenario: Snooker suggestion display is capped at 5 cards
+    Given the snooker panel is in qanda mode
+    Then the snooker _buildSuggestions function caps display at 5
+
+  Scenario: A refresh button is created by snooker _buildSuggestions
+    Given the snooker panel is in qanda mode
+    Then the snooker _buildSuggestions function creates a refresh button
 
   # ── MODE 2 — FRAME SIMULATION ───────────────────────────────────
 
