@@ -85,6 +85,31 @@ Open questions: standalone product or new cusslab section? Shared Worker + chara
 Needs Three Amigos + placement decision before any BL item can be raised.
 Full design notes archived from: notes/2026-03-10-house-name-oracle.md
 
+### IDEA: Snooker panel — add Alex Higgins, Bill Werbeniuk
+Added: 2026-03-15 | Source: Rod
+Add to The Crucible Corner: Bill Werbeniuk (FIRST — prescribed beer intake, billed to DHSS, DEAD_IN_PANEL_WORLD), Alex Higgins (Hurricane — two world titles, chaos, confrontation, DEAD_IN_PANEL_WORLD 2010). Steve Davis already in panel. Priority: Werbeniuk first, then Higgins.
+Full snapshot: Downloads/idea-snooker-new-members-2026-03-15.md
+
+### IDEA: Research write-up — Register collapse prevention in multi-agent LLM systems
+Added: 2026-03-15 | Source: Claude Code review
+The problem: sequential multi-agent LLM systems harmonise — agents read previous responses and conforming pressure flattens all voices to one cautious register. The solution built in BL-143/144/145: postureType per character (analytical/narrative/challenge), recentMoves[] tracking, REGISTER BREAK injection after 3 consecutive same-register turns. YOUR OWN ANGLE FIRST replaces mandatory reactivity. This is an empirical, working solution to a real and under-documented problem. Worth writing up as a pattern or short paper.
+Open question: is there existing research on register collapse? Is this worth a blog post, a pattern document, or a formal write-up?
+
+### IDEA: Research write-up — BDD for non-deterministic AI systems
+Added: 2026-03-15 | Source: Claude Code review
+The problem: Gherkin/BDD assumes deterministic systems. AI outputs are not deterministic. Solution used here: assert structural and contextual constraints (REGISTER BREAK instruction present, arcLog accumulated, character posture type matches) rather than content. 104 feature files of working examples. This is a genuine gap in the BDD literature — no documented practice exists for specifying non-deterministic AI behaviour in Gherkin. Worth writing up with concrete examples from this codebase.
+Open question: write as blog post, pattern document, or conference paper?
+
+### IDEA: Research write-up — Wound-based character simulation DSL
+Added: 2026-03-15 | Source: Claude Code review
+The wound system (specific historical embarrassments/failures that can be triggered by keywords) + comedy engine (the structural reason why the character is funny) + voice format constraints + relationship network = a prompt engineering DSL for consistent AI character behaviour. 91 character files all following the same schema. Could be written up as a reusable pattern for anyone building AI characters at scale: wound → trigger → escalation arc → panel-specific rules.
+Open question: generalise as a prompt schema or keep codebase-specific? Could this be a small open source tool?
+
+### IDEA: Research write-up — ConspireEngine: designed contradiction in multi-agent LLM
+Added: 2026-03-15 | Source: Claude Code review
+Most multi-agent LLM research targets consensus and agreement. ConspireEngine is the opposite: characters are explicitly designed to contradict, exaggerate, lie, and call each other out — and the product value is the gap between what they claim and what happened. This is designed unreliability as a product mechanic. Worth studying: what does it take to sustain productive contradiction in a multi-agent system? What prompt engineering makes disagreement feel authentic rather than chaotic?
+Open question: is this worth a blog post, or is there enough here for a more formal paper on adversarial multi-agent comedy systems?
+
 ### IDEA: Nostradamus as Author Epilogue voice
 Added: 2026-03-10 | Source: Rod
 The comedy IS the quatrain format applied to golf — which is why it's here and not in backlog.
