@@ -13376,6 +13376,7 @@ You layer. You do not extend for the sake of it — but if a standards failure i
   }
 
   function nextRound() {
+    window.scrollTo(0, 0);
     const mode = sessionStorage.getItem('fb-mode') || 'qanda';
     if (mode === 'ingame') callMoment(); else discuss();
   }
@@ -15183,6 +15184,7 @@ NARRATIVE POSTURE — You arrive with the warm observation: what happened, who w
   }
 
   function nextRound() {
+    window.scrollTo(0, 0);
     const ingameVisible = (document.getElementById('gf-ingame-view') || {}).style.display !== 'none';
     if (ingameVisible) callMoment(); else discuss();
   }
@@ -17297,6 +17299,7 @@ Never say "Be water, my friend." It has been said. Once was correct.`,
   }
 
   function nextRound() {
+    window.scrollTo(0, 0);
     const mode = sessionStorage.getItem('darts-mode') || 'qanda';
     if (mode === 'ingame') callMoment(); else discuss();
   }
@@ -18058,6 +18061,7 @@ Never name the move.`;
   }
 
   function nextRound() {
+    window.scrollTo(0, 0);
     const mode = sessionStorage.getItem('lr-mode') || 'qanda';
     if (mode === 'ingame') callMoment(); else discuss();
   }
@@ -18606,6 +18610,7 @@ McCririck died July 2019. O'Sullevan died October 2015. Both are present in this
   }
 
   function nextRound() {
+    window.scrollTo(0, 0);
     const mode = sessionStorage.getItem('hr-mode') || 'qanda';
     if (mode === 'ingame') assignRace(); else discuss();
   }
@@ -18824,6 +18829,7 @@ const Snooker = (() => {
   }
 
   function nextRound() {
+    window.scrollTo(0, 0);
     const inp = document.getElementById('sn-input');
     if (inp) inp.value = '';
     const container = document.getElementById('sn-responses');
@@ -19109,6 +19115,7 @@ const HipHop = (() => {
   }
 
   function nextRound() {
+    window.scrollTo(0, 0);
     const inp = document.getElementById('hh-input');
     if (inp) inp.value = '';
     _set('hh-responses', '');
