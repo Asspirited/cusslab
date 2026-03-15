@@ -269,6 +269,22 @@ const SNOOKER_SUGGESTIONS = [
   { text: 'Is the pink the most consequential ball on the table?', category: 'technique' },
   { text: 'Which World Championship final would you go back in time to watch?', category: 'match' },
   { text: 'Can anyone in this panel clear a full table without a miss?', category: 'absurd' },
+  { text: 'Was Steve Davis the most important player in snooker history, and is that different from being the greatest?', category: 'player' },
+  { text: 'Is John Parrott underrated or exactly as rated as he should be?', category: 'player' },
+  { text: 'What made Jimmy White the people\'s champion when the title kept going elsewhere?', category: 'player' },
+  { text: 'Is Mark Williams\'s second career peak more impressive than his first?', category: 'player' },
+  { text: 'Is a safety battle more entertaining than a century break to someone who knows what they\'re watching?', category: 'match' },
+  { text: 'At what point in a frame does a player know they\'ve lost it before they\'ve lost it?', category: 'match' },
+  { text: 'Is a 147 break under pressure fundamentally different from one in a practice frame?', category: 'match' },
+  { text: 'Was there a session in your career you can\'t explain even now?', category: 'match' },
+  { text: 'Is the rest an honourable shot or always a compromise?', category: 'technique' },
+  { text: 'Is side spin ever necessary, or is it always showing off?', category: 'technique' },
+  { text: 'What does pace of play tell you about a player\'s confidence that their shot selection doesn\'t?', category: 'technique' },
+  { text: 'What is the correct approach to the brown on a poor position after the blue?', category: 'technique' },
+  { text: 'If every member of the panel played a full-length frame right now, who finishes last and by how much?', category: 'absurd' },
+  { text: 'Is the waistcoat doing work for snooker\'s image, or has it always been aspirational cosplay?', category: 'absurd' },
+  { text: 'What would Ray Reardon\'s Dracula impression add to the commentary box?', category: 'absurd' },
+  { text: 'If the Crucible had a different vegetable, would the tournament feel the same?', category: 'absurd' },
 ];
 
 // ── TURN RULES ─────────────────────────────────────────────────────────────────

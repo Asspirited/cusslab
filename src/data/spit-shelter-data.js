@@ -179,6 +179,22 @@ const HIP_HOP_SUGGESTIONS = [
   { text: `What does a syllable count tell you about a rapper that listening can\'t?`, category: 'craft' },
   { text: `Is there a difference between a hit and a great record?`, category: 'craft' },
   { text: `Who is the most important British rapper of all time?`, category: 'legacy' },
+  { text: `Was the Wu-Tang Clan the most important collective in hip-hop history?`, category: 'legacy' },
+  { text: `Is Tupac's legacy bigger than his discography warranted, or did we underestimate the discography?`, category: 'legacy' },
+  { text: `What was the moment hip-hop became unavoidable for people who claimed not to listen to it?`, category: 'legacy' },
+  { text: `Is there a British equivalent of the moment hip-hop ate rock and roll?`, category: 'legacy' },
+  { text: `Roast this team-building email: "Let's take this offline and circle back."`, category: 'roast' },
+  { text: `Roast this corporate vision statement: "We put people first."`, category: 'roast' },
+  { text: `Roast this annual review comment: "A great year of personal development."`, category: 'roast' },
+  { text: `Roast this out-of-office: "I am currently on a digital detox retreat."`, category: 'roast' },
+  { text: `Was the East Coast/West Coast beef a marketing strategy that got too real?`, category: 'beef' },
+  { text: `Is a beef settled when both parties say it is, or when the music says it is?`, category: 'beef' },
+  { text: `What is the difference between a beef and a rivalry, and which is more honest?`, category: 'beef' },
+  { text: `Was Ice Cube's departure from NWA a creative decision, a business decision, or a survival decision?`, category: 'beef' },
+  { text: `Is the hook more important than the sixteen, and what does your answer reveal about you?`, category: 'craft' },
+  { text: `What makes a verse quotable twenty years later when it wasn't a hit?`, category: 'craft' },
+  { text: `Is production the unacknowledged argument in every rap beef?`, category: 'craft' },
+  { text: `What does a rapper's cadence tell you that the lyrics don't?`, category: 'craft' },
 ];
 
 // ── TURN RULES ─────────────────────────────────────────────────────────────────
