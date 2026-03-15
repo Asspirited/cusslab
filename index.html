@@ -18727,6 +18727,29 @@ const Snooker = (() => {
     }
   }
 
+  function _snPlaceholder(pid, m) {
+    return `<div class="bills-response-block" id="${pid}" style="background:${m.bg};border-left-color:${m.colour};opacity:0.6;">
+      <div class="bills-response-header">
+        <span style="font-size:28px;">${m.icon}</span>
+        <div>
+          <div class="bills-response-name" style="color:${m.colour};">${m.name}</div>
+          <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">Thinking…</div>
+        </div>
+      </div>
+      <div class="bills-response-body" style="color:var(--muted);font-style:italic;"><span class="typing-dots">▋</span></div>
+    </div>`;
+  }
+
+  function _snFill(pid, m, text) {
+    const el = document.getElementById(pid);
+    if (!el) return;
+    el.style.opacity = '1';
+    const body = el.querySelector('.bills-response-body');
+    if (body) { body.style.color = ''; body.style.fontStyle = ''; body.textContent = text || '…'; }
+    const sub = el.querySelector('.bills-response-header div div:last-child');
+    if (sub) sub.textContent = '';
+  }
+
   async function discuss() {
     if (_snBusy) return;
     const question = (document.getElementById('sn-input')?.value || '').trim();
@@ -18735,15 +18758,19 @@ const Snooker = (() => {
 
     const btn = document.getElementById('sn-submit-btn');
     if (btn) { btn.disabled = true; btn.textContent = 'DISCUSSING… 🎱'; }
-    _snShow('sn-loading');
-    _snSet('sn-responses', '');
+    _snHide('sn-loading');
+    const container = document.getElementById('sn-responses');
+    if (container) container.innerHTML = '';
 
     const ORDER = [HOST_ID, ..._snookerPick4()];
     const responses = [];
 
-    for (const memberId of ORDER) {
-      const m = _memberById(memberId);
+    for (let i = 0; i < ORDER.length; i++) {
+      const m = _memberById(ORDER[i]);
       if (!m) continue;
+      const pid = 'sn-ph-' + i;
+      if (container) container.insertAdjacentHTML('beforeend', _snPlaceholder(pid, m));
+
       const prior = responses.length
         ? `\n\nWhat has been said so far:\n${responses.map(r => `${r.name}: ${r.text}`).join('\n\n')}\n\nNow it is your turn.`
         : '\n\nYou speak first.';
@@ -18752,18 +18779,12 @@ const Snooker = (() => {
       try {
         const text = await API.call(sys, msg, 350, 'snooker/discuss');
         responses.push({ name: m.name, text });
+        _snFill(pid, m, text);
       } catch (e) {
         responses.push({ name: m.name, text: '…' });
+        _snFill(pid, m, '…');
       }
     }
-
-    _snHide('sn-loading');
-    _snSet('sn-responses', responses.map(r =>
-      `<div class="bills-response" style="margin-bottom:20px;">
-        <div class="bills-response-speaker">${r.name.toUpperCase()}</div>
-        <div class="bills-response-body" style="white-space:pre-wrap;">${r.text}</div>
-      </div>`
-    ).join(''));
 
     if (btn) { btn.disabled = false; btn.textContent = 'ASK THE PANEL 🎱'; }
     _snBusy = false;
@@ -18774,7 +18795,8 @@ const Snooker = (() => {
   function nextRound() {
     const inp = document.getElementById('sn-input');
     if (inp) inp.value = '';
-    _snSet('sn-responses', '');
+    const container = document.getElementById('sn-responses');
+    if (container) container.innerHTML = '';
     const btn = document.getElementById('sn-submit-btn');
     if (btn) { btn.disabled = false; btn.textContent = 'ASK THE PANEL 🎱'; }
     _snBusy = false;

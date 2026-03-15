@@ -1559,3 +1559,21 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Epic: Narrative Move Model
 - CD3: UBV=5 TC=2 RR=1 → CoD=8, Dur=2, **CD3=4.0**
 - Status: OPEN — raised 2026-03-15
+
+---
+
+### BL-154 — Dead Panel Mode: living members spiral into existential dread
+
+- Description: Special game mode for sports panels with existing DEAD_IN_PANEL_WORLD members. All panel members except 1–2 are dead. Dead members behave entirely normally — fully in character, present, opinionated. The living member(s) are visibly unsettled. Their unease escalates across turns: they begin referencing the wrongness obliquely, then more directly, until by the end they genuinely can't rule out that they too are dead. The dead characters are not sinister. They simply don't see what the fuss is about. Comedy engine: the living character's existential spiral vs total dead-character indifference. Applicable panels immediately: Crucible Corner (Thorne + Reardon dead), Final Furlong (McCririck + O'Sullevan dead), Spit Shelter (Biggie + Tupac + Gil dead). Golf panel has no dead members currently — requires a dead member addition before mode applies. Needs Three Amigos on: trigger mechanism (atmosphere selector? separate mode button?), how living character's spiral escalates across turns (TURN_RULES injection?), and whether dead characters get any cue that they're being observed by the living.
+- Feature: platform
+- CD3: UBV=8 TC=6 RR=7 → CoD=21, Dur=4, **CD3=5.25**
+- Status: OPEN — raised 2026-03-15. Three Amigos needed before Gherkin.
+
+---
+
+### BL-155 — Character touchstone moments: shared panel reference library
+
+- Description: Each character has one or more canonical "touchstone moments" — a specific, nameable real-world or panel-world incident that other characters can invoke to rebuke, roast, or celebrate them. Different from a wound (internal) — a touchstone is public, known to the whole panel, and can be weaponised or used warmly. Examples: Howell's "Tommy Firewood" (said on air, everyone knows), Keane's "prawn sandwich" (what he called the corporate crowd), Keane's "Vieira in the tunnel" (aggression made explicit), Dennis Taylor's final black at 12:23am. Other characters reference them mid-panel as shorthand — "this is your Firewood moment" or "in the spirit of the prawn sandwich…". Design approach: equivalence partitioning — group characters by touchstone type (verbal gaffe / confrontation / defining moment / record etc.) and test the mechanic against one representative example per type. If a type needs fixing, add specific examples; these will likely apply across panels and characters. Design questions to resolve at Three Amigos: (1) fixed touchstone library per character (1–3 entries) vs emergent; (2) injected into other characters' prompts or panel-level TURN_RULES shared memory; (3) panel-specific or cross-panel availability. Needs research pass to identify best touchstone candidates per panel before implementation.
+- Feature: platform
+- CD3: UBV=8 TC=7 RR=6 → CoD=21, Dur=4, **CD3=5.25**
+- Status: OPEN — raised 2026-03-15. Three Amigos needed before Gherkin.

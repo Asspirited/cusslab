@@ -78,6 +78,13 @@ Full notes: notes/2026-03-09-phils-opoly.md
 Open question: what panel does this belong to? New panel or extension of existing?
 Placement decision needed before any BL item can be raised.
 
+### IDEA: House Name Oracle
+Added: 2026-03-10 | Source: Claude.ai design session
+Postcode research → comedy house name generator. Three characters: Phil Spencer (market value translator), Kirstie Allsopp (The Kirstie Reframe — finds aspirational angle in any grim reality), Dion Dublin (The Dublin Drift — four-stage digression ending in accidental boast). Oracle researches topography, history, deprivation index, spurious heritage, wrong attributions. Outputs three names per query (The Dignified / The Knowing / The Unhinged) each with one-line rationale. Comedy engine: gap between aspiration and reality. Non-agreement ending: Oracle overrides all three.
+Open questions: standalone product or new cusslab section? Shared Worker + character framework feasible.
+Needs Three Amigos + placement decision before any BL item can be raised.
+Full design notes archived from: notes/2026-03-10-house-name-oracle.md
+
 ### IDEA: Nostradamus as Author Epilogue voice
 Added: 2026-03-10 | Source: Rod
 The comedy IS the quatrain format applied to golf — which is why it's here and not in backlog.
