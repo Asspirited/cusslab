@@ -161,3 +161,4 @@ Golf, QuntumLeeks. As new panels ship, add them to the charter:
 | Session start step 2c | Read Rule 5 |
 | Pipeline RED with no code change | Diagnose false negative; check Node/browser scope gap |
 | Pipeline GREEN but Rod reports broken | False green — WL entry immediately, then follow ci-cd.md Recovery Playbook |
+| Designing test cases, choosing Gherkin examples, reviewing coverage gaps | Read `.claude/practices/test-design-techniques.md` |

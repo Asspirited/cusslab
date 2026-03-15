@@ -1870,6 +1870,18 @@ Status: CLOSED
 **Tags:** `#gherkin` `#step-definitions` `#self-caused`
 **Status:** Closed — fixed same session. Pattern: when writing step defs for a large IIFE, verify member IDs and function structure from actual code before writing lookups.
 
+### WL-146
+**Item:** Snooker panel (The Crucible Corner) had no coloured character cards and batched all responses before rendering
+**Symptom:** (1) All character response cards rendered in plain unstyled divs — no per-character colour, background, or icon. (2) All 5 API calls completed before anything appeared — user waited the full sequential call time (~15s) before seeing any output.
+**Root cause:** Snooker IIFE was built before the `bills-response-block` + placeholder pattern was established. SNOOKER_MEMBERS in crucible-corner-data.js had no `colour`/`bg`/`icon` fields. `discuss()` accumulated all responses then rendered once, instead of rendering a placeholder per character immediately and filling as each response arrived.
+**Session:** 2026-03-15
+**Time lost:** Rod caught in exploratory test
+**Cost impact:** Medium — visible UX degradation in a live panel, affected every Crucible Corner Q&A run
+**Tags:** `#rod-caught` `#ux` `#progressive-rendering` `#missing-pattern`
+**Status:** CLOSED — commit 682e9e0. Added `colour`/`bg`/`icon` to all 9 SNOOKER_MEMBERS. Replaced batch render with `_snPlaceholder`/`_snFill` pattern matching Golf, Boardroom, Darts, Cricket panels.
+
+---
+
 ### WL-145
 **Item:** `sed -i` with `\n` in pattern wiped backlog.md to 0 bytes
 **Symptom:** Attempted `sed -i 's/Status: OPEN.../Status: CLOSED/'` with newlines in the pattern. On this platform `sed -i` with `\n` in pattern matched nothing and output empty string, overwriting the file entirely. backlog.md became 0 bytes.

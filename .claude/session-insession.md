@@ -654,3 +654,4 @@ pipeline/gherkin-runner.js         — Gherkin step definitions
 .claude/practices/hypothesis-driven.md — outer loop: hypothesis card, AARRR, pivot/persevere
 .claude/practices/user-stories.md     — work decomposition: INVEST, Three C's, SPIDR splitting, epic decomposition
 .claude/practices/ideas.md            — ideas board: unvalidated concepts, raw captures, pre-backlog holding area
+.claude/practices/test-design-techniques.md — EP, BVA, decision tables, state transition, mutation, property-based, SBET, pairwise, risk-based — read when designing test cases or choosing Gherkin examples

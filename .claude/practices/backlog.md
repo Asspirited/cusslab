@@ -1558,7 +1558,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Feature: golf-adventure
 - Epic: Narrative Move Model
 - CD3: UBV=5 TC=2 RR=1 → CoD=8, Dur=2, **CD3=4.0**
-- Status: OPEN — raised 2026-03-15
+- Status: CLOSED — 2026-03-15. Commit ee75540. Howell member entry added to Golf MEMBERS + both baseOrder variants. 6 Gherkin scenarios. Pipeline GREEN.
 
 ---
 
@@ -1577,3 +1577,12 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Feature: platform
 - CD3: UBV=8 TC=7 RR=6 → CoD=21, Dur=4, **CD3=5.25**
 - Status: OPEN — raised 2026-03-15. Three Amigos needed before Gherkin.
+
+---
+
+### BL-156 — Test design techniques: in-session protocol (EP, BVA, and full set)
+
+- Description: Add equivalence partitioning, boundary value analysis, and a full set of complementary test design techniques as in-session testing protocols. Architecture agreed: `.claude/practices/test-design-techniques.md` (new file, full detail) + one pointer row in session-insession.md REFERENCE FILES + one row in testing-standards.md When to Read table. Keeps insession lean; full detail available on demand. Techniques covered: EP, BVA, decision table, state transition, error guessing, pairwise/combinatorial, use case/scenario, mutation testing (Stryker), property-based (fast-check), risk-based, SBET, cause-effect graphing. Each with: definition, codebase example, layer, authority.
+- Feature: platform
+- CD3: UBV=4 TC=6 RR=5 → CoD=15, Dur=1, **CD3=15.0**
+- Status: CLOSED — 2026-03-15. test-design-techniques.md written. Wired into session-insession.md and testing-standards.md.
