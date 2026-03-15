@@ -107,7 +107,7 @@ This is the handoff from the other Claude. If file doesn't exist: note it and co
 
 **Then:** Read `.claude/practices/waste-log.md` — read the `## OPEN ITEMS` index block at the top of the file. Report all items listed there.
 
-Current open items as of 2026-03-15 (session 10): WL-131 (character dullness — Three Amigos needed), WL-136 (UI audit doesn't check IIFE return completeness — pipeline gap), WL-134 (Pub Crawl outcome feedback — Nielsen gap).
+Current open items as of 2026-03-15 (session 13 close): WL-131 (character dullness — Three Amigos needed), WL-136 (UI audit doesn't check IIFE return completeness — pipeline gap), WL-147 (backlog-report.js false-positive OPEN for items whose description contains "status text" — fix: tighten regex).
 
 ---
 
@@ -121,22 +121,32 @@ For each open product-bet item, ask:
 - Is there a falsifier — something that would tell us we were wrong?
 Full outer loop: `.claude/practices/hypothesis-driven.md`
 
-Current top 3 as of 2026-03-15 (session 12 post close):
-- BL-128 Pub Crawl UX: pressure feedback, threshold visibility, game-goal clarity (CD3=7.0) — OPEN
-- BL-139 Character audit: 6 characters with no active panel assignment (CD3=6.0) — OPEN
+Current top 3 as of 2026-03-15 (session 13 close):
 - BL-146 Golf panel: character technical knowledge enrichment (CD3=6.0) — OPEN
+- BL-151 Per-character mode selector (CD3=5.7) — OPEN
+- BL-157 Vinny Jones → football + Boardroom (CD3=5.5) — Three Amigos needed
 
-NOTE: backlog-report.js shows BL-132 (CD3=22.0) as OPEN — this is a parser bug. BL-132 is CLOSED (shipped 2026-03-14). Do not work on BL-132.
+NOTE: backlog-report.js shows BL-128 (CD3=7.0) and BL-132 (CD3=22.0) as OPEN — parser bug (WL-147). Both are CLOSED. Ignore them. Real top item is BL-146.
 
-Recently closed (2026-03-15 session 12):
-- BL-152 YOUR OWN ANGLE FIRST rolled out to Comedy Room, Science Convention, Darts, Long Room
-- BL-144 ConversationArc accumulation — Golf discuss() gets arcLog + NARRATIVE ARC SO FAR block
-- BL-145 Arc state guard — postureType register system, recentMoves[], REGISTER BREAK injection
+Recently closed (2026-03-15 session 13):
+- BL-139 Character audit: # Panel headers added to 11 characters
+- BL-148 Bruce Lee removed from football panel
+- BL-149 Roy Keane added to football panel
+- BL-150 Rodney Marsh added to football panel
+- BL-157 Vinny Jones BL raised (Three Amigos pending)
+- BL-158 Souness's Cat rethink BL raised (Three Amigos pending)
+- BL-159 Snooker speech pattern expansion BL raised
+- nextRound() auto-scroll added to all 7 panels
+- Snooker **name:** prefix bug fixed (SNOOKER_TURN_RULES rule added)
+- Prof Cox removed from football panel (all 12 locations)
 
-WL-145 added: sed -i wiped backlog.md — recovered from git. Rule: use Edit tool, not sed, for markdown.
+WL-147 added: backlog-report.js status regex false-positive — fix deferred.
 WL-136 (IIFE return check in UI audit) still OPEN — pipeline false-green risk.
 WL-131 (character dullness) still OPEN — Three Amigos needed.
-WL-134 (Pub Crawl outcome feedback) still OPEN — Nielsen review needed.
+
+Agreed next session (from 2026-03-15 session 13 close):
+- BL-146: Golf panel technical knowledge enrichment — Gherkin needed (data spike, then enrich character prompts)
+- BL-157: Vinny Jones → football + Boardroom — Three Amigos first
 
 BL-153 raised: David Howell ("Howling Mad David") for Golf panel (CD3=4.0).
 

@@ -16,6 +16,7 @@
 | WL-123 | Session context overflow mid-session | Low | Ongoing mitigation: split large sessions; read index.html in sections |
 | WL-131 | Character dullness — "X is right/wrong" openers, "I've watched this back" bleeding | Medium | Three Amigos needed before touching TURN_RULES |
 | WL-136 | UI audit: IIFE return objects not checked — exports can go missing silently | High | Add pipeline check: verify each global wrapper's IIFE target is in return statement |
+| WL-147 | backlog-report.js: `Status[:\s]+` regex matches "status text" in descriptions, falsely marking items OPEN | Low | Tighten regex to `^\s*[-*]\s*Status:` in multiline mode |
 
 ---
 
@@ -1905,3 +1906,15 @@ Status: CLOSED
 **Cost impact:** Low — recovered from git with no lost content
 **Tags:** `#self-caused` `#tool-misuse` `#use-edit-not-bash`
 **Status:** Closed — recovered via `git checkout HEAD -- .claude/practices/backlog.md`. Rule: never use `sed -i` on project markdown files — use the Edit tool.
+
+---
+
+### WL-147
+**Item:** backlog-report.js status parser false-positive OPEN on BL-128
+**Symptom:** BL-128 (Status: CLOSED) appears in OPEN list of backlog-report.js output. CD3=7.0 inflates apparent open workload.
+**Root cause:** Status regex `Status[:\s]+` is too broad — it matches "contextual status text" in the BL-128 description before reaching the actual `- Status: CLOSED` line. The capture group returns "text after each delta:..." which doesn't contain "closed", so status = OPEN. Fix: tighten regex to `^\s*[-*]\s*Status:` (line-anchor, not substring match) in pipeline/backlog-report.js.
+**Session:** 2026-03-15
+**Time lost:** ~5 min diagnosis during closedown
+**Cost impact:** Low — data correct in backlog.md; misleading report only
+**Tags:** `#parser-bug` `#backlog-report` `#false-open` `#pipeline`
+**Status:** Open — fix: tighten status regex in pipeline/backlog-report.js to `^\s*[-*]\s*Status:` (multiline mode)
