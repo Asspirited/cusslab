@@ -7096,6 +7096,102 @@ function makeSteps(ctx) {
       }
     }],
 
+    // ── BL-152 — Narrative posture roll-out (specs/bl-152-narrative-posture-rollout.feature) ──
+
+    [/^the index\.html source is loaded$/, () => {
+      ctx._html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+    }],
+
+    [/^the Comedy Room TURN_RULES does not contain "([^"]+)"$/, (text) => {
+      const html = ctx._html || '';
+      const iife = html.slice(html.indexOf('const ComedyRoom = (() => {'));
+      const trStart = iife.indexOf('const TURN_RULES');
+      if (trStart < 0) throw new Error('Comedy Room TURN_RULES not found in ComedyRoom IIFE');
+      const trBlock = iife.slice(trStart, trStart + 3000);
+      if (trBlock.includes(text)) throw new Error(`Comedy Room TURN_RULES should not contain "${text}" but does`);
+    }],
+
+    [/^the Comedy Room TURN_RULES contains "([^"]+)"$/, (text) => {
+      const html = ctx._html || '';
+      const iife = html.slice(html.indexOf('const ComedyRoom = (() => {'));
+      const trStart = iife.indexOf('const TURN_RULES');
+      if (trStart < 0) throw new Error('Comedy Room TURN_RULES not found in ComedyRoom IIFE');
+      const trBlock = iife.slice(trStart, trStart + 3000);
+      if (!trBlock.includes(text)) throw new Error(`Comedy Room TURN_RULES does not contain "${text}"`);
+    }],
+
+    [/^the Science Convention TURN_RULES does not contain "([^"]+)"$/, (text) => {
+      const html = ctx._html || '';
+      const iife = html.slice(html.indexOf('const SounessCat = (() => {'));
+      const trStart = iife.indexOf('const TURN_RULES');
+      if (trStart < 0) throw new Error('Science Convention TURN_RULES not found in SounessCat IIFE');
+      const trBlock = iife.slice(trStart, trStart + 3000);
+      if (trBlock.includes(text)) throw new Error(`Science Convention TURN_RULES should not contain "${text}" but does`);
+    }],
+
+    [/^the Science Convention TURN_RULES contains "([^"]+)"$/, (text) => {
+      const html = ctx._html || '';
+      const iife = html.slice(html.indexOf('const SounessCat = (() => {'));
+      const trStart = iife.indexOf('const TURN_RULES');
+      if (trStart < 0) throw new Error('Science Convention TURN_RULES not found in SounessCat IIFE');
+      const trBlock = iife.slice(trStart, trStart + 3000);
+      if (!trBlock.includes(text)) throw new Error(`Science Convention TURN_RULES does not contain "${text}"`);
+    }],
+
+    [/^the Darts TURN_RULES does not contain "([^"]+)"$/, (text) => {
+      const html = ctx._html || '';
+      const iife = html.slice(html.indexOf('const Darts = (() => {'));
+      const trStart = iife.indexOf('const DARTS_TURN_RULES');
+      if (trStart < 0) throw new Error('DARTS_TURN_RULES not found in Darts IIFE');
+      const trBlock = iife.slice(trStart, trStart + 3000);
+      if (trBlock.includes(text)) throw new Error(`Darts TURN_RULES should not contain "${text}" but does`);
+    }],
+
+    [/^the Darts TURN_RULES contains "([^"]+)"$/, (text) => {
+      const html = ctx._html || '';
+      const iife = html.slice(html.indexOf('const Darts = (() => {'));
+      const trStart = iife.indexOf('const DARTS_TURN_RULES');
+      if (trStart < 0) throw new Error('DARTS_TURN_RULES not found in Darts IIFE');
+      const trBlock = iife.slice(trStart, trStart + 3000);
+      if (!trBlock.includes(text)) throw new Error(`Darts TURN_RULES does not contain "${text}"`);
+    }],
+
+    [/^the Long Room TURN_RULES does not contain "([^"]+)"$/, (text) => {
+      const html = ctx._html || '';
+      const iife = html.slice(html.indexOf('const LongRoom = (() => {'));
+      const trStart = iife.indexOf('const TURN_RULES');
+      if (trStart < 0) throw new Error('Long Room TURN_RULES not found in LongRoom IIFE');
+      const trBlock = iife.slice(trStart, trStart + 3000);
+      if (trBlock.includes(text)) throw new Error(`Long Room TURN_RULES should not contain "${text}" but does`);
+    }],
+
+    [/^the Long Room TURN_RULES contains "([^"]+)"$/, (text) => {
+      const html = ctx._html || '';
+      const iife = html.slice(html.indexOf('const LongRoom = (() => {'));
+      const trStart = iife.indexOf('const TURN_RULES');
+      if (trStart < 0) throw new Error('Long Room TURN_RULES not found in LongRoom IIFE');
+      const trBlock = iife.slice(trStart, trStart + 3000);
+      if (!trBlock.includes(text)) throw new Error(`Long Room TURN_RULES does not contain "${text}"`);
+    }],
+
+    [/^the Football TURN_RULES does not contain "([^"]+)"$/, (text) => {
+      const html = ctx._html || '';
+      const iife = html.slice(html.indexOf('const Football = (() => {'));
+      const trStart = iife.indexOf('const TURN_RULES');
+      if (trStart < 0) throw new Error('Football TURN_RULES not found in Football IIFE');
+      const trBlock = iife.slice(trStart, trStart + 3000);
+      if (trBlock.includes(text)) throw new Error(`Football TURN_RULES should not contain "${text}" but does`);
+    }],
+
+    [/^the Football TURN_RULES contains "([^"]+)"$/, (text) => {
+      const html = ctx._html || '';
+      const iife = html.slice(html.indexOf('const Football = (() => {'));
+      const trStart = iife.indexOf('const TURN_RULES');
+      if (trStart < 0) throw new Error('Football TURN_RULES not found in Football IIFE');
+      const trBlock = iife.slice(trStart, trStart + 3000);
+      if (!trBlock.includes(text)) throw new Error(`Football TURN_RULES does not contain "${text}"`);
+    }],
+
     // ── Golf Adventure WatchBack (specs/golf-adventure-watchback.feature) ────────
 
     [/^GOLF_PANEL_MEMBER_IDS contains "([^"]+)"$/, (id) => {
