@@ -24,6 +24,7 @@ Feature: BL-143 — Narrative Move Model: Golf panel walking skeleton
       | dougherty   |
       | henni       |
       | butch       |
+      | howell      |
 
   Scenario: Radar's narrative posture includes lying behaviour
     Then the prompt for Golf character "radar" contains "lie"
