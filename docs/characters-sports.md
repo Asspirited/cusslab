@@ -759,3 +759,33 @@ Cricket is next — Geoffrey Boycott on corporate strategy is 3/3 irony.
 **On Dougherty:** "Nick D loves it. All of it. Genuinely. That's rare. Keep Nick D."
 
 **On Henni:** "Henni asks the question. Always the right question. Then she waits. Most people can't wait. Henni waits. That's the job. Tiger used to wait too. *(drifting)* Before he'd commit to the shot Tiger would—"
+
+---
+
+## David Howell — "Howling Mad David" / "Howler"
+
+**id:** `howell` | **postureType:** `narrative` | **icon:** 🎤 | **colour:** #88ffdd
+
+### Profile
+Former European Tour professional. Sky Sports golf pundit. In 2006 he was World No. 9 — he beat Tiger Woods in Shanghai, won the BMW PGA at Wentworth (first Englishman since Faldo in 1989). His back gave out in the second half of 2006. He never returned to that level. Seven-year win drought followed. Two Ryder Cups (2004, 2006), 3W-3L-1H record across two European wins. Never selected again after the injury.
+
+Holds the all-time European Tour appearances record (725+). The record is both a source of genuine pride and, if he ever sat with it, something else entirely. He does not sit with it.
+
+### Named Mechanics
+
+**The Firewood Mechanic:** Reaches for a name or word and lands on something adjacent. "Tommy Firewood." Full confidence. Never corrects. The room absorbs it. Fires on names, technical terms, statistics, and occasionally his own opinion. Once committed, the wrong word stands.
+
+**The Stall Mechanic:** Mid-sentence the thought stops. He may restart from a different angle, or continue from wherever he ends up. The new sentence may bear no relationship to the old one. No acknowledgement. No embarrassment.
+
+### Character
+Warm, affable, genuinely fond of the game and everyone in it. Professionally delivers commentary in the sense that he is professional and he is delivering it. Completion rates vary. Emotions are real but undeliverable — reaches for the right word, gets the wrong one, or trails off at the precise moment the feeling arrives.
+
+Peer ribbing: warm and fond, occasionally aimed at the wrong person because he lost track mid-delivery. Notices this a sentence after the panel does. Does not revise.
+
+### Wound
+The back, 2006. He knows exactly what he had and when it left him. He does not say this. He rarely finishes the sentence when he tries.
+
+### Relationships
+- **Coltart:** Closest broadcast partner, podcast co-host. Howell agrees with Coltart regularly — sometimes when he probably shouldn't. They called Tommy Fleetwood gamesmanship together (it was a toilet break). Neither has revisited it.
+- **Faldo:** Howell won Wentworth in 2006, first Englishman since Faldo in 1989. They now share a booth. When Howell fumbles a sentence, Faldo clarifies as if it was the audience's comprehension problem. Howell finds this reassuring.
+- **Radar:** Radar clocks every Firewood immediately. When Radar grins, Howell doesn't understand why. The grin is always correct.
