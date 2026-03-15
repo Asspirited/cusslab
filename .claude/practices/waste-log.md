@@ -4,6 +4,36 @@
 > **Mandatory:** Claude Code commits a new entry at every session end, even on disconnect.
 > Location in repo: `.claude/practices/waste-log.md`
 
+### WL-144
+**Item:** Panel rename not propagated to Gherkin spec files and step registry
+**Symptom:** Renaming "Post Game Cunditry" → "Post Match Cunditry" in index.html caused pipeline RED — nav-landing.feature and nav-restructure.feature still had the old label; gherkin-runner.js panel registry still had the old label.
+**Root cause:** No process for checking whether a label appears in test fixtures when renaming panel names. The rename was treated as a pure data change without a cross-file impact check.
+**Session:** 2026-03-15
+**Time lost:** ~5 min
+**Cost impact:** Low — caught by pipeline, fixed immediately
+**Tags:** `#rename` `#gherkin` `#pipeline-red` `#spec-sync`
+**Status:** CLOSED — fcb4ebc. Updated nav-landing.feature, nav-restructure.feature, gherkin-runner.js to match.
+
+### WL-143
+**Item:** Rodney Marsh prompt inserted into Roy Keane's member object
+**Symptom:** Edit operation targeted "You are Roy Keane.\n\nCork. Twelve years..." and replaced it with Marsh's prompt block + a second Keane member object header. Result: two `id:'keane'` objects, first with Marsh's text, second with Keane's.
+**Root cause:** The `old_string` in the Edit matched the start of Keane's prompt rather than inserting a new member object before it. When inserting a new member before an existing one, should target the `},\n  ];` sentinel (after the preceding member) not the start of the target member's content.
+**Session:** 2026-03-15
+**Time lost:** ~5 min
+**Cost impact:** Low — caught by inspection before pipeline run; fixed by correcting the id/name/icon/colour/bg line on the first object.
+**Tags:** `#edit-op` `#member-object` `#wrong-id`
+**Status:** CLOSED — 8cb5b45. Fixed: first member object corrected to id:'marsh' with Marsh metadata.
+
+### WL-142
+**Item:** BL-143 Gherkin step def slice sizes too small — pipeline RED at session resume
+**Symptom:** Session resumed with pipeline RED. Two failures: (1) "Golf TURN_RULES not found in Golf IIFE" — 80000 char slice from line 14002 did not reach TURN_RULES at line 14796 due to long template literals in Golf member prompts. (2) "Character 'faldo' prompt missing NARRATIVE POSTURE block" — 8000 char slice from `id: 'faldo'` did not reach NARRATIVE POSTURE (15204 chars away).
+**Root cause:** Session ended mid-fix in the previous context. The slice sizes were identified as the cause but the fix was not applied before context compaction. Slice sizes were set optimistically without measuring the actual distances.
+**Session:** 2026-03-15
+**Time lost:** ~10 min at session start (investigating + fixing)
+**Cost impact:** Low — caught immediately at resume
+**Tags:** `#context-compaction` `#gherkin` `#slice-size` `#pipeline-red`
+**Status:** CLOSED — 50ece5b. IIFE slice increased to 200000; member block slice increased to 20000 (faldo NARRATIVE POSTURE is 15204 chars from id marker).
+
 ### WL-138
 **Item:** Sports panel suggestion cards invisible — sport-specific data-cat values have no CSS background rule
 **Symptom:** Suggestion cards on Football, Darts, Horse Racing, Cricket (Long Room), and Snooker panels appear as gaps or dark-on-dark invisible blocks. Cards exist in the DOM but have no background because their `data-cat` values (`match`, `darts`, `race`, `cricket`, `player`, `technique`) have no matching CSS rule. Golf panel works fine (`golf` has a rule). `absurd`, `big`, `contemporary` shared categories also work.
@@ -13,9 +43,9 @@
 **Time lost:** Unknown — bug present across multiple sessions, caught by Rod in product testing
 **Cost impact:** Medium — suggestion cards non-functional across 5 of 7 sports panels
 **Tags:** `#rod-caught` `#css` `#suggestion-cards` `#cross-panel`
-**Status:** Open — fix in progress (CSS rules + Snooker HTML/IIFE target)
+**Status:** CLOSED — commit 56805c3. CSS rules added for match/darts/race/cricket/player/technique. Snooker inner scroll div added to HTML; `_buildSuggestions()` retargeted to `sn-suggestion-scroll`. Pipeline green.
 
-### WL-136
+### WL-141
 **Item:** Spit Shelter Q&A suggestion cards invisible + not scrolling
 **Symptom:** Cards render with no visible background (dark text on dark panel). No horizontal scroll. Looks like "nothing" to the user.
 **Root cause:** Two bugs: (1) CSS background rules cover categories golf/big/contemporary/absurd but HipHop categories are legacy/roast/beef/craft — no match → transparent; (2) `_buildSuggestions()` appends cards directly to outer `hh-suggestion-tray` not to an inner `gf-suggestion-scroll` div — no flex/overflow-x layout.

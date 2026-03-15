@@ -1520,3 +1520,21 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Hypothesis: Marsh brings a different era of footballing pundit — unapologetic, irreverent, pre-Sky era directness. Contrast with modern analytics (Neville) and rage (Keane/Souness).
 - Depends on: BL-149 (football housekeeping done first)
 - Status: CLOSED — 2026-03-15. characters/rodney-marsh.md created. Full panel member object added (id:'marsh', QPR legend, tsunami joke wound, Soccer Saturday snub, Ramsey 9 caps, Francis Lee blame). Added to BASE_ORDER, all Football config structures. Also: Bruce Lee added to WritingRoom (WR_AUTHORS_POOL + voice signature). Pipeline GREEN 1775/1775.
+
+---
+
+### BL-151 — Per-character mode selector: character-level atmosphere/posture overrides
+
+- Description: The current atmosphere/mode selectors (bloodbath, powder keg, etc.) apply panel-wide. Rod wants the ability to apply character-level posture overrides independently — turning a specific character into an antagonist, sycophant, weirdo, etc. for a session. Examples of per-character modes: ANTAGONIST (hostile to all positions), SYCOPHANT (agrees with and amplifies everything), WEIRDO (lateral, unexpected, possibly incoherent register), OVERLY_STIMULATED_EROTICALLY (everything is about something else), MUSHY (uncharacteristic warmth, may be alarming), PATERNAL (protective/disappointed, treats room as children), NOSTALGIC (everything connects to a golden past), ANGRY (volcanic, barely controlled), INFURIATED (past volcanic — actually incandescent), PERPLEXED (genuinely cannot follow what's happening, asks clarifying questions). Implementation: a per-character override selector (dropdown or toggle) in the panel UI that injects a posture modifier into that character's prompt before the main TURN_RULES. The override is session-local — resets on next submit unless held. Multiple characters can have different overrides simultaneously.
+- Output: Per-character mode UI element added to each panel that supports it; character-level posture modifier injected into the relevant character prompt at discuss() time; at minimum covers Football panel as proof-of-concept.
+- Feature: football (PoC), then other panels
+- Epic: Character Mode Overrides
+- CD3: UBV=8 TC=5 RR=4 → CoD=17, Dur=3, **CD3=5.7**
+- Hypothesis:
+  - **Actor:** Rod running a panel
+  - **AARRR:** Engagement — Rod can craft specific tension dynamics (one antagonist, one sycophant) rather than relying on panel-wide atmosphere
+  - **Signal:** Rod uses per-character overrides to create scenes that wouldn't emerge from the default character mix
+  - **Falsifier:** Overrides feel forced or collapse character voice consistency
+  - **Window:** First use in a session with overrides active
+- Depends on: none (new layer on top of existing prompt structure)
+- Status: OPEN — raised 2026-03-15

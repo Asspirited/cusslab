@@ -110,16 +110,25 @@ For each open product-bet item, ask:
 - Is there a falsifier — something that would tell us we were wrong?
 Full outer loop: `.claude/practices/hypothesis-driven.md`
 
-Current top 3 as of 2026-03-15 (session 10 post close):
+Current top 3 as of 2026-03-15 (session 11 post close):
 - BL-132 School Mode cross-panel convention (CD3=22.0) — OPEN
-- BL-128 Pub Crawl UX: pressure feedback (CD3=7.0) — OPEN
-- BL-139 Character audit: 6 with no active panel (CD3=6.0) — OPEN
+- BL-145 Narrative Move Model: arc state guard (CD3=14.0) — OPEN
+- BL-144 Narrative Move Model: ConversationArc accumulation (CD3=8.5) — OPEN
 
-Recently closed (2026-03-15 session 10):
-- BL-082 Football Author Epilogue — button + 27-author pool + queue + getLastContext() API
-- BL-133/134/135 Comedy Room: Dave Chappelle, Richard Pryor, Louis CK
-- BL-136/137/138 Comedy Room: Jim Jefferies, Ricky Gervais, Frankie Boyle
-- BL-083/084/085/086 Author Epilogue for Darts, Cricket, Oracle, Boardroom — commit dba21c1
+Recently closed (2026-03-15 session 11):
+- BL-141 Suggestion cards: cap at 5 + refresh button (from previous session)
+- BL-142 Suggestion card pool expansion to 30 questions (from previous session)
+- BL-143 Golf narrative posture — TURN_RULES RULE 2 replaced; NARRATIVE POSTURE blocks added to all 9 Golf members
+- BL-147 Football panel rename: "Post Game Cunditry" → "Post Match Cunditry"
+- BL-148 Bruce Lee removed from Football panel
+- BL-149 Roy Keane added to Football panel (full pundit character)
+- BL-150 Rodney Marsh added to Football panel; Bruce Lee added to WritingRoom
+
+Exploratory test (BL-143): Rod ran Golf panel and reports "magnificent" — narrative arc working.
+BL-144 (ConversationArc accumulation) and BL-145 (arc state guard) are unlocked — next logical steps.
+BL-151 (per-character mode overrides) raised this session — Rod wants to set individual characters as antagonist/sycophant/weirdo/etc.
+WL-136 (IIFE return check in UI audit) still OPEN — pipeline false-green risk.
+WL numbering fixed this session: duplicate WL-136 renumbered; new session entries WL-141/142/143/144.
 - BL-140 Spit Shelter Q&A: fix invisible suggestion cards + scroll — commit 618bd9c
 
 Open product bets under discussion:
