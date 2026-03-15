@@ -41,7 +41,7 @@ const NAV_GROUPS = {
   boardroom:     ['Present to the Boardroom'],
   comedy:        ['The Comedy Room','The House Name Oracle','The Roast Room','The Writing Room'],
   showers:       ["Souness's Cat","Phil's-opoly",'Ask Sun Tzu','Premise Interrogation'],
-  sports:        ['Post Game Cunditry', 'The 19th Hole', 'Watching the Oche', 'The Long Room', 'The Final Furlong'],
+  sports:        ['Post Match Cunditry', 'The 19th Hole', 'Watching the Oche', 'The Long Room', 'The Final Furlong'],
   play:          ['Roast Battle','Dinner Party',"Rogues' Gallery",'Comedy Lab','Dimension Duel'],
   misadventure:  ['Relive Golfing Greatness', 'Survive a Friday night at...', 'Friday Pub Crawl Misadventure', 'Quntum Leeks'],
 };

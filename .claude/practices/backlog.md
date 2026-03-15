@@ -1471,6 +1471,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 
 ---
 
+
 ### BL-147 — Football panel rename: "Post Game Cunditry" → "Post Match Cunditry"
 
 - Description: The football panel is currently labelled "Post Game Cunditry" in the tab, panel title, and panel registry. "Post Match" is more idiomatic for football (not "Post Game" — that's American English). Simple find-replace across index.html (tab label, panel-title div, panel registry entry, module comment).
@@ -1480,7 +1481,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - CD3: UBV=2 TC=1 RR=1 → CoD=4, Dur=0.1, **CD3=40.0**
 - Hypothesis: Labelling is more idiomatic. No falsifier — cosmetic.
 - Depends on: none
-- Status: OPEN — raised 2026-03-15
+- Status: CLOSED — 2026-03-15. Panel renamed. Gherkin specs (nav-landing.feature, nav-restructure.feature) and gherkin-runner.js panel registry updated. Pipeline GREEN 1775/1775.
 
 ---
 
@@ -1492,7 +1493,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Epic: none
 - CD3: UBV=3 TC=1 RR=1 → CoD=5, Dur=0.2, **CD3=25.0**
 - Depends on: none
-- Status: OPEN — raised 2026-03-15
+- Status: CLOSED — 2026-03-15. Bruce removed from Football panel (member object + BASE_ORDER). Already present in Boardroom, ComedyRoom, PhilsOpoly. WritingRoom addition: pending Rod's clarification on "literary" panel intent.
 
 ---
 
@@ -1505,7 +1506,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - CD3: UBV=6 TC=2 RR=2 → CoD=10, Dur=1, **CD3=10.0**
 - Hypothesis: Keane on the football panel brings standards-based comedy that Souness/Neville/Carragher don't have — different register.
 - Depends on: BL-148 (football panel housekeeping done first)
-- Status: OPEN — raised 2026-03-15
+- Status: CLOSED — 2026-03-15. Full panel member object added (id:'keane', prompt with Cork voice, wounds, narrative posture). Added to BASE_ORDER, FB_PREM_CONFIG affinities, FB_LIE_PROFILES, FOOTBALL_WOUNDS, FOOTBALL_NAMEMAP, FOOTBALL_PRE_EXISTING, FOOTBALL_VOICE_FMT, RECOVERY_STRATEGIES. Pipeline GREEN 1775/1775.
 
 ---
 

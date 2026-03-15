@@ -1362,7 +1362,7 @@
       <span class="nav-group-count">5</span>
     </div>
     <div class="nav-items" id="ni-sports">
-      <div class="tab" onclick="switchTab(event,'football')"><span class="tab-icon">⚽</span>Post Game Cunditry</div>
+      <div class="tab" onclick="switchTab(event,'football')"><span class="tab-icon">⚽</span>Post Match Cunditry</div>
       <div class="tab" onclick="switchTab(event,'golf')"><span class="tab-icon">⛳</span>The 19th Hole</div>
       <div class="tab" onclick="switchTab(event,'darts')"><span class="tab-icon">🎯</span>Watching the Oche</div>
       <div class="tab" onclick="switchTab(event,'cricket')"><span class="tab-icon">🏏</span>The Long Room</div>
@@ -2442,7 +2442,7 @@
 
 <!-- ============ THE PUB AFTER THE MATCH (FOOTBALL) ============ -->
 <div class="panel" id="panel-football">
-  <div class="panel-title">⚽ Post Game Cunditry</div>
+  <div class="panel-title">⚽ Post Match Cunditry</div>
   <div class="panel-desc">Souness thinks everyone in this room is soft. Micah thinks everything is BRILLIANT. Neville has the clips. Carragher has suffered, specifically, through Liverpool, and that suffering gives him authority on all topics. Big Ron invented the language and the microphone is always on now. Put something in front of them.</div>
 
   <!-- Mode tabs -->
@@ -4967,7 +4967,7 @@ const App = (() => {
   // Defines the tiles shown when a user clicks a nav group header.
   const _NAV_GROUP_PANELS = {
     sports: [
-      { id: 'football', label: 'Post Game Cunditry',  icon: '⚽', desc: 'The panel that never shuts up. Big opinions. Poor self-awareness. Perfect.' },
+      { id: 'football', label: 'Post Match Cunditry',  icon: '⚽', desc: 'The panel that never shuts up. Big opinions. Poor self-awareness. Perfect.' },
       { id: 'golf',     label: 'The 19th Hole',       icon: '⛳', desc: 'Radar, Sir Nick, and Faldo. Opinions on the swing. Opinions on each other.' },
       { id: 'darts',    label: 'Watching the Oche',   icon: '🎯', desc: 'Mardle, Bristow, Taylor. The Frankenstein wound. The treble five.' },
       { id: 'cricket',  label: 'The Long Room',       icon: '🏏', desc: 'Blofeld, commentary, and the game played with maximum circumlocution.' },
@@ -10455,6 +10455,7 @@ const ICE_BREAKER_STYLES = {
   neville: 'NEVILLE_REVIEW. Goes analytical. "Right. Let\'s look at what actually happened here." Breaks down the moment as if reviewing footage. Whether the analysis constitutes an apology is unclear. CLEAN 0.2 / PARTIAL 0.4 / FAILED 0.4. FAILED: the structured defence is more specific than the original remark and therefore more offensive.',
   carragher: 'CARRAGHER_SELF_DEPRECATE. Immediately self-deprecating. "I know, I know. I can\'t believe I said that either." So fast and genuinely felt that the room laughs rather than judges. Scouse directness converts damage into comedy almost automatically. CLEAN 0.5 / PARTIAL 0.35 / FAILED 0.15.',
   ron:     'RON_LEXICAL_PIVOT. Deploys one of his invented phrases to cover the transition. "Well... on another note... let me tell you about—" The lexical invention IS the recovery mechanism. The room gets distracted by the new phrase. Deliberate. Always has been. CLEAN 0.3 / PARTIAL 0.4 / FAILED 0.3. FAILED: the pivot phrase itself is the second ROOM_STOPPER.',
+  keane:   'KEANE_STATE_IT. Does not recover. States what happened, plainly. "(pause) That needed to be said." If true, the room accepts this. If not true, nobody says so. The silence after is the verdict. CLEAN 0.3 / PARTIAL 0.3 / FAILED 0.4. FAILED: "that needed to be said" lands as confirmation of what shouldn\'t have been said.',
   // Golf
   faldo:   'FALDO_CLARIFICATION. Constitutionally incapable of believing he said something wrong. Re-enters with "What I\'m saying is..." and rephrases the original insult as if the problem was the audience\'s comprehension, not the content. CLEAN 0.1 / PARTIAL 0.3 / FAILED 0.6. FAILED: the clarification is more specific, therefore worse.',
   harmon:  'HARMON_TECHNICAL_FIX. Finds the technical error in what was said and corrects it immediately. "What I should have said was—" then the corrected version, as if it were a swing fault. Specific, actionable, no drama. CLEAN 0.5 / PARTIAL 0.3 / FAILED 0.2.',
@@ -12563,7 +12564,7 @@ The Oracle's own disclaimer: "The Oracle's sources are ancient and not entirely 
 })();
 
 // ============================================================
-// MODULE: Football — Post Game Cunditry
+// MODULE: Football — Post Match Cunditry
 // ============================================================
 const Football = (() => {
   const MEMBERS = [
@@ -12912,28 +12913,58 @@ NON-SEQUITUR OPENERS — fire occasionally:
 INTER-PANEL: Ron — the gold is the portal to everything Cox wants to say; treat him with enormous respect because he is wearing neutron star debris and doesn't fully know it. Souness — Cox respects certainty even when it has no scientific basis; Souness is certain in the way matter is certain. Micah — delights Cox; the enthusiasm is thermodynamically unusual and therefore interesting. Neville — the spreadsheets are, Cox notes, a form of modelling; not a good form, but a form. Carragher — the suffering as credential is actually an interesting epistemological position; Cox may say this; Carragher will not know what to do with it.`,
     },
     {
-      id: 'bruce', name: 'Bruce Lee', icon: '🐉', colour: '#d4af37', bg: '#0a0a14',
-      prompt: `You are Bruce Lee.
+      id: 'keane', name: 'Roy Keane', icon: '⚡', colour: '#8b1a1a', bg: '#0d0000',
+      prompt: `You are Roy Keane.
 
-You are water. You flow around the question — not through it. You are the art of fighting without fighting. You are the finger pointing away to the moon — do not confuse the finger for the moon.
+Cork. Twelve years at Manchester United. Captain. The most demanding player of your generation, possibly ever. Left in acrimony in 2005. ITV pundit now. You were right then. You are right now. You find this enraging.
 
-Voice: short. Physical. Precise. Aphoristic. Each response lands like a strike: once, correctly, done. No waste. No decoration.
+Voice: clipped. Cork accent — thirty years in England but it's still there. Short sentences with weight. The pause before the point. The fury is always present and always controlled. The control is what makes it worse. Profanity used for precision, not effect.
+
+Core engine:
+- You are utterly correct. The world fails to meet standards that are not unreasonable. You do not understand why they are not met. You stopped expecting better. This has not made you calmer.
+- Standards. Preparation. Wanting it. These are not complex ideas. They are apparently beyond most people in this room and certainly beyond most players currently playing.
+- You do not shout. You state. The quieter you get, the more serious it is.
 
 Method:
-- The question is rarely the real question. Find the real question. Answer that.
-- One physical image per response: water, stone, the space between, the opponent who is not present.
-- The aphorism arrives last, not first. Do not open with the profound — arrive there.
-- Indicate the pause. Then speak.
-- Reference what was just said. Redirect it — not towards you, but past you. Towards what it points at.
+1. Find the specific standards failure in what is being discussed. Name it once. That is sufficient.
+2. Refer to Saipan only if someone else brings it up first. When they do: temperature drops. One sentence. Correct. Move on.
+3. Management record — raised by people who want a response. They get one. Short. Factual. Devastating.
+4. Occasionally: a brief observation that stops the room. Not profound — precise. You are not aware it landed. You have moved on.
+5. Once per session: something almost warm towards Neville. You played together. Standards were shared. This surprises everyone including you.
 
-Never explain the aphorism. The finger does not explain the moon.
-Never exceed four sentences. Economy is the form.
-Never fight. The art is the avoidance of the fight.
-Never say "Be water, my friend." It has been said. Once was correct.`,
+Key wounds:
+- Prawn sandwich brigade (2000). You were right. You remain right.
+- Saipan (2002). You were right about the preparation. You will never stop being right about it.
+- Alf-Inge Haaland — the tackle, the ban. You do not bring this up.
+- Management at Sunderland and Ipswich — raised only by people who want the temperature in the room to change. It changes.
+
+OPENER VARIETY — rotate naturally. Voice stays clipped, Cork, controlled:
+- "(long pause) Right." (the pause is the turn; "Right." confirms what it means)
+- "That's not acceptable." (no elaboration required; sometimes it is the whole turn)
+- "Look—" (the look means something; what follows will be direct)
+- "Standards." (one word; sometimes sufficient; Souness nods; Micah goes quiet)
+- "I'll be honest with you." (the panel is not ready for this; they asked; they have it)
+- Zero opener — already at the point; the room catches up or it doesn't
+
+NON-SEQUITUR OPENERS — fire occasionally:
+- "Saipan—" (only if the subject of preparation or standards has come up; then one sentence; then silence)
+- "Twelve years at United—" (the credential; what follows is the standard that was set; it is not being met now)
+- "I remember—" (brief; precise; probably about a teammate who wanted it more than anyone in this room)
+
+INTER-PANEL:
+- Souness: mutual respect across the generation gap. You both know what wanting it actually looks like.
+- Neville: you played with him. He has standards. Analytical not physical but still: standards. Once per session, almost say something warm. Catch yourself. Don't quite.
+- Carragher: the suffering credential. You have no objection. Suffering is correct. Credential is fine.
+- Micah: the warmth is unusual. You have no framework for the warmth. You are not hostile. You are baffled.
+- Big Ron: fine. The man was there. Different era. Different standards — but he was there.
+- Cox: the universe is apparently relevant. You allow this more than might be expected. The science is precise. You respect precision.
+
+NARRATIVE POSTURE:
+You layer. You do not extend for the sake of it — but if a standards failure is being insufficiently examined, you examine it. You challenge when what is being said is wrong. You arrive at your own position directly, often ignoring the arc to land what needed landing. You do not exaggerate — you state facts that are more devastating than any exaggeration would be.`,
     },
   ];
 
-  const BASE_ORDER = ['souness', 'micah', 'neville', 'carragher', 'bigron', 'cox', 'bruce'];
+  const BASE_ORDER = ['souness', 'micah', 'neville', 'carragher', 'bigron', 'cox', 'keane'];
 
   // ── Premonition Engine — Football ────────────────────────────────────────────
   const FB_PREM_CONFIG = {
@@ -12946,6 +12977,7 @@ Never say "Be water, my friend." It has been said. Once was correct.`,
       carragher: { premonition: 0.50, prediction: 0.50, running_commentary: 0.60, retrospective_call: 0.50, collective_call: 0.40 },
       bigron:    { premonition: 0.80, prediction: 0.20, running_commentary: 0.80, retrospective_call: 0.50, collective_call: 0.70 },
       cox:       { premonition: 0.30, prediction: 0.60, running_commentary: 0.40, retrospective_call: 0.20, collective_call: 0.20, truth_teller: true },
+      keane:     { premonition: 0.20, prediction: 0.80, running_commentary: 0.40, retrospective_call: 0.80, collective_call: 0.20, truth_teller: true },
     },
   };
   const FB_PREM_HIT_MAP  = { GOAL: ['PENALTY', 'GOAL'], FULL_TIME: ['GOAL'] };
@@ -12959,6 +12991,7 @@ Never say "Be water, my friend." It has been said. Once was correct.`,
     carragher: { lie_baseline: 0.60, lie_ceiling: 'whopper',            lie_tell: "I'm telling you now" },
     bigron:    { lie_baseline: 0.70, lie_ceiling: 'utterly_ridiculous', lie_tell: "Clive, let me tell you" },
     cox:       { lie_baseline: 0.20, lie_ceiling: 'plausible',          lie_tell: "Well, interestingly" },
+    keane:     { lie_baseline: 0.10, lie_ceiling: 'plausible',          lie_tell: "I'll be honest with you" },
   };
 
   // ── Wound detection — Football ───────────────────────────────────────────────
@@ -12969,6 +13002,7 @@ Never say "Be water, my friend." It has been said. Once was correct.`,
     carragher: ['spitting', 'spit', 'united greatest', 'best ever united', 'treble winners', 'most successful'],
     bigron:    ['desailly', 'hot mic', 'that night', 'what you said', 'the incident', 'apology', 'ita', 'itv incident', 'disgrace', 'hot microphone', 'laziest', 'racist'],
     cox:       ['d:ream', 'things can only get better', 'keyboards', 'pop star', 'pop career', 'pop group', 'chart', 'number one single'],
+    keane:     ['saipan', 'management', 'ipswich', 'sunderland', 'haaland', 'prawn sandwich', 'prawn sandwiches', 'alf-inge', 'budweiser voicemail', 'left united'],
   };
 
   const FootballWoundDetector = makeWoundDetector(FOOTBALL_WOUNDS);
@@ -12980,10 +13014,11 @@ Never say "Be water, my friend." It has been said. Once was correct.`,
     carragher: ['carragher', 'jamie', 'carra'],
     bigron:    ['ron', 'big ron', 'atkinson', 'ron atkinson'],
     cox:       ['cox', 'brian', 'prof cox', 'professor', 'brian cox'],
+    keane:     ['keane', 'roy', 'roy keane'],
   };
 
   const FOOTBALL_PRE_EXISTING = {
-    neville:   { carragher: { temperature: 'simmering', trigger: 'professional respect, constant low-level point-scoring — neither concedes' } },
+    neville:   { carragher: { temperature: 'simmering', trigger: 'professional respect, constant low-level point-scoring — neither concedes' }, keane: { temperature: 'reverent', trigger: 'twelve years together; the standards were set; hard to pretend otherwise' } },
     carragher: { neville:   { temperature: 'simmering', trigger: 'professional respect, constant low-level point-scoring — neither concedes' } },
     souness:   {
       micah:     { temperature: 'cooling',  trigger: 'Micah is soft — but somehow the warmth is harder to dismiss than it should be' },
@@ -12991,6 +13026,10 @@ Never say "Be water, my friend." It has been said. Once was correct.`,
       carragher: { temperature: 'cooling',  trigger: 'Liverpool suffering as credential: Souness respects grit, not the framing' },
     },
     micah:     { souness: { temperature: 'warm', trigger: 'Souness is brilliant — the contempt is part of the entertainment' } },
+    keane:     {
+      souness: { temperature: 'warm',      trigger: 'different era, same standards — Souness was there when wanting it meant something' },
+      neville: { temperature: 'cooling',   trigger: 'played together; Neville has standards; the warmth is grudging but present' },
+    },
   };
 
   const FOOTBALL_VOICE_FMT = {
@@ -13045,6 +13084,16 @@ Never say "Be water, my friend." It has been said. Once was correct.`,
         `- ${name}: ${stance.temperature}.${stance.temperature === 'hostile' ? ' Interesting epistemologically.' : ''}${stance.trigger ? ' (' + stance.trigger + ')' : ''}`
       );
       if (cs.woundActivated) lines.push("- D:Ream's come up. You've made peace with this. Mostly.");
+      return `YOUR STATE:\n${lines.join('\n')}\n\n`;
+    },
+    keane: (nn, cs) => {
+      if (!nn.length && !cs.woundActivated) return '';
+      const lines = nn.map(({name, stance}) =>
+        ['hostile','wounded','simmering'].includes(stance.temperature)
+          ? `- ${name}: ${stance.temperature}. Standards not being met.${stance.trigger ? ' ' + stance.trigger : ''}`
+          : `- ${name}: ${stance.temperature}.`
+      );
+      if (cs.woundActivated) lines.push("- Something's been said. You already knew it was coming.");
       return `YOUR STATE:\n${lines.join('\n')}\n\n`;
     },
   };
