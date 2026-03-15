@@ -1160,6 +1160,10 @@
   .gf-suggestion-card[data-cat="big"] { background:#d4e8d4; box-shadow:2px 3px 8px rgba(0,0,0,0.35); }
   .gf-suggestion-card[data-cat="contemporary"] { background:#d4dff5; box-shadow:2px 3px 8px rgba(0,0,0,0.35); }
   .gf-suggestion-card[data-cat="absurd"] { background:#f5d4d4; box-shadow:2px 3px 8px rgba(0,0,0,0.35); }
+  .gf-suggestion-card[data-cat="legacy"] { background:#e8d4f5; box-shadow:2px 3px 8px rgba(0,0,0,0.35); }
+  .gf-suggestion-card[data-cat="roast"] { background:#f5e4d4; box-shadow:2px 3px 8px rgba(0,0,0,0.35); }
+  .gf-suggestion-card[data-cat="beef"] { background:#f5d4d4; box-shadow:2px 3px 8px rgba(0,0,0,0.35); }
+  .gf-suggestion-card[data-cat="craft"] { background:#d4f0e8; box-shadow:2px 3px 8px rgba(0,0,0,0.35); }
   .gf-suggestion-card__cat { font-size:9px; letter-spacing:1.5px; text-transform:uppercase; opacity:0.45; margin-bottom:4px; font-family:monospace; }
   .gf-anchor-readback { display:none; margin-top:14px; opacity:0; transform:translateY(-4px); transition:opacity 0.4s ease, transform 0.4s ease; }
   .gf-anchor-readback.visible { display:block; opacity:1; transform:translateY(0); }
@@ -2952,6 +2956,7 @@
 <!-- ============ THE SPIT SHELTER (HIP-HOP) ============ -->
 <div class="panel" id="panel-hip_hop">
   <div class="panel-title">🎙️ The Spit Shelter</div>
+  <div class="panel-desc">Eminem opens. Dre says nothing. Biggie and Tupac are somehow both here. Gil Scott-Heron has corrected the Godfather label twice already. Dave is mid-thought. Mike Skinner is watching. Put a question, a lyric, a mission statement, or a diss track in front of them — or start the battle.</div>
 
   <!-- Mode tabs -->
   <div style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;">
@@ -2961,7 +2966,9 @@
 
   <!-- Mode 1: Q&A -->
   <div id="hh-qanda-view">
-    <div id="hh-suggestion-tray" class="gf-suggestion-tray" style="margin-bottom:16px;"></div>
+    <div id="hh-suggestion-tray" class="gf-suggestion-tray" style="margin-bottom:16px;">
+      <div class="gf-suggestion-scroll" id="hh-suggestion-scroll"></div>
+    </div>
     <textarea id="hh-input" class="gf-input" placeholder="Ask the panel anything — or paste a speech, mission statement, or lyric to roast…" rows="3" style="margin-bottom:10px;"></textarea>
     <button class="btn" onclick="HipHop.discuss()" id="hh-submit-btn">ASK THE PANEL 🎙️</button>
     <div id="hh-loading" style="display:none;color:var(--muted);font-size:0.9rem;padding:12px 0;">The shelter assembles…</div>
@@ -18720,7 +18727,7 @@ const HipHop = (() => {
   let _hhBusy = false;
 
   function _buildSuggestions() {
-    const tray = document.getElementById('hh-suggestion-tray');
+    const tray = document.getElementById('hh-suggestion-scroll');
     if (!tray) return;
     const shuffled = [...HIP_HOP_SUGGESTIONS].sort(() => Math.random() - 0.5);
     shuffled.forEach(s => {
