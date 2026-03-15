@@ -19,7 +19,7 @@ Feature: Nav Group Landing Page
 
   Scenario: Clicking a panel tile enters that panel
     Given the group landing page is visible for "sports"
-    When the user clicks the "Post Game Cunditry" tile
+    When the user clicks the "Post Match Cunditry" tile
     Then the Football panel content is shown
     And the group landing page is hidden
 
@@ -33,7 +33,7 @@ Feature: Nav Group Landing Page
 
   Scenario: Sports landing shows all 5 sport panels
     Given the user has clicked the "sports" nav group
-    Then the landing page includes a tile for "Post Game Cunditry"
+    Then the landing page includes a tile for "Post Match Cunditry"
     And the landing page includes a tile for "The 19th Hole"
     And the landing page includes a tile for "Watching the Oche"
     And the landing page includes a tile for "The Long Room"

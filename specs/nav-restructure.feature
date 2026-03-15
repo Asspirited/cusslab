@@ -39,7 +39,7 @@ Feature: Nav group restructuring — Comedy Room, Little Misadventure, Play, 19t
     Then "<tab>" should be in the 19TH HOLE nav group
     Examples:
       | tab                |
-      | Post Game Cunditry |
+      | Post Match Cunditry |
       | The 19th Hole      |
       | Watching the Oche  |
       | The Long Room      |
