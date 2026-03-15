@@ -7256,6 +7256,62 @@ function makeSteps(ctx) {
         throw new Error(`"${after}" does not appear after "${before}" in Golf discuss()`);
     }],
 
+    // ── BL-145 — Arc state guard (specs/bl-145-arc-state-guard.feature) ──────────
+
+    [/^the Golf character "([^"]+)" has a postureType field$/, (charId) => {
+      const iife = ctx._golfIife || '';
+      const memberStart = iife.indexOf(`id: '${charId}'`);
+      if (memberStart < 0) throw new Error(`Golf IIFE does not contain member "${charId}"`);
+      const memberLine = iife.slice(memberStart, memberStart + 300);
+      if (!memberLine.includes('postureType'))
+        throw new Error(`Golf character "${charId}" is missing postureType field`);
+    }],
+
+    [/^the Golf discuss function initialises a recentMoves array$/, () => {
+      const iife = ctx._golfIife || '';
+      const discussStart = iife.indexOf('async function discuss()');
+      if (discussStart < 0) throw new Error('Golf discuss() not found');
+      const discussBlock = iife.slice(discussStart, discussStart + 20000);
+      if (!discussBlock.includes('recentMoves = []'))
+        throw new Error('Golf discuss() does not initialise recentMoves array');
+    }],
+
+    [/^the Golf discuss function appends postureType to recentMoves after each API response$/, () => {
+      const iife = ctx._golfIife || '';
+      const discussStart = iife.indexOf('async function discuss()');
+      if (discussStart < 0) throw new Error('Golf discuss() not found');
+      const discussBlock = iife.slice(discussStart, discussStart + 20000);
+      if (!discussBlock.includes('recentMoves.push') || !discussBlock.includes('postureType'))
+        throw new Error('Golf discuss() does not push postureType to recentMoves');
+    }],
+
+    [/^the Golf discuss function checks recentMoves for three consecutive same-register moves$/, () => {
+      const iife = ctx._golfIife || '';
+      const discussStart = iife.indexOf('async function discuss()');
+      if (discussStart < 0) throw new Error('Golf discuss() not found');
+      const discussBlock = iife.slice(discussStart, discussStart + 20000);
+      if (!discussBlock.includes('recentMoves.slice(-3)'))
+        throw new Error('Golf discuss() does not check last 3 recentMoves');
+    }],
+
+    [/^the Golf system prompt construction includes a break-register block$/, () => {
+      const iife = ctx._golfIife || '';
+      const discussStart = iife.indexOf('async function discuss()');
+      if (discussStart < 0) throw new Error('Golf discuss() not found');
+      const discussBlock = iife.slice(discussStart, discussStart + 20000);
+      if (!discussBlock.includes('REGISTER BREAK') && !discussBlock.includes('_breakRegisterBlock'))
+        throw new Error('Golf discuss() does not include break-register block in system prompt');
+    }],
+
+    [/^the Golf break-register block is guarded by a recentMoves length check$/, () => {
+      const iife = ctx._golfIife || '';
+      const discussStart = iife.indexOf('async function discuss()');
+      if (discussStart < 0) throw new Error('Golf discuss() not found');
+      const discussBlock = iife.slice(discussStart, discussStart + 20000);
+      if (!discussBlock.includes('_lastThree.length >= 3') && !discussBlock.includes('recentMoves.length'))
+        throw new Error('Golf break-register block is not guarded by a length check');
+    }],
+
     // ── Golf Adventure WatchBack (specs/golf-adventure-watchback.feature) ────────
 
     [/^GOLF_PANEL_MEMBER_IDS contains "([^"]+)"$/, (id) => {
