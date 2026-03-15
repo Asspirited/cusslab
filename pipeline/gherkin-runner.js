@@ -7192,6 +7192,70 @@ function makeSteps(ctx) {
       if (!trBlock.includes(text)) throw new Error(`Football TURN_RULES does not contain "${text}"`);
     }],
 
+    // ── BL-144 — ConversationArc accumulation (specs/bl-144-conversation-arc.feature) ──
+
+    [/^the Golf discuss function initialises an arcLog array$/, () => {
+      const iife = ctx._golfIife || '';
+      const discussStart = iife.indexOf('async function discuss()');
+      if (discussStart < 0) throw new Error('Golf discuss() not found in Golf IIFE');
+      const discussBlock = iife.slice(discussStart, discussStart + 20000);
+      if (!discussBlock.includes('arcLog') || !discussBlock.includes('arcLog = []'))
+        throw new Error('Golf discuss() does not initialise arcLog array');
+    }],
+
+    [/^the Golf discuss function appends to arcLog after each API response$/, () => {
+      const iife = ctx._golfIife || '';
+      const discussStart = iife.indexOf('async function discuss()');
+      if (discussStart < 0) throw new Error('Golf discuss() not found in Golf IIFE');
+      const discussBlock = iife.slice(discussStart, discussStart + 20000);
+      if (!discussBlock.includes('arcLog.push'))
+        throw new Error('Golf discuss() does not push to arcLog after API response');
+    }],
+
+    [/^the arc entry format includes the character name and response content$/, () => {
+      const iife = ctx._golfIife || '';
+      const discussStart = iife.indexOf('async function discuss()');
+      if (discussStart < 0) throw new Error('Golf discuss() not found in Golf IIFE');
+      const discussBlock = iife.slice(discussStart, discussStart + 20000);
+      const pushIdx = discussBlock.indexOf('arcLog.push');
+      if (pushIdx < 0) throw new Error('arcLog.push not found');
+      const pushLine = discussBlock.slice(pushIdx, pushIdx + 200);
+      if (!pushLine.includes('member.name') && !pushLine.includes('.name'))
+        throw new Error('arcLog entry does not include character name');
+    }],
+
+    [/^the Golf system prompt for the first character does not include "([^"]+)"$/, (text) => {
+      const iife = ctx._golfIife || '';
+      const discussStart = iife.indexOf('async function discuss()');
+      if (discussStart < 0) throw new Error('Golf discuss() not found in Golf IIFE');
+      const discussBlock = iife.slice(discussStart, discussStart + 20000);
+      // Arc block must be conditional — guarded by arcLog.length > 0 or i > 0
+      if (!discussBlock.includes('arcLog.length'))
+        throw new Error(`"${text}" block is not conditional — first character would receive it`);
+    }],
+
+    [/^the Golf system prompt for subsequent characters includes "([^"]+)"$/, (text) => {
+      const iife = ctx._golfIife || '';
+      const discussStart = iife.indexOf('async function discuss()');
+      if (discussStart < 0) throw new Error('Golf discuss() not found in Golf IIFE');
+      const discussBlock = iife.slice(discussStart, discussStart + 20000);
+      if (!discussBlock.includes(text))
+        throw new Error(`Golf discuss() system prompt does not include "${text}"`);
+    }],
+
+    [/^the Golf system prompt contains "([^"]+)" after "([^"]+)"$/, (after, before) => {
+      const iife = ctx._golfIife || '';
+      const discussStart = iife.indexOf('async function discuss()');
+      if (discussStart < 0) throw new Error('Golf discuss() not found in Golf IIFE');
+      const discussBlock = iife.slice(discussStart, discussStart + 20000);
+      const beforeIdx = discussBlock.indexOf(before);
+      const afterIdx  = discussBlock.indexOf(after);
+      if (beforeIdx < 0) throw new Error(`"${before}" not found in Golf discuss()`);
+      if (afterIdx  < 0) throw new Error(`"${after}" not found in Golf discuss()`);
+      if (afterIdx <= beforeIdx)
+        throw new Error(`"${after}" does not appear after "${before}" in Golf discuss()`);
+    }],
+
     // ── Golf Adventure WatchBack (specs/golf-adventure-watchback.feature) ────────
 
     [/^GOLF_PANEL_MEMBER_IDS contains "([^"]+)"$/, (id) => {

@@ -14967,6 +14967,7 @@ Never say "Be water, my friend." It has been said. Once was correct.`,
     }
 
     const responses = [];
+    const arcLog = [];
     for (let i = 0; i < ORDER.length; i++) {
       const member = MEMBERS.find(m => m.id === ORDER[i]);
       const pid = 'gf-ph-' + i;
@@ -15033,7 +15034,8 @@ Never say "Be water, my friend." It has been said. Once was correct.`,
       const gfIaType = IntellectualAttempts.detect(panelInput);
       const gfBaseSystem = TURN_RULES + '\n\n' + gfIntensityBlock + gfYourState + tourCardBlock + roeIntroBlock + golfNameBlock + gfFoodBlock + gfMarmiteBlock + gfHypoBlock + gfPremBlock + gfLieBlock + member.prompt + _iceBreakBlock(member.id) + roundNote + mechanics + arcInstructions + (i > 0
         ? `\n\nPrevious:\n${prev}`
-        : '');
+        : '')
+        + (arcLog.length > 0 ? `\n\nNARRATIVE ARC SO FAR:\n${arcLog.join('\n')}` : '');
       const system = gfIaType
         ? IntellectualAttempts.inject('golf', member.id, gfBaseSystem, gfIaType)
         : gfBaseSystem;
@@ -15056,6 +15058,8 @@ Never say "Be water, my friend." It has been said. Once was correct.`,
       try {
         const resp = await API.call(system, prompt, 250, 'golf/' + member.id);
         responses.push(resp);
+        const _arcFirst = resp.split('. ')[0].replace(/\n/g, ' ').trim();
+        arcLog.push(`${member.name}: ${_arcFirst}.`);
         RelationshipState.update(gfRelState, member.id, resp, ORDER, GOLF_WOUNDS, GOLF_NAMEMAP);
         ConspireEngine.check(gfRelState, ORDER);
         ConspireEngine.advanceStage(GOLF_RESET_VALVE_PRIORITY);
