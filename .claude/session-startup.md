@@ -319,7 +319,7 @@ Reference library — read the relevant file before the relevant step:
 |---|---|---|
 | Characters, panels, comedy, banter, needles, Heckler and Cox | **Cusslab** | `/home/rodent/cusslab/` |
 | Risks, issues, RAID, quality tools, project context | **RIA** | `/home/rodent/risk-and-impact-assessor/` |
-| Deception, detection, negotiation, LieProfile, Veritas, Voigt-Kampff, scoring panels | **Art of Lying** | `/home/rodent/art-of-lying/` |
+| Deception, detection, negotiation, LieProfile, Veritas, Voigt-Kampff, scoring panels | **Fallacy Finder** | `/home/rodent/fallacy-finder/` |
 | Grey area (boardroom = project-adjacent) | Flag it — do not assume | |
 
 ---
