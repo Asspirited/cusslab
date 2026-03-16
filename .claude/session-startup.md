@@ -313,13 +313,14 @@ Reference library — read the relevant file before the relevant step:
 
 ### 11. PROJECT SEPARATION (know which repo before touching code)
 
-Two projects. Wrong project = waste log entry (WL-022: 3 hours lost).
+⚠️ **THREE PROJECTS NOW EXIST.** Wrong project = waste log entry (WL-022: 3 hours lost).
 
-| Signal | Project |
-|---|---|
-| Characters, panels, comedy, banter, needles | **Cusslab** `/home/rodent/cusslab/` |
-| Risks, issues, RAID, quality tools, project context | **RIA** `/home/rodent/risk-and-impact-assessor/` |
-| Grey area (boardroom = project-adjacent) | Flag it, don't assume |
+| Signal | Project | Path |
+|---|---|---|
+| Characters, panels, comedy, banter, needles, Heckler and Cox | **Cusslab** | `/home/rodent/cusslab/` |
+| Risks, issues, RAID, quality tools, project context | **RIA** | `/home/rodent/risk-and-impact-assessor/` |
+| Deception, detection, negotiation, LieProfile, Veritas, Voigt-Kampff, scoring panels | **Art of Lying** | `/home/rodent/art-of-lying/` |
+| Grey area (boardroom = project-adjacent) | Flag it — do not assume | |
 
 ---
 
