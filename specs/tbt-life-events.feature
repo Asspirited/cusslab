@@ -95,22 +95,22 @@ Feature: TBT life events — injury, illness, and tenacity drift
   Scenario: Three consecutive bad-form turns lower tenacity by 1
     Given life state tenacity is 5
     And the form streak is 2 bad
-    When the form word this turn is "Struggling"
+    When the form word this turn is "Nowhere"
     Then life state tenacity is 4
     And the form streak is reset
 
-  Scenario: Shaky resets the form streak
+  Scenario: Scratchy resets the form streak
     Given the form streak is 2 good
-    When the form word this turn is "Shaky"
+    When the form word this turn is "Scratchy"
     Then the form streak is reset
 
   Scenario: Good form following bad resets and starts a positive streak
     Given the form streak is 2 bad
-    When the form word this turn is "Decent"
+    When the form word this turn is "Ticking Along"
     Then the form streak is 1 good
 
   Scenario: Tenacity does not drift below its minimum
     Given life state tenacity is at its minimum
     And the form streak is 2 bad
-    When the form word this turn is "Struggling"
+    When the form word this turn is "Nowhere"
     Then life state tenacity is at its minimum
