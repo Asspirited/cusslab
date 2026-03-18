@@ -21,8 +21,8 @@ Feature: TBT weekly cycle
 
   Scenario: FORM word reflects numeric value
     Given FORM is at value 15
-    Then the form word is Decent
+    Then the form word is Ticking Along
     Given FORM is at value 5
-    Then the form word is Nowhere
+    Then the form word is Out-of-Form
     Given FORM is at value 19
     Then the form word is Flying
