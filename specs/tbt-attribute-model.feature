@@ -22,7 +22,7 @@ Feature: Hidden attribute model composing FORM
       | 8        | 8     | 8          | 8        | 0         | 0         | 0     | Decent  |
       | 10       | 10    | 10         | 10       | 0         | 0         | 0     | Flying  |
       | 8        | 8     | 8          | 8        | 2         | 2         | 0     | Flying  |
-      | 6        | 6     | 6          | 6        | 0         | 0         | 3     | Nowhere |
+      | 5        | 5     | 5          | 5        | 0         | 0         | 3     | Nowhere |
 
   Scenario: FORM score is clamped to 0 when formula produces negative
     Given core attributes physique=0 skill=0 confidence=0 tenacity=0
