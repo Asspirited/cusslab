@@ -1739,8 +1739,8 @@ assert('classifyActivity: null → null',
 const _tbtBase = initTBTGame(1968, 'Arthur', 'Rod'); // form=10
 
 const _nanDelta = applyActivity(_tbtBase, ACTIVITY_TYPES.VISIT_NAN);
-assert('applyActivity VISIT_NAN: nanDialChange green',
-  _nanDelta.nanDialChange, 'green');
+assert('applyActivity VISIT_NAN: quality-1 nanQualityδ is 0',
+  _nanDelta.nanQualityδ, 0);
 assert('applyActivity VISIT_NAN: no form change',
   _nanDelta.formDelta, 0);
 assert('applyActivity VISIT_NAN: note set',

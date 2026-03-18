@@ -78,6 +78,25 @@ function classifyActivity(input) {
 const BANK_CRITICAL_THRESHOLD = 1.00;
 const PRACTICE_SESSIONS_PER_SKILL_POINT = 4;
 
+const NAN_QUALITY_INITIAL = 7;
+const NAN_QUALITY_MAX     = 9;
+const NAN_QUALITY_MIN     = 0;
+
+function getNanDial(nanQuality, nanGrief) {
+  if (nanGrief) return 'greyed';
+  if (nanQuality >= 7) return 'green';
+  if (nanQuality >= 4) return 'amber';
+  return 'red';
+}
+
+function classifyVisitQuality(input) {
+  if (!input || typeof input !== 'string') return 1;
+  const lower = input.toLowerCase();
+  if (/\b(biscuit tin|tin|grandfather|grandad|old days|old man|looked through|asked nan about)\b/.test(lower)) return 3;
+  if (/\b(proper|chat|sat with|talked|conversation|cup of tea|sit.?down|stayed)\b/.test(lower)) return 2;
+  return 1;
+}
+
 function computeForm(attrs) {
   const { physique, skill, confidence, tenacity, sharpness, freshness, lifeNoise } = attrs;
   const score = (physique * 0.70) + (skill * 0.60) + (confidence * 0.40) + (tenacity * 0.30)
@@ -87,23 +106,36 @@ function computeForm(attrs) {
 
 function calculateLifeNoise(state) {
   let noise = 0;
-  if (state.relationships.nan === 'red' || state.relationships.nan === 'greyed') noise++;
+  const nanDial = typeof state.nanQuality === 'number'
+    ? getNanDial(state.nanQuality, state.nanGrief)
+    : state.relationships.nan;
+  if (nanDial === 'red' || nanDial === 'greyed') noise++;
   if (state.bank < BANK_CRITICAL_THRESHOLD) noise++;
   if (state.home === 'red') noise++;
   return noise;
 }
 
-function applyActivity(state, activityType) {
+function applyActivity(state, activityType, visitQuality) {
   const delta = {
-    formDelta: 0, bankDelta: 0, nanDialChange: null, note: '',
+    formDelta: 0, bankDelta: 0, nanQualityδ: -1, note: '',
     physiqueδ: 0, skillδ: 0, confidenceδ: 0, tenacityδ: 0,
     sharpnessδ: 0, freshnessδ: 0, practiceSessionsδ: 0,
   };
   switch (activityType) {
-    case ACTIVITY_TYPES.VISIT_NAN:
-      delta.nanDialChange = 'green';
-      delta.note = 'You went round to Nan\'s.';
+    case ACTIVITY_TYPES.VISIT_NAN: {
+      const quality = visitQuality || 1;
+      if (quality === 3) {
+        delta.nanQualityδ = 3;
+        delta.note = 'You sat with Nan and looked through the biscuit tin. She talked about your grandfather.';
+      } else if (quality === 2) {
+        delta.nanQualityδ = 1;
+        delta.note = 'You had a proper sit-down with Nan.';
+      } else {
+        delta.nanQualityδ = 0;
+        delta.note = 'You went round to Nan\'s.';
+      }
       break;
+    }
     case ACTIVITY_TYPES.NETS: {
       const sessions = (state.practiceSessionsThisCycle || 0) + 1;
       delta.physiqueδ = -1;
@@ -148,8 +180,10 @@ function initTBTGame(dob, grandfatherName, playerName) {
     work: 'Paper round',
     weeklyWage: 2.50,
     home: "Nan's spare room",
+    nanQuality: NAN_QUALITY_INITIAL,
+    nanGrief:   false,
     relationships: {
-      nan:         'green',
+      nan:         getNanDial(NAN_QUALITY_INITIAL, false),
       mum:         'green',
       grandfather: 'greyed',
     },
@@ -245,8 +279,10 @@ module.exports = {
   getTinObjects,
   classifyIntent,
   classifyActivity,
+  classifyVisitQuality,
   applyActivity,
   getFormWord,
+  getNanDial,
   computeForm,
   calculateLifeNoise,
   identifyExamineTarget,
@@ -257,4 +293,7 @@ module.exports = {
   EXAMINE_RESPONSES,
   ACTIVITY_TYPES,
   FORM_BANDS,
+  NAN_QUALITY_INITIAL,
+  NAN_QUALITY_MAX,
+  NAN_QUALITY_MIN,
 };

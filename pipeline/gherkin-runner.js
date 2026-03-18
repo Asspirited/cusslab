@@ -15,7 +15,7 @@ const { QUNTUM_LEEKS_SCENARIOS, initState, pickRandomScenario, betLeekiness, spe
 const { initGameState, appendToHistory, incrementTurn, buildModifierBlock } = require('../src/logic/ff-engine.js');
 const { PUB_CRAWL_SCENES, getAllScenes, getPubScene, getActiveAdvisor, initPubCrawl, resolveChoice, determineOutcome, checkLederhosen, buildAdvisorPrompt, ADVISOR_IDS } = require('../src/logic/pub-navigator-engine.js');
 const { lintStepDuplicates } = require('./lint-steps.js');
-const { initTBTGame, classifyIntent, classifyActivity, applyActivity, getFormWord, getTinObjects, getGameDate, identifyExamineTarget, getExamineResponse, computeForm, calculateLifeNoise, EXAMINE_RESPONSES, ACTIVITY_TYPES } = require('../src/logic/tbt-engine.js');
+const { initTBTGame, classifyIntent, classifyActivity, classifyVisitQuality, applyActivity, getFormWord, getTinObjects, getGameDate, identifyExamineTarget, getExamineResponse, computeForm, calculateLifeNoise, getNanDial, EXAMINE_RESPONSES, ACTIVITY_TYPES, NAN_QUALITY_MIN, NAN_QUALITY_MAX, NAN_QUALITY_INITIAL } = require('../src/logic/tbt-engine.js');
 
 // ── Mock state (simulates browser localStorage + DOM) ────────────────────────
 
@@ -10477,8 +10477,8 @@ function makeSteps(ctx) {
     }],
 
     [/^the Nan relationship dial stays green$/, () => {
-      if (ctx._tbtDelta.nanDialChange !== 'green')
-        throw new Error(`expected nanDialChange green, got: ${ctx._tbtDelta.nanDialChange}`);
+      if (ctx._tbtDelta.nanQualityδ < 0)
+        throw new Error(`expected non-negative nanQualityδ, got: ${ctx._tbtDelta.nanQualityδ}`);
     }],
 
     [/^the turn summary notes the visit$/, () => {
@@ -10642,6 +10642,9 @@ function makeSteps(ctx) {
       ctx._tbtNoiseState = { relationships: { nan: 'green' }, bank: 10, home: 'green' };
       ctx._tbtActivityState = initTBTGame(1968, 'Arthur', 'Rod');
       ctx._tbtActivityDelta = null;
+      ctx._tbtNanState = initTBTGame(1968, 'Arthur', 'Rod');
+      ctx._tbtNanDelta = null;
+      ctx._tbtNanClassify = null;
     }],
 
     [/^core attributes physique=(\d+) skill=(\d+) confidence=(\d+) tenacity=(\d+)$/, (p, s, c, t) => {
@@ -10775,6 +10778,93 @@ function makeSteps(ctx) {
     [/^practice sessions this cycle is (\d+)$/, (n) => {
       const val = ctx._tbtNewGame ? ctx._tbtNewGame.practiceSessionsThisCycle : ctx._tbtActivityState.practiceSessionsThisCycle;
       if (val !== Number(n)) throw new Error(`expected practiceSessionsThisCycle ${n}, got ${val}`);
+    }],
+
+    // ── TBT-012: Nan quality mechanic ─────────────────────────────────────────
+
+    [/^nanQuality is (\d+)$/, (n) => {
+      const num = Number(n);
+      if (ctx._tbtNewGame) {
+        if (ctx._tbtNewGame.nanQuality !== num)
+          throw new Error(`expected nanQuality ${num}, got ${ctx._tbtNewGame.nanQuality}`);
+      } else if (ctx._tbtNanDelta === null) {
+        ctx._tbtNanState.nanQuality = num;
+        ctx._tbtNanState.nanGrief = false;
+        ctx._tbtNoiseState.relationships.nan = getNanDial(num, false);
+      } else {
+        if (ctx._tbtNanState.nanQuality !== num)
+          throw new Error(`expected nanQuality ${num}, got ${ctx._tbtNanState.nanQuality}`);
+      }
+    }],
+
+    [/^the Nan dial is greyed$/, () => {
+      if (!ctx._tbtNanState.nanGrief) {
+        ctx._tbtNanState.nanGrief = true;
+      }
+      const actual = getNanDial(ctx._tbtNanState.nanQuality, ctx._tbtNanState.nanGrief);
+      if (actual !== 'greyed')
+        throw new Error(`expected Nan dial greyed, got ${actual}`);
+    }],
+
+    [/^the Nan dial is "?(green|amber|red)"?"?$/, (dial) => {
+      const state = ctx._tbtNewGame || ctx._tbtNanState;
+      const actual = getNanDial(state.nanQuality, state.nanGrief);
+      if (actual !== dial)
+        throw new Error(`expected Nan dial ${dial}, got ${actual}`);
+    }],
+
+    [/^the player makes a quality-(\d+) visit to Nan$/, (q) => {
+      const quality = Number(q);
+      const delta = applyActivity(ctx._tbtNanState, ACTIVITY_TYPES.VISIT_NAN, quality);
+      ctx._tbtNanState.nanQuality = Math.max(NAN_QUALITY_MIN, Math.min(NAN_QUALITY_MAX,
+        ctx._tbtNanState.nanQuality + delta.nanQualityδ));
+      ctx._tbtNanDelta = delta;
+    }],
+
+    [/^the player does not visit Nan this turn$/, () => {
+      const delta = applyActivity(ctx._tbtNanState, ACTIVITY_TYPES.REST);
+      ctx._tbtNanState.nanQuality = Math.max(NAN_QUALITY_MIN, Math.min(NAN_QUALITY_MAX,
+        ctx._tbtNanState.nanQuality + delta.nanQualityδ));
+      ctx._tbtNanDelta = delta;
+    }],
+
+    [/^the player says "([^"]+)"$/, (input) => {
+      ctx._tbtNanClassify = {
+        activity: classifyActivity(input),
+        quality:  classifyVisitQuality(input),
+      };
+    }],
+
+    [/^the activity is VISIT_NAN$/, () => {
+      if (ctx._tbtNanClassify.activity !== ACTIVITY_TYPES.VISIT_NAN)
+        throw new Error(`expected VISIT_NAN, got ${ctx._tbtNanClassify.activity}`);
+    }],
+
+    [/^the visit quality is (\d+)$/, (n) => {
+      if (ctx._tbtNanClassify.quality !== Number(n))
+        throw new Error(`expected visit quality ${n}, got ${ctx._tbtNanClassify.quality}`);
+    }],
+
+    [/^the turn summary includes a note about the grandfather story$/, () => {
+      if (!ctx._tbtNanDelta || !/grandfather|biscuit tin/i.test(ctx._tbtNanDelta.note))
+        throw new Error(`expected grandfather/tin note, got: ${ctx._tbtNanDelta?.note}`);
+    }],
+
+    [/^the turn summary notes the visit without an engagement note$/, () => {
+      if (!ctx._tbtNanDelta) throw new Error('no delta');
+      if (!/nan/i.test(ctx._tbtNanDelta.note))
+        throw new Error(`expected note to mention Nan, got: ${ctx._tbtNanDelta.note}`);
+      if (/grandfather|biscuit tin|grandad/i.test(ctx._tbtNanDelta.note))
+        throw new Error(`quality-1 note should not mention engagement, got: ${ctx._tbtNanDelta.note}`);
+    }],
+
+    [/^lifeNoise contribution from Nan is (\d+)$/, (n) => {
+      const contribution = ctx._tbtNoise !== undefined ? ctx._tbtNoise : (() => {
+        const nanDial = getNanDial(ctx._tbtNanState.nanQuality, ctx._tbtNanState.nanGrief);
+        return (nanDial === 'red' || nanDial === 'greyed') ? 1 : 0;
+      })();
+      if (contribution !== Number(n))
+        throw new Error(`expected Nan lifeNoise contribution ${n}, got ${contribution}`);
     }],
 
   ];
