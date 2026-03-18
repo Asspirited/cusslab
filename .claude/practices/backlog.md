@@ -1686,7 +1686,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Description: Nan dial responds to player choices over time. Visit Nan: green maintained. Miss several weeks: amber. Bank drops very low: amber (she knows). Player leaves something on the kitchen table: green restored. Dial state persists across turns. Amber triggers a scene — not a warning, just the weight of it. Three Amigos needed before Gherkin.
 - Feature: tbt
 - CD3: UBV=9 TC=8 RR=8 → CoD=25, Dur=2, **CD3=12.5**
-- Status: OPEN — raised 2026-03-17. Three Amigos needed.
+- Status: CLOSED — 2026-03-18. Bank critical (< £1.00) applies −1 nanQualityδ per turn via life noise. "Leaves something on table" mechanic dropped (didn't resonate). GREY clarified as neutral/unknown (no relationship) not grief. 10 new Gherkin scenarios. 1896/1896. Commit 23a2617.
 
 ---
 
@@ -1695,7 +1695,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Description: FORM (0-20, never shown as number) fluctuates with sleep, stress, relationships, money pressure, drink, injury, the weight of belief. Shown only as narrative word: Flying / Decent / Shaky / Nowhere / Lost. Life events move FORM up or down. Cricket performance is the readout. Three Amigos needed before Gherkin.
 - Feature: tbt
 - CD3: UBV=9 TC=8 RR=7 → CoD=24, Dur=2, **CD3=12.0**
-- Status: OPEN — raised 2026-03-17. Three Amigos needed.
+- Status: CLOSED — 2026-03-18. injuryRisk/illnessRisk (physique+freshness driven). MINOR/MODERATE/SEVERE injuries. Illness 1-turn freshness collapse, blocks NETS+MATCH. updateFormStreak: Shaky resets, |streak|≥3 → tenacity±1. 19 Gherkin scenarios. 1915/1915. Commit 1030644.
 
 ---
 
@@ -1732,6 +1732,80 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Feature: tbt
 - CD3: UBV=7 TC=6 RR=5 → CoD=18, Dur=2, **CD3=9.0**
 - Status: OPEN — raised 2026-03-18. Deferred from TBT-007 (batting only first). Three Amigos needed.
+
+---
+
+### TBT-015 — Bowling resolution: separate formulas for wickets and runs conceded
+
+- Description: Currently bowling FORM produces a single combined outcome. Split into two independent formulas: wickets taken (accuracy, turn, deception) and runs conceded per over (economy, control). Different FORM components drive each — wicket-taking correlates more with skill/sharpness, economy correlates more with physique/freshness. Allows a player to be an expensive wicket-taker or a tight non-wicket-taker. Three Amigos needed before Gherkin.
+- Feature: tbt
+- CD3: UBV=6 TC=3 RR=4 → CoD=13, Dur=2, **CD3=6.5**
+- Status: OPEN — raised 2026-03-18. Raised mid-session during TBT-014 Three Amigos.
+
+---
+
+### TBT-016 — Batting resolution: defensive vs attacking shot selection
+
+- Description: Player can choose batting approach — defensive (protect wicket, lower run risk, lower reward) or attacking (higher risk, higher ceiling). Each uses a different FORM formula: defensive weights tenacity/confidence (mental game), attacking weights physique/sharpness (physical fluency). Same input → different distributions. Adds player agency without requiring new stats. Three Amigos needed before Gherkin.
+- Feature: tbt
+- CD3: UBV=7 TC=3 RR=4 → CoD=14, Dur=2, **CD3=7.0**
+- Status: OPEN — raised 2026-03-18. Raised mid-session during TBT-014 Three Amigos.
+
+---
+
+### TBT-017 — Prize earning mechanic (tasks, puzzles, good behaviour)
+
+- Description: Player earns prizes by completing tasks, solving puzzles, answering questions correctly, and demonstrating consistent good behaviour (positive streaks, stats milestones). Prize pool works like Community Chest / Chance cards in Monopoly — draws from a deck, no duplicates until reshuffled. Each prize is tagged with a type (buff, resource, social, cricket). Three Amigos needed before Gherkin.
+- Feature: tbt
+- CD3: UBV=8 TC=4 RR=4 → CoD=16, Dur=3, **CD3=5.3**
+- Status: OPEN — raised 2026-03-18.
+
+---
+
+### TBT-018 — Prize effects (what prizes do)
+
+- Description: Define what prizes can grant: move batting FORM to Flying, refill a stat, unlock a venue, grant a one-turn buff, add runs to a match. Each prize has a type tag and effect payload. Same Community Chest / Chance card model — instant vs held. Depends on TBT-017 (earning mechanic). Three Amigos needed before Gherkin.
+- Feature: tbt
+- CD3: UBV=8 TC=3 RR=3 → CoD=14, Dur=3, **CD3=4.7**
+- Status: OPEN — raised 2026-03-18. Depends on TBT-017.
+
+---
+
+### TBT-019 — Mini-games within scenes (quiz machine, fruit machine, meat raffle, pub quiz)
+
+- Description: Venues can host mini-games that can be played to win prizes. Pub: quiz machine, fruit machine, meat raffle, pub quiz. Each mini-game has its own resolution mechanic (trivia roll, slot roll, raffle roll). Winning feeds into TBT-017/018 prize pool. Three Amigos needed per venue before Gherkin.
+- Feature: tbt
+- CD3: UBV=7 TC=3 RR=3 → CoD=13, Dur=4, **CD3=3.3**
+- Status: OPEN — raised 2026-03-18.
+
+---
+
+### TBT-020 — Venue expansion (snooker hall, greasy spoon)
+
+- Description: Add snooker hall and greasy spoon as distinct ACTIVITY_TYPEs with their own visit scenes, outcomes (stat effects), and candidate mini-games. Similar ACTIVITY_TYPE pattern to pub. Three Amigos needed before Gherkin.
+- Feature: tbt
+- Epic: Venues Expansion
+- CD3: UBV=6 TC=3 RR=2 → CoD=11, Dur=3, **CD3=3.7**
+- Status: OPEN — raised 2026-03-18.
+
+---
+
+### TBT-021 — Workplaces EPIC (job opportunities expansion) [EPIC PLACEHOLDER]
+
+- Description: EPIC. Build out a full range of job opportunities as playable workplace scenes — different employers, roles, wages, stat effects, social dynamics, cricket scheduling conflicts. Each workplace is its own mini-arc with recurring characters, tasks, and promotion/demotion paths. Scope TBD — Three Amigos with Rod before any Gherkin.
+- Feature: tbt
+- Epic: Workplaces
+- CD3: UBV=9 TC=3 RR=4 → CoD=16, Dur=10, **CD3=1.6**
+- Status: OPEN — raised 2026-03-18. EPIC placeholder — decompose into child items before implementation.
+
+---
+
+### TBT-022 — Player type selection at start (batting position + bowling role)
+
+- Description: At character creation or first match, player selects their batting position (Opener, Top Order, Middle Order, Tailender) and bowling role (First String, Second String / First Change, Third String, Occasional / Part-Time). These affect FORM band scoring ranges, stat weights, and match expectations. Bowling avg shows n/a until first wicket taken. Three Amigos needed before Gherkin.
+- Feature: tbt
+- CD3: UBV=8 TC=5 RR=4 → CoD=17, Dur=3, **CD3=5.7**
+- Status: OPEN — raised 2026-03-18. Three Amigos answer from Rod: n/a preferred over undefined for 0-wicket bowling avg; player type selection should happen at game start.
 
 ---
 

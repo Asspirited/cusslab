@@ -320,7 +320,8 @@ function initTBTGame(dob, grandfatherName, playerName) {
       mum:         'green',
       grandfather: 'greyed',
     },
-    cricket:  { matches: 0, innings: 0, runs: 0, wkts: 0, avg: null, hs: null },
+    cricket:  { matches: 0, innings: 0, runs: 0, wkts: 0, avg: null, hs: null,
+                bowlMatches: 0, bowlRuns: 0, bowlBest: null, bowlAvg: null },
     football: { apps: 0, goals: 0, level: null },
     form:     10,
     physique:  5,
@@ -394,6 +395,65 @@ function identifyExamineTarget(input) {
 
 function getExamineResponse(objectId) {
   return EXAMINE_RESPONSES[objectId] || null;
+}
+
+const BOWLING_BANDS = [
+  { minForm: 17, maxForm: 20, minWkts: 3, maxWkts: 5, minRuns: 15, maxRuns: 35, wicketThreshold: 0.20 },
+  { minForm: 13, maxForm: 16, minWkts: 2, maxWkts: 3, minRuns: 25, maxRuns: 45, wicketThreshold: 0.30 },
+  { minForm: 9,  maxForm: 12, minWkts: 1, maxWkts: 2, minRuns: 35, maxRuns: 60, wicketThreshold: 0.40 },
+  { minForm: 5,  maxForm: 8,  minWkts: 0, maxWkts: 1, minRuns: 45, maxRuns: 75, wicketThreshold: 0.55 },
+  { minForm: 0,  maxForm: 4,  minWkts: 0, maxWkts: 0, minRuns: 55, maxRuns: 90, wicketThreshold: 2.00 },
+];
+
+function buildBowlingNote(wickets, runs, formWord) {
+  const notes = {
+    'Flying':        `You ran in hard and found your shape early — ${wickets} for ${runs}. The keeper was working all afternoon.`,
+    'Ticking Along': `A decent spell, more craft than fire — ${wickets} for ${runs}. You kept them honest.`,
+    'Scratchy':      `Some good balls and some bad ones — ${wickets} for ${runs}. You'll bowl better than that.`,
+    'Out-of-Form':   `They got after you a bit — ${wickets} for ${runs}. The line wasn't quite there today.`,
+    'Nowhere':       `They put you to the sword — ${wickets} for ${runs}. The captain took you off early.`,
+  };
+  return notes[formWord] || `${wickets} for ${runs}.`;
+}
+
+function resolveBowling(formScore, skill, roll) {
+  const clampedForm = Math.max(0, Math.min(20, formScore));
+  const band = BOWLING_BANDS.find(b => clampedForm >= b.minForm && clampedForm <= b.maxForm)
+    || BOWLING_BANDS[BOWLING_BANDS.length - 1];
+
+  const runsRange     = band.maxRuns - band.minRuns;
+  const skillRunBonus = Math.floor(skill * 0.5);
+  const runs = Math.max(band.minRuns - skillRunBonus,
+    band.maxRuns - Math.floor(roll * runsRange) - skillRunBonus);
+
+  let wickets = 0;
+  if (band.maxWkts > 0 && roll >= band.wicketThreshold) {
+    const wktRange = band.maxWkts - band.minWkts;
+    const normWkt  = (roll - band.wicketThreshold) / (1 - band.wicketThreshold);
+    const skillWktBonus = Math.floor(skill * 0.2);
+    wickets = Math.min(band.maxWkts + skillWktBonus,
+      band.minWkts + Math.floor(normWkt * (wktRange + 1)) + (roll > 0.85 ? skillWktBonus : 0));
+  }
+
+  const note = buildBowlingNote(wickets, runs, getFormWord(clampedForm));
+  return { wickets, runs, note };
+}
+
+function applyBowlingResult(state, wickets, runs) {
+  const c = state.cricket;
+  c.bowlMatches = (c.bowlMatches || 0) + 1;
+  c.wkts        = (c.wkts || 0) + wickets;
+  c.bowlRuns    = (c.bowlRuns || 0) + runs;
+
+  const newFigures = { wkts: wickets, runs };
+  const best = c.bowlBest;
+  if (!best || wickets > best.wkts || (wickets === best.wkts && runs < best.runs)) {
+    c.bowlBest = newFigures;
+  }
+
+  c.bowlAvg = c.wkts > 0
+    ? Math.round((c.bowlRuns / c.wkts) * 10) / 10
+    : null;
 }
 
 const MATCH_BANDS = [
@@ -502,4 +562,7 @@ module.exports = {
   applyIllness,
   tickIllness,
   updateFormStreak,
+  BOWLING_BANDS,
+  resolveBowling,
+  applyBowlingResult,
 };

@@ -15,7 +15,7 @@ const { QUNTUM_LEEKS_SCENARIOS, initState, pickRandomScenario, betLeekiness, spe
 const { initGameState, appendToHistory, incrementTurn, buildModifierBlock } = require('../src/logic/ff-engine.js');
 const { PUB_CRAWL_SCENES, getAllScenes, getPubScene, getActiveAdvisor, initPubCrawl, resolveChoice, determineOutcome, checkLederhosen, buildAdvisorPrompt, ADVISOR_IDS } = require('../src/logic/pub-navigator-engine.js');
 const { lintStepDuplicates } = require('./lint-steps.js');
-const { initTBTGame, classifyIntent, classifyActivity, classifyVisitQuality, classifyTransport, applyActivity, applyTransport, resolveMatch, applyMatchResult, FIRST_MATCH_SCENE, getFormWord, getTinObjects, getGameDate, identifyExamineTarget, getExamineResponse, computeForm, calculateLifeNoise, getNanDial, EXAMINE_RESPONSES, ACTIVITY_TYPES, TRANSPORT_TYPES, NAN_QUALITY_MIN, NAN_QUALITY_MAX, NAN_QUALITY_INITIAL, TENACITY_MIN, TENACITY_MAX, INJURY_TYPES, injuryRisk, illnessRisk, applyInjury, tickInjury, applyIllness, tickIllness, updateFormStreak } = require('../src/logic/tbt-engine.js');
+const { initTBTGame, classifyIntent, classifyActivity, classifyVisitQuality, classifyTransport, applyActivity, applyTransport, resolveMatch, applyMatchResult, FIRST_MATCH_SCENE, getFormWord, getTinObjects, getGameDate, identifyExamineTarget, getExamineResponse, computeForm, calculateLifeNoise, getNanDial, EXAMINE_RESPONSES, ACTIVITY_TYPES, TRANSPORT_TYPES, NAN_QUALITY_MIN, NAN_QUALITY_MAX, NAN_QUALITY_INITIAL, TENACITY_MIN, TENACITY_MAX, INJURY_TYPES, injuryRisk, illnessRisk, applyInjury, tickInjury, applyIllness, tickIllness, updateFormStreak, resolveBowling, applyBowlingResult } = require('../src/logic/tbt-engine.js');
 
 // ── Mock state (simulates browser localStorage + DOM) ────────────────────────
 
@@ -11207,6 +11207,107 @@ function makeSteps(ctx) {
         throw new Error('no match result');
       if (!ctx._tbtMatchResult.note.includes(String(ctx._tbtMatchResult.runs)))
         throw new Error(`expected runs in note, got: ${ctx._tbtMatchResult.note}`);
+    }],
+
+    // ── TBT-014 Bowling ──────────────────────────────────────────────────────
+
+    [/^bowling skill is (\d+)$/, (n) => {
+      ctx._tbtBowlingSkill = Number(n);
+    }],
+
+    [/^the bowling is resolved with roll ([\d.]+)$/, (r) => {
+      ctx._tbtBowlingResult = resolveBowling(
+        ctx._tbtMatchForm,
+        ctx._tbtBowlingSkill != null ? ctx._tbtBowlingSkill : 5,
+        parseFloat(r)
+      );
+    }],
+
+    [/^the wickets taken is between (\d+) and (\d+)$/, (min, max) => {
+      const wkts = ctx._tbtBowlingResult.wickets;
+      if (wkts < Number(min) || wkts > Number(max))
+        throw new Error(`expected wickets between ${min} and ${max}, got ${wkts}`);
+    }],
+
+    [/^the wickets taken is (\d+)$/, (n) => {
+      const wkts = ctx._tbtBowlingResult.wickets;
+      if (wkts !== Number(n))
+        throw new Error(`expected wickets ${n}, got ${wkts}`);
+    }],
+
+    [/^the runs conceded is between (\d+) and (\d+)$/, (min, max) => {
+      const runs = ctx._tbtBowlingResult.runs;
+      if (runs < Number(min) || runs > Number(max))
+        throw new Error(`expected runs conceded between ${min} and ${max}, got ${runs}`);
+    }],
+
+    [/^bowling stats are at zero$/, () => {
+      const c = ctx._tbtActivityState.cricket;
+      c.bowlMatches = 0; c.wkts = 0; c.bowlRuns = 0; c.bowlBest = null; c.bowlAvg = null;
+    }],
+
+    [/^bowling stats show 1 match (\d+) wickets (\d+) runs best (\d+) for (\d+)$/, (wkts, runs, bwkts, bruns) => {
+      const c = ctx._tbtActivityState.cricket;
+      c.bowlMatches = 1;
+      c.wkts     = Number(wkts);
+      c.bowlRuns = Number(runs);
+      c.bowlBest = { wkts: Number(bwkts), runs: Number(bruns) };
+      c.bowlAvg  = Number(wkts) > 0 ? Math.round((Number(runs) / Number(wkts)) * 10) / 10 : null;
+    }],
+
+    [/^a bowling result of (\d+) wickets? (\d+) runs is applied$/, (wkts, runs) => {
+      applyBowlingResult(ctx._tbtActivityState, Number(wkts), Number(runs));
+    }],
+
+    [/^bowling matches is (\d+)$/, (n) => {
+      const got = ctx._tbtActivityState.cricket.bowlMatches;
+      if (got !== Number(n)) throw new Error(`expected bowlMatches ${n}, got ${got}`);
+    }],
+
+    [/^bowling wickets is (\d+)$/, (n) => {
+      const got = ctx._tbtActivityState.cricket.wkts;
+      if (got !== Number(n)) throw new Error(`expected wkts ${n}, got ${got}`);
+    }],
+
+    [/^bowling runs conceded is (\d+)$/, (n) => {
+      const got = ctx._tbtActivityState.cricket.bowlRuns;
+      if (got !== Number(n)) throw new Error(`expected bowlRuns ${n}, got ${got}`);
+    }],
+
+    [/^bowling best figures is (\d+) for (\d+)$/, (wkts, runs) => {
+      const best = ctx._tbtActivityState.cricket.bowlBest;
+      if (!best) throw new Error('no best figures set');
+      if (best.wkts !== Number(wkts) || best.runs !== Number(runs))
+        throw new Error(`expected best ${wkts}/${runs}, got ${best.wkts}/${best.runs}`);
+    }],
+
+    [/^bowling average is n\/a$/, () => {
+      const avg = ctx._tbtActivityState.cricket.bowlAvg;
+      if (avg !== null) throw new Error(`expected bowlAvg null (n/a), got ${avg}`);
+    }],
+
+    [/^bowling average is ([\d.]+)$/, (n) => {
+      const avg = ctx._tbtActivityState.cricket.bowlAvg;
+      if (avg !== parseFloat(n)) throw new Error(`expected bowlAvg ${n}, got ${avg}`);
+    }],
+
+    [/^the bowling turn summary includes the wickets taken$/, () => {
+      if (!ctx._tbtBowlingResult || ctx._tbtBowlingResult.wickets == null)
+        throw new Error('no bowling result');
+      if (!ctx._tbtBowlingResult.note.includes(String(ctx._tbtBowlingResult.wickets)))
+        throw new Error(`expected wickets in note, got: ${ctx._tbtBowlingResult.note}`);
+    }],
+
+    [/^the bowling turn summary includes the runs conceded$/, () => {
+      if (!ctx._tbtBowlingResult || ctx._tbtBowlingResult.runs == null)
+        throw new Error('no bowling result');
+      if (!ctx._tbtBowlingResult.note.includes(String(ctx._tbtBowlingResult.runs)))
+        throw new Error(`expected runs in note, got: ${ctx._tbtBowlingResult.note}`);
+    }],
+
+    [/^the bowling turn summary is not empty$/, () => {
+      if (!ctx._tbtBowlingResult || !ctx._tbtBowlingResult.note || ctx._tbtBowlingResult.note.length === 0)
+        throw new Error('expected non-empty bowling note');
     }],
 
     [/^lifeNoise contribution from Nan is (\d+)$/, (n) => {
