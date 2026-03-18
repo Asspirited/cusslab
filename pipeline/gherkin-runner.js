@@ -15,7 +15,7 @@ const { QUNTUM_LEEKS_SCENARIOS, initState, pickRandomScenario, betLeekiness, spe
 const { initGameState, appendToHistory, incrementTurn, buildModifierBlock } = require('../src/logic/ff-engine.js');
 const { PUB_CRAWL_SCENES, getAllScenes, getPubScene, getActiveAdvisor, initPubCrawl, resolveChoice, determineOutcome, checkLederhosen, buildAdvisorPrompt, ADVISOR_IDS } = require('../src/logic/pub-navigator-engine.js');
 const { lintStepDuplicates } = require('./lint-steps.js');
-const { initTBTGame, classifyIntent, classifyActivity, applyActivity, getFormWord, getTinObjects, getGameDate, identifyExamineTarget, getExamineResponse, EXAMINE_RESPONSES, ACTIVITY_TYPES } = require('../src/logic/tbt-engine.js');
+const { initTBTGame, classifyIntent, classifyActivity, applyActivity, getFormWord, getTinObjects, getGameDate, identifyExamineTarget, getExamineResponse, computeForm, calculateLifeNoise, EXAMINE_RESPONSES, ACTIVITY_TYPES } = require('../src/logic/tbt-engine.js');
 
 // ── Mock state (simulates browser localStorage + DOM) ────────────────────────
 
@@ -10493,9 +10493,11 @@ function makeSteps(ctx) {
       ctx._tbtDelta    = applyActivity(ctx._tbtState, ctx._tbtActivity);
     }],
 
-    [/^FORM increases by one band if below Flying$/, () => {
-      if (ctx._tbtDelta.formDelta <= 0)
-        throw new Error(`NETS delta formDelta should be positive, got: ${ctx._tbtDelta.formDelta}`);
+    [/^NETS costs physique and gains sharpness$/, () => {
+      if (ctx._tbtDelta.physiqueδ !== -1)
+        throw new Error(`NETS physiqueδ should be -1, got: ${ctx._tbtDelta.physiqueδ}`);
+      if (ctx._tbtDelta.sharpnessδ !== 2)
+        throw new Error(`NETS sharpnessδ should be 2, got: ${ctx._tbtDelta.sharpnessδ}`);
     }],
 
     [/^the turn summary notes the practice$/, () => {
@@ -10631,6 +10633,148 @@ function makeSteps(ctx) {
     [/^the turn summary includes the bank balance$/, () => {
       if (!ctx._tbtSummary) throw new Error('summary not set');
       if (ctx._tbtSummary.bank !== '£4.30') throw new Error(`bank in summary: ${ctx._tbtSummary.bank}`);
+    }],
+
+    // ── TBT-011: attribute model ──────────────────────────────────────────────
+
+    [/^the TBT attribute engine is initialised$/, () => {
+      ctx._tbtAttrs = { physique: 5, skill: 5, confidence: 5, tenacity: 5, sharpness: 0, freshness: 0, lifeNoise: 0 };
+      ctx._tbtNoiseState = { relationships: { nan: 'green' }, bank: 10, home: 'green' };
+      ctx._tbtActivityState = initTBTGame(1968, 'Arthur', 'Rod');
+      ctx._tbtActivityDelta = null;
+    }],
+
+    [/^core attributes physique=(\d+) skill=(\d+) confidence=(\d+) tenacity=(\d+)$/, (p, s, c, t) => {
+      ctx._tbtAttrs.physique    = Number(p);
+      ctx._tbtAttrs.skill       = Number(s);
+      ctx._tbtAttrs.confidence  = Number(c);
+      ctx._tbtAttrs.tenacity    = Number(t);
+    }],
+
+    [/^weekly modifiers sharpness=(\d+) freshness=(\d+)$/, (sh, fr) => {
+      ctx._tbtAttrs.sharpness = Number(sh);
+      ctx._tbtAttrs.freshness = Number(fr);
+    }],
+
+    [/^lifeNoise=(\d+)$/, (n) => {
+      ctx._tbtAttrs.lifeNoise = Number(n);
+    }],
+
+    [/^FORM is computed$/, () => {
+      ctx._tbtFormWord = computeForm(ctx._tbtAttrs);
+    }],
+
+    [/^the FORM word is "([^"]+)"$/, (word) => {
+      if (ctx._tbtFormWord !== word)
+        throw new Error(`expected FORM word "${word}", got "${ctx._tbtFormWord}"`);
+    }],
+
+    [/^Nan dial is "([^"]+)"$/, (dial) => {
+      ctx._tbtNoiseState.relationships.nan = dial;
+    }],
+
+    [/^bank balance is below critical threshold$/, () => {
+      ctx._tbtNoiseState.bank = 0.50;
+    }],
+
+    [/^bank balance is above critical threshold$/, () => {
+      ctx._tbtNoiseState.bank = 10;
+    }],
+
+    [/^HOME dial is "([^"]+)"$/, (dial) => {
+      ctx._tbtNoiseState.home = dial;
+    }],
+
+    [/^lifeNoise is calculated$/, () => {
+      ctx._tbtNoise = calculateLifeNoise(ctx._tbtNoiseState);
+    }],
+
+    [/^lifeNoise is (\d+)$/, (n) => {
+      if (ctx._tbtNoise !== Number(n))
+        throw new Error(`expected lifeNoise ${n}, got ${ctx._tbtNoise}`);
+    }],
+
+    [/^physique is (\d+)$/, (n) => {
+      ctx._tbtActivityState.physique = Number(n);
+    }],
+
+    [/^sharpness is (\d+)$/, (n) => {
+      ctx._tbtActivityState.sharpness = Number(n);
+    }],
+
+    [/^freshness is (\d+)$/, (n) => {
+      ctx._tbtActivityState.freshness = Number(n);
+    }],
+
+    [/^the player has (\d+) practice sessions this cycle$/, (n) => {
+      ctx._tbtActivityState.practiceSessionsThisCycle = Number(n);
+    }],
+
+    [/^the player does NETS$/, () => {
+      ctx._tbtActivityDelta = applyActivity(ctx._tbtActivityState, ACTIVITY_TYPES.NETS);
+    }],
+
+    [/^the player does REST$/, () => {
+      ctx._tbtActivityDelta = applyActivity(ctx._tbtActivityState, ACTIVITY_TYPES.REST);
+    }],
+
+    [/^physique delta is (-?\d+)$/, (n) => {
+      if (ctx._tbtActivityDelta.physiqueδ !== Number(n))
+        throw new Error(`expected physiqueδ ${n}, got ${ctx._tbtActivityDelta.physiqueδ}`);
+    }],
+
+    [/^sharpness delta is (-?\d+)$/, (n) => {
+      if (ctx._tbtActivityDelta.sharpnessδ !== Number(n))
+        throw new Error(`expected sharpnessδ ${n}, got ${ctx._tbtActivityDelta.sharpnessδ}`);
+    }],
+
+    [/^freshness delta is (-?\d+)$/, (n) => {
+      if (ctx._tbtActivityDelta.freshnessδ !== Number(n))
+        throw new Error(`expected freshnessδ ${n}, got ${ctx._tbtActivityDelta.freshnessδ}`);
+    }],
+
+    [/^practice sessions delta is (-?\d+)$/, (n) => {
+      if (ctx._tbtActivityDelta.practiceSessionsδ !== Number(n))
+        throw new Error(`expected practiceSessionsδ ${n}, got ${ctx._tbtActivityDelta.practiceSessionsδ}`);
+    }],
+
+    [/^skill delta is (-?\d+)$/, (n) => {
+      if (ctx._tbtActivityDelta.skillδ !== Number(n))
+        throw new Error(`expected skillδ ${n}, got ${ctx._tbtActivityDelta.skillδ}`);
+    }],
+
+    [/^a new TBT game is started$/, () => {
+      ctx._tbtNewGame = initTBTGame(1968, 'Arthur', 'Rod');
+    }],
+
+    [/^skill is (\d+)$/, (n) => {
+      const val = ctx._tbtNewGame ? ctx._tbtNewGame.skill : ctx._tbtActivityState.skill;
+      if (val !== Number(n)) throw new Error(`expected skill ${n}, got ${val}`);
+    }],
+
+    [/^confidence is (\d+)$/, (n) => {
+      const val = ctx._tbtNewGame ? ctx._tbtNewGame.confidence : ctx._tbtActivityState.confidence;
+      if (val !== Number(n)) throw new Error(`expected confidence ${n}, got ${val}`);
+    }],
+
+    [/^tenacity is (\d+)$/, (n) => {
+      const val = ctx._tbtNewGame ? ctx._tbtNewGame.tenacity : ctx._tbtActivityState.tenacity;
+      if (val !== Number(n)) throw new Error(`expected tenacity ${n}, got ${val}`);
+    }],
+
+    [/^sharpness is (\d+)$/, (n) => {
+      const val = ctx._tbtNewGame ? ctx._tbtNewGame.sharpness : ctx._tbtActivityState.sharpness;
+      if (val !== Number(n)) throw new Error(`expected sharpness ${n}, got ${val}`);
+    }],
+
+    [/^freshness is (\d+)$/, (n) => {
+      const val = ctx._tbtNewGame ? ctx._tbtNewGame.freshness : ctx._tbtActivityState.freshness;
+      if (val !== Number(n)) throw new Error(`expected freshness ${n}, got ${val}`);
+    }],
+
+    [/^practice sessions this cycle is (\d+)$/, (n) => {
+      const val = ctx._tbtNewGame ? ctx._tbtNewGame.practiceSessionsThisCycle : ctx._tbtActivityState.practiceSessionsThisCycle;
+      if (val !== Number(n)) throw new Error(`expected practiceSessionsThisCycle ${n}, got ${val}`);
     }],
 
   ];

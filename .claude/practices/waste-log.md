@@ -14,9 +14,10 @@
 | WL-097 | Left nav focus trap — pointer-events not released after right panel interaction | Low | Fix deferred; investigate pointer-events/focus trap in right panel |
 | WL-MODE-002 | Character debt: Bobby George, Rod Harrington (darts) — no character md files | Low | Write characters/bobby-george.md and characters/rod-harrington.md before next darts prompt work |
 | WL-123 | Session context overflow mid-session | Low | Ongoing mitigation: split large sessions; read index.html in sections |
-| WL-131 | Character dullness — "X is right/wrong" openers, "I've watched this back" bleeding | Medium | Three Amigos needed before touching TURN_RULES |
+| WL-131 | Character dullness — openers bleeding across characters | Medium | Three Amigos needed before touching TURN_RULES |
 | WL-136 | UI audit: IIFE return objects not checked — exports can go missing silently | High | Add pipeline check: verify each global wrapper's IIFE target is in return statement |
 | WL-147 | backlog-report.js: `Status[:\s]+` regex matches "status text" in descriptions, falsely marking items OPEN | Low | Tighten regex to `^\s*[-*]\s*Status:` in multiline mode |
+| WL-149 | tbt.html local applyActivity copy diverged from engine — uses formDelta, not attribute deltas | Low | Wire tbt.html to tbt-engine.js applyActivity before TBT-011 attribute model is live in-game |
 
 ---
 
@@ -1918,3 +1919,14 @@ Status: CLOSED
 **Cost impact:** Low — data correct in backlog.md; misleading report only
 **Tags:** `#parser-bug` `#backlog-report` `#false-open` `#pipeline`
 **Status:** Open — fix: tighten status regex in pipeline/backlog-report.js to `^\s*[-*]\s*Status:` (multiline mode)
+
+### WL-148
+**Item:** Two minor test/step-def errors caught within same session
+**Symptom 1:** Unit test `getExamineResponse: button contains no explanation` failed because `includes('match')` matched "Doesn't match anything" in the button response.
+**Symptom 2:** Gherkin step "the grandfather name appears greyed" had no match — feature file used "grandfather name" but step def was "grandfather's name".
+**Root cause:** Test assertions written too broadly (string match too short). Feature file step text not checked against existing step def before writing.
+**Session:** 2026-03-17
+**Time lost:** ~5 min total
+**Cost impact:** Low — caught immediately by pipeline
+**Tags:** `#test-design` `#gherkin` `#step-mismatch`
+**Status:** CLOSED — fixed same session. Lesson: check step text exactly against existing defs before writing feature file.

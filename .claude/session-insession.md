@@ -152,6 +152,19 @@ via .claude/settings.local.json. If a prompt appears for a routine operation it 
 the allow list needs updating — add the pattern to settings.local.json and commit.
 Do NOT ask Rod to approve routine reads, writes, git commands, or pipeline runs.
 
+### RULE: Ship after every BL close — always, no batching
+
+Every time a BL item reaches DDD CLEAN: run COMMIT SEQUENCE immediately.
+Do not finish two BL items then commit. One item closed = one commit + push.
+This is non-negotiable. "Going fast" does not mean batching commits.
+
+Signal: DDD CLEAN completes → COMMIT SEQUENCE fires automatically, no prompting needed.
+Why: batched commits obscure causality, inflate blast radius of a bad push, and make
+     session-close harder. One item, one commit, one hash. Always.
+Source: DORA — deployment frequency; Humble/Farley — Continuous Delivery (small batches)
+
+---
+
 ### SEQUENCE: Proactive session close — never let auto-compact fire
 Auto-compact is a system event, not a rule I can enforce. What I CAN control:
 watching for clean natural separations and closing there before the limit hits.

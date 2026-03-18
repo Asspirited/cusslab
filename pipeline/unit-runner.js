@@ -1518,7 +1518,7 @@ assert('buildModifierBlock: multiple modifiers each appear',
 
 // ── TBT engine ───────────────────────────────────────────────────────────────
 
-const { initTBTGame, calculateAge, getGameDate, getTinObjects, classifyIntent, classifyActivity, applyActivity, getFormWord, identifyExamineTarget, getExamineResponse, buildTurnSummaryData, EXAMINE_RESPONSES, ACTIVITY_TYPES } = require('../src/logic/tbt-engine.js');
+const { initTBTGame, calculateAge, getGameDate, getTinObjects, classifyIntent, classifyActivity, applyActivity, getFormWord, identifyExamineTarget, getExamineResponse, buildTurnSummaryData, computeForm, calculateLifeNoise, EXAMINE_RESPONSES, ACTIVITY_TYPES } = require('../src/logic/tbt-engine.js');
 
 assert('calculateAge: 1968 in 1979 is 11',
   calculateAge(1968, 1979), 11);
@@ -1747,29 +1747,115 @@ assert('applyActivity VISIT_NAN: note set',
   _nanDelta.note.includes('Nan'), true);
 
 const _netsDelta = applyActivity(_tbtBase, ACTIVITY_TYPES.NETS);
-assert('applyActivity NETS: form increases',
-  _netsDelta.formDelta, 1);
 assert('applyActivity NETS: no bank change',
   _netsDelta.bankDelta, 0);
+assert('applyActivity NETS: physique costs 1',
+  _netsDelta.physiqueδ, -1);
+assert('applyActivity NETS: sharpness gains 2',
+  _netsDelta.sharpnessδ, 2);
+assert('applyActivity NETS: practice session counted',
+  _netsDelta.practiceSessionsδ, 1);
 
 const _workDelta = applyActivity(_tbtBase, ACTIVITY_TYPES.WORK);
 assert('applyActivity WORK: bank increases by weeklyWage',
   _workDelta.bankDelta, _tbtBase.weeklyWage);
-assert('applyActivity WORK: no form change',
-  _workDelta.formDelta, 0);
+assert('applyActivity WORK: physique costs 1',
+  _workDelta.physiqueδ, -1);
 
 const _restDelta = applyActivity(_tbtBase, ACTIVITY_TYPES.REST);
-assert('applyActivity REST: form increases when below Flying',
-  _restDelta.formDelta, 2);
+assert('applyActivity REST: physique gains 2',
+  _restDelta.physiqueδ, 2);
+assert('applyActivity REST: freshness gains 2',
+  _restDelta.freshnessδ, 2);
 
-const _flyingBase = { ...initTBTGame(1968, 'Arthur', 'Rod'), form: 20 };
-const _restAtPeak = applyActivity(_flyingBase, ACTIVITY_TYPES.REST);
-assert('applyActivity REST: no form gain when already Flying',
-  _restAtPeak.formDelta, 0);
+const _pubDelta = applyActivity(_tbtBase, ACTIVITY_TYPES.PUB);
+assert('applyActivity PUB: physique costs 1',
+  _pubDelta.physiqueδ, -1);
 
-const _netsAtPeak = applyActivity(_flyingBase, ACTIVITY_TYPES.NETS);
-assert('applyActivity NETS: no form gain when already at 20',
-  _netsAtPeak.formDelta, 0);
+// ── TBT-011: computeForm ──────────────────────────────────────────────────────
+
+assert('computeForm: all zeros → score 0 → Lost',
+  computeForm({ physique:0, skill:0, confidence:0, tenacity:0, sharpness:0, freshness:0, lifeNoise:0 }),
+  'Lost');
+
+assert('computeForm: all 10s, no modifiers → Flying',
+  computeForm({ physique:10, skill:10, confidence:10, tenacity:10, sharpness:0, freshness:0, lifeNoise:0 }),
+  'Flying');
+
+assert('computeForm: max attributes + max modifiers → Flying (clamped)',
+  computeForm({ physique:10, skill:10, confidence:10, tenacity:10, sharpness:2, freshness:2, lifeNoise:0 }),
+  'Flying');
+
+assert('computeForm: zero attributes + max lifeNoise → Lost (clamp at 0)',
+  computeForm({ physique:0, skill:0, confidence:0, tenacity:0, sharpness:0, freshness:0, lifeNoise:3 }),
+  'Lost');
+
+// physique=6 skill=6 confidence=6 tenacity=6 → 4.2+3.6+2.4+1.8 = 12.0 → Shaky
+assert('computeForm: mid attributes → Shaky',
+  computeForm({ physique:6, skill:6, confidence:6, tenacity:6, sharpness:0, freshness:0, lifeNoise:0 }),
+  'Shaky');
+
+// physique=8 skill=8 confidence=8 tenacity=8 → 5.6+4.8+3.2+2.4 = 16.0 → Decent
+assert('computeForm: high attributes → Decent',
+  computeForm({ physique:8, skill:8, confidence:8, tenacity:8, sharpness:0, freshness:0, lifeNoise:0 }),
+  'Decent');
+
+// physique=6,skill=6,conf=6,ten=6 → 12.0, sharpness+freshness +4 → 16.0 = Decent (not Flying — lifeNoise 3 knocks to 13 → Decent)
+// but without lifeNoise: 12+2+2=16 → Decent; with lifeNoise 3: 13 → Decent still
+// lifeNoise knocking from Shaky: physique=6,skill=6,conf=6,ten=6 → 12.0 - lifeNoise 3 = 9.0 → Shaky (no change)
+// let's do: physique=5,skill=5,conf=5,ten=5 → 3.5+3.0+2.0+1.5=10.0 → Shaky; -3 lifeNoise → 7 → Nowhere
+assert('computeForm: lifeNoise knocks score band down',
+  computeForm({ physique:5, skill:5, confidence:5, tenacity:5, sharpness:0, freshness:0, lifeNoise:3 }),
+  'Nowhere');
+
+// ── TBT-011: calculateLifeNoise ───────────────────────────────────────────────
+
+assert('calculateLifeNoise: all stable → 0',
+  calculateLifeNoise({ relationships: { nan: 'green' }, bank: 10, home: 'green' }), 0);
+
+assert('calculateLifeNoise: nan red → 1',
+  calculateLifeNoise({ relationships: { nan: 'red' }, bank: 10, home: 'green' }), 1);
+
+assert('calculateLifeNoise: bank critical → 1',
+  calculateLifeNoise({ relationships: { nan: 'green' }, bank: 0.50, home: 'green' }), 1);
+
+assert('calculateLifeNoise: nan red + bank critical → 2',
+  calculateLifeNoise({ relationships: { nan: 'red' }, bank: 0.50, home: 'green' }), 2);
+
+assert('calculateLifeNoise: all three → 3',
+  calculateLifeNoise({ relationships: { nan: 'red' }, bank: 0.50, home: 'red' }), 3);
+
+// ── TBT-011: initTBTGame includes core attributes ─────────────────────────────
+
+const _tbt11Game = initTBTGame(1968, 'Arthur', 'Rod');
+assert('initTBTGame: physique initialised at 5',
+  _tbt11Game.physique, 5);
+assert('initTBTGame: skill initialised at 3',
+  _tbt11Game.skill, 3);
+assert('initTBTGame: confidence initialised at 5',
+  _tbt11Game.confidence, 5);
+assert('initTBTGame: tenacity initialised at 5',
+  _tbt11Game.tenacity, 5);
+assert('initTBTGame: sharpness initialised at 1',
+  _tbt11Game.sharpness, 1);
+assert('initTBTGame: freshness initialised at 2',
+  _tbt11Game.freshness, 2);
+assert('initTBTGame: practiceSessionsThisCycle initialised at 0',
+  _tbt11Game.practiceSessionsThisCycle, 0);
+
+// ── TBT-011: skill accumulation across practice sessions ──────────────────────
+
+const _skillBase = { ...initTBTGame(1968, 'Arthur', 'Rod'), skill: 5, practiceSessionsThisCycle: 0 };
+const _nets1 = applyActivity(_skillBase, ACTIVITY_TYPES.NETS);
+assert('skill accumulation: 1 session — skill unchanged, counter increments',
+  _nets1.practiceSessionsδ, 1);
+
+const _skillNear = { ...initTBTGame(1968, 'Arthur', 'Rod'), skill: 5, practiceSessionsThisCycle: 3 };
+const _nets4 = applyActivity(_skillNear, ACTIVITY_TYPES.NETS);
+assert('skill accumulation: 4th session — skillδ is 1',
+  _nets4.skillδ, 1);
+assert('skill accumulation: 4th session — practiceSessionsδ resets to -3 (net to 0)',
+  _nets4.practiceSessionsδ, -3);
 
 // ── Results ──────────────────────────────────────────────────────────────────
 

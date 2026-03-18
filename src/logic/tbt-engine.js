@@ -75,27 +75,60 @@ function classifyActivity(input) {
   return null;
 }
 
+const BANK_CRITICAL_THRESHOLD = 1.00;
+const PRACTICE_SESSIONS_PER_SKILL_POINT = 4;
+
+function computeForm(attrs) {
+  const { physique, skill, confidence, tenacity, sharpness, freshness, lifeNoise } = attrs;
+  const score = (physique * 0.70) + (skill * 0.60) + (confidence * 0.40) + (tenacity * 0.30)
+              + sharpness + freshness - lifeNoise;
+  return getFormWord(score);
+}
+
+function calculateLifeNoise(state) {
+  let noise = 0;
+  if (state.relationships.nan === 'red' || state.relationships.nan === 'greyed') noise++;
+  if (state.bank < BANK_CRITICAL_THRESHOLD) noise++;
+  if (state.home === 'red') noise++;
+  return noise;
+}
+
 function applyActivity(state, activityType) {
-  const delta = { formDelta: 0, bankDelta: 0, nanDialChange: null, note: '' };
+  const delta = {
+    formDelta: 0, bankDelta: 0, nanDialChange: null, note: '',
+    physiqueδ: 0, skillδ: 0, confidenceδ: 0, tenacityδ: 0,
+    sharpnessδ: 0, freshnessδ: 0, practiceSessionsδ: 0,
+  };
   switch (activityType) {
     case ACTIVITY_TYPES.VISIT_NAN:
       delta.nanDialChange = 'green';
       delta.note = 'You went round to Nan\'s.';
       break;
-    case ACTIVITY_TYPES.NETS:
-      delta.formDelta = state.form < 20 ? 1 : 0;
+    case ACTIVITY_TYPES.NETS: {
+      const sessions = (state.practiceSessionsThisCycle || 0) + 1;
+      delta.physiqueδ = -1;
+      delta.sharpnessδ = 2;
+      if (sessions >= PRACTICE_SESSIONS_PER_SKILL_POINT) {
+        delta.skillδ = 1;
+        delta.practiceSessionsδ = -(sessions - 1);
+      } else {
+        delta.practiceSessionsδ = 1;
+      }
       delta.note = 'You went to nets.';
       break;
+    }
     case ACTIVITY_TYPES.WORK:
       delta.bankDelta = state.weeklyWage || 2.50;
+      delta.physiqueδ = -1;
       delta.note = `Paper round done. £${(state.weeklyWage || 2.50).toFixed(2)} earned.`;
       break;
     case ACTIVITY_TYPES.REST:
-      delta.formDelta = state.form < 17 ? 2 : 0;
+      delta.physiqueδ = 2;
+      delta.freshnessδ = 2;
       delta.note = 'You took the evening. Needed it.';
       break;
     case ACTIVITY_TYPES.PUB:
-      delta.formDelta = state.form > 10 ? 1 : -1;
+      delta.physiqueδ = -1;
       delta.note = 'You went to the pub.';
       break;
     case ACTIVITY_TYPES.STUDY:
@@ -123,6 +156,13 @@ function initTBTGame(dob, grandfatherName, playerName) {
     cricket:  { matches: 0, innings: 0, runs: 0, wkts: 0, avg: null, hs: null },
     football: { apps: 0, goals: 0, level: null },
     form:     10,
+    physique:  5,
+    skill:     3,
+    confidence: 5,
+    tenacity:  5,
+    sharpness: 1,
+    freshness: 2,
+    practiceSessionsThisCycle: 0,
     gameState: 'OPENING',
     turnNumber: 1,
   };
@@ -207,6 +247,8 @@ module.exports = {
   classifyActivity,
   applyActivity,
   getFormWord,
+  computeForm,
+  calculateLifeNoise,
   identifyExamineTarget,
   getExamineResponse,
   buildTurnSummaryData,

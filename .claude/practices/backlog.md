@@ -1708,6 +1708,24 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 
 ---
 
+### TBT-011 — Hidden attribute model: physique, skill, confidence, tenacity composing FORM
+
+- Description: FORM is currently a single 0-20 number. Replace with four slow-moving core attributes (physique, skill, confidence, tenacity) plus two fast-moving weekly modifiers (sharpness, freshness) that compose into FORM. Player never sees the component values — only the FORM word. Desire is narrative, not a stat. lifeNoise bleed-in from other dial states (Nan red, bank low) remains. Key discovery moments: skilled-but-rusty, rested-but-unconfident, life-noise tanking FORM despite good training. Three Amigos done 2026-03-18. Gherkin needed.
+- Feature: tbt
+- CD3: UBV=8 TC=8 RR=9 → CoD=25, Dur=2, **CD3=12.5**
+- Status: CLOSED — 2026-03-18. computeForm, calculateLifeNoise added to tbt-engine.js. GameState extended with physique/skill/confidence/tenacity/sharpness/freshness/practiceSessionsThisCycle. applyActivity returns attribute deltas. 823/823 unit tests, Gherkin green. WL-149 raised (tbt.html divergence).
+
+---
+
+### TBT-012 — Nan quality mechanic: visit quality drives dial, not frequency alone
+
+- Description: Nan dial currently moves on visit/no-visit. Add quality score per visit (1=present-but-absent, 2=proper conversation, 3=engaged with tin object or grandfather story). Dial state derived from weighted rolling quality, not raw visit count. Player discovery: visiting every week but staying amber until they engage properly. Greyed state (grief) remains event-triggered, not quality-reversible. Depends on TBT-011 attribute model for GameState structure. Three Amigos done 2026-03-18. Gherkin needed.
+- Feature: tbt
+- CD3: UBV=7 TC=6 RR=7 → CoD=20, Dur=1, **CD3=20.0**
+- Status: OPEN — raised 2026-03-18. Three Amigos done. Gherkin needed.
+
+---
+
 ## ── TBT EPIC STRUCTURE ───────────────────────────────────────────────────────
 
 Epic 1: SCHOOL YEARS (ages 11-16, November 1979 → ~1985) — MVP scope

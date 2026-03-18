@@ -1817,3 +1817,28 @@ A runtime array in Golf discuss(). After each character responds, their first se
 
 ### arc state guard (recentMoves)
 A runtime array in Golf discuss(). After each character responds, their `postureType` is pushed. Before building the next character's system prompt, the last 3 entries are checked. If all three share the same postureType value, a `REGISTER BREAK` instruction is injected. Guard is conditional on `_lastThree.length >= 3`. Implemented BL-145 (2026-03-15).
+
+---
+
+## Through the Biscuit Tin — Bounded Context
+
+Separate from all Cusslab domain logic. No imports from Cusslab domain.
+
+**Aggregates:**
+- `GameState` — playerName, grandfatherName, dob, age, bank, work, weeklyWage, home, relationships, cricket, football, form (0-20 numeric, cached), physique, skill, confidence, tenacity, sharpness, freshness, practiceSessionsThisCycle, turnNumber, gameState (DEDICATION|CREATION|OPENING|PLAY)
+- `TinContents` — 7 objects in canonical order (photograph → wisden_page → match_stub → brylcreem_ad → southampton_programme → eagle_comic → button)
+
+**Key domain concepts:**
+- `FORM` — 0-20 cached value, derived by `computeForm()`. Never shown as number. Displayed as: Lost(0-4) / Nowhere(5-8) / Shaky(9-12) / Decent(13-16) / Flying(17-20). Player discovers what drives it through play, not instruction.
+- `coreAttributes` — four slow-moving season-arc stats: physique (0-10), skill (0-10), confidence (0-10), tenacity (0-10). Weighted formula: physique×0.70 + skill×0.60 + confidence×0.40 + tenacity×0.30 = FORM base (max 20).
+- `weeklyModifiers` — two fast-moving stats reset each turn: sharpness (0-2, recent practice), freshness (0-2, rest state). Added to FORM base before lifeNoise.
+- `lifeNoise` — 0-3 penalty derived from other dial states. Nan red+1, bank<£1+1, HOME red+1. Bleeds life pressure into FORM. Never shown. BANK_CRITICAL_THRESHOLD = £1.00.
+- `skill accumulation` — NETS does not raise skill directly. practiceSessionsThisCycle accumulates; skill increments by 1 every PRACTICE_SESSIONS_PER_SKILL_POINT (=4) sessions and counter resets.
+- `RAG dial` — green / amber / red / greyed. Greyed = grief, not estrangement. Grandfather only.
+- `Activity` — VISIT_NAN | NETS | WORK | REST | PUB | STUDY. Resolves locally, no AI call. Returns attribute deltas (physiqueδ, skillδ, sharpnessδ, freshnessδ, practiceSessionsδ) not formDelta.
+- `Intent` — EXAMINE | GET_ON_BUS | STAY | OTHER. EXAMINE routes to pre-written responses first.
+- `TurnSummary` — always includes Nan dial line, form word, bank balance.
+
+**Infrastructure:** Cloudflare Worker (tbt.leanspirited.workers.dev — future). Spike uses cusslab-api Worker.
+**Entry point:** tbt/tbt.html — standalone, never linked from index.html.
+**Branch:** through-the-biscuit-tin
