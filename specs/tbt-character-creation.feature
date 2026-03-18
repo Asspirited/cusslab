@@ -16,4 +16,4 @@ Feature: TBT character creation screen
     Given all three fields are complete
     Then the screen clears completely
     And the opening scene begins with the player name on the second line
-    And the grandfather name appears greyed in the relationships panel
+    And the grandfather's name appears greyed in the relationships panel
