@@ -15,8 +15,8 @@ Feature: Hidden attribute model composing FORM
 
     Examples:
       | physique | skill | confidence | tenacity | sharpness | freshness | noise | word    |
-      | 0        | 0     | 0          | 0        | 0         | 0         | 0     | Lost    |
-      | 2        | 2     | 2          | 2        | 0         | 0         | 0     | Lost    |
+      | 0        | 0     | 0          | 0        | 0         | 0         | 0     | Struggling    |
+      | 2        | 2     | 2          | 2        | 0         | 0         | 0     | Struggling    |
       | 4        | 4     | 4          | 4        | 0         | 0         | 0     | Nowhere |
       | 6        | 6     | 6          | 6        | 0         | 0         | 0     | Shaky   |
       | 8        | 8     | 8          | 8        | 0         | 0         | 0     | Decent  |
@@ -29,7 +29,7 @@ Feature: Hidden attribute model composing FORM
     And weekly modifiers sharpness=0 freshness=0
     And lifeNoise=3
     When FORM is computed
-    Then the FORM word is "Lost"
+    Then the FORM word is "Struggling"
 
   Scenario: FORM score is clamped to 20 when formula exceeds maximum
     Given core attributes physique=10 skill=10 confidence=10 tenacity=10
