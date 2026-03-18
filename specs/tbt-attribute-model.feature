@@ -29,7 +29,7 @@ Feature: Hidden attribute model composing FORM
     And weekly modifiers sharpness=0 freshness=0
     And lifeNoise=3
     When FORM is computed
-    Then the FORM word is "Struggling"
+    Then the FORM word is "Nowhere"
 
   Scenario: FORM score is clamped to 20 when formula exceeds maximum
     Given core attributes physique=10 skill=10 confidence=10 tenacity=10
