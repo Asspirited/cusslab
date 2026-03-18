@@ -1651,3 +1651,69 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Feature: tbt
 - CD3: UBV=8 TC=6 RR=6 → CoD=20, Dur=1, **CD3=20.0**
 - Status: OPEN — raised 2026-03-17. Gherkin approved.
+
+---
+
+### TBT-005 — Weekly cycle: time allocation and sport balance
+
+- Description: Core turn loop. Each week: fixed slots (Saturday match) + variable slots (nets, work, visit Nan, pub, rest, study). Player types intent, engine classifies and resolves. FORM/bank/relationship dials respond. Week closes with turn summary. ~50% sport target built into slot weighting. Three Amigos needed before Gherkin.
+- Feature: tbt
+- CD3: UBV=9 TC=8 RR=8 → CoD=25, Dur=3, **CD3=8.3**
+- Status: OPEN — raised 2026-03-17. Three Amigos needed.
+
+---
+
+### TBT-006 — Transport choices: getting to the game
+
+- Description: Bus (20p), bike, run, walk, cadge a lift — each with cost and FORM consequence. Early game: 20p is 10% of everything you have. Bike in rain = late + cold. The journey itself is scene material. Transport choice affects arrival condition and therefore FORM going into the match. Three Amigos needed before Gherkin.
+- Feature: tbt
+- CD3: UBV=7 TC=6 RR=6 → CoD=19, Dur=1, **CD3=19.0**
+- Status: OPEN — raised 2026-03-17. Three Amigos needed.
+
+---
+
+### TBT-007 — First cricket match: scene, resolution, stats update
+
+- Description: The first match at Utley CC. Scene renders: the pavilion, the pitch, the groundsman. Player bats or bowls. Outcome determined by FORM + TALENT (hidden) + dice. Stats panel updates: matches, innings, runs, avg, HS, wkts. Turn summary reports the result in one line. Three Amigos needed before Gherkin.
+- Feature: tbt
+- CD3: UBV=9 TC=9 RR=9 → CoD=27, Dur=2, **CD3=13.5**
+- Status: OPEN — raised 2026-03-17. Three Amigos needed.
+
+---
+
+### TBT-008 — Nan dial reactivity: choices affect the dial
+
+- Description: Nan dial responds to player choices over time. Visit Nan: green maintained. Miss several weeks: amber. Bank drops very low: amber (she knows). Player leaves something on the kitchen table: green restored. Dial state persists across turns. Amber triggers a scene — not a warning, just the weight of it. Three Amigos needed before Gherkin.
+- Feature: tbt
+- CD3: UBV=9 TC=8 RR=8 → CoD=25, Dur=2, **CD3=12.5**
+- Status: OPEN — raised 2026-03-17. Three Amigos needed.
+
+---
+
+### TBT-009 — FORM system: fluctuation across life events
+
+- Description: FORM (0-20, never shown as number) fluctuates with sleep, stress, relationships, money pressure, drink, injury, the weight of belief. Shown only as narrative word: Flying / Decent / Shaky / Nowhere / Lost. Life events move FORM up or down. Cricket performance is the readout. Three Amigos needed before Gherkin.
+- Feature: tbt
+- CD3: UBV=9 TC=8 RR=7 → CoD=24, Dur=2, **CD3=12.0**
+- Status: OPEN — raised 2026-03-17. Three Amigos needed.
+
+---
+
+### TBT-010 — The old man next door: recurring NPC, grandfather witness
+
+- Description: Old man nearby. Player can befriend over time. He watched the grandfather play and never knew his grandson lived next door. Revelation arrives when player pieces together context — not from a name-drop, from a story he's telling. His dial will go greyed during the narrative (he's old at game start). Nan doesn't know he watched her father play. Three Amigos needed before Gherkin.
+- Feature: tbt
+- CD3: UBV=8 TC=7 RR=8 → CoD=23, Dur=3, **CD3=7.7**
+- Status: OPEN — raised 2026-03-17. Three Amigos needed.
+
+---
+
+## ── TBT EPIC STRUCTURE ───────────────────────────────────────────────────────
+
+Epic 1: SCHOOL YEARS (ages 11-16, November 1979 → ~1985) — MVP scope
+Epic 2: SIXTH FORM / FIRST JOBS (ages 16-18, ~1985-87) — first proper job, A-levels or not, county scouts
+Epic 3: COUNTY SECOND XI (ages 18-22, ~1987-91) — first contract, dressing room, away trips
+Epic 4: COUNTY CIRCUIT (ages 22-30, ~1991-99) — sponsor deals, England call, Nan's kitchen scene
+Epic 5: LATE CAREER / AFTER (ages 30-35+, ~1999-2004+) — Twenty20, coaching badge, Ollie born
+
+TBT-001 through TBT-010 are all Epic 1. Build Epic 1 to playtest quality before scoping Epic 2.
