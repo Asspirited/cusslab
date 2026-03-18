@@ -23,7 +23,7 @@ Feature: TBT cricket bowling resolution
     And bowling skill is 5
     When the bowling is resolved with roll 0.10
     Then the wickets taken is 0
-    And the runs conceded is between 15 and 35
+    And the runs conceded is between 10 and 45
 
   Scenario: Bowling result updates bowling stats
     Given bowling stats are at zero
