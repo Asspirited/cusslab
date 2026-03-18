@@ -1518,7 +1518,7 @@ assert('buildModifierBlock: multiple modifiers each appear',
 
 // ── TBT engine ───────────────────────────────────────────────────────────────
 
-const { initTBTGame, calculateAge, getGameDate, getTinObjects, classifyIntent, buildTurnSummaryData } = require('../src/logic/tbt-engine.js');
+const { initTBTGame, calculateAge, getGameDate, getTinObjects, classifyIntent, identifyExamineTarget, getExamineResponse, buildTurnSummaryData, EXAMINE_RESPONSES } = require('../src/logic/tbt-engine.js');
 
 assert('calculateAge: 1968 in 1979 is 11',
   calculateAge(1968, 1979), 11);
@@ -1620,6 +1620,78 @@ assert('buildTurnSummaryData: nanDial from state',
 
 assert('buildTurnSummaryData: events array passed through',
   _tbtSummary.events[0], 'You went to Utley Cricket Club.');
+
+assert('identifyExamineTarget: "examine the stub" → match_stub',
+  identifyExamineTarget('examine the stub'), 'match_stub');
+
+assert('identifyExamineTarget: "look at 1948" → match_stub',
+  identifyExamineTarget('look at the 1948 thing'), 'match_stub');
+
+assert('identifyExamineTarget: "examine the eagle" → eagle_comic',
+  identifyExamineTarget('examine the eagle'), 'eagle_comic');
+
+assert('identifyExamineTarget: "look at the mekon" → eagle_comic',
+  identifyExamineTarget('look at the mekon'), 'eagle_comic');
+
+assert('identifyExamineTarget: "examine the button" → button',
+  identifyExamineTarget('examine the button'), 'button');
+
+assert('identifyExamineTarget: "examine the coin" → coin',
+  identifyExamineTarget('examine the coin'), 'coin');
+
+assert('identifyExamineTarget: "look at the photo" → photograph',
+  identifyExamineTarget('look at the photo'), 'photograph');
+
+assert('identifyExamineTarget: "examine the photograph" → photograph',
+  identifyExamineTarget('examine the photograph'), 'photograph');
+
+assert('identifyExamineTarget: "examine the scorecard" → wisden_page',
+  identifyExamineTarget('examine the scorecard'), 'wisden_page');
+
+assert('identifyExamineTarget: "examine the programme" → southampton_programme',
+  identifyExamineTarget('examine the programme'), 'southampton_programme');
+
+assert('identifyExamineTarget: "examine the brylcreem ad" → brylcreem_ad',
+  identifyExamineTarget('examine the brylcreem ad'), 'brylcreem_ad');
+
+assert('identifyExamineTarget: unknown input → null',
+  identifyExamineTarget('examine the invisible thing'), null);
+
+assert('identifyExamineTarget: empty → null',
+  identifyExamineTarget(''), null);
+
+assert('getExamineResponse: match_stub contains "carried not kept"',
+  getExamineResponse('match_stub').includes('Carried'), true);
+
+assert('getExamineResponse: match_stub contains THE OVAL',
+  getExamineResponse('match_stub').includes('THE OVAL'), true);
+
+assert('getExamineResponse: match_stub ends with "he was there"',
+  getExamineResponse('match_stub').includes('he was there'), true);
+
+assert('getExamineResponse: button is short — under 60 chars',
+  getExamineResponse('button').length < 60, true);
+
+assert('getExamineResponse: button contains no explanation',
+  getExamineResponse('button').includes('perhaps') || getExamineResponse('button').includes('maybe'), false);
+
+assert('getExamineResponse: eagle contains "naff"',
+  getExamineResponse('eagle_comic').includes('naff'), true);
+
+assert('getExamineResponse: eagle contains "tin kept the light out"',
+  getExamineResponse('eagle_comic').includes('tin kept the light out'), true);
+
+assert('getExamineResponse: coin does not name the competition',
+  getExamineResponse('coin').includes('FA Cup') || getExamineResponse('coin').includes('Final'), false);
+
+assert('getExamineResponse: coin contains "wording is completely gone"',
+  getExamineResponse('coin').includes('completely gone'), true);
+
+assert('getExamineResponse: unknown id → null',
+  getExamineResponse('nonexistent'), null);
+
+assert('all 8 tin objects have examine responses',
+  Object.keys(EXAMINE_RESPONSES).length, 8);
 
 // ── Results ──────────────────────────────────────────────────────────────────
 

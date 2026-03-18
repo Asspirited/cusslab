@@ -1642,3 +1642,12 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Feature: tbt
 - CD3: UBV=6 TC=5 RR=5 → CoD=16, Dur=1, **CD3=16.0**
 - Status: OPEN — raised 2026-03-17. Gherkin approved.
+
+---
+
+### TBT-004 — EXAMINE system: pre-written responses for all seven tin objects
+
+- Description: Each tin object has a distinct pre-written EXAMINE response in tbt-engine.js — not AI-generated. Tight, specific, controlled. Match stub: "carried not kept." Button: one sentence, no meaning offered. Coin: not identified (semi or final, unknown). Eagle: the Mekon is a bit naff, kept anyway. Intent classifier updated to route EXAMINE to engine before AI fallthrough. Gherkin approved 2026-03-17.
+- Feature: tbt
+- CD3: UBV=8 TC=6 RR=6 → CoD=20, Dur=1, **CD3=20.0**
+- Status: OPEN — raised 2026-03-17. Gherkin approved.

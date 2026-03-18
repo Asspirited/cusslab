@@ -15,7 +15,7 @@ const { QUNTUM_LEEKS_SCENARIOS, initState, pickRandomScenario, betLeekiness, spe
 const { initGameState, appendToHistory, incrementTurn, buildModifierBlock } = require('../src/logic/ff-engine.js');
 const { PUB_CRAWL_SCENES, getAllScenes, getPubScene, getActiveAdvisor, initPubCrawl, resolveChoice, determineOutcome, checkLederhosen, buildAdvisorPrompt, ADVISOR_IDS } = require('../src/logic/pub-navigator-engine.js');
 const { lintStepDuplicates } = require('./lint-steps.js');
-const { initTBTGame, classifyIntent, getTinObjects, getGameDate } = require('../src/logic/tbt-engine.js');
+const { initTBTGame, classifyIntent, getTinObjects, getGameDate, identifyExamineTarget, getExamineResponse, EXAMINE_RESPONSES } = require('../src/logic/tbt-engine.js');
 
 // ── Mock state (simulates browser localStorage + DOM) ────────────────────────
 
@@ -10376,6 +10376,94 @@ function makeSteps(ctx) {
     [/^a different scene renders$/, () => { /* @claude fixture — AI-generated narrative */ }],
 
     [/^the club remains available in future turns$/, () => { /* @claude fixture — game state: club not locked */ }],
+
+    // ── TBT-004 — EXAMINE system ──────────────────────────────────────────────
+
+    [/^the player types EXAMINE STUB or similar$/, () => {
+      ctx._tbtExamineId  = identifyExamineTarget('examine the stub');
+      ctx._tbtExamineText = getExamineResponse(ctx._tbtExamineId);
+    }],
+
+    [/^the soft dog-eared quality is described — carried not kept$/, () => {
+      if (!ctx._tbtExamineText || !ctx._tbtExamineText.includes('Carried'))
+        throw new Error('match_stub response must contain "Carried"');
+    }],
+
+    [/^the date and ground are legible: THE OVAL, AUGUST 1948$/, () => {
+      if (!ctx._tbtExamineText || !ctx._tbtExamineText.includes('THE OVAL'))
+        throw new Error('match_stub response must contain THE OVAL');
+      if (!ctx._tbtExamineText.includes('1948'))
+        throw new Error('match_stub response must contain 1948');
+    }],
+
+    [/^no score is written on it$/, () => {
+      if (!ctx._tbtExamineText || !ctx._tbtExamineText.includes('No score'))
+        throw new Error('match_stub response must note no score');
+    }],
+
+    [/^the final line notes he wanted to remember he was there$/, () => {
+      if (!ctx._tbtExamineText || !ctx._tbtExamineText.includes('he was there'))
+        throw new Error('match_stub response must end with "he was there"');
+    }],
+
+    [/^the player types EXAMINE EAGLE or LOOK AT COMIC or similar$/, () => {
+      ctx._tbtExamineId   = identifyExamineTarget('examine the eagle comic');
+      ctx._tbtExamineText = getExamineResponse(ctx._tbtExamineId);
+    }],
+
+    [/^the Mekon detail renders — cold contempt, flying saucer$/, () => {
+      if (!ctx._tbtExamineText || !ctx._tbtExamineText.includes('Mekon'))
+        throw new Error('eagle response must contain "Mekon"');
+    }],
+
+    [/^the colours being still bright is noted — the tin kept the light out$/, () => {
+      if (!ctx._tbtExamineText || !ctx._tbtExamineText.includes('tin kept the light out'))
+        throw new Error('eagle response must contain "tin kept the light out"');
+    }],
+
+    [/^the player's honest reaction is present — a bit naff, kept anyway$/, () => {
+      if (!ctx._tbtExamineText || !ctx._tbtExamineText.includes('naff'))
+        throw new Error('eagle response must contain "naff"');
+    }],
+
+    [/^the player types EXAMINE BUTTON or similar$/, () => {
+      ctx._tbtExamineId   = identifyExamineTarget('examine the button');
+      ctx._tbtExamineText = getExamineResponse(ctx._tbtExamineId);
+    }],
+
+    [/^a single short response renders$/, () => {
+      if (!ctx._tbtExamineText || ctx._tbtExamineText.length >= 60)
+        throw new Error(`button response must be under 60 chars, got ${ctx._tbtExamineText?.length}`);
+    }],
+
+    [/^no explanation is offered for what it was from$/, () => {
+      if (!ctx._tbtExamineText) throw new Error('no button response');
+      if (ctx._tbtExamineText.toLowerCase().includes('perhaps') ||
+          ctx._tbtExamineText.toLowerCase().includes('maybe') ||
+          ctx._tbtExamineText.toLowerCase().includes('could be'))
+        throw new Error('button response must not offer explanation');
+    }],
+
+    [/^the player types EXAMINE COIN or similar$/, () => {
+      ctx._tbtExamineId   = identifyExamineTarget('examine the coin');
+      ctx._tbtExamineText = getExamineResponse(ctx._tbtExamineId);
+    }],
+
+    [/^the worn smooth quality is noted — wording gone$/, () => {
+      if (!ctx._tbtExamineText || !ctx._tbtExamineText.includes('completely gone'))
+        throw new Error('coin response must note wording completely gone');
+    }],
+
+    [/^the crest is described as half-legible$/, () => {
+      if (!ctx._tbtExamineText || !ctx._tbtExamineText.includes('crest'))
+        throw new Error('coin response must describe a crest');
+    }],
+
+    [/^it is not identified — semi-final or final, unknown$/, () => {
+      if (!ctx._tbtExamineText) throw new Error('no coin response');
+      if (ctx._tbtExamineText.includes('FA Cup') || ctx._tbtExamineText.includes('FA cup'))
+        throw new Error('coin response must not name the competition');
+    }],
 
     // ── TBT-002 — Character creation screen ───────────────────────────────────
 

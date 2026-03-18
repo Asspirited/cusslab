@@ -79,6 +79,48 @@ function classifyIntent(input) {
   return 'OTHER';
 }
 
+const EXAMINE_RESPONSES = {
+  match_stub: `Pale green card. You hold it between two fingers and it gives — soft, the way paper goes when it's been in a pocket for years. Not kept. Carried.\n\nTHE OVAL. HOME v AUSTRALIA. AUGUST 1948. 2/6. On the reverse, a printed batting order. His name is on it. You don't recognise any of the others yet. No score written on it. No annotation.\n\nWhatever happened at The Oval in August 1948, your grandfather wanted to remember he was there.`,
+
+  eagle_comic: `April 1952. The Mekon on the cover — green-domed, sitting in his flying saucer, regarding Dan Dare with cold contempt. Like he's already won and is choosing not to announce it yet.\n\nThe colours are still bright. The tin kept the light out for thirty years.\n\nYou think the Mekon looks a bit naff, if you're honest. You keep looking at it anyway. Your grandfather kept this for thirty years and then put it in the tin. That's the part you can't quite explain.`,
+
+  button: `White. Four holes. Doesn't match anything in this house.`,
+
+  coin: `Heavier than you expect. Both sides worn smooth — not by age but by handling, by the specific pressure of a thumb. The wording is completely gone. What remains: a crest, something heraldic, an eagle or a lion or possibly both.\n\nYou can't tell if it's a semi-final or a final. You can't tell which year. You can't tell anything except that someone carried this for a very long time.`,
+
+  photograph: `Black and white, slightly foxed at the edges where the damp got in at some point. Two rows of men in cricket whites, standing and sitting in front of The Oval pavilion. Your grandfather in the front row. Young — younger than you've ever thought of him as. Something around his mouth that isn't quite a smile. Like he knows something the camera doesn't.\n\nOn the back, in handwriting you don't recognise: The Oval, August 1948.`,
+
+  wisden_page: `Torn out carefully — whoever did this took their time. The page is slightly yellowed but the print is sharp. England v Australia, The Oval, August 1948. A scorecard. His name second in the batting order.\n\nThere's a score next to his name. You'll need to find out what it means.`,
+
+  southampton_programme: `A league match at The Dell, November 1947. Southampton versus someone — the cover is slightly water-damaged in the bottom corner, which is the south coast for you. His name in the printed lineup. Centre-half.\n\nNot a Cup Final. Not a famous match. Just a Tuesday in November, Southampton versus someone, The Dell, 1947. He kept this one. Not the glamorous one. This one.`,
+
+  brylcreem_ad: `Torn from a magazine. Him again — younger than the photograph, hair swept back, looking directly at the camera. Something about his expression: he's enjoying a private joke with someone just out of frame.\n\nThe Brylcreem logo in the corner. He was paid to look like that. He kept it anyway.`,
+};
+
+const EXAMINE_PATTERNS = [
+  { pattern: /\b(stub|match stub|match|oval|1948)\b/,                         id: 'match_stub' },
+  { pattern: /\b(eagle|comic|mekon|dan dare|dan)\b/,                          id: 'eagle_comic' },
+  { pattern: /\b(button)\b/,                                                  id: 'button' },
+  { pattern: /\b(coin|cup|crest|heraldic)\b/,                                 id: 'coin' },
+  { pattern: /\b(photo|photograph|picture|image)\b/,                          id: 'photograph' },
+  { pattern: /\b(wisden|scorecard|score|batting order|cricket score)\b/,      id: 'wisden_page' },
+  { pattern: /\b(programme|program|southampton|dell|football programme)\b/,   id: 'southampton_programme' },
+  { pattern: /\b(brylcreem|advert|advertisement|ad)\b/,                       id: 'brylcreem_ad' },
+];
+
+function identifyExamineTarget(input) {
+  if (!input || typeof input !== 'string') return null;
+  const lower = input.toLowerCase();
+  for (const { pattern, id } of EXAMINE_PATTERNS) {
+    if (pattern.test(lower)) return id;
+  }
+  return null;
+}
+
+function getExamineResponse(objectId) {
+  return EXAMINE_RESPONSES[objectId] || null;
+}
+
 function buildTurnSummaryData(state, events) {
   const { month, year } = getGameDate(state.turnNumber);
   return {
@@ -97,7 +139,10 @@ module.exports = {
   getGameDate,
   getTinObjects,
   classifyIntent,
+  identifyExamineTarget,
+  getExamineResponse,
   buildTurnSummaryData,
   TIN_OBJECTS,
   GAME_START,
+  EXAMINE_RESPONSES,
 };
