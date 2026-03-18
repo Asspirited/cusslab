@@ -1,66 +1,58 @@
 # Shared Session State
-Last updated: 2026-03-18 by Claude Code
-Last commit: 1d75459 — TBT-011: hidden attribute model composing FORM
+Last updated: 2026-03-18 by Claude Code (session 16)
+Last commit: bef8a42 — Session 16 closedown — TBT bowling, variation, process
+Branch: through-the-biscuit-tin
 
 ## What shipped this session
 
-### TBT — Through the Biscuit Tin
-- **TBT-011 CLOSED**: hidden attribute model composing FORM
-  - `computeForm(attrs)` — pure function, returns FORM word from 4 core attributes + 2 weekly modifiers - lifeNoise
-  - `calculateLifeNoise(state)` — 0-3 penalty from Nan red, bank critical, HOME red
-  - `applyActivity` extended: returns attribute deltas (physiqueδ, sharpnessδ, freshnessδ, practiceSessionsδ, skillδ) not formDelta
-  - GameState extended: physique=5, skill=3, confidence=5, tenacity=5, sharpness=1, freshness=2, practiceSessionsThisCycle=0
-  - skill accumulates every 4 NETS sessions (PRACTICE_SESSIONS_PER_SKILL_POINT)
-  - BANK_CRITICAL_THRESHOLD = £1.00
-  - 19 new Gherkin scenarios in specs/tbt-attribute-model.feature — all green
-  - tbt-weekly-cycle NETS step updated to new contract
-  - domain-model.md TBT section updated with full attribute model documentation
+- **TBT-014**: Bowling resolution — BOWLING_BANDS, resolveBowling(), applyBowlingResult(), buildBowlingNote(). 13 Gherkin scenarios. Commit 4249c24.
+- **TBT-023**: Overlapping bowling bands + surprise mechanic. Thresholds 0.90 (→+1 band) and 0.95 (→+2 bands). Era flavour note prefixes. 13 variation scenarios. Commit f1e1e45.
+- **TBT-017–022** raised to backlog (prizes, mini-games, venues, player type selection)
+- **Process**: `tbt` added to canonical feature labels; Feature label rule added to RAISE NEW WORK SEQUENCE in insession.md; domain-model.md updated with batting + bowling resolution docs.
 
-### Process
-- `session-insession.md` updated: "Ship after every BL close — always, no batching" rule added
+## FORM bands (canonical — do not change without updating all 7 files)
 
-### New BL items raised
-- TBT-011 (CLOSED this session) — hidden attribute model (CD3=12.5)
-- TBT-012 (OPEN) — Nan quality mechanic (CD3=20.0)
+Nowhere(0-4) / Out-of-Form(5-8) / Scratchy(9-12) / Ticking Along(13-16) / Flying(17-20)
 
-### New WL items
-- WL-149: tbt.html local applyActivity diverged from engine (Low, OPEN)
-- WL-150: Gherkin Examples boundary values wrong — 2 rows (Low, CLOSED same session)
+## Batting MATCH_BANDS (overlapping, intentional)
 
-### Design decisions (Three Amigos)
-- TBT-011 attribute model: physique×0.70 + skill×0.60 + confidence×0.40 + tenacity×0.30 (base), + sharpness + freshness − lifeNoise
-- Desire is narrative, not a stat — not modelled as an attribute
-- New dials brainstormed (BODY, REPUTATION, HOME) — not yet raised as BL items
+Flying 50-550 / Ticking Along 30-220 / Scratchy 1-120 / Out-of-Form 1-25 / Nowhere 1-10
 
-### Brainstorm captured
-- Full scene/event/narrative-arc brainstorm for TBT Epic 1+ in session conversation (not yet filed as notes)
+## Bowling BOWLING_BANDS (overlapping, intentional)
+
+Flying 2-6wkts/10-45runs / Ticking Along 1-4/20-60 / Scratchy 0-3/30-75 / Out-of-Form 0-2/40-85 / Nowhere 0-1/50-90
+Wicket thresholds: Flying=0.20, Ticking Along=0.28, Scratchy=0.38, Out-of-Form=0.52, Nowhere=0.70
+Surprise: roll≥0.90 → +1 band, roll≥0.95 → +2 bands (capped at Flying)
+Bowling avg = null (shows as n/a) until first wicket taken.
 
 ## Open waste items (WL numbers)
-- WL-041: Mobile/tablet nav — Low — Three Amigos needed
-- WL-097: Left nav focus trap — Low — deferred
-- WL-MODE-002: Bobby George, Rod Harrington missing files — Low
-- WL-123: Session context overflow — Low — ongoing mitigation
-- WL-131: Character dullness — Medium — Three Amigos needed
-- WL-136: UI audit IIFE return check — High — pipeline gap
-- WL-147: backlog-report.js false-positive regex — Low
+
+- WL-041: Mobile/tablet nav — panels not findable on small screens — Low
+- WL-097: Left nav focus trap — pointer-events not released — Low
+- WL-MODE-002: Bobby George, Rod Harrington — no character md files — Low
+- WL-123: Session context overflow mid-session — Low (ongoing mitigation)
+- WL-131: Character dullness — openers bleeding across characters — Medium
+- WL-136: UI audit IIFE return check missing — High
+- WL-147: backlog-report.js false-positive OPEN on BL-128 — Low
 - WL-149: tbt.html applyActivity diverged from engine — Low
 
-## Backlog top 3 by CD3 (TBT — ignoring Cusslab items)
-- TBT-012 (CD3=20.0): Nan quality mechanic — Three Amigos done, Gherkin needed
-- TBT-006 (CD3=19.0): Transport choices — Three Amigos needed
-- TBT-007 (CD3=13.5): First cricket match — Three Amigos needed
+## Backlog top 3 (TBT — next session agreed)
+
+- TBT-016 (CD3=7.0): Batting — defensive vs attacking shot selection — Three Amigos first
+- TBT-015 (CD3=6.5): Bowling — separate formulas for wickets and runs conceded — Three Amigos first
+- TBT-022 (CD3=5.7): Player type at start (batting position + bowling role) — Three Amigos first
 
 ## Protocol status this session
-- Session startup: followed in full
-- Gherkin gate: followed — Gherkin approved before implementation
-- TDD: followed — red before green, 823/823
-- Pipeline: GREEN throughout (canary OK, all checks passing)
-- Ship rule: TBT-011 committed and pushed immediately on BDD CLOSE ✓
+
+- Session startup: followed
+- Gherkin gate: followed — TBT-014 and TBT-023 both had Gherkin approved before implementation
+- TDD: followed — all scenarios red → green
+- Pipeline: GREEN (1941/1941 Gherkin, 823/823 unit, 6/6 E2E, 16/16 UI audit)
 
 ## Carry-forward notes
-- TBT-012 is agreed next session priority — Three Amigos done, Gherkin needed first
-- TBT-006 after that — Three Amigos first
-- tbt.html still uses local applyActivity (formDelta model) — needs wiring to engine before attribute model goes live (WL-149)
-- Brainstorm of new TBT scenes/events discussed in session — should be captured as notes file if Rod wants to reference in Claude.ai
-- Three new dial candidates discussed (BODY, REPUTATION, HOME) — informal Three Amigos only, not yet BL items
-- formDelta is now always 0 in applyActivity delta — dead field, can be removed in a future cleanup
+
+- TBT-017–022 all need Three Amigos before Gherkin — none are ready to implement yet
+- Player type (TBT-022) will affect MATCH_BANDS and BOWLING_BANDS when built — batting position shifts run ranges, bowling role shifts wicket/economy expectations
+- backlog-report.js does not count TBT-NNN items (only BL-NNN) — 9 open TBT items invisible to the report. Known gap, not yet a BL item.
+- Rod's direction on bowling: "make it fun" — overlap + surprise mechanic confirmed. Both batting and bowling should feel variable and exciting regardless of FORM.
+- Ideas board: dice attribute roll (AD&D-style) still UNREVIEWED, awaiting Three Amigos.

@@ -299,6 +299,7 @@ DDD CLEAN fires after BDD CLOSE — harvest new concepts into domain model.
      with only Examples data different? If yes, merge unless Then steps are materially different.
    - **Background audit** — if 3+ scenarios share the same Given, it belongs in Background.
    - **Count discipline** — if count >12, review for redundancy before adding more.
+   - **Formula verification (mandatory for numeric assertions)** — before writing any `Then` that asserts a number derived from a formula (runs, wickets, scores, averages, bonuses), run `node -e "..."` to compute the expected value. Never write numeric Gherkin assertions from mental arithmetic alone. Source: WL-150, WL-152 — recurring Gherkin red on first run.
 7. Present for approval — do not proceed until Rod says yes
 8. On approval → TDD SEQUENCE
 
