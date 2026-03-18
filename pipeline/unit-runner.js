@@ -1518,7 +1518,7 @@ assert('buildModifierBlock: multiple modifiers each appear',
 
 // ── TBT engine ───────────────────────────────────────────────────────────────
 
-const { initTBTGame, calculateAge, getGameDate, getTinObjects, classifyIntent, identifyExamineTarget, getExamineResponse, buildTurnSummaryData, EXAMINE_RESPONSES } = require('../src/logic/tbt-engine.js');
+const { initTBTGame, calculateAge, getGameDate, getTinObjects, classifyIntent, classifyActivity, applyActivity, getFormWord, identifyExamineTarget, getExamineResponse, buildTurnSummaryData, EXAMINE_RESPONSES, ACTIVITY_TYPES } = require('../src/logic/tbt-engine.js');
 
 assert('calculateAge: 1968 in 1979 is 11',
   calculateAge(1968, 1979), 11);
@@ -1575,8 +1575,8 @@ assert('initTBTGame: gameState is OPENING',
 assert('initTBTGame: turnNumber is 1',
   _tbt1.turnNumber, 1);
 
-assert('initTBTGame: form is uncertain',
-  _tbt1.form, 'uncertain');
+assert('initTBTGame: form starts at 10',
+  _tbt1.form, 10);
 
 assert('classifyIntent: "yes" → GET_ON_BUS',
   classifyIntent('yes'), 'GET_ON_BUS');
@@ -1692,6 +1692,84 @@ assert('getExamineResponse: unknown id → null',
 
 assert('all 8 tin objects have examine responses',
   Object.keys(EXAMINE_RESPONSES).length, 8);
+
+// ── FORM words ────────────────────────────────────────────────────────────────
+
+assert('getFormWord: 0 → Lost',    getFormWord(0),  'Lost');
+assert('getFormWord: 4 → Lost',    getFormWord(4),  'Lost');
+assert('getFormWord: 5 → Nowhere', getFormWord(5),  'Nowhere');
+assert('getFormWord: 8 → Nowhere', getFormWord(8),  'Nowhere');
+assert('getFormWord: 9 → Shaky',   getFormWord(9),  'Shaky');
+assert('getFormWord: 10 → Shaky',  getFormWord(10), 'Shaky');
+assert('getFormWord: 12 → Shaky',  getFormWord(12), 'Shaky');
+assert('getFormWord: 13 → Decent', getFormWord(13), 'Decent');
+assert('getFormWord: 15 → Decent', getFormWord(15), 'Decent');
+assert('getFormWord: 16 → Decent', getFormWord(16), 'Decent');
+assert('getFormWord: 17 → Flying', getFormWord(17), 'Flying');
+assert('getFormWord: 19 → Flying', getFormWord(19), 'Flying');
+assert('getFormWord: 20 → Flying', getFormWord(20), 'Flying');
+assert('getFormWord: clamps below 0', getFormWord(-5), 'Lost');
+assert('getFormWord: clamps above 20', getFormWord(25), 'Flying');
+
+// ── classifyActivity ──────────────────────────────────────────────────────────
+
+assert('classifyActivity: "visit nan" → VISIT_NAN',
+  classifyActivity('visit nan'), ACTIVITY_TYPES.VISIT_NAN);
+assert('classifyActivity: "go round to nans" → VISIT_NAN',
+  classifyActivity('go round to nans'), ACTIVITY_TYPES.VISIT_NAN);
+assert('classifyActivity: "go to nets" → NETS',
+  classifyActivity('go to nets'), ACTIVITY_TYPES.NETS);
+assert('classifyActivity: "do some batting practice" → NETS',
+  classifyActivity('do some batting practice'), ACTIVITY_TYPES.NETS);
+assert('classifyActivity: "do my paper round" → WORK',
+  classifyActivity('do my paper round'), ACTIVITY_TYPES.WORK);
+assert('classifyActivity: "have an early night" → REST',
+  classifyActivity('have an early night'), ACTIVITY_TYPES.REST);
+assert('classifyActivity: "go to the pub" → PUB',
+  classifyActivity('go to the pub'), ACTIVITY_TYPES.PUB);
+assert('classifyActivity: "do my homework" → STUDY',
+  classifyActivity('do my homework'), ACTIVITY_TYPES.STUDY);
+assert('classifyActivity: unrecognised → null',
+  classifyActivity('something random'), null);
+assert('classifyActivity: null → null',
+  classifyActivity(null), null);
+
+// ── applyActivity ─────────────────────────────────────────────────────────────
+
+const _tbtBase = initTBTGame(1968, 'Arthur', 'Rod'); // form=10
+
+const _nanDelta = applyActivity(_tbtBase, ACTIVITY_TYPES.VISIT_NAN);
+assert('applyActivity VISIT_NAN: nanDialChange green',
+  _nanDelta.nanDialChange, 'green');
+assert('applyActivity VISIT_NAN: no form change',
+  _nanDelta.formDelta, 0);
+assert('applyActivity VISIT_NAN: note set',
+  _nanDelta.note.includes('Nan'), true);
+
+const _netsDelta = applyActivity(_tbtBase, ACTIVITY_TYPES.NETS);
+assert('applyActivity NETS: form increases',
+  _netsDelta.formDelta, 1);
+assert('applyActivity NETS: no bank change',
+  _netsDelta.bankDelta, 0);
+
+const _workDelta = applyActivity(_tbtBase, ACTIVITY_TYPES.WORK);
+assert('applyActivity WORK: bank increases by weeklyWage',
+  _workDelta.bankDelta, _tbtBase.weeklyWage);
+assert('applyActivity WORK: no form change',
+  _workDelta.formDelta, 0);
+
+const _restDelta = applyActivity(_tbtBase, ACTIVITY_TYPES.REST);
+assert('applyActivity REST: form increases when below Flying',
+  _restDelta.formDelta, 2);
+
+const _flyingBase = { ...initTBTGame(1968, 'Arthur', 'Rod'), form: 20 };
+const _restAtPeak = applyActivity(_flyingBase, ACTIVITY_TYPES.REST);
+assert('applyActivity REST: no form gain when already Flying',
+  _restAtPeak.formDelta, 0);
+
+const _netsAtPeak = applyActivity(_flyingBase, ACTIVITY_TYPES.NETS);
+assert('applyActivity NETS: no form gain when already at 20',
+  _netsAtPeak.formDelta, 0);
 
 // ── Results ──────────────────────────────────────────────────────────────────
 

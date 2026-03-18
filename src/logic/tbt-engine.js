@@ -40,6 +40,71 @@ function getTinObjects() {
   return TIN_OBJECTS.slice();
 }
 
+const FORM_BANDS = [
+  { min: 0,  max: 4,  word: 'Lost' },
+  { min: 5,  max: 8,  word: 'Nowhere' },
+  { min: 9,  max: 12, word: 'Shaky' },
+  { min: 13, max: 16, word: 'Decent' },
+  { min: 17, max: 20, word: 'Flying' },
+];
+
+function getFormWord(value) {
+  const clamped = Math.max(0, Math.min(20, value));
+  const band = FORM_BANDS.find(b => clamped >= b.min && clamped <= b.max);
+  return band ? band.word : 'Shaky';
+}
+
+const ACTIVITY_TYPES = {
+  VISIT_NAN: 'VISIT_NAN',
+  NETS:      'NETS',
+  WORK:      'WORK',
+  REST:      'REST',
+  PUB:       'PUB',
+  STUDY:     'STUDY',
+};
+
+function classifyActivity(input) {
+  if (!input || typeof input !== 'string') return null;
+  const lower = input.toLowerCase().trim();
+  if (/\b(nan|nan'?s|nans|visit nan|check on nan|go round|go to nan)\b/.test(lower)) return ACTIVITY_TYPES.VISIT_NAN;
+  if (/\b(nets|practice|batting|bowling|net session|training|cricket club)\b/.test(lower)) return ACTIVITY_TYPES.NETS;
+  if (/\b(work|paper round|shift|job|earn|money)\b/.test(lower)) return ACTIVITY_TYPES.WORK;
+  if (/\b(rest|sleep|early night|stay in|bed|tired)\b/.test(lower)) return ACTIVITY_TYPES.REST;
+  if (/\b(pub|pint|out with|lads|mates|drink|drinks)\b/.test(lower)) return ACTIVITY_TYPES.PUB;
+  if (/\b(study|homework|revision|revise|school|read|coursework)\b/.test(lower)) return ACTIVITY_TYPES.STUDY;
+  return null;
+}
+
+function applyActivity(state, activityType) {
+  const delta = { formDelta: 0, bankDelta: 0, nanDialChange: null, note: '' };
+  switch (activityType) {
+    case ACTIVITY_TYPES.VISIT_NAN:
+      delta.nanDialChange = 'green';
+      delta.note = 'You went round to Nan\'s.';
+      break;
+    case ACTIVITY_TYPES.NETS:
+      delta.formDelta = state.form < 20 ? 1 : 0;
+      delta.note = 'You went to nets.';
+      break;
+    case ACTIVITY_TYPES.WORK:
+      delta.bankDelta = state.weeklyWage || 2.50;
+      delta.note = `Paper round done. £${(state.weeklyWage || 2.50).toFixed(2)} earned.`;
+      break;
+    case ACTIVITY_TYPES.REST:
+      delta.formDelta = state.form < 17 ? 2 : 0;
+      delta.note = 'You took the evening. Needed it.';
+      break;
+    case ACTIVITY_TYPES.PUB:
+      delta.formDelta = state.form > 10 ? 1 : -1;
+      delta.note = 'You went to the pub.';
+      break;
+    case ACTIVITY_TYPES.STUDY:
+      delta.note = 'You did your homework.';
+      break;
+  }
+  return delta;
+}
+
 function initTBTGame(dob, grandfatherName, playerName) {
   return {
     playerName,
@@ -57,7 +122,7 @@ function initTBTGame(dob, grandfatherName, playerName) {
     },
     cricket:  { matches: 0, innings: 0, runs: 0, wkts: 0, avg: null, hs: null },
     football: { apps: 0, goals: 0, level: null },
-    form:     'uncertain',
+    form:     10,
     gameState: 'OPENING',
     turnNumber: 1,
   };
@@ -139,10 +204,15 @@ module.exports = {
   getGameDate,
   getTinObjects,
   classifyIntent,
+  classifyActivity,
+  applyActivity,
+  getFormWord,
   identifyExamineTarget,
   getExamineResponse,
   buildTurnSummaryData,
   TIN_OBJECTS,
   GAME_START,
   EXAMINE_RESPONSES,
+  ACTIVITY_TYPES,
+  FORM_BANDS,
 };

@@ -1717,3 +1717,12 @@ Epic 4: COUNTY CIRCUIT (ages 22-30, ~1991-99) — sponsor deals, England call, N
 Epic 5: LATE CAREER / AFTER (ages 30-35+, ~1999-2004+) — Twenty20, coaching badge, Ollie born
 
 TBT-001 through TBT-010 are all Epic 1. Build Epic 1 to playtest quality before scoping Epic 2.
+
+---
+
+### TBT-005 — Weekly cycle: time allocation, activity engine, FORM words
+
+- Description: Core turn loop. activityEngine in tbt-engine.js: pure function maps activity type → state delta. FORM stored as 0-20 numeric, displayed as narrative word (Lost/Nowhere/Shaky/Decent/Flying). Activities: VISIT_NAN, NETS, WORK, REST, PUB, STUDY. Parser prompt signals available time. Turn summary reports activity and effect. Gherkin approved 2026-03-17.
+- Feature: tbt
+- CD3: UBV=9 TC=8 RR=8 → CoD=25, Dur=2, **CD3=12.5**
+- Status: OPEN — raised 2026-03-17. Gherkin approved.

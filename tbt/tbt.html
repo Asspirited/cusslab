@@ -272,7 +272,7 @@
     relationships:   { nan: 'green', mum: 'green', grandfather: 'greyed' },
     cricket:         { matches: 0, innings: 0, runs: 0, wkts: 0, avg: null, hs: null },
     football:        { apps: 0, goals: 0, level: null },
-    form:            'uncertain',
+    form:            10,
     turnNumber:      1,
     gameState:       'DEDICATION', // DEDICATION | CREATION | OPENING | PLAY
     history:         [],
@@ -302,7 +302,7 @@
     $('stats-bank').textContent  = state.gameState === 'CREATION' ? '—' : `£${state.bank.toFixed(2)}`;
     $('stats-work').textContent  = state.gameState === 'CREATION' ? '—' : state.work;
     $('stats-home').textContent  = state.gameState === 'CREATION' ? '—' : state.home;
-    $('form-word').textContent   = state.gameState === 'CREATION' ? '—' : state.form;
+    $('form-word').textContent   = state.gameState === 'CREATION' ? '—' : getFormWord(state.form);
 
     const relsEl = $('stats-rels');
     relsEl.innerHTML = '';
@@ -454,6 +454,20 @@
 
     const intent = classifyIntent(input);
 
+    // ACTIVITY — resolve locally, no AI call
+    const activity = classifyActivity(input);
+    if (activity) {
+      const delta = applyActivity(activity);
+      commitDelta(delta);
+      appendParagraph(delta.note);
+      appendTurnSummary([delta.note]);
+      state.turnNumber++;
+      renderStats();
+      elParserInput.disabled = false;
+      elParserInput.focus();
+      return;
+    }
+
     // EXAMINE — pre-written response, no AI call
     if (intent === 'EXAMINE') {
       const prewritten = getExamineResponse(input);
@@ -493,6 +507,70 @@
     if (/\b(go|get|head|walk|catch|take|yes|utley|club|bus|saturday|cricket|there)\b/.test(lower)) return 'GET_ON_BUS';
     if (/\b(stay|no|home|sit|don't|not today|later|tomorrow|nan|here)\b/.test(lower)) return 'STAY';
     return 'OTHER';
+  }
+
+  // ── FORM words ─────────────────────────────────────────────────────────────
+
+  const FORM_BANDS = [
+    { min: 0,  max: 4,  word: 'Lost' },
+    { min: 5,  max: 8,  word: 'Nowhere' },
+    { min: 9,  max: 12, word: 'Shaky' },
+    { min: 13, max: 16, word: 'Decent' },
+    { min: 17, max: 20, word: 'Flying' },
+  ];
+
+  function getFormWord(value) {
+    const clamped = Math.max(0, Math.min(20, value));
+    return (FORM_BANDS.find(b => clamped >= b.min && clamped <= b.max) || { word: 'Shaky' }).word;
+  }
+
+  // ── Activity engine ─────────────────────────────────────────────────────────
+
+  function classifyActivity(input) {
+    const lower = (input || '').toLowerCase().trim();
+    if (/\b(nan|nan'?s|nans|visit nan|check on nan|go round|go to nan)\b/.test(lower)) return 'VISIT_NAN';
+    if (/\b(nets|practice|batting|bowling|net session|training|cricket club)\b/.test(lower)) return 'NETS';
+    if (/\b(work|paper round|shift|job|earn|money)\b/.test(lower)) return 'WORK';
+    if (/\b(rest|sleep|early night|stay in|bed|tired)\b/.test(lower)) return 'REST';
+    if (/\b(pub|pint|out with|lads|mates|drink|drinks)\b/.test(lower)) return 'PUB';
+    if (/\b(study|homework|revision|revise|school|read|coursework)\b/.test(lower)) return 'STUDY';
+    return null;
+  }
+
+  function applyActivity(activityType) {
+    const delta = { formDelta: 0, bankDelta: 0, nanDialChange: null, note: '' };
+    switch (activityType) {
+      case 'VISIT_NAN':
+        delta.nanDialChange = 'green';
+        delta.note = "You went round to Nan's.";
+        break;
+      case 'NETS':
+        delta.formDelta = state.form < 20 ? 1 : 0;
+        delta.note = 'You went to nets.';
+        break;
+      case 'WORK':
+        delta.bankDelta = state.weeklyWage;
+        delta.note = `Paper round done. £${state.weeklyWage.toFixed(2)} earned.`;
+        break;
+      case 'REST':
+        delta.formDelta = state.form < 17 ? 2 : 0;
+        delta.note = 'You took the evening. Needed it.';
+        break;
+      case 'PUB':
+        delta.formDelta = state.form > 10 ? 1 : -1;
+        delta.note = 'You went to the pub.';
+        break;
+      case 'STUDY':
+        delta.note = 'You did your homework.';
+        break;
+    }
+    return delta;
+  }
+
+  function commitDelta(delta) {
+    state.form = Math.max(0, Math.min(20, state.form + delta.formDelta));
+    state.bank = Math.round((state.bank + delta.bankDelta) * 100) / 100;
+    if (delta.nanDialChange) state.relationships.nan = delta.nanDialChange;
   }
 
   // ── EXAMINE — pre-written responses ────────────────────────────────────────

@@ -15,7 +15,7 @@ const { QUNTUM_LEEKS_SCENARIOS, initState, pickRandomScenario, betLeekiness, spe
 const { initGameState, appendToHistory, incrementTurn, buildModifierBlock } = require('../src/logic/ff-engine.js');
 const { PUB_CRAWL_SCENES, getAllScenes, getPubScene, getActiveAdvisor, initPubCrawl, resolveChoice, determineOutcome, checkLederhosen, buildAdvisorPrompt, ADVISOR_IDS } = require('../src/logic/pub-navigator-engine.js');
 const { lintStepDuplicates } = require('./lint-steps.js');
-const { initTBTGame, classifyIntent, getTinObjects, getGameDate, identifyExamineTarget, getExamineResponse, EXAMINE_RESPONSES } = require('../src/logic/tbt-engine.js');
+const { initTBTGame, classifyIntent, classifyActivity, applyActivity, getFormWord, getTinObjects, getGameDate, identifyExamineTarget, getExamineResponse, EXAMINE_RESPONSES, ACTIVITY_TYPES } = require('../src/logic/tbt-engine.js');
 
 // ── Mock state (simulates browser localStorage + DOM) ────────────────────────
 
@@ -10463,6 +10463,71 @@ function makeSteps(ctx) {
       if (!ctx._tbtExamineText) throw new Error('no coin response');
       if (ctx._tbtExamineText.includes('FA Cup') || ctx._tbtExamineText.includes('FA cup'))
         throw new Error('coin response must not name the competition');
+    }],
+
+    // ── TBT-005 — Weekly cycle ────────────────────────────────────────────────
+
+    [/^it is a free evening$/, () => {
+      ctx._tbtState = initTBTGame(1968, 'Arthur', 'Rod');
+    }],
+
+    [/^the player expresses intent to visit Nan$/, () => {
+      ctx._tbtActivity = classifyActivity('visit nan');
+      ctx._tbtDelta    = applyActivity(ctx._tbtState, ctx._tbtActivity);
+    }],
+
+    [/^the Nan relationship dial stays green$/, () => {
+      if (ctx._tbtDelta.nanDialChange !== 'green')
+        throw new Error(`expected nanDialChange green, got: ${ctx._tbtDelta.nanDialChange}`);
+    }],
+
+    [/^the turn summary notes the visit$/, () => {
+      if (!ctx._tbtDelta.note.includes('Nan'))
+        throw new Error('VISIT_NAN delta note must mention Nan');
+    }],
+
+    [/^time advances$/, () => { /* @claude fixture — turnNumber increments in UI */ }],
+
+    [/^the player expresses intent to go to nets$/, () => {
+      ctx._tbtActivity = classifyActivity('go to nets');
+      ctx._tbtDelta    = applyActivity(ctx._tbtState, ctx._tbtActivity);
+    }],
+
+    [/^FORM increases by one band if below Flying$/, () => {
+      if (ctx._tbtDelta.formDelta <= 0)
+        throw new Error(`NETS delta formDelta should be positive, got: ${ctx._tbtDelta.formDelta}`);
+    }],
+
+    [/^the turn summary notes the practice$/, () => {
+      if (!ctx._tbtDelta.note.toLowerCase().includes('net'))
+        throw new Error('NETS delta note must mention nets');
+    }],
+
+    [/^the player expresses intent to work$/, () => {
+      ctx._tbtActivity = classifyActivity('do my paper round');
+      ctx._tbtDelta    = applyActivity(ctx._tbtState, ctx._tbtActivity);
+    }],
+
+    [/^bank increases by the weekly wage amount$/, () => {
+      if (ctx._tbtDelta.bankDelta !== ctx._tbtState.weeklyWage)
+        throw new Error(`expected bankDelta ${ctx._tbtState.weeklyWage}, got ${ctx._tbtDelta.bankDelta}`);
+    }],
+
+    [/^the turn summary notes the earnings$/, () => {
+      if (!ctx._tbtDelta.note.includes('£'))
+        throw new Error('WORK delta note must include earnings amount');
+    }],
+
+    [/^FORM is at value (\d+)$/, (val) => {
+      ctx._tbtFormValue = parseInt(val, 10);
+    }],
+
+    [/^the form word is (Flying|Decent|Shaky|Nowhere|Lost)$/, (word) => {
+      if (!ctx._tbtFormValue && ctx._tbtFormValue !== 0)
+        throw new Error('form value not set — use "FORM is at value N" step first');
+      const actual = getFormWord(ctx._tbtFormValue);
+      if (actual !== word)
+        throw new Error(`expected form word ${word} for value ${ctx._tbtFormValue}, got ${actual}`);
     }],
 
     // ── TBT-002 — Character creation screen ───────────────────────────────────
