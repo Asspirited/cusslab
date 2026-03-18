@@ -15,7 +15,7 @@ const { QUNTUM_LEEKS_SCENARIOS, initState, pickRandomScenario, betLeekiness, spe
 const { initGameState, appendToHistory, incrementTurn, buildModifierBlock } = require('../src/logic/ff-engine.js');
 const { PUB_CRAWL_SCENES, getAllScenes, getPubScene, getActiveAdvisor, initPubCrawl, resolveChoice, determineOutcome, checkLederhosen, buildAdvisorPrompt, ADVISOR_IDS } = require('../src/logic/pub-navigator-engine.js');
 const { lintStepDuplicates } = require('./lint-steps.js');
-const { initTBTGame, classifyIntent, classifyActivity, classifyVisitQuality, classifyTransport, applyActivity, applyTransport, getFormWord, getTinObjects, getGameDate, identifyExamineTarget, getExamineResponse, computeForm, calculateLifeNoise, getNanDial, EXAMINE_RESPONSES, ACTIVITY_TYPES, TRANSPORT_TYPES, NAN_QUALITY_MIN, NAN_QUALITY_MAX, NAN_QUALITY_INITIAL } = require('../src/logic/tbt-engine.js');
+const { initTBTGame, classifyIntent, classifyActivity, classifyVisitQuality, classifyTransport, applyActivity, applyTransport, resolveMatch, applyMatchResult, FIRST_MATCH_SCENE, getFormWord, getTinObjects, getGameDate, identifyExamineTarget, getExamineResponse, computeForm, calculateLifeNoise, getNanDial, EXAMINE_RESPONSES, ACTIVITY_TYPES, TRANSPORT_TYPES, NAN_QUALITY_MIN, NAN_QUALITY_MAX, NAN_QUALITY_INITIAL } = require('../src/logic/tbt-engine.js');
 
 // ── Mock state (simulates browser localStorage + DOM) ────────────────────────
 
@@ -10751,8 +10751,12 @@ function makeSteps(ctx) {
     }],
 
     [/^skill is (\d+)$/, (n) => {
-      const val = ctx._tbtNewGame ? ctx._tbtNewGame.skill : ctx._tbtActivityState.skill;
-      if (val !== Number(n)) throw new Error(`expected skill ${n}, got ${val}`);
+      if (ctx._tbtNewGame) {
+        if (ctx._tbtNewGame.skill !== Number(n))
+          throw new Error(`expected skill ${n}, got ${ctx._tbtNewGame.skill}`);
+      } else {
+        ctx._tbtActivityState.skill = Number(n);
+      }
     }],
 
     [/^confidence is (\d+)$/, (n) => {
@@ -10914,6 +10918,104 @@ function makeSteps(ctx) {
     [/^the transport note mentions walking$/, () => {
       if (!/walk/i.test(ctx._tbtActivityDelta.note))
         throw new Error(`expected walking in note, got: ${ctx._tbtActivityDelta.note}`);
+    }],
+
+    // ── TBT-007: First cricket match ──────────────────────────────────────────
+
+    [/^form score is (\d+)$/, (n) => {
+      ctx._tbtMatchForm  = Number(n);
+      ctx._tbtMatchSkill = ctx._tbtActivityState.skill;
+    }],
+
+    [/^match skill is (\d+)$/, (n) => {
+      ctx._tbtMatchSkill = Number(n);
+    }],
+
+    [/^the match is resolved with roll ([\d.]+)$/, (r) => {
+      ctx._tbtMatchResult = resolveMatch(
+        ctx._tbtMatchForm,
+        ctx._tbtMatchSkill != null ? ctx._tbtMatchSkill : ctx._tbtActivityState.skill,
+        parseFloat(r)
+      );
+    }],
+
+    [/^the score is between (\d+) and (\d+)$/, (min, max) => {
+      const runs = ctx._tbtMatchResult.runs;
+      if (runs < Number(min) || runs > Number(max))
+        throw new Error(`expected score ${min}–${max}, got ${runs}`);
+    }],
+
+    [/^the score is (\d+)$/, (n) => {
+      if (ctx._tbtMatchResult.runs !== Number(n))
+        throw new Error(`expected score ${n}, got ${ctx._tbtMatchResult.runs}`);
+    }],
+
+    [/^the duck type is (duck|golden duck|platinum duck)$/, (type) => {
+      const expected = type.replace(/ /g, '_');
+      if (ctx._tbtMatchResult.duckType !== expected)
+        throw new Error(`expected duckType ${expected}, got ${ctx._tbtMatchResult.duckType}`);
+    }],
+
+    [/^cricket stats are at zero$/, () => {
+      ctx._tbtActivityState.cricket = { matches: 0, innings: 0, runs: 0, wkts: 0, avg: null, hs: null };
+    }],
+
+    [/^cricket stats show 1 match (\d+) runs hs (\d+)$/, (runs, hs) => {
+      ctx._tbtActivityState.cricket = {
+        matches: 1, innings: 1,
+        runs: Number(runs), hs: Number(hs),
+        avg: Number(runs), wkts: 0,
+      };
+    }],
+
+    [/^a match result of (\d+) runs is applied$/, (n) => {
+      applyMatchResult(ctx._tbtActivityState, Number(n));
+    }],
+
+    [/^cricket matches is (\d+)$/, (n) => {
+      if (ctx._tbtActivityState.cricket.matches !== Number(n))
+        throw new Error(`expected matches ${n}, got ${ctx._tbtActivityState.cricket.matches}`);
+    }],
+
+    [/^cricket innings is (\d+)$/, (n) => {
+      if (ctx._tbtActivityState.cricket.innings !== Number(n))
+        throw new Error(`expected innings ${n}, got ${ctx._tbtActivityState.cricket.innings}`);
+    }],
+
+    [/^cricket runs is (\d+)$/, (n) => {
+      if (ctx._tbtActivityState.cricket.runs !== Number(n))
+        throw new Error(`expected runs ${n}, got ${ctx._tbtActivityState.cricket.runs}`);
+    }],
+
+    [/^cricket highest score is (\d+)$/, (n) => {
+      if (ctx._tbtActivityState.cricket.hs !== Number(n))
+        throw new Error(`expected hs ${n}, got ${ctx._tbtActivityState.cricket.hs}`);
+    }],
+
+    [/^cricket average is ([\d.]+)$/, (n) => {
+      if (ctx._tbtActivityState.cricket.avg !== parseFloat(n))
+        throw new Error(`expected avg ${n}, got ${ctx._tbtActivityState.cricket.avg}`);
+    }],
+
+    [/^it is the player's first match$/, () => {
+      ctx._tbtActivityState.cricket.matches = 0;
+    }],
+
+    [/^the match begins$/, () => {
+      ctx._tbtMatchScene = ctx._tbtActivityState.cricket.matches === 0
+        ? FIRST_MATCH_SCENE : null;
+    }],
+
+    [/^the scene includes the pavilion$/, () => {
+      if (!ctx._tbtMatchScene || !ctx._tbtMatchScene.toLowerCase().includes('pavilion'))
+        throw new Error('expected pavilion in match scene');
+    }],
+
+    [/^the match turn summary includes the runs scored$/, () => {
+      if (!ctx._tbtMatchResult || ctx._tbtMatchResult.runs == null)
+        throw new Error('no match result');
+      if (!ctx._tbtMatchResult.note.includes(String(ctx._tbtMatchResult.runs)))
+        throw new Error(`expected runs in note, got: ${ctx._tbtMatchResult.note}`);
     }],
 
     [/^lifeNoise contribution from Nan is (\d+)$/, (n) => {

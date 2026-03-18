@@ -1695,8 +1695,8 @@ assert('all 8 tin objects have examine responses',
 
 // ── FORM words ────────────────────────────────────────────────────────────────
 
-assert('getFormWord: 0 → Lost',    getFormWord(0),  'Lost');
-assert('getFormWord: 4 → Lost',    getFormWord(4),  'Lost');
+assert('getFormWord: 0 → Lost',    getFormWord(0),  'Struggling');
+assert('getFormWord: 4 → Lost',    getFormWord(4),  'Struggling');
 assert('getFormWord: 5 → Nowhere', getFormWord(5),  'Nowhere');
 assert('getFormWord: 8 → Nowhere', getFormWord(8),  'Nowhere');
 assert('getFormWord: 9 → Shaky',   getFormWord(9),  'Shaky');
@@ -1708,7 +1708,7 @@ assert('getFormWord: 16 → Decent', getFormWord(16), 'Decent');
 assert('getFormWord: 17 → Flying', getFormWord(17), 'Flying');
 assert('getFormWord: 19 → Flying', getFormWord(19), 'Flying');
 assert('getFormWord: 20 → Flying', getFormWord(20), 'Flying');
-assert('getFormWord: clamps below 0', getFormWord(-5), 'Lost');
+assert('getFormWord: clamps below 0', getFormWord(-5), 'Struggling');
 assert('getFormWord: clamps above 20', getFormWord(25), 'Flying');
 
 // ── classifyActivity ──────────────────────────────────────────────────────────
@@ -1776,7 +1776,7 @@ assert('applyActivity PUB: physique costs 1',
 
 assert('computeForm: all zeros → score 0 → Lost',
   computeForm({ physique:0, skill:0, confidence:0, tenacity:0, sharpness:0, freshness:0, lifeNoise:0 }),
-  'Lost');
+  'Struggling');
 
 assert('computeForm: all 10s, no modifiers → Flying',
   computeForm({ physique:10, skill:10, confidence:10, tenacity:10, sharpness:0, freshness:0, lifeNoise:0 }),
@@ -1788,7 +1788,7 @@ assert('computeForm: max attributes + max modifiers → Flying (clamped)',
 
 assert('computeForm: zero attributes + max lifeNoise → Lost (clamp at 0)',
   computeForm({ physique:0, skill:0, confidence:0, tenacity:0, sharpness:0, freshness:0, lifeNoise:3 }),
-  'Lost');
+  'Struggling');
 
 // physique=6 skill=6 confidence=6 tenacity=6 → 4.2+3.6+2.4+1.8 = 12.0 → Shaky
 assert('computeForm: mid attributes → Shaky',

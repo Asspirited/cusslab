@@ -41,7 +41,7 @@ function getTinObjects() {
 }
 
 const FORM_BANDS = [
-  { min: 0,  max: 4,  word: 'Lost' },
+  { min: 0,  max: 4,  word: 'Struggling' },
   { min: 5,  max: 8,  word: 'Nowhere' },
   { min: 9,  max: 12, word: 'Shaky' },
   { min: 13, max: 16, word: 'Decent' },
@@ -301,6 +301,59 @@ function getExamineResponse(objectId) {
   return EXAMINE_RESPONSES[objectId] || null;
 }
 
+const MATCH_BANDS = [
+  { minForm: 17, maxForm: 20, minRuns: 100, maxRuns: 180 },
+  { minForm: 13, maxForm: 16, minRuns: 50,  maxRuns: 99  },
+  { minForm: 9,  maxForm: 12, minRuns: 30,  maxRuns: 49  },
+  { minForm: 5,  maxForm: 8,  minRuns: 10,  maxRuns: 29  },
+  { minForm: 0,  maxForm: 4,  minRuns: 1,   maxRuns: 9   },
+];
+
+const DUCK_THRESHOLD      = 0.05;
+const GOLDEN_DUCK_THRESHOLD   = 0.02;
+const PLATINUM_DUCK_THRESHOLD = 0.001;
+
+function resolveMatch(formScore, skill, roll) {
+  const clampedForm = Math.max(0, Math.min(20, formScore));
+
+  if (roll < DUCK_THRESHOLD) {
+    let duckType = 'duck';
+    if (roll < PLATINUM_DUCK_THRESHOLD) duckType = 'platinum_duck';
+    else if (roll < GOLDEN_DUCK_THRESHOLD) duckType = 'golden_duck';
+    return { runs: 0, duckType, note: duckNotes[duckType] };
+  }
+
+  const band = MATCH_BANDS.find(b => clampedForm >= b.minForm && clampedForm <= b.maxForm)
+    || MATCH_BANDS[MATCH_BANDS.length - 1];
+
+  const range      = band.maxRuns - band.minRuns;
+  const normRoll   = (roll - DUCK_THRESHOLD) / (1 - DUCK_THRESHOLD);
+  const skillBonus = Math.floor(skill * 0.5);
+  const runs       = Math.min(band.maxRuns + skillBonus * 2,
+    band.minRuns + Math.floor(normRoll * range) + skillBonus);
+
+  return { runs, duckType: null, note: `You made ${runs}.` };
+}
+
+const duckNotes = {
+  duck:          'You were out for a duck.',
+  golden_duck:   'First ball. Out for a golden duck.',
+  platinum_duck: 'First ball, first over. A platinum duck. You will not forget this one.',
+};
+
+function applyMatchResult(state, runs) {
+  const cricket = state.cricket;
+  cricket.matches += 1;
+  cricket.innings += 1;
+  cricket.runs    += runs;
+  if (runs > (cricket.hs || 0)) cricket.hs = runs;
+  cricket.avg = cricket.innings > 0
+    ? Math.round((cricket.runs / cricket.innings) * 10) / 10
+    : null;
+}
+
+const FIRST_MATCH_SCENE = `The pavilion at Utley is older than it looks — white paint over wood that's been painted white before, and before that. A smell of linseed oil and old canvas. Someone has chalked the batting order on the blackboard by the door. Your name is on it.\n\nThe groundsman doesn't look up when you walk past. The pitch is dry and slightly uneven in the middle. You won't know that until you're out there.\n\nYou sit on the bench with your pads on and wait.`;
+
 function buildTurnSummaryData(state, events) {
   const { month, year } = getGameDate(state.turnNumber);
   return {
@@ -336,6 +389,10 @@ module.exports = {
   TRANSPORT_TYPES,
   classifyTransport,
   applyTransport,
+  resolveMatch,
+  applyMatchResult,
+  FIRST_MATCH_SCENE,
+  MATCH_BANDS,
   FORM_BANDS,
   NAN_QUALITY_INITIAL,
   NAN_QUALITY_MAX,
