@@ -1722,7 +1722,16 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Description: Nan dial currently moves on visit/no-visit. Add quality score per visit (1=present-but-absent, 2=proper conversation, 3=engaged with tin object or grandfather story). Dial state derived from weighted rolling quality, not raw visit count. Player discovery: visiting every week but staying amber until they engage properly. Greyed state (grief) remains event-triggered, not quality-reversible. Depends on TBT-011 attribute model for GameState structure. Three Amigos done 2026-03-18. Gherkin needed.
 - Feature: tbt
 - CD3: UBV=7 TC=6 RR=7 → CoD=20, Dur=1, **CD3=20.0**
-- Status: OPEN — raised 2026-03-18. Three Amigos done. Gherkin needed.
+- Status: CLOSED — 2026-03-18. classifyVisitQuality, getNanDial added to tbt-engine.js. nanQuality accumulator (0–9, initial=7/green). quality-3:+3, quality-2:+1, quality-1:+0, no-visit:−1. 24 new Gherkin scenarios. 823/823. Commit 7317f83.
+
+---
+
+### TBT-013 — Dedication screen: update text for Ollie and James
+
+- Description: Replace "For Ollie. Who plays centre-half." with "For Ollie and James, who knows what their biscuit tin holds…" — both sons named. Pure content change, existing dedication screen code path.
+- Feature: tbt
+- CD3: UBV=8 TC=2 RR=1 → CoD=11, Dur=0.1, **CD3=110.0**
+- Status: CLOSED — 2026-03-18. tbt/tbt.html line 217 updated. Data-only change, no Gherkin gate. Commit below.
 
 ---
 
