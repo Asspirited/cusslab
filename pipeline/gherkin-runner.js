@@ -10863,6 +10863,25 @@ function makeSteps(ctx) {
         throw new Error(`quality-1 note should not mention engagement, got: ${ctx._tbtNanDelta.note}`);
     }],
 
+    // ── TBT-008: Nan dial — life noise reactivity ─────────────────────────────
+
+    [/^the player's bank is at or below the critical threshold$/, () => {
+      ctx._tbtNanState.bank = 0.50;
+    }],
+
+    [/^the player's bank is above the critical threshold$/, () => {
+      ctx._tbtNanState.bank = 10;
+    }],
+
+    [/^the turn resolves with (no-visit|quality-(\d+))$/, (activity, quality) => {
+      const delta = activity === 'no-visit'
+        ? applyActivity(ctx._tbtNanState, ACTIVITY_TYPES.REST)
+        : applyActivity(ctx._tbtNanState, ACTIVITY_TYPES.VISIT_NAN, Number(quality));
+      ctx._tbtNanState.nanQuality = Math.max(NAN_QUALITY_MIN, Math.min(NAN_QUALITY_MAX,
+        ctx._tbtNanState.nanQuality + delta.nanQualityδ));
+      ctx._tbtNanDelta = delta;
+    }],
+
     // ── TBT-006: Transport choices ────────────────────────────────────────────
 
     [/^it is a Saturday morning$/, () => {

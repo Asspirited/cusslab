@@ -1623,7 +1623,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Description: Parser-style interactive life narrative. The opening spike: three-field character creation (DOB, grandfather's name, player name), opening scene text (nan's house, the biscuit tin, seven objects), cursor with no instruction, AI intent resolution (GET_ON_BUS / STAY), one consequence scene, turn summary. HDD measure: does the player want to get on the bus without being told to? Does the player type a real name in the grandfather field?
 - Feature: tbt
 - CD3: UBV=9 TC=8 RR=8 → CoD=25, Dur=3, **CD3=8.3**
-- Status: OPEN — raised 2026-03-17. Gherkin approved.
+- Status: CLOSED — 2026-03-18. Opening scene, character creation (DOB/grandfather/player name), bus decision, intent resolution (GET_ON_BUS/STAY), consequence scene, turn summary. Commit 6ba2df8.
 
 ---
 
@@ -1632,7 +1632,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Description: Dedication displays alone first ("For Ollie. Who plays centre-half."), nothing else on screen, keypress advances. DOB options appear next. Grandfather name field appears after DOB — visually larger, no placeholder, cursor blinks. Player name field after. Screen clears completely on submit. Gherkin approved 2026-03-17.
 - Feature: tbt
 - CD3: UBV=7 TC=5 RR=5 → CoD=17, Dur=1, **CD3=17.0**
-- Status: OPEN — raised 2026-03-17. Gherkin approved.
+- Status: CLOSED — 2026-03-18. Dedication screen, DOB options, grandfather name field, player name field, screen clear on submit. Commit 0ea8a8b.
 
 ---
 
@@ -1641,7 +1641,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Description: Stats panel pins on game start with name/age/month/year, specific bank balance (£4.30), Nan+mum green dials, grandfather greyed (no RAG colour), cricket/football headers with dashes. Turn summary includes: Nan dial line, form word line, bank balance. Gherkin approved 2026-03-17.
 - Feature: tbt
 - CD3: UBV=6 TC=5 RR=5 → CoD=16, Dur=1, **CD3=16.0**
-- Status: OPEN — raised 2026-03-17. Gherkin approved.
+- Status: CLOSED — 2026-03-18. Stats panel: name/age/month/year, £4.30 bank, Nan+mum green dials, grandfather greyed, cricket/football headers. Turn summary. Commit 0ea8a8b.
 
 ---
 
@@ -1650,7 +1650,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Description: Each tin object has a distinct pre-written EXAMINE response in tbt-engine.js — not AI-generated. Tight, specific, controlled. Match stub: "carried not kept." Button: one sentence, no meaning offered. Coin: not identified (semi or final, unknown). Eagle: the Mekon is a bit naff, kept anyway. Intent classifier updated to route EXAMINE to engine before AI fallthrough. Gherkin approved 2026-03-17.
 - Feature: tbt
 - CD3: UBV=8 TC=6 RR=6 → CoD=20, Dur=1, **CD3=20.0**
-- Status: OPEN — raised 2026-03-17. Gherkin approved.
+- Status: CLOSED — 2026-03-18. EXAMINE_RESPONSES for all 7 objects (match stub, eagle, button, coin, photograph, brylcreem ad, wisden page). Intent classifier routes EXAMINE before AI. Commit 258a6a0.
 
 ---
 
@@ -1659,7 +1659,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Description: Core turn loop. Each week: fixed slots (Saturday match) + variable slots (nets, work, visit Nan, pub, rest, study). Player types intent, engine classifies and resolves. FORM/bank/relationship dials respond. Week closes with turn summary. ~50% sport target built into slot weighting. Three Amigos needed before Gherkin.
 - Feature: tbt
 - CD3: UBV=9 TC=8 RR=8 → CoD=25, Dur=3, **CD3=8.3**
-- Status: OPEN — raised 2026-03-17. Three Amigos needed.
+- Status: CLOSED — 2026-03-18. Activity engine, FORM words, weekly cycle loop, turn summary. Commit 94622d3.
 
 ---
 
@@ -1668,7 +1668,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Description: Bus (20p), bike, run, walk, cadge a lift — each with cost and FORM consequence. Early game: 20p is 10% of everything you have. Bike in rain = late + cold. The journey itself is scene material. Transport choice affects arrival condition and therefore FORM going into the match. Three Amigos needed before Gherkin.
 - Feature: tbt
 - CD3: UBV=7 TC=6 RR=6 → CoD=19, Dur=1, **CD3=19.0**
-- Status: OPEN — raised 2026-03-17. Three Amigos needed.
+- Status: CLOSED — 2026-03-18. classifyTransport + applyTransport added. BUS/BIKE/RUN/WALK. Weather/cadge deferred. 9 Gherkin scenarios. Commit e6fc5f5.
 
 ---
 
@@ -1677,7 +1677,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Description: The first match at Utley CC. Scene renders: the pavilion, the pitch, the groundsman. Player bats or bowls. Outcome determined by FORM + TALENT (hidden) + dice. Stats panel updates: matches, innings, runs, avg, HS, wkts. Turn summary reports the result in one line. Three Amigos needed before Gherkin.
 - Feature: tbt
 - CD3: UBV=9 TC=9 RR=9 → CoD=27, Dur=2, **CD3=13.5**
-- Status: OPEN — raised 2026-03-17. Three Amigos needed.
+- Status: CLOSED — 2026-03-18. resolveMatch, applyMatchResult, FIRST_MATCH_SCENE added. FORM bands: Flying/Decent/Shaky/Nowhere/Struggling. Duck tiers. 14 Gherkin scenarios. Bowling deferred to TBT-014. Commit 88a075d.
 
 ---
 
@@ -1723,6 +1723,15 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Feature: tbt
 - CD3: UBV=7 TC=6 RR=7 → CoD=20, Dur=1, **CD3=20.0**
 - Status: CLOSED — 2026-03-18. classifyVisitQuality, getNanDial added to tbt-engine.js. nanQuality accumulator (0–9, initial=7/green). quality-3:+3, quality-2:+1, quality-1:+0, no-visit:−1. 24 new Gherkin scenarios. 823/823. Commit 7317f83.
+
+---
+
+### TBT-014 — Cricket: bowling stats and resolution (deferred from TBT-007)
+
+- Description: Add bowling to match resolution. Player bowls as well as bats. FORM + skill → wickets taken, runs conceded. Stats panel: wkts, bowling avg, best figures. Score resolution extended to include bowling figures per match. Three Amigos needed before Gherkin.
+- Feature: tbt
+- CD3: UBV=7 TC=6 RR=5 → CoD=18, Dur=2, **CD3=9.0**
+- Status: OPEN — raised 2026-03-18. Deferred from TBT-007 (batting only first). Three Amigos needed.
 
 ---
 

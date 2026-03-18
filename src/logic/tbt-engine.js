@@ -208,6 +208,9 @@ function applyActivity(state, activityType, visitQuality) {
       delta.note = 'You did your homework.';
       break;
   }
+  if (state.bank < BANK_CRITICAL_THRESHOLD) {
+    delta.nanQualityδ -= 1;
+  }
   return delta;
 }
 
