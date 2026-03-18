@@ -16,7 +16,7 @@ Feature: Hidden attribute model composing FORM
     Examples:
       | physique | skill | confidence | tenacity | sharpness | freshness | noise | word    |
       | 0        | 0     | 0          | 0        | 0         | 0         | 0     | Lost    |
-      | 3        | 3     | 3          | 3        | 0         | 0         | 0     | Lost    |
+      | 2        | 2     | 2          | 2        | 0         | 0         | 0     | Lost    |
       | 4        | 4     | 4          | 4        | 0         | 0         | 0     | Nowhere |
       | 6        | 6     | 6          | 6        | 0         | 0         | 0     | Shaky   |
       | 8        | 8     | 8          | 8        | 0         | 0         | 0     | Decent  |
