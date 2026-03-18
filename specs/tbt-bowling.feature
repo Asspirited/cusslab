@@ -38,7 +38,7 @@ Feature: TBT cricket bowling resolution
     Given bowling stats show 1 match 2 wickets 28 runs best 2 for 28
     When a bowling result of 3 wickets 35 runs is applied
     Then bowling best figures is 3 for 35
-    And bowling average is 21.0
+    And bowling average is 12.6
 
   Scenario: Best figures does not update on worse performance
     Given bowling stats show 1 match 2 wickets 28 runs best 2 for 28
