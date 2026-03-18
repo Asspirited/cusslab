@@ -211,10 +211,15 @@
 <!-- ── Main ───────────────────────────────────────────────────────────────── -->
 <div id="main">
 
-  <!-- Character creation -->
-  <div id="creation">
-    <div class="dedication">For Ollie. Who plays centre-half.</div>
+  <!-- Dedication screen -->
+  <div id="dedication-screen" style="flex:1;display:flex;align-items:center;justify-content:center;padding:24px 32px;">
+    <div style="color:var(--muted);font-style:italic;font-size:13px;text-align:center;">
+      For Ollie. Who plays centre-half.
+    </div>
+  </div>
 
+  <!-- Character creation -->
+  <div id="creation" class="hidden">
     <div class="field-group" id="field-dob">
       <div class="field-label">Your date of birth.</div>
       <div class="dob-options">
@@ -269,7 +274,7 @@
     football:        { apps: 0, goals: 0, level: null },
     form:            'uncertain',
     turnNumber:      1,
-    gameState:       'CREATION', // CREATION | OPENING | PLAY
+    gameState:       'DEDICATION', // DEDICATION | CREATION | OPENING | PLAY
     history:         [],
   };
 
@@ -277,6 +282,7 @@
 
   const $ = id => document.getElementById(id);
 
+  const elDedication   = $('dedication-screen');
   const elCreation     = $('creation');
   const elNarrative    = $('narrative');
   const elSpinner      = $('spinner');
@@ -336,15 +342,38 @@
   }
 
   function appendTurnSummary(lines) {
-    const month = 'NOVEMBER 1979';
-    const body  = lines.map(l => `  ${l}`).join('<br>');
+    const months = ['JANUARY','FEBRUARY','MARCH','APRIL','MAY','JUNE','JULY','AUGUST','SEPTEMBER','OCTOBER','NOVEMBER','DECEMBER'];
+    const startMonth = 10; // NOVEMBER = index 10
+    const totalMonths = startMonth + (state.turnNumber - 1);
+    const month = months[totalMonths % 12];
+    const year  = 1979 + Math.floor(totalMonths / 12);
+    const nanDial  = state.relationships.nan;
+    const dialWord = nanDial === 'green' ? 'still green' : nanDial === 'amber' ? 'cooling' : 'cold';
+    const maslowLines = [
+      `Nan:  ${dialWord}.`,
+      `Form: ${state.form}.`,
+      `Bank: £${state.bank.toFixed(2)}.`,
+    ];
+    const allLines = [...(lines || []), '', ...maslowLines];
+    const body = allLines.map(l => `  ${l}`).join('<br>');
     appendNarrative(`
       <div class="turn-summary">
-        <div class="month">─────────────────────────<br>${month}<br>─────────────────────────</div>
+        <div class="month">─────────────────────────<br>${month} ${year}<br>─────────────────────────</div>
         <br>${body}
       </div>
     `);
   }
+
+  // ── Dedication screen ──────────────────────────────────────────────────────
+
+  document.addEventListener('keydown', function onDedicationKey(e) {
+    if (state.gameState !== 'DEDICATION') return;
+    if (['Shift','Control','Alt','Meta','Tab'].includes(e.key)) return;
+    state.gameState = 'CREATION';
+    elDedication.classList.add('hidden');
+    elCreation.classList.remove('hidden');
+    document.removeEventListener('keydown', onDedicationKey);
+  });
 
   // ── Character creation ─────────────────────────────────────────────────────
 

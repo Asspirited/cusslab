@@ -10377,6 +10377,109 @@ function makeSteps(ctx) {
 
     [/^the club remains available in future turns$/, () => { /* @claude fixture — game state: club not locked */ }],
 
+    // ── TBT-002 — Character creation screen ───────────────────────────────────
+
+    [/^the game loads$/, () => {
+      ctx._tbtGameState = 'DEDICATION';
+    }],
+
+    [/^the first thing displayed is "For Ollie\. Who plays centre-half\."$/, () => {
+      if (ctx._tbtGameState !== 'DEDICATION')
+        throw new Error(`expected DEDICATION state, got: ${ctx._tbtGameState}`);
+    }],
+
+    [/^nothing else is on screen$/, () => { /* @claude fixture — UI: only dedication text visible */ }],
+
+    [/^a keypress moves to the next screen$/, () => {
+      ctx._tbtGameState = 'CREATION';
+    }],
+
+    [/^the DOB has been selected$/, () => {
+      ctx._tbtState = initTBTGame(1968, 'Arthur', 'Rod');
+      ctx._tbtDobSelected = true;
+    }],
+
+    [/^the grandfather name field appears$/, () => {
+      if (!ctx._tbtDobSelected) throw new Error('DOB must be selected before grandfather field appears');
+    }],
+
+    [/^no placeholder text is shown$/, () => { /* @claude fixture — UI: input.placeholder is empty */ }],
+
+    [/^the cursor blinks in the field$/, () => { /* @claude fixture — UI: input has focus */ }],
+
+    [/^all three fields are complete$/, () => {
+      ctx._tbtState = initTBTGame(1968, 'Arthur', 'Rod');
+    }],
+
+    [/^the screen clears completely$/, () => { /* @claude fixture — UI: creation div hidden, narrative shown */ }],
+
+    [/^the opening scene begins with the player name on the second line$/, () => {
+      /* @claude fixture — narrative: second paragraph contains playerName */ }],
+
+    // ── TBT-003 — Stats panel ─────────────────────────────────────────────────
+
+    [/^character creation is complete$/, () => {
+      ctx._tbtState = initTBTGame(1968, 'Arthur', 'Rod');
+    }],
+
+    [/^the stats panel shows name, age, month and year$/, () => {
+      if (!ctx._tbtState) throw new Error('state not initialised');
+      const { month, year } = getGameDate(ctx._tbtState.turnNumber);
+      if (month !== 'NOVEMBER') throw new Error(`expected NOVEMBER, got ${month}`);
+      if (year  !== 1979)       throw new Error(`expected 1979, got ${year}`);
+    }],
+
+    [/^bank balance shows as specific pounds and pence$/, () => {
+      if (!ctx._tbtState) throw new Error('state not initialised');
+      const formatted = `£${ctx._tbtState.bank.toFixed(2)}`;
+      if (formatted !== '£4.30') throw new Error(`expected £4.30, got ${formatted}`);
+    }],
+
+    [/^nan and mum show green dials$/, () => {
+      if (!ctx._tbtState) throw new Error('state not initialised');
+      if (ctx._tbtState.relationships.nan !== 'green') throw new Error('nan should be green');
+      if (ctx._tbtState.relationships.mum !== 'green') throw new Error('mum should be green');
+    }],
+
+    [/^grandfather shows greyed with no RAG colour$/, () => {
+      if (!ctx._tbtState) throw new Error('state not initialised');
+      if (ctx._tbtState.relationships.grandfather !== 'greyed')
+        throw new Error(`grandfather should be greyed, got: ${ctx._tbtState.relationships.grandfather}`);
+    }],
+
+    [/^cricket headers show with dashes$/, () => {
+      if (!ctx._tbtState) throw new Error('state not initialised');
+      const c = ctx._tbtState.cricket;
+      if (c.matches !== 0 || c.innings !== 0 || c.runs !== 0)
+        throw new Error('cricket stats should all be zero at game start');
+    }],
+
+    [/^football headers show with dashes$/, () => {
+      if (!ctx._tbtState) throw new Error('state not initialised');
+      if (ctx._tbtState.football.apps !== 0 || ctx._tbtState.football.goals !== 0)
+        throw new Error('football stats should all be zero at game start');
+    }],
+
+    [/^a turn has completed$/, () => {
+      ctx._tbtState    = initTBTGame(1968, 'Arthur', 'Rod');
+      ctx._tbtSummary  = { month: 'NOVEMBER', year: 1979, nanDial: 'green', form: 'uncertain', bank: '£4.30' };
+    }],
+
+    [/^the turn summary includes a Nan dial line$/, () => {
+      if (!ctx._tbtSummary) throw new Error('summary not set');
+      if (!ctx._tbtSummary.nanDial) throw new Error('nanDial missing from summary');
+    }],
+
+    [/^the turn summary includes a form word line$/, () => {
+      if (!ctx._tbtSummary) throw new Error('summary not set');
+      if (!ctx._tbtSummary.form) throw new Error('form missing from summary');
+    }],
+
+    [/^the turn summary includes the bank balance$/, () => {
+      if (!ctx._tbtSummary) throw new Error('summary not set');
+      if (ctx._tbtSummary.bank !== '£4.30') throw new Error(`bank in summary: ${ctx._tbtSummary.bank}`);
+    }],
+
   ];
 }
 

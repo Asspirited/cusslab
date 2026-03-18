@@ -1624,3 +1624,21 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Feature: tbt
 - CD3: UBV=9 TC=8 RR=8 → CoD=25, Dur=3, **CD3=8.3**
 - Status: OPEN — raised 2026-03-17. Gherkin approved.
+
+---
+
+### TBT-002 — Character creation screen: dedication first, field sequencing
+
+- Description: Dedication displays alone first ("For Ollie. Who plays centre-half."), nothing else on screen, keypress advances. DOB options appear next. Grandfather name field appears after DOB — visually larger, no placeholder, cursor blinks. Player name field after. Screen clears completely on submit. Gherkin approved 2026-03-17.
+- Feature: tbt
+- CD3: UBV=7 TC=5 RR=5 → CoD=17, Dur=1, **CD3=17.0**
+- Status: OPEN — raised 2026-03-17. Gherkin approved.
+
+---
+
+### TBT-003 — Stats panel: Maslow basics rendering and turn summary
+
+- Description: Stats panel pins on game start with name/age/month/year, specific bank balance (£4.30), Nan+mum green dials, grandfather greyed (no RAG colour), cricket/football headers with dashes. Turn summary includes: Nan dial line, form word line, bank balance. Gherkin approved 2026-03-17.
+- Feature: tbt
+- CD3: UBV=6 TC=5 RR=5 → CoD=16, Dur=1, **CD3=16.0**
+- Status: OPEN — raised 2026-03-17. Gherkin approved.
