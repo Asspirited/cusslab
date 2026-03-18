@@ -398,29 +398,34 @@ function getExamineResponse(objectId) {
 }
 
 const BOWLING_BANDS = [
-  { minForm: 17, maxForm: 20, minWkts: 3, maxWkts: 5, minRuns: 15, maxRuns: 35, wicketThreshold: 0.20 },
-  { minForm: 13, maxForm: 16, minWkts: 2, maxWkts: 3, minRuns: 25, maxRuns: 45, wicketThreshold: 0.30 },
-  { minForm: 9,  maxForm: 12, minWkts: 1, maxWkts: 2, minRuns: 35, maxRuns: 60, wicketThreshold: 0.40 },
-  { minForm: 5,  maxForm: 8,  minWkts: 0, maxWkts: 1, minRuns: 45, maxRuns: 75, wicketThreshold: 0.55 },
-  { minForm: 0,  maxForm: 4,  minWkts: 0, maxWkts: 0, minRuns: 55, maxRuns: 90, wicketThreshold: 2.00 },
+  { minForm: 17, maxForm: 20, minWkts: 2, maxWkts: 6, minRuns: 10, maxRuns: 45, wicketThreshold: 0.20 },
+  { minForm: 13, maxForm: 16, minWkts: 1, maxWkts: 4, minRuns: 20, maxRuns: 60, wicketThreshold: 0.28 },
+  { minForm: 9,  maxForm: 12, minWkts: 0, maxWkts: 3, minRuns: 30, maxRuns: 75, wicketThreshold: 0.38 },
+  { minForm: 5,  maxForm: 8,  minWkts: 0, maxWkts: 2, minRuns: 40, maxRuns: 85, wicketThreshold: 0.52 },
+  { minForm: 0,  maxForm: 4,  minWkts: 0, maxWkts: 1, minRuns: 50, maxRuns: 90, wicketThreshold: 0.70 },
 ];
 
-function buildBowlingNote(wickets, runs, formWord) {
+const BOWLING_SURPRISE_THRESHOLD_1 = 0.90;
+const BOWLING_SURPRISE_THRESHOLD_2 = 0.95;
+
+function buildBowlingNote(wickets, runs, formWord, surprise) {
+  const surpriseOpener = surprise === 2
+    ? 'Nobody saw that coming — '
+    : surprise === 1
+      ? 'Something clicked — '
+      : '';
+
   const notes = {
-    'Flying':        `You ran in hard and found your shape early — ${wickets} for ${runs}. The keeper was working all afternoon.`,
-    'Ticking Along': `A decent spell, more craft than fire — ${wickets} for ${runs}. You kept them honest.`,
-    'Scratchy':      `Some good balls and some bad ones — ${wickets} for ${runs}. You'll bowl better than that.`,
-    'Out-of-Form':   `They got after you a bit — ${wickets} for ${runs}. The line wasn't quite there today.`,
-    'Nowhere':       `They put you to the sword — ${wickets} for ${runs}. The captain took you off early.`,
+    'Flying':        `${surpriseOpener}You ran in hard and found your shape early — ${wickets} for ${runs}. The keeper was working all afternoon.`,
+    'Ticking Along': `${surpriseOpener}A decent spell, more craft than fire — ${wickets} for ${runs}. You kept them honest.`,
+    'Scratchy':      `${surpriseOpener}Some good balls and some bad ones — ${wickets} for ${runs}. You'll bowl better than that.`,
+    'Out-of-Form':   `${surpriseOpener}They got after you a bit — ${wickets} for ${runs}. The line wasn't quite there today.`,
+    'Nowhere':       `${surpriseOpener}They put you to the sword — ${wickets} for ${runs}. The captain took you off early.`,
   };
   return notes[formWord] || `${wickets} for ${runs}.`;
 }
 
-function resolveBowling(formScore, skill, roll) {
-  const clampedForm = Math.max(0, Math.min(20, formScore));
-  const band = BOWLING_BANDS.find(b => clampedForm >= b.minForm && clampedForm <= b.maxForm)
-    || BOWLING_BANDS[BOWLING_BANDS.length - 1];
-
+function resolveBowlingFromBand(band, skill, roll) {
   const runsRange     = band.maxRuns - band.minRuns;
   const skillRunBonus = Math.floor(skill * 0.5);
   const runs = Math.max(band.minRuns - skillRunBonus,
@@ -428,15 +433,31 @@ function resolveBowling(formScore, skill, roll) {
 
   let wickets = 0;
   if (band.maxWkts > 0 && roll >= band.wicketThreshold) {
-    const wktRange = band.maxWkts - band.minWkts;
-    const normWkt  = (roll - band.wicketThreshold) / (1 - band.wicketThreshold);
+    const wktRange      = band.maxWkts - band.minWkts;
+    const normWkt       = (roll - band.wicketThreshold) / (1 - band.wicketThreshold);
     const skillWktBonus = Math.floor(skill * 0.2);
     wickets = Math.min(band.maxWkts + skillWktBonus,
       band.minWkts + Math.floor(normWkt * (wktRange + 1)) + (roll > 0.85 ? skillWktBonus : 0));
   }
+  return { wickets, runs };
+}
 
-  const note = buildBowlingNote(wickets, runs, getFormWord(clampedForm));
-  return { wickets, runs, note };
+function resolveBowling(formScore, skill, roll) {
+  const clampedForm = Math.max(0, Math.min(20, formScore));
+  const bandIndex = BOWLING_BANDS.findIndex(b => clampedForm >= b.minForm && clampedForm <= b.maxForm);
+  const baseBandIndex = bandIndex >= 0 ? bandIndex : 0;
+
+  let surprise = 0;
+  if (roll >= BOWLING_SURPRISE_THRESHOLD_2) surprise = 2;
+  else if (roll >= BOWLING_SURPRISE_THRESHOLD_1) surprise = 1;
+
+  // Jump toward higher-performing bands (lower index = better)
+  const resolvedIndex = Math.max(0, baseBandIndex - surprise);
+  const band = BOWLING_BANDS[resolvedIndex];
+
+  const { wickets, runs } = resolveBowlingFromBand(band, skill, roll);
+  const note = buildBowlingNote(wickets, runs, getFormWord(clampedForm), surprise);
+  return { wickets, runs, note, surprise };
 }
 
 function applyBowlingResult(state, wickets, runs) {
@@ -563,6 +584,8 @@ module.exports = {
   tickIllness,
   updateFormStreak,
   BOWLING_BANDS,
+  BOWLING_SURPRISE_THRESHOLD_1,
+  BOWLING_SURPRISE_THRESHOLD_2,
   resolveBowling,
   applyBowlingResult,
 };

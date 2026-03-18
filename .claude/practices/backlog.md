@@ -1731,7 +1731,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Description: Add bowling to match resolution. Player bowls as well as bats. FORM + skill → wickets taken, runs conceded. Stats panel: wkts, bowling avg, best figures. Score resolution extended to include bowling figures per match. Three Amigos needed before Gherkin.
 - Feature: tbt
 - CD3: UBV=7 TC=6 RR=5 → CoD=18, Dur=2, **CD3=9.0**
-- Status: OPEN — raised 2026-03-18. Deferred from TBT-007 (batting only first). Three Amigos needed.
+- Status: CLOSED — 2026-03-18. BOWLING_BANDS, resolveBowling, applyBowlingResult, buildBowlingNote added. 13 Gherkin scenarios. Commit 4249c24.
 
 ---
 
@@ -1797,6 +1797,15 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Epic: Workplaces
 - CD3: UBV=9 TC=3 RR=4 → CoD=16, Dur=10, **CD3=1.6**
 - Status: OPEN — raised 2026-03-18. EPIC placeholder — decompose into child items before implementation.
+
+---
+
+### TBT-023 — Bowling bands: overlapping ranges + surprise mechanic
+
+- Description: Two mechanisms for natural variation. (1) Overlapping bands: lower FORM bands extend into higher-band territory — same intentional-overlap design as batting MATCH_BANDS. (2) Surprise mechanic: a separate high-roll threshold (e.g. roll ≥ 0.92) triggers an "inspired spell" — resolves using the next band up. These stack: overlap gives everyday variance; surprise gives the exceptional "nowhere bowler takes five for thirty" moment. Bands, thresholds, and Gherkin ranges to be confirmed in Three Amigos.
+- Feature: tbt
+- CD3: UBV=7 TC=4 RR=3 → CoD=14, Dur=2, **CD3=7.0**
+- Status: OPEN — raised 2026-03-18. Rod confirmed both mechanisms (2026-03-18).
 
 ---
 
