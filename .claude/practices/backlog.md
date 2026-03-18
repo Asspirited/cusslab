@@ -1611,3 +1611,16 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Feature: content — snooker
 - CD3: UBV=3 TC=2 RR=2 → CoD=7, Dur=2, **CD3=3.5**
 - Status: OPEN — raised 2026-03-15
+
+---
+
+## ── THROUGH THE BISCUIT TIN ─────────────────────────────────────────────────
+
+---
+
+### TBT-001 — HDD Spike: opening scene, character creation, the bus decision
+
+- Description: Parser-style interactive life narrative. The opening spike: three-field character creation (DOB, grandfather's name, player name), opening scene text (nan's house, the biscuit tin, seven objects), cursor with no instruction, AI intent resolution (GET_ON_BUS / STAY), one consequence scene, turn summary. HDD measure: does the player want to get on the bus without being told to? Does the player type a real name in the grandfather field?
+- Feature: tbt
+- CD3: UBV=9 TC=8 RR=8 → CoD=25, Dur=3, **CD3=8.3**
+- Status: OPEN — raised 2026-03-17. Gherkin approved.

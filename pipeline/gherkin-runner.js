@@ -15,6 +15,7 @@ const { QUNTUM_LEEKS_SCENARIOS, initState, pickRandomScenario, betLeekiness, spe
 const { initGameState, appendToHistory, incrementTurn, buildModifierBlock } = require('../src/logic/ff-engine.js');
 const { PUB_CRAWL_SCENES, getAllScenes, getPubScene, getActiveAdvisor, initPubCrawl, resolveChoice, determineOutcome, checkLederhosen, buildAdvisorPrompt, ADVISOR_IDS } = require('../src/logic/pub-navigator-engine.js');
 const { lintStepDuplicates } = require('./lint-steps.js');
+const { initTBTGame, classifyIntent, getTinObjects, getGameDate } = require('../src/logic/tbt-engine.js');
 
 // ── Mock state (simulates browser localStorage + DOM) ────────────────────────
 
@@ -10310,6 +10311,71 @@ function makeSteps(ctx) {
         if (missing.length) throw new Error(`Race "${r.name}" missing required fields: ${missing.join(', ')}`);
       }
     }],
+
+    // ── TBT — Through the Biscuit Tin ────────────────────────────────────────
+
+    [/^the player has entered DOB, grandfather's name, and their own name$/, () => {
+      ctx._tbtState = initTBTGame(1968, 'Arthur', 'Rod');
+    }],
+
+    [/^the opening scene completes$/, () => { /* @claude fixture — AI-generated narrative */ }],
+
+    [/^the player is presented with a cursor and no explicit instruction$/, () => {
+      /* @claude fixture — UI: input visible, no prompt text instructing the player */ }],
+
+    [/^the biscuit tin contents are established without over-explanation$/, () => {
+      if (getTinObjects().length !== 7) throw new Error('Tin must have exactly 7 objects');
+    }],
+
+    [/^the grandfather's name appears greyed in the relationships panel$/, () => {
+      if (!ctx._tbtState) ctx._tbtState = initTBTGame(1968, 'Arthur', 'Rod');
+      if (ctx._tbtState.relationships.grandfather !== 'greyed')
+        throw new Error(`grandfather dial should be greyed, got: ${ctx._tbtState.relationships.grandfather}`);
+    }],
+
+    [/^the player's bank balance and domestic situation are visible$/, () => {
+      if (!ctx._tbtState) ctx._tbtState = initTBTGame(1968, 'Arthur', 'Rod');
+      if (typeof ctx._tbtState.bank !== 'number') throw new Error('bank must be a number');
+      if (!ctx._tbtState.home) throw new Error('home must be set');
+    }],
+
+    [/^no cricket or football stats are shown — only empty headers with dashes$/, () => {
+      if (!ctx._tbtState) ctx._tbtState = initTBTGame(1968, 'Arthur', 'Rod');
+      if (ctx._tbtState.cricket.matches !== 0) throw new Error('cricket matches should be 0');
+      if (ctx._tbtState.football.apps !== 0) throw new Error('football apps should be 0');
+    }],
+
+    [/^the opening scene has completed$/, () => {
+      ctx._tbtState = initTBTGame(1968, 'Arthur', 'Rod');
+    }],
+
+    [/^the player expresses any intent to go to Utley Cricket Club$/, () => {
+      ctx._tbtIntent = classifyIntent('go to utley cricket club on saturday');
+    }],
+
+    [/^the game resolves their intent regardless of exact phrasing$/, () => {
+      const intents = ['yes', 'go to utley', 'get on the bus', 'head to the club', 'saturday'];
+      for (const i of intents) {
+        if (classifyIntent(i) !== 'GET_ON_BUS')
+          throw new Error(`"${i}" should classify as GET_ON_BUS`);
+      }
+    }],
+
+    [/^a consequence scene renders at the club$/, () => { /* @claude fixture — AI-generated narrative */ }],
+
+    [/^the turn summary fires at scene end$/, () => { /* @claude fixture — UI: turn summary div populated */ }],
+
+    [/^the player expresses intent to stay or do something else$/, () => {
+      ctx._tbtIntent = classifyIntent('stay here with nan');
+    }],
+
+    [/^the game honours that choice without judgment$/, () => {
+      if (ctx._tbtIntent !== 'STAY') throw new Error(`expected STAY, got ${ctx._tbtIntent}`);
+    }],
+
+    [/^a different scene renders$/, () => { /* @claude fixture — AI-generated narrative */ }],
+
+    [/^the club remains available in future turns$/, () => { /* @claude fixture — game state: club not locked */ }],
 
   ];
 }

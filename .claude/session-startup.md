@@ -322,6 +322,12 @@ Reference library — read the relevant file before the relevant step:
 | Deception, detection, negotiation, LieProfile, Veritas, Voigt-Kampff, scoring panels | **Fallacy Finder** | `/home/rodent/fallacy-finder/` |
 | Grey area (boardroom = project-adjacent) | Flag it — do not assume | |
 
+**TBT — Through the Biscuit Tin** lives in the Cusslab repo on branch `through-the-biscuit-tin` but is a **separate bounded context**. Non-negotiable rules:
+- Entry point: `tbt/tbt.html` — standalone, no link from `index.html`. Ever.
+- Domain logic: `src/logic/tbt-engine.js` — no imports from Cusslab domain logic.
+- No TBT nav tabs added to Cusslab's NAV_GROUPS. No crossover.
+- When TBT forks to its own repo: zero surgery needed. The boundary is the point.
+
 ---
 
 ## NON-NEGOTIABLE RULES (violation = waste log entry)

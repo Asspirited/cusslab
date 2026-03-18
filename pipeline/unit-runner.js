@@ -1516,6 +1516,111 @@ assert('buildModifierBlock: multiple modifiers each appear',
   buildModifierBlock(['Mod A', 'Mod B']).includes('Mod A') &&
   buildModifierBlock(['Mod A', 'Mod B']).includes('Mod B'), true);
 
+// ── TBT engine ───────────────────────────────────────────────────────────────
+
+const { initTBTGame, calculateAge, getGameDate, getTinObjects, classifyIntent, buildTurnSummaryData } = require('../src/logic/tbt-engine.js');
+
+assert('calculateAge: 1968 in 1979 is 11',
+  calculateAge(1968, 1979), 11);
+
+assert('calculateAge: 1967 in 1979 is 12',
+  calculateAge(1967, 1979), 12);
+
+assert('calculateAge: 1969 in 1979 is 10',
+  calculateAge(1969, 1979), 10);
+
+assert('getGameDate: turn 1 is NOVEMBER 1979',
+  JSON.stringify(getGameDate(1)), JSON.stringify({ month: 'NOVEMBER', year: 1979 }));
+
+assert('getGameDate: turn 2 is DECEMBER 1979',
+  JSON.stringify(getGameDate(2)), JSON.stringify({ month: 'DECEMBER', year: 1979 }));
+
+assert('getGameDate: turn 13 is NOVEMBER 1980',
+  JSON.stringify(getGameDate(13)), JSON.stringify({ month: 'NOVEMBER', year: 1980 }));
+
+assert('getTinObjects: returns 7 objects',
+  getTinObjects().length, 7);
+
+assert('getTinObjects: first object is photograph',
+  getTinObjects()[0].id, 'photograph');
+
+assert('getTinObjects: last object is button',
+  getTinObjects()[6].id, 'button');
+
+assert('getTinObjects: does not mutate between calls',
+  getTinObjects() !== getTinObjects(), true);
+
+const _tbt1 = initTBTGame(1968, 'Arthur', 'Rod');
+assert('initTBTGame: playerName set',
+  _tbt1.playerName, 'Rod');
+
+assert('initTBTGame: grandfatherName set',
+  _tbt1.grandfatherName, 'Arthur');
+
+assert('initTBTGame: age calculated from dob',
+  _tbt1.age, 11);
+
+assert('initTBTGame: bank is 4.30',
+  _tbt1.bank, 4.30);
+
+assert('initTBTGame: nan dial is green',
+  _tbt1.relationships.nan, 'green');
+
+assert('initTBTGame: grandfather dial is greyed',
+  _tbt1.relationships.grandfather, 'greyed');
+
+assert('initTBTGame: gameState is OPENING',
+  _tbt1.gameState, 'OPENING');
+
+assert('initTBTGame: turnNumber is 1',
+  _tbt1.turnNumber, 1);
+
+assert('initTBTGame: form is uncertain',
+  _tbt1.form, 'uncertain');
+
+assert('classifyIntent: "yes" → GET_ON_BUS',
+  classifyIntent('yes'), 'GET_ON_BUS');
+
+assert('classifyIntent: "go to utley" → GET_ON_BUS',
+  classifyIntent('go to utley'), 'GET_ON_BUS');
+
+assert('classifyIntent: "get on the bus" → GET_ON_BUS',
+  classifyIntent('get on the bus'), 'GET_ON_BUS');
+
+assert('classifyIntent: "stay here with nan" → STAY',
+  classifyIntent('stay here with nan'), 'STAY');
+
+assert('classifyIntent: "no" → STAY',
+  classifyIntent('no'), 'STAY');
+
+assert('classifyIntent: "examine the photograph" → EXAMINE',
+  classifyIntent('examine the photograph'), 'EXAMINE');
+
+assert('classifyIntent: "look at the coin" → EXAMINE',
+  classifyIntent('look at the coin'), 'EXAMINE');
+
+assert('classifyIntent: empty string → OTHER',
+  classifyIntent(''), 'OTHER');
+
+assert('classifyIntent: null → OTHER',
+  classifyIntent(null), 'OTHER');
+
+const _tbtSummary = buildTurnSummaryData(_tbt1, ['You went to Utley Cricket Club.']);
+assert('buildTurnSummaryData: month is NOVEMBER',
+  _tbtSummary.month, 'NOVEMBER');
+
+assert('buildTurnSummaryData: year is 1979',
+  _tbtSummary.year, 1979);
+
+assert('buildTurnSummaryData: bank formatted correctly',
+  _tbtSummary.bank, '£4.30');
+
+assert('buildTurnSummaryData: nanDial from state',
+  _tbtSummary.nanDial, 'green');
+
+assert('buildTurnSummaryData: events array passed through',
+  _tbtSummary.events[0], 'You went to Utley Cricket Club.');
+
 // ── Results ──────────────────────────────────────────────────────────────────
 
 const total = passed + failed;

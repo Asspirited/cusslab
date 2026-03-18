@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Through the Biscuit Tin</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #1a1a1a;
+      --surface:   #222;
+      --border:    #333;
+      --text:      #d4cfc8;
+      --muted:     #666;
+      --green:     #4a7c59;
+      --amber:     #b8860b;
+      --red:       #8b2222;
+      --greyed:    #444;
+      --cursor:    #d4cfc8;
+      --mono:      'Courier New', Courier, monospace;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--mono);
+      font-size: 14px;
+      line-height: 1.6;
+      height: 100vh;
+      display: flex;
+      overflow: hidden;
+    }
+
+    /* ── Stats panel ──────────────────────────────────── */
+    #stats {
+      width: 220px;
+      min-width: 220px;
+      border-right: 1px solid var(--border);
+      padding: 16px 12px;
+      overflow-y: auto;
+      font-size: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    #stats .stat-block { border-top: 1px solid var(--border); padding-top: 10px; }
+    #stats .stat-block:first-child { border-top: none; padding-top: 0; }
+
+    #stats .label { color: var(--muted); text-transform: uppercase; font-size: 10px; letter-spacing: 0.08em; margin-bottom: 4px; }
+    #stats .value { color: var(--text); }
+    #stats .value.muted { color: var(--muted); }
+
+    .rel-row { display: flex; align-items: center; gap: 6px; margin-bottom: 3px; }
+    .rel-name { flex: 1; }
+    .dial { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+    .dial.green  { background: var(--green); }
+    .dial.amber  { background: var(--amber); }
+    .dial.red    { background: var(--red); }
+    .dial.greyed { background: var(--greyed); border: 1px solid #555; }
+
+    .stat-row { display: flex; justify-content: space-between; margin-bottom: 2px; }
+    .stat-row .val { color: var(--muted); }
+    .stat-row .val.active { color: var(--text); }
+
+    #form-word { font-style: italic; color: var(--muted); }
+
+    /* ── Main area ────────────────────────────────────── */
+    #main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    #narrative {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px 32px;
+      max-width: 720px;
+    }
+
+    #narrative p { margin-bottom: 1em; }
+    #narrative .turn-summary {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 0;
+      margin: 16px 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    #narrative .turn-summary .month { color: var(--text); letter-spacing: 0.1em; }
+
+    /* ── Creation screen ─────────────────────────────── */
+    #creation {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 24px 32px;
+      max-width: 520px;
+    }
+
+    #creation .dedication {
+      color: var(--muted);
+      font-style: italic;
+      margin-bottom: 32px;
+      font-size: 13px;
+    }
+
+    #creation .field-group { margin-bottom: 24px; }
+    #creation .field-label { color: var(--muted); margin-bottom: 10px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; }
+
+    #creation .dob-options { display: flex; flex-direction: column; gap: 8px; }
+    #creation .dob-option {
+      cursor: pointer;
+      padding: 8px 10px;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 13px;
+      background: none;
+      text-align: left;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    #creation .dob-option:hover,
+    #creation .dob-option.selected { color: var(--text); border-color: var(--text); }
+
+    #creation input[type="text"] {
+      background: none;
+      border: none;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+      font-family: var(--mono);
+      font-size: 15px;
+      padding: 6px 0;
+      width: 100%;
+      outline: none;
+    }
+    #creation input[type="text"]:focus { border-bottom-color: var(--text); }
+
+    /* ── Parser ──────────────────────────────────────── */
+    #parser-area {
+      border-top: 1px solid var(--border);
+      padding: 12px 32px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    #parser-area .prompt-char { color: var(--muted); }
+
+    #parser-input {
+      flex: 1;
+      background: none;
+      border: none;
+      color: var(--text);
+      font-family: var(--mono);
+      font-size: 14px;
+      outline: none;
+    }
+
+    .hidden { display: none !important; }
+
+    #spinner { color: var(--muted); font-size: 12px; padding: 8px 32px; }
+  </style>
+</head>
+<body>
+
+<!-- ── Stats panel ─────────────────────────────────────────────────────────── -->
+<div id="stats">
+  <div class="stat-block">
+    <div class="label" id="stats-name-label">—</div>
+    <div class="value" id="stats-location">—</div>
+  </div>
+
+  <div class="stat-block">
+    <div class="stat-row"><span class="label">Bank</span><span class="val" id="stats-bank">—</span></div>
+    <div class="stat-row"><span class="label">Work</span><span class="val" id="stats-work">—</span></div>
+    <div class="stat-row"><span class="label">Home</span><span class="val" id="stats-home">—</span></div>
+  </div>
+
+  <div class="stat-block" id="stats-people">
+    <div class="label">People</div>
+    <div id="stats-rels"></div>
+  </div>
+
+  <div class="stat-block">
+    <div class="label">Cricket</div>
+    <div class="stat-row"><span>Matches</span><span class="val" id="s-c-matches">—</span></div>
+    <div class="stat-row"><span>Inns</span><span class="val" id="s-c-inns">—</span></div>
+    <div class="stat-row"><span>Runs</span><span class="val" id="s-c-runs">—</span></div>
+    <div class="stat-row"><span>Avg</span><span class="val" id="s-c-avg">—</span></div>
+    <div class="stat-row"><span>HS</span><span class="val" id="s-c-hs">—</span></div>
+    <div class="stat-row"><span>Wkts</span><span class="val" id="s-c-wkts">—</span></div>
+  </div>
+
+  <div class="stat-block">
+    <div class="label">Football</div>
+    <div class="stat-row"><span>Apps</span><span class="val" id="s-f-apps">—</span></div>
+    <div class="stat-row"><span>Goals</span><span class="val" id="s-f-goals">—</span></div>
+  </div>
+
+  <div class="stat-block">
+    <div class="label">Form</div>
+    <div id="form-word">—</div>
+  </div>
+</div>
+
+<!-- ── Main ───────────────────────────────────────────────────────────────── -->
+<div id="main">
+
+  <!-- Character creation -->
+  <div id="creation">
+    <div class="dedication">For Ollie. Who plays centre-half.</div>
+
+    <div class="field-group" id="field-dob">
+      <div class="field-label">Your date of birth.</div>
+      <div class="dob-options">
+        <button class="dob-option" data-dob="1967">1967 — You were born the year England last won the Ashes before Botham.</button>
+        <button class="dob-option" data-dob="1968">1968 — You were born the year of D'Oliveira. Selected. Dropped. Selected.</button>
+        <button class="dob-option" data-dob="1969">1969 — You were born the year Yorkshire won the County Championship. Again.</button>
+      </div>
+    </div>
+
+    <div class="field-group hidden" id="field-grandfather">
+      <div class="field-label">Your grandfather's name.</div>
+      <input type="text" id="input-grandfather" autocomplete="off" spellcheck="false">
+    </div>
+
+    <div class="field-group hidden" id="field-player">
+      <div class="field-label">Your name.</div>
+      <input type="text" id="input-player" autocomplete="off" spellcheck="false">
+    </div>
+  </div>
+
+  <!-- Narrative -->
+  <div id="narrative" class="hidden"></div>
+  <div id="spinner" class="hidden">...</div>
+
+  <!-- Parser -->
+  <div id="parser-area" class="hidden">
+    <span class="prompt-char">&gt;</span>
+    <input type="text" id="parser-input" autocomplete="off" spellcheck="false">
+  </div>
+
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  const WORKER_URL = 'https://cusslab-api.leanspirited.workers.dev';
+
+  // ── State ──────────────────────────────────────────────────────────────────
+
+  const state = {
+    playerName:      '',
+    grandfatherName: '',
+    dob:             null,
+    age:             null,
+    bank:            4.30,
+    work:            'Paper round',
+    weeklyWage:      2.50,
+    home:            "Nan's spare room",
+    relationships:   { nan: 'green', mum: 'green', grandfather: 'greyed' },
+    cricket:         { matches: 0, innings: 0, runs: 0, wkts: 0, avg: null, hs: null },
+    football:        { apps: 0, goals: 0, level: null },
+    form:            'uncertain',
+    turnNumber:      1,
+    gameState:       'CREATION', // CREATION | OPENING | PLAY
+    history:         [],
+  };
+
+  // ── DOM refs ───────────────────────────────────────────────────────────────
+
+  const $ = id => document.getElementById(id);
+
+  const elCreation     = $('creation');
+  const elNarrative    = $('narrative');
+  const elSpinner      = $('spinner');
+  const elParserArea   = $('parser-area');
+  const elParserInput  = $('parser-input');
+  const elFieldGF      = $('field-grandfather');
+  const elFieldPlayer  = $('field-player');
+  const elInputGF      = $('input-grandfather');
+  const elInputPlayer  = $('input-player');
+
+  // ── Stats panel ────────────────────────────────────────────────────────────
+
+  function renderStats() {
+    $('stats-name-label').textContent =
+      state.playerName ? `${state.playerName} — Age ${state.age} — November 1979` : '—';
+    $('stats-location').textContent = '';
+    $('stats-bank').textContent  = state.gameState === 'CREATION' ? '—' : `£${state.bank.toFixed(2)}`;
+    $('stats-work').textContent  = state.gameState === 'CREATION' ? '—' : state.work;
+    $('stats-home').textContent  = state.gameState === 'CREATION' ? '—' : state.home;
+    $('form-word').textContent   = state.gameState === 'CREATION' ? '—' : state.form;
+
+    const relsEl = $('stats-rels');
+    relsEl.innerHTML = '';
+    if (state.gameState !== 'CREATION') {
+      for (const [name, dial] of Object.entries(state.relationships)) {
+        if (name === 'grandfather') {
+          relsEl.innerHTML += `<div class="rel-row"><span class="rel-name">${state.grandfatherName || 'Grandfather'}</span><span class="dial greyed"></span></div>`;
+        } else {
+          const dialClass = dial === 'green' ? 'green' : dial === 'amber' ? 'amber' : 'red';
+          const label = name.charAt(0).toUpperCase() + name.slice(1);
+          relsEl.innerHTML += `<div class="rel-row"><span class="rel-name">${label}</span><span class="dial ${dialClass}"></span></div>`;
+        }
+      }
+    }
+
+    // Cricket — dashes until stats exist
+    const c = state.cricket;
+    $('s-c-matches').textContent = c.matches || '—';
+    $('s-c-inns').textContent    = c.innings  || '—';
+    $('s-c-runs').textContent    = c.runs     || '—';
+    $('s-c-avg').textContent     = c.avg      || '—';
+    $('s-c-hs').textContent      = c.hs       || '—';
+    $('s-c-wkts').textContent    = c.wkts     || '—';
+    $('s-f-apps').textContent    = state.football.apps   || '—';
+    $('s-f-goals').textContent   = state.football.goals  || '—';
+  }
+
+  // ── Narrative helpers ──────────────────────────────────────────────────────
+
+  function appendNarrative(html) {
+    elNarrative.insertAdjacentHTML('beforeend', html);
+    elNarrative.scrollTop = elNarrative.scrollHeight;
+  }
+
+  function appendParagraph(text) {
+    appendNarrative(`<p>${text}</p>`);
+  }
+
+  function appendTurnSummary(lines) {
+    const month = 'NOVEMBER 1979';
+    const body  = lines.map(l => `  ${l}`).join('<br>');
+    appendNarrative(`
+      <div class="turn-summary">
+        <div class="month">─────────────────────────<br>${month}<br>─────────────────────────</div>
+        <br>${body}
+      </div>
+    `);
+  }
+
+  // ── Character creation ─────────────────────────────────────────────────────
+
+  document.querySelectorAll('.dob-option').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.dob-option').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      state.dob = parseInt(btn.dataset.dob, 10);
+      state.age = 1979 - state.dob;
+      elFieldGF.classList.remove('hidden');
+      elInputGF.focus();
+      renderStats();
+    });
+  });
+
+  elInputGF.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && elInputGF.value.trim()) {
+      state.grandfatherName = elInputGF.value.trim();
+      elFieldPlayer.classList.remove('hidden');
+      elInputPlayer.focus();
+    }
+  });
+
+  elInputPlayer.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && elInputPlayer.value.trim()) {
+      state.playerName = elInputPlayer.value.trim();
+      renderStats();
+      beginOpeningScene();
+    }
+  });
+
+  // ── Opening scene ──────────────────────────────────────────────────────────
+
+  function beginOpeningScene() {
+    state.gameState = 'OPENING';
+    elCreation.classList.add('hidden');
+    elNarrative.classList.remove('hidden');
+    renderStats();
+    renderOpeningScene();
+  }
+
+  function renderOpeningScene() {
+    const name = state.playerName;
+    const gf   = state.grandfatherName;
+
+    appendParagraph(`November 1979.`);
+    appendParagraph(`${name}.`);
+    appendParagraph(`Your nan's house smells the same as it always did.`);
+    appendParagraph(`She has just handed you a biscuit tin — McVitie's shortbread, tartan, slightly dented on one corner — and gone back to the front room to watch Pebble Mill at One. That is what you do when something is too large to speak about directly.`);
+    appendParagraph(`${gf} died last week. You are ${state.age} years old. You didn't know him at all. Now you have a tin.`);
+    appendParagraph(`Inside:`);
+    appendParagraph(`<em>A photograph.</em> Black and white, slightly foxed at the edges. Two rows of men in cricket whites in front of The Oval pavilion. ${gf} in the front row. Young. Something around his mouth that isn't quite a smile. On the back, in handwriting you don't recognise: <em>The Oval, August 1948.</em>`);
+    appendParagraph(`<em>A Wisden page,</em> torn out carefully. A scorecard. His name second in the batting order. England v Australia. The Oval. August 1948. A score that means nothing to you yet.`);
+    appendParagraph(`<em>A match stub.</em> Pale green card, soft with handling. Someone had this in a pocket for years. <em>THE OVAL. HOME v AUSTRALIA. AUGUST 1948.</em> No score written on it. Just the stub.`);
+    appendParagraph(`<em>A coin.</em> Worn smooth. The wording gone entirely. Just a crest — something heraldic, half-legible. His thumb was there for years.`);
+    appendParagraph(`<em>A Brylcreem advertisement</em> torn from a magazine. Him again — young, hair swept back, looking directly at the camera like he knows something.`);
+    appendParagraph(`<em>A Southampton FC programme.</em> A league match at The Dell, 1947. His name in the lineup. Centre-half. Not a Cup Final. Just a Tuesday in November. He kept this one.`);
+    appendParagraph(`<em>An Eagle comic.</em> April 1952. The Mekon on the cover, regarding Dan Dare from his flying saucer with cold contempt. Colours still bright because the tin kept the light out. You think the Mekon looks a bit naff, if you're honest.`);
+    appendParagraph(`<em>A button</em> that doesn't match anything.`);
+    appendParagraph(`Every biscuit tin in England has it. Nobody knows what it was from. Nobody will ever know.`);
+
+    // Activate parser
+    state.gameState = 'PLAY';
+    elParserArea.classList.remove('hidden');
+    elParserInput.focus();
+  }
+
+  // ── Parser ─────────────────────────────────────────────────────────────────
+
+  elParserInput.addEventListener('keydown', async e => {
+    if (e.key !== 'Enter') return;
+    const input = elParserInput.value.trim();
+    if (!input) return;
+    elParserInput.value = '';
+    elParserInput.disabled = true;
+
+    appendParagraph(`<span style="color:var(--muted)">&gt; ${input}</span>`);
+
+    const intent = classifyIntent(input);
+    elSpinner.classList.remove('hidden');
+
+    try {
+      const response = await resolveWithAI(input, intent);
+      elSpinner.classList.add('hidden');
+      appendParagraph(response.narrative);
+      if (response.summary) {
+        appendTurnSummary(response.summary);
+        state.turnNumber++;
+      }
+      renderStats();
+    } catch (err) {
+      elSpinner.classList.add('hidden');
+      appendParagraph(`<span style="color:var(--muted)">[Something went wrong. Try again.]</span>`);
+    }
+
+    elParserInput.disabled = false;
+    elParserInput.focus();
+  });
+
+  // ── Intent classifier ──────────────────────────────────────────────────────
+
+  function classifyIntent(input) {
+    const lower = input.toLowerCase().trim();
+    if (/\b(examine|look at|inspect|read|pick up|open|check|what is|what'?s)\b/.test(lower)) return 'EXAMINE';
+    if (/\b(go|get|head|walk|catch|take|yes|utley|club|bus|saturday|cricket|there)\b/.test(lower)) return 'GET_ON_BUS';
+    if (/\b(stay|no|home|sit|don't|not today|later|tomorrow|nan|here)\b/.test(lower)) return 'STAY';
+    return 'OTHER';
+  }
+
+  // ── AI resolution ──────────────────────────────────────────────────────────
+
+  async function resolveWithAI(input, intent) {
+    const systemPrompt = buildSystemPrompt();
+    const userMsg      = buildUserMessage(input, intent);
+
+    const res = await fetch(WORKER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 600,
+        system: systemPrompt,
+        messages: [{ role: 'user', content: userMsg }],
+      }),
+    });
+
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    const text = data.content?.[0]?.text || '';
+    return parseAIResponse(text, intent);
+  }
+
+  function buildSystemPrompt() {
+    return `You are the narrator of Through the Biscuit Tin — a parser-style interactive life narrative set in working class Britain, November 1979.
+
+The player is ${state.playerName}, age ${state.age}, in their nan's house. Their grandfather ${state.grandfatherName} has just died. They have been given a biscuit tin containing: a photograph (The Oval, August 1948), a Wisden scorecard page, a match stub (The Oval, August 1948), a worn coin (FA Cup, crest only), a Brylcreem advertisement, a Southampton FC programme (The Dell, 1947), an Eagle comic (April 1952, The Mekon), and a button that matches nothing.
+
+The grandfather was a dual sporting legend — cricket for England, football for Southampton FC — who never mentioned any of it. He served as a ship's doctor in WWII. His wife died during the war. He came back to his daughter (Nan) and became just Dad. Then just Grandpa. The player is discovering all of this now, from the tin.
+
+VOICE: Second person, present tense. Dry. Precise. Never tells the player how to feel. No words like "unfortunately" or "sadly" or "well done." The Squeeze test: find the specific true detail that makes it universal. The Royle Family register for domestic scenes — warm, unglamorous, real.
+
+Nan's dial must stay green. The player is eleven years old. The house smells the same as it always did.
+
+Respond ONLY in this JSON format:
+{
+  "narrative": "2-4 paragraphs of scene narrative",
+  "summary": ["line 1", "line 2", "line 3"],
+  "emit_summary": true
+}
+
+emit_summary should be true when the player has made a meaningful choice that moves time forward.`;
+  }
+
+  function buildUserMessage(input, intent) {
+    const history = state.history.slice(-3).join('\n');
+    return `Player input: "${input}"
+Classified intent: ${intent}
+Recent history: ${history || 'none'}
+
+Resolve this input. If GET_ON_BUS: player heads to Utley Cricket Club. Write the journey and arrival. If STAY: player stays in the house. If EXAMINE: describe the object in precise, specific detail — what it feels like to hold, what it tells them. If OTHER: interpret generously.`;
+  }
+
+  function parseAIResponse(text, intent) {
+    try {
+      const json = JSON.parse(text);
+      state.history.push(`Turn ${state.turnNumber}: ${intent}`);
+      if (state.history.length > 5) state.history.shift();
+      return {
+        narrative: json.narrative || text,
+        summary:   json.emit_summary ? json.summary : null,
+      };
+    } catch {
+      return { narrative: text, summary: null };
+    }
+  }
+
+  // ── Init ───────────────────────────────────────────────────────────────────
+
+  renderStats();
+
+})();
+</script>
+</body>
+</html>
