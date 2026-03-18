@@ -121,32 +121,38 @@ For each open product-bet item, ask:
 - Is there a falsifier — something that would tell us we were wrong?
 Full outer loop: `.claude/practices/hypothesis-driven.md`
 
-Current top 3 as of 2026-03-15 (session 13 close):
+Current top 3 as of 2026-03-15 (session 13 close) — Cusslab only:
 - BL-146 Golf panel: character technical knowledge enrichment (CD3=6.0) — OPEN
 - BL-151 Per-character mode selector (CD3=5.7) — OPEN
 - BL-157 Vinny Jones → football + Boardroom (CD3=5.5) — Three Amigos needed
 
 NOTE: backlog-report.js shows BL-128 (CD3=7.0) and BL-132 (CD3=22.0) as OPEN — parser bug (WL-147). Both are CLOSED. Ignore them. Real top item is BL-146.
 
-Recently closed (2026-03-15 session 13):
-- BL-139 Character audit: # Panel headers added to 11 characters
-- BL-148 Bruce Lee removed from football panel
-- BL-149 Roy Keane added to football panel
-- BL-150 Rodney Marsh added to football panel
-- BL-157 Vinny Jones BL raised (Three Amigos pending)
-- BL-158 Souness's Cat rethink BL raised (Three Amigos pending)
-- BL-159 Snooker speech pattern expansion BL raised
-- nextRound() auto-scroll added to all 7 panels
-- Snooker **name:** prefix bug fixed (SNOOKER_TURN_RULES rule added)
-- Prof Cox removed from football panel (all 12 locations)
+TBT top 3 as of 2026-03-18 (session 15 close):
+- TBT-012 Nan quality mechanic (CD3=20.0) — Three Amigos done, Gherkin needed
+- TBT-006 Transport choices (CD3=19.0) — Three Amigos needed
+- TBT-007 First cricket match (CD3=13.5) — Three Amigos needed
 
-WL-147 added: backlog-report.js status regex false-positive — fix deferred.
+Recently closed (2026-03-18 session 15 — TBT branch):
+- TBT-011 Hidden attribute model: computeForm, calculateLifeNoise, attribute deltas in applyActivity, GameState extended (commit 1d75459)
+
+New BL items raised this session:
+- TBT-011 (CLOSED) — hidden attribute model
+- TBT-012 (OPEN) — Nan quality mechanic (CD3=20.0)
+
+New WL items this session:
+- WL-149 OPEN: tbt.html applyActivity diverged from engine (Low)
+- WL-150 CLOSED: Gherkin Examples boundary values wrong (Low)
+
 WL-136 (IIFE return check in UI audit) still OPEN — pipeline false-green risk.
 WL-131 (character dullness) still OPEN — Three Amigos needed.
 
-Agreed next session (from 2026-03-15 session 13 close):
-- BL-146: Golf panel technical knowledge enrichment — Gherkin needed (data spike, then enrich character prompts)
-- BL-157: Vinny Jones → football + Boardroom — Three Amigos first
+Agreed next session (from 2026-03-18 session 15 close):
+- TBT-012: Nan quality mechanic — Gherkin first (Three Amigos done this session)
+- TBT-006: Transport choices — Three Amigos first
+- TBT-007: First cricket match — Three Amigos first
+
+NOTES FILE: notes/2026-03-18-tbt-scenes-brainstorm.md — full scene/event/arc brainstorm from session 15. Includes new dial candidates (BODY, REPUTATION, HOME) not yet raised as BL items.
 
 BL-153 raised: David Howell ("Howling Mad David") for Golf panel (CD3=4.0).
 

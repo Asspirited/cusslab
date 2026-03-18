@@ -132,3 +132,15 @@ Needs Three Amigos before BL item can be raised.
 ## ARCHIVED — considered and parked
 
 *(empty — items moved here with a one-line reason when they won't be pursued)*
+
+### IDEA: TBT — Pub scenes (pint, pie, darts)
+Added: 2026-03-17 | Source: Rod
+Recurring pub scenes as distinct scene type. The Likely Lads dynamic. Darts as FORTUNE spend mechanic. The pub that changes as career advances (local → hotel bar → sponsors' hospitality → back to local at career end). Full snapshot: Downloads/idea-tbt-pub-scenes-2026-03-17.md
+
+### IDEA: TBT — Cultural texture library
+Added: 2026-03-17 | Source: Rod + Claude Code
+Milk float, full English, Test Card F, Milkybar Kid, Minder, The Professionals, Only Fools, sheepskin coats, Bullseye, Ceefax, Blue Peter, Subbuteo, Chopper bike. Period-accurate working class Britain. Full snapshot: Downloads/idea-tbt-cultural-texture-2026-03-17.md
+
+### IDEA: TBT — Transport choices (getting to the game)
+Added: 2026-03-17 | Source: Rod
+Bus/bike/run/walk/cadge a lift. 20p bus fare is 10% of everything early game. Cycling in rain = late + cold. Full snapshot: Downloads/idea-tbt-transport-choices-2026-03-17.md

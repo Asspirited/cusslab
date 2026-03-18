@@ -18,8 +18,19 @@
 | WL-136 | UI audit: IIFE return objects not checked — exports can go missing silently | High | Add pipeline check: verify each global wrapper's IIFE target is in return statement |
 | WL-147 | backlog-report.js: `Status[:\s]+` regex matches "status text" in descriptions, falsely marking items OPEN | Low | Tighten regex to `^\s*[-*]\s*Status:` in multiline mode |
 | WL-149 | tbt.html local applyActivity copy diverged from engine — uses formDelta, not attribute deltas | Low | Wire tbt.html to tbt-engine.js applyActivity before TBT-011 attribute model is live in-game |
+| WL-150 | Gherkin Examples boundary values wrong — two rows failed pipeline first run | Low | CLOSED same session — recalculated boundaries, fixed Examples table |
 
 ---
+
+### WL-150
+**Item:** Gherkin Examples table — two wrong boundary values in tbt-attribute-model.feature
+**Symptom:** Pipeline RED on first Gherkin run: `physique=3,skill=3,conf=3,ten=3` expected Lost, got Nowhere; `physique=6,...,lifeNoise=3` expected Nowhere, got Shaky.
+**Root cause:** Formula computed mentally without verifying: 3×0.70+3×0.60+3×0.40+3×0.30=6.0 (Nowhere, not Lost); 6×...−3=9.0 (Shaky, not Nowhere). Boundaries not sanity-checked against formula before writing Examples.
+**Session:** 2026-03-18
+**Time lost:** ~5 min
+**Cost impact:** Low — caught by pipeline first run, fixed immediately
+**Tags:** `#gherkin` `#boundary-values` `#examples-table` `#pipeline-red`
+**Status:** CLOSED — fixed in same commit (1d75459). Correct values: 2,2,2,2→Lost; 5,5,5,5−3→Nowhere.
 
 ### WL-144
 **Item:** Panel rename not propagated to Gherkin spec files and step registry
