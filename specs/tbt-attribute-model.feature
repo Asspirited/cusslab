@@ -15,14 +15,14 @@ Feature: Hidden attribute model composing FORM
 
     Examples:
       | physique | skill | confidence | tenacity | sharpness | freshness | noise | word    |
-      | 0        | 0     | 0          | 0        | 0         | 0         | 0     | Struggling    |
-      | 2        | 2     | 2          | 2        | 0         | 0         | 0     | Struggling    |
-      | 4        | 4     | 4          | 4        | 0         | 0         | 0     | Nowhere |
-      | 6        | 6     | 6          | 6        | 0         | 0         | 0     | Shaky   |
-      | 8        | 8     | 8          | 8        | 0         | 0         | 0     | Decent  |
-      | 10       | 10    | 10         | 10       | 0         | 0         | 0     | Flying  |
-      | 8        | 8     | 8          | 8        | 2         | 2         | 0     | Flying  |
-      | 5        | 5     | 5          | 5        | 0         | 0         | 3     | Nowhere |
+      | 0        | 0     | 0          | 0        | 0         | 0         | 0     | Nowhere       |
+      | 2        | 2     | 2          | 2        | 0         | 0         | 0     | Nowhere       |
+      | 4        | 4     | 4          | 4        | 0         | 0         | 0     | Out-of-Form   |
+      | 6        | 6     | 6          | 6        | 0         | 0         | 0     | Scratchy      |
+      | 8        | 8     | 8          | 8        | 0         | 0         | 0     | Ticking Along |
+      | 10       | 10    | 10         | 10       | 0         | 0         | 0     | Flying        |
+      | 8        | 8     | 8          | 8        | 2         | 2         | 0     | Flying        |
+      | 5        | 5     | 5          | 5        | 0         | 0         | 3     | Out-of-Form   |
 
   Scenario: FORM score is clamped to 0 when formula produces negative
     Given core attributes physique=0 skill=0 confidence=0 tenacity=0
