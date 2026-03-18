@@ -19,7 +19,7 @@ Every open item is scored when possible:
 Items are sorted by CD3 within each section. Rescore when scope changes.
 Every item has its own BL-NNN number. No sub-items (BL-032-1 etc.) ever.
 - **Feature** — (optional) canonical label for feature-activity reporting. Set on every new item.
-  Canonical labels: `golf-adventure` · `pub-navigator` · `comedy-room` · `sports-19th-hole` · `darts` · `cricket` · `quntum-leeks` · `boardroom` · `play` · `learn` · `platform` · `process`
+  Canonical labels: `golf-adventure` · `pub-navigator` · `comedy-room` · `sports-19th-hole` · `darts` · `cricket` · `tbt` · `quntum-leeks` · `boardroom` · `play` · `learn` · `platform` · `process`
   Script: `bash .claude/scripts/feature-report.sh`
 
 ## Hypothesis Card (optional — for product bets, not pure tech debt)
@@ -1805,7 +1805,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Description: Two mechanisms for natural variation. (1) Overlapping bands: lower FORM bands extend into higher-band territory — same intentional-overlap design as batting MATCH_BANDS. (2) Surprise mechanic: a separate high-roll threshold (e.g. roll ≥ 0.92) triggers an "inspired spell" — resolves using the next band up. These stack: overlap gives everyday variance; surprise gives the exceptional "nowhere bowler takes five for thirty" moment. Bands, thresholds, and Gherkin ranges to be confirmed in Three Amigos.
 - Feature: tbt
 - CD3: UBV=7 TC=4 RR=3 → CoD=14, Dur=2, **CD3=7.0**
-- Status: OPEN — raised 2026-03-18. Rod confirmed both mechanisms (2026-03-18).
+- Status: CLOSED — 2026-03-18. Overlapping bands + two-tier surprise (0.90 → +1 band, 0.95 → +2 bands). Era flavour notes. Commit f1e1e45.
 
 ---
 

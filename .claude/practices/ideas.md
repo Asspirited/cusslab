@@ -67,6 +67,11 @@ Added: YYYY-MM-DD | Source: Rod / Claude Code / Claude.ai design session
 
 ## UNREVIEWED — not yet discussed
 
+### IDEA: Dice attribute roll — AD&D-style character creation
+Added: 2026-03-18 | Source: Rod (mid-session TBT-009)
+Player rolls dice 3 times to determine starting attribute levels (physique, confidence, tenacity etc.) — AD&D-style. Adds randomness and replayability to character creation. Attribute floor/ceiling still applies. May need a 10-sided die.
+Open questions: which attributes are rolled vs fixed? (skill may be fixed low — you're 11). 3d6? 1d10? Custom distribution? Before or after dedication screen?
+
 ### IDEA: Phil's-opoly — philosopher panel
 Added: 2026-03-09 | Source: Claude.ai design session
 Philosophers as guests in a cricket/general commentary format. 9 characters identified:

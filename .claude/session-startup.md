@@ -147,6 +147,12 @@ New WL items this session:
 WL-136 (IIFE return check in UI audit) still OPEN — pipeline false-green risk.
 WL-131 (character dullness) still OPEN — Three Amigos needed.
 
+Agreed next session (from 2026-03-18 session 16 close):
+- TBT-016: Batting — defensive vs attacking shot selection (CD3=7.0) — Three Amigos first, then Gherkin
+- TBT-015: Bowling — separate formulas for wickets and runs conceded (CD3=6.5) — Three Amigos first, then Gherkin
+- TBT-022: Player type at start — batting position + bowling role (CD3=5.7) — Three Amigos first, then Gherkin
+Note: all three need Three Amigos before any Gherkin. Start with TBT-016.
+
 Agreed next session (from 2026-03-18 session 15 close):
 - TBT-012: Nan quality mechanic — Gherkin first (Three Amigos done this session)
 - TBT-006: Transport choices — Three Amigos first

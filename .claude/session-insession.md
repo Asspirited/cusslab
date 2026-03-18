@@ -442,7 +442,8 @@ No sub-items. No BL-NNN-X. Every item is a first-class BL or WL entry with its o
 
 **Step 3 — Write the minimum viable entry immediately:**
 - **WL entry minimum:** Item + Symptom + Suspected cause + Tags + Status: Open
-- **BL entry minimum:** Name (one line) + CD3 score (UBV / TC / RR / CoD / Dur / CD3) + Epic (if part of a group) + Status: OPEN
+- **BL entry minimum:** Name (one line) + CD3 score (UBV / TC / RR / CoD / Dur / CD3) + Feature label + Epic (if part of a group) + Status: OPEN
+- **Feature label (mandatory):** Set `Feature:` on every BL item using the canonical labels in backlog.md header. TBT items use `tbt`. Check the canonical list — do not invent new labels without adding them to the header first. Observable: `bash .claude/scripts/feature-report.sh` must show no `(unlisted)` items.
 
 **Step 3b — Story quality check (BL items only):**
 Before finalising the BL entry, apply INVEST (see `.claude/practices/user-stories.md`):

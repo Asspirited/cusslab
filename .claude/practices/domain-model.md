@@ -1839,6 +1839,16 @@ Separate from all Cusslab domain logic. No imports from Cusslab domain.
 - `Intent` — EXAMINE | GET_ON_BUS | STAY | OTHER. EXAMINE routes to pre-written responses first.
 - `TurnSummary` — always includes Nan dial line, form word, bank balance.
 
+**Match resolution — batting:**
+- `MATCH_BANDS` — overlapping run ranges per FORM band (intentional). Flying 50-550 / Ticking Along 30-220 / Scratchy 1-120 / Out-of-Form 1-25 / Nowhere 1-10. Higher roll = more runs. Skill adds bonus (floor(skill×0.5)). Duck tiers: duck (<0.05), golden duck (<0.02), platinum duck (<0.001).
+- `cricket stats` — matches, innings, runs, hs, avg (runs/innings, null if 0 innings).
+
+**Match resolution — bowling:**
+- `BOWLING_BANDS` — overlapping ranges (same intentional-overlap design as batting). Flying 2-6wkts/10-45runs / Ticking Along 1-4/20-60 / Scratchy 0-3/30-75 / Out-of-Form 0-2/40-85 / Nowhere 0-1/50-90. Wickets gated by per-band threshold (Flying=0.20 → Nowhere=0.70); high roll = more wickets, fewer runs. Skill adds wicket/run bonus.
+- `Surprise mechanic` — roll ≥ 0.90 → resolve using 1 band higher; roll ≥ 0.95 → 2 bands higher (capped at Flying). ~10%/5% per match. Note prefix: "Something clicked —" or "Nobody saw that coming —".
+- `bowling stats` — bowlMatches, wkts (total), bowlRuns (total conceded), bowlBest ({wkts, runs}), bowlAvg (bowlRuns/wkts, null = n/a when 0 wickets).
+- `bowling avg` — shows as n/a until first wicket taken. Displayed to 1 decimal place.
+
 **Infrastructure:** Cloudflare Worker (tbt.leanspirited.workers.dev — future). Spike uses cusslab-api Worker.
 **Entry point:** tbt/tbt.html — standalone, never linked from index.html.
 **Branch:** through-the-biscuit-tin

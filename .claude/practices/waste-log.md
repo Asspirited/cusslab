@@ -18,9 +18,43 @@
 | WL-136 | UI audit: IIFE return objects not checked — exports can go missing silently | High | Add pipeline check: verify each global wrapper's IIFE target is in return statement |
 | WL-147 | backlog-report.js: `Status[:\s]+` regex matches "status text" in descriptions, falsely marking items OPEN | Low | Tighten regex to `^\s*[-*]\s*Status:` in multiline mode |
 | WL-149 | tbt.html local applyActivity copy diverged from engine — uses formDelta, not attribute deltas | Low | Wire tbt.html to tbt-engine.js applyActivity before TBT-011 attribute model is live in-game |
-| WL-150 | Gherkin Examples boundary values wrong — two rows failed pipeline first run | Low | CLOSED same session — recalculated boundaries, fixed Examples table |
+| WL-150 | Gherkin Examples boundary values wrong — two rows failed pipeline first run | Low | CLOSED same session |
+| WL-151 | TBT FORM band rename lost between Claude.ai and Claude Code sessions | Low | CLOSED 2026-03-18 — commit 0f239f4 |
+
+| WL-152 | Bowling Gherkin red runs — wrong expected values after band changes and skill bonus not accounted for | Low | CLOSED same session |
+| WL-153 | `tbt` not in canonical feature label list — shows as "unlisted" in feature-report | Low | Add `tbt` to canonical labels in backlog.md header; update insession protocol |
 
 ---
+
+### WL-153
+**Item:** `tbt` feature label not registered in canonical labels in backlog.md header
+**Symptom:** `bash .claude/scripts/feature-report.sh` shows `tbt (unlisted)` — 9 open BL items not counted in labelled total. Rod flagged: "please differentiate tbt from other Cusslab tickets in protocol."
+**Root cause:** When TBT work started, `Feature: tbt` was applied to BL items but the label was never added to the canonical label list at the top of backlog.md. No process reminder in insession.md to check canonical labels when adding a new feature.
+**Session:** 2026-03-18
+**Time lost:** ~5 min discovery at closedown
+**Cost impact:** Low — cosmetic reporting gap, no logic affected
+**Tags:** `#backlog` `#tbt` `#process` `#feature-labels`
+**Status:** CLOSED — fixed this closedown. Added `tbt` to canonical labels. Added protocol note to session-insession.md.
+
+### WL-152
+**Item:** Bowling Gherkin expected values wrong after BOWLING_BANDS redesign
+**Symptom:** Multiple red Gherkin runs on tbt-bowling.feature and tbt-bowling-variation.feature. Failures: (a) tbt-bowling.feature Scratchy row expected wkts 1-2 but got 0 after threshold change; runs expected 35-60 but got values outside range; low-roll runs expected 15-35 but got 40. (b) tbt-bowling-variation.feature: max_wkts too low (skill bonus not accounted for); wrong values for surprise scenarios.
+**Root cause:** Same as WL-150 — expected values written from memory/intuition, not calculated from the formula. Skill bonus (`floor(skill * 0.2)`) applied when `roll > 0.85` was not factored into Gherkin maxima. BOWLING_BANDS changed after tbt-bowling.feature was written, making its ranges stale.
+**Session:** 2026-03-18
+**Time lost:** ~15 min (3 debug cycles across both files)
+**Cost impact:** Low — caught by pipeline, all fixed same session
+**Tags:** `#gherkin` `#tbt` `#bowling` `#formula-not-verified`
+**Status:** CLOSED — all scenarios passing. Lesson: run `node -e` to compute expected values before writing Gherkin, especially when skill bonus modifies the cap.
+
+### WL-151
+**Item:** TBT FORM band names agreed in Claude.ai session but never landed in Claude Code
+**Symptom:** During TBT-014 Three Amigos, Rod noted "I thought we'd changed the FORM bands to things like Scratchy?" — engine still had Struggling/Nowhere/Shaky/Decent/Flying.
+**Root cause:** Cross-Claude sync gap. The rename was designed in a Claude.ai session; shared-session-state.md only carries what Claude Code closed, not Claude.ai design decisions. No mechanism to carry design changes from Claude.ai to Claude Code unless explicitly written to shared state.
+**Session:** 2026-03-18
+**Time lost:** ~20 min (discovery + full rename across 7 files)
+**Cost impact:** Low — caught before TBT-014 Gherkin was written
+**Tags:** `#cross-claude-sync` `#form-bands` `#rename`
+**Status:** CLOSED — 0f239f4. New names: Nowhere/Out-of-Form/Scratchy/Ticking Along/Flying. Run ranges updated. 1915/1915 passing.
 
 ### WL-150
 **Item:** Gherkin Examples table — two wrong boundary values in tbt-attribute-model.feature
