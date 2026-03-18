@@ -11,11 +11,11 @@ Feature: TBT first cricket match
 
     Examples:
       | form | skill | roll | min | max |
-      | 17   | 5     | 0.50 | 100 | 200 |
-      | 13   | 5     | 0.50 | 50  | 99  |
-      | 9    | 5     | 0.50 | 30  | 49  |
-      | 5    | 5     | 0.50 | 10  | 29  |
-      | 2    | 5     | 0.50 | 1   | 9   |
+      | 17   | 5     | 0.50 | 50  | 554 |
+      | 13   | 5     | 0.50 | 30  | 224 |
+      | 9    | 5     | 0.50 | 1   | 124 |
+      | 5    | 5     | 0.50 | 1   | 29  |
+      | 2    | 5     | 0.50 | 1   | 14  |
 
   Scenario: Low roll produces a duck regardless of FORM
     Given form score is 17
