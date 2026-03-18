@@ -114,7 +114,7 @@ Feature: TBT Nan quality mechanic
     When lifeNoise is calculated
     Then lifeNoise contribution from Nan is 0
 
-  Scenario: New game initialises nanQuality at 5
+  Scenario: New game initialises nanQuality at 7
     Given a new TBT game is started
-    Then nanQuality is 5
-    And the Nan dial is amber
+    Then nanQuality is 7
+    And the Nan dial is green
