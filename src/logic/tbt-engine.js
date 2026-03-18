@@ -63,6 +63,47 @@ const ACTIVITY_TYPES = {
   STUDY:     'STUDY',
 };
 
+const TRANSPORT_TYPES = {
+  BUS:  'BUS',
+  BIKE: 'BIKE',
+  RUN:  'RUN',
+  WALK: 'WALK',
+};
+
+function classifyTransport(input) {
+  if (!input || typeof input !== 'string') return null;
+  const lower = input.toLowerCase();
+  if (/\b(bus|catch the bus|get the bus|take the bus)\b/.test(lower)) return TRANSPORT_TYPES.BUS;
+  if (/\b(bike|cycle|cycling|cycled)\b/.test(lower)) return TRANSPORT_TYPES.BIKE;
+  if (/\b(run|running|jog|jogging|ran)\b/.test(lower)) return TRANSPORT_TYPES.RUN;
+  if (/\b(walk|walking|on foot)\b/.test(lower)) return TRANSPORT_TYPES.WALK;
+  return null;
+}
+
+function applyTransport(state, transportType) {
+  const delta = { bankDelta: 0, sharpnessδ: 0, physiqueδ: 0, note: '' };
+  switch (transportType) {
+    case TRANSPORT_TYPES.BUS:
+      delta.bankDelta = -0.20;
+      delta.note = 'You caught the bus.';
+      break;
+    case TRANSPORT_TYPES.BIKE:
+      delta.sharpnessδ = 1;
+      delta.note = 'You cycled over.';
+      break;
+    case TRANSPORT_TYPES.RUN:
+      delta.sharpnessδ = 1;
+      delta.physiqueδ = -1;
+      delta.note = "You ran. By the end you weren't sure that was wise.";
+      break;
+    case TRANSPORT_TYPES.WALK:
+      delta.sharpnessδ = -1;
+      delta.note = 'You walked. Took longer than you thought.';
+      break;
+  }
+  return delta;
+}
+
 function classifyActivity(input) {
   if (!input || typeof input !== 'string') return null;
   const lower = input.toLowerCase().trim();
@@ -292,6 +333,9 @@ module.exports = {
   GAME_START,
   EXAMINE_RESPONSES,
   ACTIVITY_TYPES,
+  TRANSPORT_TYPES,
+  classifyTransport,
+  applyTransport,
   FORM_BANDS,
   NAN_QUALITY_INITIAL,
   NAN_QUALITY_MAX,

@@ -15,7 +15,7 @@ const { QUNTUM_LEEKS_SCENARIOS, initState, pickRandomScenario, betLeekiness, spe
 const { initGameState, appendToHistory, incrementTurn, buildModifierBlock } = require('../src/logic/ff-engine.js');
 const { PUB_CRAWL_SCENES, getAllScenes, getPubScene, getActiveAdvisor, initPubCrawl, resolveChoice, determineOutcome, checkLederhosen, buildAdvisorPrompt, ADVISOR_IDS } = require('../src/logic/pub-navigator-engine.js');
 const { lintStepDuplicates } = require('./lint-steps.js');
-const { initTBTGame, classifyIntent, classifyActivity, classifyVisitQuality, applyActivity, getFormWord, getTinObjects, getGameDate, identifyExamineTarget, getExamineResponse, computeForm, calculateLifeNoise, getNanDial, EXAMINE_RESPONSES, ACTIVITY_TYPES, NAN_QUALITY_MIN, NAN_QUALITY_MAX, NAN_QUALITY_INITIAL } = require('../src/logic/tbt-engine.js');
+const { initTBTGame, classifyIntent, classifyActivity, classifyVisitQuality, classifyTransport, applyActivity, applyTransport, getFormWord, getTinObjects, getGameDate, identifyExamineTarget, getExamineResponse, computeForm, calculateLifeNoise, getNanDial, EXAMINE_RESPONSES, ACTIVITY_TYPES, TRANSPORT_TYPES, NAN_QUALITY_MIN, NAN_QUALITY_MAX, NAN_QUALITY_INITIAL } = require('../src/logic/tbt-engine.js');
 
 // ── Mock state (simulates browser localStorage + DOM) ────────────────────────
 
@@ -10833,6 +10833,7 @@ function makeSteps(ctx) {
         activity: classifyActivity(input),
         quality:  classifyVisitQuality(input),
       };
+      ctx._tbtTransportClassify = classifyTransport(input);
     }],
 
     [/^the activity is VISIT_NAN$/, () => {
@@ -10856,6 +10857,63 @@ function makeSteps(ctx) {
         throw new Error(`expected note to mention Nan, got: ${ctx._tbtNanDelta.note}`);
       if (/grandfather|biscuit tin|grandad/i.test(ctx._tbtNanDelta.note))
         throw new Error(`quality-1 note should not mention engagement, got: ${ctx._tbtNanDelta.note}`);
+    }],
+
+    // ── TBT-006: Transport choices ────────────────────────────────────────────
+
+    [/^it is a Saturday morning$/, () => {
+      // state already initialised by Background
+    }],
+
+    [/^the transport is (BUS|BIKE|RUN|WALK)$/, (type) => {
+      if (ctx._tbtTransportClassify !== TRANSPORT_TYPES[type])
+        throw new Error(`expected transport ${type}, got ${ctx._tbtTransportClassify}`);
+    }],
+
+    [/^bank balance is £(\d+\.\d+)$/, (amount) => {
+      ctx._tbtActivityState.bank = parseFloat(amount);
+    }],
+
+    [/^the player takes the bus to the ground$/, () => {
+      ctx._tbtActivityDelta = applyTransport(ctx._tbtActivityState, TRANSPORT_TYPES.BUS);
+    }],
+
+    [/^the player cycles to the ground$/, () => {
+      ctx._tbtActivityDelta = applyTransport(ctx._tbtActivityState, TRANSPORT_TYPES.BIKE);
+    }],
+
+    [/^the player runs to the ground$/, () => {
+      ctx._tbtActivityDelta = applyTransport(ctx._tbtActivityState, TRANSPORT_TYPES.RUN);
+    }],
+
+    [/^the player walks to the ground$/, () => {
+      ctx._tbtActivityDelta = applyTransport(ctx._tbtActivityState, TRANSPORT_TYPES.WALK);
+    }],
+
+    [/^bank decreases by £(\d+\.\d+)$/, (amount) => {
+      const expected = -parseFloat(amount);
+      if (ctx._tbtActivityDelta.bankDelta !== expected)
+        throw new Error(`expected bankDelta ${expected}, got ${ctx._tbtActivityDelta.bankDelta}`);
+    }],
+
+    [/^the transport note mentions the bus$/, () => {
+      if (!/bus/i.test(ctx._tbtActivityDelta.note))
+        throw new Error(`expected bus in note, got: ${ctx._tbtActivityDelta.note}`);
+    }],
+
+    [/^the transport note mentions cycling$/, () => {
+      if (!/cycl/i.test(ctx._tbtActivityDelta.note))
+        throw new Error(`expected cycling in note, got: ${ctx._tbtActivityDelta.note}`);
+    }],
+
+    [/^the transport note mentions running$/, () => {
+      if (!/ran|run/i.test(ctx._tbtActivityDelta.note))
+        throw new Error(`expected running in note, got: ${ctx._tbtActivityDelta.note}`);
+    }],
+
+    [/^the transport note mentions walking$/, () => {
+      if (!/walk/i.test(ctx._tbtActivityDelta.note))
+        throw new Error(`expected walking in note, got: ${ctx._tbtActivityDelta.note}`);
     }],
 
     [/^lifeNoise contribution from Nan is (\d+)$/, (n) => {
