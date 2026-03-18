@@ -1695,21 +1695,21 @@ assert('all 8 tin objects have examine responses',
 
 // ── FORM words ────────────────────────────────────────────────────────────────
 
-assert('getFormWord: 0 → Lost',    getFormWord(0),  'Struggling');
-assert('getFormWord: 4 → Lost',    getFormWord(4),  'Struggling');
-assert('getFormWord: 5 → Nowhere', getFormWord(5),  'Nowhere');
-assert('getFormWord: 8 → Nowhere', getFormWord(8),  'Nowhere');
-assert('getFormWord: 9 → Shaky',   getFormWord(9),  'Shaky');
-assert('getFormWord: 10 → Shaky',  getFormWord(10), 'Shaky');
-assert('getFormWord: 12 → Shaky',  getFormWord(12), 'Shaky');
-assert('getFormWord: 13 → Decent', getFormWord(13), 'Decent');
-assert('getFormWord: 15 → Decent', getFormWord(15), 'Decent');
-assert('getFormWord: 16 → Decent', getFormWord(16), 'Decent');
-assert('getFormWord: 17 → Flying', getFormWord(17), 'Flying');
-assert('getFormWord: 19 → Flying', getFormWord(19), 'Flying');
-assert('getFormWord: 20 → Flying', getFormWord(20), 'Flying');
-assert('getFormWord: clamps below 0', getFormWord(-5), 'Struggling');
-assert('getFormWord: clamps above 20', getFormWord(25), 'Flying');
+assert('getFormWord: 0 → Nowhere',       getFormWord(0),  'Nowhere');
+assert('getFormWord: 4 → Nowhere',       getFormWord(4),  'Nowhere');
+assert('getFormWord: 5 → Out-of-Form',   getFormWord(5),  'Out-of-Form');
+assert('getFormWord: 8 → Out-of-Form',   getFormWord(8),  'Out-of-Form');
+assert('getFormWord: 9 → Scratchy',      getFormWord(9),  'Scratchy');
+assert('getFormWord: 10 → Scratchy',     getFormWord(10), 'Scratchy');
+assert('getFormWord: 12 → Scratchy',     getFormWord(12), 'Scratchy');
+assert('getFormWord: 13 → Ticking Along',getFormWord(13), 'Ticking Along');
+assert('getFormWord: 15 → Ticking Along',getFormWord(15), 'Ticking Along');
+assert('getFormWord: 16 → Ticking Along',getFormWord(16), 'Ticking Along');
+assert('getFormWord: 17 → Flying',       getFormWord(17), 'Flying');
+assert('getFormWord: 19 → Flying',       getFormWord(19), 'Flying');
+assert('getFormWord: 20 → Flying',       getFormWord(20), 'Flying');
+assert('getFormWord: clamps below 0',    getFormWord(-5), 'Nowhere');
+assert('getFormWord: clamps above 20',   getFormWord(25), 'Flying');
 
 // ── classifyActivity ──────────────────────────────────────────────────────────
 
@@ -1774,9 +1774,9 @@ assert('applyActivity PUB: physique costs 1',
 
 // ── TBT-011: computeForm ──────────────────────────────────────────────────────
 
-assert('computeForm: all zeros → score 0 → Lost',
+assert('computeForm: all zeros → score 0 → Nowhere',
   computeForm({ physique:0, skill:0, confidence:0, tenacity:0, sharpness:0, freshness:0, lifeNoise:0 }),
-  'Struggling');
+  'Nowhere');
 
 assert('computeForm: all 10s, no modifiers → Flying',
   computeForm({ physique:10, skill:10, confidence:10, tenacity:10, sharpness:0, freshness:0, lifeNoise:0 }),
@@ -1786,27 +1786,24 @@ assert('computeForm: max attributes + max modifiers → Flying (clamped)',
   computeForm({ physique:10, skill:10, confidence:10, tenacity:10, sharpness:2, freshness:2, lifeNoise:0 }),
   'Flying');
 
-assert('computeForm: zero attributes + max lifeNoise → Lost (clamp at 0)',
+assert('computeForm: zero attributes + max lifeNoise → Nowhere (clamp at 0)',
   computeForm({ physique:0, skill:0, confidence:0, tenacity:0, sharpness:0, freshness:0, lifeNoise:3 }),
-  'Struggling');
+  'Nowhere');
 
-// physique=6 skill=6 confidence=6 tenacity=6 → 4.2+3.6+2.4+1.8 = 12.0 → Shaky
-assert('computeForm: mid attributes → Shaky',
+// physique=6 skill=6 confidence=6 tenacity=6 → 4.2+3.6+2.4+1.8 = 12.0 → Scratchy
+assert('computeForm: mid attributes → Scratchy',
   computeForm({ physique:6, skill:6, confidence:6, tenacity:6, sharpness:0, freshness:0, lifeNoise:0 }),
-  'Shaky');
+  'Scratchy');
 
-// physique=8 skill=8 confidence=8 tenacity=8 → 5.6+4.8+3.2+2.4 = 16.0 → Decent
-assert('computeForm: high attributes → Decent',
+// physique=8 skill=8 confidence=8 tenacity=8 → 5.6+4.8+3.2+2.4 = 16.0 → Ticking Along
+assert('computeForm: high attributes → Ticking Along',
   computeForm({ physique:8, skill:8, confidence:8, tenacity:8, sharpness:0, freshness:0, lifeNoise:0 }),
-  'Decent');
+  'Ticking Along');
 
-// physique=6,skill=6,conf=6,ten=6 → 12.0, sharpness+freshness +4 → 16.0 = Decent (not Flying — lifeNoise 3 knocks to 13 → Decent)
-// but without lifeNoise: 12+2+2=16 → Decent; with lifeNoise 3: 13 → Decent still
-// lifeNoise knocking from Shaky: physique=6,skill=6,conf=6,ten=6 → 12.0 - lifeNoise 3 = 9.0 → Shaky (no change)
-// let's do: physique=5,skill=5,conf=5,ten=5 → 3.5+3.0+2.0+1.5=10.0 → Shaky; -3 lifeNoise → 7 → Nowhere
+// physique=5,skill=5,conf=5,ten=5 → 3.5+3.0+2.0+1.5=10.0 → Scratchy; -3 lifeNoise → 7 → Out-of-Form
 assert('computeForm: lifeNoise knocks score band down',
   computeForm({ physique:5, skill:5, confidence:5, tenacity:5, sharpness:0, freshness:0, lifeNoise:3 }),
-  'Nowhere');
+  'Out-of-Form');
 
 // ── TBT-011: calculateLifeNoise ───────────────────────────────────────────────
 

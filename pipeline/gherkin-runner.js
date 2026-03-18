@@ -10524,7 +10524,7 @@ function makeSteps(ctx) {
       ctx._tbtFormValue = parseInt(val, 10);
     }],
 
-    [/^the form word is (Flying|Decent|Shaky|Nowhere|Lost)$/, (word) => {
+    [/^the form word is (Flying|Ticking Along|Scratchy|Out-of-Form|Nowhere)$/, (word) => {
       if (!ctx._tbtFormValue && ctx._tbtFormValue !== 0)
         throw new Error('form value not set — use "FORM is at value N" step first');
       const actual = getFormWord(ctx._tbtFormValue);

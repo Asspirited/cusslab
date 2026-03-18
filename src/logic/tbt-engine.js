@@ -41,17 +41,17 @@ function getTinObjects() {
 }
 
 const FORM_BANDS = [
-  { min: 0,  max: 4,  word: 'Struggling' },
-  { min: 5,  max: 8,  word: 'Nowhere' },
-  { min: 9,  max: 12, word: 'Shaky' },
-  { min: 13, max: 16, word: 'Decent' },
+  { min: 0,  max: 4,  word: 'Nowhere' },
+  { min: 5,  max: 8,  word: 'Out-of-Form' },
+  { min: 9,  max: 12, word: 'Scratchy' },
+  { min: 13, max: 16, word: 'Ticking Along' },
   { min: 17, max: 20, word: 'Flying' },
 ];
 
 function getFormWord(value) {
   const clamped = Math.max(0, Math.min(20, value));
   const band = FORM_BANDS.find(b => clamped >= b.min && clamped <= b.max);
-  return band ? band.word : 'Shaky';
+  return band ? band.word : 'Scratchy';
 }
 
 const ACTIVITY_TYPES = {
@@ -178,12 +178,12 @@ function updateFormStreak(state, formWord) {
   let streak = state.formStreak || 0;
   let tenacityδ = 0;
 
-  if (formWord === 'Shaky') {
+  if (formWord === 'Scratchy') {
     return { tenacityδ: 0, formStreakNew: 0 };
   }
 
-  const isGood = formWord === 'Flying' || formWord === 'Decent';
-  const isBad  = formWord === 'Nowhere' || formWord === 'Struggling';
+  const isGood = formWord === 'Flying' || formWord === 'Ticking Along';
+  const isBad  = formWord === 'Out-of-Form' || formWord === 'Nowhere';
 
   if (isGood)      streak = streak > 0 ? streak + 1 : 1;
   else if (isBad)  streak = streak < 0 ? streak - 1 : -1;
@@ -397,11 +397,11 @@ function getExamineResponse(objectId) {
 }
 
 const MATCH_BANDS = [
-  { minForm: 17, maxForm: 20, minRuns: 100, maxRuns: 180 },
-  { minForm: 13, maxForm: 16, minRuns: 50,  maxRuns: 99  },
-  { minForm: 9,  maxForm: 12, minRuns: 30,  maxRuns: 49  },
-  { minForm: 5,  maxForm: 8,  minRuns: 10,  maxRuns: 29  },
-  { minForm: 0,  maxForm: 4,  minRuns: 1,   maxRuns: 9   },
+  { minForm: 17, maxForm: 20, minRuns: 50,  maxRuns: 550 },
+  { minForm: 13, maxForm: 16, minRuns: 30,  maxRuns: 220 },
+  { minForm: 9,  maxForm: 12, minRuns: 1,   maxRuns: 120 },
+  { minForm: 5,  maxForm: 8,  minRuns: 1,   maxRuns: 25  },
+  { minForm: 0,  maxForm: 4,  minRuns: 1,   maxRuns: 10  },
 ];
 
 const DUCK_THRESHOLD      = 0.05;

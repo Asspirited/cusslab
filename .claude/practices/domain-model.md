@@ -1829,7 +1829,7 @@ Separate from all Cusslab domain logic. No imports from Cusslab domain.
 - `TinContents` — 7 objects in canonical order (photograph → wisden_page → match_stub → brylcreem_ad → southampton_programme → eagle_comic → button)
 
 **Key domain concepts:**
-- `FORM` — 0-20 cached value, derived by `computeForm()`. Never shown as number. Displayed as: Lost(0-4) / Nowhere(5-8) / Shaky(9-12) / Decent(13-16) / Flying(17-20). Player discovers what drives it through play, not instruction.
+- `FORM` — 0-20 cached value, derived by `computeForm()`. Never shown as number. Displayed as: Nowhere(0-4) / Out-of-Form(5-8) / Scratchy(9-12) / Ticking Along(13-16) / Flying(17-20). Player discovers what drives it through play, not instruction.
 - `coreAttributes` — four slow-moving season-arc stats: physique (0-10), skill (0-10), confidence (0-10), tenacity (0-10). Weighted formula: physique×0.70 + skill×0.60 + confidence×0.40 + tenacity×0.30 = FORM base (max 20).
 - `weeklyModifiers` — two fast-moving stats reset each turn: sharpness (0-2, recent practice), freshness (0-2, rest state). Added to FORM base before lifeNoise.
 - `lifeNoise` — 0-3 penalty derived from other dial states. Nan red+1, bank<£1+1, HOME red+1. Bleeds life pressure into FORM. Never shown. BANK_CRITICAL_THRESHOLD = £1.00.
