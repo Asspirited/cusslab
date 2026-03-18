@@ -61,6 +61,7 @@ const ACTIVITY_TYPES = {
   REST:      'REST',
   PUB:       'PUB',
   STUDY:     'STUDY',
+  MATCH:     'MATCH',
 };
 
 const TRANSPORT_TYPES = {
@@ -119,6 +120,85 @@ function classifyActivity(input) {
 const BANK_CRITICAL_THRESHOLD = 1.00;
 const PRACTICE_SESSIONS_PER_SKILL_POINT = 4;
 
+const TENACITY_MIN = 0;
+const TENACITY_MAX = 10;
+const FORM_STREAK_THRESHOLD = 3;
+
+const INJURY_TYPES = {
+  MINOR:    { physiqueδ: -1, weeksRecovery: 1 },
+  MODERATE: { physiqueδ: -2, weeksRecovery: 3 },
+  SEVERE:   { physiqueδ: -3, weeksRecovery: 6 },
+};
+
+const INJURY_BASE_RISK  = 0.05;
+const ILLNESS_BASE_RISK = 0.03;
+
+function injuryRisk(physique, freshness) {
+  let risk = INJURY_BASE_RISK;
+  if (physique < 7) risk += (7 - physique) * 0.01;
+  if (freshness < 3) risk += 0.03;
+  return Math.min(risk, 0.20);
+}
+
+function illnessRisk(freshness) {
+  let risk = ILLNESS_BASE_RISK;
+  if (freshness < 5) risk += (5 - freshness) * 0.02;
+  return Math.min(risk, 0.15);
+}
+
+function applyInjury(state, injuryType) {
+  const spec = INJURY_TYPES[injuryType];
+  if (!spec) return { physiqueδ: 0, injury: null, note: '' };
+  return {
+    physiqueδ:      spec.physiqueδ,
+    injury:         { type: injuryType, weeksRemaining: spec.weeksRecovery },
+    note:           `Injury (${injuryType.toLowerCase()}). ${spec.weeksRecovery} week${spec.weeksRecovery > 1 ? 's' : ''} recovery.`,
+  };
+}
+
+function tickInjury(state) {
+  if (!state.injury) return { injuryCleared: false, weeksRemaining: 0 };
+  const weeksRemaining = state.injury.weeksRemaining - 1;
+  return { injuryCleared: weeksRemaining <= 0, weeksRemaining: Math.max(0, weeksRemaining) };
+}
+
+function applyIllness(state) {
+  return {
+    freshnessδ: -3,
+    ill:        true,
+    note:       "You\'re not well. Stay in.",
+  };
+}
+
+function tickIllness(state) {
+  return { ill: false };
+}
+
+function updateFormStreak(state, formWord) {
+  let streak = state.formStreak || 0;
+  let tenacityδ = 0;
+
+  if (formWord === 'Shaky') {
+    return { tenacityδ: 0, formStreakNew: 0 };
+  }
+
+  const isGood = formWord === 'Flying' || formWord === 'Decent';
+  const isBad  = formWord === 'Nowhere' || formWord === 'Struggling';
+
+  if (isGood)      streak = streak > 0 ? streak + 1 : 1;
+  else if (isBad)  streak = streak < 0 ? streak - 1 : -1;
+
+  if (streak >= FORM_STREAK_THRESHOLD) {
+    tenacityδ = 1;
+    streak = 0;
+  } else if (streak <= -FORM_STREAK_THRESHOLD) {
+    tenacityδ = -1;
+    streak = 0;
+  }
+
+  return { tenacityδ, formStreakNew: streak };
+}
+
 const NAN_QUALITY_INITIAL = 7;
 const NAN_QUALITY_MAX     = 9;
 const NAN_QUALITY_MIN     = 0;
@@ -158,10 +238,19 @@ function calculateLifeNoise(state) {
 
 function applyActivity(state, activityType, visitQuality) {
   const delta = {
-    formDelta: 0, bankDelta: 0, nanQualityδ: -1, note: '',
+    formDelta: 0, bankDelta: 0, nanQualityδ: -1, note: '', blocked: false,
     physiqueδ: 0, skillδ: 0, confidenceδ: 0, tenacityδ: 0,
     sharpnessδ: 0, freshnessδ: 0, practiceSessionsδ: 0,
   };
+
+  const illBlocked = [ACTIVITY_TYPES.NETS, ACTIVITY_TYPES.MATCH];
+  if (state.ill && illBlocked.includes(activityType)) {
+    delta.blocked = true;
+    delta.note = "You\'re not well enough for that.";
+    delta.nanQualityδ = 0;
+    return delta;
+  }
+
   switch (activityType) {
     case ACTIVITY_TYPES.VISIT_NAN: {
       const quality = visitQuality || 1;
@@ -179,7 +268,7 @@ function applyActivity(state, activityType, visitQuality) {
     }
     case ACTIVITY_TYPES.NETS: {
       const sessions = (state.practiceSessionsThisCycle || 0) + 1;
-      delta.physiqueδ = -1;
+      delta.physiqueδ = state.injury ? 0 : -1;
       delta.sharpnessδ = 2;
       if (sessions >= PRACTICE_SESSIONS_PER_SKILL_POINT) {
         delta.skillδ = 1;
@@ -241,6 +330,9 @@ function initTBTGame(dob, grandfatherName, playerName) {
     sharpness: 1,
     freshness: 2,
     practiceSessionsThisCycle: 0,
+    injury:     null,
+    ill:        false,
+    formStreak: 0,
     gameState: 'OPENING',
     turnNumber: 1,
   };
@@ -400,4 +492,14 @@ module.exports = {
   NAN_QUALITY_INITIAL,
   NAN_QUALITY_MAX,
   NAN_QUALITY_MIN,
+  TENACITY_MIN,
+  TENACITY_MAX,
+  INJURY_TYPES,
+  injuryRisk,
+  illnessRisk,
+  applyInjury,
+  tickInjury,
+  applyIllness,
+  tickIllness,
+  updateFormStreak,
 };

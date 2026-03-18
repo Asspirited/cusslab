@@ -15,7 +15,7 @@ const { QUNTUM_LEEKS_SCENARIOS, initState, pickRandomScenario, betLeekiness, spe
 const { initGameState, appendToHistory, incrementTurn, buildModifierBlock } = require('../src/logic/ff-engine.js');
 const { PUB_CRAWL_SCENES, getAllScenes, getPubScene, getActiveAdvisor, initPubCrawl, resolveChoice, determineOutcome, checkLederhosen, buildAdvisorPrompt, ADVISOR_IDS } = require('../src/logic/pub-navigator-engine.js');
 const { lintStepDuplicates } = require('./lint-steps.js');
-const { initTBTGame, classifyIntent, classifyActivity, classifyVisitQuality, classifyTransport, applyActivity, applyTransport, resolveMatch, applyMatchResult, FIRST_MATCH_SCENE, getFormWord, getTinObjects, getGameDate, identifyExamineTarget, getExamineResponse, computeForm, calculateLifeNoise, getNanDial, EXAMINE_RESPONSES, ACTIVITY_TYPES, TRANSPORT_TYPES, NAN_QUALITY_MIN, NAN_QUALITY_MAX, NAN_QUALITY_INITIAL } = require('../src/logic/tbt-engine.js');
+const { initTBTGame, classifyIntent, classifyActivity, classifyVisitQuality, classifyTransport, applyActivity, applyTransport, resolveMatch, applyMatchResult, FIRST_MATCH_SCENE, getFormWord, getTinObjects, getGameDate, identifyExamineTarget, getExamineResponse, computeForm, calculateLifeNoise, getNanDial, EXAMINE_RESPONSES, ACTIVITY_TYPES, TRANSPORT_TYPES, NAN_QUALITY_MIN, NAN_QUALITY_MAX, NAN_QUALITY_INITIAL, TENACITY_MIN, TENACITY_MAX, INJURY_TYPES, injuryRisk, illnessRisk, applyInjury, tickInjury, applyIllness, tickIllness, updateFormStreak } = require('../src/logic/tbt-engine.js');
 
 // ── Mock state (simulates browser localStorage + DOM) ────────────────────────
 
@@ -10645,6 +10645,9 @@ function makeSteps(ctx) {
       ctx._tbtNanState = initTBTGame(1968, 'Arthur', 'Rod');
       ctx._tbtNanDelta = null;
       ctx._tbtNanClassify = null;
+      ctx._tbtLifeState = initTBTGame(1968, 'Arthur', 'Rod');
+      ctx._tbtLifeDelta = null;
+      ctx._tbtFormStreak = 0;
     }],
 
     [/^core attributes physique=(\d+) skill=(\d+) confidence=(\d+) tenacity=(\d+)$/, (p, s, c, t) => {
@@ -10880,6 +10883,175 @@ function makeSteps(ctx) {
       ctx._tbtNanState.nanQuality = Math.max(NAN_QUALITY_MIN, Math.min(NAN_QUALITY_MAX,
         ctx._tbtNanState.nanQuality + delta.nanQualityδ));
       ctx._tbtNanDelta = delta;
+    }],
+
+    // ── TBT-009: Life events — injury, illness, tenacity drift ────────────────
+
+    [/^life state physique is (\d+)$/, (n) => {
+      const num = Number(n);
+      if (ctx._tbtLifeDelta === null) {
+        ctx._tbtLifeState.physique = num;
+      } else {
+        if (ctx._tbtLifeState.physique !== num)
+          throw new Error(`expected physique ${num}, got ${ctx._tbtLifeState.physique}`);
+      }
+    }],
+
+    [/^life state freshness is (\d+)$/, (n) => {
+      const num = Number(n);
+      if (ctx._tbtLifeDelta === null) {
+        ctx._tbtLifeState.freshness = num;
+      } else {
+        if (ctx._tbtLifeState.freshness !== num)
+          throw new Error(`expected freshness ${num}, got ${ctx._tbtLifeState.freshness}`);
+      }
+    }],
+
+    [/^life state tenacity is (\d+)$/, (n) => {
+      const num = Number(n);
+      if (ctx._tbtLifeDelta === null) {
+        ctx._tbtLifeState.tenacity = num;
+      } else {
+        if (ctx._tbtLifeState.tenacity !== num)
+          throw new Error(`expected tenacity ${num}, got ${ctx._tbtLifeState.tenacity}`);
+      }
+    }],
+
+    [/^life state tenacity is at its minimum$/, () => {
+      if (ctx._tbtLifeDelta === null) {
+        ctx._tbtLifeState.tenacity = TENACITY_MIN;
+      } else {
+        if (ctx._tbtLifeState.tenacity !== TENACITY_MIN)
+          throw new Error(`expected tenacity at minimum (${TENACITY_MIN}), got ${ctx._tbtLifeState.tenacity}`);
+      }
+    }],
+
+    [/^the player has an injury with (\d+) weeks? remaining$/, (n) => {
+      ctx._tbtLifeState.injury = { type: 'MODERATE', weeksRemaining: Number(n) };
+    }],
+
+    [/^the player is ill this turn$/, () => {
+      ctx._tbtLifeState.ill = true;
+    }],
+
+    [/^the form streak is (\d+) (good|bad)$/, (n, dir) => {
+      const val = Number(n);
+      if (ctx._tbtLifeDelta === null) {
+        ctx._tbtFormStreak = dir === 'good' ? val : -val;
+        ctx._tbtLifeState.formStreak = ctx._tbtFormStreak;
+      } else {
+        const expected = dir === 'good' ? val : -val;
+        if (ctx._tbtLifeState.formStreak !== expected)
+          throw new Error(`expected formStreak ${expected}, got ${ctx._tbtLifeState.formStreak}`);
+      }
+    }],
+
+    [/^injury risk with physique (\d+) freshness (\d+) is higher than with physique (\d+) freshness (\d+)$/, (p1, f1, p2, f2) => {
+      const low  = injuryRisk(Number(p1), Number(f1));
+      const high = injuryRisk(Number(p2), Number(f2));
+      if (low <= high)
+        throw new Error(`expected injuryRisk(${p1},${f1})=${low} > injuryRisk(${p2},${f2})=${high}`);
+    }],
+
+    [/^injury risk with physique (\d+) freshness (\d+) does not exceed ([\d.]+)$/, (p, f, cap) => {
+      const risk = injuryRisk(Number(p), Number(f));
+      if (risk > Number(cap))
+        throw new Error(`expected injuryRisk <= ${cap}, got ${risk}`);
+    }],
+
+    [/^illness risk with freshness (\d+) is higher than with freshness (\d+)$/, (f1, f2) => {
+      const low  = illnessRisk(Number(f1));
+      const high = illnessRisk(Number(f2));
+      if (low <= high)
+        throw new Error(`expected illnessRisk(${f1})=${low} > illnessRisk(${f2})=${high}`);
+    }],
+
+    [/^illness risk with freshness (\d+) does not exceed ([\d.]+)$/, (f, cap) => {
+      const risk = illnessRisk(Number(f));
+      if (risk > Number(cap))
+        throw new Error(`expected illnessRisk <= ${cap}, got ${risk}`);
+    }],
+
+    [/^a (MINOR|MODERATE|SEVERE) injury is applied$/, (type) => {
+      ctx._tbtLifeDelta = applyInjury(ctx._tbtLifeState, type);
+      ctx._tbtLifeState.physique = Math.max(0, ctx._tbtLifeState.physique + ctx._tbtLifeDelta.physiqueδ);
+      ctx._tbtLifeState.injury   = ctx._tbtLifeDelta.injury;
+    }],
+
+    [/^illness is applied$/, () => {
+      ctx._tbtLifeDelta = applyIllness(ctx._tbtLifeState);
+      ctx._tbtLifeState.freshness = Math.max(0, ctx._tbtLifeState.freshness + ctx._tbtLifeDelta.freshnessδ);
+      ctx._tbtLifeState.ill       = ctx._tbtLifeDelta.ill;
+    }],
+
+    [/^the player goes to nets this turn$/, () => {
+      ctx._tbtLifeDelta = applyActivity(ctx._tbtLifeState, ACTIVITY_TYPES.NETS);
+      ctx._tbtLifeState.physique = Math.max(0, ctx._tbtLifeState.physique + ctx._tbtLifeDelta.physiqueδ);
+    }],
+
+    [/^the player attempts nets while ill$/, () => {
+      ctx._tbtLifeDelta = applyActivity(ctx._tbtLifeState, ACTIVITY_TYPES.NETS);
+    }],
+
+    [/^the player attempts a match while ill$/, () => {
+      ctx._tbtLifeDelta = applyActivity(ctx._tbtLifeState, ACTIVITY_TYPES.MATCH);
+    }],
+
+    [/^a life turn passes$/, () => {
+      const injResult = tickInjury(ctx._tbtLifeState);
+      if (injResult.injuryCleared) {
+        ctx._tbtLifeState.injury = null;
+      } else if (ctx._tbtLifeState.injury) {
+        ctx._tbtLifeState.injury.weeksRemaining = injResult.weeksRemaining;
+      }
+      const illResult = tickIllness(ctx._tbtLifeState);
+      ctx._tbtLifeState.ill = illResult.ill;
+      ctx._tbtLifeDelta = { ticked: true };
+    }],
+
+    [/^the form word this turn is "([^"]+)"$/, (word) => {
+      ctx._tbtLifeState.formStreak = ctx._tbtFormStreak;
+      const result = updateFormStreak(ctx._tbtLifeState, word);
+      ctx._tbtLifeState.tenacity    = Math.max(TENACITY_MIN, Math.min(TENACITY_MAX,
+        ctx._tbtLifeState.tenacity + result.tenacityδ));
+      ctx._tbtLifeState.formStreak  = result.formStreakNew;
+      ctx._tbtFormStreak            = result.formStreakNew;
+      ctx._tbtLifeDelta             = result;
+    }],
+
+    [/^injury weeks remaining is (\d+)$/, (n) => {
+      const num = Number(n);
+      if (!ctx._tbtLifeState.injury)
+        throw new Error(`expected injury with weeksRemaining ${num}, but no injury present`);
+      if (ctx._tbtLifeState.injury.weeksRemaining !== num)
+        throw new Error(`expected weeksRemaining ${num}, got ${ctx._tbtLifeState.injury.weeksRemaining}`);
+    }],
+
+    [/^the player has no injury$/, () => {
+      if (ctx._tbtLifeState.injury !== null)
+        throw new Error(`expected no injury, got ${JSON.stringify(ctx._tbtLifeState.injury)}`);
+    }],
+
+    [/^the player is marked as ill$/, () => {
+      if (!ctx._tbtLifeState.ill)
+        throw new Error('expected player to be ill');
+    }],
+
+    [/^the activity is blocked with an illness note$/, () => {
+      if (!ctx._tbtLifeDelta || !ctx._tbtLifeDelta.blocked)
+        throw new Error(`expected blocked delta, got: ${JSON.stringify(ctx._tbtLifeDelta)}`);
+      if (!/not well/i.test(ctx._tbtLifeDelta.note))
+        throw new Error(`expected illness note, got: ${ctx._tbtLifeDelta.note}`);
+    }],
+
+    [/^the player is no longer ill$/, () => {
+      if (ctx._tbtLifeState.ill)
+        throw new Error('expected player to be no longer ill');
+    }],
+
+    [/^the form streak is reset$/, () => {
+      if (ctx._tbtLifeState.formStreak !== 0)
+        throw new Error(`expected formStreak 0, got ${ctx._tbtLifeState.formStreak}`);
     }],
 
     // ── TBT-006: Transport choices ────────────────────────────────────────────
