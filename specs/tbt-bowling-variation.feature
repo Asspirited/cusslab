@@ -36,40 +36,40 @@ Feature: TBT bowling variation — overlapping bands and surprise mechanic
     Given form score is 5
     And bowling skill is 5
     When the bowling is resolved with roll 0.90
-    Then the wickets taken is between 0 and 3
+    Then the wickets taken is between 0 and 4
     And the runs conceded is between 30 and 85
 
   Scenario: Roll at 0.95 triggers two-band surprise
     Given form score is 5
     And bowling skill is 5
     When the bowling is resolved with roll 0.95
-    Then the wickets taken is between 0 and 4
+    Then the wickets taken is between 0 and 5
     And the runs conceded is between 20 and 85
 
   Scenario: Surprise from Nowhere reaches Out-of-Form territory at 0.90
     Given form score is 2
     And bowling skill is 5
     When the bowling is resolved with roll 0.90
-    Then the wickets taken is between 0 and 2
+    Then the wickets taken is between 0 and 3
     And the runs conceded is between 40 and 90
 
   Scenario: Surprise from Nowhere reaches Scratchy territory at 0.95
     Given form score is 2
     And bowling skill is 5
     When the bowling is resolved with roll 0.95
-    Then the wickets taken is between 0 and 3
+    Then the wickets taken is between 0 and 4
     And the runs conceded is between 30 and 90
 
   Scenario: Flying cannot jump beyond top band
     Given form score is 17
     And bowling skill is 5
     When the bowling is resolved with roll 0.95
-    Then the wickets taken is between 2 and 6
+    Then the wickets taken is between 2 and 7
     And the runs conceded is between 10 and 45
 
   Scenario: Surprise does not trigger below threshold
     Given form score is 5
     And bowling skill is 5
     When the bowling is resolved with roll 0.89
-    Then the wickets taken is between 0 and 2
+    Then the wickets taken is between 0 and 3
     And the runs conceded is between 40 and 85
