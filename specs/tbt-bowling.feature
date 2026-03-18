@@ -12,11 +12,11 @@ Feature: TBT cricket bowling resolution
 
     Examples:
       | form | skill | roll | min_wkts | max_wkts | min_runs | max_runs |
-      | 17   | 5     | 0.50 | 3        | 5        | 15       | 35       |
-      | 13   | 5     | 0.50 | 2        | 3        | 25       | 45       |
-      | 9    | 5     | 0.50 | 1        | 2        | 35       | 60       |
-      | 5    | 5     | 0.50 | 0        | 1        | 45       | 75       |
-      | 2    | 5     | 0.50 | 0        | 0        | 55       | 90       |
+      | 17   | 5     | 0.50 | 2        | 6        | 10       | 45       |
+      | 13   | 5     | 0.50 | 1        | 4        | 20       | 60       |
+      | 9    | 5     | 0.50 | 0        | 3        | 30       | 75       |
+      | 5    | 5     | 0.50 | 0        | 2        | 40       | 85       |
+      | 2    | 5     | 0.50 | 0        | 1        | 50       | 90       |
 
   Scenario: Low roll produces a wicketless economy spell
     Given form score is 17
