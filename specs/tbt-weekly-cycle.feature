@@ -10,7 +10,7 @@ Feature: TBT weekly cycle
   Scenario: Player chooses nets
     Given it is a free evening
     When the player expresses intent to go to nets
-    Then FORM increases by one band if below Flying
+    Then NETS costs physique and gains sharpness
     And the turn summary notes the practice
 
   Scenario: Player chooses work
