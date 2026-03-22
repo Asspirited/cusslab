@@ -4312,6 +4312,8 @@
 <script src="src/data/final-furlong-data.js"></script>
 <script src="src/data/crucible-corner-data.js"></script>
 <script src="src/data/spit-shelter-data.js"></script>
+<script src="src/logic/rage-o-meter-engine.js"></script>
+<script src="rage-o-meter.js"></script>
 
 <script>
 // ============================================================
@@ -10531,6 +10533,7 @@ if (typeof LieEngine === 'undefined') {
 // ============================================================
 const Boardroom = (() => {
   let _brLastContext = null;
+  const PANEL_CONFIG = { rageEnabled: true };
   const MEMBERS = [
     {
       id: 'harold', name: 'Pint of Harold', icon: '✒️', colour: '#ff6644', bg: '#1a0800',
@@ -11165,6 +11168,7 @@ How to behave:
     document.getElementById('br-output').style.display = 'block';
     document.getElementById('br-reply-area').style.display = 'none';
     UI.setDisabled('br-btn', true);
+    RageOMeter.init(PANEL_CONFIG, MEMBERS, 'br-output');
 
     _appendQuestioner(input, 'Presented to the board');
     await _runRound(input);

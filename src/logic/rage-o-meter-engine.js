@@ -58,7 +58,7 @@ function isRageEnabled(panelConfig) {
   return !!(panelConfig && panelConfig.rageEnabled === true);
 }
 
-module.exports = {
+const _RageOMeterEngineExports = {
   BASELINE_MIN,
   BASELINE_MAX,
   generateBaseline,
@@ -69,3 +69,9 @@ module.exports = {
   buildVerdict,
   isRageEnabled,
 };
+
+// Browser: expose as global
+if (typeof window !== 'undefined') window.RageOMeterEngine = _RageOMeterEngineExports;
+
+// Node (pipeline) export
+if (typeof module !== 'undefined') module.exports = _RageOMeterEngineExports;
