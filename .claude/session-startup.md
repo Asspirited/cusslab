@@ -334,3 +334,54 @@ Reference library — read the relevant file before the relevant step:
 - Waste log entry for every bug and every failure. At session end at minimum.
 - Never suggest `wrangler login`.
 - Quntum Leeks — intentional typo. Never autocorrect.
+## Validated Learning & Engines of Growth (append to HDD, DDD, BDD loop guidance)
+
+---
+
+### HDD loop — outer frame
+
+Every HDD cycle must answer:
+
+1. **What did we learn?** Not what did we build — what do we now know that we didn't before?
+2. **Is this validated learning?** Evidence from real user behaviour beats assumptions every time. An interview is weak signal. Someone paying, sharing, or returning is strong signal.
+3. **Which Engine of Growth are we building for?**
+   - **Sticky** — retention is the metric; users come back repeatedly (landscaper repeat proposals)
+   - **Viral** — each user generates new users (end user shares a plan; landscaper sees it)
+   - **Paid** — CAC < LTV; you can buy growth profitably
+   - *Pick one as primary. All three can coexist but only one drives decisions.*
+
+If HDD says wrong problem, all inner loops stop. No exceptions.
+
+---
+
+### DDD loop — design decisions
+
+Every significant design decision should be traceable to a validated learning:
+
+> "We are building X because we observed Y from users Z."
+
+Not:
+> "We are building X because it seems like a good idea."
+
+Favour **reversible decisions** (feature flags, thin slices, separate modes) until the engine of growth is identified and validated. Irreversible architectural decisions (data model, pricing model, brand) require stronger evidence.
+
+Backlog items should carry a `learning:` tag where applicable — what question does building this answer?
+
+---
+
+### BDD loop — session acceptance criteria
+
+Session ACs should include a **learning criterion** alongside the delivery criterion:
+
+```gherkin
+Given [context]
+When [action]
+Then [observable outcome]
+And we will have learned [what this tells us about our hypothesis]
+```
+
+If a session produces only built things and no validated learning, treat it as a red loop — something to fix in the next session retrospective.
+
+---
+
+*Appended March 2026. Applies across YGW and Cusslab projects.*
