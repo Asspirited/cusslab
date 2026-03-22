@@ -20,6 +20,18 @@
 
 ---
 
+### WL-148
+**Item:** Context compression mid-session — BL-161 prototype not yet written to disk when context rolled over
+**Symptom:** Continued session had no `insult-periodic-table.html` file. The user-pasted prototype HTML was only in the conversation transcript, not extracted to disk. Resume required extracting the prototype from `.jsonl` transcript before work could continue.
+**Root cause:** Prototype extraction step not done before context limit hit. When a session contains large user-pasted content (HTML prototypes), that content should be saved to a temp file immediately after receipt — not held only in conversation context.
+**Session:** 2026-03-22
+**Time lost:** ~5 min (transcript extraction)
+**Cost impact:** Low — recovered via python3 transcript parse, no work lost
+**Tags:** `#context-overflow` `#prototype-not-saved` `#paste-handling`
+**Status:** Closed — prototype extracted and shipped as BL-161. Mitigation: save pasted prototypes to `/tmp/` or repo immediately on receipt.
+
+---
+
 ### WL-144
 **Item:** Panel rename not propagated to Gherkin spec files and step registry
 **Symptom:** Renaming "Post Game Cunditry" → "Post Match Cunditry" in index.html caused pipeline RED — nav-landing.feature and nav-restructure.feature still had the old label; gherkin-runner.js panel registry still had the old label.

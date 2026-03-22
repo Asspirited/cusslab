@@ -1630,7 +1630,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Feature: tools
 - Epic: New Standalone Tools
 - CD3: UBV=7 TC=2 RR=3 → CoD=12, Dur=2, **CD3=6.0**
-- Status: OPEN — raised 2026-03-22
+- Status: CLOSED — shipped 2026-03-22. insult-periodic-table.html at repo root, Worker URL + haiku model, nav link in PLAY group, Gherkin contracts 1808/1808 green.
 
 ---
 

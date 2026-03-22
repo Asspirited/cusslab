@@ -1,42 +1,16 @@
 # Shared Session State
-Last updated: 2026-03-15 by Claude Code
-Last commit: fa5868f — Fix snooker name prefix bug; remove Cox from football panel; log BL-159
+Last updated: 2026-03-22 by Claude Code
+Last commit: 84aa5c3 — BL-161: Insult Periodic Table standalone page + Worker routing
 
 ## What shipped this session
 
-### Structural / Process
-- WL waste-log restructured: OPEN ITEMS index block at top of waste-log.md — genuinely open items only
-- session-startup.md step 3 updated to read OPEN ITEMS index (not grep last 5 entries)
-
-### Character panel assignments (BL-139 CLOSED)
-- # Panel: headers added to 11 character files: bruce-lee, buddha, chuck-norris, nostradamus, sun-tzu, vinny-jones, adams, cox, alliss, souness, roy-keane
-- BL-157 raised: Vinny Jones → football + Boardroom (Three Amigos needed)
-- BL-158 raised: Souness's Cat rethink (Three Amigos needed)
-
-### Football panel
-- Prof Cox fully removed from football panel (12 locations)
-- Football panel is now: souness, micah, neville, carragher, bigron, marsh, keane (7 members)
-- souness/neville ConspireEngine reset valve changed from 'cox' to 'micah'
-
-### Snooker
-- SNOOKER_TURN_RULES: added no-name-prefix rule (stops **Name:** bold opener pattern)
-- BL-159 raised: expand snooker character speech patterns/openers
-
-### UI
-- nextRound() auto-scroll (window.scrollTo(0,0)) added to all 7 panels
-
-### Research ideas (confirmed by Rod — all 4 on ideas.md UNREVIEWED)
-- Register collapse prevention in multi-agent LLM systems
-- BDD for non-deterministic AI systems
-- Wound-based character simulation DSL
-- ConspireEngine: designed contradiction in multi-agent LLM
-- Full writeup in Downloads/idea-research-writeups-2026-03-15.md
-
-### Bugs logged
-- WL-147: backlog-report.js status regex false-positive (BL-128 and BL-132 show as OPEN, both CLOSED)
+### New features
+- **BL-160 CLOSED**: Rage-O-Meter embedded widget. DOM layer at `rage-o-meter.js`, pure engine at `src/logic/rage-o-meter-engine.js`. Wired to all 10 multi-character interaction panels (Boardroom, Football, Golf, ComedyRoom, LongRoom, PhilsOpoly, Darts, Racing, Snooker, HipHop). DinnerParty excluded (uses `n` not `name`, user-selected cast).
+- **BL-161 CLOSED**: Insult Periodic Table standalone page (`insult-periodic-table.html`). ~80 elements, 8 categories, synthesis chamber, AI-rated compound insults. Worker-routed (`cusslab-api.leanspirited.workers.dev`), haiku model. Nav link in PLAY group. Gherkin contracts added (1808 total).
+- 733/733 unit tests, 1808/1808 Gherkin — all green.
 
 ## Open waste items (WL numbers)
-- WL-041: Mobile/tablet nav not findable on small screens — Low — Three Amigos needed
+- WL-041: Mobile/tablet nav — panels not findable on small screens — Low — Three Amigos needed
 - WL-097: Left nav focus trap — pointer-events not released — Low — deferred
 - WL-MODE-002: Bobby George + Rod Harrington darts character files missing — Low
 - WL-123: Session context overflow mid-session — Low — ongoing mitigation
@@ -44,21 +18,19 @@ Last commit: fa5868f — Fix snooker name prefix bug; remove Cox from football p
 - WL-136: UI audit doesn't check IIFE return objects — High — pipeline false-green risk
 - WL-147: backlog-report.js false-positive OPEN for items with "status text" in description — Low
 
-## Backlog top 3 by CD3 (excluding parser false-positives BL-128, BL-132)
-- BL-146 (CD3=6.0): Golf panel character technical knowledge enrichment
-- BL-151 (CD3=5.7): Per-character mode selector: character-level atmosphere/posture override
-- BL-157 (CD3=5.5): Vinny Jones → football panel + Boardroom (Three Amigos first)
+## Backlog top 3 by CD3
+- BL-132 (CD3=22.0): School Mode: cross-panel prompt convention (Three Amigos first)
+- BL-128 (CD3=7.0): Pub Crawl UX: pressure feedback, threshold visibility
+- BL-162 (CD3=6.5): index.html SRP extraction + PACT contract tests (spike — Three Amigos first)
 
 ## Protocol status this session
-- Session startup: followed in full
-- Gherkin gate: followed — no new code paths requiring new Gherkin
-- TDD: N/A — character data + prompt text changes only
-- Pipeline: GREEN throughout (707/707 unit, 6/6 E2E, 16/16 UI, canary OK)
+- Session startup: followed (continued from prior context — full startup in earlier context)
+- Gherkin gate: followed — BL-160 and BL-161 both Gherkin-first
+- TDD: followed — 22 unit tests written for rage-o-meter-engine before DOM layer
+- Pipeline: GREEN — EXIT:0, 1808/1808 Gherkin, 733/733 units
 
 ## Carry-forward notes
-- BL-146 is agreed next session priority. Start with Gherkin (none exists yet), then enrich character prompts.
-- BL-157 (Vinny Jones) needs Three Amigos before any implementation.
-- BL-158 (Souness's Cat): Cox + Adams + Souness confirmed characters; mechanic TBD. Snapshot: Downloads/idea-souness-cat-rethink-2026-03-15.md
-- Phil's-opoly notes at notes/2026-03-09-phils-opoly.md — still active context.
-- Football panel is now 7 members. Cox is in Science Convention + Souness's Cat (future) only.
-- Session context compacted mid-session — longer sessions than usual. Consider splitting at 2h.
+- BL-162 (SRP extraction spike) needs Three Amigos before any code — agree module boundaries, PACT tooling choice, layer vs panel decomposition strategy.
+- When user pastes large HTML prototypes in chat: save immediately to /tmp/ — don't rely on context surviving to implementation (WL-148: had to re-extract from .jsonl transcript).
+- DinnerParty panel excluded from Rage-O-Meter: revisit if it gets a fixed character model with `name` and `colour` fields.
+- No agreed next session features from Rod — propose top 3 by CD3 at start.

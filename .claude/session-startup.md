@@ -144,6 +144,15 @@ WL-147 added: backlog-report.js status regex false-positive — fix deferred.
 WL-136 (IIFE return check in UI audit) still OPEN — pipeline false-green risk.
 WL-131 (character dullness) still OPEN — Three Amigos needed.
 
+Agreed next session (from 2026-03-22 closedown):
+- No specific features agreed by Rod. Propose top 3 by CD3:
+  - BL-132 (CD3=22.0): School Mode cross-panel prompt convention — Three Amigos first
+  - BL-128 (CD3=7.0): Pub Crawl UX pressure feedback + threshold visibility — Gherkin needed
+  - BL-162 (CD3=6.5): index.html SRP extraction spike — Three Amigos first (module boundaries, PACT tooling)
+
+This session shipped: BL-160 (Rage-O-Meter, all 10 interaction panels), BL-161 (Insult Periodic Table standalone page).
+Pipeline: 1808/1808 Gherkin, 733/733 unit tests — GREEN.
+
 Agreed next session (from 2026-03-15 session 13 close):
 - BL-146: Golf panel technical knowledge enrichment — Gherkin needed (data spike, then enrich character prompts)
 - BL-157: Vinny Jones → football + Boardroom — Three Amigos first
