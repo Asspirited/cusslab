@@ -3,6 +3,7 @@
 const { lintStepDuplicates } = require('./lint-steps.js');
 const { initGameState, appendToHistory, incrementTurn, buildModifierBlock } = require('../src/logic/ff-engine.js');
 const { getAllScenes, getPubScene, initPubCrawl, resolveChoice, determineOutcome, checkLederhosen, getActiveAdvisor, buildAdvisorPrompt, ADVISOR_IDS } = require('../src/logic/pub-navigator-engine.js');
+const { BASELINE_MIN, BASELINE_MAX, generateBaseline, initCharacter, commitRound, computeDelta, rankByDelta, buildVerdict, isRageEnabled } = require('../src/logic/rage-o-meter-engine.js');
 
 const { maskKey, isValidKey, shouldUpdateInput, Temperature, makeWoundDetector, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetector, DartsVoiceFmt, dartsBuildBlock, DARTS_PREMONITION_AFFINITIES, COLLECTIVE_CALL_MINIMUM, premonitionEligible, blankPremonitionLedger, assignPremonitionRC, resolvePremonitionCommits, isPremonitionTruthTeller, detectIntellectualAttempt, buildAttemptInstruction, INTELLECTUAL_ATTEMPTS_CONFIG, SOUNESS_CAT_PRE_EXISTING, SOUNESS_CAT_IDS, getAllPairs, getPairTone, allPairsHaveToneAndNote, teslaHasNoWarmOrSolidary, pairToneIsSymmetrical, noConflictingTones, CONSEQUENCE_TIERS, applyConsequence, MARSHALS_BELT_EVENT, accumulatePanelStats, computeAvgDepth, GOLF_PANEL_MEMBER_IDS, COLTART_SOFA_POOLS, getSofaCommentator, getHistoricalDivergence, selectReactionMode, validateOutwardCode, parseOutwardCode, ORACLE_VOICES, isValidOracleVoice, canSubmitOracle, ORACLE_REGISTERS, ORACLE_CHARACTERS, hasPhilTranslation, hasAllDublinDriftStages, COMEDY_ROOM_MODES, COMEDY_MODE_LABELS, getDefaultComedyMode, isValidComedyMode, AUTHOR_VOICES, buildAuthorEpiloguePrompt, AUTHORS_POOL, shufflePool, selectNextAuthorFromQueue, selectRoastAuthors, buildRoastPrompt, selectWritingRoomAuthors, buildWritingRoomPrompt, PUB_SITUATIONS, buildPubAdvicePrompt } = require('./logic.js');
 
@@ -1515,6 +1516,95 @@ assert('buildModifierBlock: contains modifier text',
 assert('buildModifierBlock: multiple modifiers each appear',
   buildModifierBlock(['Mod A', 'Mod B']).includes('Mod A') &&
   buildModifierBlock(['Mod A', 'Mod B']).includes('Mod B'), true);
+
+// ── RageOMeter engine ────────────────────────────────────────────────────────
+
+assert('isRageEnabled: returns true when rageEnabled is true',
+  isRageEnabled({ rageEnabled: true }), true);
+
+assert('isRageEnabled: returns false when rageEnabled is false',
+  isRageEnabled({ rageEnabled: false }), false);
+
+assert('isRageEnabled: returns false when rageEnabled is absent',
+  isRageEnabled({}), false);
+
+assert('isRageEnabled: returns false for null config',
+  isRageEnabled(null), false);
+
+assert('generateBaseline: result is at least BASELINE_MIN (5)',
+  generateBaseline() >= BASELINE_MIN, true);
+
+assert('generateBaseline: result is at most BASELINE_MAX (25)',
+  generateBaseline() <= BASELINE_MAX, true);
+
+assert('generateBaseline: result is an integer',
+  Number.isInteger(generateBaseline()), true);
+
+(function() {
+  const c = initCharacter('Sebastian', '#ff6b1a') || {};
+  assert('initCharacter: returns an object',
+    typeof initCharacter('Sebastian', '#ff6b1a'), 'object');
+  assert('initCharacter: name is set',
+    c.name, 'Sebastian');
+  assert('initCharacter: color is set',
+    c.color, '#ff6b1a');
+  assert('initCharacter: baseline is within range',
+    c.baseline >= BASELINE_MIN && c.baseline <= BASELINE_MAX, true);
+  assert('initCharacter: current equals baseline on init',
+    c.current, c.baseline);
+  assert('initCharacter: history starts with baseline as first entry',
+    (c.history || [])[0], c.baseline);
+  assert('initCharacter: history length is 1 on init',
+    (c.history || []).length, 1);
+})();
+
+(function() {
+  const c = initCharacter('Roy', '#e63030') || { baseline: 10, current: 10, history: [10] };
+  const c2 = commitRound(c, 72) || {};
+  assert('commitRound: current is updated to new rage',
+    c2.current, 72);
+  assert('commitRound: history appends new rage value',
+    (c2.history || [])[((c2.history || []).length) - 1], 72);
+  assert('commitRound: history length grows by 1',
+    (c2.history || []).length, (c.history || []).length + 1);
+  assert('commitRound: does not mutate original character',
+    c.current, c.baseline);
+})();
+
+(function() {
+  const baseline = 15;
+  const c2 = { name: 'Partridge', baseline, current: baseline + 30, history: [baseline, baseline + 30] };
+  assert('computeDelta: returns difference between current and baseline',
+    computeDelta(c2), 30);
+  const c3 = { name: 'Partridge', baseline, current: baseline - 3, history: [baseline, baseline - 3] };
+  assert('computeDelta: returns negative delta when current is below baseline',
+    computeDelta(c3) < 0, true);
+})();
+
+(function() {
+  const sebastian = { name: 'Sebastian', color: '#ff6b1a', baseline: 10, current: 85, history: [10, 85] };
+  const roy       = { name: 'Roy',       color: '#e63030', baseline: 20, current: 25, history: [20, 25] };
+  const partridge = { name: 'Partridge', color: '#f5c842', baseline: 15, current: 14, history: [15, 14] };
+  const ranked = rankByDelta([sebastian, roy, partridge]) || [];
+  assert('rankByDelta: highest delta character is first',
+    (ranked[0] || {}).name, 'Sebastian');
+  assert('rankByDelta: lowest delta character is last',
+    (ranked[ranked.length - 1] || {}).name, 'Partridge');
+  assert('rankByDelta: does not mutate original array order',
+    [sebastian, roy, partridge][0].name, 'Sebastian');
+})();
+
+(function() {
+  const sebastian = { name: 'Sebastian', color: '#ff6b1a', baseline: 10, current: 85, history: [10, 85] };
+  const partridge = { name: 'Partridge', color: '#f5c842', baseline: 15, current: 14, history: [15, 14] };
+  const verdict = buildVerdict([sebastian, partridge]) || '';
+  assert('buildVerdict: mentions the most-raged character by name',
+    verdict.includes('Sebastian'), true);
+  assert('buildVerdict: mentions the most-unbothered character by name',
+    verdict.includes('Partridge'), true);
+  assert('buildVerdict: returns a non-empty string',
+    typeof verdict === 'string' && verdict.length > 0, true);
+})();
 
 // ── Results ──────────────────────────────────────────────────────────────────
 
