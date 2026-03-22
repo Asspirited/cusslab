@@ -1611,3 +1611,32 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Feature: content — snooker
 - CD3: UBV=3 TC=2 RR=2 → CoD=7, Dur=2, **CD3=3.5**
 - Status: OPEN — raised 2026-03-15
+
+---
+
+### BL-160 — Rage-O-Meter: embedded rage tracker for multi-character interaction panels
+
+- Description: Add Rage-O-Meter as an embedded component within interaction panels (panels where named characters respond to each other, not monologue-only modes). Characters auto-populated from the panel's own character set — no manual entry. Per-round sliders let the user rate each character's rage after each response; rage history logged to sparkline bars; post-session summary shows delta-from-baseline. Prototype JS extracted to `rage-o-meter.js` (IIFE). Component shows/hides based on panel type — hidden in monologue/single-voice modes. Three Amigos still needed: (a) define the interaction vs monologue panel classification (data flag vs explicit list); (b) how characters and baseline values are sourced per panel; (c) DOM placement within the panel response area; (d) max character count (prototype caps at 4, some panels have 6+). No AI call — fully self-contained.
+- Feature: tools
+- Epic: New Standalone Tools
+- CD3: UBV=6 TC=2 RR=3 → CoD=11, Dur=3, **CD3=3.7**
+- Status: CLOSED — 2026-03-22. Engine + DOM layer shipped. Boardroom wired. All remaining interaction panels wired in same session.
+
+---
+
+### BL-161 — Insult Periodic Table: element selection UI + synthesis via Worker
+
+- Description: Add `insult-periodic-table.html` (prototype complete) to the Cusslab repo. The page renders ~80 insult elements across 8 categories in a periodic-table grid. Player selects 2–4 elements, clicks Synthesise, gets a compound insult with savagery/wit/specificity ratings. Prototype currently calls `api.anthropic.com` directly without a key — must be updated to route through `https://cusslab-api.leanspirited.workers.dev`. Work: file placement, URL swap + model update to Worker-compatible model (haiku), verify Worker response format matches expected `{content:[{text}]}`, nav wiring, pipeline, push. Three Amigos needed before Gherkin: confirm Worker request/response contract, model choice, nav placement.
+- Feature: tools
+- Epic: New Standalone Tools
+- CD3: UBV=7 TC=2 RR=3 → CoD=12, Dur=2, **CD3=6.0**
+- Status: OPEN — raised 2026-03-22
+
+---
+
+### BL-162 — index.html SRP extraction: decompose into module files with PACT contract tests
+
+- Description: index.html is ~19,700 lines with all JS inline. Extract into discrete responsibility modules (e.g. character data, panel logic, UI, API calls) as separate `.js` files with IIFE wrappers. Add PACT consumer-driven contract tests between modules to catch interface breakage at seams. Output: agreed module map, extraction sequence, test strategy. Start as a spike (output = decision + module map) before delivery stories are raised. Three Amigos needed before spike: agree module boundaries, PACT tooling choice, and whether extraction is file-per-panel or layer-per-concern.
+- Feature: architecture
+- CD3: UBV=5 TC=2 RR=6 → CoD=13, Dur=2 (spike), **CD3=6.5**
+- Status: OPEN — raised 2026-03-22

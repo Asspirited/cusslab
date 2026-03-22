@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Insult Periodic Table — Heckler & Cox</title>
+<link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Share+Tech+Mono&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0d0d;
+    --surface: #141414;
+    --chalk: #e8e0cc;
+    --chalk-dim: #a09880;
+    --green: #4ade80;
+    --amber: #f59e0b;
+    --red: #ef4444;
+    --blue: #38bdf8;
+    --purple: #a78bfa;
+    --orange: #fb923c;
+    --pink: #f472b6;
+    --teal: #2dd4bf;
+
+    --cat-appearance: #ef4444;
+    --cat-intelligence: #38bdf8;
+    --cat-lifestyle: #f59e0b;
+    --cat-personality: #a78bfa;
+    --cat-career: #4ade80;
+    --cat-relationships: #f472b6;
+    --cat-existential: #2dd4bf;
+    --cat-hygiene: #fb923c;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--chalk);
+    font-family: 'Share Tech Mono', monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+    cursor: crosshair;
+  }
+
+  /* Chalkboard texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 28px, rgba(255,255,255,0.012) 28px, rgba(255,255,255,0.012) 29px),
+      repeating-linear-gradient(90deg, transparent, transparent 28px, rgba(255,255,255,0.008) 28px, rgba(255,255,255,0.008) 29px);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .noise {
+    position: fixed;
+    inset: 0;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .container {
+    position: relative;
+    z-index: 2;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px 20px;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+
+  .title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.4rem, 6vw, 4rem);
+    letter-spacing: 0.08em;
+    color: var(--chalk);
+    text-shadow: 0 0 40px rgba(232,224,204,0.2);
+    line-height: 1;
+  }
+
+  .subtitle {
+    font-family: 'Special Elite', cursive;
+    font-size: 0.85rem;
+    color: var(--chalk-dim);
+    margin-top: 6px;
+    letter-spacing: 0.15em;
+  }
+
+  /* Category legend */
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 28px;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    opacity: 0.8;
+  }
+
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+  }
+
+  /* Periodic table grid */
+  .table-wrapper {
+    overflow-x: auto;
+    padding-bottom: 8px;
+  }
+
+  .periodic-grid {
+    display: grid;
+    grid-template-columns: repeat(18, minmax(58px, 1fr));
+    gap: 4px;
+    min-width: 900px;
+  }
+
+  .element {
+    aspect-ratio: 1;
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 5px 4px 4px;
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.12s ease, border-color 0.12s ease, box-shadow 0.12s ease;
+    user-select: none;
+    background: rgba(20,20,20,0.8);
+  }
+
+  .element:hover {
+    transform: scale(1.08) translateY(-2px);
+    z-index: 10;
+    border-color: rgba(255,255,255,0.5);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+  }
+
+  .element.selected {
+    border-width: 2px;
+    transform: scale(1.05);
+    z-index: 5;
+  }
+
+  .element.selected::after {
+    content: '✓';
+    position: absolute;
+    top: 2px;
+    right: 4px;
+    font-size: 0.55rem;
+    opacity: 0.9;
+  }
+
+  .el-number {
+    font-size: 0.5rem;
+    opacity: 0.5;
+    line-height: 1;
+  }
+
+  .el-symbol {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    line-height: 1;
+    text-align: center;
+    letter-spacing: 0.02em;
+  }
+
+  .el-name {
+    font-size: 0.38rem;
+    text-align: center;
+    opacity: 0.75;
+    line-height: 1.2;
+    letter-spacing: 0.04em;
+    word-break: break-word;
+  }
+
+  .el-weight {
+    font-size: 0.38rem;
+    text-align: center;
+    opacity: 0.4;
+  }
+
+  .spacer { /* invisible grid spacer */
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* Combination zone */
+  .lab-bench {
+    margin-top: 28px;
+    background: rgba(232,224,204,0.04);
+    border: 1px solid rgba(232,224,204,0.12);
+    border-radius: 4px;
+    padding: 20px;
+  }
+
+  .bench-title {
+    font-family: 'Special Elite', cursive;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    color: var(--chalk-dim);
+    margin-bottom: 14px;
+    text-transform: uppercase;
+  }
+
+  .selected-elements {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    min-height: 52px;
+    margin-bottom: 16px;
+    align-items: center;
+  }
+
+  .selected-pill {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    border-radius: 3px;
+    font-size: 0.7rem;
+    border: 1px solid currentColor;
+    animation: pillIn 0.2s ease;
+  }
+
+  @keyframes pillIn {
+    from { opacity: 0; transform: scale(0.85); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  .selected-pill button {
+    background: none;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    opacity: 0.6;
+    font-size: 0.8rem;
+    line-height: 1;
+    padding: 0;
+  }
+
+  .selected-pill button:hover { opacity: 1; }
+
+  .empty-hint {
+    color: var(--chalk-dim);
+    font-size: 0.7rem;
+    font-family: 'Special Elite', cursive;
+    opacity: 0.5;
+    font-style: italic;
+  }
+
+  .bench-controls {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    padding: 9px 18px;
+    border-radius: 3px;
+    border: 1px solid;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    text-transform: uppercase;
+  }
+
+  .btn-synthesize {
+    background: var(--chalk);
+    color: var(--bg);
+    border-color: var(--chalk);
+  }
+
+  .btn-synthesize:hover {
+    background: transparent;
+    color: var(--chalk);
+  }
+
+  .btn-synthesize:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+
+  .btn-clear {
+    background: transparent;
+    color: var(--chalk-dim);
+    border-color: rgba(232,224,204,0.2);
+  }
+
+  .btn-clear:hover {
+    border-color: var(--red);
+    color: var(--red);
+  }
+
+  /* Result panel */
+  .result-panel {
+    margin-top: 20px;
+    padding: 20px;
+    background: rgba(232,224,204,0.04);
+    border: 1px solid rgba(232,224,204,0.15);
+    border-radius: 4px;
+    display: none;
+  }
+
+  .result-panel.visible { display: block; }
+
+  .result-formula {
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    color: var(--chalk-dim);
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+
+  .result-insult {
+    font-family: 'Special Elite', cursive;
+    font-size: clamp(1rem, 2.5vw, 1.35rem);
+    line-height: 1.6;
+    color: var(--chalk);
+    text-shadow: 0 0 30px rgba(232,224,204,0.15);
+  }
+
+  .result-insult.loading {
+    opacity: 0.4;
+    animation: pulse 1s ease infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 0.7; }
+  }
+
+  .result-rating {
+    margin-top: 14px;
+    font-size: 0.65rem;
+    color: var(--chalk-dim);
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .rating-badge {
+    padding: 3px 8px;
+    border-radius: 2px;
+    border: 1px solid currentColor;
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
+  }
+
+  .result-actions {
+    margin-top: 14px;
+    display: flex;
+    gap: 8px;
+  }
+
+  .btn-copy, .btn-again {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    padding: 6px 14px;
+    border-radius: 3px;
+    border: 1px solid rgba(232,224,204,0.25);
+    background: transparent;
+    color: var(--chalk-dim);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    text-transform: uppercase;
+  }
+
+  .btn-copy:hover { color: var(--green); border-color: var(--green); }
+  .btn-again:hover { color: var(--amber); border-color: var(--amber); }
+
+  /* Tooltip */
+  .tooltip {
+    position: fixed;
+    background: rgba(20,20,20,0.95);
+    border: 1px solid rgba(232,224,204,0.25);
+    color: var(--chalk);
+    padding: 8px 12px;
+    font-size: 0.65rem;
+    border-radius: 3px;
+    pointer-events: none;
+    z-index: 100;
+    max-width: 200px;
+    line-height: 1.5;
+    display: none;
+    font-family: 'Special Elite', cursive;
+  }
+
+  footer {
+    text-align: center;
+    margin-top: 32px;
+    font-size: 0.55rem;
+    color: var(--chalk-dim);
+    opacity: 0.4;
+    letter-spacing: 0.1em;
+  }
+</style>
+</head>
+<body>
+<div class="noise"></div>
+
+<div class="container">
+  <header>
+    <div class="title">⚗ The Insult Periodic Table</div>
+    <div class="subtitle">Heckler &amp; Cox — Comedy Science Laboratory // Select elements to synthesize compound burns</div>
+  </header>
+
+  <div class="legend" id="legend"></div>
+
+  <div class="table-wrapper">
+    <div class="periodic-grid" id="periodicGrid"></div>
+  </div>
+
+  <div class="lab-bench">
+    <div class="bench-title">// Synthesis Chamber — select 2-4 elements to combine</div>
+    <div class="selected-elements" id="selectedElements">
+      <span class="empty-hint">Click elements above to add them here...</span>
+    </div>
+    <div class="bench-controls">
+      <button class="btn btn-synthesize" id="synthesizeBtn" disabled>⚗ Synthesise Insult</button>
+      <button class="btn btn-clear" id="clearBtn">✕ Clear</button>
+    </div>
+  </div>
+
+  <div class="result-panel" id="resultPanel">
+    <div class="result-formula" id="resultFormula"></div>
+    <div class="result-insult" id="resultInsult"></div>
+    <div class="result-rating" id="resultRating"></div>
+    <div class="result-actions">
+      <button class="btn-copy" id="copyBtn">⎘ Copy</button>
+      <button class="btn-again" id="againBtn">↻ Synthesise Again</button>
+    </div>
+  </div>
+
+  <footer>PERIODIC TABLE OF INSULTS v1.0 — FOR COMEDY PURPOSES ONLY — HANDLE WITH CARE</footer>
+</div>
+
+<div class="tooltip" id="tooltip"></div>
+
+<script>
+const CATEGORIES = {
+  appearance:    { label: 'Appearance',    color: '#ef4444', short: 'Ap' },
+  intelligence:  { label: 'Intelligence',  color: '#38bdf8', short: 'Iq' },
+  lifestyle:     { label: 'Lifestyle',     color: '#f59e0b', short: 'Ls' },
+  personality:   { label: 'Personality',   color: '#a78bfa', short: 'Pn' },
+  career:        { label: 'Career',        color: '#4ade80', short: 'Ca' },
+  relationships: { label: 'Relationships', color: '#f472b6', short: 'Re' },
+  existential:   { label: 'Existential',   color: '#2dd4bf', short: 'Ex' },
+  hygiene:       { label: 'Hygiene',       color: '#fb923c', short: 'Hy' },
+};
+
+// Each element: symbol, name, category, atomicNumber, weight (fictional), tooltip description
+const ELEMENTS = [
+  // Row 1 (sparse, periodic-style with gaps)
+  { sym: 'Gl', name: 'Glumness',      cat: 'personality',   n: 1,  w: '1.008',   tip: 'The energy of someone who brings spreadsheets to parties' },
+  null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
+  { sym: 'Vn', name: 'Vanity',        cat: 'appearance',    n: 2,  w: '4.003',   tip: 'Atomic selfie energy; highly unstable in mirrors' },
+
+  // Row 2
+  { sym: 'Bl', name: 'Blandness',     cat: 'personality',   n: 3,  w: '6.941',   tip: 'The human equivalent of unseasoned rice' },
+  { sym: 'Ob', name: 'Obliviousness', cat: 'intelligence',  n: 4,  w: '9.012',   tip: 'Blissfully unaware of its own damage radius' },
+  null, null, null, null, null, null, null, null, null,
+  { sym: 'Cr', name: 'Clinginess',    cat: 'relationships', n: 5,  w: '10.81',   tip: 'Bonds with anything. Won\'t let go.' },
+  { sym: 'Sk', name: 'Skankiness',    cat: 'hygiene',       n: 6,  w: '12.01',   tip: 'Detectable at significant range' },
+  { sym: 'Dn', name: 'Deniability',   cat: 'personality',   n: 7,  w: '14.01',   tip: 'Refuses to acknowledge its own existence' },
+  { sym: 'Dp', name: 'Dopiness',      cat: 'intelligence',  n: 8,  w: '15.99',   tip: 'Lower density than ambient intelligence' },
+  { sym: 'Mo', name: 'Moodiness',     cat: 'personality',   n: 9,  w: '18.99',   tip: 'Highly reactive. Do not approach before coffee.' },
+  { sym: 'Ne', name: 'Neediness',     cat: 'relationships', n: 10, w: '20.18',   tip: 'Suffocates everything it touches' },
+
+  // Row 3
+  { sym: 'Sw', name: 'Sweatiness',    cat: 'hygiene',       n: 11, w: '22.99',   tip: 'Persists under pressure. And rest. And mild warmth.' },
+  { sym: 'Mg', name: 'Mediocrity',    cat: 'career',        n: 12, w: '24.31',   tip: 'Aspires to average. Usually undershoots.' },
+  null, null, null, null, null, null, null, null, null,
+  { sym: 'Pt', name: 'Pettiness',     cat: 'personality',   n: 13, w: '26.98',   tip: 'Remembers everything. Forgives nothing.' },
+  { sym: 'Sc', name: 'Sarcasm',       cat: 'personality',   n: 14, w: '28.09',   tip: 'Extremely stable. Bonds with almost anything.' },
+  { sym: 'Ph', name: 'Phoniness',     cat: 'personality',   n: 15, w: '30.97',   tip: 'Smile half-life: approximately 0.3 seconds' },
+  { sym: 'Sl', name: 'Sloth',         cat: 'lifestyle',     n: 16, w: '32.06',   tip: 'Lowest kinetic energy of any known element' },
+  { sym: 'Eg', name: 'Ego',           cat: 'personality',   n: 17, w: '35.45',   tip: 'Expands to fill all available space' },
+  { sym: 'Ob', name: 'Obnoxiousness', cat: 'personality',   n: 18, w: '39.95',   tip: 'Noble in its own estimation. Inert to feedback.' },
+
+  // Row 4
+  { sym: 'Bs', name: 'Bad Skin',         cat: 'appearance',    n: 19, w: '39.10',  tip: 'Surface-level instability' },
+  { sym: 'Br', name: 'Bad Breath',       cat: 'hygiene',       n: 20, w: '40.08',  tip: 'Clears rooms at subatomic speed' },
+  { sym: 'Lr', name: 'Laziness',         cat: 'lifestyle',     n: 21, w: '44.96',  tip: 'Does the minimum viable decay' },
+  { sym: 'Fb', name: 'Flab',             cat: 'appearance',    n: 22, w: '47.87',  tip: 'Accumulated potential. Never released.' },
+  { sym: 'Wh', name: 'Whining',          cat: 'personality',   n: 23, w: '50.94',  tip: 'High frequency emissions at low stimulation' },
+  { sym: 'Gd', name: 'Gaslighting',      cat: 'relationships', n: 24, w: '51.99',  tip: 'Makes others question their own readings' },
+  { sym: 'Db', name: 'Dullness',         cat: 'personality',   n: 25, w: '54.94',  tip: 'Absorbs all interesting conversation nearby' },
+  { sym: 'Fl', name: 'Flakiness',        cat: 'relationships', n: 26, w: '55.85',  tip: 'Unstable. Will cancel. Already rescheduling.' },
+  { sym: 'Nm', name: 'Name-dropping',    cat: 'career',        n: 27, w: '58.93',  tip: 'Bonds exclusively with celebrities' },
+  { sym: 'Ov', name: 'Overconfidence',   cat: 'personality',   n: 28, w: '58.69',  tip: 'Inverse relationship with actual ability' },
+  { sym: 'Jl', name: 'Jealousy',         cat: 'relationships', n: 29, w: '63.55',  tip: 'Green. Corrosive. Everywhere.' },
+  { sym: 'Mn', name: 'Mansplaining',     cat: 'personality',   n: 30, w: '65.38',  tip: 'Will explain itself at length. Without prompting.' },
+  { sym: 'Gp', name: 'Gossip',           cat: 'relationships', n: 31, w: '69.72',  tip: 'Spreads rapidly in enclosed social spaces' },
+  { sym: 'Wd', name: 'Weirdness',        cat: 'lifestyle',     n: 32, w: '72.64',  tip: 'Non-standard configuration. Results vary.' },
+  { sym: 'De', name: 'Delusion',         cat: 'existential',   n: 33, w: '74.92',  tip: 'Inhabits an alternate but deeply committed reality' },
+  { sym: 'Fo', name: 'Forgetfulness',    cat: 'intelligence',  n: 34, w: '78.96',  tip: 'Unstable memory half-life: minutes' },
+  { sym: 'Tr', name: 'Tryhard',          cat: 'personality',   n: 35, w: '79.90',  tip: 'Maximum effort. Minimum cool.' },
+  { sym: 'Aw', name: 'Awkwardness',      cat: 'personality',   n: 36, w: '83.80',  tip: 'Creates tension in any social bond' },
+
+  // Row 5
+  { sym: 'Bb', name: 'Blabbering',       cat: 'personality',   n: 37, w: '85.47',  tip: 'High volume output. Zero signal-to-noise ratio.' },
+  { sym: 'Cf', name: 'Cheapness',        cat: 'lifestyle',     n: 38, w: '87.62',  tip: 'Repels generosity. Attracts resentment.' },
+  { sym: 'Nc', name: 'Narcissism',       cat: 'personality',   n: 39, w: '88.91',  tip: 'Bonds exclusively with itself' },
+  { sym: 'Ig', name: 'Ignorance',        cat: 'intelligence',  n: 40, w: '91.22',  tip: 'Proudly compounds without external input' },
+  { sym: 'Px', name: 'Passive Aggression', cat: 'personality', n: 41, w: '92.91',  tip: '"No it\'s fine." [it is not fine]' },
+  { sym: 'Mi', name: 'Midlife Crisis',   cat: 'existential',   n: 42, w: '95.96',  tip: 'Spontaneously converts into sports car energy' },
+  null,
+  { sym: 'Ru', name: 'Rudeness',         cat: 'personality',   n: 44, w: '101.07', tip: 'Corrosive at standard temperature and pressure' },
+  { sym: 'Ob', name: 'Obstinance',       cat: 'personality',   n: 45, w: '102.91', tip: 'Will not move. Has never moved. Will not consider moving.' },
+  { sym: 'Fa', name: 'Fakeness',         cat: 'personality',   n: 46, w: '106.42', tip: 'Synthetic. Non-biodegradable.' },
+  { sym: 'Ss', name: 'Selfishness',      cat: 'personality',   n: 47, w: '107.87', tip: 'Does not bond. Repels.' },
+  { sym: 'Cd', name: 'Condescension',    cat: 'personality',   n: 48, w: '112.41', tip: 'You probably wouldn\'t understand this element' },
+  { sym: 'Im', name: 'Immaturity',       cat: 'lifestyle',     n: 49, w: '114.82', tip: 'Failed to complete standard development cycle' },
+  { sym: 'Sn', name: 'Snobbishness',     cat: 'lifestyle',     n: 50, w: '118.71', tip: 'Refuses to combine with common elements' },
+  { sym: 'Xe', name: 'Xenophobia',       cat: 'existential',   n: 51, w: '121.76', tip: 'Pathologically inert to new experiences' },
+  { sym: 'Sp', name: 'Spite',            cat: 'personality',   n: 52, w: '127.60', tip: 'Burns itself to generate heat for others' },
+  { sym: 'Ff', name: 'Fluff',            cat: 'career',        n: 53, w: '126.90', tip: 'High volume. Zero substance.' },
+  { sym: 'Xn', name: 'Xenophobia',       cat: 'existential',   n: 54, w: '131.29', tip: 'Stable only in isolation' },
+
+  // Row 6
+  { sym: 'Dp', name: 'Desperation',      cat: 'relationships', n: 55, w: '132.91', tip: 'Bonds with literally anything' },
+  { sym: 'Bk', name: 'Brokeness',        cat: 'lifestyle',     n: 56, w: '137.33', tip: 'Low energy state. Permanent.' },
+  null, null, null, null, null, null, null, null, null, null, null, null, null,
+  { sym: 'Pp', name: 'Pompousness',      cat: 'personality',   n: 72, w: '178.49', tip: 'Takes up far more space than its mass warrants' },
+  { sym: 'Tc', name: 'Tackiness',        cat: 'appearance',    n: 73, w: '180.95', tip: 'Highly visible. Impossible to ignore.' },
+  { sym: 'Bw', name: 'Bad Wifi',         cat: 'existential',   n: 74, w: '183.84', tip: 'Disconnects at critical moments. No explanation.' },
+  { sym: 'Cp', name: 'Cheapo',           cat: 'lifestyle',     n: 75, w: '186.21', tip: 'Dense and unremarkable' },
+  { sym: 'Is', name: 'Insufferableness', cat: 'personality',   n: 76, w: '190.23', tip: 'Maximum social toxicity per unit volume' },
+  { sym: 'Pr', name: 'Pretentiousness',  cat: 'lifestyle',     n: 77, w: '192.22', tip: 'Has read one philosophy book. Will not stop.' },
+  { sym: 'Dz', name: 'Ditziness',        cat: 'intelligence',  n: 78, w: '195.08', tip: 'Randomly repels logical conclusions' },
+  { sym: 'Tl', name: 'Trolling',         cat: 'personality',   n: 79, w: '196.97', tip: 'Destabilises surrounding elements for sport' },
+  { sym: 'Ug', name: 'Uggo',             cat: 'appearance',    n: 80, w: '200.59', tip: 'Low aesthetic energy state' },
+  { sym: 'Rm', name: 'Rambling',         cat: 'personality',   n: 81, w: '204.38', tip: 'No clear endpoint. Ongoing reaction.' },
+  { sym: 'Pd', name: 'Paranoia',         cat: 'existential',   n: 82, w: '207.2',  tip: 'All other elements are against it. It knows.' },
+  { sym: 'Wf', name: 'Waffle',           cat: 'career',        n: 83, w: '208.98', tip: 'Fills time with no caloric value' },
+  null, null,
+  { sym: 'Rn', name: 'Resentment',       cat: 'existential',   n: 86, w: '222',    tip: 'Colourless. Odourless. Inescapable.' },
+];
+
+const selected = [];
+let lastInsult = '';
+
+function buildLegend() {
+  const legend = document.getElementById('legend');
+  Object.entries(CATEGORIES).forEach(([key, cat]) => {
+    legend.innerHTML += `
+      <div class="legend-item">
+        <div class="legend-dot" style="background:${cat.color}"></div>
+        <span style="color:${cat.color}">${cat.label}</span>
+      </div>`;
+  });
+}
+
+function buildTable() {
+  const grid = document.getElementById('periodicGrid');
+  ELEMENTS.forEach((el, i) => {
+    if (!el) {
+      grid.innerHTML += `<div class="element spacer"></div>`;
+      return;
+    }
+    const cat = CATEGORIES[el.cat];
+    const div = document.createElement('div');
+    div.className = 'element';
+    div.dataset.index = i;
+    div.style.borderColor = `${cat.color}40`;
+    div.style.setProperty('--el-color', cat.color);
+    div.innerHTML = `
+      <span class="el-number">${el.n}</span>
+      <span class="el-symbol" style="color:${cat.color}">${el.sym}</span>
+      <span class="el-name">${el.name}</span>
+      <span class="el-weight">${el.w}</span>`;
+    div.addEventListener('click', () => toggleElement(el, div, cat));
+    div.addEventListener('mouseenter', (e) => showTooltip(e, el, cat));
+    div.addEventListener('mouseleave', hideTooltip);
+    div.addEventListener('mousemove', (e) => moveTooltip(e));
+    grid.appendChild(div);
+  });
+}
+
+function toggleElement(el, div, cat) {
+  const idx = selected.findIndex(s => s.el.name === el.name);
+  if (idx >= 0) {
+    selected.splice(idx, 1);
+    div.classList.remove('selected');
+    div.style.borderColor = `${cat.color}40`;
+    div.style.boxShadow = '';
+  } else {
+    if (selected.length >= 4) {
+      div.style.animation = 'none';
+      setTimeout(() => div.style.animation = '', 10);
+      return;
+    }
+    selected.push({ el, cat });
+    div.classList.add('selected');
+    div.style.borderColor = cat.color;
+    div.style.boxShadow = `0 0 12px ${cat.color}60`;
+  }
+  renderSelected();
+}
+
+function renderSelected() {
+  const container = document.getElementById('selectedElements');
+  const btn = document.getElementById('synthesizeBtn');
+  if (selected.length === 0) {
+    container.innerHTML = '<span class="empty-hint">Click elements above to add them here...</span>';
+    btn.disabled = true;
+    return;
+  }
+  btn.disabled = selected.length < 2;
+  container.innerHTML = selected.map((s, i) => `
+    <div class="selected-pill" style="color:${s.cat.color};border-color:${s.cat.color}60">
+      <span style="font-family:'Bebas Neue',sans-serif;font-size:1rem">${s.el.sym}</span>
+      <span>${s.el.name}</span>
+      <button onclick="removePill(${i})">×</button>
+    </div>`).join('');
+}
+
+function removePill(i) {
+  const removed = selected[i];
+  selected.splice(i, 1);
+  document.querySelectorAll('.element:not(.spacer)').forEach(div => {
+    if (!div.dataset.index) return;
+    const el = ELEMENTS[parseInt(div.dataset.index)];
+    if (el && el.name === removed.el.name) {
+      div.classList.remove('selected');
+      div.style.borderColor = `${removed.cat.color}40`;
+      div.style.boxShadow = '';
+    }
+  });
+  renderSelected();
+}
+
+function clearAll() {
+  selected.length = 0;
+  document.querySelectorAll('.element.selected').forEach(div => {
+    const idx = parseInt(div.dataset.index);
+    const el = ELEMENTS[idx];
+    if (el) {
+      const cat = CATEGORIES[el.cat];
+      div.style.borderColor = `${cat.color}40`;
+      div.style.boxShadow = '';
+    }
+    div.classList.remove('selected');
+  });
+  renderSelected();
+  document.getElementById('resultPanel').classList.remove('visible');
+}
+
+async function synthesise() {
+  if (selected.length < 2) return;
+  const panel = document.getElementById('resultPanel');
+  const insultEl = document.getElementById('resultInsult');
+  const formulaEl = document.getElementById('resultFormula');
+  const ratingEl = document.getElementById('resultRating');
+
+  panel.classList.add('visible');
+  insultEl.className = 'result-insult loading';
+  insultEl.textContent = 'Synthesising compound insult...';
+  ratingEl.innerHTML = '';
+
+  const formula = selected.map(s => s.el.sym).join(' + ');
+  const names = selected.map(s => s.el.name).join(', ');
+  formulaEl.textContent = `COMPOUND FORMULA: ${formula} — ${names}`;
+
+  const prompt = `You are a razor-sharp comedy writer for "Heckler & Cox," a British comedy app.
+Generate ONE single devastating, witty insult that combines these personality/appearance elements: ${names}.
+The insult should:
+- Be a single sentence or two at most
+- Blend all the elements naturally and cleverly
+- Be cutting and funny, not just mean
+- Have the energy of a great roast joke
+- Be original and specific, not generic
+
+Also rate the insult on:
+- SAVAGERY (1-10)
+- WIT (1-10)
+- SPECIFICITY (1-10)
+
+Respond ONLY in this exact JSON format, nothing else:
+{"insult":"your insult here","savagery":7,"wit":8,"specificity":9}`;
+
+  try {
+    const res = await fetch('https://cusslab-api.leanspirited.workers.dev', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+    const data = await res.json();
+    const text = data.content.map(b => b.text || '').join('');
+    const clean = text.replace(/```json|```/g, '').trim();
+    const parsed = JSON.parse(clean);
+
+    lastInsult = parsed.insult;
+    insultEl.className = 'result-insult';
+    insultEl.textContent = `"${parsed.insult}"`;
+
+    const savageColor = parsed.savagery >= 8 ? '#ef4444' : parsed.savagery >= 5 ? '#f59e0b' : '#4ade80';
+    const witColor    = parsed.wit      >= 8 ? '#a78bfa' : parsed.wit      >= 5 ? '#38bdf8' : '#4ade80';
+    ratingEl.innerHTML = `
+      <span class="rating-badge" style="color:${savageColor};border-color:${savageColor}60">SAVAGERY: ${parsed.savagery}/10</span>
+      <span class="rating-badge" style="color:${witColor};border-color:${witColor}60">WIT: ${parsed.wit}/10</span>
+      <span class="rating-badge" style="color:#2dd4bf;border-color:#2dd4bf60">SPECIFICITY: ${parsed.specificity}/10</span>`;
+  } catch (e) {
+    insultEl.className = 'result-insult';
+    insultEl.textContent = '"The synthesis failed — much like your career choices."';
+    ratingEl.innerHTML = '<span style="color:#ef4444;font-size:0.6rem">[ REACTION ERROR — TRY AGAIN ]</span>';
+  }
+}
+
+function showTooltip(e, el, cat) {
+  const tip = document.getElementById('tooltip');
+  tip.innerHTML = `<strong style="color:${cat.color}">${el.name}</strong><br>${el.tip}`;
+  tip.style.display = 'block';
+  moveTooltip(e);
+}
+
+function hideTooltip() {
+  document.getElementById('tooltip').style.display = 'none';
+}
+
+function moveTooltip(e) {
+  const tip = document.getElementById('tooltip');
+  tip.style.left = (e.clientX + 14) + 'px';
+  tip.style.top  = (e.clientY - 10) + 'px';
+}
+
+document.getElementById('synthesizeBtn').addEventListener('click', synthesise);
+document.getElementById('clearBtn').addEventListener('click', clearAll);
+document.getElementById('againBtn').addEventListener('click', synthesise);
+document.getElementById('copyBtn').addEventListener('click', () => {
+  if (lastInsult) {
+    navigator.clipboard.writeText(lastInsult).then(() => {
+      const btn = document.getElementById('copyBtn');
+      btn.textContent = '✓ Copied!';
+      setTimeout(() => btn.textContent = '⎘ Copy', 1500);
+    });
+  }
+});
+
+buildLegend();
+buildTable();
+</script>
+</body>
+</html>

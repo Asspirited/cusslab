@@ -10311,6 +10311,23 @@ function makeSteps(ctx) {
       }
     }],
 
+    // ── Insult Periodic Table — BL-161 ────────────────────────────────────────
+    [/^insult-periodic-table\.html source is examined$/, () => {
+      ctx._iptSrc = fs.readFileSync(path.join(__dirname, '..', 'insult-periodic-table.html'), 'utf8');
+    }],
+    [/^the fetch URL is "([^"]+)"$/, (url) => {
+      if (!ctx._iptSrc.includes(`fetch('${url}'`) && !ctx._iptSrc.includes(`fetch("${url}"`))
+        throw new Error(`fetch URL "${url}" not found in insult-periodic-table.html`);
+    }],
+    [/^the URL "([^"]+)" does not appear in the fetch call$/, (url) => {
+      if (ctx._iptSrc.includes(`fetch('${url}`) || ctx._iptSrc.includes(`fetch("${url}`))
+        throw new Error(`Forbidden URL "${url}" found in fetch call in insult-periodic-table.html`);
+    }],
+    [/^the model field is "([^"]+)"$/, (model) => {
+      if (!ctx._iptSrc.includes(`'${model}'`) && !ctx._iptSrc.includes(`"${model}"`))
+        throw new Error(`Model "${model}" not found in insult-periodic-table.html`);
+    }],
+
   ];
 }
 
