@@ -72,6 +72,53 @@ const SURVIVAL_SCHOOL_HOME = `<!DOCTYPE html>
       color: var(--text-muted);
       margin-top: 3px;
       text-transform: uppercase;
+      height: 14px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .tagline-track {
+      position: absolute;
+      top: 0; left: 0;
+      display: flex;
+      flex-direction: column;
+      animation: taglines 28s steps(1) infinite;
+    }
+
+    .tagline-track span {
+      display: block;
+      height: 14px;
+      line-height: 14px;
+      opacity: 0;
+      animation: tagline-fade 28s infinite;
+    }
+
+    .tagline-track span:nth-child(1)  { animation-delay: 0s; }
+    .tagline-track span:nth-child(2)  { animation-delay: 3.5s; }
+    .tagline-track span:nth-child(3)  { animation-delay: 7s; }
+    .tagline-track span:nth-child(4)  { animation-delay: 10.5s; }
+    .tagline-track span:nth-child(5)  { animation-delay: 14s; }
+    .tagline-track span:nth-child(6)  { animation-delay: 17.5s; }
+    .tagline-track span:nth-child(7)  { animation-delay: 21s; }
+    .tagline-track span:nth-child(8)  { animation-delay: 24.5s; }
+
+    @keyframes tagline-fade {
+      0%, 100%      { opacity: 0; }
+      3%, 96.5%     { opacity: 1; }
+      12.5%, 87.5%  { opacity: 1; }
+    }
+
+    /* Each span fades in at its delay, stays visible for ~3s, then fades */
+    .tagline-track span {
+      animation: tagline-fade 28s infinite;
+    }
+
+    @keyframes tagline-fade {
+      0%    { opacity: 0; }
+      2%    { opacity: 1; }
+      10.5% { opacity: 1; }
+      12.5% { opacity: 0; }
+      100%  { opacity: 0; }
     }
 
     /* ── LAYOUT ─────────────────────────────────────────────────────────── */
@@ -315,7 +362,18 @@ const SURVIVAL_SCHOOL_HOME = `<!DOCTYPE html>
   </svg>
   <div>
     <div class="logo-text">SURVIVAL <span>SCHOOL</span></div>
-    <div class="logo-sub">the panel knows more than you</div>
+    <div class="logo-sub">
+      <div class="tagline-track">
+        <span>ask them... before you bleed out.</span>
+        <span>just (don't) do it.</span>
+        <span>is it too late? find out fast.</span>
+        <span>no fear?™ good. you need some.</span>
+        <span>probably the best panel in the world.</span>
+        <span>think different. or don't think at all.</span>
+        <span>i'm lovin' it. they are not.</span>
+        <span>the panel knows more than you.</span>
+      </div>
+    </div>
   </div>
 </header>
 
