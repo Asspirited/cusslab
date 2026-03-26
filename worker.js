@@ -339,6 +339,11 @@ const SURVIVAL_SCHOOL_HOME = `<!DOCTYPE html>
 
     <div class="nav-section">
       <div class="nav-section-label">Scenarios</div>
+      <div class="nav-item" data-panel="worst">
+        <span class="nav-icon">⚡</span>
+        How Bad Is This?
+        <span class="nav-badge badge-live">LIVE</span>
+      </div>
       <div class="nav-item" data-panel="panel-qa">
         <span class="nav-icon">◎</span>
         Panel Q&amp;A
@@ -400,6 +405,12 @@ const SURVIVAL_SCHOOL_HOME = `<!DOCTYPE html>
     <div class="panel active" id="panel-screwed">
       <iframe src="https://cusslab-api.leanspirited.workers.dev/survival-school/app"
               title="How Screwed Am I?"></iframe>
+    </div>
+
+    <!-- HOW BAD IS THIS? — live -->
+    <div class="panel" id="panel-worst">
+      <iframe src="https://cusslab-api.leanspirited.workers.dev/survival-school/worst"
+              title="How Bad Is This?"></iframe>
     </div>
 
     <!-- BEAR FACT-CHECKER -->
@@ -592,6 +603,7 @@ const SURVIVAL_SCHOOL_HOME = `<!DOCTYPE html>
 
 </body>
 </html>
+
 `;
 const SURVIVAL_SCHOOL_APP  = `<!DOCTYPE html>
 <html lang="en">
@@ -1749,6 +1761,834 @@ async function react(situation, decision, currentProbability) {
 
 `;
 
+const SURVIVAL_SCHOOL_WORST = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>How Bad Is This? — Survival School</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f1209;
+      --surface: #181d10;
+      --surface2: #1e2514;
+      --border: rgba(120,160,60,0.15);
+      --border-strong: rgba(120,160,60,0.3);
+      --green: #7aad3a;
+      --green-dim: #4a7020;
+      --green-bright: #a0d050;
+      --amber: #BA7517;
+      --amber-dim: #5c3a08;
+      --bark: #8B6040;
+      --bark-dim: #3d2008;
+      --text: #e8edd8;
+      --text-muted: #7a8a60;
+      --blood: #cc1111;
+      --blood-dim: #3a0808;
+    }
+
+    body {
+      font-family: 'Barlow', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    #app {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 1.5rem 1rem 3rem;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 0.5px solid var(--border);
+    }
+
+    .title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 40px;
+      letter-spacing: 3px;
+      line-height: 1;
+    }
+
+    .title span { color: var(--blood); }
+
+    .subtitle {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      color: var(--text-muted);
+      letter-spacing: 1.5px;
+      margin-top: 5px;
+    }
+
+    .field-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      margin-top: 16px;
+    }
+
+    .field-label:first-child { margin-top: 0; }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-bottom: 8px;
+    }
+
+    .chip {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      padding: 5px 10px;
+      border: 0.5px solid var(--border-strong);
+      border-radius: 5px;
+      cursor: pointer;
+      background: none;
+      color: var(--text-muted);
+      transition: all 0.15s;
+      white-space: nowrap;
+      user-select: none;
+    }
+
+    .chip:hover, .chip.sel { border-color: var(--blood); color: var(--blood); }
+
+    input[type="text"], textarea {
+      width: 100%;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 13px;
+      padding: 9px 12px;
+      border: 0.5px solid var(--border-strong);
+      border-radius: 6px;
+      background: var(--surface);
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    input[type="text"]:focus, textarea:focus { border-color: var(--blood); }
+
+    .btn-row { display: flex; gap: 8px; margin-top: 16px; }
+
+    .btn-assess {
+      flex: 1;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 11px;
+      background: var(--blood);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+
+    .btn-assess:hover { opacity: 0.88; }
+    .btn-assess:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    .btn-clear {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 1px;
+      padding: 11px 16px;
+      border: 0.5px solid var(--border-strong);
+      border-radius: 6px;
+      background: none;
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: color 0.15s, border-color 0.15s;
+    }
+
+    .btn-clear:hover { color: var(--text); border-color: var(--blood); }
+
+    /* Results */
+    .results { display: none; margin-top: 1.5rem; }
+    .results.show { display: block; }
+
+    .loading {
+      padding: 2rem;
+      text-align: center;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+    }
+
+    .dots::after {
+      content: '';
+      animation: dots 1.5s steps(3, end) infinite;
+    }
+
+    @keyframes dots {
+      0%   { content: '.'; }
+      33%  { content: '..'; }
+      66%  { content: '...'; }
+      100% { content: ''; }
+    }
+
+    /* Doom meter */
+    .verdict-bar {
+      border: 0.5px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin-bottom: 1rem;
+      background: var(--surface);
+    }
+
+    .verdict-top {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .verdict-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--text-muted);
+    }
+
+    /* Doom: red=bad, amber=mid, green=fine — inverted from survival probability */
+    .pct.doom { color: var(--blood); }
+    .pct.doom.mid { color: var(--amber); }
+    .pct.doom.ok  { color: var(--green); }
+
+    .pct {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 52px;
+      line-height: 1;
+      transition: color 0.5s;
+    }
+
+    .meter {
+      height: 4px;
+      background: var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .meter-fill {
+      height: 100%;
+      background: var(--blood);
+      border-radius: 2px;
+      transition: width 1.2s ease, background 0.5s;
+    }
+
+    .meter-fill.mid { background: var(--amber); }
+    .meter-fill.ok  { background: var(--green); }
+
+    /* Panel cards */
+    .panel-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+      margin-top: 1rem;
+    }
+
+    .char-card {
+      border: 0.5px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: 8px;
+      overflow: hidden;
+      background: var(--surface);
+    }
+
+    .char-card.death-card { border-color: var(--blood); }
+
+    .char-card.cody-card {
+      border-color: var(--green-dim);
+      background: #131a0d;
+    }
+
+    .card-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 14px;
+      background: var(--surface2);
+      border-bottom: 0.5px solid var(--border);
+    }
+
+    .cody-card .card-head {
+      background: var(--green-dim);
+      border-bottom-color: rgba(120,160,60,0.25);
+    }
+
+    .avatar {
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.5px;
+      flex-shrink: 0;
+    }
+
+    .av-green  { background: var(--green-dim);  color: var(--green-bright); }
+    .av-bark   { background: var(--bark-dim);   color: var(--bark); }
+    .av-amber  { background: var(--amber-dim);  color: var(--amber); }
+    .av-blue   { background: #0c1f3a;           color: #5a9fd4; }
+    .av-gray   { background: #1e1e1c;           color: #7a8a70; }
+
+    .char-name {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: 0.5px;
+      color: var(--text);
+    }
+
+    .char-role {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+
+    .card-body {
+      padding: 11px 14px;
+      font-family: 'Barlow', sans-serif;
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--text);
+      font-weight: 400;
+    }
+
+    .death-note {
+      margin-top: 8px;
+      padding: 7px 11px;
+      background: var(--blood-dim);
+      border-left: 3px solid var(--blood);
+      border-radius: 0 4px 4px 0;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      color: var(--blood);
+      font-weight: 500;
+    }
+
+    .fact-check {
+      margin-top: 6px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      color: var(--text-muted);
+      border-top: 0.5px solid var(--border);
+      padding-top: 6px;
+      opacity: 0.7;
+    }
+
+    /* Cody action line */
+    .action-line {
+      margin-top: 10px;
+      padding: 8px 12px;
+      background: var(--green-dim);
+      border-left: 3px solid var(--green);
+      border-radius: 0 4px 4px 0;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      color: var(--green-bright);
+      font-weight: 500;
+      letter-spacing: 0.5px;
+    }
+
+    .reset-row { margin-top: 1rem; text-align: center; }
+
+    .btn-reset {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      color: var(--text-muted);
+      background: none;
+      border: 0.5px solid var(--border-strong);
+      border-radius: 6px;
+      padding: 7px 16px;
+      cursor: pointer;
+      letter-spacing: 1px;
+      transition: all 0.15s;
+    }
+
+    .btn-reset:hover { color: var(--text); border-color: var(--blood); }
+  </style>
+</head>
+<body>
+<div id="app">
+
+  <div class="header">
+    <div class="title">HOW <span>BAD</span> IS THIS?</div>
+    <div class="subtitle">the panel will tell you exactly how worried to be.</div>
+  </div>
+
+  <div class="field-label">What happened?</div>
+  <div class="chips" id="chips-event">
+    <div class="chip" onclick="onChip(this,'event','bitten by a snake')">bitten by snake</div>
+    <div class="chip" onclick="onChip(this,'event','stung or bitten by something venomous')">stung / bitten</div>
+    <div class="chip" onclick="onChip(this,'event','bear encounter, it\\'s charging')">bear charging</div>
+    <div class="chip" onclick="onChip(this,'event','something is circling me')">being circled</div>
+    <div class="chip" onclick="onChip(this,'event','knocked from boat into open water')">overboard</div>
+    <div class="chip" onclick="onChip(this,'event','I\\'ve been stalked for the last 20 minutes')">being stalked</div>
+    <div class="chip" onclick="onChip(this,'event','pinned or trapped, cannot move')">pinned / trapped</div>
+    <div class="chip" onclick="onChip(this,'event','attacked by something I did not expect to be aggressive')">unexpected attack</div>
+  </div>
+  <input type="text" id="event-input" placeholder="or describe what happened..." oninput="onFieldInput('event',this.value)"/>
+
+  <div class="field-label">The animal or hazard</div>
+  <div class="chips" id="chips-animal">
+    <div class="chip" onclick="onChip(this,'animal','king cobra')">king cobra</div>
+    <div class="chip" onclick="onChip(this,'animal','black mamba')">black mamba</div>
+    <div class="chip" onclick="onChip(this,'animal','Brazilian wandering spider')">Brazilian wandering spider</div>
+    <div class="chip" onclick="onChip(this,'animal','grizzly bear')">grizzly bear</div>
+    <div class="chip" onclick="onChip(this,'animal','polar bear')">polar bear</div>
+    <div class="chip" onclick="onChip(this,'animal','great white shark')">great white shark</div>
+    <div class="chip" onclick="onChip(this,'animal','saltwater crocodile')">saltwater croc</div>
+    <div class="chip" onclick="onChip(this,'animal','Komodo dragon')">Komodo dragon</div>
+    <div class="chip" onclick="onChip(this,'animal','pack of spotted hyenas')">hyena pack</div>
+    <div class="chip" onclick="onChip(this,'animal','box jellyfish')">box jellyfish</div>
+    <div class="chip" onclick="onChip(this,'animal','hippo')">hippo</div>
+    <div class="chip" onclick="onChip(this,'animal','cassowary')">cassowary</div>
+    <div class="chip" onclick="onChip(this,'animal','manatee')">manatee</div>
+    <div class="chip" onclick="onChip(this,'animal','swan')">swan</div>
+  </div>
+  <input type="text" id="animal-input" placeholder="or name the animal or hazard..." oninput="onFieldInput('animal',this.value)"/>
+
+  <div class="field-label">Circumstances</div>
+  <div class="chips" id="chips-circ">
+    <div class="chip" onclick="onChip(this,'circ','alone, no communication')">alone, no comms</div>
+    <div class="chip" onclick="onChip(this,'circ','2 hours from nearest hospital')">2hrs from hospital</div>
+    <div class="chip" onclick="onChip(this,'circ','remote wilderness, helicopter is the only option')">remote, heli only</div>
+    <div class="chip" onclick="onChip(this,'circ','urban, ambulance 10 minutes away')">urban, 10min ETA</div>
+    <div class="chip" onclick="onChip(this,'circ','no medical kit at all')">no kit</div>
+    <div class="chip" onclick="onChip(this,'circ','basic first aid kit available')">first aid kit</div>
+    <div class="chip" onclick="onChip(this,'circ','dark, nightfall already')">nightfall</div>
+    <div class="chip" onclick="onChip(this,'circ','trained medic in the group')">medic with me</div>
+  </div>
+  <input type="text" id="circ-input" placeholder="or describe your circumstances..." oninput="onFieldInput('circ',this.value)"/>
+
+  <div class="btn-row">
+    <button class="btn-assess" id="btn-assess" onclick="onAssess()">HOW BAD IS THIS? ↗</button>
+    <button class="btn-clear" onclick="onClear()">CLEAR</button>
+  </div>
+
+  <div class="results" id="results">
+    <div class="loading" id="loading">
+      <span>PANEL CONVENING</span><span class="dots"></span>
+    </div>
+    <div id="verdict-block" style="display:none">
+      <div class="verdict-bar">
+        <div class="verdict-top">
+          <div class="verdict-label">DOOM PERCENTAGE</div>
+          <div class="pct doom" id="doom-pct">0%</div>
+        </div>
+        <div class="meter">
+          <div class="meter-fill" id="doom-fill" style="width:0%"></div>
+        </div>
+      </div>
+      <div class="panel-label">PANEL ASSESSMENT</div>
+      <div id="cards-out"></div>
+      <div class="reset-row">
+        <button class="btn-reset" onclick="onClear()">NEW INCIDENT</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// === characters-worst.js ===
+
+// characters-worst.js — How Bad Is This? panel
+// 8 characters: Ray, Fox, O'Shea, Stevens, Bear, Hales, Attenborough, Cody — fixed order
+
+const CHARACTERS_WORST = {
+  ray: {
+    id: 'ray', name: 'Ray Mears', role: 'Bushcraft',
+    av: 'RM', avClass: 'av-green',
+    deathLine: 'You could be dead within the hour.',
+    voice: \`RAY MEARS — Bushcraft, 30+ years field experience.
+Cerebral, warm, loves the land. Great storyteller. Never dramatic. Brevity is power.
+VOICE: First response — immediate triage, what to do right now. Craft-based. No panic.
+"Don't." is a complete sentence. Silence more eloquent than anything about Bear.
+SKILLS: Fire 99, Shelter 97, Tool-making 98, Plant Knowledge 88, Navigation 90.\`
+  },
+  fox: {
+    id: 'fox', name: 'Jason Fox', role: 'Special Boat Service',
+    av: 'JF', avClass: 'av-green',
+    deathLine: 'That is not a recoverable position.',
+    voice: \`JASON FOX — Foxy. Royal Marines at 16. SBS from 2001. Demolitions expert, combat swimmer, jungle survival expert.
+Warm, self-deprecating, genuinely funny. Absolute killing machine. No contradiction in his mind.
+VOICE: Tactical assessment — is the threat still active? Exit routes? What's available as improvised weapon?
+Flat delivery on alarming information. "Is that a dog walker or a contact?" register.
+Self-deprecating then immediately competent. Emotions processed as tactical problems to resolve.
+NEVER make mental health a punchline. Ever.
+SKILLS: Navigation 96, Endurance 97, Terrain 92, Tool-making 88, Psychology 90.\`
+  },
+  oshea: {
+    id: 'oshea', name: "Mark O'Shea", role: 'Herpetology',
+    av: 'MO', avClass: 'av-amber',
+    deathLine: 'I have the academic paper on exactly this mechanism of death.',
+    voice: \`MARK O'SHEA MBE — Professor of Herpetology, University of Wolverhampton. WHO snakebite expert.
+Named his king cobra "Sleeping Beauty." Got bitten regularly despite the papers. Book: Blood, Sweat and Snakebites.
+Golden Rule: No Set-ups. Still got bitten. Ready Steady Cook alumnus.
+VOICE: Academically precise, slightly barbed (Fawlty Towers register — right, but somehow you enjoy watching things go wrong for him).
+References "chapter seven" of his own published work. Credentialled recklessness.
+Comedy: gap between his credentials and the number of times animals have ignored them.
+Genuinely surprised when animal deviates from the published literature. Every time.\`
+  },
+  stevens: {
+    id: 'stevens', name: 'Austin Stevens', role: 'Snake Master',
+    av: 'AS', avClass: 'av-bark',
+    deathLine: 'The snake has completed its lesson.',
+    voice: \`AUSTIN STEVENS — Spent 107 days in a cage with 36 of Africa's most venomous snakes. Got bitten by a cobra on day 96. Refused to leave. Completed the full 107 days.
+Juggled a sleeping Amazon Tree Boa. Prodded a docile boomslang. Was bitten in almost every episode.
+Genuinely believes he has a spiritual connection with snakes. The snakes do not share this belief.
+VOICE: Grandiose, mystical, completely unbothered by evidence. Every bite is communion. Every near-death is spiritual growth.
+Only fully engaged if there's a snake or venomous creature involved. Everything else is background noise.
+"Was there a snake?" fires when the incident doesn't involve one.
+The snake didn't bite him — it chose to share its venom as a gift.\`
+  },
+  bear: {
+    id: 'bear', name: 'Bear Grylls', role: 'Former SAS',
+    av: 'BG', avClass: 'av-bark',
+    deathLine: 'If you get this wrong, you will not make it out of here alive.',
+    voice: \`BEAR GRYLLS — Former SAS. Genuine SAS credentials. Also drinks own urine when Londis is forty yards away.
+Gets ill eating things he didn't need to eat. Idiocy is sincere, not performed.
+VOICE: Urgent, evangelical, slightly breathless. Personal anecdote always — abroad, fine in the end.
+"Hydration?" unprompted. Fact-checker footnote fires on factual claims.
+SKILLS: Psychology 92, Endurance 95, Navigation 80, Fire 70.\`
+  },
+  hales: {
+    id: 'hales', name: 'Les Hales', role: 'Bush Tucker Man',
+    av: 'LH', avClass: 'av-amber',
+    deathLine: 'Yeah, nah.',
+    voice: \`LES HALES — Major, Australian Army. Bush Tucker Man.
+VOICE: Three words maximum. "Yeah, nah." means both simultaneously.
+Never heard of Bear Grylls. Flat delivery funnier the more dangerous the situation.
+SKILLS: Plant Knowledge 95, Psychology 95, Endurance 90, Water 90.\`
+  },
+  attenborough: {
+    id: 'attenborough', name: 'David Attenborough', role: 'Natural World',
+    av: 'DA', avClass: 'av-gray',
+    deathLine: 'And so the story ends. As so many do. Quietly. And entirely predictably.',
+    voice: \`DAVID ATTENBOROUGH — 97 years watching things die. Your mistake is a Holocene footnote.
+VOICE: Never gives survival advice. Observes, describes, delivers verdict. Geological calm.
+Narrates as nature documentary. "Fascinating" always genuine. Gaps matter as much as words.
+SKILLS: Animal Encounters 95, Psychology 85. Everything practical: 0. Has a crew for this.\`
+  },
+  cody: {
+    id: 'cody', name: 'Cody Lundin', role: 'Primitive Skills',
+    av: 'CL', avClass: 'av-green',
+    deathLine: 'I have watched people make this mistake. They are no longer with us.',
+    voice: \`CODY LUNDIN — Aboriginal Living Skills School, Prescott Arizona. Barefoot on glaciers.
+Threw fire-making supplies into pool rather than demonstrate bad technique. Chose integrity over career.
+VOICE: Patient, quiet, certain. Always last. The practical close.
+Cody's action line: a single, specific imperative — what to do RIGHT NOW.
+Cody Override fires when asked to endorse wrong survival advice — refuses.
+Comedy: always knows the better option that was right there. "Cattails. Thirty feet away."
+SKILLS: Fire 97, Plant Knowledge 96, Tool-making 95, Psychology 95, Endurance 93.\`
+  }
+};
+
+function buildWorstSystemPrompt() {
+  const chars = Object.values(CHARACTERS_WORST)
+    .map(c => \`=== \${c.name.toUpperCase()} ===\\n\${c.voice}\`)
+    .join('\\n\\n');
+
+  return \`You are the Survival School HOW BAD IS THIS? panel. The user has experienced an incident — an animal encounter, bite, sting, or dangerous situation. Assess the severity and advise.
+
+\${chars}
+
+PANEL ORDER — fixed: Ray, Fox, O'Shea, Stevens, Bear, Hales, Attenborough, Cody.
+
+RESPONSE LOGIC:
+- Ray: immediate triage. What to do right now. Craft-based. Brief, no drama.
+- Fox: tactical — is the threat still active? Exit routes? What does the user have available?
+- O'Shea: medical/herpetological expertise. References chapter numbers. Surprised if animal deviated from his published literature.
+- Stevens: spiritual interpretation. Only fully engaged if snake or venomous creature involved — "Was there a snake?" fires if not.
+- Bear: personal anecdote, somewhere exotic, fine in the end. Hydration check.
+- Hales: three words maximum. Flat delivery.
+- Attenborough: nature documentary narration. Geological calm. Does not give advice.
+- Cody: verdict + ACTION LINE — a single, specific imperative sentence. What to do right now.
+
+DOOM PERCENTAGE: 0 = you're fine, 100 = certain death.
+Scale reference:
+- Comedy scenario (manatee, swan, seagull chip theft): 5–15%
+- Minor bite/sting, treatment available soon: 15–35%
+- Serious envenomation, hospital within 2hrs: 35–60%
+- Serious envenomation, remote, no treatment: 60–85%
+- Certainly fatal combination: 85–100%
+
+Death commentary (death: true): fires when doom > 65% OR the situation is clearly unrecoverable.
+Stevens's death line only fires for snake incidents.
+Attenborough death line fires on doom > 70%.
+
+OUTPUT — valid JSON only, no markdown:
+{"doom_percentage":<integer 0-100>,"panel":[{"charId":"ray","text":"<2-3 sentences>","death":<bool>},{"charId":"fox","text":"<2-3 sentences>"},{"charId":"oshea","text":"<2-3 sentences>","fact_check":"<optional — O'Shea only, if animal deviated from literature>"},{"charId":"stevens","text":"<2-3 sentences>"},{"charId":"bear","text":"<2-3 sentences>","fact_check":"<optional>"},{"charId":"hales","text":"<max 3 words>"},{"charId":"attenborough","text":"<nature documentary narration 2-3 sentences>","death":<bool>},{"charId":"cody","text":"<2-3 sentences>","action":"<single imperative sentence — what to do RIGHT NOW>"}]}\`;
+}
+
+
+
+// === state-worst.js ===
+
+// state-worst.js — How Bad Is This? state management
+// Single responsibility: state only. No DOM. No API.
+
+const DEFAULT_STATE = {
+  event: '',
+  animal: '',
+  circumstances: '',
+  status: 'idle'   // idle | loading | results
+};
+
+let _state = JSON.parse(JSON.stringify(DEFAULT_STATE));
+
+const getState = () => JSON.parse(JSON.stringify(_state));
+const setEvent = (v) => { _state.event = v; };
+const setAnimal = (v) => { _state.animal = v; };
+const setCircumstances = (v) => { _state.circumstances = v; };
+const setStatus = (s) => { _state.status = s; };
+
+function buildSituation() {
+  const parts = [];
+  if (_state.event)         parts.push(\`INCIDENT: \${_state.event}\`);
+  if (_state.animal)        parts.push(\`ANIMAL / HAZARD: \${_state.animal}\`);
+  if (_state.circumstances) parts.push(\`CIRCUMSTANCES: \${_state.circumstances}\`);
+  return parts.length ? parts.join('\\n') : null;
+}
+
+function reset() {
+  _state = JSON.parse(JSON.stringify(DEFAULT_STATE));
+}
+
+
+
+// === ui-worst.js ===
+
+// ui-worst.js — How Bad Is This? rendering
+// Single responsibility: DOM manipulation only.
+
+
+function clearChips(field) {
+  document.querySelectorAll(\`#chips-\${field} .chip\`).forEach(c => c.classList.remove('sel'));
+}
+
+function clearAll() {
+  ['event', 'animal', 'circ'].forEach(f => {
+    clearChips(f);
+    const el = document.getElementById(\`\${f}-input\`);
+    if (el) el.value = '';
+  });
+}
+
+function showLoading() {
+  document.getElementById('results').classList.add('show');
+  document.getElementById('loading').style.display = 'block';
+  document.getElementById('loading').innerHTML = '<span>PANEL CONVENING</span><span class="dots"></span>';
+  document.getElementById('verdict-block').style.display = 'none';
+}
+
+function showError(msg) {
+  document.getElementById('loading').innerHTML =
+    \`<span style="color:var(--blood)">\${msg}</span>\`;
+}
+
+// Doom meter — inverted: 0=green (fine), 100=red (dead)
+function updateDoom(pct, animate = true) {
+  const cls = pct <= 30 ? 'ok' : pct <= 65 ? 'mid' : '';
+  const pctEl = document.getElementById('doom-pct');
+  const fill  = document.getElementById('doom-fill');
+  pctEl.className = 'pct doom' + (cls ? ' ' + cls : '');
+  fill.className  = 'meter-fill' + (cls ? ' ' + cls : '');
+  if (animate) {
+    fill.style.width = '0%';
+    pctEl.textContent = '0%';
+    setTimeout(() => {
+      fill.style.width = pct + '%';
+      pctEl.textContent = pct + '%';
+    }, 100);
+  } else {
+    fill.style.width = pct + '%';
+    pctEl.textContent = pct + '%';
+  }
+}
+
+function renderResults(data) {
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('verdict-block').style.display = 'block';
+
+  updateDoom(data.doom_percentage);
+
+  const container = document.getElementById('cards-out');
+  container.innerHTML = '';
+
+  (data.panel || []).forEach((r, i) => {
+    const char = CHARACTERS_WORST[r.charId];
+    if (!char) return;
+
+    const isCody = r.charId === 'cody';
+    const card = document.createElement('div');
+    card.className = 'char-card' +
+      (r.death ? ' death-card' : '') +
+      (isCody ? ' cody-card' : '');
+    card.style.opacity = '0';
+    card.style.transform = 'translateY(7px)';
+    card.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+
+    card.innerHTML = \`
+      <div class="card-head">
+        <div class="avatar \${char.avClass}">\${char.av}</div>
+        <div>
+          <div class="char-name">\${char.name}</div>
+          <div class="char-role">\${char.role}</div>
+        </div>
+      </div>
+      <div class="card-body">
+        \${r.text}
+        \${r.death && char.deathLine ? \`<div class="death-note">\${char.deathLine}</div>\` : ''}
+        \${r.fact_check ? \`<div class="fact-check">&#10033; \${r.fact_check}</div>\` : ''}
+        \${isCody && r.action ? \`<div class="action-line">&#9658; \${r.action}</div>\` : ''}
+      </div>\`;
+
+    container.appendChild(card);
+    setTimeout(() => {
+      card.style.opacity = '1';
+      card.style.transform = 'translateY(0)';
+    }, 80 + i * 100);
+  });
+}
+
+function hideResults() {
+  document.getElementById('results').classList.remove('show');
+  document.getElementById('verdict-block').style.display = 'none';
+  document.getElementById('loading').style.display = 'block';
+  document.getElementById('loading').innerHTML = '<span>PANEL CONVENING</span><span class="dots"></span>';
+  document.getElementById('cards-out').innerHTML = '';
+  document.getElementById('doom-pct').textContent = '0%';
+  document.getElementById('doom-fill').style.width = '0%';
+}
+
+function setButtonState(disabled) {
+  const btn = document.getElementById('btn-assess');
+  if (btn) btn.disabled = disabled;
+}
+
+
+
+// === api.js ===
+
+// api.js — v2 with reaction mode support
+// Single responsibility: Worker integration and API calls.
+
+
+const WORKER_ENDPOINT = 'https://cusslab-api.leanspirited.workers.dev/survival-school/assess';
+
+async function assess(situation) {
+  const response = await fetch(WORKER_ENDPOINT, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      system: buildSystemPrompt('assessment'),
+      situation
+    })
+  });
+  if (!response.ok) throw new Error(\`Worker \${response.status}\`);
+  const data = await response.json();
+  if (!data.panel || !Array.isArray(data.panel)) throw new Error('Invalid response');
+  return data;
+}
+
+async function assessWorst(situation, systemPrompt) {
+  const response = await fetch(WORKER_ENDPOINT, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ system: systemPrompt, situation })
+  });
+  if (!response.ok) throw new Error(\`Worker \${response.status}\`);
+  const data = await response.json();
+  if (!data.panel || !Array.isArray(data.panel)) throw new Error('Invalid response');
+  return data;
+}
+
+async function react(situation, decision, currentProbability) {
+  const context = \`ORIGINAL SITUATION:\\n\${situation}\\n\\nCURRENT SURVIVAL PROBABILITY: \${currentProbability}%\\n\\nUSER'S DECISION: \${decision}\`;
+  const response = await fetch(WORKER_ENDPOINT, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      system: buildSystemPrompt('reaction'),
+      situation: context
+    })
+  });
+  if (!response.ok) throw new Error(\`Worker \${response.status}\`);
+  const data = await response.json();
+  if (!data.panel || !Array.isArray(data.panel)) throw new Error('Invalid response');
+  return data;
+}
+
+
+
+// === main ===
+
+
+
+  window.onChip = (el, field, val) => {
+    document.querySelectorAll(\`#chips-\${field} .chip\`).forEach(c => c.classList.remove('sel'));
+    el.classList.add('sel');
+    if (field === 'event')  { State.setEvent(val); document.getElementById('event-input').value = val; }
+    if (field === 'animal') { State.setAnimal(val); document.getElementById('animal-input').value = val; }
+    if (field === 'circ')   { State.setCircumstances(val); document.getElementById('circ-input').value = val; }
+  };
+
+  window.onFieldInput = (field, val) => {
+    UI.clearChips(field);
+    if (field === 'event')  State.setEvent(val);
+    if (field === 'animal') State.setAnimal(val);
+    if (field === 'circ')   State.setCircumstances(val);
+  };
+
+  window.onClear = () => {
+    State.reset();
+    UI.clearAll();
+    UI.hideResults();
+    UI.setButtonState(false);
+  };
+
+  window.onAssess = async () => {
+    const situation = State.buildSituation();
+    if (!situation) { alert('Tell us something about your incident first.'); return; }
+
+    UI.setButtonState(true);
+    UI.showLoading();
+
+    try {
+      const data = await API.assessWorst(situation, buildWorstSystemPrompt());
+      UI.renderResults(data);
+    } catch (e) {
+      UI.showError('Panel unavailable. They may already know how this ends.');
+    } finally {
+      UI.setButtonState(false);
+    }
+  };
+
+</script>
+
+</body>
+</html>
+
+`;
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -1764,6 +2604,9 @@ export default {
     }
     if (request.method === 'GET' && url.pathname === '/survival-school/app') {
       return new Response(SURVIVAL_SCHOOL_APP, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' }});
+    }
+    if (request.method === 'GET' && url.pathname === '/survival-school/worst') {
+      return new Response(SURVIVAL_SCHOOL_WORST, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' }});
     }
     if (request.method !== 'POST') {
       return new Response('Method not allowed', { status: 405 });
