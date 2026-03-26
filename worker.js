@@ -1,46 +1,1803 @@
-// Cloudflare Worker — proxies requests to Anthropic API
-// Deploy: wrangler deploy
-// Set secret: wrangler secret put ANTHROPIC_API_KEY
+// Cloudflare Worker — Survival School + Cusslab proxy
+const SURVIVAL_SCHOOL_HOME = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Survival School</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@700&family=Barlow:wght@400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:           #0f1209;
+      --surface:      #181d10;
+      --surface2:     #1e2514;
+      --green:        #7aad3a;
+      --green-bright: #a0d050;
+      --bark:         #8B6040;
+      --text:         #e8edd8;
+      --text-muted:   #7a8a60;
+      --blood:        #cc1111;
+      --border:       rgba(122,173,58,0.18);
+      --border-strong:rgba(122,173,58,0.32);
+      --radius:       6px;
+      --radius-lg:    10px;
+      --nav-w:        240px;
+    }
+
+    body {
+      font-family: 'Barlow', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── HEADER ─────────────────────────────────────────────────────────── */
+    header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 24px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo-mark {
+      width: 36px;
+      height: 36px;
+      flex-shrink: 0;
+    }
+
+    .logo-text {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 26px;
+      letter-spacing: 3px;
+      line-height: 1;
+      color: var(--text);
+    }
+
+    .logo-text span { color: var(--blood); }
+
+    .logo-sub {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 2px;
+      color: var(--text-muted);
+      margin-top: 3px;
+      text-transform: uppercase;
+    }
+
+    /* ── LAYOUT ─────────────────────────────────────────────────────────── */
+    #app-body {
+      display: flex;
+      flex: 1;
+    }
+
+    /* ── SIDEBAR ─────────────────────────────────────────────────────────── */
+    nav {
+      width: var(--nav-w);
+      min-width: var(--nav-w);
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      padding: 20px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .nav-section {
+      padding: 0 12px;
+      margin-top: 8px;
+      margin-bottom: 2px;
+    }
+
+    .nav-section-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 2px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      padding: 0 8px;
+      margin-bottom: 4px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 8px;
+      border-left: 2px solid transparent;
+      cursor: pointer;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      transition: background 0.12s, color 0.12s, border-color 0.12s;
+      user-select: none;
+    }
+
+    .nav-item:hover {
+      background: var(--surface2);
+      color: var(--text);
+      border-left-color: var(--border-strong);
+    }
+
+    .nav-item.active {
+      background: var(--surface2);
+      color: var(--green);
+      border-left-color: var(--green);
+    }
+
+    .nav-item .nav-icon {
+      font-size: 13px;
+      width: 18px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .nav-badge {
+      margin-left: auto;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      padding: 2px 5px;
+      border-radius: 20px;
+      letter-spacing: 0.5px;
+    }
+
+    .badge-live {
+      background: rgba(122,173,58,0.2);
+      color: var(--green-bright);
+    }
+
+    .badge-soon {
+      background: rgba(122,138,96,0.12);
+      color: var(--text-muted);
+    }
+
+    /* ── CONTENT ─────────────────────────────────────────────────────────── */
+    #content {
+      flex: 1;
+      overflow: auto;
+      background: var(--bg);
+    }
+
+    .panel { display: none; height: 100%; }
+    .panel.active { display: block; }
+
+    /* ── HOW SCREWED AM I — embedded iframe ─────────────────────────────── */
+    #panel-screwed { padding: 0; }
+
+    #panel-screwed iframe {
+      width: 100%;
+      height: calc(100vh - 65px);
+      border: none;
+      display: block;
+    }
+
+    /* ── COMING SOON panels ──────────────────────────────────────────────── */
+    .coming-soon {
+      max-width: 560px;
+      margin: 80px auto;
+      padding: 0 24px;
+      text-align: center;
+    }
+
+    .coming-soon-icon {
+      font-size: 48px;
+      margin-bottom: 20px;
+      opacity: 0.3;
+    }
+
+    .coming-soon-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 32px;
+      letter-spacing: 2px;
+      margin-bottom: 12px;
+      color: var(--text);
+    }
+
+    .coming-soon-desc {
+      font-family: 'Barlow', sans-serif;
+      font-size: 14px;
+      line-height: 1.8;
+      color: var(--text-muted);
+      margin-bottom: 28px;
+    }
+
+    .feature-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      text-align: left;
+      max-width: 360px;
+      margin: 0 auto;
+    }
+
+    .feature-list li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      color: var(--text-muted);
+      padding: 8px 12px;
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius);
+      background: var(--surface);
+    }
+
+    .feature-list li .fi-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--border-strong);
+      flex-shrink: 0;
+    }
+
+    .feature-list li.fi-live .fi-dot { background: var(--green); }
+    .feature-list li.fi-next .fi-dot { background: var(--bark); }
+
+    /* ── ABOUT panel ─────────────────────────────────────────────────────── */
+    .about-body {
+      max-width: 600px;
+      margin: 48px auto;
+      padding: 0 24px;
+    }
+
+    .about-body h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      letter-spacing: 2px;
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+
+    .about-body p {
+      font-family: 'Barlow', sans-serif;
+      font-size: 15px;
+      line-height: 1.9;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+
+    .about-body blockquote {
+      border-left: 3px solid var(--green);
+      padding: 12px 20px;
+      margin: 24px 0;
+      background: var(--surface);
+      border-radius: 0 var(--radius) var(--radius) 0;
+    }
+
+    .about-body blockquote p {
+      font-size: 16px;
+      font-style: italic;
+      color: var(--text);
+      margin: 0;
+    }
+
+    /* ── MOBILE ──────────────────────────────────────────────────────────── */
+    @media (max-width: 640px) {
+      nav { width: 200px; min-width: 200px; }
+      :root { --nav-w: 200px; }
+    }
+
+    @media (max-width: 480px) {
+      #app-body { flex-direction: column; }
+      nav { width: 100%; min-width: unset; border-right: none; border-bottom: 1px solid var(--border); padding: 8px 12px; flex-direction: row; overflow-x: auto; flex-wrap: nowrap; gap: 0; }
+      .nav-section { display: contents; margin: 0; }
+      .nav-section-label { display: none; }
+      .nav-item { white-space: nowrap; flex-shrink: 0; border-left: none; border-bottom: 2px solid transparent; }
+      .nav-item.active { border-bottom-color: var(--green); border-left: none; }
+      #panel-screwed iframe { height: 80vh; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <!-- Logo mark — compass/flame SVG -->
+  <svg class="logo-mark" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="18" cy="18" r="17" stroke="#8B0000" stroke-width="1.5"/>
+    <path d="M18 4 L21 15 L18 13 L15 15 Z" fill="#8B0000"/>
+    <path d="M18 32 L15 21 L18 23 L21 21 Z" fill="#5F5E5A" opacity="0.5"/>
+    <path d="M4 18 L15 15 L13 18 L15 21 Z" fill="#5F5E5A" opacity="0.5"/>
+    <path d="M32 18 L21 21 L23 18 L21 15 Z" fill="#5F5E5A" opacity="0.5"/>
+    <circle cx="18" cy="18" r="2.5" fill="#8B0000"/>
+  </svg>
+  <div>
+    <div class="logo-text">SURVIVAL <span>SCHOOL</span></div>
+    <div class="logo-sub">the panel knows more than you</div>
+  </div>
+</header>
+
+<div id="app-body">
+
+  <nav>
+
+    <div class="nav-section">
+      <div class="nav-section-label">Assessment</div>
+      <div class="nav-item active" data-panel="screwed">
+        <span class="nav-icon">⚠</span>
+        How Screwed Am I?
+        <span class="nav-badge badge-live">LIVE</span>
+      </div>
+      <div class="nav-item" data-panel="fact-checker">
+        <span class="nav-icon">✓</span>
+        Bear Fact-Checker
+        <span class="nav-badge badge-soon">SOON</span>
+      </div>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-label">Scenarios</div>
+      <div class="nav-item" data-panel="panel-qa">
+        <span class="nav-icon">◎</span>
+        Panel Q&amp;A
+        <span class="nav-badge badge-soon">SOON</span>
+      </div>
+      <div class="nav-item" data-panel="mundane">
+        <span class="nav-icon">◎</span>
+        Mundane Mode
+        <span class="nav-badge badge-soon">SOON</span>
+      </div>
+      <div class="nav-item" data-panel="deathmatch">
+        <span class="nav-icon">◎</span>
+        Animal Deathmatch
+        <span class="nav-badge badge-soon">SOON</span>
+      </div>
+      <div class="nav-item" data-panel="irwin">
+        <span class="nav-icon">◎</span>
+        Irwin Memorial
+        <span class="nav-badge badge-soon">SOON</span>
+      </div>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-label">The Panel</div>
+      <div class="nav-item" data-panel="characters">
+        <span class="nav-icon">◉</span>
+        Characters
+        <span class="nav-badge badge-soon">SOON</span>
+      </div>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-label">Knowledge</div>
+      <div class="nav-item" data-panel="domains">
+        <span class="nav-icon">◈</span>
+        Survival Domains
+        <span class="nav-badge badge-soon">SOON</span>
+      </div>
+      <div class="nav-item" data-panel="skills">
+        <span class="nav-icon">◈</span>
+        Skill Ratings
+        <span class="nav-badge badge-soon">SOON</span>
+      </div>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-label">About</div>
+      <div class="nav-item" data-panel="about">
+        <span class="nav-icon">◦</span>
+        About
+      </div>
+    </div>
+
+  </nav>
+
+  <div id="content">
+
+    <!-- HOW SCREWED AM I — live -->
+    <div class="panel active" id="panel-screwed">
+      <iframe src="https://cusslab-api.leanspirited.workers.dev/survival-school/app"
+              title="How Screwed Am I?"></iframe>
+    </div>
+
+    <!-- BEAR FACT-CHECKER -->
+    <div class="panel" id="panel-fact-checker">
+      <div class="coming-soon">
+        <div class="coming-soon-icon">✓</div>
+        <div class="coming-soon-title">Bear Fact-Checker</div>
+        <div class="coming-soon-desc">
+          Bear makes a claim. The panel verifies it. Factual accuracy optional.
+          SAS credentials not disputed. Everything else is fair game.
+        </div>
+        <ul class="feature-list">
+          <li class="fi-next"><span class="fi-dot"></span>Panel rates claim accuracy 0–100</li>
+          <li class="fi-next"><span class="fi-dot"></span>Ray's silence worth 1000 words</li>
+          <li class="fi-next"><span class="fi-dot"></span>Bear never accepts the correction</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- PANEL Q&A -->
+    <div class="panel" id="panel-panel-qa">
+      <div class="coming-soon">
+        <div class="coming-soon-icon">◎</div>
+        <div class="coming-soon-title">Panel Q&amp;A</div>
+        <div class="coming-soon-desc">
+          Ask the panel anything about survival. Six experts. Six answers.
+          No two of them agree on the right way to make fire.
+        </div>
+        <ul class="feature-list">
+          <li class="fi-next"><span class="fi-dot"></span>Free-form question input</li>
+          <li class="fi-next"><span class="fi-dot"></span>All 6 characters respond in voice</li>
+          <li class="fi-next"><span class="fi-dot"></span>Relationship matrix fires naturally</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- MUNDANE MODE -->
+    <div class="panel" id="panel-mundane">
+      <div class="coming-soon">
+        <div class="coming-soon-icon">◎</div>
+        <div class="coming-soon-title">Mundane Mode</div>
+        <div class="coming-soon-desc">
+          Survival panel. Everyday problem. The contrast is the joke.
+          "I've missed the last bus." Ray has thoughts.
+        </div>
+        <ul class="feature-list">
+          <li class="fi-next"><span class="fi-dot"></span>Mundane scenario input</li>
+          <li class="fi-next"><span class="fi-dot"></span>Panel applies full survival gravity</li>
+          <li class="fi-next"><span class="fi-dot"></span>Death commentary fires freely</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ANIMAL DEATHMATCH -->
+    <div class="panel" id="panel-deathmatch">
+      <div class="coming-soon">
+        <div class="coming-soon-icon">◎</div>
+        <div class="coming-soon-title">Animal Deathmatch</div>
+        <div class="coming-soon-desc">
+          Two animals. One encounter. Who wins?
+          The panel disagrees violently and with great authority.
+        </div>
+        <ul class="feature-list">
+          <li class="fi-next"><span class="fi-dot"></span>Animal vs animal selection</li>
+          <li class="fi-next"><span class="fi-dot"></span>Panel adjudicates with full expertise</li>
+          <li class="fi-next"><span class="fi-dot"></span>Backshall and Irwin take opposing corners</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- IRWIN MEMORIAL -->
+    <div class="panel" id="panel-irwin">
+      <div class="coming-soon">
+        <div class="coming-soon-icon">◎</div>
+        <div class="coming-soon-title">Irwin Memorial Encounter</div>
+        <div class="coming-soon-desc">
+          Describe an animal encounter. Steve rates your handling.
+          From beyond.
+        </div>
+        <ul class="feature-list">
+          <li class="fi-next"><span class="fi-dot"></span>Animal encounter input</li>
+          <li class="fi-next"><span class="fi-dot"></span>DEAD_IN_PANEL_WORLD mechanic</li>
+          <li class="fi-next"><span class="fi-dot"></span>Panel responds to Irwin's verdict</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- CHARACTERS -->
+    <div class="panel" id="panel-characters">
+      <div class="coming-soon">
+        <div class="coming-soon-icon">◉</div>
+        <div class="coming-soon-title">The Panel</div>
+        <div class="coming-soon-desc">
+          Six experts. Real knowledge. Distinct voices.
+          The comedy is earned by the expertise being genuine.
+        </div>
+        <ul class="feature-list">
+          <li><span class="fi-dot"></span>Ray Mears — Bushcraft</li>
+          <li><span class="fi-dot"></span>Bear Grylls — Former SAS</li>
+          <li><span class="fi-dot"></span>Cody Lundin — Primitive Skills</li>
+          <li><span class="fi-dot"></span>Les Hales — Bush Tucker Man</li>
+          <li><span class="fi-dot"></span>David Attenborough — Natural World</li>
+          <li><span class="fi-dot"></span>Les Stroud — Survivorman</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- SURVIVAL DOMAINS -->
+    <div class="panel" id="panel-domains">
+      <div class="coming-soon">
+        <div class="coming-soon-icon">◈</div>
+        <div class="coming-soon-title">Survival Domains</div>
+        <div class="coming-soon-desc">
+          12-domain survival knowledge taxonomy. Fire, water, shelter, food,
+          navigation, medical, signalling, psychology, terrain, fauna, flora, tools.
+          The knowledge behind the panel.
+        </div>
+        <ul class="feature-list">
+          <li class="fi-next"><span class="fi-dot"></span>12 survival domains</li>
+          <li class="fi-next"><span class="fi-dot"></span>Per-domain expert profiles</li>
+          <li class="fi-next"><span class="fi-dot"></span>Skill rating cross-reference</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- SKILL RATINGS -->
+    <div class="panel" id="panel-skills">
+      <div class="coming-soon">
+        <div class="coming-soon-icon">◈</div>
+        <div class="coming-soon-title">Skill Ratings</div>
+        <div class="coming-soon-desc">
+          Every panel member rated across every domain.
+          Ray: Fire 99. Bear: Fire 70. This is not a coincidence.
+        </div>
+        <ul class="feature-list">
+          <li class="fi-next"><span class="fi-dot"></span>Per-character skill breakdown</li>
+          <li class="fi-next"><span class="fi-dot"></span>Domain comparison view</li>
+          <li class="fi-next"><span class="fi-dot"></span>The Shoe Question (Cody vs Stroud)</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ABOUT -->
+    <div class="panel" id="panel-about">
+      <div class="about-body">
+        <h2>About Survival School</h2>
+        <p>
+          Real knowledge. Genuine consequence. No performance.
+          The comedy is earned by the expertise being real.
+          If the experts were charlatans, there's no joke.
+        </p>
+        <blockquote>
+          <p>Cody threw the fire-making supplies into the pool rather than
+          demonstrate bad technique for a producer. He chose integrity over
+          career in one clean arc of a spear into water.
+          That is what this product is.</p>
+        </blockquote>
+        <p>
+          Six survival experts. One panel. Your situation assessed with full
+          expertise and no diplomatic softening. Attenborough closes every scene.
+          Not by demanding it — because what he says is always the last word.
+        </p>
+        <p>
+          Built by Rod Roden / LeanSpirited.
+        </p>
+      </div>
+    </div>
+
+  </div><!-- #content -->
+</div><!-- #app-body -->
+
+<script>
+  const navItems = document.querySelectorAll('.nav-item[data-panel]');
+
+  navItems.forEach(item => {
+    item.addEventListener('click', () => {
+      const target = item.dataset.panel;
+      const panelId = 'panel-' + target;
+      const panel = document.getElementById(panelId);
+      if (!panel) return;
+
+      navItems.forEach(n => n.classList.remove('active'));
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+
+      item.classList.add('active');
+      panel.classList.add('active');
+    });
+  });
+</script>
+
+</body>
+</html>
+`;
+const SURVIVAL_SCHOOL_APP  = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>How Screwed Am I? — Survival School</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f1209;
+      --surface: #181d10;
+      --surface2: #1e2514;
+      --border: rgba(120,160,60,0.15);
+      --border-strong: rgba(120,160,60,0.3);
+      --green: #7aad3a;
+      --green-dim: #4a7020;
+      --green-bright: #a0d050;
+      --amber: #BA7517;
+      --amber-dim: #5c3a08;
+      --bark: #8B6040;
+      --bark-dim: #3d2008;
+      --text: #e8edd8;
+      --text-muted: #7a8a60;
+      --blood: #cc1111;
+      --blood-dim: #3a0808;
+    }
+
+    body {
+      font-family: 'Barlow', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    #app {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 1.5rem 1rem 3rem;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 0.5px solid var(--border);
+    }
+
+    .title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 40px;
+      letter-spacing: 3px;
+      line-height: 1;
+    }
+
+    .title span { color: var(--blood); }
+
+    .subtitle {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      color: var(--text-muted);
+      letter-spacing: 1.5px;
+      margin-top: 5px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 1.25rem;
+    }
+
+    .tab {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 1px;
+      padding: 7px 14px;
+      border: 0.5px solid var(--border);
+      border-radius: 6px;
+      cursor: pointer;
+      background: var(--surface);
+      color: var(--text-muted);
+      transition: all 0.15s;
+    }
+
+    .tab.active { background: var(--blood); color: white; border-color: var(--blood); }
+
+    .input-panel { display: none; }
+    .input-panel.active { display: block; }
+
+    .field-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      margin-top: 14px;
+    }
+
+    .field-label:first-child { margin-top: 0; }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-bottom: 8px;
+    }
+
+    .chip {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      padding: 5px 10px;
+      border: 0.5px solid var(--border-strong);
+      border-radius: 5px;
+      cursor: pointer;
+      background: none;
+      color: var(--text-muted);
+      transition: all 0.15s;
+      white-space: nowrap;
+      user-select: none;
+    }
+
+    .chip:hover, .chip.sel { border-color: var(--green); color: var(--green); }
+
+    input[type="text"], textarea {
+      width: 100%;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 13px;
+      padding: 9px 12px;
+      border: 0.5px solid var(--border-strong);
+      border-radius: 6px;
+      background: var(--surface);
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    input[type="text"]:focus, textarea:focus { border-color: var(--green); }
+    textarea { resize: vertical; }
+
+    .btn-row { display: flex; gap: 8px; margin-top: 14px; }
+
+    .btn-assess {
+      flex: 1;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 11px;
+      background: var(--green);
+      color: var(--bg);
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+
+    .btn-assess:hover { opacity: 0.88; }
+    .btn-assess:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    .btn-clear {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 1px;
+      padding: 11px 16px;
+      border: 0.5px solid var(--border-strong);
+      border-radius: 6px;
+      background: none;
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: color 0.15s, border-color 0.15s;
+    }
+
+    .btn-clear:hover { color: var(--text); border-color: var(--green); }
+
+    /* Results */
+    .results { display: none; margin-top: 1.5rem; }
+    .results.show { display: block; }
+
+    .loading {
+      padding: 2rem;
+      text-align: center;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+    }
+
+    .dots::after {
+      content: '';
+      animation: dots 1.5s steps(3, end) infinite;
+    }
+
+    @keyframes dots {
+      0%   { content: '.'; }
+      33%  { content: '..'; }
+      66%  { content: '...'; }
+      100% { content: ''; }
+    }
+
+    .verdict-bar {
+      border: 0.5px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin-bottom: 1rem;
+      background: var(--surface);
+    }
+
+    .verdict-top {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .verdict-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--text-muted);
+    }
+
+    .pct {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 52px;
+      color: var(--blood);
+      line-height: 1;
+      transition: color 0.5s;
+    }
+
+    .pct.ok  { color: var(--green); }
+    .pct.mid { color: var(--amber); }
+
+    .meter {
+      height: 4px;
+      background: var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+
+    .meter-fill {
+      height: 100%;
+      background: var(--blood);
+      border-radius: 2px;
+      transition: width 1.2s ease, background 0.5s;
+    }
+
+    .meter-fill.ok  { background: var(--green); }
+    .meter-fill.mid { background: var(--amber); }
+
+    .att-verdict {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 300;
+      font-style: italic;
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--text-muted);
+    }
+
+    .panel-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+
+    .char-card {
+      border: 0.5px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: 8px;
+      overflow: hidden;
+      background: var(--surface);
+    }
+
+    .char-card.death-card { border-color: var(--blood); }
+
+    .card-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 14px;
+      background: var(--surface2);
+      border-bottom: 0.5px solid var(--border);
+    }
+
+    .avatar {
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.5px;
+      flex-shrink: 0;
+    }
+
+    .av-green  { background: var(--green-dim);  color: var(--green-bright); }
+    .av-bark   { background: var(--bark-dim);   color: var(--bark); }
+    .av-amber  { background: var(--amber-dim);  color: var(--amber); }
+    .av-blue   { background: #0c1f3a;           color: #5a9fd4; }
+    .av-gray   { background: #1e1e1c;           color: #7a8a70; }
+
+    .char-name {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: 0.5px;
+      color: var(--text);
+    }
+
+    .char-role {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+
+    .card-body {
+      padding: 11px 14px;
+      font-family: 'Barlow', sans-serif;
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--text);
+      font-weight: 400;
+    }
+
+    .death-note {
+      margin-top: 8px;
+      padding: 7px 11px;
+      background: var(--blood-dim);
+      border-left: 3px solid var(--blood);
+      border-radius: 0 4px 4px 0;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      color: var(--blood);
+      font-weight: 500;
+    }
+
+    .fact-check {
+      margin-top: 6px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      color: var(--text-muted);
+      border-top: 0.5px solid var(--border);
+      padding-top: 6px;
+      opacity: 0.7;
+    }
+
+    /* Interaction */
+    #interaction-block { display: none; margin-top: 1rem; }
+
+    .decision-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .decision-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--green);
+    }
+
+    .turn-pct {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .action-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-bottom: 10px;
+    }
+
+    .action-chip {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      padding: 5px 11px;
+      border: 0.5px solid var(--border-strong);
+      border-radius: 5px;
+      cursor: pointer;
+      color: var(--text-muted);
+      background: none;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+
+    .action-chip:hover, .action-chip.sel {
+      border-color: var(--green);
+      color: var(--green);
+      background: var(--surface2);
+    }
+
+    .decision-input-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-decide {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 1.5px;
+      padding: 9px 16px;
+      background: var(--green);
+      color: var(--bg);
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: opacity 0.15s;
+    }
+
+    .btn-decide:hover { opacity: 0.88; }
+
+    /* Turn history */
+    .turn-divider {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: var(--green-dim);
+      text-align: center;
+      padding: 10px 0 6px;
+      border-top: 0.5px solid var(--border);
+      margin-top: 8px;
+    }
+
+    .situation-update {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 300;
+      font-style: italic;
+      font-size: 13px;
+      color: var(--text-muted);
+      padding: 8px 0;
+      margin-top: 4px;
+    }
+
+    /* Terminal */
+    .terminal {
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+      margin-bottom: 12px;
+    }
+
+    .terminal-dead {
+      background: var(--blood-dim);
+      border: 0.5px solid var(--blood);
+    }
+
+    .terminal-alive {
+      background: var(--green-dim);
+      border: 0.5px solid var(--green);
+    }
+
+    .terminal-label {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      letter-spacing: 3px;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .terminal-sub {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 300;
+      font-style: italic;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .reset-row { margin-top: 1rem; text-align: center; }
+
+    .btn-reset {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      color: var(--text-muted);
+      background: none;
+      border: 0.5px solid var(--border-strong);
+      border-radius: 6px;
+      padding: 7px 16px;
+      cursor: pointer;
+      letter-spacing: 1px;
+      transition: all 0.15s;
+    }
+
+    .btn-reset:hover { color: var(--text); border-color: var(--green); }
+  </style>
+</head>
+<body>
+<div id="app">
+
+  <div class="header">
+    <div class="title">HOW <span>SCREWED</span> AM I?</div>
+    <div class="subtitle">the panel will be honest with you. you may not enjoy it.</div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" id="tab-guided" onclick="onTabClick('guided')">GUIDED</div>
+    <div class="tab" id="tab-free" onclick="onTabClick('free')">FREETEXT</div>
+  </div>
+
+  <div class="input-panel active" id="panel-guided">
+    <div class="field-label">Location</div>
+    <div class="chips" id="chips-loc">
+      <div class="chip" onclick="onChip(this,'loc','Dartmoor, October')">Dartmoor, October</div>
+      <div class="chip" onclick="onChip(this,'loc','Scottish Highlands, midwinter')">Scottish Highlands, midwinter</div>
+      <div class="chip" onclick="onChip(this,'loc','Amazon rainforest')">Amazon rainforest</div>
+      <div class="chip" onclick="onChip(this,'loc','Sonoran Desert, Arizona')">Sonoran Desert, Arizona</div>
+      <div class="chip" onclick="onChip(this,'loc','North Sea, small boat')">North Sea, small boat</div>
+      <div class="chip" onclick="onChip(this,'loc','M25 contraflow')">M25 contraflow</div>
+    </div>
+    <input type="text" id="loc-input" placeholder="or describe your location..." oninput="onFieldInput('loc',this.value)"/>
+
+    <div class="field-label">Situation &amp; key circumstances</div>
+    <div class="chips" id="chips-sit">
+      <div class="chip" onclick="onChip(this,'sit','lost, no map, phone at 4%')">lost, no map, phone at 4%</div>
+      <div class="chip" onclick="onChip(this,'sit','shelter destroyed, nightfall in 2 hours')">shelter destroyed, nightfall 2hrs</div>
+      <div class="chip" onclick="onChip(this,'sit','injured ankle, alone')">injured ankle, alone</div>
+      <div class="chip" onclick="onChip(this,'sit','broke down, no signal')">broke down, no signal</div>
+    </div>
+    <input type="text" id="sit-input" placeholder="or describe your situation..." oninput="onFieldInput('sit',this.value)"/>
+
+    <div class="field-label">Who or what is with you</div>
+    <div class="chips" id="chips-who">
+      <div class="chip" onclick="onChip(this,'who','alone')">alone</div>
+      <div class="chip" onclick="onChip(this,'who','one other, no survival knowledge')">one other, no skills</div>
+      <div class="chip" onclick="onChip(this,'who','dog')">dog</div>
+      <div class="chip" onclick="onChip(this,'who','puff adder, nearby')">puff adder, nearby</div>
+      <div class="chip" onclick="onChip(this,'who','children')">children</div>
+    </div>
+    <input type="text" id="who-input" placeholder="or describe who / what is with you..." oninput="onFieldInput('who',this.value)"/>
+
+    <div class="field-label">Weather &amp; time of day</div>
+    <div class="chips" id="chips-wx">
+      <div class="chip" onclick="onChip(this,'wx','dusk, temperature dropping fast')">dusk, dropping fast</div>
+      <div class="chip" onclick="onChip(this,'wx','heavy rain, no shelter')">heavy rain, no shelter</div>
+      <div class="chip" onclick="onChip(this,'wx','midday, 38°C, no shade')">midday, 38°C</div>
+      <div class="chip" onclick="onChip(this,'wx','night, clear, -8°C')">night, -8°C</div>
+      <div class="chip" onclick="onChip(this,'wx','fog, visibility 10m')">fog, 10m visibility</div>
+    </div>
+    <input type="text" id="wx-input" placeholder="or describe conditions..." oninput="onFieldInput('wx',this.value)"/>
+
+    <div class="btn-row">
+      <button class="btn-assess" id="btn-guided" onclick="onAssess('guided')">ASSESS MY SITUATION ↗</button>
+      <button class="btn-clear" onclick="onClear()">CLEAR</button>
+    </div>
+  </div>
+
+  <div class="input-panel" id="panel-free">
+    <div class="field-label">Describe your situation</div>
+    <textarea id="free-input" rows="5"
+      placeholder="I'm on Dartmoor, it's October, phone at 4%, no map, dusk in 90 minutes, wearing trainers..."
+      oninput="onFreeInput(this.value)"></textarea>
+    <div class="btn-row" style="margin-top:12px">
+      <button class="btn-assess" id="btn-free" onclick="onAssess('free')">ASSESS MY SITUATION ↗</button>
+    </div>
+  </div>
+
+  <div class="results" id="results">
+    <div class="loading" id="loading">
+      <span>PANEL CONVENING</span><span class="dots"></span>
+    </div>
+    <div id="verdict-block" style="display:none">
+      <div class="verdict-bar">
+        <div class="verdict-top">
+          <div class="verdict-label">SURVIVAL PROBABILITY</div>
+          <div class="pct" id="surv-pct">0%</div>
+        </div>
+        <div class="meter">
+          <div class="meter-fill" id="pct-fill" style="width:0%"></div>
+        </div>
+        <div class="att-verdict" id="att-verdict"></div>
+      </div>
+      <div class="panel-label">PANEL ASSESSMENT</div>
+      <div id="cards-out"></div>
+    </div>
+    <div id="interaction-block"></div>
+  </div>
+
+</div>
+
+<script>
+// === characters.js ===
+
+// characters.js — v2 with Jason Fox and interaction loop support
+// Anti-Corruption Layer. Single source of truth for all character data.
+
+const CHARACTERS = {
+  ray: {
+    id: 'ray', name: 'Ray Mears', role: 'Bushcraft',
+    av: 'RM', avClass: 'av-green',
+    deathLine: 'You could be dead within the hour.',
+    voice: \`RAY MEARS — Bushcraft, 30+ years field experience.
+Cerebral, warm, loves the land. Great storyteller. Chubby survivalist —
+kebab van just off camera, never mentioned, always implied.
+Delivers five-minute meditation on interconnectedness then roasts it with evident satisfaction.
+VOICE: Never dramatic. Brevity is power. "Don't." is a complete sentence.
+Silence more eloquent than anything about Bear. Stories build slowly to a point.
+SKILLS: Fire 99, Shelter 97, Tool-making 98, Plant Knowledge 88, Navigation 90.\`
+  },
+  bear: {
+    id: 'bear', name: 'Bear Grylls', role: 'Former SAS',
+    av: 'BG', avClass: 'av-bark',
+    deathLine: 'If you get this wrong, you will not make it out of here alive.',
+    voice: \`BEAR GRYLLS — Former SAS. Genuine SAS credentials. Also drinks own urine when Londis is forty yards away.
+Gets ill eating things he didn't need to eat. Idiocy is sincere, not performed.
+Comedy engine: gap between SAS credentials and Londis forty yards away.
+Genuinely believes dramatic version IS the technique. No ironic distance whatsoever.
+VOICE: Urgent, evangelical, slightly breathless. Personal anecdote always — abroad, fine in the end.
+"Hydration?" unprompted every third response. Fact-checker footnote fires on factual claims.
+SKILLS: Psychology 92, Endurance 95, Navigation 80, Fire 70.\`
+  },
+  cody: {
+    id: 'cody', name: 'Cody Lundin', role: 'Primitive Skills',
+    av: 'CL', avClass: 'av-green',
+    deathLine: 'I have watched people make this mistake. They are no longer with us.',
+    voice: \`CODY LUNDIN — Aboriginal Living Skills School, Prescott Arizona. Barefoot on glaciers.
+Threw fire-making supplies into pool rather than demonstrate bad technique. Chose integrity over career.
+Comedy engine: always knows better option that was right there. "Cattails. Thirty feet away."
+VOICE: Patient, quiet, certain. Mentions feet/footwear when relevant. Never dramatic.
+Cody Override fires when asked to endorse wrong survival advice — refuses.
+SKILLS: Fire 97, Plant Knowledge 96, Tool-making 95, Psychology 95, Endurance 93.\`
+  },
+  hales: {
+    id: 'hales', name: 'Les Hales', role: 'Bush Tucker Man',
+    av: 'LH', avClass: 'av-amber',
+    deathLine: 'Yeah, nah.',
+    voice: \`LES HALES — Major, Australian Army. Bush Tucker Man.
+Walked outback eating things that would kill a normal person with the energy of a man doing light admin.
+Witchetty grub goes down like a Rich Tea biscuit.
+VOICE: Three words maximum. "Yeah, nah." means both simultaneously.
+Never heard of Bear Grylls. Frowns if called tough. Flat delivery funnier the more dangerous the situation.
+SKILLS: Plant Knowledge 95, Psychology 95, Endurance 90, Water 90.\`
+  },
+  fox: {
+    id: 'fox', name: 'Jason Fox', role: 'Special Boat Service',
+    av: 'JF', avClass: 'av-green',
+    deathLine: 'That is not a recoverable position.',
+    voice: \`JASON FOX — Foxy. Royal Marines at 16. SBS from 2001. "Like the SAS but better."
+Demolitions expert, combat swimmer, dog handler, jungle survival expert.
+Warm, self-deprecating, genuinely funny. Absolute killing machine. No contradiction in his mind.
+Comedy engine: tactical reframe of everything. Panel talks shelter. Fox assesses defensibility,
+lines of sight, exit routes, what is available as improvised incendiary. Not doing it to be funny.
+VOICE PATTERNS:
+1. Flat deflation — remarkable things delivered as admin. "Needed to pay bills, there we go."
+2. Calls it what it is, moves on — "gobshite. But he'd love it." One word, then useful info.
+3. Logical framework for feelings — emotions as problems to diagnose and resolve.
+4. Tactical reframe — threat assessment, lines of sight, entry/exit, improvised weapons.
+5. Self-deprecating then immediately competent.
+"Is that a dog walker or a contact?" is the template register. Swears naturally, matter-of-fact.
+NEVER make mental health a punchline. Ever.
+SKILLS: Navigation 96, Endurance 97, Terrain/Weather 92, Tool-making 88, Psychology 90.\`
+  },
+  attenborough: {
+    id: 'attenborough', name: 'David Attenborough', role: 'Natural World',
+    av: 'DA', avClass: 'av-gray',
+    deathLine: 'And so the story ends. As so many do. Quietly. And entirely predictably.',
+    voice: \`DAVID ATTENBOROUGH — 97 years watching things die. Your mistake is a Holocene footnote.
+Comedy engine: geological calm applied to your specific predicament.
+VOICE: Never gives survival advice — observes, describes, delivers verdict.
+Gaps matter as much as words. "Fascinating" always genuine. Narrates as nature documentary.
+Attenborough Eulogy closes every death state — one paragraph, never comedic in register, always in effect.
+SKILLS: Animal Encounters 95, Psychology 85. Everything practical: 0. Has a crew for this.\`
+  },
+  stroud: {
+    id: 'stroud', name: 'Les Stroud', role: 'Survivorman',
+    av: 'LS', avClass: 'av-blue',
+    deathLine: '',
+    voice: \`LES STROUD — Survivorman. Canadian. Entirely alone — no crew, films himself.
+Refused producer demands to fake survival. Walked away from money for authenticity.
+One harmonica note is a complete response sometimes.
+VOICE: Mild, slightly distant, genuine. "That didn't work." on camera and means it.
+Wears shoes — Cody has feelings about this.
+SKILLS: Endurance 90, Shelter 90, Water 88, Psychology 85, Navigation 85.\`
+  }
+};
+
+const SHARED_CONTEXT = \`
+RELATIONSHIPS:
+- Bear/Ray: Ray never says Bear is wrong. Silence and contrast do the work.
+- Bear/Fox: Fox finds Bear broadly fine. Thinks Bear would have passed selection. Doesn't say this.
+- Fox/Cody: Both genuinely competent, neither performs it. Fox finds barefoot thing tactically suboptimal.
+- Fox/Hales: Fox finds Hales immediately credible. "Yeah he's good." Full endorsement.
+- Fox/Attenborough: Non-threatening, high-value, zero tactical utility. Treats him with warmth.
+- Cody/Stroud: Stroud wears shoes. One long look. Silence.
+- Attenborough/everyone: Closes every scene.
+
+DEATH COMMENTARY: Earned — not wallpaper. Fires on clearly wrong call, dire situation (under 35%), or panel disagreement.
+
+FOUNDING PHILOSOPHY: Real knowledge. Genuine consequence. No performance. Comedy earned by knowledge being real.\`;
+
+function buildSystemPrompt(mode = 'assessment') {
+  const chars = Object.values(CHARACTERS)
+    .map(c => \`=== \${c.name.toUpperCase()} ===\\n\${c.voice}\`)
+    .join('\\n\\n');
+
+  if (mode === 'reaction') {
+    return \`You are the Survival School panel reaction engine. A user has made a survival decision. React to that specific choice in character.
+
+\${chars}
+
+\${SHARED_CONTEXT}
+
+Assess the decision through each character's lens:
+- Ray: is it technically correct? Craft judgement. Brief.
+- Bear: anecdote, probably did something similar somewhere exotic, hydration check.
+- Cody: was there a better option right there they missed?
+- Hales: three words maximum.
+- Fox: tactical assessment — lines of sight, threat exposure, exit options, what's available.
+- Attenborough: narrates the decision as nature documentary footnote.
+- Stroud: quiet verdict.
+
+Survival probability shifts:
+- Good decision: +10 to +20
+- Neutral: no change
+- Poor: -15 to -25
+- Catastrophic: -30 to -50
+
+Generate 3 specific next actions the user could take from here.
+If probability reaches 0 or situation fully resolves, set is_terminal to true.
+
+OUTPUT — valid JSON only, no markdown:
+{"survival_probability":<integer>,"situation_update":"<one sentence what changed>","panel":[{"charId":"<id>","text":"<2-3 sentences>","death":<bool>,"fact_check":"<optional — Bear only, quiet factual correction if he said something wrong>"}],"next_actions":["<action>","<action>","<action>"],"is_terminal":<bool>}\`;
+  }
+
+  return \`You are the Survival School panel assessment engine.
+
+\${chars}
+
+\${SHARED_CONTEXT}
+
+Generate initial assessment. Also produce 3 specific suggested first actions.
+
+OUTPUT — valid JSON only, no markdown:
+{"survival_probability":<integer 0-100>,"attenborough_verdict":"<one sentence geological calm nature documentary never advice>","panel":[{"charId":"<id>","text":"<2-4 sentences>","death":<bool>,"fact_check":"<optional Bear only>"}],"next_actions":["<action>","<action>","<action>"]}\`;
+}
+
+
+
+// === state.js ===
+
+// state.js — v2 with interaction loop state
+// Single responsibility: all state management. No DOM. No API.
+
+const DEFAULT_STATE = {
+  mode: 'guided',
+  guided: { loc: '', sit: '', who: '', wx: '' },
+  free: { text: '' },
+  status: 'idle',         // idle | loading | results | reacting | terminal
+  situation: null,        // built situation string, persists across reactions
+  probability: null,      // current survival probability
+  turnCount: 0,           // how many decisions made
+  history: []             // array of {decision, probability, situationUpdate}
+};
+
+let _state = JSON.parse(JSON.stringify(DEFAULT_STATE));
+
+const getState = () => JSON.parse(JSON.stringify(_state));
+const setMode = (mode) => { _state.mode = mode; };
+const setGuidedField = (field, value) => { _state.guided[field] = value; };
+const setFreeText = (text) => { _state.free.text = text; };
+const setStatus = (status) => { _state.status = status; };
+
+function setProbability(p) {
+  _state.probability = Math.max(0, Math.min(100, p));
+}
+
+function setSituation(s) {
+  _state.situation = s;
+}
+
+function recordDecision(decision, newProbability, situationUpdate) {
+  _state.history.push({
+    decision,
+    probability: newProbability,
+    situationUpdate
+  });
+  _state.turnCount++;
+  setProbability(newProbability);
+}
+
+function reset() {
+  _state = JSON.parse(JSON.stringify(DEFAULT_STATE));
+}
+
+function buildSituation() {
+  if (_state.mode === 'free') return _state.free.text.trim() || null;
+  const { loc, sit, who, wx } = _state.guided;
+  if (!loc && !sit) return null;
+  return [
+    loc && \`Location: \${loc}\`,
+    sit && \`Situation: \${sit}\`,
+    who && \`With you: \${who}\`,
+    wx  && \`Conditions: \${wx}\`
+  ].filter(Boolean).join('\\n');
+}
+
+  getState, setMode, setGuidedField, setFreeText,
+  setStatus, setProbability, setSituation, recordDecision,
+  reset, buildSituation
+};
+
+
+// === ui.js ===
+
+// ui.js — v2 with interaction loop rendering
+// Single responsibility: DOM manipulation and rendering only.
+
+
+// Tabs
+function switchTab(mode) {
+  ['guided', 'free'].forEach(t => {
+    document.getElementById(\`tab-\${t}\`).classList.toggle('active', t === mode);
+    document.getElementById(\`panel-\${t}\`).classList.toggle('active', t === mode);
+  });
+}
+
+// Chips
+function pickChip(el, field) {
+  document.querySelectorAll(\`#chips-\${field} .chip\`).forEach(c => c.classList.remove('sel'));
+  el.classList.add('sel');
+}
+
+function clearChips(field) {
+  document.querySelectorAll(\`#chips-\${field} .chip\`).forEach(c => c.classList.remove('sel'));
+}
+
+function clearAll() {
+  ['loc', 'sit', 'who', 'wx'].forEach(f => {
+    const el = document.getElementById(\`\${f}-input\`);
+    if (el) el.value = '';
+    clearChips(f);
+  });
+  const free = document.getElementById('free-input');
+  if (free) free.value = '';
+}
+
+// Loading / error
+function showLoading(msg = 'PANEL CONVENING') {
+  document.getElementById('results').classList.add('show');
+  const loading = document.getElementById('loading');
+  loading.style.display = 'block';
+  loading.innerHTML = \`<span>\${msg}</span><span class="dots"></span>\`;
+  document.getElementById('verdict-block').style.display = 'none';
+  document.getElementById('interaction-block').style.display = 'none';
+}
+
+function showError(msg) {
+  document.getElementById('loading').innerHTML =
+    \`<span style="color:var(--blood)">\${msg}</span>\`;
+}
+
+// Probability meter
+function updateProbability(pct, animate = true) {
+  const cls = pct >= 70 ? 'ok' : pct >= 40 ? 'mid' : '';
+  const pctEl = document.getElementById('surv-pct');
+  const fill = document.getElementById('pct-fill');
+  pctEl.className = 'pct' + (cls ? ' ' + cls : '');
+  fill.className = 'meter-fill' + (cls ? ' ' + cls : '');
+  if (animate) {
+    fill.style.width = '0%';
+    pctEl.textContent = '0%';
+    setTimeout(() => {
+      fill.style.width = pct + '%';
+      pctEl.textContent = pct + '%';
+    }, 100);
+  } else {
+    fill.style.width = pct + '%';
+    pctEl.textContent = pct + '%';
+  }
+}
+
+// Render panel cards
+function renderCards(panelData, container, startDelay = 0) {
+  (panelData || []).forEach((r, i) => {
+    const char = CHARACTERS[r.charId] || Object.values(CHARACTERS)[i];
+    if (!char) return;
+
+    const card = document.createElement('div');
+    card.className = 'char-card' + (r.death ? ' death-card' : '');
+    card.style.opacity = '0';
+    card.style.transform = 'translateY(7px)';
+    card.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+
+    card.innerHTML = \`
+      <div class="card-head">
+        <div class="avatar \${char.avClass}">\${char.av}</div>
+        <div>
+          <div class="char-name">\${char.name}</div>
+          <div class="char-role">\${char.role}</div>
+        </div>
+      </div>
+      <div class="card-body">
+        \${r.text}
+        \${r.death && char.deathLine ? \`<div class="death-note">\${char.deathLine}</div>\` : ''}
+        \${r.fact_check ? \`<div class="fact-check">&#10033; \${r.fact_check}</div>\` : ''}
+      </div>\`;
+
+    container.appendChild(card);
+    setTimeout(() => {
+      card.style.opacity = '1';
+      card.style.transform = 'translateY(0)';
+    }, startDelay + 80 + i * 100);
+  });
+}
+
+// Initial assessment results
+function showResults(data, onDecision) {
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('verdict-block').style.display = 'block';
+
+  updateProbability(data.survival_probability);
+
+  const verdictEl = document.getElementById('att-verdict');
+  if (verdictEl) verdictEl.textContent = data.attenborough_verdict || '';
+
+  const container = document.getElementById('cards-out');
+  container.innerHTML = '';
+  renderCards(data.panel, container);
+
+  // Show decision input
+  showDecisionInput(data.next_actions, data.survival_probability, onDecision);
+}
+
+// Decision input after initial assessment
+function showDecisionInput(nextActions, currentProbability, onDecision) {
+  const block = document.getElementById('interaction-block');
+  block.style.display = 'block';
+
+  const actionsHtml = (nextActions || []).map(a =>
+    \`<div class="action-chip" onclick="window._onActionChip(this, '\${a.replace(/'/g, "\\\\'")}')">\${a}</div>\`
+  ).join('');
+
+  block.innerHTML = \`
+    <div class="decision-header">
+      <div class="decision-label">WHAT DO YOU DO?</div>
+      <div class="turn-pct">Currently: <span style="color:\${currentProbability < 40 ? 'var(--blood)' : currentProbability < 70 ? 'var(--amber)' : 'var(--green)'}">\${currentProbability}%</span></div>
+    </div>
+    <div class="action-chips">\${actionsHtml}</div>
+    <div class="decision-input-row">
+      <input type="text" id="decision-input" placeholder="or describe your decision..." />
+      <button class="btn-decide" id="btn-decide" onclick="window._onDecide()">GO ↗</button>
+    </div>\`;
+
+  window._onActionChip = (el, val) => {
+    document.querySelectorAll('.action-chip').forEach(c => c.classList.remove('sel'));
+    el.classList.add('sel');
+    document.getElementById('decision-input').value = val;
+  };
+
+  window._onDecide = () => {
+    const val = document.getElementById('decision-input').value.trim();
+    if (!val) return;
+    onDecision(val);
+  };
+
+  document.getElementById('decision-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') window._onDecide();
+  });
+}
+
+// Reaction results — appended below existing cards
+function showReaction(data, turnCount, onDecision) {
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('verdict-block').style.display = 'block';
+  document.getElementById('interaction-block').style.display = 'none';
+
+  // Update probability
+  updateProbability(data.survival_probability);
+
+  // Situation update banner
+  if (data.situation_update) {
+    const banner = document.createElement('div');
+    banner.className = 'situation-update';
+    banner.textContent = data.situation_update;
+    document.getElementById('cards-out').appendChild(banner);
+  }
+
+  // Divider
+  const divider = document.createElement('div');
+  divider.className = 'turn-divider';
+  divider.textContent = \`TURN \${turnCount}\`;
+  document.getElementById('cards-out').appendChild(divider);
+
+  // New cards
+  renderCards(data.panel, document.getElementById('cards-out'), 0);
+
+  // Terminal or next decision
+  if (data.is_terminal) {
+    showTerminal(data.survival_probability);
+  } else {
+    setTimeout(() => {
+      showDecisionInput(data.next_actions, data.survival_probability, onDecision);
+    }, 800);
+  }
+}
+
+// Terminal state
+function showTerminal(probability) {
+  const block = document.getElementById('interaction-block');
+  block.style.display = 'block';
+
+  if (probability <= 0) {
+    block.innerHTML = \`
+      <div class="terminal terminal-dead">
+        <div class="terminal-label">YOU DID NOT SURVIVE</div>
+        <div class="terminal-sub">Attenborough will close proceedings.</div>
+      </div>
+      <div class="reset-row"><button class="btn-reset" onclick="window._onReset()">TRY AGAIN</button></div>\`;
+  } else {
+    block.innerHTML = \`
+      <div class="terminal terminal-alive">
+        <div class="terminal-label">YOU SURVIVED</div>
+        <div class="terminal-sub">Improbably. The panel is as surprised as you are.</div>
+      </div>
+      <div class="reset-row"><button class="btn-reset" onclick="window._onReset()">NEW SITUATION</button></div>\`;
+  }
+}
+
+function hideResults() {
+  document.getElementById('results').classList.remove('show');
+  document.getElementById('verdict-block').style.display = 'none';
+  document.getElementById('interaction-block').style.display = 'none';
+  document.getElementById('loading').style.display = 'block';
+  document.getElementById('loading').innerHTML = '<span>PANEL CONVENING</span><span class="dots"></span>';
+  document.getElementById('cards-out').innerHTML = '';
+  document.getElementById('surv-pct').textContent = '0%';
+  document.getElementById('pct-fill').style.width = '0%';
+}
+
+function setButtonState(mode, disabled) {
+  const btn = document.getElementById(\`btn-\${mode}\`);
+  if (btn) btn.disabled = disabled;
+}
+
+  switchTab, pickChip, clearChips, clearAll,
+  showLoading, showError, showResults, showReaction,
+  showTerminal, hideResults, setButtonState, updateProbability
+};
+
+
+// === api.js ===
+
+// api.js — v2 with reaction mode support
+// Single responsibility: Worker integration and API calls.
+
+
+const WORKER_ENDPOINT = 'https://cusslab-api.leanspirited.workers.dev/survival-school/assess';
+
+async function assess(situation) {
+  const response = await fetch(WORKER_ENDPOINT, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      system: buildSystemPrompt('assessment'),
+      situation
+    })
+  });
+  if (!response.ok) throw new Error(\`Worker \${response.status}\`);
+  const data = await response.json();
+  if (!data.panel || !Array.isArray(data.panel)) throw new Error('Invalid response');
+  return data;
+}
+
+async function react(situation, decision, currentProbability) {
+  const context = \`ORIGINAL SITUATION:\\n\${situation}\\n\\nCURRENT SURVIVAL PROBABILITY: \${currentProbability}%\\n\\nUSER'S DECISION: \${decision}\`;
+  const response = await fetch(WORKER_ENDPOINT, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      system: buildSystemPrompt('reaction'),
+      situation: context
+    })
+  });
+  if (!response.ok) throw new Error(\`Worker \${response.status}\`);
+  const data = await response.json();
+  if (!data.panel || !Array.isArray(data.panel)) throw new Error('Invalid response');
+  return data;
+}
+
+
+
+// === main ===
+
+
+
+  // Tab / chip / input handlers
+  window.onTabClick = (mode) => { State.setMode(mode); UI.switchTab(mode); };
+  window.onChip = (el, field, val) => {
+    State.setGuidedField(field, val);
+    UI.pickChip(el, field);
+    document.getElementById(\`\${field}-input\`).value = val;
+  };
+  window.onFieldInput = (field, val) => { State.setGuidedField(field, val); UI.clearChips(field); };
+  window.onFreeInput = (val) => State.setFreeText(val);
+  window.onClear = () => { State.reset(); UI.clearAll(); };
+
+  // Initial assessment
+  window.onAssess = async (mode) => {
+    State.setMode(mode);
+    const situation = State.buildSituation();
+    if (!situation) { alert('Tell us something about your situation first.'); return; }
+
+    State.setSituation(situation);
+    UI.setButtonState(mode, true);
+    UI.showLoading();
+
+    try {
+      const data = await API.assess(situation);
+      State.setProbability(data.survival_probability);
+      UI.showResults(data, handleDecision);
+    } catch (e) {
+      UI.showError('Panel unavailable. They may already know how this ends.');
+    } finally {
+      UI.setButtonState(mode, false);
+    }
+  };
+
+  // Decision loop
+  async function handleDecision(decision) {
+    const s = State.getState();
+    UI.showLoading('PANEL REACTING');
+
+    try {
+      const data = await API.react(s.situation, decision, s.probability);
+      State.recordDecision(decision, data.survival_probability, data.situation_update);
+      UI.showReaction(data, s.turnCount + 1, handleDecision);
+    } catch (e) {
+      UI.showError('Panel unavailable.');
+    }
+  }
+
+  // Reset
+  window._onReset = () => {
+    State.reset();
+    UI.hideResults();
+    UI.clearAll();
+    ['guided','free'].forEach(m => UI.setButtonState(m, false));
+  };
+
+</script>
+
+</body>
+</html>
+
+`;
+
 export default {
   async fetch(request, env) {
-    // CORS preflight
+    const url = new URL(request.url);
     if (request.method === 'OPTIONS') {
-      return new Response(null, {
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Methods': 'POST, OPTIONS',
-          'Access-Control-Allow-Headers': 'Content-Type, x-api-key, anthropic-version',
-        },
-      });
+      return new Response(null, { headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, x-api-key, anthropic-version',
+      }});
+    }
+    if (request.method === 'GET' && url.pathname === '/survival-school') {
+      return new Response(SURVIVAL_SCHOOL_HOME, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' }});
+    }
+    if (request.method === 'GET' && url.pathname === '/survival-school/app') {
+      return new Response(SURVIVAL_SCHOOL_APP, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' }});
     }
     if (request.method !== 'POST') {
       return new Response('Method not allowed', { status: 405 });
     }
-    // Caller's key takes priority; fall back to server secret
     const apiKey = request.headers.get('x-api-key') || env.ANTHROPIC_API_KEY;
     if (!apiKey) {
       return new Response(JSON.stringify({ error: { message: 'No API key configured on server' } }), {
-        status: 500,
-        headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
+        status: 500, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
       });
+    }
+    if (url.pathname === '/survival-school/assess') {
+      const body = await request.json();
+      const upstream = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'anthropic-version': '2023-06-01', 'x-api-key': apiKey },
+        body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 1500, system: body.system, messages: [{ role: 'user', content: body.situation }] }),
+      });
+      if (!upstream.ok) {
+        return new Response(JSON.stringify({ error: { message: `Anthropic error ${upstream.status}` } }), {
+          status: upstream.status, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
+        });
+      }
+      const anthropicData = await upstream.json();
+      const raw = anthropicData.content[0].text;
+      const text = raw.replace(/^```(?:json)?\s*/i, '').replace(/\s*```\s*$/, '').trim();
+      return new Response(text, { status: 200, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }});
     }
     const body = await request.text();
     const upstream = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'anthropic-version': '2023-06-01',
-        'x-api-key': apiKey,
-      },
+      headers: { 'Content-Type': 'application/json', 'anthropic-version': '2023-06-01', 'x-api-key': apiKey },
       body,
     });
     const data = await upstream.text();
-    return new Response(data, {
-      status: upstream.status,
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-      },
-    });
+    return new Response(data, { status: upstream.status, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }});
   },
 };
