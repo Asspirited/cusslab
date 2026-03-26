@@ -352,7 +352,7 @@ const SURVIVAL_SCHOOL_HOME = `<!DOCTYPE html>
       <div class="nav-item" data-panel="mundane">
         <span class="nav-icon">◎</span>
         Mundane Mode
-        <span class="nav-badge badge-soon">SOON</span>
+        <span class="nav-badge badge-live">LIVE</span>
       </div>
       <div class="nav-item" data-panel="deathmatch">
         <span class="nav-icon">◎</span>
@@ -447,21 +447,10 @@ const SURVIVAL_SCHOOL_HOME = `<!DOCTYPE html>
       </div>
     </div>
 
-    <!-- MUNDANE MODE -->
+    <!-- MUNDANE MODE — live -->
     <div class="panel" id="panel-mundane">
-      <div class="coming-soon">
-        <div class="coming-soon-icon">◎</div>
-        <div class="coming-soon-title">Mundane Mode</div>
-        <div class="coming-soon-desc">
-          Survival panel. Everyday problem. The contrast is the joke.
-          "I've missed the last bus." Ray has thoughts.
-        </div>
-        <ul class="feature-list">
-          <li class="fi-next"><span class="fi-dot"></span>Mundane scenario input</li>
-          <li class="fi-next"><span class="fi-dot"></span>Panel applies full survival gravity</li>
-          <li class="fi-next"><span class="fi-dot"></span>Death commentary fires freely</li>
-        </ul>
-      </div>
+      <iframe src="https://cusslab-api.leanspirited.workers.dev/survival-school/mundane"
+              title="Mundane Mode"></iframe>
     </div>
 
     <!-- ANIMAL DEATHMATCH -->
@@ -957,6 +946,95 @@ const SURVIVAL_SCHOOL_APP  = `<!DOCTYPE html>
       opacity: 0.7;
     }
 
+    /* Attenborough bookends */
+    .att-bookend {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      padding: 10px 14px;
+      background: var(--surface);
+      border: 0.5px solid var(--border);
+      border-radius: 8px;
+    }
+
+    .att-avatar {
+      width: 26px; height: 26px;
+      background: #1e1e1c;
+      color: #7a8a70;
+      border-radius: 50%;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 9px;
+      letter-spacing: 0.5px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .att-text {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 300;
+      font-style: italic;
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--text-muted);
+    }
+
+    #att-opening { margin-bottom: 12px; }
+
+    #att-verdict {
+      margin-top: 12px;
+      opacity: 0;
+      transition: opacity 0.8s ease;
+    }
+
+    #att-verdict.visible { opacity: 1; }
+
+    /* Inline turn bookends (reaction loop) */
+    .att-turn-header {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+      padding: 8px 0 4px;
+    }
+
+    .att-turn-verdict {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+      padding: 8px 0 4px;
+      margin-top: 4px;
+    }
+
+    .att-turn-verdict.att-fade {
+      opacity: 0;
+      transition: opacity 0.8s ease;
+    }
+
+    .att-turn-verdict.att-fade.visible { opacity: 1; }
+
+    .att-mini-avatar {
+      width: 20px; height: 20px;
+      background: #1e1e1c;
+      color: #7a8a70;
+      border-radius: 50%;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 8px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      margin-top: 3px;
+    }
+
+    .att-mini-text {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 300;
+      font-style: italic;
+      font-size: 13px;
+      line-height: 1.7;
+      color: var(--text-muted);
+    }
+
     /* Interaction */
     #interaction-block { display: none; margin-top: 1rem; }
 
@@ -1177,6 +1255,10 @@ const SURVIVAL_SCHOOL_APP  = `<!DOCTYPE html>
       <span>PANEL CONVENING</span><span class="dots"></span>
     </div>
     <div id="verdict-block" style="display:none">
+      <div class="att-bookend" id="att-opening" style="display:none">
+        <div class="att-avatar">DA</div>
+        <div class="att-text"></div>
+      </div>
       <div class="verdict-bar">
         <div class="verdict-top">
           <div class="verdict-label">SURVIVAL PROBABILITY</div>
@@ -1185,10 +1267,13 @@ const SURVIVAL_SCHOOL_APP  = `<!DOCTYPE html>
         <div class="meter">
           <div class="meter-fill" id="pct-fill" style="width:0%"></div>
         </div>
-        <div class="att-verdict" id="att-verdict"></div>
       </div>
       <div class="panel-label">PANEL ASSESSMENT</div>
       <div id="cards-out"></div>
+      <div class="att-bookend" id="att-verdict" style="display:none">
+        <div class="att-avatar">DA</div>
+        <div class="att-text"></div>
+      </div>
     </div>
     <div id="interaction-block"></div>
   </div>
@@ -1305,6 +1390,9 @@ DEATH COMMENTARY: Earned — not wallpaper. Fires on clearly wrong call, dire si
 
 FOUNDING PHILOSOPHY: Real knowledge. Genuine consequence. No performance. Comedy earned by knowledge being real.\`;
 
+// Panel characters (excludes Attenborough — he does bookends, not panel cards)
+const PANEL_IDS = ['ray', 'bear', 'cody', 'hales', 'fox', 'stroud'];
+
 function buildSystemPrompt(mode = 'assessment') {
   const chars = Object.values(CHARACTERS)
     .map(c => \`=== \${c.name.toUpperCase()} ===\\n\${c.voice}\`)
@@ -1317,13 +1405,16 @@ function buildSystemPrompt(mode = 'assessment') {
 
 \${SHARED_CONTEXT}
 
-Assess the decision through each character's lens:
+ATTENBOROUGH BOOKEND STRUCTURE — Attenborough does NOT appear in the panel array. He bookends the whole response:
+- attenborough_opening: one sentence, nature documentary register, frames what this decision is about to cause. Observational, slightly ominous.
+- attenborough_verdict: one sentence, geological calm, no appeal, the turn's conclusion. He already knew.
+
+Panel characters (no Attenborough): Ray, Bear, Cody, Hales, Fox, Stroud.
 - Ray: is it technically correct? Craft judgement. Brief.
 - Bear: anecdote, probably did something similar somewhere exotic, hydration check.
 - Cody: was there a better option right there they missed?
 - Hales: three words maximum.
 - Fox: tactical assessment — lines of sight, threat exposure, exit options, what's available.
-- Attenborough: narrates the decision as nature documentary footnote.
 - Stroud: quiet verdict.
 
 Survival probability shifts:
@@ -1336,7 +1427,36 @@ Generate 3 specific next actions the user could take from here.
 If probability reaches 0 or situation fully resolves, set is_terminal to true.
 
 OUTPUT — valid JSON only, no markdown:
-{"survival_probability":<integer>,"situation_update":"<one sentence what changed>","panel":[{"charId":"<id>","text":"<2-3 sentences>","death":<bool>,"fact_check":"<optional — Bear only, quiet factual correction if he said something wrong>"}],"next_actions":["<action>","<action>","<action>"],"is_terminal":<bool>}\`;
+{"survival_probability":<integer>,"attenborough_opening":"<one sentence, nature doc, frames what the decision is about to cause>","situation_update":"<one sentence what changed>","panel":[{"charId":"<id>","text":"<2-3 sentences>","death":<bool>,"fact_check":"<optional — Bear only>"}],"attenborough_verdict":"<one sentence, geological calm, turn conclusion, he already knew>","next_actions":["<action>","<action>","<action>"],"is_terminal":<bool>}\`;
+  }
+
+  if (mode === 'mundane') {
+    return \`You are the Survival School panel. The user has described a MUNDANE, EVERYDAY problem. Apply full survival gravity. This is the joke — the greater the gravity, the funnier.
+
+\${chars}
+
+\${SHARED_CONTEXT}
+
+MUNDANE MODE: The situation is not a survival emergency. The panel doesn't know this.
+They assess with the same weight they would give a man trapped on Dartmoor in October.
+Ray identifies three immediate risks. Fox assesses lines of sight. Cody notes what was available nearby. Bear has done something similar abroad.
+
+ATTENBOROUGH BOOKEND STRUCTURE — Attenborough does NOT appear in the panel array. He bookends:
+- attenborough_opening: one sentence, introduces the mundane situation as if it's a wildlife encounter. "And here, in the fluorescent ecology of the Wetherspoons, a specimen faces a challenge that, while modest in geological terms, carries its own quiet urgency."
+- attenborough_verdict: one sentence, geological calm. Final verdict. He always knew.
+
+Panel characters (no Attenborough): Ray, Bear, Cody, Hales, Fox, Stroud.
+- Ray: identifies real risks in the mundane situation. Genuinely concerned.
+- Bear: has done something similar, abroad, fine in the end.
+- Cody: points out the better option that was right there. "The bus stop. Fifty yards away."
+- Hales: three words. Maximum.
+- Fox: tactical assessment of the mundane. Exit routes from the post office queue.
+- Stroud: quiet, measured verdict. Slightly melancholy.
+
+Survival probability: 0-100. For mundane scenarios this is usually 40-85% — they're not great situations, but survivable with the right mindset. A truly catastrophic mundane scenario (printer has run out of ink, presentation in 10 minutes) may drop lower.
+
+OUTPUT — valid JSON only, no markdown:
+{"survival_probability":<integer 0-100>,"attenborough_opening":"<one sentence, nature documentary, introduces mundane situation as wildlife encounter>","panel":[{"charId":"<id>","text":"<2-3 sentences>","death":<bool>,"fact_check":"<optional Bear only>"}],"attenborough_verdict":"<one sentence, geological calm, final verdict>"}\`;
   }
 
   return \`You are the Survival School panel assessment engine.
@@ -1345,10 +1465,16 @@ OUTPUT — valid JSON only, no markdown:
 
 \${SHARED_CONTEXT}
 
+ATTENBOROUGH BOOKEND STRUCTURE — Attenborough does NOT appear in the panel array. He bookends the whole assessment:
+- attenborough_opening: one sentence, nature documentary register, introduces the situation as if it's a wildlife encounter. Sets the stakes. Slightly ominous.
+- attenborough_verdict: one sentence, geological calm, no appeal. The documentary's conclusion. He already knew.
+
+Panel characters (no Attenborough): Ray, Bear, Cody, Hales, Fox, Stroud.
+
 Generate initial assessment. Also produce 3 specific suggested first actions.
 
 OUTPUT — valid JSON only, no markdown:
-{"survival_probability":<integer 0-100>,"attenborough_verdict":"<one sentence geological calm nature documentary never advice>","panel":[{"charId":"<id>","text":"<2-4 sentences>","death":<bool>,"fact_check":"<optional Bear only>"}],"next_actions":["<action>","<action>","<action>"]}\`;
+{"survival_probability":<integer 0-100>,"attenborough_opening":"<one sentence, nature doc, introduces situation as wildlife encounter, slightly ominous>","panel":[{"charId":"<id>","text":"<2-4 sentences>","death":<bool>,"fact_check":"<optional Bear only>"}],"attenborough_verdict":"<one sentence, geological calm, no appeal, the documentary's conclusion>","next_actions":["<action>","<action>","<action>"]}\`;
 }
 
 
@@ -1520,21 +1646,38 @@ function renderCards(panelData, container, startDelay = 0) {
   });
 }
 
+// Attenborough bookend helpers
+function showAttOpening(text) {
+  const el = document.getElementById('att-opening');
+  if (!el || !text) return;
+  el.querySelector('.att-text').textContent = text;
+  el.style.display = 'flex';
+}
+
+function showAttVerdict(text, delayMs = 0) {
+  const el = document.getElementById('att-verdict');
+  if (!el || !text) return;
+  el.querySelector('.att-text').textContent = text;
+  el.style.display = 'flex';
+  el.classList.remove('visible');
+  setTimeout(() => el.classList.add('visible'), delayMs + 50);
+}
+
 // Initial assessment results
 function showResults(data, onDecision) {
   document.getElementById('loading').style.display = 'none';
   document.getElementById('verdict-block').style.display = 'block';
 
+  showAttOpening(data.attenborough_opening);
   updateProbability(data.survival_probability);
-
-  const verdictEl = document.getElementById('att-verdict');
-  if (verdictEl) verdictEl.textContent = data.attenborough_verdict || '';
 
   const container = document.getElementById('cards-out');
   container.innerHTML = '';
   renderCards(data.panel, container);
 
-  // Show decision input
+  const cardDelay = (data.panel?.length || 0) * 100 + 400;
+  showAttVerdict(data.attenborough_verdict, cardDelay);
+
   showDecisionInput(data.next_actions, data.survival_probability, onDecision);
 }
 
@@ -1581,33 +1724,66 @@ function showReaction(data, turnCount, onDecision) {
   document.getElementById('verdict-block').style.display = 'block';
   document.getElementById('interaction-block').style.display = 'none';
 
-  // Update probability
   updateProbability(data.survival_probability);
 
-  // Situation update banner
-  if (data.situation_update) {
-    const banner = document.createElement('div');
-    banner.className = 'situation-update';
-    banner.textContent = data.situation_update;
-    document.getElementById('cards-out').appendChild(banner);
+  const cardsOut = document.getElementById('cards-out');
+
+  // Remove previous att-verdict (will re-append new one)
+  const prevVerdict = cardsOut.querySelector('.att-turn-verdict');
+  if (prevVerdict) prevVerdict.remove();
+
+  // Attenborough opening — frames what this decision caused
+  if (data.attenborough_opening) {
+    const opening = document.createElement('div');
+    opening.className = 'att-turn-header';
+    opening.innerHTML = \`
+      <div class="att-mini-avatar">DA</div>
+      <div class="att-mini-text">\${data.attenborough_opening}</div>\`;
+    cardsOut.appendChild(opening);
   }
 
   // Divider
   const divider = document.createElement('div');
   divider.className = 'turn-divider';
   divider.textContent = \`TURN \${turnCount}\`;
-  document.getElementById('cards-out').appendChild(divider);
+  cardsOut.appendChild(divider);
 
-  // New cards
-  renderCards(data.panel, document.getElementById('cards-out'), 0);
+  // Situation update
+  if (data.situation_update) {
+    const banner = document.createElement('div');
+    banner.className = 'situation-update';
+    banner.textContent = data.situation_update;
+    cardsOut.appendChild(banner);
+  }
 
-  // Terminal or next decision
-  if (data.is_terminal) {
-    showTerminal(data.survival_probability);
-  } else {
+  // New panel cards
+  const startCount = cardsOut.querySelectorAll('.char-card').length;
+  renderCards(data.panel, cardsOut, 0);
+
+  // Attenborough verdict after cards
+  if (data.attenborough_verdict) {
+    const cardDelay = (data.panel?.length || 0) * 100 + 400;
     setTimeout(() => {
-      showDecisionInput(data.next_actions, data.survival_probability, onDecision);
-    }, 800);
+      const verdict = document.createElement('div');
+      verdict.className = 'att-turn-verdict att-fade';
+      verdict.innerHTML = \`
+        <div class="att-mini-avatar">DA</div>
+        <div class="att-mini-text">\${data.attenborough_verdict}</div>\`;
+      cardsOut.appendChild(verdict);
+      setTimeout(() => verdict.classList.add('visible'), 50);
+    }, cardDelay);
+    const nextDelay = (data.panel?.length || 0) * 100 + 900;
+    if (data.is_terminal) {
+      setTimeout(() => showTerminal(data.survival_probability), nextDelay);
+    } else {
+      setTimeout(() => showDecisionInput(data.next_actions, data.survival_probability, onDecision), nextDelay);
+    }
+  } else {
+    if (data.is_terminal) {
+      showTerminal(data.survival_probability);
+    } else {
+      setTimeout(() => showDecisionInput(data.next_actions, data.survival_probability, onDecision), 800);
+    }
   }
 }
 
@@ -1642,6 +1818,10 @@ function hideResults() {
   document.getElementById('cards-out').innerHTML = '';
   document.getElementById('surv-pct').textContent = '0%';
   document.getElementById('pct-fill').style.width = '0%';
+  const opening = document.getElementById('att-opening');
+  if (opening) { opening.style.display = 'none'; opening.classList.remove('visible'); }
+  const verdict = document.getElementById('att-verdict');
+  if (verdict) { verdict.style.display = 'none'; verdict.classList.remove('visible'); }
 }
 
 function setButtonState(mode, disabled) {
@@ -1651,7 +1831,8 @@ function setButtonState(mode, disabled) {
 
   switchTab, pickChip, clearChips, clearAll,
   showLoading, showError, showResults, showReaction,
-  showTerminal, hideResults, setButtonState, updateProbability
+  showTerminal, hideResults, setButtonState, updateProbability,
+  showAttOpening, showAttVerdict
 };
 
 
@@ -1671,6 +1852,18 @@ async function assess(situation) {
       system: buildSystemPrompt('assessment'),
       situation
     })
+  });
+  if (!response.ok) throw new Error(\`Worker \${response.status}\`);
+  const data = await response.json();
+  if (!data.panel || !Array.isArray(data.panel)) throw new Error('Invalid response');
+  return data;
+}
+
+async function assessWorst(situation, systemPrompt) {
+  const response = await fetch(WORKER_ENDPOINT, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ system: systemPrompt, situation })
   });
   if (!response.ok) throw new Error(\`Worker \${response.status}\`);
   const data = await response.json();
@@ -2122,6 +2315,50 @@ const SURVIVAL_SCHOOL_WORST = `<!DOCTYPE html>
     }
 
     .btn-reset:hover { color: var(--text); border-color: var(--blood); }
+
+    /* Attenborough bookends */
+    .att-bookend {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      padding: 10px 14px;
+      background: var(--surface);
+      border: 0.5px solid var(--border);
+      border-radius: 8px;
+    }
+
+    .att-avatar {
+      width: 26px; height: 26px;
+      background: #1e1e1c;
+      color: #7a8a70;
+      border-radius: 50%;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 9px;
+      letter-spacing: 0.5px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .att-text {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 300;
+      font-style: italic;
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--text-muted);
+    }
+
+    #att-opening { margin-bottom: 12px; }
+
+    #att-verdict {
+      margin-top: 12px;
+      opacity: 0;
+      transition: opacity 0.8s ease;
+    }
+
+    #att-verdict.visible { opacity: 1; }
   </style>
 </head>
 <body>
@@ -2187,6 +2424,10 @@ const SURVIVAL_SCHOOL_WORST = `<!DOCTYPE html>
       <span>PANEL CONVENING</span><span class="dots"></span>
     </div>
     <div id="verdict-block" style="display:none">
+      <div class="att-bookend" id="att-opening" style="display:none">
+        <div class="att-avatar">DA</div>
+        <div class="att-text"></div>
+      </div>
       <div class="verdict-bar">
         <div class="verdict-top">
           <div class="verdict-label">DOOM PERCENTAGE</div>
@@ -2198,6 +2439,10 @@ const SURVIVAL_SCHOOL_WORST = `<!DOCTYPE html>
       </div>
       <div class="panel-label">PANEL ASSESSMENT</div>
       <div id="cards-out"></div>
+      <div class="att-bookend" id="att-verdict" style="display:none">
+        <div class="att-avatar">DA</div>
+        <div class="att-text"></div>
+      </div>
       <div class="reset-row">
         <button class="btn-reset" onclick="onClear()">NEW INCIDENT</button>
       </div>
@@ -2278,15 +2523,6 @@ VOICE: Three words maximum. "Yeah, nah." means both simultaneously.
 Never heard of Bear Grylls. Flat delivery funnier the more dangerous the situation.
 SKILLS: Plant Knowledge 95, Psychology 95, Endurance 90, Water 90.\`
   },
-  attenborough: {
-    id: 'attenborough', name: 'David Attenborough', role: 'Natural World',
-    av: 'DA', avClass: 'av-gray',
-    deathLine: 'And so the story ends. As so many do. Quietly. And entirely predictably.',
-    voice: \`DAVID ATTENBOROUGH — 97 years watching things die. Your mistake is a Holocene footnote.
-VOICE: Never gives survival advice. Observes, describes, delivers verdict. Geological calm.
-Narrates as nature documentary. "Fascinating" always genuine. Gaps matter as much as words.
-SKILLS: Animal Encounters 95, Psychology 85. Everything practical: 0. Has a crew for this.\`
-  },
   cody: {
     id: 'cody', name: 'Cody Lundin', role: 'Primitive Skills',
     av: 'CL', avClass: 'av-green',
@@ -2310,17 +2546,21 @@ function buildWorstSystemPrompt() {
 
 \${chars}
 
-PANEL ORDER — fixed: Ray, Fox, O'Shea, Stevens, Bear, Hales, Attenborough, Cody.
+PANEL ORDER — fixed: Ray, Fox, O'Shea, Stevens, Bear, Hales, Cody.
+ATTENBOROUGH BOOKENDS — he does NOT appear in the panel array. He opens and closes.
 
-RESPONSE LOGIC:
+ATTENBOROUGH BOOKEND STRUCTURE:
+- attenborough_opening: one sentence, nature documentary register, introduces the incident as if it's a wildlife encounter. "And here, the specimen has made contact with one of nature's more emphatic advisors." Slightly ominous.
+- attenborough_verdict: one sentence, geological calm, no appeal. He always knew.
+
+PANEL RESPONSE LOGIC:
 - Ray: immediate triage. What to do right now. Craft-based. Brief, no drama.
 - Fox: tactical — is the threat still active? Exit routes? What does the user have available?
 - O'Shea: medical/herpetological expertise. References chapter numbers. Surprised if animal deviated from his published literature.
 - Stevens: spiritual interpretation. Only fully engaged if snake or venomous creature involved — "Was there a snake?" fires if not.
 - Bear: personal anecdote, somewhere exotic, fine in the end. Hydration check.
 - Hales: three words maximum. Flat delivery.
-- Attenborough: nature documentary narration. Geological calm. Does not give advice.
-- Cody: verdict + ACTION LINE — a single, specific imperative sentence. What to do right now.
+- Cody: verdict + ACTION LINE — a single, specific imperative sentence. What to do RIGHT NOW.
 
 DOOM PERCENTAGE: 0 = you're fine, 100 = certain death.
 Scale reference:
@@ -2330,12 +2570,11 @@ Scale reference:
 - Serious envenomation, remote, no treatment: 60–85%
 - Certainly fatal combination: 85–100%
 
-Death commentary (death: true): fires when doom > 65% OR the situation is clearly unrecoverable.
-Stevens's death line only fires for snake incidents.
-Attenborough death line fires on doom > 70%.
+Death commentary (death: true): fires when doom > 65% OR clearly unrecoverable.
+Stevens's death line only fires for snake/venom incidents.
 
 OUTPUT — valid JSON only, no markdown:
-{"doom_percentage":<integer 0-100>,"panel":[{"charId":"ray","text":"<2-3 sentences>","death":<bool>},{"charId":"fox","text":"<2-3 sentences>"},{"charId":"oshea","text":"<2-3 sentences>","fact_check":"<optional — O'Shea only, if animal deviated from literature>"},{"charId":"stevens","text":"<2-3 sentences>"},{"charId":"bear","text":"<2-3 sentences>","fact_check":"<optional>"},{"charId":"hales","text":"<max 3 words>"},{"charId":"attenborough","text":"<nature documentary narration 2-3 sentences>","death":<bool>},{"charId":"cody","text":"<2-3 sentences>","action":"<single imperative sentence — what to do RIGHT NOW>"}]}\`;
+{"doom_percentage":<integer 0-100>,"attenborough_opening":"<one sentence, nature doc, introduces incident as wildlife encounter>","panel":[{"charId":"ray","text":"<2-3 sentences>","death":<bool>},{"charId":"fox","text":"<2-3 sentences>"},{"charId":"oshea","text":"<2-3 sentences>","fact_check":"<optional — O'Shea only>"},{"charId":"stevens","text":"<2-3 sentences>"},{"charId":"bear","text":"<2-3 sentences>","fact_check":"<optional>"},{"charId":"hales","text":"<max 3 words>"},{"charId":"cody","text":"<2-3 sentences>","action":"<single imperative sentence — what to do RIGHT NOW>"}],"attenborough_verdict":"<one sentence, geological calm, no appeal>"}\`;
 }
 
 
@@ -2428,6 +2667,13 @@ function renderResults(data) {
   document.getElementById('loading').style.display = 'none';
   document.getElementById('verdict-block').style.display = 'block';
 
+  // Attenborough opening — above doom meter
+  const openingEl = document.getElementById('att-opening');
+  if (openingEl && data.attenborough_opening) {
+    openingEl.querySelector('.att-text').textContent = data.attenborough_opening;
+    openingEl.style.display = 'flex';
+  }
+
   updateDoom(data.doom_percentage);
 
   const container = document.getElementById('cards-out');
@@ -2467,6 +2713,19 @@ function renderResults(data) {
       card.style.transform = 'translateY(0)';
     }, 80 + i * 100);
   });
+
+  // Attenborough verdict — below cards, delayed
+  if (data.attenborough_verdict) {
+    const cardDelay = (data.panel?.length || 0) * 100 + 400;
+    const verdictEl = document.getElementById('att-verdict');
+    if (verdictEl) {
+      setTimeout(() => {
+        verdictEl.querySelector('.att-text').textContent = data.attenborough_verdict;
+        verdictEl.style.display = 'flex';
+        setTimeout(() => verdictEl.classList.add('visible'), 50);
+      }, cardDelay);
+    }
+  }
 }
 
 function hideResults() {
@@ -2477,6 +2736,10 @@ function hideResults() {
   document.getElementById('cards-out').innerHTML = '';
   document.getElementById('doom-pct').textContent = '0%';
   document.getElementById('doom-fill').style.width = '0%';
+  const opening = document.getElementById('att-opening');
+  if (opening) { opening.style.display = 'none'; }
+  const verdict = document.getElementById('att-verdict');
+  if (verdict) { verdict.style.display = 'none'; verdict.classList.remove('visible'); }
 }
 
 function setButtonState(disabled) {
@@ -2589,6 +2852,820 @@ async function react(situation, decision, currentProbability) {
 
 `;
 
+const SURVIVAL_SCHOOL_MUNDANE = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mundane Mode — Survival School</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f1209;
+      --surface: #181d10;
+      --surface2: #1e2514;
+      --border: rgba(120,160,60,0.15);
+      --border-strong: rgba(120,160,60,0.3);
+      --green: #7aad3a;
+      --green-dim: #4a7020;
+      --green-bright: #a0d050;
+      --amber: #BA7517;
+      --amber-dim: #5c3a08;
+      --bark: #8B6040;
+      --bark-dim: #3d2008;
+      --text: #e8edd8;
+      --text-muted: #7a8a60;
+      --blood: #cc1111;
+      --blood-dim: #3a0808;
+    }
+
+    body {
+      font-family: 'Barlow', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    #app {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 1.5rem 1rem 3rem;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 0.5px solid var(--border);
+    }
+
+    .title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 40px;
+      letter-spacing: 3px;
+      line-height: 1;
+    }
+
+    .title span { color: var(--amber); }
+
+    .subtitle {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      color: var(--text-muted);
+      letter-spacing: 1.5px;
+      margin-top: 5px;
+    }
+
+    .field-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      margin-top: 0;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-bottom: 10px;
+    }
+
+    .chip {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      padding: 5px 10px;
+      border: 0.5px solid var(--border-strong);
+      border-radius: 5px;
+      cursor: pointer;
+      background: none;
+      color: var(--text-muted);
+      transition: all 0.15s;
+      white-space: nowrap;
+      user-select: none;
+    }
+
+    .chip:hover, .chip.sel { border-color: var(--amber); color: var(--amber); }
+
+    textarea {
+      width: 100%;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 13px;
+      padding: 9px 12px;
+      border: 0.5px solid var(--border-strong);
+      border-radius: 6px;
+      background: var(--surface);
+      color: var(--text);
+      outline: none;
+      resize: vertical;
+      transition: border-color 0.15s;
+    }
+
+    textarea:focus { border-color: var(--amber); }
+
+    .btn-row { display: flex; gap: 8px; margin-top: 14px; }
+
+    .btn-assess {
+      flex: 1;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 11px;
+      background: var(--amber);
+      color: var(--bg);
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+
+    .btn-assess:hover { opacity: 0.88; }
+    .btn-assess:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    .btn-clear {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 1px;
+      padding: 11px 16px;
+      border: 0.5px solid var(--border-strong);
+      border-radius: 6px;
+      background: none;
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: color 0.15s, border-color 0.15s;
+    }
+
+    .btn-clear:hover { color: var(--text); border-color: var(--amber); }
+
+    /* Results */
+    .results { display: none; margin-top: 1.5rem; }
+    .results.show { display: block; }
+
+    .loading {
+      padding: 2rem;
+      text-align: center;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+    }
+
+    .dots::after {
+      content: '';
+      animation: dots 1.5s steps(3, end) infinite;
+    }
+
+    @keyframes dots {
+      0%   { content: '.'; }
+      33%  { content: '..'; }
+      66%  { content: '...'; }
+      100% { content: ''; }
+    }
+
+    /* Attenborough bookends */
+    .att-bookend {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      padding: 10px 14px;
+      background: var(--surface);
+      border: 0.5px solid var(--border);
+      border-radius: 8px;
+    }
+
+    .att-avatar {
+      width: 26px; height: 26px;
+      background: #1e1e1c;
+      color: #7a8a70;
+      border-radius: 50%;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 9px;
+      letter-spacing: 0.5px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .att-text {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 300;
+      font-style: italic;
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--text-muted);
+    }
+
+    #att-opening { margin-bottom: 12px; }
+
+    #att-verdict {
+      margin-top: 12px;
+      opacity: 0;
+      transition: opacity 0.8s ease;
+    }
+
+    #att-verdict.visible { opacity: 1; }
+
+    /* Probability meter */
+    .verdict-bar {
+      border: 0.5px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin-bottom: 1rem;
+      background: var(--surface);
+    }
+
+    .verdict-top {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .verdict-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--text-muted);
+    }
+
+    .pct {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 52px;
+      color: var(--blood);
+      line-height: 1;
+      transition: color 0.5s;
+    }
+
+    .pct.ok  { color: var(--green); }
+    .pct.mid { color: var(--amber); }
+
+    .meter {
+      height: 4px;
+      background: var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .meter-fill {
+      height: 100%;
+      background: var(--blood);
+      border-radius: 2px;
+      transition: width 1.2s ease, background 0.5s;
+    }
+
+    .meter-fill.ok  { background: var(--green); }
+    .meter-fill.mid { background: var(--amber); }
+
+    .panel-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+
+    /* Panel cards */
+    .char-card {
+      border: 0.5px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: 8px;
+      overflow: hidden;
+      background: var(--surface);
+    }
+
+    .char-card.death-card { border-color: var(--blood); }
+
+    .card-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 14px;
+      background: var(--surface2);
+      border-bottom: 0.5px solid var(--border);
+    }
+
+    .avatar {
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.5px;
+      flex-shrink: 0;
+    }
+
+    .av-green  { background: var(--green-dim);  color: var(--green-bright); }
+    .av-bark   { background: var(--bark-dim);   color: var(--bark); }
+    .av-amber  { background: var(--amber-dim);  color: var(--amber); }
+    .av-blue   { background: #0c1f3a;           color: #5a9fd4; }
+    .av-gray   { background: #1e1e1c;           color: #7a8a70; }
+
+    .char-name {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: 0.5px;
+      color: var(--text);
+    }
+
+    .char-role {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+
+    .card-body {
+      padding: 11px 14px;
+      font-family: 'Barlow', sans-serif;
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--text);
+      font-weight: 400;
+    }
+
+    .death-note {
+      margin-top: 8px;
+      padding: 7px 11px;
+      background: var(--blood-dim);
+      border-left: 3px solid var(--blood);
+      border-radius: 0 4px 4px 0;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      color: var(--blood);
+      font-weight: 500;
+    }
+
+    .fact-check {
+      margin-top: 6px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      color: var(--text-muted);
+      border-top: 0.5px solid var(--border);
+      padding-top: 6px;
+      opacity: 0.7;
+    }
+
+    .reset-row { margin-top: 1rem; text-align: center; }
+
+    .btn-reset {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      color: var(--text-muted);
+      background: none;
+      border: 0.5px solid var(--border-strong);
+      border-radius: 6px;
+      padding: 7px 16px;
+      cursor: pointer;
+      letter-spacing: 1px;
+      transition: all 0.15s;
+    }
+
+    .btn-reset:hover { color: var(--text); border-color: var(--amber); }
+  </style>
+</head>
+<body>
+<div id="app">
+
+  <div class="header">
+    <div class="title"><span>MUNDANE</span> MODE</div>
+    <div class="subtitle">your everyday problem. their full survival gravity.</div>
+  </div>
+
+  <div class="field-label">Your situation</div>
+  <div class="chips" id="chips-mundane">
+    <div class="chip" onclick="onChip(this, 'I have missed the last bus home. It is raining.')">missed the last bus</div>
+    <div class="chip" onclick="onChip(this, 'I am locked out of my house. It is 11pm.')">locked out</div>
+    <div class="chip" onclick="onChip(this, 'The printer has run out of ink. My presentation is in 10 minutes.')">printer out of ink</div>
+    <div class="chip" onclick="onChip(this, 'I have spilled coffee on my laptop. It is making a concerning noise.')">coffee on laptop</div>
+    <div class="chip" onclick="onChip(this, 'The wifi is down. I am working from home. I have a video call in 20 minutes.')">wifi down, call in 20</div>
+    <div class="chip" onclick="onChip(this, 'I have run out of tea bags. It is Sunday. The shops are closed.')">no tea bags, Sunday</div>
+    <div class="chip" onclick="onChip(this, 'There is one till open at the post office. The queue has not moved in 15 minutes.')">one till, post office</div>
+    <div class="chip" onclick="onChip(this, 'I ordered a takeaway 90 minutes ago. The app says it is still being prepared.')">takeaway 90 mins</div>
+    <div class="chip" onclick="onChip(this, 'My flat tyre is on the motorway hard shoulder. I am not a member of the AA.')">flat tyre, M-way</div>
+    <div class="chip" onclick="onChip(this, 'The self-checkout has called for assistance. There is a queue behind me.')">self-checkout assist</div>
+  </div>
+  <textarea id="mundane-input" rows="3"
+    placeholder="or describe your situation in full... I've missed the last bus, it's October, raining, and I'm wearing trainers..."
+    oninput="onInput(this.value)"></textarea>
+
+  <div class="btn-row">
+    <button class="btn-assess" id="btn-assess" onclick="onAssess()">ASSESS MY SITUATION ↗</button>
+    <button class="btn-clear" onclick="onClear()">CLEAR</button>
+  </div>
+
+  <div class="results" id="results">
+    <div class="loading" id="loading">
+      <span>PANEL CONVENING</span><span class="dots"></span>
+    </div>
+    <div id="verdict-block" style="display:none">
+      <div class="att-bookend" id="att-opening" style="display:none">
+        <div class="att-avatar">DA</div>
+        <div class="att-text"></div>
+      </div>
+      <div class="verdict-bar">
+        <div class="verdict-top">
+          <div class="verdict-label">SURVIVAL PROBABILITY</div>
+          <div class="pct" id="surv-pct">0%</div>
+        </div>
+        <div class="meter">
+          <div class="meter-fill" id="pct-fill" style="width:0%"></div>
+        </div>
+      </div>
+      <div class="panel-label">PANEL ASSESSMENT</div>
+      <div id="cards-out"></div>
+      <div class="att-bookend" id="att-verdict" style="display:none">
+        <div class="att-avatar">DA</div>
+        <div class="att-text"></div>
+      </div>
+      <div class="reset-row">
+        <button class="btn-reset" onclick="onClear()">NEW SITUATION</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// === characters.js ===
+
+// characters.js — v2 with Jason Fox and interaction loop support
+// Anti-Corruption Layer. Single source of truth for all character data.
+
+const CHARACTERS = {
+  ray: {
+    id: 'ray', name: 'Ray Mears', role: 'Bushcraft',
+    av: 'RM', avClass: 'av-green',
+    deathLine: 'You could be dead within the hour.',
+    voice: \`RAY MEARS — Bushcraft, 30+ years field experience.
+Cerebral, warm, loves the land. Great storyteller. Chubby survivalist —
+kebab van just off camera, never mentioned, always implied.
+Delivers five-minute meditation on interconnectedness then roasts it with evident satisfaction.
+VOICE: Never dramatic. Brevity is power. "Don't." is a complete sentence.
+Silence more eloquent than anything about Bear. Stories build slowly to a point.
+SKILLS: Fire 99, Shelter 97, Tool-making 98, Plant Knowledge 88, Navigation 90.\`
+  },
+  bear: {
+    id: 'bear', name: 'Bear Grylls', role: 'Former SAS',
+    av: 'BG', avClass: 'av-bark',
+    deathLine: 'If you get this wrong, you will not make it out of here alive.',
+    voice: \`BEAR GRYLLS — Former SAS. Genuine SAS credentials. Also drinks own urine when Londis is forty yards away.
+Gets ill eating things he didn't need to eat. Idiocy is sincere, not performed.
+Comedy engine: gap between SAS credentials and Londis forty yards away.
+Genuinely believes dramatic version IS the technique. No ironic distance whatsoever.
+VOICE: Urgent, evangelical, slightly breathless. Personal anecdote always — abroad, fine in the end.
+"Hydration?" unprompted every third response. Fact-checker footnote fires on factual claims.
+SKILLS: Psychology 92, Endurance 95, Navigation 80, Fire 70.\`
+  },
+  cody: {
+    id: 'cody', name: 'Cody Lundin', role: 'Primitive Skills',
+    av: 'CL', avClass: 'av-green',
+    deathLine: 'I have watched people make this mistake. They are no longer with us.',
+    voice: \`CODY LUNDIN — Aboriginal Living Skills School, Prescott Arizona. Barefoot on glaciers.
+Threw fire-making supplies into pool rather than demonstrate bad technique. Chose integrity over career.
+Comedy engine: always knows better option that was right there. "Cattails. Thirty feet away."
+VOICE: Patient, quiet, certain. Mentions feet/footwear when relevant. Never dramatic.
+Cody Override fires when asked to endorse wrong survival advice — refuses.
+SKILLS: Fire 97, Plant Knowledge 96, Tool-making 95, Psychology 95, Endurance 93.\`
+  },
+  hales: {
+    id: 'hales', name: 'Les Hales', role: 'Bush Tucker Man',
+    av: 'LH', avClass: 'av-amber',
+    deathLine: 'Yeah, nah.',
+    voice: \`LES HALES — Major, Australian Army. Bush Tucker Man.
+Walked outback eating things that would kill a normal person with the energy of a man doing light admin.
+Witchetty grub goes down like a Rich Tea biscuit.
+VOICE: Three words maximum. "Yeah, nah." means both simultaneously.
+Never heard of Bear Grylls. Frowns if called tough. Flat delivery funnier the more dangerous the situation.
+SKILLS: Plant Knowledge 95, Psychology 95, Endurance 90, Water 90.\`
+  },
+  fox: {
+    id: 'fox', name: 'Jason Fox', role: 'Special Boat Service',
+    av: 'JF', avClass: 'av-green',
+    deathLine: 'That is not a recoverable position.',
+    voice: \`JASON FOX — Foxy. Royal Marines at 16. SBS from 2001. "Like the SAS but better."
+Demolitions expert, combat swimmer, dog handler, jungle survival expert.
+Warm, self-deprecating, genuinely funny. Absolute killing machine. No contradiction in his mind.
+Comedy engine: tactical reframe of everything. Panel talks shelter. Fox assesses defensibility,
+lines of sight, exit routes, what is available as improvised incendiary. Not doing it to be funny.
+VOICE PATTERNS:
+1. Flat deflation — remarkable things delivered as admin. "Needed to pay bills, there we go."
+2. Calls it what it is, moves on — "gobshite. But he'd love it." One word, then useful info.
+3. Logical framework for feelings — emotions as problems to diagnose and resolve.
+4. Tactical reframe — threat assessment, lines of sight, entry/exit, improvised weapons.
+5. Self-deprecating then immediately competent.
+"Is that a dog walker or a contact?" is the template register. Swears naturally, matter-of-fact.
+NEVER make mental health a punchline. Ever.
+SKILLS: Navigation 96, Endurance 97, Terrain/Weather 92, Tool-making 88, Psychology 90.\`
+  },
+  attenborough: {
+    id: 'attenborough', name: 'David Attenborough', role: 'Natural World',
+    av: 'DA', avClass: 'av-gray',
+    deathLine: 'And so the story ends. As so many do. Quietly. And entirely predictably.',
+    voice: \`DAVID ATTENBOROUGH — 97 years watching things die. Your mistake is a Holocene footnote.
+Comedy engine: geological calm applied to your specific predicament.
+VOICE: Never gives survival advice — observes, describes, delivers verdict.
+Gaps matter as much as words. "Fascinating" always genuine. Narrates as nature documentary.
+Attenborough Eulogy closes every death state — one paragraph, never comedic in register, always in effect.
+SKILLS: Animal Encounters 95, Psychology 85. Everything practical: 0. Has a crew for this.\`
+  },
+  stroud: {
+    id: 'stroud', name: 'Les Stroud', role: 'Survivorman',
+    av: 'LS', avClass: 'av-blue',
+    deathLine: '',
+    voice: \`LES STROUD — Survivorman. Canadian. Entirely alone — no crew, films himself.
+Refused producer demands to fake survival. Walked away from money for authenticity.
+One harmonica note is a complete response sometimes.
+VOICE: Mild, slightly distant, genuine. "That didn't work." on camera and means it.
+Wears shoes — Cody has feelings about this.
+SKILLS: Endurance 90, Shelter 90, Water 88, Psychology 85, Navigation 85.\`
+  }
+};
+
+const SHARED_CONTEXT = \`
+RELATIONSHIPS:
+- Bear/Ray: Ray never says Bear is wrong. Silence and contrast do the work.
+- Bear/Fox: Fox finds Bear broadly fine. Thinks Bear would have passed selection. Doesn't say this.
+- Fox/Cody: Both genuinely competent, neither performs it. Fox finds barefoot thing tactically suboptimal.
+- Fox/Hales: Fox finds Hales immediately credible. "Yeah he's good." Full endorsement.
+- Fox/Attenborough: Non-threatening, high-value, zero tactical utility. Treats him with warmth.
+- Cody/Stroud: Stroud wears shoes. One long look. Silence.
+- Attenborough/everyone: Closes every scene.
+
+DEATH COMMENTARY: Earned — not wallpaper. Fires on clearly wrong call, dire situation (under 35%), or panel disagreement.
+
+FOUNDING PHILOSOPHY: Real knowledge. Genuine consequence. No performance. Comedy earned by knowledge being real.\`;
+
+// Panel characters (excludes Attenborough — he does bookends, not panel cards)
+const PANEL_IDS = ['ray', 'bear', 'cody', 'hales', 'fox', 'stroud'];
+
+function buildSystemPrompt(mode = 'assessment') {
+  const chars = Object.values(CHARACTERS)
+    .map(c => \`=== \${c.name.toUpperCase()} ===\\n\${c.voice}\`)
+    .join('\\n\\n');
+
+  if (mode === 'reaction') {
+    return \`You are the Survival School panel reaction engine. A user has made a survival decision. React to that specific choice in character.
+
+\${chars}
+
+\${SHARED_CONTEXT}
+
+ATTENBOROUGH BOOKEND STRUCTURE — Attenborough does NOT appear in the panel array. He bookends the whole response:
+- attenborough_opening: one sentence, nature documentary register, frames what this decision is about to cause. Observational, slightly ominous.
+- attenborough_verdict: one sentence, geological calm, no appeal, the turn's conclusion. He already knew.
+
+Panel characters (no Attenborough): Ray, Bear, Cody, Hales, Fox, Stroud.
+- Ray: is it technically correct? Craft judgement. Brief.
+- Bear: anecdote, probably did something similar somewhere exotic, hydration check.
+- Cody: was there a better option right there they missed?
+- Hales: three words maximum.
+- Fox: tactical assessment — lines of sight, threat exposure, exit options, what's available.
+- Stroud: quiet verdict.
+
+Survival probability shifts:
+- Good decision: +10 to +20
+- Neutral: no change
+- Poor: -15 to -25
+- Catastrophic: -30 to -50
+
+Generate 3 specific next actions the user could take from here.
+If probability reaches 0 or situation fully resolves, set is_terminal to true.
+
+OUTPUT — valid JSON only, no markdown:
+{"survival_probability":<integer>,"attenborough_opening":"<one sentence, nature doc, frames what the decision is about to cause>","situation_update":"<one sentence what changed>","panel":[{"charId":"<id>","text":"<2-3 sentences>","death":<bool>,"fact_check":"<optional — Bear only>"}],"attenborough_verdict":"<one sentence, geological calm, turn conclusion, he already knew>","next_actions":["<action>","<action>","<action>"],"is_terminal":<bool>}\`;
+  }
+
+  if (mode === 'mundane') {
+    return \`You are the Survival School panel. The user has described a MUNDANE, EVERYDAY problem. Apply full survival gravity. This is the joke — the greater the gravity, the funnier.
+
+\${chars}
+
+\${SHARED_CONTEXT}
+
+MUNDANE MODE: The situation is not a survival emergency. The panel doesn't know this.
+They assess with the same weight they would give a man trapped on Dartmoor in October.
+Ray identifies three immediate risks. Fox assesses lines of sight. Cody notes what was available nearby. Bear has done something similar abroad.
+
+ATTENBOROUGH BOOKEND STRUCTURE — Attenborough does NOT appear in the panel array. He bookends:
+- attenborough_opening: one sentence, introduces the mundane situation as if it's a wildlife encounter. "And here, in the fluorescent ecology of the Wetherspoons, a specimen faces a challenge that, while modest in geological terms, carries its own quiet urgency."
+- attenborough_verdict: one sentence, geological calm. Final verdict. He always knew.
+
+Panel characters (no Attenborough): Ray, Bear, Cody, Hales, Fox, Stroud.
+- Ray: identifies real risks in the mundane situation. Genuinely concerned.
+- Bear: has done something similar, abroad, fine in the end.
+- Cody: points out the better option that was right there. "The bus stop. Fifty yards away."
+- Hales: three words. Maximum.
+- Fox: tactical assessment of the mundane. Exit routes from the post office queue.
+- Stroud: quiet, measured verdict. Slightly melancholy.
+
+Survival probability: 0-100. For mundane scenarios this is usually 40-85% — they're not great situations, but survivable with the right mindset. A truly catastrophic mundane scenario (printer has run out of ink, presentation in 10 minutes) may drop lower.
+
+OUTPUT — valid JSON only, no markdown:
+{"survival_probability":<integer 0-100>,"attenborough_opening":"<one sentence, nature documentary, introduces mundane situation as wildlife encounter>","panel":[{"charId":"<id>","text":"<2-3 sentences>","death":<bool>,"fact_check":"<optional Bear only>"}],"attenborough_verdict":"<one sentence, geological calm, final verdict>"}\`;
+  }
+
+  return \`You are the Survival School panel assessment engine.
+
+\${chars}
+
+\${SHARED_CONTEXT}
+
+ATTENBOROUGH BOOKEND STRUCTURE — Attenborough does NOT appear in the panel array. He bookends the whole assessment:
+- attenborough_opening: one sentence, nature documentary register, introduces the situation as if it's a wildlife encounter. Sets the stakes. Slightly ominous.
+- attenborough_verdict: one sentence, geological calm, no appeal. The documentary's conclusion. He already knew.
+
+Panel characters (no Attenborough): Ray, Bear, Cody, Hales, Fox, Stroud.
+
+Generate initial assessment. Also produce 3 specific suggested first actions.
+
+OUTPUT — valid JSON only, no markdown:
+{"survival_probability":<integer 0-100>,"attenborough_opening":"<one sentence, nature doc, introduces situation as wildlife encounter, slightly ominous>","panel":[{"charId":"<id>","text":"<2-4 sentences>","death":<bool>,"fact_check":"<optional Bear only>"}],"attenborough_verdict":"<one sentence, geological calm, no appeal, the documentary's conclusion>","next_actions":["<action>","<action>","<action>"]}\`;
+}
+
+
+
+// === api.js ===
+
+// api.js — v2 with reaction mode support
+// Single responsibility: Worker integration and API calls.
+
+
+const WORKER_ENDPOINT = 'https://cusslab-api.leanspirited.workers.dev/survival-school/assess';
+
+async function assess(situation) {
+  const response = await fetch(WORKER_ENDPOINT, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      system: buildSystemPrompt('assessment'),
+      situation
+    })
+  });
+  if (!response.ok) throw new Error(\`Worker \${response.status}\`);
+  const data = await response.json();
+  if (!data.panel || !Array.isArray(data.panel)) throw new Error('Invalid response');
+  return data;
+}
+
+async function assessWorst(situation, systemPrompt) {
+  const response = await fetch(WORKER_ENDPOINT, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ system: systemPrompt, situation })
+  });
+  if (!response.ok) throw new Error(\`Worker \${response.status}\`);
+  const data = await response.json();
+  if (!data.panel || !Array.isArray(data.panel)) throw new Error('Invalid response');
+  return data;
+}
+
+async function react(situation, decision, currentProbability) {
+  const context = \`ORIGINAL SITUATION:\\n\${situation}\\n\\nCURRENT SURVIVAL PROBABILITY: \${currentProbability}%\\n\\nUSER'S DECISION: \${decision}\`;
+  const response = await fetch(WORKER_ENDPOINT, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      system: buildSystemPrompt('reaction'),
+      situation: context
+    })
+  });
+  if (!response.ok) throw new Error(\`Worker \${response.status}\`);
+  const data = await response.json();
+  if (!data.panel || !Array.isArray(data.panel)) throw new Error('Invalid response');
+  return data;
+}
+
+
+
+// === main ===
+
+
+
+  let situation = '';
+
+  window.onChip = (el, val) => {
+    document.querySelectorAll('#chips-mundane .chip').forEach(c => c.classList.remove('sel'));
+    el.classList.add('sel');
+    situation = val;
+    document.getElementById('mundane-input').value = val;
+  };
+
+  window.onInput = (val) => {
+    document.querySelectorAll('#chips-mundane .chip').forEach(c => c.classList.remove('sel'));
+    situation = val;
+  };
+
+  window.onClear = () => {
+    situation = '';
+    document.getElementById('mundane-input').value = '';
+    document.querySelectorAll('#chips-mundane .chip').forEach(c => c.classList.remove('sel'));
+    document.getElementById('results').classList.remove('show');
+    document.getElementById('verdict-block').style.display = 'none';
+    document.getElementById('loading').style.display = 'block';
+    document.getElementById('loading').innerHTML = '<span>PANEL CONVENING</span><span class="dots"></span>';
+    document.getElementById('cards-out').innerHTML = '';
+    document.getElementById('surv-pct').textContent = '0%';
+    document.getElementById('pct-fill').style.width = '0%';
+    const opening = document.getElementById('att-opening');
+    opening.style.display = 'none';
+    const verdict = document.getElementById('att-verdict');
+    verdict.style.display = 'none';
+    verdict.classList.remove('visible');
+    document.getElementById('btn-assess').disabled = false;
+  };
+
+  window.onAssess = async () => {
+    if (!situation.trim()) { alert('Tell us about your situation first.'); return; }
+    document.getElementById('btn-assess').disabled = true;
+    document.getElementById('results').classList.add('show');
+    document.getElementById('loading').style.display = 'block';
+    document.getElementById('loading').innerHTML = '<span>PANEL CONVENING</span><span class="dots"></span>';
+    document.getElementById('verdict-block').style.display = 'none';
+
+    try {
+      const data = await assessWorst(situation.trim(), buildSystemPrompt('mundane'));
+
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('verdict-block').style.display = 'block';
+
+      // Attenborough opening
+      if (data.attenborough_opening) {
+        const openingEl = document.getElementById('att-opening');
+        openingEl.querySelector('.att-text').textContent = data.attenborough_opening;
+        openingEl.style.display = 'flex';
+      }
+
+      // Probability meter
+      const pct = data.survival_probability || 0;
+      const cls = pct >= 70 ? 'ok' : pct >= 40 ? 'mid' : '';
+      const pctEl = document.getElementById('surv-pct');
+      const fill  = document.getElementById('pct-fill');
+      pctEl.className = 'pct' + (cls ? ' ' + cls : '');
+      fill.className  = 'meter-fill' + (cls ? ' ' + cls : '');
+      fill.style.width = '0%'; pctEl.textContent = '0%';
+      setTimeout(() => { fill.style.width = pct + '%'; pctEl.textContent = pct + '%'; }, 100);
+
+      // Panel cards
+      const container = document.getElementById('cards-out');
+      container.innerHTML = '';
+      (data.panel || []).forEach((r, i) => {
+        const char = CHARACTERS[r.charId];
+        if (!char) return;
+        const card = document.createElement('div');
+        card.className = 'char-card' + (r.death ? ' death-card' : '');
+        card.style.cssText = 'opacity:0;transform:translateY(7px);transition:opacity 0.3s ease,transform 0.3s ease';
+        card.innerHTML = \`
+          <div class="card-head">
+            <div class="avatar \${char.avClass}">\${char.av}</div>
+            <div>
+              <div class="char-name">\${char.name}</div>
+              <div class="char-role">\${char.role}</div>
+            </div>
+          </div>
+          <div class="card-body">
+            \${r.text}
+            \${r.death && char.deathLine ? \`<div class="death-note">\${char.deathLine}</div>\` : ''}
+            \${r.fact_check ? \`<div class="fact-check">&#10033; \${r.fact_check}</div>\` : ''}
+          </div>\`;
+        container.appendChild(card);
+        setTimeout(() => { card.style.opacity = '1'; card.style.transform = 'translateY(0)'; }, 80 + i * 100);
+      });
+
+      // Attenborough verdict — delayed
+      if (data.attenborough_verdict) {
+        const cardDelay = (data.panel?.length || 0) * 100 + 400;
+        setTimeout(() => {
+          const verdictEl = document.getElementById('att-verdict');
+          verdictEl.querySelector('.att-text').textContent = data.attenborough_verdict;
+          verdictEl.style.display = 'flex';
+          setTimeout(() => verdictEl.classList.add('visible'), 50);
+        }, cardDelay);
+      }
+
+    } catch (e) {
+      document.getElementById('loading').innerHTML =
+        \`<span style="color:var(--blood)">Panel unavailable. They may already know how this ends.</span>\`;
+    } finally {
+      document.getElementById('btn-assess').disabled = false;
+    }
+  };
+
+</script>
+
+</body>
+</html>
+
+`;
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -2607,6 +3684,9 @@ export default {
     }
     if (request.method === 'GET' && url.pathname === '/survival-school/worst') {
       return new Response(SURVIVAL_SCHOOL_WORST, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' }});
+    }
+    if (request.method === 'GET' && url.pathname === '/survival-school/mundane') {
+      return new Response(SURVIVAL_SCHOOL_MUNDANE, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' }});
     }
     if (request.method !== 'POST') {
       return new Response('Method not allowed', { status: 405 });
