@@ -224,13 +224,15 @@ const SURVIVAL_SCHOOL_HOME = `<!DOCTYPE html>
     #panel-worst,
     #panel-mundane,
     #panel-fact-checker,
-    #panel-deathmatch { padding: 0; }
+    #panel-deathmatch,
+    #panel-coyote { padding: 0; }
 
     #panel-screwed iframe,
     #panel-worst iframe,
     #panel-mundane iframe,
     #panel-fact-checker iframe,
-    #panel-deathmatch iframe {
+    #panel-deathmatch iframe,
+    #panel-coyote iframe {
       width: 100%;
       height: calc(100vh - 65px);
       border: none;
@@ -356,7 +358,8 @@ const SURVIVAL_SCHOOL_HOME = `<!DOCTYPE html>
       #panel-worst iframe,
       #panel-mundane iframe,
       #panel-fact-checker iframe,
-      #panel-deathmatch iframe { height: 80vh; }
+      #panel-deathmatch iframe,
+      #panel-coyote iframe { height: 80vh; }
     }
   </style>
 </head>
@@ -403,6 +406,11 @@ const SURVIVAL_SCHOOL_HOME = `<!DOCTYPE html>
       <div class="nav-item" data-panel="fact-checker">
         <span class="nav-icon">✓</span>
         Bear Fact-Checker
+        <span class="nav-badge badge-live">LIVE</span>
+      </div>
+      <div class="nav-item" data-panel="coyote">
+        <span class="nav-icon">⚡</span>
+        The Coyote Index
         <span class="nav-badge badge-live">LIVE</span>
       </div>
     </div>
@@ -487,6 +495,12 @@ const SURVIVAL_SCHOOL_HOME = `<!DOCTYPE html>
     <div class="panel" id="panel-fact-checker">
       <iframe src="https://cusslab-api.leanspirited.workers.dev/survival-school/fact-checker"
               title="Bear Fact-Checker"></iframe>
+    </div>
+
+    <!-- THE COYOTE INDEX — live -->
+    <div class="panel" id="panel-coyote">
+      <iframe src="https://cusslab-api.leanspirited.workers.dev/survival-school/coyote"
+              title="The Coyote Index"></iframe>
     </div>
 
     <!-- PANEL Q&A -->
@@ -4520,6 +4534,337 @@ document.getElementById('claim-input').addEventListener('keydown', e => {
 </html>
 `;
 
+const SURVIVAL_SCHOOL_COYOTE = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>The Coyote Index — Survival School</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0f1209; --surface: #181d10; --surface2: #1e2514;
+      --border: rgba(120,160,60,0.15); --border-strong: rgba(120,160,60,0.3);
+      --green: #7aad3a; --green-dim: #4a7020; --green-bright: #a0d050;
+      --amber: #BA7517; --amber-dim: #5c3a08;
+      --bark: #8B6040; --bark-dim: #3d2008;
+      --blood: #cc1111; --blood-dim: #3a0808;
+      --blue-dim: #1a1e2a; --blue: #5a7aaa;
+      --text: #e8edd8; --text-muted: #7a8a60;
+    }
+    body { font-family: 'Barlow', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+    #app { max-width: 680px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+
+    .header { text-align: center; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 0.5px solid var(--border); }
+    .title { font-family: 'Bebas Neue', sans-serif; font-size: 40px; letter-spacing: 3px; line-height: 1; }
+    .title span { color: var(--amber); }
+    .subtitle { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-muted); letter-spacing: 1.5px; margin-top: 5px; }
+
+    .field-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1.5px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; margin-top: 16px; }
+
+    .chips { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 8px; }
+    .chip { font-family: 'IBM Plex Mono', monospace; font-size: 11px; padding: 5px 10px; border: 0.5px solid var(--border-strong); border-radius: 5px; cursor: pointer; background: none; color: var(--text-muted); transition: all 0.15s; white-space: nowrap; user-select: none; }
+    .chip:hover, .chip.sel { border-color: var(--amber); color: var(--amber); }
+
+    textarea { width: 100%; font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; padding: 9px 12px; border: 0.5px solid var(--border-strong); border-radius: 6px; background: var(--surface); color: var(--text); outline: none; transition: border-color 0.15s; resize: vertical; min-height: 72px; line-height: 1.6; }
+    textarea:focus { border-color: var(--amber); }
+
+    .btn-row { display: flex; gap: 8px; margin-top: 14px; }
+    .btn-rate { flex: 1; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 2px; text-transform: uppercase; padding: 11px; background: var(--amber-dim); color: var(--amber); border: 0.5px solid var(--amber-dim); border-radius: 6px; cursor: pointer; transition: opacity 0.15s; }
+    .btn-rate:hover { opacity: 0.88; }
+    .btn-rate:disabled { opacity: 0.4; cursor: not-allowed; }
+    .btn-clear { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 1px; padding: 11px 16px; border: 0.5px solid var(--border-strong); border-radius: 6px; background: none; cursor: pointer; color: var(--text-muted); transition: color 0.15s, border-color 0.15s; }
+    .btn-clear:hover { color: var(--text); border-color: var(--amber); }
+
+    .results { display: none; margin-top: 1.5rem; }
+    .results.show { display: block; }
+    .loading { padding: 2rem; text-align: center; font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--text-muted); letter-spacing: 1px; }
+    .dots::after { content: ''; animation: dots 1.5s steps(3, end) infinite; }
+    @keyframes dots { 0%{content:'.'} 33%{content:'..'} 66%{content:'...'} 100%{content:''} }
+
+    .rating-block { margin-bottom: 1.2rem; }
+    .rating-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
+    .rating-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1.5px; color: var(--text-muted); text-transform: uppercase; }
+    .rating-number { font-family: 'Bebas Neue', sans-serif; font-size: 52px; letter-spacing: 2px; line-height: 1; color: var(--amber); }
+    .rating-track { height: 4px; background: var(--surface2); border-radius: 2px; overflow: hidden; margin-bottom: 8px; }
+    .rating-fill { height: 100%; border-radius: 2px; background: var(--amber); transition: width 0.6s ease; }
+    .rating-scale { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-muted); display: flex; justify-content: space-between; }
+
+    .coyote-assessment { font-family: 'Barlow', sans-serif; font-size: 14px; line-height: 1.7; color: var(--text); padding: 10px 14px; background: var(--surface); border: 0.5px solid var(--border); border-radius: 8px; margin-bottom: 10px; }
+    .anecdote-block { padding: 10px 14px; border-left: 2px solid var(--amber-dim); margin-bottom: 1rem; }
+    .anecdote-direction { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1.5px; color: var(--amber); text-transform: uppercase; margin-bottom: 4px; }
+    .anecdote-text { font-family: 'Barlow', sans-serif; font-size: 14px; line-height: 1.7; color: var(--text-muted); font-style: italic; }
+    .anecdote-rating { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--amber); margin-top: 4px; }
+
+    .panel-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 2px; color: var(--text-muted); margin: 1rem 0 8px; }
+    .char-card { border: 0.5px solid var(--border); border-radius: 10px; margin-bottom: 8px; overflow: hidden; background: var(--surface); }
+    .card-head { display: flex; align-items: center; gap: 10px; padding: 9px 14px; background: var(--surface2); border-bottom: 0.5px solid var(--border); }
+    .avatar { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 11px; flex-shrink: 0; }
+    .av-green { background: var(--green-dim);  color: var(--green-bright); }
+    .av-amber { background: var(--amber-dim);  color: var(--amber); }
+    .av-bark  { background: var(--bark-dim);   color: var(--bark); }
+    .av-blue  { background: var(--blue-dim);   color: var(--blue); }
+    .char-name { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 14px; color: var(--text); }
+    .char-role { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-muted); }
+    .card-body { padding: 11px 14px; font-family: 'Barlow', sans-serif; font-size: 14px; line-height: 1.7; color: var(--text); }
+
+    .att-bookend { display: flex; gap: 10px; align-items: flex-start; padding: 10px 14px; background: var(--surface); border: 0.5px solid var(--border); border-radius: 8px; }
+    .att-avatar { width: 26px; height: 26px; background: #1e1e1c; color: #7a8a70; border-radius: 50%; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 9px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+    .att-text { font-family: 'Barlow', sans-serif; font-weight: 300; font-style: italic; font-size: 14px; line-height: 1.7; color: var(--text-muted); }
+    #att-verdict { margin-top: 12px; opacity: 0; transition: opacity 0.8s ease; }
+    #att-verdict.visible { opacity: 1; }
+
+    .reset-row { margin-top: 1rem; text-align: center; }
+    .btn-reset { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-muted); background: none; border: 0.5px solid var(--border-strong); border-radius: 6px; padding: 7px 16px; cursor: pointer; letter-spacing: 1px; transition: all 0.15s; }
+    .btn-reset:hover { color: var(--text); border-color: var(--amber); }
+  </style>
+</head>
+<body>
+<div id="app">
+
+  <div class="header">
+    <div class="title">THE <span>COYOTE</span> INDEX</div>
+    <div class="subtitle">describe your pain. coyote assigns a number. context provided.</div>
+  </div>
+
+  <div class="field-label">Common incidents (select or describe your own)</div>
+  <div class="chips" id="chips-incident">
+    <div class="chip" onclick="onChip(this,'shin struck by shopping trolley in Sainsbury\\'s, Saturday afternoon, no apology given')">trolley to shin</div>
+    <div class="chip" onclick="onChip(this,'paper cut from cardboard box edge, not paper — the deceptive kind')">cardboard cut</div>
+    <div class="chip" onclick="onChip(this,'stepped on Lego barefoot, 3am, trying not to wake anyone')">Lego, 3am</div>
+    <div class="chip" onclick="onChip(this,'stubbed little toe on bed corner, full speed, unexpected')">bed corner, little toe</div>
+    <div class="chip" onclick="onChip(this,'eating something described as mild on the menu')">mild (it was not mild)</div>
+    <div class="chip" onclick="onChip(this,'bee sting, forearm, unprovoked')">bee sting</div>
+    <div class="chip" onclick="onChip(this,'jellyfish sting, leg, holiday, shallow water')">jellyfish, holiday</div>
+    <div class="chip" onclick="onChip(this,'waxing — any area')">waxing</div>
+    <div class="chip" onclick="onChip(this,'dental filling without full anaesthetic, dentist says it\\'s fine')">filling, insufficient anaesthetic</div>
+    <div class="chip" onclick="onChip(this,'bitten by bullet ant, Paraponera clavata, deliberately')">bullet ant (reference)</div>
+  </div>
+
+  <div class="field-label" style="margin-top:12px">Or describe your incident</div>
+  <textarea id="incident-input" placeholder="Describe what happened. Be specific. Coyote will be."></textarea>
+
+  <div class="btn-row">
+    <button class="btn-rate" id="btn-rate" onclick="onRate()">RATE IT ↗</button>
+    <button class="btn-clear" onclick="onClear()">CLEAR</button>
+  </div>
+
+  <div class="results" id="results">
+    <div class="loading" id="loading">
+      <span>COYOTE IS CONSULTING HIS FIELD NOTES</span><span class="dots"></span>
+    </div>
+    <div id="result-block" style="display:none">
+      <div id="rating-out"></div>
+      <div class="panel-label">THE PANEL HAS OBSERVED THIS INCIDENT</div>
+      <div id="cards-out"></div>
+      <div class="att-bookend" id="att-verdict" style="display:none">
+        <div class="att-avatar">DA</div>
+        <div class="att-text"></div>
+      </div>
+      <div class="reset-row">
+        <button class="btn-reset" onclick="onClear()">SUBMIT ANOTHER INCIDENT</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const WORKER_ENDPOINT = 'https://cusslab-api.leanspirited.workers.dev/survival-school/coyote';
+
+const CHARACTERS = {
+  ray:    { name: 'Ray Mears',       role: 'Bushcraft',            av: 'RM', avClass: 'av-green' },
+  bear:   { name: 'Bear Grylls',     role: 'Former SAS',           av: 'BG', avClass: 'av-bark'  },
+  cody:   { name: 'Cody Lundin',     role: 'Primitive Skills',     av: 'CL', avClass: 'av-green' },
+  hales:  { name: 'Les Hiddins',     role: 'Bush Tucker Man',      av: 'LH', avClass: 'av-amber' },
+  stroud: { name: 'Les Stroud',      role: 'Survivorman',          av: 'LS', avClass: 'av-green' },
+  coyote: { name: 'Coyote Peterson', role: 'Brave Wilderness',     av: 'CP', avClass: 'av-amber' },
+};
+
+const SYSTEM_PROMPT = \`You are Coyote Peterson and the Survival School panel. A user has described a painful incident. Coyote rates it on his personal pain scale (derived from the Schmidt Sting Pain Index) and provides a comparison from his own field work — which may be significantly more extreme (mismatch that destroys the user's claim to suffering) or surprisingly less extreme (mismatch that validates it). The direction alternates unpredictably. Both are delivered with identical clinical enthusiasm.
+
+=== COYOTE PETERSON ===
+YouTube: Brave Wilderness. Has been stung/bitten deliberately by bullet ant (4.0), executioner wasp (4.5+), Gila monster, tarantula hawk, and many others. Maintains a personal pain scale with decimal precision.
+RATING: A number 0.0–5.0. One decimal place. Always precise. The bullet ant is 4.0 — "pure, intense, brilliant pain, like walking over flaming charcoal with a 3-inch nail embedded in your heel."
+ASSESSMENT: 2-3 sentences. Clinical, enthusiastic. Treats the incident as a valuable data point.
+ANECDOTE: 2-3 sentences. A specific incident from his field work. Either significantly more extreme (higher rating — he has experienced far worse, user's suffering is negligible) OR surprisingly less extreme (lower rating — he has logged something far more trivial and it still got a number). He is equally enthusiastic about both. He ALWAYS respects the animal or object involved. Even the trolley.
+anecdote_direction: "higher" if his comparison is worse than the user's incident. "lower" if it is less severe.
+anecdote_rating: the numeric rating of his comparison incident.
+
+=== RAY MEARS ===
+Notes the physiological response with clinical accuracy. One sentence. Dry. Does not sympathise. Does not dismiss.
+
+=== BEAR GRYLLS ===
+Has experienced something comparable or worse. Possibly self-inflicted. Possibly abroad. Fine in the end. 1-2 sentences. Never concedes the user's version was worse.
+
+=== CODY LUNDIN ===
+Barefoot, always. Has an opinion on footwear that is tangentially relevant. Quiet, certain, one observation.
+
+=== LES HIDDINS ===
+The Aboriginal people have context for this. Brief. Educational. Has encountered something similar in the Northern Territory.
+
+=== LES STROUD ===
+One sentence. Quiet verdict. Slightly melancholy. Has documented something comparable, alone, on camera.
+
+=== ATTENBOROUGH ===
+Does NOT appear in panel array. attenborough_verdict only: one sentence, nature documentary register, closes everything. He has observed this before.
+
+OUTPUT — valid JSON only, no markdown, no prose:
+{"rating":<number 0.0-5.0, one decimal>,"coyote_assessment":"<2-3 sentences, clinical and enthusiastic>","coyote_anecdote":"<2-3 sentences, specific field incident, match or mismatch>","anecdote_rating":<number 0.0-5.0>,"anecdote_direction":"higher|lower","panel":[{"charId":"ray","text":"<1-2 sentences>"},{"charId":"bear","text":"<1-2 sentences>"},{"charId":"cody","text":"<1-2 sentences>"},{"charId":"hales","text":"<1-2 sentences>"},{"charId":"stroud","text":"<1 sentence>"}],"attenborough_verdict":"<one sentence, geological calm>"}\`;
+
+const State = {
+  incident: '',
+  setIncident(v) { this.incident = v; },
+  clear() { this.incident = ''; },
+};
+
+const UI = {
+  showLoading() {
+    document.getElementById('results').classList.add('show');
+    document.getElementById('loading').style.display = 'block';
+    document.getElementById('result-block').style.display = 'none';
+  },
+  showResults() {
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('result-block').style.display = 'block';
+  },
+  showError(msg) {
+    document.getElementById('loading').innerHTML = \`<span style="color:var(--blood)">\${msg}</span>\`;
+  },
+  setButtonState(disabled) {
+    document.getElementById('btn-rate').disabled = disabled;
+  },
+  clear() {
+    document.getElementById('incident-input').value = '';
+    document.querySelectorAll('#chips-incident .chip').forEach(c => c.classList.remove('sel'));
+    document.getElementById('results').classList.remove('show');
+    document.getElementById('result-block').style.display = 'none';
+    document.getElementById('loading').style.display = 'block';
+    document.getElementById('loading').innerHTML = '<span>COYOTE IS CONSULTING HIS FIELD NOTES</span><span class="dots"></span>';
+    document.getElementById('rating-out').innerHTML = '';
+    document.getElementById('cards-out').innerHTML = '';
+    const verdict = document.getElementById('att-verdict');
+    if (verdict) { verdict.style.display = 'none'; verdict.classList.remove('visible'); }
+  },
+};
+
+const API = {
+  async rate(incident) {
+    const resp = await fetch(WORKER_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ system: SYSTEM_PROMPT, incident }),
+    });
+    if (!resp.ok) throw new Error('Worker ' + resp.status);
+    return resp.json();
+  },
+};
+
+function ratingColor(r) {
+  if (r >= 4) return 'var(--blood)';
+  if (r >= 3) return 'var(--amber)';
+  if (r >= 2) return 'var(--bark)';
+  return 'var(--green)';
+}
+
+function renderResults(data) {
+  UI.showResults();
+
+  const r = typeof data.rating === 'number' ? data.rating : 0;
+  const color = ratingColor(r);
+  document.getElementById('rating-out').innerHTML = \`
+    <div class="rating-block">
+      <div class="rating-header">
+        <span class="rating-label">Coyote Index Rating</span>
+        <span class="rating-number" style="color:\${color}">\${r.toFixed(1)}</span>
+      </div>
+      <div class="rating-track"><div class="rating-fill" style="width:\${(r/5)*100}%;background:\${color}"></div></div>
+      <div class="rating-scale"><span>0.0 — nothing</span><span>2.5 — notable</span><span>5.0 — legendary</span></div>
+    </div>
+    <div class="coyote-assessment">\${data.coyote_assessment || ''}</div>
+    <div class="anecdote-block">
+      <div class="anecdote-direction">\${data.anecdote_direction === 'higher' ? '▲ Coyote has experienced worse' : '▼ Coyote has experienced less'}</div>
+      <div class="anecdote-text">\${data.coyote_anecdote || ''}</div>
+      \${data.anecdote_rating != null ? \`<div class="anecdote-rating">His rating: \${Number(data.anecdote_rating).toFixed(1)}</div>\` : ''}
+    </div>\`;
+
+  const container = document.getElementById('cards-out');
+  container.innerHTML = '';
+  (data.panel || []).forEach((r, i) => {
+    const char = CHARACTERS[r.charId];
+    if (!char) return;
+    const card = document.createElement('div');
+    card.className = 'char-card';
+    card.style.cssText = 'opacity:0;transform:translateY(7px);transition:opacity 0.3s ease,transform 0.3s ease;';
+    card.innerHTML = \`
+      <div class="card-head">
+        <div class="avatar \${char.avClass}">\${char.av}</div>
+        <div>
+          <div class="char-name">\${char.name}</div>
+          <div class="char-role">\${char.role}</div>
+        </div>
+      </div>
+      <div class="card-body">\${r.text}</div>\`;
+    container.appendChild(card);
+    setTimeout(() => { card.style.opacity = '1'; card.style.transform = 'translateY(0)'; }, 80 + i * 100);
+  });
+
+  if (data.attenborough_verdict) {
+    const delay = (data.panel?.length || 0) * 100 + 400;
+    const el = document.getElementById('att-verdict');
+    if (el) {
+      setTimeout(() => {
+        el.querySelector('.att-text').textContent = data.attenborough_verdict;
+        el.style.display = 'flex';
+        setTimeout(() => el.classList.add('visible'), 50);
+      }, delay);
+    }
+  }
+}
+
+function onChip(el, val) {
+  document.querySelectorAll('#chips-incident .chip').forEach(c => c.classList.remove('sel'));
+  el.classList.add('sel');
+  State.setIncident(val);
+  document.getElementById('incident-input').value = val;
+}
+
+function onClear() {
+  State.clear();
+  UI.clear();
+  UI.setButtonState(false);
+}
+
+async function onRate() {
+  const incident = document.getElementById('incident-input').value.trim() || State.incident;
+  if (!incident) { alert('Describe an incident first.'); return; }
+  State.setIncident(incident);
+  UI.setButtonState(true);
+  UI.showLoading();
+  try {
+    const data = await API.rate(incident);
+    renderResults(data);
+  } catch(e) {
+    UI.showError('Coyote is unavailable. He may be in the sting zone.');
+  } finally {
+    UI.setButtonState(false);
+  }
+}
+
+document.getElementById('incident-input').addEventListener('input', e => {
+  document.querySelectorAll('#chips-incident .chip').forEach(c => c.classList.remove('sel'));
+  State.setIncident(e.target.value);
+});
+document.getElementById('incident-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); onRate(); }
+});
+</script>
+</body>
+</html>
+`;
+
 const SURVIVAL_SCHOOL_DEATHMATCH = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5278,6 +5623,9 @@ export default {
     if (request.method === 'GET' && url.pathname === '/survival-school/deathmatch') {
       return new Response(SURVIVAL_SCHOOL_DEATHMATCH, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' }});
     }
+    if (request.method === 'GET' && url.pathname === '/survival-school/coyote') {
+      return new Response(SURVIVAL_SCHOOL_COYOTE, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' }});
+    }
     if (request.method !== 'POST') {
       return new Response('Method not allowed', { status: 405 });
     }
@@ -5286,6 +5634,23 @@ export default {
       return new Response(JSON.stringify({ error: { message: 'No API key configured on server' } }), {
         status: 500, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
       });
+    }
+    if (url.pathname === '/survival-school/coyote') {
+      const body = await request.json();
+      const upstream = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'anthropic-version': '2023-06-01', 'x-api-key': apiKey },
+        body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 1500, system: body.system, messages: [{ role: 'user', content: body.incident }] }),
+      });
+      if (!upstream.ok) {
+        return new Response(JSON.stringify({ error: { message: `Anthropic error ${upstream.status}` } }), {
+          status: upstream.status, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
+        });
+      }
+      const anthropicData = await upstream.json();
+      const raw = anthropicData.content[0].text;
+      const text = raw.replace(/^```(?:json)?\s*/i, '').replace(/\s*```\s*$/, '').trim();
+      return new Response(text, { status: 200, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }});
     }
     if (url.pathname === '/survival-school/assess') {
       const body = await request.json();
