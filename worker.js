@@ -7,6 +7,7 @@ const SURVIVAL_SCHOOL_HOME = `<!DOCTYPE html>
   <title>Survival School</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@700&family=Barlow:wght@400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <!-- SS-044 tiled homepage -->
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -24,7 +25,6 @@ const SURVIVAL_SCHOOL_HOME = `<!DOCTYPE html>
       --border-strong:rgba(122,173,58,0.32);
       --radius:       6px;
       --radius-lg:    10px;
-      --nav-w:        240px;
     }
 
     body {
@@ -49,11 +49,7 @@ const SURVIVAL_SCHOOL_HOME = `<!DOCTYPE html>
       z-index: 100;
     }
 
-    .logo-mark {
-      width: 36px;
-      height: 36px;
-      flex-shrink: 0;
-    }
+    .logo-mark { width: 36px; height: 36px; flex-shrink: 0; }
 
     .logo-text {
       font-family: 'Bebas Neue', sans-serif;
@@ -62,7 +58,6 @@ const SURVIVAL_SCHOOL_HOME = `<!DOCTYPE html>
       line-height: 1;
       color: var(--text);
     }
-
     .logo-text span { color: var(--blood); }
 
     .logo-sub {
@@ -82,7 +77,6 @@ const SURVIVAL_SCHOOL_HOME = `<!DOCTYPE html>
       top: 0; left: 0;
       display: flex;
       flex-direction: column;
-      animation: taglines 28s steps(1) infinite;
     }
 
     .tagline-track span {
@@ -93,25 +87,14 @@ const SURVIVAL_SCHOOL_HOME = `<!DOCTYPE html>
       animation: tagline-fade 28s infinite;
     }
 
-    .tagline-track span:nth-child(1)  { animation-delay: 0s; }
-    .tagline-track span:nth-child(2)  { animation-delay: 3.5s; }
-    .tagline-track span:nth-child(3)  { animation-delay: 7s; }
-    .tagline-track span:nth-child(4)  { animation-delay: 10.5s; }
-    .tagline-track span:nth-child(5)  { animation-delay: 14s; }
-    .tagline-track span:nth-child(6)  { animation-delay: 17.5s; }
-    .tagline-track span:nth-child(7)  { animation-delay: 21s; }
-    .tagline-track span:nth-child(8)  { animation-delay: 24.5s; }
-
-    @keyframes tagline-fade {
-      0%, 100%      { opacity: 0; }
-      3%, 96.5%     { opacity: 1; }
-      12.5%, 87.5%  { opacity: 1; }
-    }
-
-    /* Each span fades in at its delay, stays visible for ~3s, then fades */
-    .tagline-track span {
-      animation: tagline-fade 28s infinite;
-    }
+    .tagline-track span:nth-child(1) { animation-delay: 0s; }
+    .tagline-track span:nth-child(2) { animation-delay: 3.5s; }
+    .tagline-track span:nth-child(3) { animation-delay: 7s; }
+    .tagline-track span:nth-child(4) { animation-delay: 10.5s; }
+    .tagline-track span:nth-child(5) { animation-delay: 14s; }
+    .tagline-track span:nth-child(6) { animation-delay: 17.5s; }
+    .tagline-track span:nth-child(7) { animation-delay: 21s; }
+    .tagline-track span:nth-child(8) { animation-delay: 24.5s; }
 
     @keyframes tagline-fade {
       0%    { opacity: 0; }
@@ -121,80 +104,74 @@ const SURVIVAL_SCHOOL_HOME = `<!DOCTYPE html>
       100%  { opacity: 0; }
     }
 
-    /* ── LAYOUT ─────────────────────────────────────────────────────────── */
-    #app-body {
-      display: flex;
+    /* ── TILE GRID ───────────────────────────────────────────────────────── */
+    main {
       flex: 1;
+      padding: 36px 24px 48px;
     }
 
-    /* ── SIDEBAR ─────────────────────────────────────────────────────────── */
-    nav {
-      width: var(--nav-w);
-      min-width: var(--nav-w);
+    .section-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 2.5px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      margin-top: 32px;
+    }
+
+    .section-label:first-child { margin-top: 0; }
+
+    .tile-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      max-width: 920px;
+    }
+
+    .tile {
       background: var(--surface);
-      border-right: 1px solid var(--border);
-      padding: 20px 0;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 6px;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.14s, background 0.14s;
+      min-height: 130px;
     }
 
-    .nav-section {
-      padding: 0 12px;
-      margin-top: 8px;
+    .tile:hover {
+      border-color: var(--border-strong);
+      background: var(--surface2);
+    }
+
+    .tile.soon {
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
+    .tile-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       margin-bottom: 2px;
     }
 
-    .nav-section-label {
+    .tile-cat {
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 9px;
-      letter-spacing: 2px;
+      font-size: 8px;
+      letter-spacing: 1.5px;
       color: var(--text-muted);
       text-transform: uppercase;
-      padding: 0 8px;
-      margin-bottom: 4px;
     }
 
-    .nav-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 7px 8px;
-      border-left: 2px solid transparent;
-      cursor: pointer;
-      font-family: 'Barlow Condensed', sans-serif;
-      font-weight: 700;
-      font-size: 13px;
-      letter-spacing: 0.5px;
-      color: var(--text-muted);
-      transition: background 0.12s, color 0.12s, border-color 0.12s;
-      user-select: none;
-    }
-
-    .nav-item:hover {
-      background: var(--surface2);
-      color: var(--text);
-      border-left-color: var(--border-strong);
-    }
-
-    .nav-item.active {
-      background: var(--surface2);
-      color: var(--green);
-      border-left-color: var(--green);
-    }
-
-    .nav-item .nav-icon {
-      font-size: 13px;
-      width: 18px;
-      text-align: center;
-      flex-shrink: 0;
-    }
-
-    .nav-badge {
-      margin-left: auto;
+    .tile-badge {
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 9px;
-      padding: 2px 5px;
+      font-size: 8px;
+      padding: 2px 6px;
       border-radius: 20px;
       letter-spacing: 0.5px;
     }
@@ -205,168 +182,41 @@ const SURVIVAL_SCHOOL_HOME = `<!DOCTYPE html>
     }
 
     .badge-soon {
-      background: rgba(122,138,96,0.12);
+      background: rgba(122,138,96,0.1);
       color: var(--text-muted);
     }
 
-    /* ── CONTENT ─────────────────────────────────────────────────────────── */
-    #content {
-      flex: 1;
-      overflow: auto;
-      background: var(--bg);
-    }
-
-    .panel { display: none; height: 100%; }
-    .panel.active { display: block; }
-
-    /* ── Iframe panels — full height ────────────────────────────────────── */
-    #panel-screwed,
-    #panel-worst,
-    #panel-mundane,
-    #panel-fact-checker,
-    #panel-deathmatch,
-    #panel-coyote { padding: 0; }
-
-    #panel-screwed iframe,
-    #panel-worst iframe,
-    #panel-mundane iframe,
-    #panel-fact-checker iframe,
-    #panel-deathmatch iframe,
-    #panel-coyote iframe {
-      width: 100%;
-      height: calc(100vh - 65px);
-      border: none;
-      display: block;
-    }
-
-    /* ── COMING SOON panels ──────────────────────────────────────────────── */
-    .coming-soon {
-      max-width: 560px;
-      margin: 80px auto;
-      padding: 0 24px;
-      text-align: center;
-    }
-
-    .coming-soon-icon {
-      font-size: 48px;
-      margin-bottom: 20px;
-      opacity: 0.3;
-    }
-
-    .coming-soon-title {
+    .tile-title {
       font-family: 'Bebas Neue', sans-serif;
-      font-size: 32px;
-      letter-spacing: 2px;
-      margin-bottom: 12px;
+      font-size: 20px;
+      letter-spacing: 1px;
       color: var(--text);
+      line-height: 1.1;
     }
 
-    .coming-soon-desc {
+    .tile-desc {
       font-family: 'Barlow', sans-serif;
-      font-size: 14px;
-      line-height: 1.8;
-      color: var(--text-muted);
-      margin-bottom: 28px;
-    }
-
-    .feature-list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      text-align: left;
-      max-width: 360px;
-      margin: 0 auto;
-    }
-
-    .feature-list li {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-family: 'IBM Plex Mono', monospace;
       font-size: 12px;
+      line-height: 1.6;
       color: var(--text-muted);
-      padding: 8px 12px;
-      border: 1px solid var(--border-strong);
-      border-radius: var(--radius);
-      background: var(--surface);
-    }
-
-    .feature-list li .fi-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--border-strong);
-      flex-shrink: 0;
-    }
-
-    .feature-list li.fi-live .fi-dot { background: var(--green); }
-    .feature-list li.fi-next .fi-dot { background: var(--bark); }
-
-    /* ── ABOUT panel ─────────────────────────────────────────────────────── */
-    .about-body {
-      max-width: 600px;
-      margin: 48px auto;
-      padding: 0 24px;
-    }
-
-    .about-body h2 {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 28px;
-      letter-spacing: 2px;
-      margin-bottom: 16px;
-      color: var(--text);
-    }
-
-    .about-body p {
-      font-family: 'Barlow', sans-serif;
-      font-size: 15px;
-      line-height: 1.9;
-      color: var(--text-muted);
-      margin-bottom: 20px;
-    }
-
-    .about-body blockquote {
-      border-left: 3px solid var(--green);
-      padding: 12px 20px;
-      margin: 24px 0;
-      background: var(--surface);
-      border-radius: 0 var(--radius) var(--radius) 0;
-    }
-
-    .about-body blockquote p {
-      font-size: 16px;
-      font-style: italic;
-      color: var(--text);
-      margin: 0;
+      flex: 1;
+      margin-top: 2px;
     }
 
     /* ── MOBILE ──────────────────────────────────────────────────────────── */
-    @media (max-width: 640px) {
-      nav { width: 200px; min-width: 200px; }
-      :root { --nav-w: 200px; }
+    @media (max-width: 700px) {
+      .tile-grid { grid-template-columns: repeat(2, 1fr); }
     }
 
     @media (max-width: 480px) {
-      #app-body { flex-direction: column; }
-      nav { width: 100%; min-width: unset; border-right: none; border-bottom: 1px solid var(--border); padding: 8px 12px; flex-direction: row; overflow-x: auto; flex-wrap: nowrap; gap: 0; }
-      .nav-section { display: contents; margin: 0; }
-      .nav-section-label { display: none; }
-      .nav-item { white-space: nowrap; flex-shrink: 0; border-left: none; border-bottom: 2px solid transparent; }
-      .nav-item.active { border-bottom-color: var(--green); border-left: none; }
-      #panel-screwed iframe,
-      #panel-worst iframe,
-      #panel-mundane iframe,
-      #panel-fact-checker iframe,
-      #panel-deathmatch iframe,
-      #panel-coyote iframe { height: 80vh; }
+      main { padding: 20px 14px 32px; }
+      .tile-grid { grid-template-columns: 1fr; gap: 8px; }
     }
   </style>
 </head>
 <body>
 
 <header>
-  <!-- Logo mark — compass/flame SVG -->
   <svg class="logo-mark" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
     <circle cx="18" cy="18" r="17" stroke="#8B0000" stroke-width="1.5"/>
     <path d="M18 4 L21 15 L18 13 L15 15 Z" fill="#8B0000"/>
@@ -382,7 +232,7 @@ const SURVIVAL_SCHOOL_HOME = `<!DOCTYPE html>
         <span>ask them... before you bleed out.</span>
         <span>just (don't) do it.</span>
         <span>is it too late? find out fast.</span>
-        <span>no fear?™ good. you need some.</span>
+        <span>no fear?&trade; good. you need some.</span>
         <span>probably the best panel in the world.</span>
         <span>think different. or don't think at all.</span>
         <span>finger lickin' fatality. FINISH HIM.</span>
@@ -392,269 +242,112 @@ const SURVIVAL_SCHOOL_HOME = `<!DOCTYPE html>
   </div>
 </header>
 
-<div id="app-body">
+<main>
 
-  <nav>
+  <div class="section-label">Assessment</div>
+  <div class="tile-grid">
 
-    <div class="nav-section">
-      <div class="nav-section-label">Assessment</div>
-      <div class="nav-item active" data-panel="screwed">
-        <span class="nav-icon">⚠</span>
-        How Screwed Am I?
-        <span class="nav-badge badge-live">LIVE</span>
+    <a class="tile" href="/survival-school/app">
+      <div class="tile-top">
+        <span class="tile-cat">Survival</span>
+        <span class="tile-badge badge-live">LIVE</span>
       </div>
-      <div class="nav-item" data-panel="fact-checker">
-        <span class="nav-icon">✓</span>
-        Bear Fact-Checker
-        <span class="nav-badge badge-live">LIVE</span>
+      <div class="tile-title">How Screwed Am I?</div>
+      <div class="tile-desc">Your situation. The panel's verdict. Survival probability and what to do next.</div>
+    </a>
+
+    <a class="tile" href="/survival-school/fact-checker">
+      <div class="tile-top">
+        <span class="tile-cat">Verification</span>
+        <span class="tile-badge badge-live">LIVE</span>
       </div>
-      <div class="nav-item" data-panel="coyote">
-        <span class="nav-icon">⚡</span>
-        The Coyote Index
-        <span class="nav-badge badge-live">LIVE</span>
+      <div class="tile-title">Bear Fact-Checker</div>
+      <div class="tile-desc">Bear's field claims. Independently verified. Panel agrees or doesn't.</div>
+    </a>
+
+    <a class="tile" href="/survival-school/coyote">
+      <div class="tile-top">
+        <span class="tile-cat">Pain Scale</span>
+        <span class="tile-badge badge-live">LIVE</span>
       </div>
-    </div>
+      <div class="tile-title">The Coyote Index</div>
+      <div class="tile-desc">Coyote Peterson rates your incident. Rigorously. Panel reacts to the number.</div>
+    </a>
 
-    <div class="nav-section">
-      <div class="nav-section-label">Scenarios</div>
-      <div class="nav-item" data-panel="worst">
-        <span class="nav-icon">⚡</span>
-        I've Been Bit, Guys
-        <span class="nav-badge badge-live">LIVE</span>
+    <a class="tile" href="/survival-school/eat">
+      <div class="tile-top">
+        <span class="tile-cat">Field Decisions</span>
+        <span class="tile-badge badge-live">LIVE</span>
       </div>
-      <div class="nav-item" data-panel="panel-qa">
-        <span class="nav-icon">◎</span>
-        Panel Q&amp;A
-        <span class="nav-badge badge-soon">SOON</span>
+      <div class="tile-title">Will You Eat It?</div>
+      <div class="tile-desc">Threat assessment before you commit your mouth. Panel delivers a verdict.</div>
+    </a>
+
+    <a class="tile soon" href="#">
+      <div class="tile-top">
+        <span class="tile-cat">Infiltration</span>
+        <span class="tile-badge badge-soon">SOON</span>
       </div>
-      <div class="nav-item" data-panel="mundane">
-        <span class="nav-icon">◎</span>
-        Mundane Mode
-        <span class="nav-badge badge-live">LIVE</span>
+      <div class="tile-title">One Man In</div>
+      <div class="tile-desc">Fit. Alone. Compromised. Craighead runs the brief. No chain of command.</div>
+    </a>
+
+    <a class="tile soon" href="#">
+      <div class="tile-top">
+        <span class="tile-cat">Open Q</span>
+        <span class="tile-badge badge-soon">SOON</span>
       </div>
-      <div class="nav-item" data-panel="deathmatch">
-        <span class="nav-icon">◎</span>
-        Animal Deathmatch
-        <span class="nav-badge badge-live">LIVE</span>
+      <div class="tile-title">Panel Q&amp;A</div>
+      <div class="tile-desc">Ask the panel anything about survival. Six answers. None of them agree on fire.</div>
+    </a>
+
+  </div>
+
+  <div class="section-label">Scenarios</div>
+  <div class="tile-grid">
+
+    <a class="tile" href="/survival-school/worst">
+      <div class="tile-top">
+        <span class="tile-cat">Already Bitten</span>
+        <span class="tile-badge badge-live">LIVE</span>
       </div>
-      <div class="nav-item" data-panel="irwin">
-        <span class="nav-icon">◎</span>
-        Irwin Memorial
-        <span class="nav-badge badge-soon">SOON</span>
+      <div class="tile-title">I've Been Bit, Guys</div>
+      <div class="tile-desc">Already compromised. You've made a decision. Panel reacts to what you did.</div>
+    </a>
+
+    <a class="tile" href="/survival-school/mundane">
+      <div class="tile-top">
+        <span class="tile-cat">Mundane Emergency</span>
+        <span class="tile-badge badge-live">LIVE</span>
       </div>
-    </div>
+      <div class="tile-title">Mundane Mode</div>
+      <div class="tile-desc">The panel treats your Monday morning as a wilderness emergency. They don't know this.</div>
+    </a>
 
-    <div class="nav-section">
-      <div class="nav-section-label">The Panel</div>
-      <div class="nav-item" data-panel="characters">
-        <span class="nav-icon">◉</span>
-        Characters
-        <span class="nav-badge badge-soon">SOON</span>
+    <a class="tile" href="/survival-school/deathmatch">
+      <div class="tile-top">
+        <span class="tile-cat">The Colosseum</span>
+        <span class="tile-badge badge-live">LIVE</span>
       </div>
-    </div>
+      <div class="tile-title">Animal Deathmatch</div>
+      <div class="tile-desc">Two animals. One outcome. Attenborough narrates. Panel disagrees with the result.</div>
+    </a>
 
-    <div class="nav-section">
-      <div class="nav-section-label">Knowledge</div>
-      <div class="nav-item" data-panel="domains">
-        <span class="nav-icon">◈</span>
-        Survival Domains
-        <span class="nav-badge badge-soon">SOON</span>
+    <a class="tile soon" href="#">
+      <div class="tile-top">
+        <span class="tile-cat">From Beyond</span>
+        <span class="tile-badge badge-soon">SOON</span>
       </div>
-      <div class="nav-item" data-panel="skills">
-        <span class="nav-icon">◈</span>
-        Skill Ratings
-        <span class="nav-badge badge-soon">SOON</span>
-      </div>
-    </div>
+      <div class="tile-title">Irwin Memorial</div>
+      <div class="tile-desc">Describe an animal encounter. Steve rates your handling. From beyond.</div>
+    </a>
 
-    <div class="nav-section">
-      <div class="nav-section-label">About</div>
-      <div class="nav-item" data-panel="about">
-        <span class="nav-icon">◦</span>
-        About
-      </div>
-    </div>
+  </div>
 
-  </nav>
-
-  <div id="content">
-
-    <!-- HOW SCREWED AM I — live -->
-    <div class="panel active" id="panel-screwed">
-      <iframe src="https://cusslab-api.leanspirited.workers.dev/survival-school/app"
-              title="How Screwed Am I?"></iframe>
-    </div>
-
-    <!-- HOW BAD IS THIS? — live -->
-    <div class="panel" id="panel-worst">
-      <iframe src="https://cusslab-api.leanspirited.workers.dev/survival-school/worst"
-              title="I've Been Bit, Guys"></iframe>
-    </div>
-
-    <!-- BEAR FACT-CHECKER — live -->
-    <div class="panel" id="panel-fact-checker">
-      <iframe src="https://cusslab-api.leanspirited.workers.dev/survival-school/fact-checker"
-              title="Bear Fact-Checker"></iframe>
-    </div>
-
-    <!-- THE COYOTE INDEX — live -->
-    <div class="panel" id="panel-coyote">
-      <iframe src="https://cusslab-api.leanspirited.workers.dev/survival-school/coyote"
-              title="The Coyote Index"></iframe>
-    </div>
-
-    <!-- PANEL Q&A -->
-    <div class="panel" id="panel-panel-qa">
-      <div class="coming-soon">
-        <div class="coming-soon-icon">◎</div>
-        <div class="coming-soon-title">Panel Q&amp;A</div>
-        <div class="coming-soon-desc">
-          Ask the panel anything about survival. Six experts. Six answers.
-          No two of them agree on the right way to make fire.
-        </div>
-        <ul class="feature-list">
-          <li class="fi-next"><span class="fi-dot"></span>Free-form question input</li>
-          <li class="fi-next"><span class="fi-dot"></span>All 6 characters respond in voice</li>
-          <li class="fi-next"><span class="fi-dot"></span>Relationship matrix fires naturally</li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- MUNDANE MODE — live -->
-    <div class="panel" id="panel-mundane">
-      <iframe src="https://cusslab-api.leanspirited.workers.dev/survival-school/mundane"
-              title="Mundane Mode"></iframe>
-    </div>
-
-    <!-- ANIMAL DEATHMATCH — live -->
-    <div class="panel" id="panel-deathmatch">
-      <iframe src="https://cusslab-api.leanspirited.workers.dev/survival-school/deathmatch"
-              title="Animal Deathmatch"></iframe>
-    </div>
-
-    <!-- IRWIN MEMORIAL -->
-    <div class="panel" id="panel-irwin">
-      <div class="coming-soon">
-        <div class="coming-soon-icon">◎</div>
-        <div class="coming-soon-title">Irwin Memorial Encounter</div>
-        <div class="coming-soon-desc">
-          Describe an animal encounter. Steve rates your handling.
-          From beyond.
-        </div>
-        <ul class="feature-list">
-          <li class="fi-next"><span class="fi-dot"></span>Animal encounter input</li>
-          <li class="fi-next"><span class="fi-dot"></span>DEAD_IN_PANEL_WORLD mechanic</li>
-          <li class="fi-next"><span class="fi-dot"></span>Panel responds to Irwin's verdict</li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- CHARACTERS -->
-    <div class="panel" id="panel-characters">
-      <div class="coming-soon">
-        <div class="coming-soon-icon">◉</div>
-        <div class="coming-soon-title">The Panel</div>
-        <div class="coming-soon-desc">
-          Six experts. Real knowledge. Distinct voices.
-          The comedy is earned by the expertise being genuine.
-        </div>
-        <ul class="feature-list">
-          <li><span class="fi-dot"></span>Ray Mears — Bushcraft</li>
-          <li><span class="fi-dot"></span>Bear Grylls — Former SAS</li>
-          <li><span class="fi-dot"></span>Cody Lundin — Primitive Skills</li>
-          <li><span class="fi-dot"></span>Les Hiddins — Bush Tucker Man</li>
-          <li><span class="fi-dot"></span>David Attenborough — Natural World</li>
-          <li><span class="fi-dot"></span>Les Stroud — Survivorman</li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- SURVIVAL DOMAINS -->
-    <div class="panel" id="panel-domains">
-      <div class="coming-soon">
-        <div class="coming-soon-icon">◈</div>
-        <div class="coming-soon-title">Survival Domains</div>
-        <div class="coming-soon-desc">
-          12-domain survival knowledge taxonomy. Fire, water, shelter, food,
-          navigation, medical, signalling, psychology, terrain, fauna, flora, tools.
-          The knowledge behind the panel.
-        </div>
-        <ul class="feature-list">
-          <li class="fi-next"><span class="fi-dot"></span>12 survival domains</li>
-          <li class="fi-next"><span class="fi-dot"></span>Per-domain expert profiles</li>
-          <li class="fi-next"><span class="fi-dot"></span>Skill rating cross-reference</li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- SKILL RATINGS -->
-    <div class="panel" id="panel-skills">
-      <div class="coming-soon">
-        <div class="coming-soon-icon">◈</div>
-        <div class="coming-soon-title">Skill Ratings</div>
-        <div class="coming-soon-desc">
-          Every panel member rated across every domain.
-          Ray: Fire 99. Bear: Fire 70. This is not a coincidence.
-        </div>
-        <ul class="feature-list">
-          <li class="fi-next"><span class="fi-dot"></span>Per-character skill breakdown</li>
-          <li class="fi-next"><span class="fi-dot"></span>Domain comparison view</li>
-          <li class="fi-next"><span class="fi-dot"></span>The Shoe Question (Cody vs Stroud)</li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- ABOUT -->
-    <div class="panel" id="panel-about">
-      <div class="about-body">
-        <h2>About Survival School</h2>
-        <p>
-          Real knowledge. Genuine consequence. No performance.
-          The comedy is earned by the expertise being real.
-          If the experts were charlatans, there's no joke.
-        </p>
-        <blockquote>
-          <p>Cody threw the fire-making supplies into the pool rather than
-          demonstrate bad technique for a producer. He chose integrity over
-          career in one clean arc of a spear into water.
-          That is what this product is.</p>
-        </blockquote>
-        <p>
-          Six survival experts. One panel. Your situation assessed with full
-          expertise and no diplomatic softening. Attenborough closes every scene.
-          Not by demanding it — because what he says is always the last word.
-        </p>
-        <p>
-          Built by Rod Roden / LeanSpirited.
-        </p>
-      </div>
-    </div>
-
-  </div><!-- #content -->
-</div><!-- #app-body -->
-
-<script>
-  const navItems = document.querySelectorAll('.nav-item[data-panel]');
-
-  navItems.forEach(item => {
-    item.addEventListener('click', () => {
-      const target = item.dataset.panel;
-      const panelId = 'panel-' + target;
-      const panel = document.getElementById(panelId);
-      if (!panel) return;
-
-      navItems.forEach(n => n.classList.remove('active'));
-      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-
-      item.classList.add('active');
-      panel.classList.add('active');
-    });
-  });
-</script>
+</main>
 
 </body>
 </html>
-
 `;
 const SURVIVAL_SCHOOL_APP  = `<!DOCTYPE html>
 <html lang="en">
