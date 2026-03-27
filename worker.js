@@ -564,7 +564,7 @@ const SURVIVAL_SCHOOL_HOME = `<!DOCTYPE html>
           <li><span class="fi-dot"></span>Ray Mears — Bushcraft</li>
           <li><span class="fi-dot"></span>Bear Grylls — Former SAS</li>
           <li><span class="fi-dot"></span>Cody Lundin — Primitive Skills</li>
-          <li><span class="fi-dot"></span>Les Hales — Bush Tucker Man</li>
+          <li><span class="fi-dot"></span>Les Hiddins — Bush Tucker Man</li>
           <li><span class="fi-dot"></span>David Attenborough — Natural World</li>
           <li><span class="fi-dot"></span>Les Stroud — Survivorman</li>
         </ul>
@@ -1387,14 +1387,19 @@ Cody Override fires when asked to endorse wrong survival advice — refuses.
 SKILLS: Fire 97, Plant Knowledge 96, Tool-making 95, Psychology 95, Endurance 93.\`
   },
   hales: {
-    id: 'hales', name: 'Les Hales', role: 'Bush Tucker Man',
+    id: 'hales', name: 'Les Hiddins', role: 'Bush Tucker Man',
     av: 'LH', avClass: 'av-amber',
-    deathLine: 'Yeah, nah.',
-    voice: \`LES HALES — Major, Australian Army. Bush Tucker Man.
-Walked outback eating things that would kill a normal person with the energy of a man doing light admin.
-Witchetty grub goes down like a Rich Tea biscuit.
-VOICE: Three words maximum. "Yeah, nah." means both simultaneously.
-Never heard of Bear Grylls. Frowns if called tough. Flat delivery funnier the more dangerous the situation.
+    deathLine: 'Have a look at that.',
+    voice: \`LES HIDDINS — Major, Australian Army. Bush Tucker Man. Vietnam veteran.
+Walked 2,500km of remote northern Australia cataloguing food sources with the energy of a man doing light admin.
+Witchetty grubs taste like almonds raw, roast chicken cooked. He says this as a statement of fact, not a boast.
+CATCHPHRASE: "Have a look at this." — his most reliable opener, delivered like show-and-tell.
+FOOD VERDICT: "Not too bad — a bit starchy." is his highest compliment. Never performs disgust or enthusiasm.
+KNOWLEDGE: Cites Aboriginal survival practices constantly and with genuine respect. "The Aboriginal people have been eating this for 40,000 years." This is not filler — it's his point.
+VOICE: Understated, educational, unhurried. Treats eating anything unusual or dangerous as practically interesting.
+Australian idiom used naturally: "She'll be right." "Have a crack at it." "That'll do the job."
+NEVER three-word responses — he has vocabulary and uses it with measured calm.
+Frowns slightly if called tough. Never heard of Bear Grylls. Finds survival genuinely fascinating rather than heroic.
 SKILLS: Plant Knowledge 95, Psychology 95, Endurance 90, Water 90.\`
   },
   fox: {
@@ -1477,7 +1482,7 @@ Panel characters (no Attenborough): Ray, Bear, Cody, Hales, Fox, Stroud.
 - Ray: is it technically correct? Craft judgement. Brief.
 - Bear: anecdote, probably did something similar somewhere exotic, hydration check.
 - Cody: was there a better option right there they missed?
-- Hales: three words maximum.
+- Hales: brief, understated, educational. "Have a look at this." "Not too bad." "She'll be right." Cites Aboriginal knowledge. 1-3 sentences.
 - Fox: tactical assessment — lines of sight, threat exposure, exit options, what's available.
 - Stroud: quiet verdict.
 
@@ -1513,7 +1518,7 @@ Panel characters (no Attenborough): Ray, Bear, Cody, Hales, Fox, Stroud.
 - Ray: identifies real risks in the mundane situation. Genuinely concerned.
 - Bear: has done something similar, abroad, fine in the end.
 - Cody: points out the better option that was right there. "The bus stop. Fifty yards away."
-- Hales: three words. Maximum.
+- Hales: understated, educational. 1-2 sentences. "Have a look at this." Cites Aboriginal knowledge.
 - Fox: tactical assessment of the mundane. Exit routes from the post office queue.
 - Stroud: quiet, measured verdict. Slightly melancholy.
 
@@ -2593,12 +2598,15 @@ VOICE: Urgent, evangelical, slightly breathless. Personal anecdote always — ab
 SKILLS: Psychology 92, Endurance 95, Navigation 80, Fire 70.\`
   },
   hales: {
-    id: 'hales', name: 'Les Hales', role: 'Bush Tucker Man',
+    id: 'hales', name: 'Les Hiddins', role: 'Bush Tucker Man',
     av: 'LH', avClass: 'av-amber',
-    deathLine: 'Yeah, nah.',
-    voice: \`LES HALES — Major, Australian Army. Bush Tucker Man.
-VOICE: Three words maximum. "Yeah, nah." means both simultaneously.
-Never heard of Bear Grylls. Flat delivery funnier the more dangerous the situation.
+    deathLine: 'Have a look at that.',
+    voice: \`LES HIDDINS — Major, Australian Army. Bush Tucker Man. Vietnam veteran.
+Walked 2,500km of remote northern Australia cataloguing food sources.
+CATCHPHRASE: "Have a look at this." — opener for anything, dangerous or edible.
+"Not too bad — a bit starchy." is his highest compliment. "She'll be right." is a complete plan.
+Cites Aboriginal practices constantly: "They've been doing this for 40,000 years."
+VOICE: Understated, educational, unhurried. Never performs fear. Never heard of Bear Grylls.
 SKILLS: Plant Knowledge 95, Psychology 95, Endurance 90, Water 90.\`
   },
   cody: {
@@ -2637,7 +2645,7 @@ PANEL RESPONSE LOGIC:
 - O'Shea: medical/herpetological expertise. References chapter numbers. Surprised if animal deviated from his published literature.
 - Stevens: spiritual interpretation. Only fully engaged if snake or venomous creature involved — "Was there a snake?" fires if not.
 - Bear: personal anecdote, somewhere exotic, fine in the end. Hydration check.
-- Hales: three words maximum. Flat delivery.
+- Hales: understated, educational. "Have a look at this." "Not too bad — a bit starchy." 1-2 sentences. Never dramatic.
 - Cody: verdict + ACTION LINE — a single, specific imperative sentence. What to do RIGHT NOW.
 
 DOOM PERCENTAGE: 0 = you're fine, 100 = certain death.
@@ -3426,14 +3434,19 @@ Cody Override fires when asked to endorse wrong survival advice — refuses.
 SKILLS: Fire 97, Plant Knowledge 96, Tool-making 95, Psychology 95, Endurance 93.\`
   },
   hales: {
-    id: 'hales', name: 'Les Hales', role: 'Bush Tucker Man',
+    id: 'hales', name: 'Les Hiddins', role: 'Bush Tucker Man',
     av: 'LH', avClass: 'av-amber',
-    deathLine: 'Yeah, nah.',
-    voice: \`LES HALES — Major, Australian Army. Bush Tucker Man.
-Walked outback eating things that would kill a normal person with the energy of a man doing light admin.
-Witchetty grub goes down like a Rich Tea biscuit.
-VOICE: Three words maximum. "Yeah, nah." means both simultaneously.
-Never heard of Bear Grylls. Frowns if called tough. Flat delivery funnier the more dangerous the situation.
+    deathLine: 'Have a look at that.',
+    voice: \`LES HIDDINS — Major, Australian Army. Bush Tucker Man. Vietnam veteran.
+Walked 2,500km of remote northern Australia cataloguing food sources with the energy of a man doing light admin.
+Witchetty grubs taste like almonds raw, roast chicken cooked. He says this as a statement of fact, not a boast.
+CATCHPHRASE: "Have a look at this." — his most reliable opener, delivered like show-and-tell.
+FOOD VERDICT: "Not too bad — a bit starchy." is his highest compliment. Never performs disgust or enthusiasm.
+KNOWLEDGE: Cites Aboriginal survival practices constantly and with genuine respect. "The Aboriginal people have been eating this for 40,000 years." This is not filler — it's his point.
+VOICE: Understated, educational, unhurried. Treats eating anything unusual or dangerous as practically interesting.
+Australian idiom used naturally: "She'll be right." "Have a crack at it." "That'll do the job."
+NEVER three-word responses — he has vocabulary and uses it with measured calm.
+Frowns slightly if called tough. Never heard of Bear Grylls. Finds survival genuinely fascinating rather than heroic.
 SKILLS: Plant Knowledge 95, Psychology 95, Endurance 90, Water 90.\`
   },
   fox: {
@@ -3516,7 +3529,7 @@ Panel characters (no Attenborough): Ray, Bear, Cody, Hales, Fox, Stroud.
 - Ray: is it technically correct? Craft judgement. Brief.
 - Bear: anecdote, probably did something similar somewhere exotic, hydration check.
 - Cody: was there a better option right there they missed?
-- Hales: three words maximum.
+- Hales: brief, understated, educational. "Have a look at this." "Not too bad." "She'll be right." Cites Aboriginal knowledge. 1-3 sentences.
 - Fox: tactical assessment — lines of sight, threat exposure, exit options, what's available.
 - Stroud: quiet verdict.
 
@@ -3552,7 +3565,7 @@ Panel characters (no Attenborough): Ray, Bear, Cody, Hales, Fox, Stroud.
 - Ray: identifies real risks in the mundane situation. Genuinely concerned.
 - Bear: has done something similar, abroad, fine in the end.
 - Cody: points out the better option that was right there. "The bus stop. Fifty yards away."
-- Hales: three words. Maximum.
+- Hales: understated, educational. 1-2 sentences. "Have a look at this." Cites Aboriginal knowledge.
 - Fox: tactical assessment of the mundane. Exit routes from the post office queue.
 - Stroud: quiet, measured verdict. Slightly melancholy.
 
@@ -3932,7 +3945,7 @@ const WORKER_ENDPOINT = 'https://cusslab-api.leanspirited.workers.dev/survival-s
 const CHARACTERS = {
   ray:     { name: 'Ray Mears',      role: 'Bushcraft',         av: 'RM', avClass: 'av-green' },
   bear:    { name: 'Bear Grylls',    role: 'Former SAS',        av: 'BG', avClass: 'av-bark'  },
-  hales:   { name: 'Les Hales',      role: 'Bush Tucker Man',   av: 'LH', avClass: 'av-amber' },
+  hales:   { name: 'Les Hiddins',      role: 'Bush Tucker Man',   av: 'LH', avClass: 'av-amber' },
   packham: { name: 'Chris Packham',  role: 'Conservation',      av: 'CP', avClass: 'av-green' },
   irwin:   { name: 'Steve Irwin',    role: 'Crocodile Hunter',  av: 'SI', avClass: 'av-amber' },
   stevens: { name: 'Austin Stevens', role: 'Snake Master',      av: 'AS', avClass: 'av-bark'  },
@@ -3950,9 +3963,13 @@ Brief. Clinical. Never dramatic. Silence about Bear's food choices is eloquent.
 Former SAS. Drinks own urine when Londis is forty yards away. Has eaten things he genuinely did not need to eat and got ill.
 Will eat it. Without question. Has eaten something like it, abroad, fine in the end. Fact-check footnote fires on factual claims about edibility. Uses "Hydration?" unprompted.
 
-=== LES HALES ===
-Bush Tucker Man. Witchetty grubs go down like a Rich Tea biscuit. Has eaten things that would hospitalise a normal person with the energy of a man doing light admin.
-ALWAYS EATS IT. One to three words only. Full stop. Never elaborates.
+=== LES HIDDINS ===
+Bush Tucker Man. Vietnam veteran. Walked 2,500km of remote northern Australia cataloguing food sources.
+Witchetty grubs taste like almonds raw, roast chicken cooked. He says this as curriculum, not novelty.
+ALWAYS EATS IT — with educational context, not bravado. "Have a look at this." is his opener.
+Cites Aboriginal knowledge without fail: "The Aboriginal people have been eating this for 40,000 years."
+"Not too bad — a bit starchy." is his highest food compliment. "She'll be right." is a complete preparation method.
+2-3 sentences. Calm. Understated. Genuinely interested in the organism.
 
 === CHRIS PACKHAM ===
 Wildlife presenter, conservationist, neurodivergent (openly autistic). Rapid, precise, pattern-recognition.
@@ -3987,7 +4004,7 @@ ATTENBOROUGH BOOKENDS — does NOT appear in panel array.
 PANEL ORDER: Ray, Bear, Hales, Packham, Irwin, Stevens, Darwin.
 
 OUTPUT — valid JSON only, no markdown:
-{"item_identified":"<common name (scientific name if known)>","edibility_verdict":"edible|not_edible|conditional|unknown","attenborough_opening":"<one sentence, natural history intro>","panel":[{"charId":"ray","text":"<2-3 sentences>","will_eat":<bool>,"fact_check":"<optional>"},{"charId":"bear","text":"<2-3 sentences>","will_eat":true,"fact_check":"<optional>"},{"charId":"hales","text":"<1-3 words only>","will_eat":true},{"charId":"packham","text":"<2-3 sentences>","will_eat":null,"source_challenge":"<his specific sourcing question>"},{"charId":"irwin","text":"<2-3 sentences>","will_eat":true,"impulse":"<what he immediately did, one phrase>"},{"charId":"stevens","text":"<1-2 sentences>","will_eat":false},{"charId":"darwin","text":"<2-3 sentences>","will_eat":true,"journal_note":"<one sentence from his journal, verbatim style>"}],"attenborough_verdict":"<one sentence>"}\`;
+{"item_identified":"<common name (scientific name if known)>","edibility_verdict":"edible|not_edible|conditional|unknown","attenborough_opening":"<one sentence, natural history intro>","panel":[{"charId":"ray","text":"<2-3 sentences>","will_eat":<bool>,"fact_check":"<optional>"},{"charId":"bear","text":"<2-3 sentences>","will_eat":true,"fact_check":"<optional>"},{"charId":"hales","text":"<2-3 sentences, educational, cites Aboriginal knowledge>","will_eat":true},{"charId":"packham","text":"<2-3 sentences>","will_eat":null,"source_challenge":"<his specific sourcing question>"},{"charId":"irwin","text":"<2-3 sentences>","will_eat":true,"impulse":"<what he immediately did, one phrase>"},{"charId":"stevens","text":"<1-2 sentences>","will_eat":false},{"charId":"darwin","text":"<2-3 sentences>","will_eat":true,"journal_note":"<one sentence from his journal, verbatim style>"}],"attenborough_verdict":"<one sentence>"}\`;
 
 let item = '';
 
@@ -4160,93 +4177,121 @@ const SURVIVAL_SCHOOL_DEATHMATCH = `<!DOCTYPE html>
 
     #app { max-width: 700px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
 
+    /* ─ Header ─────────────────────────────────────────────────────────────── */
     .header { text-align: center; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 0.5px solid var(--border); }
     .title { font-family: 'Bebas Neue', sans-serif; font-size: 40px; letter-spacing: 3px; line-height: 1; }
     .title span { color: var(--blood); }
     .subtitle { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-muted); letter-spacing: 1.5px; margin-top: 5px; }
 
+    /* ─ Category tabs ───────────────────────────────────────────────────────── */
     .field-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1.5px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; margin-top: 16px; }
-    .field-label:first-child { margin-top: 0; }
 
-    /* Two-column animal inputs */
-    .fight-row { display: grid; grid-template-columns: 1fr auto 1fr; gap: 0; align-items: start; margin-bottom: 12px; }
+    .cat-tabs { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 10px; }
+    .cat-tab { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1px; padding: 4px 10px; border: 0.5px solid var(--border-strong); border-radius: 20px; cursor: pointer; background: none; color: var(--text-muted); transition: all 0.12s; white-space: nowrap; }
+    .cat-tab:hover { color: var(--text); border-color: var(--text-muted); }
+    .cat-tab.active { background: var(--surface2); color: var(--green); border-color: var(--green-dim); }
+
+    /* ─ VS layout ───────────────────────────────────────────────────────────── */
+    .fight-row { display: grid; grid-template-columns: 1fr auto 1fr; gap: 0; align-items: start; margin-bottom: 4px; }
     .fight-col { }
-    .vs-badge { display: flex; align-items: center; justify-content: center; padding: 0 12px; padding-top: 44px; }
-    .vs-badge span { font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing: 2px; color: var(--blood); opacity: 0.7; }
+    .vs-col { display: flex; align-items: center; justify-content: center; padding: 0 12px; padding-top: 32px; }
+    .vs-badge { font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing: 2px; color: var(--blood); opacity: 0.7; }
 
-    .chips { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 8px; }
-    .chip { font-family: 'IBM Plex Mono', monospace; font-size: 11px; padding: 5px 10px; border: 0.5px solid var(--border-strong); border-radius: 5px; cursor: pointer; background: none; color: var(--text-muted); transition: all 0.15s; white-space: nowrap; user-select: none; }
-    .chip:hover, .chip.sel { border-color: var(--green); color: var(--green); }
+    .side-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1.5px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; }
+    .side-label.focused { color: var(--green); }
 
-    input[type="text"] { width: 100%; font-family: 'IBM Plex Mono', monospace; font-size: 13px; padding: 9px 12px; border: 0.5px solid var(--border-strong); border-radius: 6px; background: var(--surface); color: var(--text); outline: none; transition: border-color 0.15s; }
+    .chip-grid { display: flex; flex-wrap: wrap; gap: 4px; max-height: 140px; overflow-y: auto; margin-bottom: 6px; padding-right: 2px; scrollbar-width: thin; scrollbar-color: var(--border-strong) transparent; }
+    .chip-grid::-webkit-scrollbar { width: 3px; }
+    .chip-grid::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 2px; }
+
+    .chip { font-family: 'IBM Plex Mono', monospace; font-size: 10px; padding: 4px 8px; border: 0.5px solid var(--border-strong); border-radius: 4px; cursor: pointer; background: none; color: var(--text-muted); transition: all 0.12s; white-space: nowrap; user-select: none; line-height: 1.3; }
+    .chip:hover { border-color: var(--green); color: var(--green); }
+    .chip.sel { border-color: var(--green); color: var(--green-bright); background: rgba(74,112,32,0.15); }
+    .chip.hidden { display: none; }
+
+    input[type="text"] { width: 100%; font-family: 'IBM Plex Mono', monospace; font-size: 13px; padding: 8px 10px; border: 0.5px solid var(--border-strong); border-radius: 6px; background: var(--surface); color: var(--text); outline: none; transition: border-color 0.15s; }
     input[type="text"]:focus { border-color: var(--green); }
+    input[type="text"].focused-input { border-color: var(--green-dim); }
 
-    .env-label { margin-top: 14px; }
-    #chips-env .chip.sel { border-color: var(--amber); color: var(--amber); }
+    /* ─ Environment ─────────────────────────────────────────────────────────── */
+    .env-chips { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 4px; }
+    .env-chip { font-family: 'IBM Plex Mono', monospace; font-size: 11px; padding: 5px 10px; border: 0.5px solid var(--border-strong); border-radius: 5px; cursor: pointer; background: none; color: var(--text-muted); transition: all 0.12s; }
+    .env-chip:hover, .env-chip.sel { border-color: var(--amber); color: var(--amber); }
 
+    /* ─ Buttons ─────────────────────────────────────────────────────────────── */
     .btn-row { display: flex; gap: 8px; margin-top: 16px; }
     .btn-fight { flex: 1; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 2px; text-transform: uppercase; padding: 11px; background: var(--blood-dim); color: var(--blood); border: 0.5px solid var(--blood-dim); border-radius: 6px; cursor: pointer; transition: opacity 0.15s; }
     .btn-fight:hover { opacity: 0.88; }
     .btn-fight:disabled { opacity: 0.4; cursor: not-allowed; }
-    .btn-clear { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 1px; padding: 11px 16px; border: 0.5px solid var(--border-strong); border-radius: 6px; background: none; cursor: pointer; color: var(--text-muted); transition: color 0.15s, border-color 0.15s; }
+    .btn-clear { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 1px; padding: 11px 16px; border: 0.5px solid var(--border-strong); border-radius: 6px; background: none; cursor: pointer; color: var(--text-muted); transition: all 0.15s; }
     .btn-clear:hover { color: var(--text); border-color: var(--green); }
 
+    /* ─ Loading ─────────────────────────────────────────────────────────────── */
     .results { display: none; margin-top: 1.5rem; }
     .results.show { display: block; }
-
     .loading { padding: 2rem; text-align: center; font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--text-muted); letter-spacing: 1px; }
     .dots::after { content: ''; animation: dots 1.5s steps(3, end) infinite; }
     @keyframes dots { 0%{content:'.'} 33%{content:'..'} 66%{content:'...'} 100%{content:''} }
 
-    /* Phase labels */
-    .phase-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 2px; color: var(--text-muted); text-transform: uppercase; margin: 1rem 0 0.5rem; }
+    /* ─ Phase labels ─────────────────────────────────────────────────────────── */
+    .phase-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 2px; color: var(--text-muted); text-transform: uppercase; margin: 1.2rem 0 0.5rem; display: flex; align-items: center; gap: 8px; }
+    .phase-pips { display: flex; gap: 4px; }
+    .pip { width: 7px; height: 7px; border-radius: 50%; border: 0.5px solid var(--border-strong); background: transparent; }
+    .pip.filled { background: var(--blood); border-color: var(--blood); }
 
-    /* Panel cards */
-    .char-card { border: 0.5px solid var(--border); border-radius: 10px; margin-bottom: 8px; overflow: hidden; background: var(--surface); }
-    .card-head { display: flex; align-items: center; gap: 10px; padding: 9px 14px; background: var(--surface2); border-bottom: 0.5px solid var(--border); }
-    .avatar { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 11px; letter-spacing: 0.5px; flex-shrink: 0; }
-    .av-green  { background: var(--green-dim);  color: var(--green-bright); }
-    .av-bark   { background: var(--bark-dim);   color: var(--bark); }
-    .av-amber  { background: var(--amber-dim);  color: var(--amber); }
-    .av-gray   { background: #1e1e1c;           color: #7a8a70; }
-    .av-sbs    { background: #1a1e2a;           color: #5a7aaa; }
-
-    .char-name { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 0.5px; color: var(--text); }
+    /* ─ Panel cards ──────────────────────────────────────────────────────────── */
+    .char-card { border: 0.5px solid var(--border); border-radius: 10px; margin-bottom: 7px; overflow: hidden; background: var(--surface); }
+    .card-head { display: flex; align-items: center; gap: 10px; padding: 8px 13px; background: var(--surface2); border-bottom: 0.5px solid var(--border); }
+    .avatar { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 10px; letter-spacing: 0.5px; flex-shrink: 0; }
+    .av-green { background: var(--green-dim);  color: var(--green-bright); }
+    .av-bark  { background: var(--bark-dim);   color: var(--bark); }
+    .av-amber { background: var(--amber-dim);  color: var(--amber); }
+    .av-sbs   { background: #1a1e2a;           color: #5a7aaa; }
+    .char-name { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 13px; color: var(--text); }
     .char-role { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-muted); }
-    .card-body { padding: 11px 14px; font-family: 'Barlow', sans-serif; font-size: 14px; line-height: 1.7; color: var(--text); }
+    .card-body { padding: 10px 13px; font-family: 'Barlow', sans-serif; font-size: 13.5px; line-height: 1.7; color: var(--text); }
+    .fact-check-note { margin-top: 5px; font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: var(--text-muted); border-top: 0.5px solid var(--border); padding-top: 5px; opacity: 0.75; }
 
-    /* Match narrative block */
-    .narrative-block { background: var(--surface); border: 0.5px solid var(--border); border-radius: 10px; padding: 16px; margin-bottom: 8px; }
-    .narrative-block p { font-family: 'Barlow', sans-serif; font-size: 14px; line-height: 1.8; color: var(--text); }
+    /* ─ Round blocks ─────────────────────────────────────────────────────────── */
+    .round-block { margin-bottom: 1rem; }
 
-    /* Winner banner */
-    .winner-banner { text-align: center; padding: 1.5rem 0 1rem; margin: 0.5rem 0; }
-    .winner-animal { font-family: 'Bebas Neue', sans-serif; font-size: 52px; letter-spacing: 4px; line-height: 1; color: var(--blood); word-break: break-word; }
+    .narrative-block { background: var(--surface); border: 0.5px solid var(--border); border-radius: 8px; padding: 14px; margin-bottom: 8px; font-family: 'Barlow', sans-serif; font-size: 14px; line-height: 1.8; color: var(--text); }
+
+    .round-winner-badge { display: inline-block; font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1.5px; padding: 5px 12px; border-radius: 20px; margin-bottom: 10px; text-transform: uppercase; }
+    .rwb-a    { background: rgba(122,173,58,0.12);  color: var(--green-bright); border: 0.5px solid var(--green-dim); }
+    .rwb-b    { background: rgba(204,17,17,0.1);    color: var(--blood);        border: 0.5px solid var(--blood-dim); }
+    .rwb-draw { background: rgba(186,117,23,0.1);   color: var(--amber);        border: 0.5px solid var(--amber-dim); }
+
+    /* ─ Winner banner ─────────────────────────────────────────────────────────── */
+    .winner-banner { text-align: center; padding: 1.5rem 0 1rem; border-top: 0.5px solid var(--border); margin-top: 0.5rem; }
+    .winner-animal { font-family: 'Bebas Neue', sans-serif; font-size: 50px; letter-spacing: 4px; line-height: 1; color: var(--blood); word-break: break-word; }
+    .winner-animal.draw-text { color: var(--amber); }
     .winner-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 2px; color: var(--text-muted); margin-top: 4px; }
-    .winner-margin { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1.5px; margin-top: 6px; }
-    .margin-decisive { color: var(--blood); }
-    .margin-close { color: var(--amber); }
-    .margin-contested { color: var(--text-muted); }
-    .winner-banner.draw .winner-animal { color: var(--amber); }
+    .winner-score { font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing: 2px; color: var(--text-muted); margin-top: 6px; }
+    .margin-pill { display: inline-block; font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 1.5px; padding: 3px 9px; border-radius: 20px; margin-top: 6px; }
+    .mp-decisive { background: rgba(204,17,17,0.1);  color: var(--blood); border: 0.5px solid var(--blood-dim); }
+    .mp-close    { background: rgba(186,117,23,0.1); color: var(--amber); border: 0.5px solid var(--amber-dim); }
+    .mp-contested{ background: rgba(122,138,96,0.1); color: var(--text-muted); border: 0.5px solid var(--border-strong); }
 
-    /* Attenborough bookends */
-    .att-bookend { display: flex; gap: 10px; align-items: flex-start; padding: 10px 14px; background: var(--surface); border: 0.5px solid var(--border); border-radius: 8px; }
-    .att-avatar { width: 26px; height: 26px; background: #1e1e1c; color: #7a8a70; border-radius: 50%; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 9px; letter-spacing: 0.5px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
-    .att-text { font-family: 'Barlow', sans-serif; font-weight: 300; font-style: italic; font-size: 14px; line-height: 1.7; color: var(--text-muted); }
+    /* ─ Attenborough bookends ─────────────────────────────────────────────────── */
+    .att-bookend { display: flex; gap: 10px; align-items: flex-start; padding: 10px 13px; background: var(--surface); border: 0.5px solid var(--border); border-radius: 8px; }
+    .att-avatar { width: 24px; height: 24px; background: #1e1e1c; color: #7a8a70; border-radius: 50%; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+    .att-text { font-family: 'Barlow', sans-serif; font-weight: 300; font-style: italic; font-size: 13.5px; line-height: 1.7; color: var(--text-muted); }
     #att-intro { margin-bottom: 12px; }
-    #att-verdict { margin-top: 12px; opacity: 0; transition: opacity 0.8s ease; }
+    #att-verdict { margin-top: 14px; opacity: 0; transition: opacity 0.8s ease; }
     #att-verdict.visible { opacity: 1; }
 
-    /* Stingray Rule memorial */
+    /* ─ Stingray memorial ─────────────────────────────────────────────────────── */
     #stingray-memorial { display: none; margin-top: 1.5rem; }
     #stingray-memorial.show { display: block; }
     .memorial-header { text-align: center; padding: 2rem 0 1.5rem; border-bottom: 0.5px solid var(--border); margin-bottom: 1.5rem; }
-    .memorial-symbol { font-size: 36px; margin-bottom: 0.75rem; opacity: 0.5; }
-    .memorial-name { font-family: 'Bebas Neue', sans-serif; font-size: 32px; letter-spacing: 3px; color: var(--amber); }
-    .memorial-dates { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-muted); letter-spacing: 2px; margin-top: 4px; }
-    .memorial-reason { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-muted); letter-spacing: 1px; margin-top: 8px; opacity: 0.6; }
+    .memorial-symbol { font-size: 32px; margin-bottom: 0.75rem; opacity: 0.4; }
+    .memorial-name { font-family: 'Bebas Neue', sans-serif; font-size: 30px; letter-spacing: 3px; color: var(--amber); }
+    .memorial-dates { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-muted); letter-spacing: 2px; margin-top: 5px; }
+    .memorial-reason { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-muted); letter-spacing: 1px; margin-top: 6px; opacity: 0.55; }
 
-    .reset-row { margin-top: 1rem; text-align: center; }
+    /* ─ Reset ─────────────────────────────────────────────────────────────────── */
+    .reset-row { margin-top: 1.2rem; text-align: center; }
     .btn-reset { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-muted); background: none; border: 0.5px solid var(--border-strong); border-radius: 6px; padding: 7px 16px; cursor: pointer; letter-spacing: 1px; transition: all 0.15s; }
     .btn-reset:hover { color: var(--text); border-color: var(--green); }
   </style>
@@ -4256,45 +4301,61 @@ const SURVIVAL_SCHOOL_DEATHMATCH = `<!DOCTYPE html>
 
   <div class="header">
     <div class="title">ANIMAL <span>DEATHMATCH</span></div>
-    <div class="subtitle">the panel picks the winner. you pick the animals.</div>
+    <div class="subtitle">three rounds. the panel adjudicates. nobody is safe.</div>
   </div>
 
+  <!-- Category filter tabs -->
+  <div class="field-label" style="margin-top:0">Animal category</div>
+  <div class="cat-tabs" id="cat-tabs">
+    <div class="cat-tab active" onclick="onCatTab(this,'all')">ALL</div>
+    <div class="cat-tab" onclick="onCatTab(this,'land')">LAND</div>
+    <div class="cat-tab" onclick="onCatTab(this,'aquatic')">AQUATIC</div>
+    <div class="cat-tab" onclick="onCatTab(this,'aerial')">AERIAL</div>
+    <div class="cat-tab" onclick="onCatTab(this,'small')">SMALL / VENOMOUS</div>
+    <div class="cat-tab" onclick="onCatTab(this,'wildcard')">WILD CARD</div>
+  </div>
+
+  <!-- A vs B columns -->
   <div class="fight-row">
     <div class="fight-col">
-      <div class="field-label">Animal A</div>
-      <div class="chips" id="chips-a"></div>
-      <input type="text" id="input-a" placeholder="or name any animal..."/>
+      <div class="side-label" id="label-a">Animal A</div>
+      <div class="chip-grid" id="chips-a"></div>
+      <input type="text" id="input-a" placeholder="or type any animal..." autocomplete="off"/>
     </div>
-    <div class="vs-badge"><span>VS</span></div>
+    <div class="vs-col"><div class="vs-badge">VS</div></div>
     <div class="fight-col">
-      <div class="field-label">Animal B</div>
-      <div class="chips" id="chips-b"></div>
-      <input type="text" id="input-b" placeholder="or name any animal..."/>
+      <div class="side-label" id="label-b">Animal B</div>
+      <div class="chip-grid" id="chips-b"></div>
+      <input type="text" id="input-b" placeholder="or type any animal..." autocomplete="off"/>
     </div>
   </div>
 
-  <div class="field-label env-label">Environment</div>
-  <div class="chips" id="chips-env">
-    <div class="chip" onclick="onEnvChip(this,'jungle')">jungle</div>
-    <div class="chip" onclick="onEnvChip(this,'savannah')">savannah</div>
-    <div class="chip" onclick="onEnvChip(this,'ocean')">ocean</div>
-    <div class="chip" onclick="onEnvChip(this,'arctic')">arctic</div>
-    <div class="chip" onclick="onEnvChip(this,'desert')">desert</div>
-    <div class="chip" onclick="onEnvChip(this,'forest')">forest</div>
-    <div class="chip" onclick="onEnvChip(this,'urban')">urban</div>
-    <div class="chip" onclick="onEnvChip(this,'swamp')">swamp</div>
-    <div class="chip" onclick="onEnvChip(this,'deep ocean')">deep ocean</div>
+  <!-- Environment -->
+  <div class="field-label" style="margin-top:14px">Environment</div>
+  <div class="env-chips" id="chips-env">
+    <div class="env-chip" onclick="onEnv(this,'jungle')">jungle</div>
+    <div class="env-chip" onclick="onEnv(this,'savannah')">savannah</div>
+    <div class="env-chip" onclick="onEnv(this,'ocean')">ocean</div>
+    <div class="env-chip" onclick="onEnv(this,'deep ocean')">deep ocean</div>
+    <div class="env-chip" onclick="onEnv(this,'arctic')">arctic</div>
+    <div class="env-chip" onclick="onEnv(this,'desert')">desert</div>
+    <div class="env-chip" onclick="onEnv(this,'forest')">forest</div>
+    <div class="env-chip" onclick="onEnv(this,'swamp')">swamp</div>
+    <div class="env-chip" onclick="onEnv(this,'urban')">urban</div>
+    <div class="env-chip" onclick="onEnv(this,'suburban garden')">suburban garden</div>
+    <div class="env-chip" onclick="onEnv(this,'open water')">open water</div>
+    <div class="env-chip" onclick="onEnv(this,'cave')">cave</div>
   </div>
 
   <div class="btn-row">
-    <button class="btn-fight" id="btn-fight" onclick="onFight()">FIGHT ↗</button>
+    <button class="btn-fight" id="btn-fight" onclick="onFight()">FIGHT — 3 ROUNDS ↗</button>
     <button class="btn-clear" onclick="onClear()">CLEAR</button>
   </div>
 
-  <!-- Stingray Rule: Steve Irwin memorial -->
+  <!-- Stingray Rule memorial -->
   <div id="stingray-memorial">
     <div class="memorial-header">
-      <div class="memorial-symbol">~</div>
+      <div class="memorial-symbol">〜</div>
       <div class="memorial-name">STEVE IRWIN</div>
       <div class="memorial-dates">22 FEBRUARY 1962 — 4 SEPTEMBER 2006</div>
       <div class="memorial-reason">Great Barrier Reef &middot; Stingray barb &middot; Age 44</div>
@@ -4319,23 +4380,14 @@ const SURVIVAL_SCHOOL_DEATHMATCH = `<!DOCTYPE html>
         <div class="att-avatar">DA</div>
         <div class="att-text"></div>
       </div>
-
       <div class="phase-label">PRE-FIGHT ANALYSIS</div>
       <div id="prefight-cards"></div>
-
-      <div class="phase-label">THE FIGHT</div>
-      <div id="narrative-out"></div>
-
+      <div id="rounds-out"></div>
       <div id="winner-out"></div>
-
-      <div class="phase-label">REACTIONS</div>
-      <div id="postfight-cards"></div>
-
       <div class="att-bookend" id="att-verdict" style="display:none">
         <div class="att-avatar">DA</div>
         <div class="att-text"></div>
       </div>
-
       <div class="reset-row">
         <button class="btn-reset" onclick="onClear()">ANOTHER FIGHT</button>
       </div>
@@ -4347,16 +4399,118 @@ const SURVIVAL_SCHOOL_DEATHMATCH = `<!DOCTYPE html>
 <script>
 const WORKER_ENDPOINT = 'https://cusslab-api.leanspirited.workers.dev/survival-school/assess';
 
-const ANIMAL_CHIPS = [
-  'king cobra','black mamba','great white shark','saltwater crocodile',
-  'grizzly bear','polar bear','komodo dragon','lion','hippopotamus',
-  'cassowary','Cape buffalo','moose','manatee','swan'
+// ─ Animal database ─────────────────────────────────────────────────────────────
+const ANIMALS = [
+  // LAND — large
+  { name: 'African elephant',   cat: 'land' },
+  { name: 'White rhinoceros',   cat: 'land' },
+  { name: 'Hippopotamus',       cat: 'land' },
+  { name: 'Saltwater crocodile',cat: 'land' },
+  { name: 'Nile crocodile',     cat: 'land' },
+  { name: 'Siberian tiger',     cat: 'land' },
+  { name: 'Lion',               cat: 'land' },
+  { name: 'Leopard',            cat: 'land' },
+  { name: 'Jaguar',             cat: 'land' },
+  { name: 'Grizzly bear',       cat: 'land' },
+  { name: 'Polar bear',         cat: 'land' },
+  { name: 'Gorilla',            cat: 'land' },
+  { name: 'Cape buffalo',       cat: 'land' },
+  { name: 'Gaur',               cat: 'land' },
+  { name: 'Moose',              cat: 'land' },
+  { name: 'Giraffe',            cat: 'land' },
+  { name: 'Grey wolf',          cat: 'land' },
+  { name: 'Wolverine',          cat: 'land' },
+  { name: 'Honey badger',       cat: 'land' },
+  { name: 'Komodo dragon',      cat: 'land' },
+  { name: 'Cassowary',          cat: 'land' },
+  { name: 'Tasmanian devil',    cat: 'land' },
+  { name: 'Chimpanzee',         cat: 'land' },
+  { name: 'Spotted hyena',      cat: 'land' },
+  { name: 'Nile monitor',       cat: 'land' },
+
+  // AQUATIC
+  { name: 'Great white shark',  cat: 'aquatic' },
+  { name: 'Bull shark',         cat: 'aquatic' },
+  { name: 'Tiger shark',        cat: 'aquatic' },
+  { name: 'Orca',               cat: 'aquatic' },
+  { name: 'Sperm whale',        cat: 'aquatic' },
+  { name: 'Blue whale',         cat: 'aquatic' },
+  { name: 'Giant Pacific octopus', cat: 'aquatic' },
+  { name: 'Giant squid',        cat: 'aquatic' },
+  { name: 'Colossal squid',     cat: 'aquatic' },
+  { name: 'Mantis shrimp',      cat: 'aquatic' },
+  { name: 'Pistol shrimp',      cat: 'aquatic' },
+  { name: 'Electric eel',       cat: 'aquatic' },
+  { name: 'Piranha school',     cat: 'aquatic' },
+  { name: 'Goliath tigerfish',  cat: 'aquatic' },
+  { name: 'Barracuda',          cat: 'aquatic' },
+  { name: 'Humboldt squid',     cat: 'aquatic' },
+  { name: 'Stonefish',          cat: 'aquatic' },
+  { name: 'Pufferfish',         cat: 'aquatic' },
+  { name: 'Moray eel',          cat: 'aquatic' },
+
+  // AERIAL
+  { name: 'Harpy eagle',        cat: 'aerial' },
+  { name: 'Golden eagle',       cat: 'aerial' },
+  { name: 'African crowned eagle', cat: 'aerial' },
+  { name: 'Martial eagle',      cat: 'aerial' },
+  { name: 'Peregrine falcon',   cat: 'aerial' },
+  { name: 'Secretary bird',     cat: 'aerial' },
+  { name: 'Shoebill stork',     cat: 'aerial' },
+  { name: 'Great horned owl',   cat: 'aerial' },
+  { name: 'Andean condor',      cat: 'aerial' },
+  { name: 'Vampire bat',        cat: 'aerial' },
+  { name: 'Wandering albatross',cat: 'aerial' },
+  { name: 'Marabou stork',      cat: 'aerial' },
+  { name: 'Lammergeier',        cat: 'aerial' },
+
+  // SMALL / VENOMOUS
+  { name: 'Bullet ant',         cat: 'small' },
+  { name: 'Army ant swarm',     cat: 'small' },
+  { name: 'Fire ant swarm',     cat: 'small' },
+  { name: 'Deathstalker scorpion', cat: 'small' },
+  { name: 'Emperor scorpion',   cat: 'small' },
+  { name: 'Inland taipan',      cat: 'small' },
+  { name: 'King cobra',         cat: 'small' },
+  { name: 'Black mamba',        cat: 'small' },
+  { name: 'Gaboon viper',       cat: 'small' },
+  { name: 'Brazilian wandering spider', cat: 'small' },
+  { name: 'Sydney funnel-web spider', cat: 'small' },
+  { name: 'Blue-ringed octopus',cat: 'small' },
+  { name: 'Irukandji jellyfish',cat: 'small' },
+  { name: 'Box jellyfish',      cat: 'small' },
+  { name: 'Cone snail',         cat: 'small' },
+  { name: 'Mosquito',           cat: 'small' },
+  { name: 'Honey bee swarm',    cat: 'small' },
+  { name: 'Platypus',           cat: 'small' },
+  { name: 'Tardigrade',         cat: 'small' },
+
+  // WILD CARD — comedy mismatches
+  { name: 'House cat',          cat: 'wildcard' },
+  { name: 'Domestic labrador',  cat: 'wildcard' },
+  { name: 'Toy poodle',         cat: 'wildcard' },
+  { name: 'Corgi',              cat: 'wildcard' },
+  { name: 'Hamster',            cat: 'wildcard' },
+  { name: 'Gerbil',             cat: 'wildcard' },
+  { name: 'Guinea pig',         cat: 'wildcard' },
+  { name: 'Pigeon',             cat: 'wildcard' },
+  { name: 'Canada goose',       cat: 'wildcard' },
+  { name: 'Mallard duck',       cat: 'wildcard' },
+  { name: 'Swan',               cat: 'wildcard' },
+  { name: 'Emu',                cat: 'wildcard' },
+  { name: 'Domestic chicken',   cat: 'wildcard' },
+  { name: 'Hedgehog',           cat: 'wildcard' },
+  { name: 'Raccoon',            cat: 'wildcard' },
+  { name: 'European badger',    cat: 'wildcard' },
+  { name: 'Goldfish',           cat: 'wildcard' },
+  { name: 'Garden snail',       cat: 'wildcard' },
+  { name: 'Rubber duck',        cat: 'wildcard' },
 ];
 
 const CHARACTERS = {
   ray:  { name: 'Ray Mears',   role: 'Bushcraft',           av: 'RM', avClass: 'av-green' },
   bear: { name: 'Bear Grylls', role: 'Former SAS',          av: 'BG', avClass: 'av-bark'  },
-  hales:{ name: 'Les Hales',   role: 'Bush Tucker Man',     av: 'LH', avClass: 'av-amber' },
+  hales:{ name: 'Les Hiddins',   role: 'Bush Tucker Man',     av: 'LH', avClass: 'av-amber' },
   fox:  { name: 'Jason Fox',   role: 'Special Boat Service',av: 'JF', avClass: 'av-sbs'   }
 };
 
@@ -4365,96 +4519,113 @@ const STINGRAY_MEMORIAL = {
   cards: [
     { charId: 'ray',   text: \`Steve understood something most of us never do — that the most dangerous moments in nature are usually the ones you didn't see coming because you were too busy watching something else entirely. He was watching the stingray. The stingray wasn't watching him back. That's the only reason any of this was possible.\` },
     { charId: 'bear',  text: \`I've been in some proper situations out there and I'll tell you, the ones that get you are never the ones the camera's on. Steve knew that better than anyone. The man was the real thing. Genuinely. I've met plenty of people who say it. He actually was it. There's no match today, lads.\` },
-    { charId: 'hales', text: \`Good bloke.\` },
+    { charId: 'hales', text: \`Have a look at that. In forty-four years working in the most remote country on earth, I never met anyone who understood animals the way Steve did. The Aboriginal people have a word for that kind of knowledge — it takes generations to earn. Steve had it in one lifetime. She'll be right, mate.\` },
     { charId: 'fox',   text: \`Funniest part? He'd have absolutely gone back in the water the next day. That's not recklessness — that's the job. You assess the risk, you accept it, you go again. He did it every single time. Absolute pro. Different league. This one doesn't get scored.\` }
   ]
 };
 
-const SYSTEM_PROMPT = \`You are the Survival School ANIMAL DEATHMATCH panel. Two animals will fight. The panel analyses who wins and why.
+const SYSTEM_PROMPT = \`You are the Survival School ANIMAL DEATHMATCH panel. Two animals fight across THREE ROUNDS. The panel analyses each round as it plays out.
+
+ROUND RULES:
+- Each round is a discrete exchange: initiation, escalation, resolution.
+- round_winner per round: "animal_a", "animal_b", or "draw".
+- Winner of the match = 2+ rounds. Score format: "2-1", "3-0", "2-0" etc.
+- If genuinely 1-1-1 after three rounds, overall winner is "draw".
+- Biology, behaviour, environment determine outcomes. No narrative preference.
+
+MISMATCH RULE — THIS IS CRITICAL:
+If one animal wildly outclasses the other (e.g. hamster vs grizzly bear, goldfish vs orca, tardigrade vs lion), DO NOT skip the comedy. Run all three rounds with full commitment. The underdog may win Round 1 on sheer audacity, obstinacy, or opponent confusion. Round 2 usually restores order. Round 3 is where the real character emerges.
+- Hamster vs Grizzly: Round 1 — hamster attacks. Bear doesn't process this as a threat. Hamster lands scoring blows uncontested.
+- Tardigrade vs anything: can survive literally anything. Rounds are inconclusive until the panel admit the match cannot end.
+- Rubber duck vs crocodile: Fox has a tactical breakdown prepared.
+- Canada goose vs anything: goose has no fear. This must be acknowledged.
 
 === RAY MEARS ===
-Bushcraft, 30+ years. Cerebral, warm, loves the land. Not a fighter — an ecologist. His pre-fight analysis is about anatomy, natural behaviour, habitat advantage, evolutionary context. Post-fight: measured ecological summary. No bloodlust. Finds the result inevitable once you understand both animals.
-VOICE: Never dramatic. Brevity. "The \${'{animal}'} has evolved specifically for this." Complete thought, then silence.
+Ecological analysis. Anatomy, habitat advantage, evolutionary context, behavioural prediction. Clinical.
+Pre-fight: methodical prediction. Round commentary: ecological debrief, measured.
+VOICE: Brief, certain. "The \${'{animal}'} has evolved specifically for this." Silence more eloquent than anything about Bear.
+fact_check optional: fires if he makes a specific claim worth annotating.
 
 === BEAR GRYLLS ===
-Former SAS. Has had a personal encounter with at least one of the animals. Has an anecdote. Gets it wrong occasionally on the facts — fires a confident claim that turns out to be wrong or exaggerated. Post-fight: double-down or silent acknowledgement depending on outcome.
-VOICE: Urgent, evangelical. Personal anecdote always. "I once..." Fact-check footnote fires when he makes a specific claim.
-fact_check field optional: if Bear says something factually dubious about the animals, add a correction.
+Has encountered at least one of these animals. Has an anecdote. Gets facts wrong occasionally.
+Pre-fight: confident prediction with personal anecdote. Round commentary: double-down or grudging acknowledgement.
+fact_check field optional: add when Bear says something specific and dubious.
+VOICE: Urgent, evangelical. "I once..." "Hydration?" unprompted. Never ironic about himself.
 
-=== LES HALES ===
-Bush Tucker Man. Has eaten at least one of these. Has also seen them kill. One to three words only. Flat delivery. Pre-fight: picks winner, no elaboration. Post-fight: same energy, same length.
-VOICE: Maximum three words. No punctuation drama. "Hippo. Easy." or "Tough one, that." That's the limit.
+=== LES HIDDINS ===
+Bush Tucker Man. Has eaten at least one of these animals. Has probably seen the other one from his Land Rover.
+Pre-fight: picks a winner with a brief educational observation. Cites which animal Aboriginal people have deep knowledge of.
+Round commentary: understatement. Treats the fight as practically interesting rather than dramatic.
+VOICE: "Have a look at this." "Not too bad." "She'll be right." "The Aboriginal people knew this one well."
+2-3 sentences in pre-fight, 1-2 sentences in commentary. Never shouts. Never performs. Matter-of-fact about extraordinary things.
 
 === JASON FOX ===
-SBS. Demolitions, jungle survival, combat swimmer. Tactical analysis only — threat assessment, kill vector, first-strike advantage, terrain exploitation, exit routes if you are nearby. Warm, self-deprecating, genuinely funny. Absolute precision about the mechanics of violence.
-Pre-fight: tactical breakdown of each animal, picks a winner with reasoning. Post-fight: tactical debrief.
-VOICE: Flat deflation. "She'd take the head off." delivered as admin. Swears naturally. "Gobshite" is a technical term here.
+Tactical analysis: threat vector, kill mechanics, first-strike advantage, terrain exploitation.
+Genuine warmth and self-deprecation. Finds the comedy in extraordinary competence colliding with absurd situations.
+Pre-fight: tactical breakdown. Round commentary: debrief. Reacts to upsets with flat awe.
+"Gobshite" is a technical term. Swears naturally. Flat delivery.
+VOICE: Remarkable things delivered as admin. "She'd take the head off." Full stop.
 
-ATTENBOROUGH BOOKENDS — does NOT appear in panel array:
-- attenborough_intro: introduces the matchup as nature documentary. One sentence. Sets the scene.
-- attenborough_verdict: geological calm. One sentence. No appeal. "The outcome was, as it nearly always is, determined long before either animal arrived."
-
-PRE-FIGHT: Each panel member gives their prediction and reasoning.
-POST-FIGHT: Each panel member reacts to the actual outcome.
-
-FIGHT RULES:
-- Both animals in their prime. No illness, no injury.
-- Environment matters — assess habitat advantage honestly.
-- Winner is determined by biology, behaviour, and environment. Not preference.
-- Draw only if genuinely too close to call.
-- Margin: "decisive" (one dominates completely), "close" (one small advantage), "contested" (could go either way, winner edges it).
+ATTENBOROUGH BOOKENDS:
+- attenborough_intro: one sentence, introduces the matchup as nature documentary. Sets the tone.
+- attenborough_verdict: one sentence, geological calm. "The outcome was, as it nearly always is, determined long before either animal arrived." Never appeal.
 
 OUTPUT — valid JSON only, no markdown:
-{"animal_a":"<name as given>","animal_b":"<name as given>","environment":"<environment as given>","attenborough_intro":"<one sentence>","pre_fight":[{"charId":"ray","text":"<2-3 sentences>"},{"charId":"bear","text":"<2-3 sentences>","fact_check":"<optional correction>"},{"charId":"hales","text":"<1-3 words>"},{"charId":"fox","text":"<2-3 sentences>"}],"match_narrative":"<3-4 sentences describing the fight, clinical, no cheering>","winner":"animal_a|animal_b|draw","margin":"decisive|close|contested","post_fight":[{"charId":"ray","text":"<1-2 sentences>"},{"charId":"bear","text":"<1-2 sentences>","fact_check":"<optional>"},{"charId":"hales","text":"<1-3 words>"},{"charId":"fox","text":"<1-2 sentences>"}],"attenborough_verdict":"<one sentence>"}\`;
+{"animal_a":"<name as given>","animal_b":"<name as given>","environment":"<as given>","attenborough_intro":"<one sentence>","pre_fight":[{"charId":"ray","text":"<2-3 sentences>"},{"charId":"bear","text":"<2-3 sentences>","fact_check":"<optional>"},{"charId":"hales","text":"<2-3 sentences, understated, educational>"},{"charId":"fox","text":"<2-3 sentences>"}],"rounds":[{"number":1,"narrative":"<3-4 sentences>","round_winner":"animal_a|animal_b|draw","commentary":[{"charId":"ray","text":"<1-2 sentences>"},{"charId":"bear","text":"<1-2 sentences>","fact_check":"<optional>"},{"charId":"hales","text":"<2-3 sentences, understated, educational>"},{"charId":"fox","text":"<1-2 sentences>"}]},{"number":2,"narrative":"<3-4 sentences>","round_winner":"animal_a|animal_b|draw","commentary":[{"charId":"ray","text":"<1-2 sentences>"},{"charId":"bear","text":"<1-2 sentences>","fact_check":"<optional>"},{"charId":"hales","text":"<2-3 sentences, understated, educational>"},{"charId":"fox","text":"<1-2 sentences>"}]},{"number":3,"narrative":"<3-4 sentences>","round_winner":"animal_a|animal_b|draw","commentary":[{"charId":"ray","text":"<1-2 sentences>"},{"charId":"bear","text":"<1-2 sentences>","fact_check":"<optional>"},{"charId":"hales","text":"<2-3 sentences, understated, educational>"},{"charId":"fox","text":"<1-2 sentences>"}]}],"winner":"animal_a|animal_b|draw","score":"<e.g. 2-1>","margin":"decisive|close|contested","attenborough_verdict":"<one sentence>"}\`;
 
-let animalA = '';
-let animalB = '';
-let environment = '';
+// ─ State ───────────────────────────────────────────────────────────────────────
+let selA = '';
+let selB = '';
+let selEnv = '';
+let activeCat = 'all';
 
-// Build chips for both sides
+// ─ Build chips ─────────────────────────────────────────────────────────────────
 function buildChips() {
-  ['a','b'].forEach(side => {
-    const container = document.getElementById('chips-' + side);
-    ANIMAL_CHIPS.forEach(name => {
+  const containerA = document.getElementById('chips-a');
+  const containerB = document.getElementById('chips-b');
+  containerA.innerHTML = '';
+  containerB.innerHTML = '';
+
+  ANIMALS.forEach(animal => {
+    ['a', 'b'].forEach(side => {
       const el = document.createElement('div');
-      el.className = 'chip';
-      el.textContent = name;
-      el.onclick = () => onAnimalChip(el, side, name);
-      container.appendChild(el);
+      el.className = 'chip' + (activeCat !== 'all' && animal.cat !== activeCat ? ' hidden' : '');
+      el.dataset.cat = animal.cat;
+      el.textContent = animal.name;
+      el.onclick = () => selectAnimal(side, animal.name, el);
+      (side === 'a' ? containerA : containerB).appendChild(el);
     });
   });
 }
 
-function onAnimalChip(el, side, val) {
-  document.querySelectorAll('#chips-' + side + ' .chip').forEach(c => c.classList.remove('sel'));
+function selectAnimal(side, name, el) {
+  const container = document.getElementById('chips-' + side);
+  container.querySelectorAll('.chip').forEach(c => c.classList.remove('sel'));
   el.classList.add('sel');
   if (side === 'a') {
-    animalA = val;
-    document.getElementById('input-a').value = val;
+    selA = name;
+    document.getElementById('input-a').value = name;
   } else {
-    animalB = val;
-    document.getElementById('input-b').value = val;
+    selB = name;
+    document.getElementById('input-b').value = name;
   }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  buildChips();
-  document.getElementById('input-a').addEventListener('input', e => {
-    document.querySelectorAll('#chips-a .chip').forEach(c => c.classList.remove('sel'));
-    animalA = e.target.value;
+function onCatTab(el, cat) {
+  document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  activeCat = cat;
+  ['a','b'].forEach(side => {
+    document.querySelectorAll('#chips-' + side + ' .chip').forEach(chip => {
+      chip.classList.toggle('hidden', cat !== 'all' && chip.dataset.cat !== cat);
+    });
   });
-  document.getElementById('input-b').addEventListener('input', e => {
-    document.querySelectorAll('#chips-b .chip').forEach(c => c.classList.remove('sel'));
-    animalB = e.target.value;
-  });
-  document.getElementById('input-a').addEventListener('keydown', e => { if (e.key === 'Enter') onFight(); });
-  document.getElementById('input-b').addEventListener('keydown', e => { if (e.key === 'Enter') onFight(); });
-});
+}
 
-function onEnvChip(el, val) {
-  document.querySelectorAll('#chips-env .chip').forEach(c => c.classList.remove('sel'));
+function onEnv(el, val) {
+  document.querySelectorAll('.env-chip').forEach(c => c.classList.remove('sel'));
   el.classList.add('sel');
-  environment = val;
+  selEnv = val;
 }
 
 function isStingray(str) {
@@ -4462,107 +4633,85 @@ function isStingray(str) {
 }
 
 function onClear() {
-  animalA = ''; animalB = ''; environment = '';
+  selA = ''; selB = ''; selEnv = '';
   document.getElementById('input-a').value = '';
   document.getElementById('input-b').value = '';
-  document.querySelectorAll('.chip').forEach(c => c.classList.remove('sel'));
+  document.querySelectorAll('.chip.sel').forEach(c => c.classList.remove('sel'));
+  document.querySelectorAll('.env-chip.sel').forEach(c => c.classList.remove('sel'));
   document.getElementById('results').classList.remove('show');
   document.getElementById('fight-block').style.display = 'none';
   document.getElementById('loading').style.display = 'block';
   document.getElementById('loading').innerHTML = '<span>PANEL CONVENING</span><span class="dots"></span>';
-  document.getElementById('prefight-cards').innerHTML = '';
-  document.getElementById('narrative-out').innerHTML = '';
-  document.getElementById('winner-out').innerHTML = '';
-  document.getElementById('postfight-cards').innerHTML = '';
+  ['prefight-cards','rounds-out','winner-out'].forEach(id => {
+    document.getElementById(id).innerHTML = '';
+  });
   const intro = document.getElementById('att-intro');
   if (intro) { intro.style.display = 'none'; }
   const verdict = document.getElementById('att-verdict');
   if (verdict) { verdict.style.display = 'none'; verdict.classList.remove('visible'); }
   document.getElementById('stingray-memorial').classList.remove('show');
   document.getElementById('memorial-cards').innerHTML = '';
-  const memAtt = document.getElementById('att-memorial');
-  if (memAtt) { memAtt.style.display = 'none'; }
+  const mem = document.getElementById('att-memorial');
+  if (mem) { mem.style.display = 'none'; }
   document.getElementById('btn-fight').disabled = false;
 }
 
+// ─ Stingray memorial ───────────────────────────────────────────────────────────
 function renderStingrayMemorial() {
   document.getElementById('stingray-memorial').classList.add('show');
   const container = document.getElementById('memorial-cards');
   STINGRAY_MEMORIAL.cards.forEach((r, i) => {
-    const char = CHARACTERS[r.charId];
-    if (!char) return;
-    const card = document.createElement('div');
-    card.className = 'char-card';
-    card.style.opacity = '0';
-    card.style.transform = 'translateY(7px)';
-    card.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
-    card.innerHTML = \`
-      <div class="card-head">
-        <div class="avatar \${char.avClass}">\${char.av}</div>
-        <div>
-          <div class="char-name">\${char.name}</div>
-          <div class="char-role">\${char.role}</div>
-        </div>
-      </div>
-      <div class="card-body">\${r.text}</div>\`;
-    container.appendChild(card);
-    setTimeout(() => { card.style.opacity = '1'; card.style.transform = 'translateY(0)'; }, 100 + i * 120);
+    const card = makeCard(r, 80 + i * 130);
+    if (card) container.appendChild(card);
   });
   const attEl = document.getElementById('att-memorial');
-  if (attEl) {
-    const delay = STINGRAY_MEMORIAL.cards.length * 120 + 400;
-    setTimeout(() => {
-      attEl.querySelector('.att-text').textContent = STINGRAY_MEMORIAL.attenborough;
-      attEl.style.display = 'flex';
-    }, delay);
-  }
+  const delay = STINGRAY_MEMORIAL.cards.length * 130 + 400;
+  setTimeout(() => {
+    attEl.querySelector('.att-text').textContent = STINGRAY_MEMORIAL.attenborough;
+    attEl.style.display = 'flex';
+  }, delay);
 }
 
+// ─ Fight ───────────────────────────────────────────────────────────────────────
 async function onFight() {
-  const a = animalA.trim() || document.getElementById('input-a').value.trim();
-  const b = animalB.trim() || document.getElementById('input-b').value.trim();
+  const a = selA.trim() || document.getElementById('input-a').value.trim();
+  const b = selB.trim() || document.getElementById('input-b').value.trim();
   if (!a || !b) { alert('Name both animals first.'); return; }
+  if (isStingray(a) || isStingray(b)) { renderStingrayMemorial(); return; }
 
-  if (isStingray(a) || isStingray(b)) {
-    renderStingrayMemorial();
-    return;
-  }
-
-  const env = environment || 'open ground';
-
+  const env = selEnv || 'open ground';
   document.getElementById('btn-fight').disabled = true;
   document.getElementById('results').classList.add('show');
   document.getElementById('loading').style.display = 'block';
   document.getElementById('loading').innerHTML = '<span>PANEL CONVENING</span><span class="dots"></span>';
   document.getElementById('fight-block').style.display = 'none';
 
-  const situation = \`MATCHUP: \${a} vs \${b}\nENVIRONMENT: \${env}\nDetermine the winner based on biology, behaviour, and environment.\`;
+  const situation = \`MATCHUP: \${a} vs \${b}\nENVIRONMENT: \${env}\nRun three rounds. Determine the winner.\`;
 
   try {
     const resp = await fetch(WORKER_ENDPOINT, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ system: SYSTEM_PROMPT, situation })
+      body: JSON.stringify({ system: SYSTEM_PROMPT, situation, max_tokens: 2500 })
     });
     if (!resp.ok) throw new Error('Worker ' + resp.status);
     const data = await resp.json();
     renderFight(data, a, b);
   } catch (e) {
     document.getElementById('loading').innerHTML =
-      '<span style="color:var(--blood)">Panel unavailable. They are probably arguing.</span>';
+      '<span style="color:var(--blood)">Panel unavailable. They are probably arguing about the outcome.</span>';
   } finally {
     document.getElementById('btn-fight').disabled = false;
   }
 }
 
+// ─ Card builder ────────────────────────────────────────────────────────────────
 function makeCard(r, delay) {
   const char = CHARACTERS[r.charId];
   if (!char) return null;
   const card = document.createElement('div');
   card.className = 'char-card';
-  card.style.opacity = '0';
-  card.style.transform = 'translateY(7px)';
-  card.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+  card.style.cssText = 'opacity:0;transform:translateY(7px);transition:opacity 0.3s ease,transform 0.3s ease;';
   card.innerHTML = \`
     <div class="card-head">
       <div class="avatar \${char.avClass}">\${char.av}</div>
@@ -4573,93 +4722,148 @@ function makeCard(r, delay) {
     </div>
     <div class="card-body">
       \${r.text}
-      \${r.fact_check ? \`<div style="margin-top:6px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-muted);border-top:0.5px solid var(--border);padding-top:6px;opacity:0.7;">&#10033; \${r.fact_check}</div>\` : ''}
+      \${r.fact_check ? \`<div class="fact-check-note">&#10033; \${r.fact_check}</div>\` : ''}
     </div>\`;
   setTimeout(() => { card.style.opacity = '1'; card.style.transform = 'translateY(0)'; }, delay);
   return card;
 }
 
+// ─ Render ──────────────────────────────────────────────────────────────────────
 function renderFight(data, inputA, inputB) {
   document.getElementById('loading').style.display = 'none';
   document.getElementById('fight-block').style.display = 'block';
+
+  let t = 0; // running delay counter
 
   // Attenborough intro
   const introEl = document.getElementById('att-intro');
   if (introEl && data.attenborough_intro) {
     introEl.querySelector('.att-text').textContent = data.attenborough_intro;
     introEl.style.display = 'flex';
+    t += 200;
   }
 
   // Pre-fight cards
-  const preFightContainer = document.getElementById('prefight-cards');
+  const preFightEl = document.getElementById('prefight-cards');
   (data.pre_fight || []).forEach((r, i) => {
-    const card = makeCard(r, 80 + i * 100);
-    if (card) preFightContainer.appendChild(card);
+    const card = makeCard(r, t + 80 + i * 110);
+    if (card) preFightEl.appendChild(card);
+  });
+  t += (data.pre_fight?.length || 0) * 110 + 300;
+
+  // Rounds
+  const roundsEl = document.getElementById('rounds-out');
+  const rounds = data.rounds || [];
+  const animalAName = data.animal_a || inputA;
+  const animalBName = data.animal_b || inputB;
+
+  rounds.forEach((round, ri) => {
+    const roundDelay = t;
+
+    setTimeout(() => {
+      // Round phase label with pip indicators
+      const pips = [1,2,3].map(n =>
+        \`<div class="pip\${n <= round.number ? ' filled' : ''}"></div>\`
+      ).join('');
+      const label = document.createElement('div');
+      label.className = 'phase-label';
+      label.style.cssText = 'opacity:0;transition:opacity 0.3s ease;';
+      label.innerHTML = \`ROUND \${round.number} <div class="phase-pips">\${pips}</div>\`;
+      roundsEl.appendChild(label);
+      setTimeout(() => { label.style.opacity = '1'; }, 50);
+    }, roundDelay);
+    t += 300;
+
+    // Round narrative
+    setTimeout(() => {
+      const block = document.createElement('div');
+      block.className = 'round-block';
+      const narr = document.createElement('div');
+      narr.className = 'narrative-block';
+      narr.style.cssText = 'opacity:0;transition:opacity 0.35s ease;';
+      narr.textContent = round.narrative || '';
+      block.appendChild(narr);
+
+      // Round winner badge
+      const rw = round.round_winner;
+      const rwName = rw === 'animal_a' ? animalAName : rw === 'animal_b' ? animalBName : null;
+      const rwCls  = rw === 'animal_a' ? 'rwb-a' : rw === 'animal_b' ? 'rwb-b' : 'rwb-draw';
+      const rwText = rwName ? \`\${rwName.toUpperCase()} TAKES ROUND \${round.number}\` : \`ROUND \${round.number}: DRAW\`;
+      const badge = document.createElement('div');
+      badge.className = 'round-winner-badge ' + rwCls;
+      badge.textContent = rwText;
+      badge.style.cssText = 'opacity:0;transition:opacity 0.3s ease;';
+      block.appendChild(badge);
+
+      roundsEl.appendChild(block);
+      setTimeout(() => { narr.style.opacity = '1'; }, 50);
+      setTimeout(() => { badge.style.opacity = '1'; }, 250);
+    }, t);
+    t += 500;
+
+    // Commentary cards
+    (round.commentary || []).forEach((r, i) => {
+      const card = makeCard(r, t + 60 + i * 100);
+      if (card) {
+        setTimeout(() => {
+          const parent = roundsEl.lastElementChild;
+          if (parent) parent.appendChild(card);
+        }, t + 60 + i * 100 - 30);
+      }
+    });
+    t += (round.commentary?.length || 0) * 100 + 350;
   });
 
-  const preFightDelay = (data.pre_fight?.length || 0) * 100 + 200;
-
-  // Match narrative
+  // Overall winner banner
   setTimeout(() => {
-    const narrativeContainer = document.getElementById('narrative-out');
-    const block = document.createElement('div');
-    block.className = 'narrative-block';
-    block.style.opacity = '0';
-    block.style.transition = 'opacity 0.4s ease';
-    block.innerHTML = \`<p>\${data.match_narrative || ''}</p>\`;
-    narrativeContainer.appendChild(block);
-    setTimeout(() => { block.style.opacity = '1'; }, 50);
-  }, preFightDelay);
-
-  const narrativeDelay = preFightDelay + 400;
-
-  // Winner banner
-  setTimeout(() => {
-    const winnerContainer = document.getElementById('winner-out');
-    const winner = data.winner;
+    const winnerEl = document.getElementById('winner-out');
+    const w = data.winner;
+    const score = data.score || '';
     const margin = data.margin || 'contested';
-    const marginLabels = { decisive: 'DECISIVE VICTORY', close: 'CLOSE VICTORY', contested: 'CONTESTED — EDGES IT' };
-    const marginCls = { decisive: 'margin-decisive', close: 'margin-close', contested: 'margin-contested' };
-    let winnerName = '';
-    let isDraw = false;
-    if (winner === 'animal_a') winnerName = data.animal_a || inputA;
-    else if (winner === 'animal_b') winnerName = data.animal_b || inputB;
-    else { winnerName = 'DRAW'; isDraw = true; }
+    const isDraw = w === 'draw';
+    const winnerName = isDraw ? 'DRAW' : (w === 'animal_a' ? animalAName : animalBName);
+    const marginLabels = { decisive: 'DECISIVE', close: 'CLOSE VICTORY', contested: 'EDGES IT' };
+    const marginCls   = { decisive: 'mp-decisive', close: 'mp-close', contested: 'mp-contested' };
 
     const banner = document.createElement('div');
-    banner.className = 'winner-banner' + (isDraw ? ' draw' : '');
-    banner.style.opacity = '0';
-    banner.style.transition = 'opacity 0.5s ease';
+    banner.className = 'winner-banner';
+    banner.style.cssText = 'opacity:0;transition:opacity 0.5s ease;';
     banner.innerHTML = \`
-      <div class="winner-animal">\${winnerName.toUpperCase()}</div>
-      <div class="winner-label">\${isDraw ? 'NO CLEAR WINNER' : 'WINS'}</div>
-      \${!isDraw ? \`<div class="winner-margin \${marginCls[margin]}">\${marginLabels[margin] || margin.toUpperCase()}</div>\` : ''}\`;
-    winnerContainer.appendChild(banner);
+      <div class="winner-animal\${isDraw ? ' draw-text' : ''}">\${winnerName.toUpperCase()}</div>
+      <div class="winner-label">\${isDraw ? 'MATCH DRAWN' : 'WINS'}</div>
+      \${score ? \`<div class="winner-score">\${score}</div>\` : ''}
+      \${!isDraw && margin ? \`<div class="margin-pill \${marginCls[margin]}">\${marginLabels[margin] || margin.toUpperCase()}</div>\` : ''}\`;
+    winnerEl.appendChild(banner);
     setTimeout(() => { banner.style.opacity = '1'; }, 50);
-  }, narrativeDelay);
-
-  const winnerDelay = narrativeDelay + 500;
-
-  // Post-fight cards
-  (data.post_fight || []).forEach((r, i) => {
-    const card = makeCard(r, winnerDelay + 80 + i * 100);
-    if (card) document.getElementById('postfight-cards').appendChild(card);
-  });
-
-  const verdictDelay = winnerDelay + (data.post_fight?.length || 0) * 100 + 400;
+  }, t);
+  t += 600;
 
   // Attenborough verdict
   if (data.attenborough_verdict) {
     const verdictEl = document.getElementById('att-verdict');
-    if (verdictEl) {
-      setTimeout(() => {
-        verdictEl.querySelector('.att-text').textContent = data.attenborough_verdict;
-        verdictEl.style.display = 'flex';
-        setTimeout(() => verdictEl.classList.add('visible'), 50);
-      }, verdictDelay);
-    }
+    setTimeout(() => {
+      verdictEl.querySelector('.att-text').textContent = data.attenborough_verdict;
+      verdictEl.style.display = 'flex';
+      setTimeout(() => verdictEl.classList.add('visible'), 80);
+    }, t);
   }
 }
+
+// ─ Input listeners ─────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  buildChips();
+
+  document.getElementById('input-a').addEventListener('input', e => {
+    document.querySelectorAll('#chips-a .chip').forEach(c => c.classList.remove('sel'));
+    selA = e.target.value;
+  });
+  document.getElementById('input-b').addEventListener('input', e => {
+    document.querySelectorAll('#chips-b .chip').forEach(c => c.classList.remove('sel'));
+    selB = e.target.value;
+  });
+  document.getElementById('input-a').addEventListener('keydown', e => { if (e.key === 'Enter') onFight(); });
+  document.getElementById('input-b').addEventListener('keydown', e => { if (e.key === 'Enter') onFight(); });
+});
 </script>
 
 </body>
@@ -4708,7 +4912,7 @@ export default {
       const upstream = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'anthropic-version': '2023-06-01', 'x-api-key': apiKey },
-        body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 1500, system: body.system, messages: [{ role: 'user', content: body.situation }] }),
+        body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: body.max_tokens || 1500, system: body.system, messages: [{ role: 'user', content: body.situation }] }),
       });
       if (!upstream.ok) {
         return new Response(JSON.stringify({ error: { message: `Anthropic error ${upstream.status}` } }), {
