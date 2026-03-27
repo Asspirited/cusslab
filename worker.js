@@ -349,10 +349,10 @@ const SURVIVAL_SCHOOL_HOME = `<!DOCTYPE html>
 
     <a class="tile soon" href="#">
       <div class="tile-top">
-        <span class="tile-cat">From Beyond</span>
+        <span class="tile-cat">Irwin Memorial</span>
         <span class="tile-badge badge-soon">SOON</span>
       </div>
-      <div class="tile-title">Irwin Memorial</div>
+      <div class="tile-title">You're alright mate...</div>
       <div class="tile-desc">Describe an animal encounter. Steve rates your handling. From beyond.</div>
     </a>
 
@@ -1243,8 +1243,10 @@ Survival probability shifts:
 Generate 3 specific next actions the user could take from here.
 If probability reaches 0 or situation fully resolves, set is_terminal to true.
 
+ATTENBOROUGH EULOGY (SS-014): When is_terminal is true AND survival_probability is 0 (death), include attenborough_eulogy — one paragraph, geological calm, never comedic in register, always comedic in effect. References specific details from this specific situation. He does not console. He observes. The comedy comes from the precision and the calm, not from any attempt at comedy.
+
 OUTPUT — valid JSON only, no markdown:
-{"survival_probability":<integer>,"attenborough_opening":"<one sentence, nature doc, frames what the decision is about to cause>","situation_update":"<one sentence what changed>","panel":[{"charId":"<id>","text":"<2-3 sentences>","death":<bool>,"fact_check":"<optional — Bear only>"}],"attenborough_verdict":"<one sentence, geological calm, turn conclusion, he already knew>","next_actions":["<action>","<action>","<action>"],"is_terminal":<bool>}\`;
+{"survival_probability":<integer>,"attenborough_opening":"<one sentence, nature doc, frames what the decision is about to cause>","situation_update":"<one sentence what changed>","panel":[{"charId":"<id>","text":"<2-3 sentences>","death":<bool>,"fact_check":"<optional — Bear only>"}],"attenborough_verdict":"<one sentence, geological calm, turn conclusion, he already knew>","next_actions":["<action>","<action>","<action>"],"is_terminal":<bool>,"attenborough_eulogy":"<one paragraph, death only, geological calm, never comic in register, always in effect — omit if not terminal death>"}\`;
   }
 
   if (mode === 'mundane') {
@@ -1677,31 +1679,43 @@ function showReaction(data, turnCount, onDecision) {
     }, cardDelay);
     const nextDelay = (data.panel?.length || 0) * 100 + 900;
     if (data.is_terminal) {
-      setTimeout(() => showTerminal(data.survival_probability), nextDelay);
+      setTimeout(() => showTerminal(data.survival_probability, data.attenborough_eulogy), nextDelay);
     } else {
       setTimeout(() => showDecisionInput(data.next_actions, data.survival_probability, onDecision), nextDelay);
     }
   } else {
     if (data.is_terminal) {
-      showTerminal(data.survival_probability);
+      showTerminal(data.survival_probability, data.attenborough_eulogy);
     } else {
       setTimeout(() => showDecisionInput(data.next_actions, data.survival_probability, onDecision), 800);
     }
   }
 }
 
-// Terminal state
-function showTerminal(probability) {
+// Terminal state (SS-014: eulogy added)
+function showTerminal(probability, eulogy) {
   const block = document.getElementById('interaction-block');
   block.style.display = 'block';
 
   if (probability <= 0) {
+    const eulogyHtml = eulogy
+      ? \`<div class="att-bookend" style="margin-top:14px;opacity:0;transition:opacity 1.2s ease;" id="eulogy-block">
+           <div class="att-avatar">DA</div>
+           <div class="att-text">\${eulogy}</div>
+         </div>\`
+      : '';
     block.innerHTML = \`
       <div class="terminal terminal-dead">
         <div class="terminal-label">YOU DID NOT SURVIVE</div>
-        <div class="terminal-sub">Attenborough will close proceedings.</div>
       </div>
+      \${eulogyHtml}
       <div class="reset-row"><button class="btn-reset" onclick="window._onReset()">TRY AGAIN</button></div>\`;
+    if (eulogy) {
+      setTimeout(() => {
+        const el = document.getElementById('eulogy-block');
+        if (el) el.style.opacity = '1';
+      }, 800);
+    }
   } else {
     block.innerHTML = \`
       <div class="terminal terminal-alive">
@@ -2470,18 +2484,8 @@ const SURVIVAL_SCHOOL_WORST = `<!DOCTYPE html>
     <div class="chip" onclick="onScenario(this,'72 days, all food is gone, there are options on the ground','none','Andes mountains, 16 survivors, decision cannot be delayed')">andes decision</div>
   </div>
 
-  <div class="field-label">What happened?</div>
-  <div class="chips" id="chips-event">
-    <div class="chip" onclick="onChip(this,'event','bitten by a snake')">bitten by snake</div>
-    <div class="chip" onclick="onChip(this,'event','stung or bitten by something venomous')">stung / bitten</div>
-    <div class="chip" onclick="onChip(this,'event','bear encounter, it\\'s charging')">bear charging</div>
-    <div class="chip" onclick="onChip(this,'event','something is circling me')">being circled</div>
-    <div class="chip" onclick="onChip(this,'event','knocked from boat into open water')">overboard</div>
-    <div class="chip" onclick="onChip(this,'event','I\\'ve been stalked for the last 20 minutes')">being stalked</div>
-    <div class="chip" onclick="onChip(this,'event','pinned or trapped, cannot move')">pinned / trapped</div>
-    <div class="chip" onclick="onChip(this,'event','attacked by something I did not expect to be aggressive')">unexpected attack</div>
-  </div>
-  <input type="text" id="event-input" placeholder="or describe what happened..." oninput="onFieldInput('event',this.value)"/>
+  <div class="field-label">Or describe what happened...</div>
+  <input type="text" id="event-input" placeholder="describe what happened..." oninput="onFieldInput('event',this.value)"/>
 
   <div class="field-label">The animal or hazard</div>
   <div class="chips" id="chips-animal">
@@ -3595,8 +3599,10 @@ Survival probability shifts:
 Generate 3 specific next actions the user could take from here.
 If probability reaches 0 or situation fully resolves, set is_terminal to true.
 
+ATTENBOROUGH EULOGY (SS-014): When is_terminal is true AND survival_probability is 0 (death), include attenborough_eulogy — one paragraph, geological calm, never comedic in register, always comedic in effect. References specific details from this specific situation. He does not console. He observes. The comedy comes from the precision and the calm, not from any attempt at comedy.
+
 OUTPUT — valid JSON only, no markdown:
-{"survival_probability":<integer>,"attenborough_opening":"<one sentence, nature doc, frames what the decision is about to cause>","situation_update":"<one sentence what changed>","panel":[{"charId":"<id>","text":"<2-3 sentences>","death":<bool>,"fact_check":"<optional — Bear only>"}],"attenborough_verdict":"<one sentence, geological calm, turn conclusion, he already knew>","next_actions":["<action>","<action>","<action>"],"is_terminal":<bool>}\`;
+{"survival_probability":<integer>,"attenborough_opening":"<one sentence, nature doc, frames what the decision is about to cause>","situation_update":"<one sentence what changed>","panel":[{"charId":"<id>","text":"<2-3 sentences>","death":<bool>,"fact_check":"<optional — Bear only>"}],"attenborough_verdict":"<one sentence, geological calm, turn conclusion, he already knew>","next_actions":["<action>","<action>","<action>"],"is_terminal":<bool>,"attenborough_eulogy":"<one paragraph, death only, geological calm, never comic in register, always in effect — omit if not terminal death>"}\`;
   }
 
   if (mode === 'mundane') {
