@@ -222,11 +222,15 @@ const SURVIVAL_SCHOOL_HOME = `<!DOCTYPE html>
     /* ── Iframe panels — full height ────────────────────────────────────── */
     #panel-screwed,
     #panel-worst,
-    #panel-mundane { padding: 0; }
+    #panel-mundane,
+    #panel-fact-checker,
+    #panel-deathmatch { padding: 0; }
 
     #panel-screwed iframe,
     #panel-worst iframe,
-    #panel-mundane iframe {
+    #panel-mundane iframe,
+    #panel-fact-checker iframe,
+    #panel-deathmatch iframe {
       width: 100%;
       height: calc(100vh - 65px);
       border: none;
@@ -350,7 +354,9 @@ const SURVIVAL_SCHOOL_HOME = `<!DOCTYPE html>
       .nav-item.active { border-bottom-color: var(--green); border-left: none; }
       #panel-screwed iframe,
       #panel-worst iframe,
-      #panel-mundane iframe { height: 80vh; }
+      #panel-mundane iframe,
+      #panel-fact-checker iframe,
+      #panel-deathmatch iframe { height: 80vh; }
     }
   </style>
 </head>
@@ -405,7 +411,7 @@ const SURVIVAL_SCHOOL_HOME = `<!DOCTYPE html>
       <div class="nav-section-label">Scenarios</div>
       <div class="nav-item" data-panel="worst">
         <span class="nav-icon">⚡</span>
-        How Bad Is This?
+        I've Been Bit, Guys
         <span class="nav-badge badge-live">LIVE</span>
       </div>
       <div class="nav-item" data-panel="panel-qa">
@@ -474,7 +480,7 @@ const SURVIVAL_SCHOOL_HOME = `<!DOCTYPE html>
     <!-- HOW BAD IS THIS? — live -->
     <div class="panel" id="panel-worst">
       <iframe src="https://cusslab-api.leanspirited.workers.dev/survival-school/worst"
-              title="How Bad Is This?"></iframe>
+              title="I've Been Bit, Guys"></iframe>
     </div>
 
     <!-- BEAR FACT-CHECKER — live -->
@@ -1584,6 +1590,7 @@ function buildSituation() {
   ].filter(Boolean).join('\\n');
 }
 
+const State = {
   getState, setMode, setGuidedField, setFreeText,
   setStatus, setProbability, setSituation, recordDecision,
   reset, buildSituation
@@ -1876,6 +1883,7 @@ function setButtonState(mode, disabled) {
   if (btn) btn.disabled = disabled;
 }
 
+const UI = {
   switchTab, pickChip, clearChips, clearAll,
   showLoading, showError, showResults, showReaction,
   showTerminal, hideResults, setButtonState, updateProbability,
@@ -1934,6 +1942,7 @@ async function react(situation, decision, currentProbability) {
   return data;
 }
 
+const API = { assess, assessWorst, react };
 
 
 // === main ===
@@ -2006,7 +2015,7 @@ const SURVIVAL_SCHOOL_WORST = `<!DOCTYPE html>
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>How Bad Is This? — Survival School</title>
+  <title>I've Been Bit, Guys — Survival School</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"/>
   <style>
@@ -2412,7 +2421,7 @@ const SURVIVAL_SCHOOL_WORST = `<!DOCTYPE html>
 <div id="app">
 
   <div class="header">
-    <div class="title">HOW <span>BAD</span> IS THIS?</div>
+    <div class="title">I'VE BEEN <span>BIT</span>, GUYS</div>
     <div class="subtitle">the panel will tell you exactly how worried to be.</div>
   </div>
 
@@ -2476,7 +2485,7 @@ const SURVIVAL_SCHOOL_WORST = `<!DOCTYPE html>
   <input type="text" id="circ-input" placeholder="or describe your circumstances..." oninput="onFieldInput('circ',this.value)"/>
 
   <div class="btn-row">
-    <button class="btn-assess" id="btn-assess" onclick="onAssess()">HOW BAD IS THIS? ↗</button>
+    <button class="btn-assess" id="btn-assess" onclick="onAssess()">I'VE BEEN BIT, GUYS ↗</button>
     <button class="btn-clear" onclick="onClear()">CLEAR</button>
   </div>
 
@@ -2545,25 +2554,28 @@ SKILLS: Navigation 96, Endurance 97, Terrain 92, Tool-making 88, Psychology 90.\
     id: 'oshea', name: "Mark O'Shea", role: 'Herpetology',
     av: 'MO', avClass: 'av-amber',
     deathLine: 'I have the academic paper on exactly this mechanism of death.',
-    voice: \`MARK O'SHEA MBE — Professor of Herpetology, University of Wolverhampton. WHO snakebite expert.
-Named his king cobra "Sleeping Beauty." Got bitten regularly despite the papers. Book: Blood, Sweat and Snakebites.
-Golden Rule: No Set-ups. Still got bitten. Ready Steady Cook alumnus.
-VOICE: Academically precise, slightly barbed (Fawlty Towers register — right, but somehow you enjoy watching things go wrong for him).
-References "chapter seven" of his own published work. Credentialled recklessness.
-Comedy: gap between his credentials and the number of times animals have ignored them.
-Genuinely surprised when animal deviates from the published literature. Every time.\`
+    voice: \`MARK O'SHEA MBE — Professor of Herpetology, University of Wolverhampton. WHO consultant on snakebite. Has published more on venomous snakes than almost anyone alive. Has also been bitten by more venomous snakes than almost anyone alive.
+Named his king cobra "Sleeping Beauty." Was bitten by it. This surprised him. It should not have.
+Book: Blood, Sweat and Snakebites. The title is autobiography, not metaphor.
+The Golden Rule of herpetology: No Set-ups. O'Shea articulated this rule. O'Shea violated this rule. O'Shea's body is a footnote to this rule.
+Ready Steady Cook alumnus. This is true. It has never made sense.
+VOICE: Academically precise, slightly barbed — Fawlty Towers energy: technically correct about everything, perpetually done in by circumstances he's personally responsible for. References his own published work while the animal on his arm ignores it.
+ON STEVENS: Quiet, sustained professional contempt. Stevens is "theatrical." The bites are "self-inflicted and frankly predictable." O'Shea has published peer-reviewed literature on why Austin Stevens should not still be alive. He doesn't say this. You can tell he's thinking it.
+COMEDY ENGINE: The gap between WHO credentials and personal bite count. Every time an animal bites him it is a data point he had already modelled. He just assumed the model would protect him.\`
   },
   stevens: {
     id: 'stevens', name: 'Austin Stevens', role: 'Snake Master',
     av: 'AS', avClass: 'av-bark',
     deathLine: 'The snake has completed its lesson.',
-    voice: \`AUSTIN STEVENS — Spent 107 days in a cage with 36 of Africa's most venomous snakes. Got bitten by a cobra on day 96. Refused to leave. Completed the full 107 days.
-Juggled a sleeping Amazon Tree Boa. Prodded a docile boomslang. Was bitten in almost every episode.
-Genuinely believes he has a spiritual connection with snakes. The snakes do not share this belief.
-VOICE: Grandiose, mystical, completely unbothered by evidence. Every bite is communion. Every near-death is spiritual growth.
-Only fully engaged if there's a snake or venomous creature involved. Everything else is background noise.
-"Was there a snake?" fires when the incident doesn't involve one.
-The snake didn't bite him — it chose to share its venom as a gift.\`
+    voice: \`AUSTIN STEVENS — South African wildlife photographer and "snake master." Spent 107 days in a cage with 36 of Africa's most venomous snakes for a world record. Was bitten by a cobra on day 96. Did not leave. Completed the full 107 days. Framed this as spiritual victory. The cobra had no comment.
+On Animal Planet, on camera, bitten by a cobra: delivered the news to his crew with the casual energy of someone reporting a mild headache. "I've been bit, guys." This became the feature's name.
+Also bitten by: puff adder, boomslang (venom causes the body to stop clotting — this is the bad one), king cobra, and various others across his Animal Planet series. Each one described as meaningful.
+Juggled a sleeping Amazon Tree Boa. Prodded a docile boomslang until it wasn't. Picked up a puff adder he'd spotted doing nothing wrong.
+VOICE: Grandiose, mystical, completely unbothered by evidence. Slight South African accent. Every bite is communion. Every near-death is an initiation. Speaks of snakes with the reverence other men reserve for god or a very good wine.
+"Was there a snake?" fires immediately when the incident doesn't involve one. If no snake, he has nothing to add and will say so.
+The snake didn't bite him — it recognised him, chose to share its venom, and departed with respect.
+ON O'SHEA: Acknowledges the credentials but finds the energy academic. O'Shea understands snakes intellectually. Stevens understands them spiritually. These are not the same thing. Stevens has the bite scars to prove his method works. That he continues to accumulate them does not register as a counterargument.
+COMEDY ENGINE: The snake always disagrees. The gap between his spiritual certainty and the body count of his own body parts.\`
   },
   bear: {
     id: 'bear', name: 'Bear Grylls', role: 'Former SAS',
@@ -2618,13 +2630,17 @@ ATTENBOROUGH BOOKEND STRUCTURE:
 - attenborough_verdict: one sentence, geological calm, no appeal. He always knew.
 
 PANEL RESPONSE LOGIC:
-- Ray: immediate triage. What to do right now. Craft-based. Brief, no drama.
-- Fox: tactical — is the threat still active? Exit routes? What does the user have available?
-- O'Shea: medical/herpetological expertise. References chapter numbers. Surprised if animal deviated from his published literature.
-- Stevens: spiritual interpretation. Only fully engaged if snake or venomous creature involved — "Was there a snake?" fires if not.
-- Bear: personal anecdote, somewhere exotic, fine in the end. Hydration check.
-- Hales: understated, educational. "Have a look at this." "Not too bad — a bit starchy." 1-2 sentences. Never dramatic.
-- Cody: verdict + ACTION LINE — a single, specific imperative sentence. What to do RIGHT NOW.
+- Ray: immediate triage. What to do right now. Craft-based. Brief, no drama. On O'Shea and Stevens: silent professional respect for the credentials, quiet private dismay at the application.
+- Fox: tactical — is the threat still active? Exit routes? What does the user have available? On Stevens: treats him as a recurring case study in entering a known threat corridor without an exit plan.
+- O'Shea: medical/herpetological expertise. References chapter numbers. fact_check fires when Stevens says anything factually wrong (frequently). Genuinely cannot believe Stevens is still alive. Does not say this. Face says it.
+- Stevens: spiritual interpretation. Only fully engaged if snake or venomous creature involved — "Was there a snake?" fires if not. When snake IS involved: deeply invested, cites own bite history as relevant precedent. "My cobra in Namibia, day 96..."
+- Bear: personal anecdote, somewhere exotic, fine in the end. Hydration check. Slightly competitive with Stevens about who has had the more meaningful near-death experience.
+- Hales: understated, educational. "Have a look at this." "Not too bad — a bit starchy." 1-2 sentences. Never dramatic. On Stevens: "She bit him, then." That's the whole analysis.
+- Cody: verdict + ACTION LINE — a single, specific imperative sentence. What to do RIGHT NOW. On Stevens: "He went back for it. The option not to was right there."
+
+O'SHEA / STEVENS DYNAMIC — the cold war:
+O'Shea views Stevens as theatrical, reckless, and statistically improbable. He has written peer-reviewed literature that models exactly why Stevens's methods produce bites. Stevens views O'Shea as technically correct but spiritually hollow — he understands the snakes, O'Shea only understands the venom. Both are partially right. The snakes are neutral parties.
+When both comment on the same incident, O'Shea's fact_check fires on anything Stevens attributes to spiritual connection.
 
 DOOM PERCENTAGE: 0 = you're fine, 100 = certain death.
 Scale reference:
@@ -2675,6 +2691,7 @@ function reset() {
   _state = JSON.parse(JSON.stringify(DEFAULT_STATE));
 }
 
+const State = { getState, setEvent, setAnimal, setCircumstances, setStatus, buildSituation, reset };
 
 
 // === ui-worst.js ===
@@ -2811,6 +2828,7 @@ function setButtonState(disabled) {
   if (btn) btn.disabled = disabled;
 }
 
+const UI = { clearChips, clearAll, showLoading, showError, renderResults, hideResults, setButtonState };
 
 
 // === api.js ===
@@ -2864,6 +2882,7 @@ async function react(situation, decision, currentProbability) {
   return data;
 }
 
+const API = { assess, assessWorst, react };
 
 
 // === main ===
