@@ -2433,6 +2433,20 @@ const SURVIVAL_SCHOOL_WORST = `<!DOCTYPE html>
     <div class="subtitle">the panel will tell you exactly how worried to be.</div>
   </div>
 
+  <div class="field-label">Classic incidents</div>
+  <div class="chips" id="chips-scenario">
+    <div class="chip" onclick="onScenario(this,'bitten by king cobra 45 minutes ago','king cobra','jungle, alone, 45 minutes from help')">cobra bite</div>
+    <div class="chip" onclick="onScenario(this,'grizzly bear charging me on a trail','grizzly bear','Montana wilderness, 3 miles from car, no phone signal')">grizzly charge</div>
+    <div class="chip" onclick="onScenario(this,'great white shark circling me in the water','great white shark','surfing, 400 metres from shore')">shark circling</div>
+    <div class="chip" onclick="onScenario(this,'Brazilian wandering spider is on my chest and I have not moved','Brazilian wandering spider','3am, in bed, urban, ambulance available')">spider on chest</div>
+    <div class="chip" onclick="onScenario(this,'three spotted hyenas closing in, I am alone on foot','pack of spotted hyenas','open savannah, nightfall in 40 minutes, no vehicle')">hyena pack</div>
+    <div class="chip" onclick="onScenario(this,'struck by lightning for the seventh time in my life','lightning strike','outdoors, fully conscious somehow, confused bystanders')">lightning (7th)</div>
+    <div class="chip" onclick="onScenario(this,'Komodo dragon bit my ankle 20 minutes ago, wound is not clotting','Komodo dragon','Komodo Island, 2 hours from hospital, basic first aid kit')">komodo bite</div>
+    <div class="chip" onclick="onScenario(this,'I have been injured by a manatee and require assistance','manatee','coastal water, near shore, witnesses present, explanation required')">manatee incident</div>
+    <div class="chip" onclick="onScenario(this,'being attacked by a swan and cannot leave the area','swan','canal towpath, urban, witnesses unable to help')">swan attack</div>
+    <div class="chip" onclick="onScenario(this,'72 days, all food is gone, there are options on the ground','none','Andes mountains, 16 survivors, decision cannot be delayed')">andes decision</div>
+  </div>
+
   <div class="field-label">What happened?</div>
   <div class="chips" id="chips-event">
     <div class="chip" onclick="onChip(this,'event','bitten by a snake')">bitten by snake</div>
@@ -2869,6 +2883,17 @@ async function react(situation, decision, currentProbability) {
 // === main ===
 
 
+
+  window.onScenario = (el, eventVal, animalVal, circVal) => {
+    document.querySelectorAll('#chips-scenario .chip').forEach(c => c.classList.remove('sel'));
+    el.classList.add('sel');
+    State.setEvent(eventVal);
+    State.setAnimal(animalVal);
+    State.setCircumstances(circVal);
+    document.getElementById('event-input').value = eventVal;
+    document.getElementById('animal-input').value = animalVal;
+    document.getElementById('circ-input').value = circVal;
+  };
 
   window.onChip = (el, field, val) => {
     document.querySelectorAll(\`#chips-\${field} .chip\`).forEach(c => c.classList.remove('sel'));
