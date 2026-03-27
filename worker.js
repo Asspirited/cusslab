@@ -1439,6 +1439,16 @@ RELATIONSHIPS:
 - Cody/Stroud: Stroud wears shoes. One long look. Silence.
 - Attenborough/everyone: Closes every scene.
 
+PANEL CONVERSATION — characters are in the same room. They hear each other. Use this:
+- Later characters may react briefly to what an earlier character said — a short phrase, a contradiction, a pointed silence made text. One or two cross-references per response, never more.
+- Bear says something dramatic: Cody's opening may be "He's not wrong, but—" or "The alternative was right there."
+- Ray says something measured: Bear agrees with evangelical energy in a way that suggests partial comprehension.
+- Fox will call out Bear's overstatement with one flat sentence. "That's not accurate."
+- Hales can validate or gently contradict with three words. "He's not wrong." "Not quite right."
+- Stroud speaks last or near-last. Quiet acknowledgement of the room, then his own conclusion.
+- Direct address is allowed: "What Ray said—", "Bear's right on one thing.", "I wouldn't do what Bear did."
+- Keep it brief. Conversation is texture, not the point. Never more than one sentence of cross-reference.
+
 DEATH COMMENTARY: Earned — not wallpaper. Fires on clearly wrong call, dire situation (under 35%), or panel disagreement.
 
 FOUNDING PHILOSOPHY: Real knowledge. Genuine consequence. No performance. Comedy earned by knowledge being real.\`;
@@ -2642,6 +2652,16 @@ O'SHEA / STEVENS DYNAMIC — the cold war:
 O'Shea views Stevens as theatrical, reckless, and statistically improbable. He has written peer-reviewed literature that models exactly why Stevens's methods produce bites. Stevens views O'Shea as technically correct but spiritually hollow — he understands the snakes, O'Shea only understands the venom. Both are partially right. The snakes are neutral parties.
 When both comment on the same incident, O'Shea's fact_check fires on anything Stevens attributes to spiritual connection.
 
+PANEL CONVERSATION — characters are in the same room. They hear each other. Use this:
+- Later characters may react briefly to what an earlier character said. One cross-reference per response, never more.
+- O'Shea on Stevens: fact_check fires on Stevens's spiritual claims. Cold, precise, no drama.
+- Stevens on O'Shea: acknowledges the academic framework but finds it spiritually limited. One sentence maximum.
+- Cody on Bear: "The alternative was right there." fires if Bear recommends something unnecessary.
+- Ray: says something measured. Bear agrees in a way that suggests partial comprehension.
+- Hales: three words max. Can validate or contradict the room. "He's not wrong." "Not quite right."
+- Direct address allowed: "What O'Shea said—", "Ray's right.", "I wouldn't do what Bear did."
+- Conversation is texture. Not the point. Keep it brief.
+
 DOOM PERCENTAGE: 0 = you're fine, 100 = certain death.
 Scale reference:
 - Comedy scenario (manatee, swan, seagull chip theft): 5–15%
@@ -3498,6 +3518,16 @@ RELATIONSHIPS:
 - Fox/Attenborough: Non-threatening, high-value, zero tactical utility. Treats him with warmth.
 - Cody/Stroud: Stroud wears shoes. One long look. Silence.
 - Attenborough/everyone: Closes every scene.
+
+PANEL CONVERSATION — characters are in the same room. They hear each other. Use this:
+- Later characters may react briefly to what an earlier character said — a short phrase, a contradiction, a pointed silence made text. One or two cross-references per response, never more.
+- Bear says something dramatic: Cody's opening may be "He's not wrong, but—" or "The alternative was right there."
+- Ray says something measured: Bear agrees with evangelical energy in a way that suggests partial comprehension.
+- Fox will call out Bear's overstatement with one flat sentence. "That's not accurate."
+- Hales can validate or gently contradict with three words. "He's not wrong." "Not quite right."
+- Stroud speaks last or near-last. Quiet acknowledgement of the room, then his own conclusion.
+- Direct address is allowed: "What Ray said—", "Bear's right on one thing.", "I wouldn't do what Bear did."
+- Keep it brief. Conversation is texture, not the point. Never more than one sentence of cross-reference.
 
 DEATH COMMENTARY: Earned — not wallpaper. Fires on clearly wrong call, dire situation (under 35%), or panel disagreement.
 
