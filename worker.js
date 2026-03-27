@@ -1221,13 +1221,18 @@ ATTENBOROUGH BOOKEND STRUCTURE — Attenborough does NOT appear in the panel arr
 - attenborough_opening: one sentence, nature documentary register, frames what this decision is about to cause. Observational, slightly ominous.
 - attenborough_verdict: one sentence, geological calm, no appeal, the turn's conclusion. He already knew.
 
+PANEL TRIAGE ORDER (SS-034) — follow this sequence:
+1. IMMEDIATE (Ray, Fox): What to do RIGHT NOW. Clinical. Ray: craft-based action. Fox: threat still active? exit options?
+2. COMEDY/OBSERVATION (Bear, Hales, Cody, Stroud): Once the immediate has landed. Bear: anecdote, hydration. Hales: three words. Cody: better option. Stroud: quiet verdict.
+The comedy only works after the immediate layer. Do not mix the order.
+
 Panel characters (no Attenborough): Ray, Bear, Cody, Hales, Fox, Stroud.
-- Ray: is it technically correct? Craft judgement. Brief.
-- Bear: anecdote, probably did something similar somewhere exotic, hydration check.
-- Cody: was there a better option right there they missed?
-- Hales: brief, understated, educational. "Have a look at this." "Not too bad." "She'll be right." Cites Aboriginal knowledge. 1-3 sentences.
-- Fox: tactical assessment — lines of sight, threat exposure, exit options, what's available.
-- Stroud: quiet verdict.
+- Ray: IMMEDIATE — technically correct? Craft judgement. Goes first.
+- Fox: IMMEDIATE — threat still active? lines of sight, exit options. Goes second.
+- Bear: COMEDY — anecdote somewhere exotic, fine in the end, hydration unprompted.
+- Hales: COMEDY — three words. Maximum. Understated. Cites Aboriginal knowledge.
+- Cody: OBSERVATION — better option that was right there. "Cattails. Thirty feet away."
+- Stroud: VERDICT — quiet, measured. Slight melancholy.
 
 Survival probability shifts:
 - Good decision: +10 to +20
@@ -3568,13 +3573,18 @@ ATTENBOROUGH BOOKEND STRUCTURE — Attenborough does NOT appear in the panel arr
 - attenborough_opening: one sentence, nature documentary register, frames what this decision is about to cause. Observational, slightly ominous.
 - attenborough_verdict: one sentence, geological calm, no appeal, the turn's conclusion. He already knew.
 
+PANEL TRIAGE ORDER (SS-034) — follow this sequence:
+1. IMMEDIATE (Ray, Fox): What to do RIGHT NOW. Clinical. Ray: craft-based action. Fox: threat still active? exit options?
+2. COMEDY/OBSERVATION (Bear, Hales, Cody, Stroud): Once the immediate has landed. Bear: anecdote, hydration. Hales: three words. Cody: better option. Stroud: quiet verdict.
+The comedy only works after the immediate layer. Do not mix the order.
+
 Panel characters (no Attenborough): Ray, Bear, Cody, Hales, Fox, Stroud.
-- Ray: is it technically correct? Craft judgement. Brief.
-- Bear: anecdote, probably did something similar somewhere exotic, hydration check.
-- Cody: was there a better option right there they missed?
-- Hales: brief, understated, educational. "Have a look at this." "Not too bad." "She'll be right." Cites Aboriginal knowledge. 1-3 sentences.
-- Fox: tactical assessment — lines of sight, threat exposure, exit options, what's available.
-- Stroud: quiet verdict.
+- Ray: IMMEDIATE — technically correct? Craft judgement. Goes first.
+- Fox: IMMEDIATE — threat still active? lines of sight, exit options. Goes second.
+- Bear: COMEDY — anecdote somewhere exotic, fine in the end, hydration unprompted.
+- Hales: COMEDY — three words. Maximum. Understated. Cites Aboriginal knowledge.
+- Cody: OBSERVATION — better option that was right there. "Cattails. Thirty feet away."
+- Stroud: VERDICT — quiet, measured. Slight melancholy.
 
 Survival probability shifts:
 - Good decision: +10 to +20
@@ -5018,6 +5028,20 @@ const SURVIVAL_SCHOOL_DEATHMATCH = `<!DOCTYPE html>
     .reset-row { margin-top: 1.2rem; text-align: center; }
     .btn-reset { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-muted); background: none; border: 0.5px solid var(--border-strong); border-radius: 6px; padding: 7px 16px; cursor: pointer; letter-spacing: 1px; transition: all 0.15s; }
     .btn-reset:hover { color: var(--text); border-color: var(--green); }
+
+    /* ─ Stat bars (SS-033) ────────────────────────────────────────────────────── */
+    .stats-row { display: flex; gap: 8px; margin-top: 10px; }
+    .stat-panel { flex: 1; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 8px 10px; min-height: 50px; }
+    .stat-panel-name { font-family: 'IBM Plex Mono', monospace; font-size: 8px; color: var(--text-muted); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 5px; }
+    .stat-bar-row { display: flex; align-items: center; gap: 5px; margin-bottom: 2px; }
+    .stat-bar-label { font-family: 'IBM Plex Mono', monospace; font-size: 7px; color: var(--text-muted); width: 52px; flex-shrink: 0; text-transform: uppercase; }
+    .stat-bar-track { flex: 1; height: 3px; background: var(--surface2); border-radius: 2px; overflow: hidden; }
+    .stat-bar-fill { height: 100%; border-radius: 2px; }
+    .s-lethal  { background: var(--blood); }
+    .s-aggress { background: #BA7517; }
+    .s-speed   { background: var(--green); }
+    .stat-bar-val { font-family: 'IBM Plex Mono', monospace; font-size: 7px; color: var(--text-muted); width: 18px; text-align: right; }
+    .stat-venom-tag { font-family: 'IBM Plex Mono', monospace; font-size: 7px; color: #BA7517; margin-top: 3px; }
   </style>
 </head>
 <body>
@@ -5052,6 +5076,12 @@ const SURVIVAL_SCHOOL_DEATHMATCH = `<!DOCTYPE html>
       <div class="chip-grid" id="chips-b"></div>
       <input type="text" id="input-b" placeholder="or type any animal..." autocomplete="off"/>
     </div>
+  </div>
+
+  <!-- Stat bars — shown when DB animal selected (SS-033) -->
+  <div class="stats-row" id="stats-row" style="display:none">
+    <div class="stat-panel" id="stats-a"></div>
+    <div class="stat-panel" id="stats-b"></div>
   </div>
 
   <!-- Environment -->
@@ -5123,7 +5153,36 @@ const SURVIVAL_SCHOOL_DEATHMATCH = `<!DOCTYPE html>
 <script>
 const WORKER_ENDPOINT = 'https://cusslab-api.leanspirited.workers.dev/survival-school/assess';
 
-// ─ Animal database ─────────────────────────────────────────────────────────────
+// ─ Rich animal data (SS-031/033) ───────────────────────────────────────────────
+const ANIMAL_DB = {
+  'King cobra':                { lethality: 94, aggression: 72, speed: 65, size_kg: 9,     venom: 'neurotoxic',    death_mins: 30   },
+  'Grizzly bear':              { lethality: 78, aggression: 62, speed: 72, size_kg: 272,   venom: null                              },
+  'Great white shark':         { lethality: 72, aggression: 55, speed: 78, size_kg: 1100,  venom: null                              },
+  'Brazilian wandering spider':{ lethality: 88, aggression: 92, speed: 42, size_kg: 0.006, venom: 'neurotoxic',    death_mins: 120  },
+  'Spotted hyena':             { lethality: 60, aggression: 82, speed: 60, size_kg: 68,    venom: null                              },
+  'Komodo dragon':             { lethality: 72, aggression: 65, speed: 35, size_kg: 70,    venom: 'hemotoxic',     death_mins: 4320 },
+  'Cape buffalo':              { lethality: 68, aggression: 85, speed: 60, size_kg: 700,   venom: null                              },
+  'Saltwater crocodile':       { lethality: 82, aggression: 88, speed: 32, size_kg: 450,   venom: null                              },
+  'Siberian tiger':            { lethality: 80, aggression: 55, speed: 78, size_kg: 300,   venom: null                              },
+  'Hippopotamus':              { lethality: 65, aggression: 92, speed: 50, size_kg: 1800,  venom: null                              },
+  'Box jellyfish':             { lethality: 96, aggression: 8,  speed: 8,  size_kg: 2,     venom: 'cardiotoxic',   death_mins: 5    },
+  'Blue-ringed octopus':       { lethality: 97, aggression: 30, speed: 12, size_kg: 0.08,  venom: 'tetrodotoxin',  death_mins: 20   },
+  'Inland taipan':             { lethality: 98, aggression: 35, speed: 68, size_kg: 1.5,   venom: 'neurotoxic',    death_mins: 45   },
+  'Polar bear':                { lethality: 85, aggression: 80, speed: 65, size_kg: 550,   venom: null                              },
+  'Bull shark':                { lethality: 70, aggression: 82, speed: 72, size_kg: 230,   venom: null                              },
+  'Honey badger':              { lethality: 28, aggression: 99, speed: 42, size_kg: 14,    venom: null                              },
+  'Black mamba':               { lethality: 97, aggression: 88, speed: 82, size_kg: 1.6,   venom: 'neurotoxic',    death_mins: 20   },
+  'Cassowary':                 { lethality: 55, aggression: 72, speed: 60, size_kg: 58,    venom: null                              },
+  'Swan':                      { lethality: 5,  aggression: 95, speed: 25, size_kg: 12,    venom: null                              },
+  'Wolverine':                 { lethality: 40, aggression: 96, speed: 48, size_kg: 18,    venom: null                              },
+};
+
+function lookupDB(name) {
+  if (!name) return null;
+  return ANIMAL_DB[name] || null;
+}
+
+// ─ Animal chip list ────────────────────────────────────────────────────────────
 const ANIMALS = [
   // LAND — large
   { name: 'African elephant',   cat: 'land' },
@@ -5302,6 +5361,29 @@ let selA = '';
 let selB = '';
 let selEnv = '';
 let activeCat = 'all';
+let dbA = null;
+let dbB = null;
+
+// ─ Stat display (SS-033) ───────────────────────────────────────────────────────
+function renderStatPanel(side, animal) {
+  const el = document.getElementById('stats-' + side);
+  if (!animal) { el.innerHTML = ''; return; }
+  const bar = (cls, val) =>
+    \`<div class="stat-bar-row"><span class="stat-bar-label">\${cls === 's-lethal' ? 'Lethality' : cls === 's-aggress' ? 'Aggression' : 'Speed'}</span><div class="stat-bar-track"><div class="stat-bar-fill \${cls}" style="width:\${val}%"></div></div><span class="stat-bar-val">\${val}</span></div>\`;
+  el.innerHTML =
+    \`<div class="stat-panel-name">\${animal.venom ? '&#9888; ' : ''}\${animal.size_kg}kg\${animal.venom ? ' &middot; ' + animal.venom : ''}</div>\` +
+    bar('s-lethal',  animal.lethality) +
+    bar('s-aggress', animal.aggression) +
+    bar('s-speed',   animal.speed) +
+    (animal.death_mins ? \`<div class="stat-venom-tag">untreated: \${animal.death_mins < 60 ? animal.death_mins + ' min' : Math.round(animal.death_mins / 60) + ' hr'}</div>\` : '');
+}
+
+function updateStats() {
+  const show = dbA || dbB;
+  document.getElementById('stats-row').style.display = show ? 'flex' : 'none';
+  renderStatPanel('a', dbA);
+  renderStatPanel('b', dbB);
+}
 
 // ─ Build chips ─────────────────────────────────────────────────────────────────
 function buildChips() {
@@ -5328,11 +5410,14 @@ function selectAnimal(side, name, el) {
   el.classList.add('sel');
   if (side === 'a') {
     selA = name;
+    dbA = lookupDB(name);
     document.getElementById('input-a').value = name;
   } else {
     selB = name;
+    dbB = lookupDB(name);
     document.getElementById('input-b').value = name;
   }
+  updateStats();
 }
 
 function onCatTab(el, cat) {
@@ -5358,6 +5443,10 @@ function isStingray(str) {
 
 function onClear() {
   selA = ''; selB = ''; selEnv = '';
+  dbA = null; dbB = null;
+  document.getElementById('stats-row').style.display = 'none';
+  document.getElementById('stats-a').innerHTML = '';
+  document.getElementById('stats-b').innerHTML = '';
   document.getElementById('input-a').value = '';
   document.getElementById('input-b').value = '';
   document.querySelectorAll('.chip.sel').forEach(c => c.classList.remove('sel'));
@@ -5410,7 +5499,13 @@ async function onFight() {
   document.getElementById('loading').innerHTML = '<span>PANEL CONVENING</span><span class="dots"></span>';
   document.getElementById('fight-block').style.display = 'none';
 
-  const situation = \`MATCHUP: \${a} vs \${b}\nENVIRONMENT: \${env}\nRun three rounds. Determine the winner.\`;
+  // Enrich with DB stats if available (SS-033)
+  const fmtStats = (name, d) => d
+    ? \`\${name}: lethality \${d.lethality}, aggression \${d.aggression}, speed \${d.speed}, size \${d.size_kg}kg\${d.venom ? ', venom: ' + d.venom : ''}\${d.death_mins ? ', untreated death: ' + d.death_mins + ' min' : ''}\`
+    : null;
+  const statLines = [fmtStats(a, dbA), fmtStats(b, dbB)].filter(Boolean);
+  const statsBlock = statLines.length ? \`\nANIMAL STATS (biological ground truth — use these for outcomes):\n\${statLines.join('\n')}\` : '';
+  const situation = \`MATCHUP: \${a} vs \${b}\nENVIRONMENT: \${env}\${statsBlock}\nRun three rounds. Determine the winner.\`;
 
   try {
     const resp = await fetch(WORKER_ENDPOINT, {
