@@ -1240,6 +1240,19 @@ const SURVIVAL_SCHOOL_APP  = `<!DOCTYPE html>
     }
 
     .btn-reset:hover { color: var(--text); border-color: var(--green); }
+
+    /* ── Cascade steps (SS-043) ─────────────────────────────────────────── */
+    .step.hidden { display: none; }
+    .step-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; margin-top: 14px; }
+    .step-head .field-label { margin: 0; }
+    .btn-skip { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1px; color: var(--text-muted); background: none; border: none; cursor: pointer; padding: 2px 0; transition: color 0.15s; }
+    .btn-skip:hover { color: var(--green); }
+    .group-nav { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px; }
+    .group-btn { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1px; padding: 4px 9px; border: 0.5px solid var(--border); border-radius: 4px; cursor: pointer; background: none; color: var(--text-muted); transition: all 0.15s; white-space: nowrap; }
+    .group-btn.active { border-color: var(--green); color: var(--green); }
+    .absurdity-divider { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 2px; color: var(--green-dim); margin: 10px 0 6px; text-align: center; }
+    .ctx-section { margin-top: 10px; }
+    .ctx-label { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 1.5px; color: var(--green-dim); margin-bottom: 5px; text-transform: uppercase; }
   </style>
 </head>
 <body>
@@ -1256,48 +1269,63 @@ const SURVIVAL_SCHOOL_APP  = `<!DOCTYPE html>
   </div>
 
   <div class="input-panel active" id="panel-guided">
-    <div class="field-label">Location</div>
-    <div class="chips" id="chips-loc">
-      <div class="chip" onclick="onChip(this,'loc','Dartmoor, October')">Dartmoor, October</div>
-      <div class="chip" onclick="onChip(this,'loc','Scottish Highlands, midwinter')">Scottish Highlands, midwinter</div>
-      <div class="chip" onclick="onChip(this,'loc','Amazon rainforest')">Amazon rainforest</div>
-      <div class="chip" onclick="onChip(this,'loc','Sonoran Desert, Arizona')">Sonoran Desert, Arizona</div>
-      <div class="chip" onclick="onChip(this,'loc','North Sea, small boat')">North Sea, small boat</div>
-      <div class="chip" onclick="onChip(this,'loc','M25 contraflow')">M25 contraflow</div>
-    </div>
-    <input type="text" id="loc-input" placeholder="or describe your location..." oninput="onFieldInput('loc',this.value)"/>
 
-    <div class="field-label">Situation &amp; key circumstances</div>
-    <div class="chips" id="chips-sit">
-      <div class="chip" onclick="onChip(this,'sit','lost, no map, phone at 4%')">lost, no map, phone at 4%</div>
-      <div class="chip" onclick="onChip(this,'sit','shelter destroyed, nightfall in 2 hours')">shelter destroyed, nightfall 2hrs</div>
-      <div class="chip" onclick="onChip(this,'sit','injured ankle, alone')">injured ankle, alone</div>
-      <div class="chip" onclick="onChip(this,'sit','broke down, no signal')">broke down, no signal</div>
+    <!-- STEP 1: LOCATION -->
+    <div class="step" id="step-loc">
+      <div class="field-label">01 — WHERE ARE YOU?</div>
+      <div class="group-nav" id="group-nav"></div>
+      <div class="chips" id="loc-chips"></div>
+      <input type="text" id="loc-input" placeholder="or describe your location..." oninput="onLocFree(this.value)"/>
     </div>
-    <input type="text" id="sit-input" placeholder="or describe your situation..." oninput="onFieldInput('sit',this.value)"/>
 
-    <div class="field-label">Who or what is with you</div>
-    <div class="chips" id="chips-who">
-      <div class="chip" onclick="onChip(this,'who','alone')">alone</div>
-      <div class="chip" onclick="onChip(this,'who','one other, no survival knowledge')">one other, no skills</div>
-      <div class="chip" onclick="onChip(this,'who','dog')">dog</div>
-      <div class="chip" onclick="onChip(this,'who','puff adder, nearby')">puff adder, nearby</div>
-      <div class="chip" onclick="onChip(this,'who','children')">children</div>
+    <!-- STEP 2: CONDITIONS -->
+    <div class="step hidden" id="step-cond">
+      <div class="step-head">
+        <div class="field-label">02 — CONDITIONS</div>
+        <button class="btn-skip" onclick="skipTo('evt')">SKIP →</button>
+      </div>
+      <div class="chips" id="cond-chips"></div>
+      <input type="text" id="cond-input" placeholder="or describe conditions..." oninput="onCondFree(this.value)"/>
     </div>
-    <input type="text" id="who-input" placeholder="or describe who / what is with you..." oninput="onFieldInput('who',this.value)"/>
 
-    <div class="field-label">Weather &amp; time of day</div>
-    <div class="chips" id="chips-wx">
-      <div class="chip" onclick="onChip(this,'wx','dusk, temperature dropping fast')">dusk, dropping fast</div>
-      <div class="chip" onclick="onChip(this,'wx','heavy rain, no shelter')">heavy rain, no shelter</div>
-      <div class="chip" onclick="onChip(this,'wx','midday, 38°C, no shade')">midday, 38°C</div>
-      <div class="chip" onclick="onChip(this,'wx','night, clear, -8°C')">night, -8°C</div>
-      <div class="chip" onclick="onChip(this,'wx','fog, visibility 10m')">fog, 10m visibility</div>
+    <!-- STEP 3: EVENTS -->
+    <div class="step hidden" id="step-evt">
+      <div class="step-head">
+        <div class="field-label">03 — WHAT'S HAPPENING</div>
+        <button class="btn-skip" onclick="skipTo('ctx')">SKIP →</button>
+      </div>
+      <div class="chips" id="evt-chips"></div>
+      <div class="absurdity-divider">— ALSO POSSIBLE —</div>
+      <div class="chips" id="absurdity-chips"></div>
+      <input type="text" id="evt-input" placeholder="or describe what's happening..." oninput="onEvtFree(this.value)"/>
     </div>
-    <input type="text" id="wx-input" placeholder="or describe conditions..." oninput="onFieldInput('wx',this.value)"/>
 
-    <div class="btn-row">
-      <button class="btn-assess" id="btn-guided" onclick="onAssess('guided')">ASSESS MY SITUATION ↗</button>
+    <!-- STEP 4: CONTEXT -->
+    <div class="step hidden" id="step-ctx">
+      <div class="step-head">
+        <div class="field-label">04 — CONTEXT</div>
+        <button class="btn-skip" onclick="updateAssessBtn()">SKIP →</button>
+      </div>
+      <div class="ctx-section">
+        <div class="ctx-label">TIME OF DAY</div>
+        <div class="chips" id="ctx-time"></div>
+      </div>
+      <div class="ctx-section">
+        <div class="ctx-label">MENTAL STATE</div>
+        <div class="chips" id="ctx-mental"></div>
+      </div>
+      <div class="ctx-section">
+        <div class="ctx-label">KIT</div>
+        <div class="chips" id="ctx-kit"></div>
+      </div>
+      <div class="ctx-section">
+        <div class="ctx-label">COMPANY</div>
+        <div class="chips" id="ctx-company"></div>
+      </div>
+    </div>
+
+    <div class="btn-row" style="margin-top:14px">
+      <button class="btn-assess" id="btn-guided" onclick="onAssess('guided')" disabled>ASSESS MY SITUATION ↗</button>
       <button class="btn-clear" onclick="onClear()">CLEAR</button>
     </div>
   </div>
@@ -1556,6 +1584,70 @@ OUTPUT — valid JSON only, no markdown:
 
 
 
+// === scenarios.js (inlined) ===
+
+const LOCATION_GROUPS = [
+  { group: 'Wilderness', locations: [
+    { id: 'amazon', label: 'Amazon basin', conditions: ['rainy season — rivers rising','dry season, midday, 40\u00b0C','river at dusk','jungle night — zero visibility'], events: ['jaguar','anaconda','Brazilian wandering spider','caiman','piranha (in water)','bullet ant colony','flash flood','lost — no canopy GPS signal','river crossing gone wrong','quicksand'] },
+    { id: 'scottish_highlands', label: 'Scottish Highlands', conditions: ['October gale, exposed ridge','midwinter dawn, -10\u00b0C','haar fog — visibility 5m','unexpected sunshine (still dangerous)'], events: ['red deer (rutting stag)','adder','highland cattle','golden eagle (aggressive — nest nearby)','exposure — core temperature dropping','bog — submerged to knee','ankle on scree, 3 miles from car','white-out — no horizon'] },
+    { id: 'serengeti', label: 'Serengeti / Maasai Mara', conditions: ['migration season — wildebeest everywhere','dry season, midday, 42\u00b0C','dusk — predators active','night — no torch'], events: ['lion (pride, with cubs)','leopard (tree, above you)','cape buffalo','black mamba','elephant (mock charge, unclear if mock)','pack of spotted hyenas','hippo (out of water)','vehicle broken down — on foot now'] },
+    { id: 'sonoran_desert', label: 'Sonoran Desert, Arizona', conditions: ['midday, 46\u00b0C, no shade','dawn, 4\u00b0C, dropping','dusk, flash storm incoming','night, clear, -2\u00b0C'], events: ['diamondback rattlesnake','Gila monster','bark scorpion (in shoe)','coyote (pack, closing in)','dehydration — 1 litre left','flash flood (arroyo, no warning)','lost — GPS dead, sun at zenith'] },
+    { id: 'himalayas', label: 'Himalayan approach, above 4,000m', conditions: ['altitude sickness setting in','whiteout — storm in 20 minutes','clear, -20\u00b0C, wind chill -35\u00b0C','monsoon season — trail gone'], events: ['snow leopard','yak (loose, annoyed)','avalanche — small but enough','crevasse — one leg through','HACE symptoms beginning','partner incapacitated','tent destroyed — bivouac only'] },
+    { id: 'antarctic_station', label: 'Antarctic research station (winter-over)', conditions: ['polar night — 3 months of dark','white-out, -55\u00b0C wind chill','inside station — something is wrong','outside, tether lost'], events: ['leopard seal (fell through ice)','equipment failure — heating gone','colleague behaving strangely (The Thing rules apply)','supply drop missed — 6 months to next','frostbite, fingers, early stage','fire in the station (only warmth for miles)'] },
+    { id: 'north_sea', label: 'North Sea, small boat', conditions: ['force 8, January, nightfall','fog — visibility 20m, shipping lane','engine failure, drifting','calm, but that means nothing out here'], events: ['overboard — water temp 6\u00b0C','hull breach, taking on water','container ship, not seeing you','flare kit — one left','someone unconscious below deck','orca (rare, but they do this now)'] },
+  ]},
+  { group: 'Dangerous Jobs', locations: [
+    { id: 'comms_tower', label: 'Replacing bulb on 600m comms tower', conditions: ['two-thirds up, wind picking up','equipment malfunction at the top','clear day — the view is not helping','ice on rungs, discovered at 400m'], events: ['harness clip failure','wind gust, lateral, significant','hand cramp — both hands','colleague below not answering radio','bird of prey — nesting, directly above target','forgot the bulb'] },
+    { id: 'chernobyl', label: 'Chernobyl exclusion zone', conditions: ['1986, liquidator deployment, day 1','modern tourist — guide has wandered off','night — dosimeter behaving unusually','rain — ground contamination mobilised'], events: ['dosimeter reading unexpected','structure unstable underfoot','wolf pack (thriving, unfortunately)','guide says "this is fine" — it is not fine'] },
+    { id: 'rnli', label: 'RNLI lifeboat, force 9, 3am', conditions: ['force 9 gusting 10, black water','casualty vessel sinking — minutes left','crew member overboard','engine at 60%, radio intermittent'], events: ['casualty in water, hypothermic','second vessel, unlit, approaching','wave pooped the boat','casualty panicking, fighting rescue','fuel situation becoming relevant'] },
+    { id: 'saturation_diver', label: 'Saturation diver, North Sea, 300m', conditions: ['bell cut off from surface — briefly','visibility zero, current significant','decompression schedule disrupted','something outside the bell'], events: ['umbilical snagged','dive partner unresponsive','surface comms gone — both channels','pressure anomaly in the bell','something large, unidentified, nearby'] },
+  ]},
+  { group: 'Work & Commuting', locations: [
+    { id: 'm25_breakdown', label: 'M25 contraflow, broken down, lane 1', conditions: ['rush hour, lorries at 56mph, 2m gap','rain, visibility poor, hazards on','night, no hard shoulder','AA ETA: 90 minutes'], events: ['lorry not moving over','phone at 4%','passenger needs the toilet','tyre completely flat — spare is also flat','van driver shouting, unclear if at you'] },
+    { id: 'london_underground', label: 'London Underground, rush hour', conditions: ['Jubilee line, 8:47am, signal failure ahead','stopped in tunnel — no announcement','Victoria line, someone eating a full McDonald\'s','Northern line, air con non-functional, July'], events: ['door closing on your bag','man with saxophone, unasked','someone crying, everyone pretending not to notice','mice on the track — more than usual','announcement: "we are being held"'] },
+    { id: 'pret_a_manger', label: 'Pret a Manger — queue incident', conditions: ['lunchtime, 12:47, one item left of the thing you want','man behind you already too close','barista has called your name wrong three times','card machine down — cash only sign appeared after you ordered'], events: ['someone pushes in — directly, no ambiguity','your order given to someone else who takes it','heated disagreement at the condiments station','you are the one who caused the queue','almond milk situation, not your fault, everyone thinks it is'] },
+    { id: 'open_plan_office', label: 'Open-plan office, 3pm', conditions: ['post-lunch, everyone watching','all-hands meeting in 8 minutes, you are presenting','hot desk — your usual spot taken','someone microwaved fish'], events: ['eating something loud — unavoidable','Teams call, camera on, cat is doing something','printer jammed — you touched it last','sneezing, repeatedly, during silence','your screen reflected in the window behind you'] },
+  ]},
+  { group: 'Holiday Destinations', locations: [
+    { id: 'all_inclusive', label: 'All-inclusive resort, pool bar', conditions: ['11am, swim-up bar, ice situation developing','peak afternoon, every sunbed taken, you left yours','buffet opens in 4 minutes, position critical','entertainment team have noticed you'], events: ['sunbed reserved with towel — disputed claim','swim-up bar run out of your drink','entertainment staff approaching with microphone','wasp — singular, purposeful','your wristband stopped working'] },
+    { id: 'safari_vehicle', label: 'Safari vehicle — engine won\'t start', conditions: ['dusk, predators active, 6km from camp','dawn, lion pride crossed the road 40m back','midday, 44\u00b0C, no shade outside the vehicle','guide has gone to look at something'], events: ['lion approaching vehicle — curious','elephant broadside, not moving','guide has been gone 12 minutes','radio battery dead','someone in the group wants to get out for a photo'] },
+    { id: 'budget_airline', label: 'Budget airline, middle seat, 9 hours', conditions: ['taxiing — you need the toilet immediately','3 hours in, no sign of trolley','turbulence — moderate, sustained','landing approach, person reclined fully'], events: ['window seat person asleep — you need out','tray table broken — meal on lap','child directly behind, consistent','your entertainment screen only works sideways','overhead locker: your bag not there'] },
+  ]},
+  { group: 'Airports & Transport Hubs', locations: [
+    { id: 'heathrow_t5', label: 'Heathrow Terminal 5 — bag on wrong belt', conditions: ['gate closing in 9 minutes, bag on reclaim belt','security queue: 40 minutes, flight: 35 minutes','passport control, e-gate rejected, 3 times','transfer, different terminal, no one told you'], events: ['bag arrived — someone has taken it','flight not on the board','security confiscated your water — refill station closed','moving walkway stopped, both of them','wrong terminal — shuttle bus: 18 minutes'] },
+    { id: 'last_train', label: 'Train station — last train, platform unannounced', conditions: ['23:47, last train, board says "See Staff"','platform announced — wrong end of station','train delayed — replacement bus. Bus not there.','last train cancelled — email sent earlier today'], events: ['running for it — decision required now','taxi app: surge 4.8x','person ahead of you also running — collision risk','ticket barrier won\'t open','train doors closing — you are at the gap'] },
+  ]},
+  { group: 'Civil & Institutional', locations: [
+    { id: 'ikea', label: 'IKEA — unspecified area', conditions: ['Sunday afternoon, full capacity','marketplace, lost, no map, phone dying','car park, 5:45pm, trolley situation','restaurant, tray full, no seats visible'], events: ['separated from group — no signal inside','item out of stock, assembly started at home','shortcut attempt — back in the bedroom section','trolley wheel failure — structural','argument about the meatballs, not yours, spreading','staff member: cannot help, different department'] },
+    { id: 'ae_saturday', label: 'A&E, Saturday night, triage', conditions: ['11pm, full waiting room, 4-hour wait sign','2am, triage nurse has seen everything','nobody is sure what triage order means here','the overhead lights are the wrong colour'], events: ['person next to you may be contagious','your stated reason for attending sounds worse out loud','someone more dramatic arrives, queue resets','you have been here 3 hours, number not called','the thing you came in for has, worryingly, stopped hurting'] },
+    { id: 'estate_agent', label: 'Estate agent — viewing a "cosy" flat', conditions: ['second viewing, you\'ve already told people','agent 8 minutes late, you\'ve been outside','seller is still in the flat','offer deadline: today, 5pm'], events: ['"cosy" means something specific here','damp patch — agent has positioned themselves in front of it','neighbour audible through wall — at rest','previous viewer\'s notes visible on agent\'s clipboard','you are starting to talk yourself into it'] },
+  ]},
+  { group: 'Operations', locations: [
+    { id: 'bravo_two_zero', label: 'Bravo Two Zero — Western Iraq, 1991', conditions: ['compromised — goat herder has seen you, patrol split','tab to Syria, 300km, one chocolate bar, January, alone','Vince is falling behind — exposure setting in','TACBE beacon activated — no response from Riyadh'], events: ['McNab\'s account and Ryan\'s account do not agree — which do you believe','the patrol is deciding whether to move at night or risk daylight','Iraqi military patrol, 400m, closing','two men have mild hypothermia, one is denying it','compromise inevitable — do you wait for contact or initiate exfil now'] },
+    { id: 'operation_nimrod', label: 'Iranian Embassy — Operation Nimrod, 1980', conditions: ['Day 6 — negotiators exhausted, one hostage executed inside','frame charges set — entry in 47 seconds on go signal','Tak is on the rope — window team not yet in position','fire spreading from stun grenades — hostages still inside'], events: ['who gave the order to go — accounts differ','a hostage is running — you cannot confirm they are not a threat','blue-on-blue risk — team entering from the wrong side','the rope team is exposed — go early or hold the plan'] },
+  ]},
+];
+
+const UNIVERSAL_EVENTS = [
+  'ghost (confirmed, visible, interactive)',
+  'drone swarm (civilian or military — panel will debate)',
+  'military incursion (unspecified nation, organised)',
+  'alien contact (first contact, intent unclear)',
+  'sentient weather (it is making decisions)',
+  'spontaneous medieval re-enactment (no one else alarmed)',
+  'the floor is lava (panel takes this literally)',
+  'time loop (you are the only one who knows)',
+  'everyone has forgotten who you are',
+  'bees — just bees, but the panel treats this with full gravity',
+];
+
+const CONTEXT_DATA = {
+  time_of_day: ['dawn — just light enough to make bad decisions','midday — maximum exposure','dusk — predators know something you don\'t','night — full dark'],
+  mental_state: ['calm — possibly worryingly so','panicking, but quietly','mildly concussed','convinced I am fine','have made one decision already and it was wrong'],
+  kit: ['nothing at all','phone at 4%','basic first aid kit','full survival pack','something completely inappropriate for this situation'],
+  company: ['alone','with children','with a dog (helpful)','with someone useless','with someone who is making it worse','with someone calmer than they should be'],
+};
+
 // === state.js ===
 
 // state.js — v2 with interaction loop state
@@ -1563,22 +1655,22 @@ OUTPUT — valid JSON only, no markdown:
 
 const DEFAULT_STATE = {
   mode: 'guided',
-  guided: { loc: '', sit: '', who: '', wx: '' },
+  cascade: { locationId: null, locationLabel: '', conditions: [], events: [], context: [], freeConditions: '', freeEvents: '' },
   free: { text: '' },
-  status: 'idle',         // idle | loading | results | reacting | terminal
-  situation: null,        // built situation string, persists across reactions
-  probability: null,      // current survival probability
-  turnCount: 0,           // how many decisions made
-  history: []             // array of {decision, probability, situationUpdate}
+  status: 'idle',
+  situation: null,
+  probability: null,
+  turnCount: 0,
+  history: []
 };
 
 let _state = JSON.parse(JSON.stringify(DEFAULT_STATE));
 
 const getState = () => JSON.parse(JSON.stringify(_state));
 const setMode = (mode) => { _state.mode = mode; };
-const setGuidedField = (field, value) => { _state.guided[field] = value; };
 const setFreeText = (text) => { _state.free.text = text; };
 const setStatus = (status) => { _state.status = status; };
+const setCascade = (field, value) => { _state.cascade[field] = value; };
 
 function setProbability(p) {
   _state.probability = Math.max(0, Math.min(100, p));
@@ -1604,18 +1696,20 @@ function reset() {
 
 function buildSituation() {
   if (_state.mode === 'free') return _state.free.text.trim() || null;
-  const { loc, sit, who, wx } = _state.guided;
-  if (!loc && !sit) return null;
-  return [
-    loc && \`Location: \${loc}\`,
-    sit && \`Situation: \${sit}\`,
-    who && \`With you: \${who}\`,
-    wx  && \`Conditions: \${wx}\`
-  ].filter(Boolean).join('\\n');
+  const c = _state.cascade;
+  const locLabel = c.locationLabel || (document.getElementById('loc-input') ? document.getElementById('loc-input').value.trim() : '');
+  if (!locLabel) return null;
+  const parts = ['Location: ' + locLabel];
+  const conds = c.conditions.concat(c.freeConditions ? [c.freeConditions] : []);
+  const evts = c.events.concat(c.freeEvents ? [c.freeEvents] : []);
+  if (conds.length) parts.push('Conditions: ' + conds.join(', '));
+  if (evts.length) parts.push('Situation: ' + evts.join(', '));
+  if (c.context.length) parts.push('Context: ' + c.context.join(', '));
+  return parts.join('\\n');
 }
 
 const State = {
-  getState, setMode, setGuidedField, setFreeText,
+  getState, setMode, setCascade, setFreeText,
   setStatus, setProbability, setSituation, recordDecision,
   reset, buildSituation
 };
@@ -1646,13 +1740,32 @@ function clearChips(field) {
 }
 
 function clearAll() {
-  ['loc', 'sit', 'who', 'wx'].forEach(f => {
+  // Clear cascade inputs and chips
+  ['loc', 'cond', 'evt'].forEach(f => {
     const el = document.getElementById(\`\${f}-input\`);
     if (el) el.value = '';
-    clearChips(f);
   });
+  ['loc-chips','cond-chips','evt-chips','absurdity-chips','ctx-time','ctx-mental','ctx-kit','ctx-company'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.querySelectorAll('.chip').forEach(c => c.classList.remove('sel'));
+  });
+  // Reset cascade steps — hide steps 2-4
+  ['step-cond','step-evt','step-ctx'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.classList.add('hidden');
+  });
+  // Reset group nav active state
+  const groupBtns = document.querySelectorAll('.group-btn');
+  groupBtns.forEach(b => b.classList.remove('active'));
+  const allBtn = document.querySelector('.group-btn[data-group="all"]');
+  if (allBtn) allBtn.classList.add('active');
+  document.querySelectorAll('#loc-chips .chip').forEach(c => c.classList.remove('sel'));
+  // Clear freetext tab
   const free = document.getElementById('free-input');
   if (free) free.value = '';
+  // Disable assess button
+  const btn = document.getElementById('btn-guided');
+  if (btn) btn.disabled = true;
 }
 
 // Loading / error
@@ -1973,16 +2086,198 @@ const API = { assess, assessWorst, react };
 
 
 
-  // Tab / chip / input handlers
-  window.onTabClick = (mode) => { State.setMode(mode); UI.switchTab(mode); };
-  window.onChip = (el, field, val) => {
-    State.setGuidedField(field, val);
-    UI.pickChip(el, field);
-    document.getElementById(\`\${field}-input\`).value = val;
+  // ── Cascade helpers ──────────────────────────────────────────────────────
+  function findLocation(locId) {
+    for (const g of LOCATION_GROUPS) {
+      const loc = g.locations.find(l => l.id === locId);
+      if (loc) return loc;
+    }
+    return null;
+  }
+
+  function makeChip(label, onClick, multi) {
+    const el = document.createElement('div');
+    el.className = 'chip';
+    el.textContent = label;
+    el.onclick = onClick;
+    return el;
+  }
+
+  function updateAssessBtn() {
+    const c = State.getState().cascade;
+    const locInput = document.getElementById('loc-input');
+    const hasLoc = c.locationLabel || (locInput && locInput.value.trim());
+    const btn = document.getElementById('btn-guided');
+    if (btn) btn.disabled = !hasLoc;
+  }
+
+  window.updateAssessBtn = updateAssessBtn;
+
+  function showStep(stepId) {
+    const el = document.getElementById(stepId);
+    if (el) el.classList.remove('hidden');
+  }
+
+  window.skipTo = (stepId) => {
+    showStep('step-' + stepId);
+    if (stepId === 'ctx') populateContext();
   };
-  window.onFieldInput = (field, val) => { State.setGuidedField(field, val); UI.clearChips(field); };
+
+  function filterGroup(group) {
+    document.querySelectorAll('.group-btn').forEach(b => b.classList.remove('active'));
+    const active = document.querySelector('[data-group="' + group + '"]');
+    if (active) active.classList.add('active');
+    document.querySelectorAll('#loc-chips .chip').forEach(chip => {
+      chip.style.display = (group === 'all' || chip.dataset.group === group) ? '' : 'none';
+    });
+  }
+  window.filterGroup = filterGroup;
+
+  function initCascade() {
+    // Build group nav
+    const groupNav = document.getElementById('group-nav');
+    const allBtn = document.createElement('button');
+    allBtn.className = 'group-btn active';
+    allBtn.textContent = 'ALL';
+    allBtn.dataset.group = 'all';
+    allBtn.onclick = () => filterGroup('all');
+    groupNav.appendChild(allBtn);
+
+    LOCATION_GROUPS.forEach(g => {
+      const btn = document.createElement('button');
+      btn.className = 'group-btn';
+      btn.textContent = g.group.toUpperCase();
+      btn.dataset.group = g.group;
+      btn.onclick = () => filterGroup(g.group);
+      groupNav.appendChild(btn);
+    });
+
+    // Build location chips
+    const locChips = document.getElementById('loc-chips');
+    LOCATION_GROUPS.forEach(g => {
+      g.locations.forEach(loc => {
+        const el = makeChip(loc.label, function() {
+          document.querySelectorAll('#loc-chips .chip').forEach(c => c.classList.remove('sel'));
+          el.classList.add('sel');
+          document.getElementById('loc-input').value = '';
+          State.setCascade('locationId', loc.id);
+          State.setCascade('locationLabel', loc.label);
+          State.setCascade('conditions', []);
+          State.setCascade('events', []);
+          State.setCascade('context', []);
+          populateConditions(loc.id);
+          populateEvents(loc.id);
+          showStep('step-cond');
+          updateAssessBtn();
+        });
+        el.dataset.group = g.group;
+        locChips.appendChild(el);
+      });
+    });
+
+    // Populate context (always same)
+    populateContext();
+  }
+
+  function populateConditions(locId) {
+    const loc = findLocation(locId);
+    const container = document.getElementById('cond-chips');
+    container.innerHTML = '';
+    if (!loc) return;
+    loc.conditions.forEach(cond => {
+      const el = makeChip(cond, function() {
+        el.classList.toggle('sel');
+        const c = State.getState().cascade;
+        const arr = c.conditions.slice();
+        const idx = arr.indexOf(cond);
+        if (idx === -1) arr.push(cond); else arr.splice(idx, 1);
+        State.setCascade('conditions', arr);
+        showStep('step-evt');
+        updateAssessBtn();
+      });
+      container.appendChild(el);
+    });
+  }
+
+  function populateEvents(locId) {
+    const loc = findLocation(locId);
+    const evtContainer = document.getElementById('evt-chips');
+    const absContainer = document.getElementById('absurdity-chips');
+    evtContainer.innerHTML = '';
+    absContainer.innerHTML = '';
+
+    (loc ? loc.events : []).forEach(evt => {
+      const el = makeChip(evt, function() {
+        el.classList.toggle('sel');
+        const c = State.getState().cascade;
+        const arr = c.events.slice();
+        const idx = arr.indexOf(evt);
+        if (idx === -1) arr.push(evt); else arr.splice(idx, 1);
+        State.setCascade('events', arr);
+        showStep('step-ctx');
+        updateAssessBtn();
+      });
+      evtContainer.appendChild(el);
+    });
+
+    UNIVERSAL_EVENTS.forEach(evt => {
+      const el = makeChip(evt, function() {
+        el.classList.toggle('sel');
+        const c = State.getState().cascade;
+        const arr = c.events.slice();
+        const idx = arr.indexOf(evt);
+        if (idx === -1) arr.push(evt); else arr.splice(idx, 1);
+        State.setCascade('events', arr);
+        showStep('step-ctx');
+        updateAssessBtn();
+      });
+      absContainer.appendChild(el);
+    });
+  }
+
+  function populateContext() {
+    const map = { 'ctx-time': 'time_of_day', 'ctx-mental': 'mental_state', 'ctx-kit': 'kit', 'ctx-company': 'company' };
+    Object.entries(map).forEach(([domId, dataKey]) => {
+      const container = document.getElementById(domId);
+      if (!container || container.children.length) return; // already populated
+      (CONTEXT_DATA[dataKey] || []).forEach(val => {
+        const el = makeChip(val, function() {
+          el.classList.toggle('sel');
+          const c = State.getState().cascade;
+          const arr = c.context.slice();
+          const idx = arr.indexOf(val);
+          if (idx === -1) arr.push(val); else arr.splice(idx, 1);
+          State.setCascade('context', arr);
+          updateAssessBtn();
+        });
+        container.appendChild(el);
+      });
+    });
+  }
+
+  // Freetext handlers for cascade steps
+  window.onLocFree = (val) => {
+    State.setCascade('locationLabel', val);
+    State.setCascade('locationId', null);
+    document.querySelectorAll('#loc-chips .chip').forEach(c => c.classList.remove('sel'));
+    if (val.trim()) {
+      showStep('step-cond');
+      showStep('step-evt');
+      populateEvents(null); // show only universal events when freetext loc
+      showStep('step-ctx');
+    }
+    updateAssessBtn();
+  };
+  window.onCondFree = (val) => { State.setCascade('freeConditions', val); showStep('step-evt'); updateAssessBtn(); };
+  window.onEvtFree = (val) => { State.setCascade('freeEvents', val); showStep('step-ctx'); updateAssessBtn(); };
+
+  // Tab / input handlers
+  window.onTabClick = (mode) => { State.setMode(mode); UI.switchTab(mode); };
   window.onFreeInput = (val) => State.setFreeText(val);
   window.onClear = () => { State.reset(); UI.clearAll(); };
+
+  // Init cascade on load
+  initCascade();
 
   // Initial assessment
   window.onAssess = async (mode) => {
