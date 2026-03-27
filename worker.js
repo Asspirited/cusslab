@@ -219,10 +219,14 @@ const SURVIVAL_SCHOOL_HOME = `<!DOCTYPE html>
     .panel { display: none; height: 100%; }
     .panel.active { display: block; }
 
-    /* ── HOW SCREWED AM I — embedded iframe ─────────────────────────────── */
-    #panel-screwed { padding: 0; }
+    /* ── Iframe panels — full height ────────────────────────────────────── */
+    #panel-screwed,
+    #panel-worst,
+    #panel-mundane { padding: 0; }
 
-    #panel-screwed iframe {
+    #panel-screwed iframe,
+    #panel-worst iframe,
+    #panel-mundane iframe {
       width: 100%;
       height: calc(100vh - 65px);
       border: none;
@@ -344,7 +348,9 @@ const SURVIVAL_SCHOOL_HOME = `<!DOCTYPE html>
       .nav-section-label { display: none; }
       .nav-item { white-space: nowrap; flex-shrink: 0; border-left: none; border-bottom: 2px solid transparent; }
       .nav-item.active { border-bottom-color: var(--green); border-left: none; }
-      #panel-screwed iframe { height: 80vh; }
+      #panel-screwed iframe,
+      #panel-worst iframe,
+      #panel-mundane iframe { height: 80vh; }
     }
   </style>
 </head>
@@ -370,7 +376,7 @@ const SURVIVAL_SCHOOL_HOME = `<!DOCTYPE html>
         <span>no fear?™ good. you need some.</span>
         <span>probably the best panel in the world.</span>
         <span>think different. or don't think at all.</span>
-        <span>i'm lovin' it. they are not.</span>
+        <span>finger lickin' fatality. FINISH HIM.</span>
         <span>the panel knows more than you.</span>
       </div>
     </div>
