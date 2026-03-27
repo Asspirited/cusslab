@@ -49,7 +49,7 @@ const SURVIVAL_SCHOOL_HOME = `<!DOCTYPE html>
       z-index: 100;
     }
 
-    .logo-mark { width: 36px; height: 36px; flex-shrink: 0; }
+    .logo-mark { height: 22px; width: auto; flex-shrink: 0; }
 
     .logo-text {
       font-family: 'Bebas Neue', sans-serif;
@@ -58,7 +58,8 @@ const SURVIVAL_SCHOOL_HOME = `<!DOCTYPE html>
       line-height: 1;
       color: var(--text);
     }
-    .logo-text span { color: var(--blood); }
+    .logo-text .s-blood { color: var(--blood); }
+    .logo-text .logo-school { color: #BA7517; }
 
     .logo-sub {
       font-family: 'IBM Plex Mono', monospace;
@@ -209,6 +210,8 @@ const SURVIVAL_SCHOOL_HOME = `<!DOCTYPE html>
     }
 
     @media (max-width: 480px) {
+      header { flex-direction: column; align-items: flex-start; padding: 10px 16px; gap: 6px; }
+      .logo-mark { width: 100%; height: auto; }
       main { padding: 20px 14px 32px; }
       .tile-grid { grid-template-columns: 1fr; gap: 8px; }
     }
@@ -217,16 +220,27 @@ const SURVIVAL_SCHOOL_HOME = `<!DOCTYPE html>
 <body>
 
 <header>
-  <svg class="logo-mark" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="18" cy="18" r="17" stroke="#8B0000" stroke-width="1.5"/>
-    <path d="M18 4 L21 15 L18 13 L15 15 Z" fill="#8B0000"/>
-    <path d="M18 32 L15 21 L18 23 L21 21 Z" fill="#5F5E5A" opacity="0.5"/>
-    <path d="M4 18 L15 15 L13 18 L15 21 Z" fill="#5F5E5A" opacity="0.5"/>
-    <path d="M32 18 L21 21 L23 18 L21 15 Z" fill="#5F5E5A" opacity="0.5"/>
-    <circle cx="18" cy="18" r="2.5" fill="#8B0000"/>
+  <!-- Bowie knife logo — SS-023 -->
+  <svg class="logo-mark" viewBox="0 0 80 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Handle — dark wood -->
+    <rect x="0" y="9" width="13" height="6" rx="2" fill="#3d2010"/>
+    <line x1="3"  y1="10" x2="3"  y2="14" stroke="#251008" stroke-width="0.8" stroke-linecap="round"/>
+    <line x1="6"  y1="10" x2="6"  y2="14" stroke="#251008" stroke-width="0.8" stroke-linecap="round"/>
+    <line x1="9"  y1="10" x2="9"  y2="14" stroke="#251008" stroke-width="0.8" stroke-linecap="round"/>
+    <line x1="11" y1="10" x2="11" y2="14" stroke="#251008" stroke-width="0.8" stroke-linecap="round"/>
+    <!-- Crossguard -->
+    <rect x="13" y="7" width="3" height="10" rx="1" fill="#706050"/>
+    <!-- Blade body -->
+    <path d="M16 10.5 L65 7.5 L75 12 L65 15.5 L16 13.5 Z" fill="#7a8878"/>
+    <!-- Spine highlight -->
+    <path d="M16 10.5 L65 7.5 L75 12" stroke="#9aaa98" stroke-width="0.7" fill="none"/>
+    <!-- Edge shadow -->
+    <path d="M16 13.5 L65 15.5 L75 12" stroke="#5a6858" stroke-width="0.4" fill="none"/>
+    <!-- Blood drip at tip -->
+    <path d="M75 12 Q76.5 13.5 76 16 Q75.8 17.5 75.5 18.5" stroke="#cc1111" stroke-width="1.3" stroke-linecap="round" fill="none" opacity="0.9"/>
   </svg>
   <div>
-    <div class="logo-text">SURVIVAL <span>SCHOOL</span></div>
+    <div class="logo-text"><span class="s-blood">S</span>URVIVAL <span class="logo-school">SCHOOL</span></div>
     <div class="logo-sub">
       <div class="tagline-track">
         <span>ask them... before you bleed out.</span>
