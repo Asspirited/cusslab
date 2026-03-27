@@ -397,7 +397,7 @@ const SURVIVAL_SCHOOL_HOME = `<!DOCTYPE html>
       <div class="nav-item" data-panel="fact-checker">
         <span class="nav-icon">✓</span>
         Bear Fact-Checker
-        <span class="nav-badge badge-soon">SOON</span>
+        <span class="nav-badge badge-live">LIVE</span>
       </div>
     </div>
 
@@ -421,7 +421,7 @@ const SURVIVAL_SCHOOL_HOME = `<!DOCTYPE html>
       <div class="nav-item" data-panel="deathmatch">
         <span class="nav-icon">◎</span>
         Animal Deathmatch
-        <span class="nav-badge badge-soon">SOON</span>
+        <span class="nav-badge badge-live">LIVE</span>
       </div>
       <div class="nav-item" data-panel="irwin">
         <span class="nav-icon">◎</span>
@@ -477,21 +477,10 @@ const SURVIVAL_SCHOOL_HOME = `<!DOCTYPE html>
               title="How Bad Is This?"></iframe>
     </div>
 
-    <!-- BEAR FACT-CHECKER -->
+    <!-- BEAR FACT-CHECKER — live -->
     <div class="panel" id="panel-fact-checker">
-      <div class="coming-soon">
-        <div class="coming-soon-icon">✓</div>
-        <div class="coming-soon-title">Bear Fact-Checker</div>
-        <div class="coming-soon-desc">
-          Bear makes a claim. The panel verifies it. Factual accuracy optional.
-          SAS credentials not disputed. Everything else is fair game.
-        </div>
-        <ul class="feature-list">
-          <li class="fi-next"><span class="fi-dot"></span>Panel rates claim accuracy 0–100</li>
-          <li class="fi-next"><span class="fi-dot"></span>Ray's silence worth 1000 words</li>
-          <li class="fi-next"><span class="fi-dot"></span>Bear never accepts the correction</li>
-        </ul>
-      </div>
+      <iframe src="https://cusslab-api.leanspirited.workers.dev/survival-school/fact-checker"
+              title="Bear Fact-Checker"></iframe>
     </div>
 
     <!-- PANEL Q&A -->
@@ -517,21 +506,10 @@ const SURVIVAL_SCHOOL_HOME = `<!DOCTYPE html>
               title="Mundane Mode"></iframe>
     </div>
 
-    <!-- ANIMAL DEATHMATCH -->
+    <!-- ANIMAL DEATHMATCH — live -->
     <div class="panel" id="panel-deathmatch">
-      <div class="coming-soon">
-        <div class="coming-soon-icon">◎</div>
-        <div class="coming-soon-title">Animal Deathmatch</div>
-        <div class="coming-soon-desc">
-          Two animals. One encounter. Who wins?
-          The panel disagrees violently and with great authority.
-        </div>
-        <ul class="feature-list">
-          <li class="fi-next"><span class="fi-dot"></span>Animal vs animal selection</li>
-          <li class="fi-next"><span class="fi-dot"></span>Panel adjudicates with full expertise</li>
-          <li class="fi-next"><span class="fi-dot"></span>Backshall and Irwin take opposing corners</li>
-        </ul>
-      </div>
+      <iframe src="https://cusslab-api.leanspirited.workers.dev/survival-school/deathmatch"
+              title="Animal Deathmatch"></iframe>
     </div>
 
     <!-- IRWIN MEMORIAL -->
@@ -4143,6 +4121,356 @@ document.getElementById('item-input').addEventListener('keydown', e => {
 </html>
 `;
 
+const SURVIVAL_SCHOOL_FACT_CHECKER = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bear Fact-Checker — Survival School</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0f1209; --surface: #181d10; --surface2: #1e2514;
+      --border: rgba(120,160,60,0.15); --border-strong: rgba(120,160,60,0.3);
+      --green: #7aad3a; --green-dim: #4a7020; --green-bright: #a0d050;
+      --amber: #BA7517; --amber-dim: #5c3a08;
+      --bark: #8B6040; --bark-dim: #3d2008;
+      --blood: #cc1111; --blood-dim: #3a0808;
+      --blue-dim: #1a1e2a; --blue: #5a7aaa;
+      --text: #e8edd8; --text-muted: #7a8a60;
+    }
+    body { font-family: 'Barlow', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+    #app { max-width: 680px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+
+    .header { text-align: center; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 0.5px solid var(--border); }
+    .title { font-family: 'Bebas Neue', sans-serif; font-size: 40px; letter-spacing: 3px; line-height: 1; }
+    .title span { color: var(--bark); }
+    .subtitle { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-muted); letter-spacing: 1.5px; margin-top: 5px; }
+
+    .field-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1.5px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; margin-top: 16px; }
+    .field-label:first-child { margin-top: 0; }
+
+    .chips { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 8px; }
+    .chip { font-family: 'IBM Plex Mono', monospace; font-size: 11px; padding: 5px 10px; border: 0.5px solid var(--border-strong); border-radius: 5px; cursor: pointer; background: none; color: var(--text-muted); transition: all 0.15s; white-space: nowrap; user-select: none; }
+    .chip:hover, .chip.sel { border-color: var(--bark); color: var(--bark); }
+
+    textarea { width: 100%; font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; padding: 9px 12px; border: 0.5px solid var(--border-strong); border-radius: 6px; background: var(--surface); color: var(--text); outline: none; transition: border-color 0.15s; resize: vertical; min-height: 72px; line-height: 1.6; }
+    textarea:focus { border-color: var(--bark); }
+
+    .btn-row { display: flex; gap: 8px; margin-top: 14px; }
+    .btn-check { flex: 1; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 2px; text-transform: uppercase; padding: 11px; background: var(--bark-dim); color: var(--bark); border: 0.5px solid var(--bark-dim); border-radius: 6px; cursor: pointer; transition: opacity 0.15s; }
+    .btn-check:hover { opacity: 0.88; }
+    .btn-check:disabled { opacity: 0.4; cursor: not-allowed; }
+    .btn-clear { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 1px; padding: 11px 16px; border: 0.5px solid var(--border-strong); border-radius: 6px; background: none; cursor: pointer; color: var(--text-muted); transition: color 0.15s, border-color 0.15s; }
+    .btn-clear:hover { color: var(--text); border-color: var(--green); }
+
+    .results { display: none; margin-top: 1.5rem; }
+    .results.show { display: block; }
+    .loading { padding: 2rem; text-align: center; font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--text-muted); letter-spacing: 1px; }
+    .dots::after { content: ''; animation: dots 1.5s steps(3, end) infinite; }
+    @keyframes dots { 0%{content:'.'} 33%{content:'..'} 66%{content:'...'} 100%{content:''} }
+
+    .accuracy-block { margin-bottom: 1rem; }
+    .accuracy-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
+    .accuracy-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1.5px; color: var(--text-muted); text-transform: uppercase; }
+    .accuracy-score { font-family: 'Bebas Neue', sans-serif; font-size: 36px; letter-spacing: 2px; line-height: 1; }
+    .accuracy-track { height: 4px; background: var(--surface2); border-radius: 2px; overflow: hidden; }
+    .accuracy-fill { height: 100%; border-radius: 2px; transition: width 0.6s ease; }
+
+    .verdict-badge { display: inline-block; font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 2px; padding: 5px 14px; border-radius: 20px; margin-bottom: 1rem; text-transform: uppercase; }
+    .vb-confirmed  { background: rgba(122,173,58,0.12); color: var(--green-bright); border: 0.5px solid var(--green-dim); }
+    .vb-disputed   { background: rgba(186,117,23,0.1);  color: var(--amber);        border: 0.5px solid var(--amber-dim); }
+    .vb-embellished{ background: rgba(139,96,64,0.12);  color: var(--bark);          border: 0.5px solid var(--bark-dim); }
+    .vb-myth       { background: rgba(204,17,17,0.1);   color: var(--blood);         border: 0.5px solid var(--blood-dim); }
+
+    .claim-display { font-family: 'Barlow', sans-serif; font-style: italic; font-size: 14px; line-height: 1.7; color: var(--text-muted); border-left: 3px solid var(--bark-dim); padding: 8px 12px; margin-bottom: 1rem; }
+    .claim-display::before { content: '"'; } .claim-display::after { content: '"'; }
+
+    .panel-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 2px; color: var(--text-muted); margin: 1rem 0 8px; }
+
+    .char-card { border: 0.5px solid var(--border); border-radius: 10px; margin-bottom: 8px; overflow: hidden; background: var(--surface); }
+    .card-head { display: flex; align-items: center; gap: 10px; padding: 9px 14px; background: var(--surface2); border-bottom: 0.5px solid var(--border); }
+    .avatar { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 11px; flex-shrink: 0; }
+    .av-green { background: var(--green-dim);  color: var(--green-bright); }
+    .av-bark  { background: var(--bark-dim);   color: var(--bark); }
+    .av-amber { background: var(--amber-dim);  color: var(--amber); }
+    .av-blue  { background: var(--blue-dim);   color: var(--blue); }
+    .char-name { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 14px; color: var(--text); }
+    .char-role { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-muted); }
+    .card-body { padding: 11px 14px; font-family: 'Barlow', sans-serif; font-size: 14px; line-height: 1.7; color: var(--text); }
+    .fact-check-note { margin-top: 6px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-muted); border-top: 0.5px solid var(--border); padding-top: 6px; opacity: 0.75; }
+
+    .att-bookend { display: flex; gap: 10px; align-items: flex-start; padding: 10px 14px; background: var(--surface); border: 0.5px solid var(--border); border-radius: 8px; }
+    .att-avatar { width: 26px; height: 26px; background: #1e1e1c; color: #7a8a70; border-radius: 50%; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 9px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+    .att-text { font-family: 'Barlow', sans-serif; font-weight: 300; font-style: italic; font-size: 14px; line-height: 1.7; color: var(--text-muted); }
+    #att-opening { margin-bottom: 12px; }
+    #att-verdict { margin-top: 12px; opacity: 0; transition: opacity 0.8s ease; }
+    #att-verdict.visible { opacity: 1; }
+
+    .reset-row { margin-top: 1rem; text-align: center; }
+    .btn-reset { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-muted); background: none; border: 0.5px solid var(--border-strong); border-radius: 6px; padding: 7px 16px; cursor: pointer; letter-spacing: 1px; transition: all 0.15s; }
+    .btn-reset:hover { color: var(--text); border-color: var(--green); }
+  </style>
+</head>
+<body>
+<div id="app">
+
+  <div class="header">
+    <div class="title">BEAR <span>FACT-CHECKER</span></div>
+    <div class="subtitle">bear makes a claim. the panel responds. ray has notes.</div>
+  </div>
+
+  <div class="field-label">Famous Bear claims</div>
+  <div class="chips" id="chips-claim">
+    <div class="chip" onclick="onChip(this,'I once made fire using sunlight and a piece of ice in the Himalayas.')">ice lens fire</div>
+    <div class="chip" onclick="onChip(this,'Drinking your own urine is a good survival strategy when water is scarce.')">urine hydration</div>
+    <div class="chip" onclick="onChip(this,'You can survive by drinking the blood of a freshly caught fish.')">fish blood</div>
+    <div class="chip" onclick="onChip(this,'Running in a zigzag is the best way to escape a crocodile.')">croc zigzag</div>
+    <div class="chip" onclick="onChip(this,'I survived a night by sheltering inside a freshly killed camel.')">camel bivouac</div>
+    <div class="chip" onclick="onChip(this,'Eating raw meat in the jungle gives you energy within minutes.')">raw meat energy</div>
+    <div class="chip" onclick="onChip(this,'You should suck the venom out of a snake bite immediately.')">venom extraction</div>
+    <div class="chip" onclick="onChip(this,'In an avalanche, spit to find which way is down.')">avalanche spit</div>
+  </div>
+
+  <div class="field-label" style="margin-top:12px">Or enter a Bear claim</div>
+  <textarea id="claim-input" placeholder="Bear said something. Describe it exactly..."></textarea>
+
+  <div class="btn-row">
+    <button class="btn-check" id="btn-check" onclick="onCheck()">FACT-CHECK THIS ↗</button>
+    <button class="btn-clear" onclick="onClear()">CLEAR</button>
+  </div>
+
+  <div class="results" id="results">
+    <div class="loading" id="loading">
+      <span>RAY IS TAKING NOTES</span><span class="dots"></span>
+    </div>
+    <div id="result-block" style="display:none">
+      <div class="att-bookend" id="att-opening" style="display:none">
+        <div class="att-avatar">DA</div>
+        <div class="att-text"></div>
+      </div>
+      <div id="accuracy-out"></div>
+      <div id="claim-out"></div>
+      <div class="panel-label">THE PANEL HAS REVIEWED THE EVIDENCE</div>
+      <div id="cards-out"></div>
+      <div class="att-bookend" id="att-verdict" style="display:none">
+        <div class="att-avatar">DA</div>
+        <div class="att-text"></div>
+      </div>
+      <div class="reset-row">
+        <button class="btn-reset" onclick="onClear()">SUBMIT ANOTHER CLAIM</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const WORKER_ENDPOINT = 'https://cusslab-api.leanspirited.workers.dev/survival-school/assess';
+
+const CHARACTERS = {
+  ray:    { name: 'Ray Mears',    role: 'Bushcraft',           av: 'RM', avClass: 'av-green' },
+  bear:   { name: 'Bear Grylls',  role: 'Former SAS',          av: 'BG', avClass: 'av-bark'  },
+  cody:   { name: 'Cody Lundin',  role: 'Primitive Skills',    av: 'CL', avClass: 'av-green'  },
+  hales:  { name: 'Les Hiddins',  role: 'Bush Tucker Man',     av: 'LH', avClass: 'av-amber' },
+  fox:    { name: 'Jason Fox',    role: 'Special Boat Service',av: 'JF', avClass: 'av-blue'  },
+  stroud: { name: 'Les Stroud',   role: 'Survivorman',         av: 'LS', avClass: 'av-green' }
+};
+
+const SYSTEM_PROMPT = \`You are the Survival School BEAR FACT-CHECKER panel. A user has submitted a claim attributed to Bear Grylls. Assess its accuracy and respond in character.
+
+=== RAY MEARS ===
+Bushcraft, 30+ years. Dry, clinical, never dramatic. "Don't." is a complete sentence.
+fact_check field is MANDATORY for Ray — he never misses. The correction should be brief, specific, and technically accurate. Never dismissive, just correct.
+Main text: 2-3 sentences of polite, devastating understatement. Silence about Bear is eloquent.
+
+=== BEAR GRYLLS ===
+Former SAS. Drinks own urine when Londis is forty yards away.
+Defends the claim completely. Has context. Has done it abroad. Fine in the end. Genuinely believes his version. Never concedes. Adds embellishment.
+NO fact_check field — Bear is the subject, not the checker.
+VOICE: Urgent, evangelical. Personal anecdote always. "That is exactly what kept me alive."
+
+=== CODY LUNDIN ===
+Aboriginal Living Skills School. Barefoot on glaciers. Threw fire supplies into a pool rather than demonstrate bad technique.
+Gives the actual correct technique that was available and being ignored. "There was a better option. Right there." Specific.
+Patient, quiet, certain. Never dramatic. Just correct.
+
+=== LES HIDDINS ===
+Bush Tucker Man. Has done the correct version, probably forty years ago in the Northern Territory.
+Educational. Brief. Cites Aboriginal knowledge. "The Aboriginal people have been doing this correctly for 40,000 years."
+"Have a look at this." is his opener. "Not too bad." is high praise. Understated. Never performs.
+
+=== JASON FOX ===
+Royal Marines, SBS. Tactical assessment. Would this work operationally? Flat delivery.
+Warm but clinical. Swears naturally, matter-of-fact. "That'd get you killed." or grudging respect if surprisingly correct.
+Tactical reframe: could you actually rely on this in the field?
+
+=== LES STROUD ===
+Survivorman. Alone, no crew, films himself. Quiet. Genuine. Has tried the correct version, on camera, alone.
+One sentence verdict. "That didn't work." means it didn't work. Slightly melancholy about the whole thing.
+
+=== ATTENBOROUGH BOOKENDS ===
+Does NOT appear in the panel array. Bookends the assessment.
+attenborough_opening: introduces the claim as a natural history specimen — Bear's claim as an organism under scientific scrutiny. One sentence.
+attenborough_verdict: geological calm. Whether the claim survives scrutiny. No appeal. One sentence.
+
+accuracy_score: integer 0–100.
+  0 = complete fiction, dangerous if followed.
+  50 = contains a grain of truth buried under performance and embellishment.
+  100 = technically, irritatingly, correct.
+
+verdict: exactly one of: CONFIRMED / DISPUTED / EMBELLISHED / MYTH
+
+OUTPUT — valid JSON only, no markdown:
+{"claim":"<the claim as submitted>","accuracy_score":<integer 0-100>,"verdict":"CONFIRMED|DISPUTED|EMBELLISHED|MYTH","attenborough_opening":"<one sentence, introduces Bear's claim as specimen under scrutiny>","panel":[{"charId":"ray","text":"<2-3 sentences>","fact_check":"<mandatory — Ray's correction, specific and brief>"},{"charId":"bear","text":"<2-3 sentences, defends the claim completely>"},{"charId":"cody","text":"<2-3 sentences, the correct technique that was available>"},{"charId":"hales","text":"<2-3 sentences, educational, cites Aboriginal knowledge where relevant>"},{"charId":"fox","text":"<2-3 sentences, tactical operational assessment>"},{"charId":"stroud","text":"<1-2 sentences, quiet verdict>"}],"attenborough_verdict":"<one sentence, geological calm>"}\`;
+
+let claim = '';
+
+function onChip(el, val) {
+  document.querySelectorAll('#chips-claim .chip').forEach(c => c.classList.remove('sel'));
+  el.classList.add('sel');
+  claim = val;
+  document.getElementById('claim-input').value = val;
+}
+
+function onClear() {
+  claim = '';
+  document.getElementById('claim-input').value = '';
+  document.querySelectorAll('#chips-claim .chip').forEach(c => c.classList.remove('sel'));
+  document.getElementById('results').classList.remove('show');
+  document.getElementById('result-block').style.display = 'none';
+  document.getElementById('loading').style.display = 'block';
+  document.getElementById('loading').innerHTML = '<span>RAY IS TAKING NOTES</span><span class="dots"></span>';
+  document.getElementById('cards-out').innerHTML = '';
+  document.getElementById('accuracy-out').innerHTML = '';
+  document.getElementById('claim-out').innerHTML = '';
+  const opening = document.getElementById('att-opening');
+  if (opening) { opening.style.display = 'none'; }
+  const verdict = document.getElementById('att-verdict');
+  if (verdict) { verdict.style.display = 'none'; verdict.classList.remove('visible'); }
+  document.getElementById('btn-check').disabled = false;
+}
+
+async function onCheck() {
+  claim = document.getElementById('claim-input').value.trim() || claim;
+  if (!claim) { alert('Enter a Bear claim first.'); return; }
+  document.getElementById('btn-check').disabled = true;
+  document.getElementById('results').classList.add('show');
+  document.getElementById('loading').style.display = 'block';
+  document.getElementById('loading').innerHTML = '<span>RAY IS TAKING NOTES</span><span class="dots"></span>';
+  document.getElementById('result-block').style.display = 'none';
+
+  try {
+    const resp = await fetch(WORKER_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ system: SYSTEM_PROMPT, situation: \`CLAIM SUBMITTED: \${claim}\` })
+    });
+    if (!resp.ok) throw new Error('Worker ' + resp.status);
+    const data = await resp.json();
+    renderResults(data);
+  } catch (e) {
+    document.getElementById('loading').innerHTML =
+      '<span style="color:var(--blood)">Panel unavailable. Ray is still writing.</span>';
+  } finally {
+    document.getElementById('btn-check').disabled = false;
+  }
+}
+
+function accuracyColor(score) {
+  if (score >= 80) return 'var(--green)';
+  if (score >= 50) return 'var(--amber)';
+  if (score >= 25) return 'var(--bark)';
+  return 'var(--blood)';
+}
+
+function verdictClass(v) {
+  return { CONFIRMED: 'vb-confirmed', DISPUTED: 'vb-disputed', EMBELLISHED: 'vb-embellished', MYTH: 'vb-myth' }[v] || 'vb-disputed';
+}
+
+function renderResults(data) {
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('result-block').style.display = 'block';
+
+  const openingEl = document.getElementById('att-opening');
+  if (openingEl && data.attenborough_opening) {
+    openingEl.querySelector('.att-text').textContent = data.attenborough_opening;
+    openingEl.style.display = 'flex';
+  }
+
+  const score = typeof data.accuracy_score === 'number' ? data.accuracy_score : 50;
+  const color = accuracyColor(score);
+  document.getElementById('accuracy-out').innerHTML = \`
+    <div class="accuracy-block">
+      <div class="accuracy-header">
+        <span class="accuracy-label">Accuracy score</span>
+        <span class="accuracy-score" style="color:\${color}">\${score}</span>
+      </div>
+      <div class="accuracy-track">
+        <div class="accuracy-fill" style="width:\${score}%;background:\${color}"></div>
+      </div>
+      <div style="margin-top:8px">
+        <span class="verdict-badge \${verdictClass(data.verdict)}">\${data.verdict || 'DISPUTED'}</span>
+      </div>
+    </div>\`;
+
+  if (data.claim) {
+    document.getElementById('claim-out').innerHTML =
+      \`<div class="claim-display">\${data.claim}</div>\`;
+  }
+
+  const container = document.getElementById('cards-out');
+  container.innerHTML = '';
+  (data.panel || []).forEach((r, i) => {
+    const char = CHARACTERS[r.charId];
+    if (!char) return;
+    const card = document.createElement('div');
+    card.className = 'char-card';
+    card.style.cssText = 'opacity:0;transform:translateY(7px);transition:opacity 0.3s ease,transform 0.3s ease;';
+    card.innerHTML = \`
+      <div class="card-head">
+        <div class="avatar \${char.avClass}">\${char.av}</div>
+        <div>
+          <div class="char-name">\${char.name}</div>
+          <div class="char-role">\${char.role}</div>
+        </div>
+      </div>
+      <div class="card-body">
+        \${r.text}
+        \${r.fact_check ? \`<div class="fact-check-note">&#10033; \${r.fact_check}</div>\` : ''}
+      </div>\`;
+    container.appendChild(card);
+    setTimeout(() => { card.style.opacity = '1'; card.style.transform = 'translateY(0)'; }, 80 + i * 100);
+  });
+
+  if (data.attenborough_verdict) {
+    const cardDelay = (data.panel?.length || 0) * 100 + 400;
+    const verdictEl = document.getElementById('att-verdict');
+    if (verdictEl) {
+      setTimeout(() => {
+        verdictEl.querySelector('.att-text').textContent = data.attenborough_verdict;
+        verdictEl.style.display = 'flex';
+        setTimeout(() => verdictEl.classList.add('visible'), 50);
+      }, cardDelay);
+    }
+  }
+}
+
+document.getElementById('claim-input').addEventListener('input', e => {
+  document.querySelectorAll('#chips-claim .chip').forEach(c => c.classList.remove('sel'));
+  claim = e.target.value;
+});
+document.getElementById('claim-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); onCheck(); }
+});
+</script>
+
+</body>
+</html>
+`;
+
 const SURVIVAL_SCHOOL_DEATHMATCH = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -4894,6 +5222,9 @@ export default {
     }
     if (request.method === 'GET' && url.pathname === '/survival-school/eat') {
       return new Response(SURVIVAL_SCHOOL_EAT, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' }});
+    }
+    if (request.method === 'GET' && url.pathname === '/survival-school/fact-checker') {
+      return new Response(SURVIVAL_SCHOOL_FACT_CHECKER, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' }});
     }
     if (request.method === 'GET' && url.pathname === '/survival-school/deathmatch') {
       return new Response(SURVIVAL_SCHOOL_DEATHMATCH, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' }});
