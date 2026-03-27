@@ -3755,6 +3755,917 @@ async function react(situation, decision, currentProbability) {
 
 `;
 
+const SURVIVAL_SCHOOL_EAT = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Will You Eat It? — Survival School</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f1209;
+      --surface: #181d10;
+      --surface2: #1e2514;
+      --border: rgba(120,160,60,0.15);
+      --border-strong: rgba(120,160,60,0.3);
+      --green: #7aad3a;
+      --green-dim: #4a7020;
+      --green-bright: #a0d050;
+      --amber: #BA7517;
+      --amber-dim: #5c3a08;
+      --bark: #8B6040;
+      --bark-dim: #3d2008;
+      --text: #e8edd8;
+      --text-muted: #7a8a60;
+      --blood: #cc1111;
+      --blood-dim: #3a0808;
+    }
+
+    body { font-family: 'Barlow', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    #app { max-width: 680px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+
+    .header { text-align: center; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 0.5px solid var(--border); }
+    .title { font-family: 'Bebas Neue', sans-serif; font-size: 40px; letter-spacing: 3px; line-height: 1; }
+    .title span { color: var(--green); }
+    .subtitle { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-muted); letter-spacing: 1.5px; margin-top: 5px; }
+
+    .field-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1.5px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; margin-top: 16px; }
+    .field-label:first-child { margin-top: 0; }
+
+    .chips { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 8px; }
+    .chip { font-family: 'IBM Plex Mono', monospace; font-size: 11px; padding: 5px 10px; border: 0.5px solid var(--border-strong); border-radius: 5px; cursor: pointer; background: none; color: var(--text-muted); transition: all 0.15s; white-space: nowrap; user-select: none; }
+    .chip:hover, .chip.sel { border-color: var(--green); color: var(--green); }
+
+    input[type="text"] { width: 100%; font-family: 'IBM Plex Mono', monospace; font-size: 13px; padding: 9px 12px; border: 0.5px solid var(--border-strong); border-radius: 6px; background: var(--surface); color: var(--text); outline: none; transition: border-color 0.15s; }
+    input[type="text"]:focus { border-color: var(--green); }
+
+    .btn-row { display: flex; gap: 8px; margin-top: 16px; }
+    .btn-assess { flex: 1; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 2px; text-transform: uppercase; padding: 11px; background: var(--green-dim); color: var(--green-bright); border: 0.5px solid var(--green-dim); border-radius: 6px; cursor: pointer; transition: opacity 0.15s; }
+    .btn-assess:hover { opacity: 0.88; }
+    .btn-assess:disabled { opacity: 0.4; cursor: not-allowed; }
+    .btn-clear { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 1px; padding: 11px 16px; border: 0.5px solid var(--border-strong); border-radius: 6px; background: none; cursor: pointer; color: var(--text-muted); transition: color 0.15s, border-color 0.15s; }
+    .btn-clear:hover { color: var(--text); border-color: var(--green); }
+
+    .results { display: none; margin-top: 1.5rem; }
+    .results.show { display: block; }
+
+    .loading { padding: 2rem; text-align: center; font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--text-muted); letter-spacing: 1px; }
+    .dots::after { content: ''; animation: dots 1.5s steps(3, end) infinite; }
+    @keyframes dots { 0%{content:'.'} 33%{content:'..'} 66%{content:'...'} 100%{content:''} }
+
+    /* Verdict summary banner */
+    .verdict-banner { text-align: center; padding: 1rem 0 0.5rem; margin-bottom: 0.5rem; }
+    .verdict-banner .verdict-word { font-family: 'Bebas Neue', sans-serif; font-size: 48px; letter-spacing: 4px; line-height: 1; }
+    .verdict-banner .verdict-word.eat { color: var(--green); }
+    .verdict-banner .verdict-word.no  { color: var(--blood); }
+    .verdict-banner .verdict-word.conditional { color: var(--amber); }
+    .verdict-banner .item-name { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-muted); letter-spacing: 1.5px; margin-top: 4px; }
+
+    /* Panel cards */
+    .panel-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 2px; color: var(--text-muted); margin-bottom: 10px; margin-top: 1rem; }
+
+    .char-card { border: 0.5px solid var(--border); border-radius: 10px; margin-bottom: 8px; overflow: hidden; background: var(--surface); }
+    .char-card.eats { border-color: var(--green-dim); }
+    .char-card.wont { border-color: var(--blood-dim); }
+    .char-card.asks { border-color: var(--amber-dim); }
+
+    .card-head { display: flex; align-items: center; gap: 10px; padding: 9px 14px; background: var(--surface2); border-bottom: 0.5px solid var(--border); }
+    .avatar { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 11px; letter-spacing: 0.5px; flex-shrink: 0; }
+    .av-green  { background: var(--green-dim);  color: var(--green-bright); }
+    .av-bark   { background: var(--bark-dim);   color: var(--bark); }
+    .av-amber  { background: var(--amber-dim);  color: var(--amber); }
+    .av-gray   { background: #1e1e1c;           color: #7a8a70; }
+
+    .char-name { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 0.5px; color: var(--text); }
+    .char-role { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-muted); }
+
+    .eat-badge { margin-left: auto; font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 1px; padding: 3px 7px; border-radius: 3px; white-space: nowrap; }
+    .eat-badge.yes  { background: rgba(122,173,58,0.15); color: var(--green); border: 0.5px solid var(--green-dim); }
+    .eat-badge.no   { background: rgba(204,17,17,0.12);  color: var(--blood); border: 0.5px solid var(--blood-dim); }
+    .eat-badge.ask  { background: rgba(186,117,23,0.12); color: var(--amber); border: 0.5px solid var(--amber-dim); }
+
+    .card-body { padding: 11px 14px; font-family: 'Barlow', sans-serif; font-size: 14px; line-height: 1.7; color: var(--text); }
+
+    .fact-check { margin-top: 6px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-muted); border-top: 0.5px solid var(--border); padding-top: 6px; opacity: 0.7; }
+
+    .source-challenge { margin-top: 8px; padding: 7px 11px; background: rgba(120,160,60,0.06); border-left: 3px solid var(--green-dim); border-radius: 0 4px 4px 0; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--green-bright); }
+
+    .impulse-note { margin-top: 8px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--amber); border-top: 0.5px solid var(--border); padding-top: 6px; }
+
+    .journal-note { margin-top: 8px; font-family: 'Barlow', sans-serif; font-style: italic; font-size: 12px; color: var(--text-muted); border-top: 0.5px solid var(--border); padding-top: 6px; opacity: 0.8; }
+
+    /* Attenborough bookends */
+    .att-bookend { display: flex; gap: 10px; align-items: flex-start; padding: 10px 14px; background: var(--surface); border: 0.5px solid var(--border); border-radius: 8px; }
+    .att-avatar { width: 26px; height: 26px; background: #1e1e1c; color: #7a8a70; border-radius: 50%; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 9px; letter-spacing: 0.5px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+    .att-text { font-family: 'Barlow', sans-serif; font-weight: 300; font-style: italic; font-size: 14px; line-height: 1.7; color: var(--text-muted); }
+    #att-opening { margin-bottom: 12px; }
+    #att-verdict { margin-top: 12px; opacity: 0; transition: opacity 0.8s ease; }
+    #att-verdict.visible { opacity: 1; }
+
+    .reset-row { margin-top: 1rem; text-align: center; }
+    .btn-reset { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-muted); background: none; border: 0.5px solid var(--border-strong); border-radius: 6px; padding: 7px 16px; cursor: pointer; letter-spacing: 1px; transition: all 0.15s; }
+    .btn-reset:hover { color: var(--text); border-color: var(--green); }
+  </style>
+</head>
+<body>
+<div id="app">
+
+  <div class="header">
+    <div class="title">WILL YOU <span>EAT</span> IT?</div>
+    <div class="subtitle">the panel will decide before you do.</div>
+  </div>
+
+  <div class="field-label">What did you find?</div>
+  <div class="chips" id="chips-item">
+    <div class="chip" onclick="onChip(this,'mushroom')">mushroom</div>
+    <div class="chip" onclick="onChip(this,'wild berries')">wild berries</div>
+    <div class="chip" onclick="onChip(this,'witchetty grubs')">witchetty grubs</div>
+    <div class="chip" onclick="onChip(this,'raw fish')">raw fish</div>
+    <div class="chip" onclick="onChip(this,'roadkill')">roadkill</div>
+    <div class="chip" onclick="onChip(this,'seaweed')">seaweed</div>
+    <div class="chip" onclick="onChip(this,'insects')">insects</div>
+    <div class="chip" onclick="onChip(this,'lichen')">lichen</div>
+    <div class="chip" onclick="onChip(this,'bark or roots')">bark / roots</div>
+    <div class="chip" onclick="onChip(this,'unknown leaves')">unknown leaves</div>
+    <div class="chip" onclick="onChip(this,'snake')">snake</div>
+    <div class="chip" onclick="onChip(this,'something I cannot identify')">unidentified</div>
+  </div>
+  <input type="text" id="item-input" placeholder="or describe exactly what you found..." oninput="onInput(this.value)"/>
+
+  <div class="btn-row">
+    <button class="btn-assess" id="btn-assess" onclick="onAssess()">WILL YOU EAT IT? ↗</button>
+    <button class="btn-clear" onclick="onClear()">CLEAR</button>
+  </div>
+
+  <div class="results" id="results">
+    <div class="loading" id="loading">
+      <span>PANEL DELIBERATING</span><span class="dots"></span>
+    </div>
+    <div id="verdict-block" style="display:none">
+      <div class="att-bookend" id="att-opening" style="display:none">
+        <div class="att-avatar">DA</div>
+        <div class="att-text"></div>
+      </div>
+      <div id="verdict-banner"></div>
+      <div class="panel-label">THE PANEL HAS DECIDED</div>
+      <div id="cards-out"></div>
+      <div class="att-bookend" id="att-verdict" style="display:none">
+        <div class="att-avatar">DA</div>
+        <div class="att-text"></div>
+      </div>
+      <div class="reset-row">
+        <button class="btn-reset" onclick="onClear()">ANOTHER ITEM</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const WORKER_ENDPOINT = 'https://cusslab-api.leanspirited.workers.dev/survival-school/assess';
+
+const CHARACTERS = {
+  ray:     { name: 'Ray Mears',      role: 'Bushcraft',         av: 'RM', avClass: 'av-green' },
+  bear:    { name: 'Bear Grylls',    role: 'Former SAS',        av: 'BG', avClass: 'av-bark'  },
+  hales:   { name: 'Les Hales',      role: 'Bush Tucker Man',   av: 'LH', avClass: 'av-amber' },
+  packham: { name: 'Chris Packham',  role: 'Conservation',      av: 'CP', avClass: 'av-green' },
+  irwin:   { name: 'Steve Irwin',    role: 'Crocodile Hunter',  av: 'SI', avClass: 'av-amber' },
+  stevens: { name: 'Austin Stevens', role: 'Snake Master',      av: 'AS', avClass: 'av-bark'  },
+  darwin:  { name: 'Charles Darwin', role: 'Naturalist',        av: 'CD', avClass: 'av-gray'  }
+};
+
+const SYSTEM_PROMPT = \`You are the Survival School WILL YOU EAT IT? panel. The user has found an item and wants to know if it is edible.
+
+=== RAY MEARS ===
+Plant Knowledge 88, Bushcraft 30+ years. Identifies items correctly using binomial nomenclature when confident.
+Will eat IF properly identified and safely prepared — specifies exactly how. "Needs boiling for 20 minutes to neutralise toxins." Won't eat it raw if preparation is required.
+Brief. Clinical. Never dramatic. Silence about Bear's food choices is eloquent.
+
+=== BEAR GRYLLS ===
+Former SAS. Drinks own urine when Londis is forty yards away. Has eaten things he genuinely did not need to eat and got ill.
+Will eat it. Without question. Has eaten something like it, abroad, fine in the end. Fact-check footnote fires on factual claims about edibility. Uses "Hydration?" unprompted.
+
+=== LES HALES ===
+Bush Tucker Man. Witchetty grubs go down like a Rich Tea biscuit. Has eaten things that would hospitalise a normal person with the energy of a man doing light admin.
+ALWAYS EATS IT. One to three words only. Full stop. Never elaborates.
+
+=== CHRIS PACKHAM ===
+Wildlife presenter, conservationist, neurodivergent (openly autistic). Rapid, precise, pattern-recognition.
+Primary response: where was this sourced? Is it protected? What is the local population pressure?
+Edibility is secondary. Sourcing is primary. Will not endorse foraging of protected or vulnerable species regardless of survival context.
+"Fascinating" means he is disturbed. "Interesting" means he is furious. Genuinely excited by the organism's biology before the food question.
+will_eat: null — he asks questions, he does not commit.
+
+=== STEVE IRWIN ===
+The Crocodile Hunter. Died 4 September 2006, stingray barb, Great Barrier Reef. In panel-world: alive.
+First instinct: pick it up. Always. Before the edibility question. Has already grabbed it.
+Boundless energy. Genuine love for every organism. "CRIKEY!" is structural not decorative.
+"She's a beauty!" — the item is always beautiful. The food question comes second to the appreciation.
+will_eat: true. He will eat it. With enthusiasm.
+
+=== AUSTIN STEVENS ===
+Snake Master. 107 days in a cage with 36 venomous snakes. Got bitten on day 96. Completed the 107 days.
+Only engaged if the item might be near snakes or is venomous. If found under rocks, in leaf litter, or in tropical locations: checks for nearby snakes first. Every time.
+If no snake involved: "Very well." Brief. Slightly disappointed. Returns to his thoughts.
+will_eat: false. He is not here for the food.
+
+=== CHARLES DARWIN ===
+HMS Beagle, Galapagos. On the Origin of Species, 1859. Ate everything he encountered on the voyage — owls, tortoises, pumas, iguanas, a rhea he had eaten before realising it was a new species.
+Uses Latin binomial nomenclature. Always has. Describes flavour and texture with scientific detachment.
+Journal always cited. "I consumed a specimen of this genus in the Galapagos in 1835 and found the flavour acceptable, though the texture was somewhat resistant."
+will_eat: true. Curiosity outweighs caution.
+
+ATTENBOROUGH BOOKENDS — does NOT appear in panel array.
+- attenborough_opening: introduces the item as natural history subject. Describes its ecological role, lifecycle, or evolutionary context. One sentence.
+- attenborough_verdict: geological calm. One sentence. No appeal.
+
+PANEL ORDER: Ray, Bear, Hales, Packham, Irwin, Stevens, Darwin.
+
+OUTPUT — valid JSON only, no markdown:
+{"item_identified":"<common name (scientific name if known)>","edibility_verdict":"edible|not_edible|conditional|unknown","attenborough_opening":"<one sentence, natural history intro>","panel":[{"charId":"ray","text":"<2-3 sentences>","will_eat":<bool>,"fact_check":"<optional>"},{"charId":"bear","text":"<2-3 sentences>","will_eat":true,"fact_check":"<optional>"},{"charId":"hales","text":"<1-3 words only>","will_eat":true},{"charId":"packham","text":"<2-3 sentences>","will_eat":null,"source_challenge":"<his specific sourcing question>"},{"charId":"irwin","text":"<2-3 sentences>","will_eat":true,"impulse":"<what he immediately did, one phrase>"},{"charId":"stevens","text":"<1-2 sentences>","will_eat":false},{"charId":"darwin","text":"<2-3 sentences>","will_eat":true,"journal_note":"<one sentence from his journal, verbatim style>"}],"attenborough_verdict":"<one sentence>"}\`;
+
+let item = '';
+
+function onChip(el, val) {
+  document.querySelectorAll('#chips-item .chip').forEach(c => c.classList.remove('sel'));
+  el.classList.add('sel');
+  item = val;
+  document.getElementById('item-input').value = val;
+}
+
+function onInput(val) {
+  document.querySelectorAll('#chips-item .chip').forEach(c => c.classList.remove('sel'));
+  item = val;
+}
+
+function onClear() {
+  item = '';
+  document.getElementById('item-input').value = '';
+  document.querySelectorAll('#chips-item .chip').forEach(c => c.classList.remove('sel'));
+  document.getElementById('results').classList.remove('show');
+  document.getElementById('verdict-block').style.display = 'none';
+  document.getElementById('loading').style.display = 'block';
+  document.getElementById('loading').innerHTML = '<span>PANEL DELIBERATING</span><span class="dots"></span>';
+  document.getElementById('cards-out').innerHTML = '';
+  document.getElementById('verdict-banner').innerHTML = '';
+  const opening = document.getElementById('att-opening');
+  if (opening) { opening.style.display = 'none'; }
+  const verdict = document.getElementById('att-verdict');
+  if (verdict) { verdict.style.display = 'none'; verdict.classList.remove('visible'); }
+  document.getElementById('btn-assess').disabled = false;
+}
+
+async function onAssess() {
+  if (!item.trim()) { alert('Tell us what you found first.'); return; }
+  document.getElementById('btn-assess').disabled = true;
+  document.getElementById('results').classList.add('show');
+  document.getElementById('loading').style.display = 'block';
+  document.getElementById('loading').innerHTML = '<span>PANEL DELIBERATING</span><span class="dots"></span>';
+  document.getElementById('verdict-block').style.display = 'none';
+
+  try {
+    const resp = await fetch(WORKER_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ system: SYSTEM_PROMPT, situation: \`ITEM FOUND: \${item}\` })
+    });
+    if (!resp.ok) throw new Error('Worker ' + resp.status);
+    const data = await resp.json();
+    renderResults(data);
+  } catch (e) {
+    document.getElementById('loading').innerHTML =
+      '<span style="color:var(--blood)">Panel unavailable. They are probably eating something.</span>';
+  } finally {
+    document.getElementById('btn-assess').disabled = false;
+  }
+}
+
+function renderResults(data) {
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('verdict-block').style.display = 'block';
+
+  const openingEl = document.getElementById('att-opening');
+  if (openingEl && data.attenborough_opening) {
+    openingEl.querySelector('.att-text').textContent = data.attenborough_opening;
+    openingEl.style.display = 'flex';
+  }
+
+  const banner = document.getElementById('verdict-banner');
+  const v = data.edibility_verdict || 'unknown';
+  const words = { edible: 'EAT IT', not_edible: 'DO NOT EAT', conditional: 'DEPENDS', unknown: 'UNCLEAR' };
+  const cls   = { edible: 'eat',    not_edible: 'no',         conditional: 'conditional', unknown: 'conditional' };
+  banner.innerHTML = \`
+    <div class="verdict-banner">
+      <div class="verdict-word \${cls[v]}">\${words[v]}</div>
+      \${data.item_identified ? \`<div class="item-name">\${data.item_identified}</div>\` : ''}
+    </div>\`;
+
+  const container = document.getElementById('cards-out');
+  container.innerHTML = '';
+
+  (data.panel || []).forEach((r, i) => {
+    const char = CHARACTERS[r.charId];
+    if (!char) return;
+
+    const willEat = r.will_eat;
+    const cardCls = willEat === true ? 'eats' : willEat === false ? 'wont' : 'asks';
+    const badgeLabel = willEat === true ? 'EATS IT' : willEat === false ? 'WILL NOT' : 'ASKS FIRST';
+    const badgeCls   = willEat === true ? 'yes'     : willEat === false ? 'no'         : 'ask';
+
+    const card = document.createElement('div');
+    card.className = 'char-card ' + cardCls;
+    card.style.opacity = '0';
+    card.style.transform = 'translateY(7px)';
+    card.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+
+    card.innerHTML = \`
+      <div class="card-head">
+        <div class="avatar \${char.avClass}">\${char.av}</div>
+        <div>
+          <div class="char-name">\${char.name}</div>
+          <div class="char-role">\${char.role}</div>
+        </div>
+        <span class="eat-badge \${badgeCls}">\${badgeLabel}</span>
+      </div>
+      <div class="card-body">
+        \${r.text}
+        \${r.fact_check  ? \`<div class="fact-check">&#10033; \${r.fact_check}</div>\` : ''}
+        \${r.source_challenge ? \`<div class="source-challenge">&#9658; \${r.source_challenge}</div>\` : ''}
+        \${r.impulse     ? \`<div class="impulse-note">&#9651; \${r.impulse}</div>\` : ''}
+        \${r.journal_note ? \`<div class="journal-note">"\${r.journal_note}"</div>\` : ''}
+      </div>\`;
+
+    container.appendChild(card);
+    setTimeout(() => { card.style.opacity = '1'; card.style.transform = 'translateY(0)'; }, 80 + i * 100);
+  });
+
+  if (data.attenborough_verdict) {
+    const cardDelay = (data.panel?.length || 0) * 100 + 400;
+    const verdictEl = document.getElementById('att-verdict');
+    if (verdictEl) {
+      setTimeout(() => {
+        verdictEl.querySelector('.att-text').textContent = data.attenborough_verdict;
+        verdictEl.style.display = 'flex';
+        setTimeout(() => verdictEl.classList.add('visible'), 50);
+      }, cardDelay);
+    }
+  }
+}
+
+document.getElementById('item-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') onAssess();
+});
+</script>
+
+</body>
+</html>
+`;
+
+const SURVIVAL_SCHOOL_DEATHMATCH = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Animal Deathmatch — Survival School</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f1209;
+      --surface: #181d10;
+      --surface2: #1e2514;
+      --border: rgba(120,160,60,0.15);
+      --border-strong: rgba(120,160,60,0.3);
+      --green: #7aad3a;
+      --green-dim: #4a7020;
+      --green-bright: #a0d050;
+      --amber: #BA7517;
+      --amber-dim: #5c3a08;
+      --bark: #8B6040;
+      --bark-dim: #3d2008;
+      --blood: #cc1111;
+      --blood-dim: #3a0808;
+      --text: #e8edd8;
+      --text-muted: #7a8a60;
+    }
+
+    body { font-family: 'Barlow', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    #app { max-width: 700px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+
+    .header { text-align: center; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 0.5px solid var(--border); }
+    .title { font-family: 'Bebas Neue', sans-serif; font-size: 40px; letter-spacing: 3px; line-height: 1; }
+    .title span { color: var(--blood); }
+    .subtitle { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-muted); letter-spacing: 1.5px; margin-top: 5px; }
+
+    .field-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1.5px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; margin-top: 16px; }
+    .field-label:first-child { margin-top: 0; }
+
+    /* Two-column animal inputs */
+    .fight-row { display: grid; grid-template-columns: 1fr auto 1fr; gap: 0; align-items: start; margin-bottom: 12px; }
+    .fight-col { }
+    .vs-badge { display: flex; align-items: center; justify-content: center; padding: 0 12px; padding-top: 44px; }
+    .vs-badge span { font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing: 2px; color: var(--blood); opacity: 0.7; }
+
+    .chips { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 8px; }
+    .chip { font-family: 'IBM Plex Mono', monospace; font-size: 11px; padding: 5px 10px; border: 0.5px solid var(--border-strong); border-radius: 5px; cursor: pointer; background: none; color: var(--text-muted); transition: all 0.15s; white-space: nowrap; user-select: none; }
+    .chip:hover, .chip.sel { border-color: var(--green); color: var(--green); }
+
+    input[type="text"] { width: 100%; font-family: 'IBM Plex Mono', monospace; font-size: 13px; padding: 9px 12px; border: 0.5px solid var(--border-strong); border-radius: 6px; background: var(--surface); color: var(--text); outline: none; transition: border-color 0.15s; }
+    input[type="text"]:focus { border-color: var(--green); }
+
+    .env-label { margin-top: 14px; }
+    #chips-env .chip.sel { border-color: var(--amber); color: var(--amber); }
+
+    .btn-row { display: flex; gap: 8px; margin-top: 16px; }
+    .btn-fight { flex: 1; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 2px; text-transform: uppercase; padding: 11px; background: var(--blood-dim); color: var(--blood); border: 0.5px solid var(--blood-dim); border-radius: 6px; cursor: pointer; transition: opacity 0.15s; }
+    .btn-fight:hover { opacity: 0.88; }
+    .btn-fight:disabled { opacity: 0.4; cursor: not-allowed; }
+    .btn-clear { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 1px; padding: 11px 16px; border: 0.5px solid var(--border-strong); border-radius: 6px; background: none; cursor: pointer; color: var(--text-muted); transition: color 0.15s, border-color 0.15s; }
+    .btn-clear:hover { color: var(--text); border-color: var(--green); }
+
+    .results { display: none; margin-top: 1.5rem; }
+    .results.show { display: block; }
+
+    .loading { padding: 2rem; text-align: center; font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--text-muted); letter-spacing: 1px; }
+    .dots::after { content: ''; animation: dots 1.5s steps(3, end) infinite; }
+    @keyframes dots { 0%{content:'.'} 33%{content:'..'} 66%{content:'...'} 100%{content:''} }
+
+    /* Phase labels */
+    .phase-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 2px; color: var(--text-muted); text-transform: uppercase; margin: 1rem 0 0.5rem; }
+
+    /* Panel cards */
+    .char-card { border: 0.5px solid var(--border); border-radius: 10px; margin-bottom: 8px; overflow: hidden; background: var(--surface); }
+    .card-head { display: flex; align-items: center; gap: 10px; padding: 9px 14px; background: var(--surface2); border-bottom: 0.5px solid var(--border); }
+    .avatar { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 11px; letter-spacing: 0.5px; flex-shrink: 0; }
+    .av-green  { background: var(--green-dim);  color: var(--green-bright); }
+    .av-bark   { background: var(--bark-dim);   color: var(--bark); }
+    .av-amber  { background: var(--amber-dim);  color: var(--amber); }
+    .av-gray   { background: #1e1e1c;           color: #7a8a70; }
+    .av-sbs    { background: #1a1e2a;           color: #5a7aaa; }
+
+    .char-name { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 0.5px; color: var(--text); }
+    .char-role { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-muted); }
+    .card-body { padding: 11px 14px; font-family: 'Barlow', sans-serif; font-size: 14px; line-height: 1.7; color: var(--text); }
+
+    /* Match narrative block */
+    .narrative-block { background: var(--surface); border: 0.5px solid var(--border); border-radius: 10px; padding: 16px; margin-bottom: 8px; }
+    .narrative-block p { font-family: 'Barlow', sans-serif; font-size: 14px; line-height: 1.8; color: var(--text); }
+
+    /* Winner banner */
+    .winner-banner { text-align: center; padding: 1.5rem 0 1rem; margin: 0.5rem 0; }
+    .winner-animal { font-family: 'Bebas Neue', sans-serif; font-size: 52px; letter-spacing: 4px; line-height: 1; color: var(--blood); word-break: break-word; }
+    .winner-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 2px; color: var(--text-muted); margin-top: 4px; }
+    .winner-margin { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1.5px; margin-top: 6px; }
+    .margin-decisive { color: var(--blood); }
+    .margin-close { color: var(--amber); }
+    .margin-contested { color: var(--text-muted); }
+    .winner-banner.draw .winner-animal { color: var(--amber); }
+
+    /* Attenborough bookends */
+    .att-bookend { display: flex; gap: 10px; align-items: flex-start; padding: 10px 14px; background: var(--surface); border: 0.5px solid var(--border); border-radius: 8px; }
+    .att-avatar { width: 26px; height: 26px; background: #1e1e1c; color: #7a8a70; border-radius: 50%; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 9px; letter-spacing: 0.5px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+    .att-text { font-family: 'Barlow', sans-serif; font-weight: 300; font-style: italic; font-size: 14px; line-height: 1.7; color: var(--text-muted); }
+    #att-intro { margin-bottom: 12px; }
+    #att-verdict { margin-top: 12px; opacity: 0; transition: opacity 0.8s ease; }
+    #att-verdict.visible { opacity: 1; }
+
+    /* Stingray Rule memorial */
+    #stingray-memorial { display: none; margin-top: 1.5rem; }
+    #stingray-memorial.show { display: block; }
+    .memorial-header { text-align: center; padding: 2rem 0 1.5rem; border-bottom: 0.5px solid var(--border); margin-bottom: 1.5rem; }
+    .memorial-symbol { font-size: 36px; margin-bottom: 0.75rem; opacity: 0.5; }
+    .memorial-name { font-family: 'Bebas Neue', sans-serif; font-size: 32px; letter-spacing: 3px; color: var(--amber); }
+    .memorial-dates { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-muted); letter-spacing: 2px; margin-top: 4px; }
+    .memorial-reason { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-muted); letter-spacing: 1px; margin-top: 8px; opacity: 0.6; }
+
+    .reset-row { margin-top: 1rem; text-align: center; }
+    .btn-reset { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-muted); background: none; border: 0.5px solid var(--border-strong); border-radius: 6px; padding: 7px 16px; cursor: pointer; letter-spacing: 1px; transition: all 0.15s; }
+    .btn-reset:hover { color: var(--text); border-color: var(--green); }
+  </style>
+</head>
+<body>
+<div id="app">
+
+  <div class="header">
+    <div class="title">ANIMAL <span>DEATHMATCH</span></div>
+    <div class="subtitle">the panel picks the winner. you pick the animals.</div>
+  </div>
+
+  <div class="fight-row">
+    <div class="fight-col">
+      <div class="field-label">Animal A</div>
+      <div class="chips" id="chips-a"></div>
+      <input type="text" id="input-a" placeholder="or name any animal..."/>
+    </div>
+    <div class="vs-badge"><span>VS</span></div>
+    <div class="fight-col">
+      <div class="field-label">Animal B</div>
+      <div class="chips" id="chips-b"></div>
+      <input type="text" id="input-b" placeholder="or name any animal..."/>
+    </div>
+  </div>
+
+  <div class="field-label env-label">Environment</div>
+  <div class="chips" id="chips-env">
+    <div class="chip" onclick="onEnvChip(this,'jungle')">jungle</div>
+    <div class="chip" onclick="onEnvChip(this,'savannah')">savannah</div>
+    <div class="chip" onclick="onEnvChip(this,'ocean')">ocean</div>
+    <div class="chip" onclick="onEnvChip(this,'arctic')">arctic</div>
+    <div class="chip" onclick="onEnvChip(this,'desert')">desert</div>
+    <div class="chip" onclick="onEnvChip(this,'forest')">forest</div>
+    <div class="chip" onclick="onEnvChip(this,'urban')">urban</div>
+    <div class="chip" onclick="onEnvChip(this,'swamp')">swamp</div>
+    <div class="chip" onclick="onEnvChip(this,'deep ocean')">deep ocean</div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn-fight" id="btn-fight" onclick="onFight()">FIGHT ↗</button>
+    <button class="btn-clear" onclick="onClear()">CLEAR</button>
+  </div>
+
+  <!-- Stingray Rule: Steve Irwin memorial -->
+  <div id="stingray-memorial">
+    <div class="memorial-header">
+      <div class="memorial-symbol">~</div>
+      <div class="memorial-name">STEVE IRWIN</div>
+      <div class="memorial-dates">22 FEBRUARY 1962 — 4 SEPTEMBER 2006</div>
+      <div class="memorial-reason">Great Barrier Reef &middot; Stingray barb &middot; Age 44</div>
+    </div>
+    <div class="phase-label">The panel cannot proceed</div>
+    <div id="memorial-cards"></div>
+    <div class="att-bookend" id="att-memorial" style="display:none">
+      <div class="att-avatar">DA</div>
+      <div class="att-text"></div>
+    </div>
+    <div class="reset-row">
+      <button class="btn-reset" onclick="onClear()">CHOOSE ANOTHER MATCHUP</button>
+    </div>
+  </div>
+
+  <div class="results" id="results">
+    <div class="loading" id="loading">
+      <span>PANEL CONVENING</span><span class="dots"></span>
+    </div>
+    <div id="fight-block" style="display:none">
+      <div class="att-bookend" id="att-intro" style="display:none">
+        <div class="att-avatar">DA</div>
+        <div class="att-text"></div>
+      </div>
+
+      <div class="phase-label">PRE-FIGHT ANALYSIS</div>
+      <div id="prefight-cards"></div>
+
+      <div class="phase-label">THE FIGHT</div>
+      <div id="narrative-out"></div>
+
+      <div id="winner-out"></div>
+
+      <div class="phase-label">REACTIONS</div>
+      <div id="postfight-cards"></div>
+
+      <div class="att-bookend" id="att-verdict" style="display:none">
+        <div class="att-avatar">DA</div>
+        <div class="att-text"></div>
+      </div>
+
+      <div class="reset-row">
+        <button class="btn-reset" onclick="onClear()">ANOTHER FIGHT</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const WORKER_ENDPOINT = 'https://cusslab-api.leanspirited.workers.dev/survival-school/assess';
+
+const ANIMAL_CHIPS = [
+  'king cobra','black mamba','great white shark','saltwater crocodile',
+  'grizzly bear','polar bear','komodo dragon','lion','hippopotamus',
+  'cassowary','Cape buffalo','moose','manatee','swan'
+];
+
+const CHARACTERS = {
+  ray:  { name: 'Ray Mears',   role: 'Bushcraft',           av: 'RM', avClass: 'av-green' },
+  bear: { name: 'Bear Grylls', role: 'Former SAS',          av: 'BG', avClass: 'av-bark'  },
+  hales:{ name: 'Les Hales',   role: 'Bush Tucker Man',     av: 'LH', avClass: 'av-amber' },
+  fox:  { name: 'Jason Fox',   role: 'Special Boat Service',av: 'JF', avClass: 'av-sbs'   }
+};
+
+const STINGRAY_MEMORIAL = {
+  attenborough: \`In forty-four years, he touched more lives than most creatures encounter in a lifetime. The ocean keeps its own counsel about that morning. It always does.\`,
+  cards: [
+    { charId: 'ray',   text: \`Steve understood something most of us never do — that the most dangerous moments in nature are usually the ones you didn't see coming because you were too busy watching something else entirely. He was watching the stingray. The stingray wasn't watching him back. That's the only reason any of this was possible.\` },
+    { charId: 'bear',  text: \`I've been in some proper situations out there and I'll tell you, the ones that get you are never the ones the camera's on. Steve knew that better than anyone. The man was the real thing. Genuinely. I've met plenty of people who say it. He actually was it. There's no match today, lads.\` },
+    { charId: 'hales', text: \`Good bloke.\` },
+    { charId: 'fox',   text: \`Funniest part? He'd have absolutely gone back in the water the next day. That's not recklessness — that's the job. You assess the risk, you accept it, you go again. He did it every single time. Absolute pro. Different league. This one doesn't get scored.\` }
+  ]
+};
+
+const SYSTEM_PROMPT = \`You are the Survival School ANIMAL DEATHMATCH panel. Two animals will fight. The panel analyses who wins and why.
+
+=== RAY MEARS ===
+Bushcraft, 30+ years. Cerebral, warm, loves the land. Not a fighter — an ecologist. His pre-fight analysis is about anatomy, natural behaviour, habitat advantage, evolutionary context. Post-fight: measured ecological summary. No bloodlust. Finds the result inevitable once you understand both animals.
+VOICE: Never dramatic. Brevity. "The \${'{animal}'} has evolved specifically for this." Complete thought, then silence.
+
+=== BEAR GRYLLS ===
+Former SAS. Has had a personal encounter with at least one of the animals. Has an anecdote. Gets it wrong occasionally on the facts — fires a confident claim that turns out to be wrong or exaggerated. Post-fight: double-down or silent acknowledgement depending on outcome.
+VOICE: Urgent, evangelical. Personal anecdote always. "I once..." Fact-check footnote fires when he makes a specific claim.
+fact_check field optional: if Bear says something factually dubious about the animals, add a correction.
+
+=== LES HALES ===
+Bush Tucker Man. Has eaten at least one of these. Has also seen them kill. One to three words only. Flat delivery. Pre-fight: picks winner, no elaboration. Post-fight: same energy, same length.
+VOICE: Maximum three words. No punctuation drama. "Hippo. Easy." or "Tough one, that." That's the limit.
+
+=== JASON FOX ===
+SBS. Demolitions, jungle survival, combat swimmer. Tactical analysis only — threat assessment, kill vector, first-strike advantage, terrain exploitation, exit routes if you are nearby. Warm, self-deprecating, genuinely funny. Absolute precision about the mechanics of violence.
+Pre-fight: tactical breakdown of each animal, picks a winner with reasoning. Post-fight: tactical debrief.
+VOICE: Flat deflation. "She'd take the head off." delivered as admin. Swears naturally. "Gobshite" is a technical term here.
+
+ATTENBOROUGH BOOKENDS — does NOT appear in panel array:
+- attenborough_intro: introduces the matchup as nature documentary. One sentence. Sets the scene.
+- attenborough_verdict: geological calm. One sentence. No appeal. "The outcome was, as it nearly always is, determined long before either animal arrived."
+
+PRE-FIGHT: Each panel member gives their prediction and reasoning.
+POST-FIGHT: Each panel member reacts to the actual outcome.
+
+FIGHT RULES:
+- Both animals in their prime. No illness, no injury.
+- Environment matters — assess habitat advantage honestly.
+- Winner is determined by biology, behaviour, and environment. Not preference.
+- Draw only if genuinely too close to call.
+- Margin: "decisive" (one dominates completely), "close" (one small advantage), "contested" (could go either way, winner edges it).
+
+OUTPUT — valid JSON only, no markdown:
+{"animal_a":"<name as given>","animal_b":"<name as given>","environment":"<environment as given>","attenborough_intro":"<one sentence>","pre_fight":[{"charId":"ray","text":"<2-3 sentences>"},{"charId":"bear","text":"<2-3 sentences>","fact_check":"<optional correction>"},{"charId":"hales","text":"<1-3 words>"},{"charId":"fox","text":"<2-3 sentences>"}],"match_narrative":"<3-4 sentences describing the fight, clinical, no cheering>","winner":"animal_a|animal_b|draw","margin":"decisive|close|contested","post_fight":[{"charId":"ray","text":"<1-2 sentences>"},{"charId":"bear","text":"<1-2 sentences>","fact_check":"<optional>"},{"charId":"hales","text":"<1-3 words>"},{"charId":"fox","text":"<1-2 sentences>"}],"attenborough_verdict":"<one sentence>"}\`;
+
+let animalA = '';
+let animalB = '';
+let environment = '';
+
+// Build chips for both sides
+function buildChips() {
+  ['a','b'].forEach(side => {
+    const container = document.getElementById('chips-' + side);
+    ANIMAL_CHIPS.forEach(name => {
+      const el = document.createElement('div');
+      el.className = 'chip';
+      el.textContent = name;
+      el.onclick = () => onAnimalChip(el, side, name);
+      container.appendChild(el);
+    });
+  });
+}
+
+function onAnimalChip(el, side, val) {
+  document.querySelectorAll('#chips-' + side + ' .chip').forEach(c => c.classList.remove('sel'));
+  el.classList.add('sel');
+  if (side === 'a') {
+    animalA = val;
+    document.getElementById('input-a').value = val;
+  } else {
+    animalB = val;
+    document.getElementById('input-b').value = val;
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  buildChips();
+  document.getElementById('input-a').addEventListener('input', e => {
+    document.querySelectorAll('#chips-a .chip').forEach(c => c.classList.remove('sel'));
+    animalA = e.target.value;
+  });
+  document.getElementById('input-b').addEventListener('input', e => {
+    document.querySelectorAll('#chips-b .chip').forEach(c => c.classList.remove('sel'));
+    animalB = e.target.value;
+  });
+  document.getElementById('input-a').addEventListener('keydown', e => { if (e.key === 'Enter') onFight(); });
+  document.getElementById('input-b').addEventListener('keydown', e => { if (e.key === 'Enter') onFight(); });
+});
+
+function onEnvChip(el, val) {
+  document.querySelectorAll('#chips-env .chip').forEach(c => c.classList.remove('sel'));
+  el.classList.add('sel');
+  environment = val;
+}
+
+function isStingray(str) {
+  return /stingray/i.test(str);
+}
+
+function onClear() {
+  animalA = ''; animalB = ''; environment = '';
+  document.getElementById('input-a').value = '';
+  document.getElementById('input-b').value = '';
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('sel'));
+  document.getElementById('results').classList.remove('show');
+  document.getElementById('fight-block').style.display = 'none';
+  document.getElementById('loading').style.display = 'block';
+  document.getElementById('loading').innerHTML = '<span>PANEL CONVENING</span><span class="dots"></span>';
+  document.getElementById('prefight-cards').innerHTML = '';
+  document.getElementById('narrative-out').innerHTML = '';
+  document.getElementById('winner-out').innerHTML = '';
+  document.getElementById('postfight-cards').innerHTML = '';
+  const intro = document.getElementById('att-intro');
+  if (intro) { intro.style.display = 'none'; }
+  const verdict = document.getElementById('att-verdict');
+  if (verdict) { verdict.style.display = 'none'; verdict.classList.remove('visible'); }
+  document.getElementById('stingray-memorial').classList.remove('show');
+  document.getElementById('memorial-cards').innerHTML = '';
+  const memAtt = document.getElementById('att-memorial');
+  if (memAtt) { memAtt.style.display = 'none'; }
+  document.getElementById('btn-fight').disabled = false;
+}
+
+function renderStingrayMemorial() {
+  document.getElementById('stingray-memorial').classList.add('show');
+  const container = document.getElementById('memorial-cards');
+  STINGRAY_MEMORIAL.cards.forEach((r, i) => {
+    const char = CHARACTERS[r.charId];
+    if (!char) return;
+    const card = document.createElement('div');
+    card.className = 'char-card';
+    card.style.opacity = '0';
+    card.style.transform = 'translateY(7px)';
+    card.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+    card.innerHTML = \`
+      <div class="card-head">
+        <div class="avatar \${char.avClass}">\${char.av}</div>
+        <div>
+          <div class="char-name">\${char.name}</div>
+          <div class="char-role">\${char.role}</div>
+        </div>
+      </div>
+      <div class="card-body">\${r.text}</div>\`;
+    container.appendChild(card);
+    setTimeout(() => { card.style.opacity = '1'; card.style.transform = 'translateY(0)'; }, 100 + i * 120);
+  });
+  const attEl = document.getElementById('att-memorial');
+  if (attEl) {
+    const delay = STINGRAY_MEMORIAL.cards.length * 120 + 400;
+    setTimeout(() => {
+      attEl.querySelector('.att-text').textContent = STINGRAY_MEMORIAL.attenborough;
+      attEl.style.display = 'flex';
+    }, delay);
+  }
+}
+
+async function onFight() {
+  const a = animalA.trim() || document.getElementById('input-a').value.trim();
+  const b = animalB.trim() || document.getElementById('input-b').value.trim();
+  if (!a || !b) { alert('Name both animals first.'); return; }
+
+  if (isStingray(a) || isStingray(b)) {
+    renderStingrayMemorial();
+    return;
+  }
+
+  const env = environment || 'open ground';
+
+  document.getElementById('btn-fight').disabled = true;
+  document.getElementById('results').classList.add('show');
+  document.getElementById('loading').style.display = 'block';
+  document.getElementById('loading').innerHTML = '<span>PANEL CONVENING</span><span class="dots"></span>';
+  document.getElementById('fight-block').style.display = 'none';
+
+  const situation = \`MATCHUP: \${a} vs \${b}\nENVIRONMENT: \${env}\nDetermine the winner based on biology, behaviour, and environment.\`;
+
+  try {
+    const resp = await fetch(WORKER_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ system: SYSTEM_PROMPT, situation })
+    });
+    if (!resp.ok) throw new Error('Worker ' + resp.status);
+    const data = await resp.json();
+    renderFight(data, a, b);
+  } catch (e) {
+    document.getElementById('loading').innerHTML =
+      '<span style="color:var(--blood)">Panel unavailable. They are probably arguing.</span>';
+  } finally {
+    document.getElementById('btn-fight').disabled = false;
+  }
+}
+
+function makeCard(r, delay) {
+  const char = CHARACTERS[r.charId];
+  if (!char) return null;
+  const card = document.createElement('div');
+  card.className = 'char-card';
+  card.style.opacity = '0';
+  card.style.transform = 'translateY(7px)';
+  card.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+  card.innerHTML = \`
+    <div class="card-head">
+      <div class="avatar \${char.avClass}">\${char.av}</div>
+      <div>
+        <div class="char-name">\${char.name}</div>
+        <div class="char-role">\${char.role}</div>
+      </div>
+    </div>
+    <div class="card-body">
+      \${r.text}
+      \${r.fact_check ? \`<div style="margin-top:6px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-muted);border-top:0.5px solid var(--border);padding-top:6px;opacity:0.7;">&#10033; \${r.fact_check}</div>\` : ''}
+    </div>\`;
+  setTimeout(() => { card.style.opacity = '1'; card.style.transform = 'translateY(0)'; }, delay);
+  return card;
+}
+
+function renderFight(data, inputA, inputB) {
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('fight-block').style.display = 'block';
+
+  // Attenborough intro
+  const introEl = document.getElementById('att-intro');
+  if (introEl && data.attenborough_intro) {
+    introEl.querySelector('.att-text').textContent = data.attenborough_intro;
+    introEl.style.display = 'flex';
+  }
+
+  // Pre-fight cards
+  const preFightContainer = document.getElementById('prefight-cards');
+  (data.pre_fight || []).forEach((r, i) => {
+    const card = makeCard(r, 80 + i * 100);
+    if (card) preFightContainer.appendChild(card);
+  });
+
+  const preFightDelay = (data.pre_fight?.length || 0) * 100 + 200;
+
+  // Match narrative
+  setTimeout(() => {
+    const narrativeContainer = document.getElementById('narrative-out');
+    const block = document.createElement('div');
+    block.className = 'narrative-block';
+    block.style.opacity = '0';
+    block.style.transition = 'opacity 0.4s ease';
+    block.innerHTML = \`<p>\${data.match_narrative || ''}</p>\`;
+    narrativeContainer.appendChild(block);
+    setTimeout(() => { block.style.opacity = '1'; }, 50);
+  }, preFightDelay);
+
+  const narrativeDelay = preFightDelay + 400;
+
+  // Winner banner
+  setTimeout(() => {
+    const winnerContainer = document.getElementById('winner-out');
+    const winner = data.winner;
+    const margin = data.margin || 'contested';
+    const marginLabels = { decisive: 'DECISIVE VICTORY', close: 'CLOSE VICTORY', contested: 'CONTESTED — EDGES IT' };
+    const marginCls = { decisive: 'margin-decisive', close: 'margin-close', contested: 'margin-contested' };
+    let winnerName = '';
+    let isDraw = false;
+    if (winner === 'animal_a') winnerName = data.animal_a || inputA;
+    else if (winner === 'animal_b') winnerName = data.animal_b || inputB;
+    else { winnerName = 'DRAW'; isDraw = true; }
+
+    const banner = document.createElement('div');
+    banner.className = 'winner-banner' + (isDraw ? ' draw' : '');
+    banner.style.opacity = '0';
+    banner.style.transition = 'opacity 0.5s ease';
+    banner.innerHTML = \`
+      <div class="winner-animal">\${winnerName.toUpperCase()}</div>
+      <div class="winner-label">\${isDraw ? 'NO CLEAR WINNER' : 'WINS'}</div>
+      \${!isDraw ? \`<div class="winner-margin \${marginCls[margin]}">\${marginLabels[margin] || margin.toUpperCase()}</div>\` : ''}\`;
+    winnerContainer.appendChild(banner);
+    setTimeout(() => { banner.style.opacity = '1'; }, 50);
+  }, narrativeDelay);
+
+  const winnerDelay = narrativeDelay + 500;
+
+  // Post-fight cards
+  (data.post_fight || []).forEach((r, i) => {
+    const card = makeCard(r, winnerDelay + 80 + i * 100);
+    if (card) document.getElementById('postfight-cards').appendChild(card);
+  });
+
+  const verdictDelay = winnerDelay + (data.post_fight?.length || 0) * 100 + 400;
+
+  // Attenborough verdict
+  if (data.attenborough_verdict) {
+    const verdictEl = document.getElementById('att-verdict');
+    if (verdictEl) {
+      setTimeout(() => {
+        verdictEl.querySelector('.att-text').textContent = data.attenborough_verdict;
+        verdictEl.style.display = 'flex';
+        setTimeout(() => verdictEl.classList.add('visible'), 50);
+      }, verdictDelay);
+    }
+  }
+}
+</script>
+
+</body>
+</html>
+`;
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -3776,6 +4687,12 @@ export default {
     }
     if (request.method === 'GET' && url.pathname === '/survival-school/mundane') {
       return new Response(SURVIVAL_SCHOOL_MUNDANE, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' }});
+    }
+    if (request.method === 'GET' && url.pathname === '/survival-school/eat') {
+      return new Response(SURVIVAL_SCHOOL_EAT, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' }});
+    }
+    if (request.method === 'GET' && url.pathname === '/survival-school/deathmatch') {
+      return new Response(SURVIVAL_SCHOOL_DEATHMATCH, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' }});
     }
     if (request.method !== 'POST') {
       return new Response('Method not allowed', { status: 405 });
