@@ -5754,7 +5754,7 @@ const SURVIVAL_SCHOOL_ROOMS = `<!DOCTYPE html>
   </div>
 
   <div class="morrison-block">
-    <div class="morrison-quote" id="morrison-quote">"People are strange when you're a stranger."</div>
+    <div class="morrison-quote" id="morrison-quote"></div>
     <div class="morrison-attr">— Jim Morrison</div>
   </div>
 
@@ -5798,8 +5798,37 @@ const SURVIVAL_SCHOOL_ROOMS = `<!DOCTYPE html>
 </div>
 
 <script>
-const MORRISON_DEFAULT = '"People are strange when you\'re a stranger."';
+const CORRIDOR_QUOTES = [
+  "People are strange when you're a stranger.",
+  "Break on through to the other side.",
+  "The future is uncertain and the end is always near.",
+  "I am the Lizard King. I can do anything.",
+  "No one here gets out alive.",
+  "You cannot petition the Lord with prayer.",
+  "When one door closes, another opens. This has never been Bear's experience.",
+  "Opportunity knocks. The panel was already listening at the door.",
+  "If opportunity doesn't knock, build a door. Bear built one in Norway. It held for eleven days.",
+  "Sometimes you have to close a door to open a window. Bear opened a window. In January. In Siberia. He was fine.",
+  "Don't stand at the door — you're either in or out. Ray was in. He has been there for three weeks.",
+  "When you come to a fork in the road, take it. Cody took it barefoot.",
+  "The door is open, but the ride ain't free. Fox will not confirm or deny the price.",
+  "Always leave the door open. Fox always closes the door. Always.",
+  "One door closes, another opens. Les Stroud noticed this eight days into his first winter alone.",
+  "You don't know what's behind the door. That is the point.",
+  "Jim Morrison sent thirty-seven people through these doors. He is not entirely sure where they went.",
+  "The door is not judging you. The panel is judging you. The door is indifferent.",
+  "Enter voluntarily. It is too late to wonder about the other doors.",
+  "The wilderness does not have doors. That is what makes this harder.",
+  "When one door closes, do not stand in the corridor. Ray does not recommend the corridor.",
+  "Every accomplishment starts with the decision to try. Bear tried. The panel has opinions about this.",
+  "Life is short. Break the rules, forgive quickly, kiss slowly. Ray does not kiss slowly. He does not kiss at all. He is very focused.",
+  "Behind every door is a new beginning. Behind this one is the panel. It is not the same thing.",
+  "Go confidently in the direction of your dreams. Fox went confidently. He cannot tell you which direction.",
+];
+
 const quoteEl = document.getElementById('morrison-quote');
+const sessionQuote = CORRIDOR_QUOTES[Math.floor(Math.random() * CORRIDOR_QUOTES.length)];
+quoteEl.textContent = '"' + sessionQuote + '"';
 
 document.querySelectorAll('.door').forEach(door => {
   door.addEventListener('mouseenter', () => {
@@ -5807,7 +5836,7 @@ document.querySelectorAll('.door').forEach(door => {
     quoteEl.classList.add('active');
   });
   door.addEventListener('mouseleave', () => {
-    quoteEl.textContent = MORRISON_DEFAULT;
+    quoteEl.textContent = '"' + sessionQuote + '"';
     quoteEl.classList.remove('active');
   });
 });
@@ -5944,6 +5973,11 @@ const SURVIVAL_SCHOOL_IVE_HAD_WORSE = `<!DOCTYPE html>
     <button class="chip" data-pred="I sat on my keys">sat on keys</button>
     <button class="chip" data-pred="A shopping trolley hit my shin">shin vs trolley</button>
     <button class="chip" data-pred="I have mild sunburn">mild sunburn</button>
+    <button class="chip" data-pred="I took a toilet break in the aisle of a crowded airplane because the queue was simply unreasonable">airplane aisle situation</button>
+    <button class="chip" data-pred="I was drunk and incapacitated after a pint and a half of weak shandy at a work function">defeated by a shandy</button>
+    <button class="chip" data-pred="I was found in a concerning situation involving a badger and I had questions">the badger incident</button>
+    <button class="chip" data-pred="I had to explain to hospital staff why there was a pigeon involved in an incident that was entirely the pigeon's fault">pigeon-related hospital visit</button>
+    <button class="chip" data-pred="I ate a tortoise on a long sea voyage and found it quite pleasant and now need to defend this morally and nutritionally">the tortoise question</button>
   </div>
 
   <div class="btn-row">
