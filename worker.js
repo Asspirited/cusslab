@@ -5978,6 +5978,7 @@ const SURVIVAL_SCHOOL_IVE_HAD_WORSE = `<!DOCTYPE html>
     <button class="chip" data-pred="I was found in a concerning situation involving a badger and I had questions">the badger incident</button>
     <button class="chip" data-pred="I had to explain to hospital staff why there was a pigeon involved in an incident that was entirely the pigeon's fault">pigeon-related hospital visit</button>
     <button class="chip" data-pred="I ate a tortoise on a long sea voyage and found it quite pleasant and now need to defend this morally and nutritionally">the tortoise question</button>
+    <button class="chip" data-pred="I urgently urinated into what I believed to be an empty vessel but turned out to be the ceremonial urn containing someone's grandmother's ashes, and now need to explain myself with full sincerity and some dignity">grandmother's urn incident</button>
   </div>
 
   <div class="btn-row">
