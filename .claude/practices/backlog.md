@@ -1690,3 +1690,39 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
   - **Falsifier:** Gambits feel forced; panel reactions don't build coherently on prior turns
   - **Window:** First session with decision loop active on Golf panel
 - Status: OPEN — raised 2026-03-28
+
+---
+
+### BL-166 — RegisterContract walking skeleton: Room 13 "I've Had Worse"
+
+- Minimum viable proof of one RegisterContract working end-to-end. Room 13: user describes a predicament, each character tops the previous one, escalation state passes between characters, Attenborough closes at absurdity ceiling. Key principle: characters must not know they're in an interaction mode. Sincerity under absurd constraint is the engine — never winking at the audience.
+- Build order: (1) registerContracts.js — contract schema + Room 13 object; (2) system prompt builder accepts RegisterContract param; (3) escalation state — each character's prompt includes previous character's response; (4) terminal condition detection (absurdity ceiling); (5) Attenborough terminal close.
+- Three Amigos required before Gherkin — terminal condition detection logic particularly needs checking. Outstanding questions: (1) Is The Rooms Cusslab, SS, or both? (2) Fixed panel per room or user-configurable? (3) Corridor as visual metaphor or literal styled doors? (4) Can user be *in* the room (first person) or always audience?
+- Crack profiles needed per character (Bear: Confidence Spiral; Ray: Graceful Admission — see ss_domain_model_handoff.md for full table). These unlock Phase 2.
+- Full spec: /mnt/c/Users/roden/Downloads/the_rooms_design_brief.md and ss_domain_model_handoff.md
+- Feature: platform
+- Epic: The Rooms
+- CD3: UBV=9 TC=7 RR=6 → CoD=22, Dur=3, **CD3=7.3**
+- Status: OPEN — raised 2026-03-28. Three Amigos before Gherkin.
+
+---
+
+### BL-167 — The Rooms: corridor navigation + room selection UI
+
+- User experience: a corridor with numbered doors. Each door: name, one-line description, current panel configuration. Wrong-room gag: one room always labelled something that sounds relevant but isn't (candidates: "The Complaint Room", "The Sympathy Room" staffed by Billy/Fox/Cody). Depends on BL-166 walking skeleton being live.
+- Three Amigos: visual/nav metaphor vs literally styled as doors; wrong-room gag always present or toggleable; drama setting slider (deferred).
+- Feature: platform
+- Epic: The Rooms
+- CD3: UBV=8 TC=5 RR=4 → CoD=17, Dur=3, **CD3=5.7**
+- Status: OPEN — raised 2026-03-28. Depends on BL-166.
+
+---
+
+### BL-168 — The Rooms: remaining five contracts (Rooms 12, 12A, 14, 15, 16)
+
+- Implement Denial Loop (12), The Argument (12A), The Reasonable One (14), Going With It (15), The Detail (16) following the RegisterContract schema proved by BL-166. Each has its own terminal condition logic — Denial Loop terminal is crack-profile-dependent; The Reasonable One terminal is the rarest and funniest. Session persistence for The Detail (does the fixated detail carry to the next session?) is the world log concept — powerful if yes, complex if yes.
+- Full specs in: /mnt/c/Users/roden/Downloads/the_rooms_design_brief.md
+- Feature: platform
+- Epic: The Rooms
+- CD3: UBV=8 TC=4 RR=4 → CoD=16, Dur=5, **CD3=3.2**
+- Status: OPEN — raised 2026-03-28. Depends on BL-166 + BL-167.
