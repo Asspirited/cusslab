@@ -6153,6 +6153,14 @@ const SURVIVAL_SCHOOL_IVE_HAD_WORSE = `<!DOCTYPE html>
     .sendoff-block { margin: 10px 0 4px; padding: 10px 14px; border-left: 2px solid var(--amber-dim); font-size: 12.5px; color: var(--text-muted); font-style: italic; line-height: 1.65; display: none; }
     .sendoff-block.show { display: block; }
 
+    .morrison-card { display: flex; align-items: flex-start; gap: 12px; padding: 12px 14px; border-radius: 8px; margin: 12px 0; transition: border-color 0.2s; }
+    .morrison-warm { border: 0.5px solid var(--gold-dim); background: rgba(90,60,10,0.15); }
+    .morrison-hostile { border: 0.5px solid var(--blood-dim); background: rgba(60,10,10,0.15); }
+    .av-morrison { background: #1a1510; border-color: var(--gold-dim); color: var(--gold); }
+    .morrison-quote-text { font-style: italic; color: var(--gold); }
+    .morrison-hostile .morrison-quote-text { color: var(--blood); }
+    .morrison-reaction { font-size: 12px; color: var(--text-muted); margin-top: 6px; font-style: italic; }
+
     .nav-back { display: inline-block; font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1px; color: var(--text-muted); text-decoration: none; margin-bottom: 1rem; transition: color 0.15s; }
     .nav-back:hover { color: var(--green); }
 
@@ -6223,6 +6231,7 @@ const SURVIVAL_SCHOOL_IVE_HAD_WORSE = `<!DOCTYPE html>
       <div id="att-opening"></div>
       <div class="panel-label">THE PANEL</div>
       <div id="cards-out"></div>
+      <div id="morrison-interruption" style="display:none"></div>
       <div class="terminal-label">ATTENBOROUGH CLOSES THE ROOM</div>
       <div class="att-bookend" id="att-terminal" style="display:none">
         <div class="att-av">DA</div>
@@ -6282,12 +6291,39 @@ const CORRIDOR_SENDOFFS = {
   jeremy:  'He is already in waders. He has a thermal flask. He has the notebook. He appeared to say something to the translator before entering. The translator frowned but said nothing. The translator has made his peace with this.',
 };
 
+function buildMorrisonInjection(morrisonPresent) {
+  if (morrisonPresent) {
+    return \`=== JIM MORRISON INTERRUPTION (SS-083) ===
+Morrison is in the room this round (he was here last round and stayed).
+He MUST appear in the morrison_interruption field.
+He says something — cryptic, banal, poetic, or accidentally offensive.
+The panel knows Morrison. They are used to his visits. Baseline reaction is warm — they welcome him, enjoy him, engage with his nonsense.
+UNLESS he says something that crosses a line — wrong thing about the wrong person, casual dismissal of something they care about, accidental insult to someone present. Then the panel turns on him. At least two panellists attack. Morrison does not understand what went wrong.
+Tone: WARM (they enjoy him), AMUSED (he said something funny), ENGAGED (they asked him something / he's interested in the topic), HOSTILE (he crossed a line, they attack).
+If the topic still interests Morrison or a panellist engages him or asks him a question: set morrison_present to true (he stays).
+If neither: set morrison_present to false (he drifts off).
+morrison_interruption format: {"quote":"<what Morrison says>","panel_reaction":"<how the panel reacts — 1-2 sentences>","tone":"WARM|AMUSED|ENGAGED|HOSTILE","morrison_present":<bool>}\`;
+  }
+  return \`=== JIM MORRISON INTERRUPTION (SS-083) ===
+Morrison is the corridor guide. He occasionally wanders into panel sessions uninvited.
+This round: there is approximately a 20% chance Morrison wanders in.
+If he appears: include morrison_interruption in the output.
+If he does not appear: set morrison_interruption to null.
+The panel knows Morrison. They are used to his visits. Baseline reaction is warm — they welcome him, enjoy him, engage with his nonsense.
+UNLESS he says something that crosses a line. Then the panel turns on him. Morrison does not understand what went wrong.
+Tone: WARM, AMUSED, ENGAGED, or HOSTILE.
+If Morrison appears and the topic interests him or a panellist engages: set morrison_present to true (he stays next round).
+If brief visit: set morrison_present to false.
+morrison_interruption format (or null): {"quote":"<what Morrison says>","panel_reaction":"<how the panel reacts — 1-2 sentences>","tone":"WARM|AMUSED|ENGAGED|HOSTILE","morrison_present":<bool>}\`;
+}
+
 const State = {
   protagonist: null,
   predicament: '',
+  morrisonPresent: false,
   setProtagonist(id) { this.protagonist = id; },
   setPredicament(v)  { this.predicament = v.trim(); },
-  clear() { this.protagonist = null; this.predicament = ''; },
+  clear() { this.protagonist = null; this.predicament = ''; this.morrisonPresent = false; },
   isReady() { return this.protagonist && this.predicament.length > 0; },
 };
 
@@ -6346,6 +6382,25 @@ const UI = {
       </div>\`;
     });
 
+    // Morrison interruption
+    const morrisonEl = document.getElementById('morrison-interruption');
+    if (data.morrison_interruption && data.morrison_interruption.quote) {
+      const m = data.morrison_interruption;
+      const toneClass = m.tone === 'HOSTILE' ? 'morrison-hostile' : 'morrison-warm';
+      morrisonEl.innerHTML = \`<div class="morrison-card \${toneClass}">
+        <div class="av av-morrison">JM</div>
+        <div class="card-meta">
+          <div class="card-name"><span>Jim Morrison</span><span style="opacity:0.5">Corridor Guide</span></div>
+          <div class="card-text morrison-quote-text">"\${m.quote}"</div>
+          <div class="morrison-reaction">\${m.panel_reaction}</div>
+        </div>
+      </div>\`;
+      morrisonEl.style.display = 'block';
+    } else {
+      morrisonEl.innerHTML = '';
+      morrisonEl.style.display = 'none';
+    }
+
     // Attenborough terminal
     const terminalEl = document.getElementById('att-terminal');
     const terminalText = document.getElementById('att-terminal-text');
@@ -6368,9 +6423,10 @@ const UI = {
 };
 
 const API = {
-  buildSystemPrompt(protagonist) {
+  buildSystemPrompt(protagonist, morrisonPresent) {
     const char = CHARACTERS[protagonist];
     const protagonistName = char ? char.name : protagonist;
+    const morrisonInjection = buildMorrisonInjection(morrisonPresent);
     return \`You are the Survival School panel running the "I've Had Worse" mechanic.
 
 === THE MECHANIC ===
@@ -6422,18 +6478,21 @@ VALID charIds — use ONLY these exact values, no others:
   ray, bear, fox, hales, cody, stroud, stevens, cox, faldo, jim, jeremy
 Include at least 3 panel members. The protagonist charId "\${protagonist}" must appear.
 
+\${morrisonInjection}
+
 ${SOCIAL_DYNAMICS_ENGINE}
 
 OUTPUT — valid JSON only, no markdown:
-{"attenborough_opening":"<one sentence, nature doc, frames the user's predicament as a minor event in the natural order>","panel":[{"charId":"ray|bear|fox|hales|cody|stroud|stevens|cox|faldo|jim|jeremy","text":"<1-2 sentences — their worse experience, absolutely sincere>"}],"attenborough_terminal":"<one sentence, geological calm, closes the room, no appeal>","panel_tension":{"type":"wound_reference|lie|callout|wolf_pack|none","subject":"<charId or empty>","by":["<charId>"],"note":"<one line or empty string>"}}\`;
+{"attenborough_opening":"<one sentence, nature doc, frames the user's predicament as a minor event in the natural order>","panel":[{"charId":"ray|bear|fox|hales|cody|stroud|stevens|cox|faldo|jim|jeremy","text":"<1-2 sentences — their worse experience, absolutely sincere>"}],"attenborough_terminal":"<one sentence, geological calm, closes the room, no appeal>","panel_tension":{"type":"wound_reference|lie|callout|wolf_pack|none","subject":"<charId or empty>","by":["<charId>"],"note":"<one line or empty string>"},"morrison_interruption":<object or null — see MORRISON rules above>}\`;
   },
 
   async submit(predicament, protagonist) {
-    const system = API.buildSystemPrompt(protagonist);
+    const morrisonPresent = State.morrisonPresent || false;
+    const system = API.buildSystemPrompt(protagonist, morrisonPresent);
     const response = await fetch(WORKER_ENDPOINT, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ system, predicament, protagonist }),
+      body: JSON.stringify({ system, predicament, protagonist, morrison_present: morrisonPresent }),
     });
     if (!response.ok) throw new Error(\`Worker error \${response.status}\`);
     return response.json();
@@ -6475,6 +6534,11 @@ document.getElementById('btn-submit').addEventListener('click', async () => {
   document.getElementById('btn-submit').disabled = true;
   try {
     const data = await API.submit(State.predicament, State.protagonist);
+    if (data.morrison_interruption && data.morrison_interruption.morrison_present !== undefined) {
+      State.morrisonPresent = data.morrison_interruption.morrison_present;
+    } else {
+      State.morrisonPresent = false;
+    }
     UI.renderResults(data, State.protagonist);
   } catch (err) {
     UI.showError('The panel couldn\\'t make it. Try again.');
@@ -6615,6 +6679,14 @@ const SURVIVAL_SCHOOL_IN_MY_DEFENCE = `<!DOCTYPE html>
     .error-msg { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--red-bright); margin-top: 10px; display: none; }
     .error-msg.show { display: block; }
 
+    .morrison-card { display: flex; align-items: flex-start; gap: 12px; padding: 12px 14px; border-radius: 8px; margin: 12px 0; }
+    .morrison-warm { border: 0.5px solid rgba(200,160,64,0.25); background: rgba(90,60,10,0.15); }
+    .morrison-hostile { border: 0.5px solid rgba(200,30,30,0.25); background: rgba(60,10,10,0.15); }
+    .av-morrison { background: #1a1510; border-color: rgba(200,160,64,0.3); color: #c8a040; }
+    .morrison-quote-text { font-style: italic; color: #c8a040; }
+    .morrison-hostile .morrison-quote-text { color: var(--red-bright); }
+    .morrison-reaction { font-size: 12px; color: var(--text-muted); margin-top: 6px; font-style: italic; }
+
     .results { margin-top: 2rem; display: none; }
     .results.show { display: block; }
 
@@ -6733,6 +6805,7 @@ const SURVIVAL_SCHOOL_IN_MY_DEFENCE = `<!DOCTYPE html>
       <div id="att-opening"></div>
       <div class="committee-label">THE COMMITTEE</div>
       <div id="cards-out"></div>
+      <div id="morrison-interruption" style="display:none"></div>
       <div class="verdict-label">ATTENBOROUGH DELIVERS THE VERDICT</div>
       <div class="att-bookend" id="att-verdict" style="display:none">
         <div class="att-av">DA</div>
@@ -6804,6 +6877,11 @@ const PERSONAL_INCIDENTS = {
     { label: 'Goonch (second time)', incident: "I am Jeremy Wade. I have been dragged into a river for the second time by the same species of catfish. I did not release the rod. The fish has broken the line and escaped. I need the panel to help me contextualise why I am less concerned about nearly drowning than I am about losing the fish. The translator is shaking his head. That same wry grin." },
     { label: 'the Arojubtria incident', incident: "I am Jeremy Wade. I have attempted to communicate with the local Arojubtria community of the remote Brazilian Amazon using a phrase I prepared specifically for this visit. I was confident in this phrase. I had it written in the notebook beside a detailed anatomical fish diagram, or possibly a cock and balls. I have now been asked to leave. I need the panel to advise whether this was a language problem or something else. The translator has laughed for the first time in eleven years." },
     { label: 'arapaima (bruised heart)', incident: "I am Jeremy Wade. An 80-pound arapaima has struck me in the chest with its tail. I have a bruised heart. I am continuing to film. I need the panel to confirm that this is the correct decision and that the correct decision is also to stay in the water, because the fish is still there. The camera operator has concerns. I do not share these concerns." },
+    { label: 'candiru (the waggle)', incident: "I am Jeremy Wade. I have travelled to the Amazon to investigate the candiru — a parasitic catfish alleged to swim up the human urethra. I have interviewed a man who claims this happened to him. I have examined the fish. I have held the fish near my own body for the camera. I need the panel to assess my investigation methodology and whether the waggle I performed to demonstrate the fish's barbed spines was strictly necessary. The translator has closed the notebook." },
+    { label: 'Congo witchcraft accusation', incident: "I am Jeremy Wade. I have been fishing in the Congo for three days. The village elders have now formally accused me of witchcraft. The evidence appears to be that I caught a fish they consider sacred using a method they have not seen before. I used a spoon lure. I need the panel to advise on whether this is a diplomatic incident or a compliment. The translator will not make eye contact." },
+    { label: 'Mekong spy arrest', incident: "I am Jeremy Wade. I have been detained by Laotian military police on the Mekong River. They believe I am a spy. The evidence is that I was using sonar equipment to locate fish. I have attempted to explain this. The explanation has not landed. I need the panel to confirm that my fishing equipment does not, in fact, constitute espionage apparatus. The translator has been taken to a separate room." },
+    { label: 'terrible recreation (bite angle)', incident: "I am Jeremy Wade. I am attempting to demonstrate the bite angle of a bull shark to the camera crew using a fellow presenter as the victim. I have asked him to stand in a specific position. He has concerns. I do not share these concerns. The bite angle is important. I need the panel to confirm that this recreation is scientifically valid and that asking someone to lie down in shallow water while I approach from below is a reasonable request in the context of fisheries research." },
+    { label: 'Cowabunga (the widow)', incident: "I am Jeremy Wade. I have just said Cowabunga to a bereaved widow on the banks of the Ganges. I said it with a solemn frown. I meant it as encouragement. I need the panel to assess whether Cowabunga was the right word in this context. I believe it was. The translator has put his head in his hands. I would like to also note that the river here contains a species of freshwater stingray that I intend to investigate after the funeral." },
   ],
 };
 
@@ -6831,12 +6909,39 @@ const CORRIDOR_SENDOFFS = {
   jeremy:  'He is already in waders. He has a thermal flask. He has the notebook. He appeared to say something to the translator before entering. The translator frowned but said nothing. The translator has made his peace with this.',
 };
 
+function buildMorrisonInjection(morrisonPresent) {
+  if (morrisonPresent) {
+    return \`=== JIM MORRISON INTERRUPTION (SS-083) ===
+Morrison is in the room this round (he was here last round and stayed).
+He MUST appear in the morrison_interruption field.
+He says something — cryptic, banal, poetic, or accidentally offensive.
+The panel knows Morrison. They are used to his visits. Baseline reaction is warm — they welcome him, enjoy him, engage with his nonsense.
+UNLESS he says something that crosses a line — wrong thing about the wrong person, casual dismissal of something they care about, accidental insult to someone present. Then the panel turns on him. At least two panellists attack. Morrison does not understand what went wrong.
+Tone: WARM (they enjoy him), AMUSED (he said something funny), ENGAGED (they asked him something / he\\'s interested in the topic), HOSTILE (he crossed a line, they attack).
+If the topic still interests Morrison or a panellist engages him or asks him a question: set morrison_present to true (he stays).
+If neither: set morrison_present to false (he drifts off).
+morrison_interruption format: {"quote":"<what Morrison says>","panel_reaction":"<how the panel reacts — 1-2 sentences>","tone":"WARM|AMUSED|ENGAGED|HOSTILE","morrison_present":<bool>}\`;
+  }
+  return \`=== JIM MORRISON INTERRUPTION (SS-083) ===
+Morrison is the corridor guide. He occasionally wanders into panel sessions uninvited.
+This round: there is approximately a 20% chance Morrison wanders in.
+If he appears: include morrison_interruption in the output.
+If he does not appear: set morrison_interruption to null.
+The panel knows Morrison. Baseline reaction is warm — they welcome him, enjoy him, engage.
+UNLESS he crosses a line. Then they attack. Morrison does not understand what went wrong.
+Tone: WARM, AMUSED, ENGAGED, or HOSTILE.
+If Morrison appears and the topic interests him or a panellist engages: set morrison_present to true.
+If brief visit: set morrison_present to false.
+morrison_interruption format (or null): {"quote":"<what Morrison says>","panel_reaction":"<how the panel reacts — 1-2 sentences>","tone":"WARM|AMUSED|ENGAGED|HOSTILE","morrison_present":<bool>}\`;
+}
+
 const State = {
   protagonist: null,
   incident: '',
+  morrisonPresent: false,
   setProtagonist(id) { this.protagonist = id; },
   setIncident(v)     { this.incident = v.trim(); },
-  clear()            { this.protagonist = null; this.incident = ''; },
+  clear()            { this.protagonist = null; this.incident = ''; this.morrisonPresent = false; },
   isReady()          { return this.protagonist && this.incident.length > 0; },
 };
 
@@ -6915,6 +7020,25 @@ const UI = {
       </div>\`;
     });
 
+    // Morrison interruption
+    const morrisonEl = document.getElementById('morrison-interruption');
+    if (data.morrison_interruption && data.morrison_interruption.quote) {
+      const m = data.morrison_interruption;
+      const toneClass = m.tone === 'HOSTILE' ? 'morrison-hostile' : 'morrison-warm';
+      morrisonEl.innerHTML = \`<div class="morrison-card \${toneClass}">
+        <div class="card-av av-morrison">JM</div>
+        <div>
+          <div class="card-name">Jim Morrison <span class="card-role">Corridor Guide</span></div>
+          <div class="card-text morrison-quote-text">"\${m.quote}"</div>
+          <div class="morrison-reaction">\${m.panel_reaction}</div>
+        </div>
+      </div>\`;
+      morrisonEl.style.display = 'block';
+    } else {
+      morrisonEl.innerHTML = '';
+      morrisonEl.style.display = 'none';
+    }
+
     if (data.attenborough_verdict) {
       const vEl = document.getElementById('att-verdict');
       document.getElementById('att-verdict-text').textContent = data.attenborough_verdict;
@@ -6930,9 +7054,10 @@ const UI = {
 };
 
 const API = {
-  buildSystemPrompt(protagonist) {
+  buildSystemPrompt(protagonist, morrisonPresent) {
     const char = CHARACTERS[protagonist];
     const protagonistName = char ? char.name : protagonist;
+    const morrisonInjection = buildMorrisonInjection(morrisonPresent);
     return \`You are the Survival School panel running the "In My Defence" mechanic.
 
 === THE MECHANIC ===
@@ -6967,18 +7092,21 @@ VALID charIds — use ONLY these exact values:
   ray, bear, fox, hales, cody, stroud, stevens, cox, faldo, jim, jeremy
 Include at least 3 panel members. The protagonist charId "\${protagonist}" MUST appear.
 
+\${morrisonInjection}
+
 \${SOCIAL_DYNAMICS_ENGINE}
 
 OUTPUT — valid JSON only, no markdown:
-{"attenborough_opening":"<one sentence, nature documentary, observes the protagonist entering — species under examination, already under pressure>","panel":[{"charId":"<id>","text":"<2-3 sentences — their specific question or observation, absolutely sincere, presses a specific detail>"}],"attenborough_verdict":"<one sentence, geological calm — the case is concluded, the rationalisation has not survived>","panel_tension":{"type":"wound_reference|lie|callout|wolf_pack|none","subject":"<charId or empty>","by":["<charId>"],"note":"<one line or empty string>"}}\`;
+{"attenborough_opening":"<one sentence, nature documentary, observes the protagonist entering — species under examination, already under pressure>","panel":[{"charId":"<id>","text":"<2-3 sentences — their specific question or observation, absolutely sincere, presses a specific detail>"}],"attenborough_verdict":"<one sentence, geological calm — the case is concluded, the rationalisation has not survived>","panel_tension":{"type":"wound_reference|lie|callout|wolf_pack|none","subject":"<charId or empty>","by":["<charId>"],"note":"<one line or empty string>"},"morrison_interruption":<object or null — see MORRISON rules above>}\`;
   },
 
   async submit(incident, protagonist) {
-    const system = API.buildSystemPrompt(protagonist);
+    const morrisonPresent = State.morrisonPresent || false;
+    const system = API.buildSystemPrompt(protagonist, morrisonPresent);
     const response = await fetch(WORKER_ENDPOINT, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ system, incident, protagonist }),
+      body: JSON.stringify({ system, incident, protagonist, morrison_present: morrisonPresent }),
     });
     if (!response.ok) throw new Error(\`Worker error \${response.status}\`);
     return response.json();
@@ -7019,6 +7147,11 @@ document.getElementById('btn-submit').addEventListener('click', async () => {
   document.getElementById('btn-submit').disabled = true;
   try {
     const data = await API.submit(State.incident, State.protagonist);
+    if (data.morrison_interruption && data.morrison_interruption.morrison_present !== undefined) {
+      State.morrisonPresent = data.morrison_interruption.morrison_present;
+    } else {
+      State.morrisonPresent = false;
+    }
     UI.renderResults(data, State.protagonist);
   } catch (err) {
     UI.showError("The panel couldn't convene. Try again.");
