@@ -358,6 +358,20 @@ const SURVIVAL_SCHOOL_HOME = `<!DOCTYPE html>
 
   </div>
 
+  <div class="section-label">The Doors</div>
+  <div class="tile-grid">
+
+    <a class="tile" href="/survival-school/rooms">
+      <div class="tile-top">
+        <span class="tile-cat">The Corridor</span>
+        <span class="tile-badge badge-live">LIVE</span>
+      </div>
+      <div class="tile-title">The Doors</div>
+      <div class="tile-desc">Six doors. One guide. You don't know what's behind them until it's too late.</div>
+    </a>
+
+  </div>
+
 </main>
 
 </body>
@@ -5670,6 +5684,139 @@ document.addEventListener('DOMContentLoaded', () => {
 </html>
 `;
 
+const SURVIVAL_SCHOOL_ROOMS = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>The Doors — Survival School</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0a0b0f; --surface: #12141a; --surface2: #1a1c24;
+      --border: rgba(90,80,140,0.18); --border-strong: rgba(90,80,140,0.35);
+      --gold: #c8a040; --gold-dim: #5a3e10; --gold-bright: #e8c060;
+      --purple: #7a60b0; --purple-dim: #2a1e4a; --purple-bright: #a080e0;
+      --green: #7aad3a; --green-dim: #2a4010;
+      --text: #d8d4e8; --text-muted: #6a6480;
+    }
+    body { font-family: 'Barlow', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+    #app { max-width: 640px; margin: 0 auto; padding: 1.5rem 1rem 4rem; }
+
+    .header { text-align: center; margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 0.5px solid var(--border); }
+    .corridor-label { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 3px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; }
+    .title { font-family: 'Bebas Neue', sans-serif; font-size: 52px; letter-spacing: 5px; line-height: 1; color: var(--text); }
+    .title span { color: var(--gold); }
+    .subtitle { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-muted); letter-spacing: 1.5px; margin-top: 6px; }
+
+    .morrison-block { margin: 2rem 0; min-height: 72px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; }
+    .morrison-quote { font-family: 'Barlow', sans-serif; font-size: 15px; font-style: italic; color: var(--gold); text-align: center; line-height: 1.5; opacity: 0.85; transition: opacity 0.25s, color 0.25s; padding: 0 1rem; }
+    .morrison-quote.active { opacity: 1; color: var(--gold-bright); }
+    .morrison-attr { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-muted); letter-spacing: 1px; }
+
+    .doors-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 2.5rem; }
+
+    .door { border: 0.5px solid var(--border-strong); border-radius: 8px; padding: 1.5rem 1rem; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 10px; cursor: default; transition: border-color 0.2s, background 0.2s; position: relative; text-decoration: none; color: inherit; }
+    .door.locked { background: var(--surface); opacity: 0.55; }
+    .door.locked:hover { opacity: 0.7; border-color: rgba(90,80,140,0.4); }
+    .door.live { background: var(--surface2); border-color: var(--gold-dim); cursor: pointer; opacity: 1; }
+    .door.live:hover { border-color: var(--gold); background: rgba(90,60,10,0.35); }
+
+    .door-number { font-family: 'Bebas Neue', sans-serif; font-size: 42px; letter-spacing: 2px; line-height: 1; color: var(--text-muted); }
+    .door.live .door-number { color: var(--gold); }
+
+    .door-state { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); }
+    .door.live .door-state { color: var(--gold); font-size: 10px; }
+
+    .door-badge { font-family: 'IBM Plex Mono', monospace; font-size: 8px; letter-spacing: 1px; text-transform: uppercase; padding: 2px 6px; border-radius: 3px; background: var(--gold-dim); color: var(--gold); }
+
+    .back-link { display: inline-block; font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1.5px; color: var(--text-muted); text-decoration: none; transition: color 0.15s; }
+    .back-link:hover { color: var(--text); }
+
+    @media (max-width: 460px) {
+      .doors-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+      .title { font-size: 40px; }
+    }
+    @media (max-width: 320px) {
+      .doors-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+
+  <div class="header">
+    <div class="corridor-label">CORRIDOR · THE DOORS</div>
+    <div class="title"><span>THE</span> DOORS</div>
+    <div class="subtitle">SIX DOORS. ONE GUIDE. YOU DON'T KNOW WHAT'S BEHIND THEM.</div>
+  </div>
+
+  <div class="morrison-block">
+    <div class="morrison-quote" id="morrison-quote">"People are strange when you're a stranger."</div>
+    <div class="morrison-attr">— Jim Morrison</div>
+  </div>
+
+  <div class="doors-grid">
+
+    <div class="door locked" data-morrison="The snake does not ask whether it is biting correctly. This room has been waiting for you.">
+      <div class="door-number">12</div>
+      <div class="door-state">locked</div>
+    </div>
+
+    <div class="door locked" data-morrison="When you argue with the universe, the universe wins. But you can make it a good argument.">
+      <div class="door-number">12A</div>
+      <div class="door-state">locked</div>
+    </div>
+
+    <a class="door live" href="/survival-school/ive-had-worse" data-morrison="Whoever walks through this door will understand something about themselves. Probably that they've had worse.">
+      <div class="door-number">13</div>
+      <div class="door-state">enter</div>
+      <div class="door-badge">LIVE</div>
+    </a>
+
+    <div class="door locked" data-morrison="One of them will keep their head. The question is which one. It is always the one you don't expect.">
+      <div class="door-number">14</div>
+      <div class="door-state">locked</div>
+    </div>
+
+    <div class="door locked" data-morrison="On the other side of this door: unconditional yes. The universe demands it of you.">
+      <div class="door-number">15</div>
+      <div class="door-state">locked</div>
+    </div>
+
+    <div class="door locked" data-morrison="There is a detail waiting for you in that room. It will mean everything eventually.">
+      <div class="door-number">16</div>
+      <div class="door-state">locked</div>
+    </div>
+
+  </div>
+
+  <a class="back-link" href="/survival-school">← SURVIVAL SCHOOL</a>
+
+</div>
+
+<script>
+const MORRISON_DEFAULT = '"People are strange when you\'re a stranger."';
+const quoteEl = document.getElementById('morrison-quote');
+
+document.querySelectorAll('.door').forEach(door => {
+  door.addEventListener('mouseenter', () => {
+    quoteEl.textContent = '"' + door.dataset.morrison + '"';
+    quoteEl.classList.add('active');
+  });
+  door.addEventListener('mouseleave', () => {
+    quoteEl.textContent = MORRISON_DEFAULT;
+    quoteEl.classList.remove('active');
+  });
+});
+</script>
+
+</body>
+</html>
+`;
+
 const SURVIVAL_SCHOOL_IVE_HAD_WORSE = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6382,6 +6529,9 @@ export default {
     }
     if (request.method === 'GET' && url.pathname === '/survival-school/panel-qa') {
       return new Response(SURVIVAL_SCHOOL_PANEL_QA, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' }});
+    }
+    if (request.method === 'GET' && url.pathname === '/survival-school/rooms') {
+      return new Response(SURVIVAL_SCHOOL_ROOMS, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' }});
     }
     if (request.method === 'GET' && url.pathname === '/survival-school/ive-had-worse') {
       return new Response(SURVIVAL_SCHOOL_IVE_HAD_WORSE, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' }});
