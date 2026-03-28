@@ -5965,9 +5965,13 @@ const SURVIVAL_SCHOOL_IVE_HAD_WORSE = `<!DOCTYPE html>
     .card-text { font-size: 13.5px; line-height: 1.65; color: var(--text); }
 
     .terminal-label { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 2px; color: var(--text-muted); text-transform: uppercase; margin: 1.2rem 0 6px; opacity: 0.5; }
-    .reset-row { margin-top: 1.2rem; text-align: center; }
+    .reset-row { margin-top: 1.2rem; display: flex; gap: 8px; justify-content: center; align-items: center; flex-wrap: wrap; }
     .btn-reset { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 1px; padding: 8px 18px; border: 0.5px solid var(--border-strong); border-radius: 5px; background: none; cursor: pointer; color: var(--text-muted); transition: color 0.15s, border-color 0.15s; }
     .btn-reset:hover { color: var(--text); border-color: var(--green); }
+    .btn-share { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 1px; padding: 8px 18px; border: 0.5px solid var(--amber-dim); border-radius: 5px; background: none; cursor: pointer; color: var(--amber); transition: color 0.15s, border-color 0.15s; }
+    .btn-share:hover { border-color: var(--amber); }
+    .share-feedback { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--green); letter-spacing: 1px; display: none; }
+    .share-feedback.show { display: inline; }
 
     .error-msg { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--blood); padding: 10px 14px; border: 0.5px solid var(--blood-dim); border-radius: 6px; margin-top: 12px; display: none; }
     .error-msg.show { display: block; }
@@ -6073,6 +6077,8 @@ const SURVIVAL_SCHOOL_IVE_HAD_WORSE = `<!DOCTYPE html>
       </div>
       <div class="reset-row">
         <button class="btn-reset" onclick="onClear()">SEND ANOTHER ONE IN</button>
+        <button class="btn-share" onclick="shareResult()">SHARE</button>
+        <span class="share-feedback" id="share-feedback">COPIED</span>
       </div>
     </div>
   </div>
@@ -6323,6 +6329,52 @@ function onClear() {
   UI.updatePrompt(null);
   UI.setSubmitEnabled(false);
   UI.clearResults();
+  document.getElementById('share-feedback').classList.remove('show');
+}
+
+function buildShareText() {
+  const char = CHARACTERS[State.protagonist];
+  const name = char ? char.name : State.protagonist;
+  const pred = State.predicament;
+  const attOpening = document.querySelector('#att-opening .att-text')?.textContent || '';
+  const cards = Array.from(document.querySelectorAll('#cards-out .card-text')).slice(0, 3);
+  const cardNames = Array.from(document.querySelectorAll('#cards-out .card-name span:first-child')).slice(0, 3);
+  const panelLines = cards.map((c, i) => (cardNames[i]?.textContent || '') + ': "' + c.textContent + '"').join('\\n');
+  const attTerminal = document.getElementById('att-terminal-text')?.textContent || '';
+  return [
+    'I sent ' + name + ' through The Doors',
+    '',
+    '"' + pred + '"',
+    '',
+    '"' + attOpening + '"',
+    '\\u2014 David Attenborough',
+    '',
+    panelLines,
+    '',
+    '"' + attTerminal + '"',
+    '',
+    'Survival School \u00b7 cusslab-api.leanspirited.workers.dev/survival-school/ive-had-worse'
+  ].join('\\n');
+}
+
+async function shareResult() {
+  const text = buildShareText();
+  const fb = document.getElementById('share-feedback');
+  try {
+    if (navigator.share) {
+      await navigator.share({ text });
+    } else {
+      await navigator.clipboard.writeText(text);
+      fb.classList.add('show');
+      setTimeout(() => fb.classList.remove('show'), 2000);
+    }
+  } catch (e) {
+    try {
+      await navigator.clipboard.writeText(text);
+      fb.classList.add('show');
+      setTimeout(() => fb.classList.remove('show'), 2000);
+    } catch (_) {}
+  }
 }
 </script>
 
