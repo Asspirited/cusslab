@@ -211,7 +211,7 @@ const SURVIVAL_SCHOOL_HOME = `<!DOCTYPE html>
 
     @media (max-width: 480px) {
       header { flex-direction: column; align-items: flex-start; padding: 10px 16px; gap: 6px; }
-      .logo-mark { width: 100%; height: auto; }
+      .logo-mark { height: 18px; width: auto; }
       main { padding: 20px 14px 32px; }
       .tile-grid { grid-template-columns: 1fr; gap: 8px; }
     }
@@ -1246,7 +1246,7 @@ If probability reaches 0 or situation fully resolves, set is_terminal to true.
 ATTENBOROUGH EULOGY (SS-014): When is_terminal is true AND survival_probability is 0 (death), include attenborough_eulogy — one paragraph, geological calm, never comedic in register, always comedic in effect. References specific details from this specific situation. He does not console. He observes. The comedy comes from the precision and the calm, not from any attempt at comedy.
 
 OUTPUT — valid JSON only, no markdown:
-{"survival_probability":<integer>,"attenborough_opening":"<one sentence, nature doc, frames what the decision is about to cause>","situation_update":"<one sentence what changed>","panel":[{"charId":"<id>","text":"<2-3 sentences>","death":<bool>,"fact_check":"<optional — Bear only>"}],"attenborough_verdict":"<one sentence, geological calm, turn conclusion, he already knew>","next_actions":["<action>","<action>","<action>"],"is_terminal":<bool>,"attenborough_eulogy":"<one paragraph, death only, geological calm, never comic in register, always in effect — omit if not terminal death>"}\`;
+{"survival_probability":<integer>,"attenborough_opening":"<one sentence, nature doc, frames what the decision is about to cause>","situation_update":"<one sentence what changed>","panel":[{"charId":"ray","text":"<2-3 sentences>"},{"charId":"fox","text":"<2-3 sentences>"},{"charId":"bear","text":"<2-3 sentences>","fact_check":"<optional>"},{"charId":"hales","text":"<1-2 sentences>"},{"charId":"cody","text":"<2-3 sentences>"},{"charId":"stroud","text":"<1-2 sentences>"}],"attenborough_verdict":"<one sentence, geological calm, turn conclusion, he already knew>","next_actions":["<action>","<action>","<action>"],"is_terminal":<bool>,"attenborough_eulogy":"<one paragraph, death only, geological calm, never comic in register, always in effect — omit if not terminal death>"}\`;
   }
 
   if (mode === 'mundane') {
@@ -1275,7 +1275,7 @@ Panel characters (no Attenborough): Ray, Bear, Cody, Hales, Fox, Stroud.
 Survival probability: 0-100. For mundane scenarios this is usually 40-85% — they're not great situations, but survivable with the right mindset. A truly catastrophic mundane scenario (printer has run out of ink, presentation in 10 minutes) may drop lower.
 
 OUTPUT — valid JSON only, no markdown:
-{"survival_probability":<integer 0-100>,"attenborough_opening":"<one sentence, nature documentary, introduces mundane situation as wildlife encounter>","panel":[{"charId":"<id>","text":"<2-3 sentences>","death":<bool>,"fact_check":"<optional Bear only>"}],"attenborough_verdict":"<one sentence, geological calm, final verdict>"}\`;
+{"survival_probability":<integer 0-100>,"attenborough_opening":"<one sentence, nature documentary, introduces mundane situation as wildlife encounter>","panel":[{"charId":"ray","text":"<2-3 sentences>"},{"charId":"bear","text":"<2-3 sentences>","fact_check":"<optional>"},{"charId":"cody","text":"<2-3 sentences>"},{"charId":"hales","text":"<1-2 sentences>"},{"charId":"fox","text":"<2-3 sentences>"},{"charId":"stroud","text":"<1-2 sentences>"}],"attenborough_verdict":"<one sentence, geological calm, final verdict>"}\`;
   }
 
   return \`You are the Survival School panel assessment engine.
@@ -1293,7 +1293,7 @@ Panel characters (no Attenborough): Ray, Bear, Cody, Hales, Fox, Stroud.
 Generate initial assessment. Also produce 3 specific suggested first actions.
 
 OUTPUT — valid JSON only, no markdown:
-{"survival_probability":<integer 0-100>,"attenborough_opening":"<one sentence, nature doc, introduces situation as wildlife encounter, slightly ominous>","panel":[{"charId":"<id>","text":"<2-4 sentences>","death":<bool>,"fact_check":"<optional Bear only>"}],"attenborough_verdict":"<one sentence, geological calm, no appeal, the documentary's conclusion>","next_actions":["<action>","<action>","<action>"]}\`;
+{"survival_probability":<integer 0-100>,"attenborough_opening":"<one sentence, nature doc, introduces situation as wildlife encounter, slightly ominous>","panel":[{"charId":"ray","text":"<2-4 sentences>"},{"charId":"bear","text":"<2-4 sentences>","fact_check":"<optional>"},{"charId":"cody","text":"<2-4 sentences>"},{"charId":"hales","text":"<2-3 sentences>"},{"charId":"fox","text":"<2-4 sentences>"},{"charId":"stroud","text":"<1-2 sentences>"}],"attenborough_verdict":"<one sentence, geological calm, no appeal, the documentary's conclusion>","next_actions":["<action>","<action>","<action>"]}\`;
 }
 
 
@@ -1318,26 +1318,26 @@ const LOCATION_GROUPS = [
   ]},
   { group: 'Work & Commuting', locations: [
     { id: 'm25_breakdown', label: 'M25 contraflow, broken down, lane 1', conditions: ['rush hour, lorries at 56mph, 2m gap','rain, visibility poor, hazards on','night, no hard shoulder','AA ETA: 90 minutes'], events: ['lorry not moving over','phone at 4%','passenger needs the toilet','tyre completely flat — spare is also flat','van driver shouting, unclear if at you'] },
-    { id: 'london_underground', label: 'London Underground, rush hour', conditions: ['Jubilee line, 8:47am, signal failure ahead','stopped in tunnel — no announcement','Victoria line, someone eating a full McDonald\'s','Northern line, air con non-functional, July'], events: ['door closing on your bag','man with saxophone, unasked','someone crying, everyone pretending not to notice','mice on the track — more than usual','announcement: "we are being held"'] },
+    { id: 'london_underground', label: 'London Underground, rush hour', conditions: ['Jubilee line, 8:47am, signal failure ahead','stopped in tunnel — no announcement','Victoria line, someone eating a full McDonald\\'s','Northern line, air con non-functional, July'], events: ['door closing on your bag','man with saxophone, unasked','someone crying, everyone pretending not to notice','mice on the track — more than usual','announcement: "we are being held"'] },
     { id: 'pret_a_manger', label: 'Pret a Manger — queue incident', conditions: ['lunchtime, 12:47, one item left of the thing you want','man behind you already too close','barista has called your name wrong three times','card machine down — cash only sign appeared after you ordered'], events: ['someone pushes in — directly, no ambiguity','your order given to someone else who takes it','heated disagreement at the condiments station','you are the one who caused the queue','almond milk situation, not your fault, everyone thinks it is'] },
     { id: 'open_plan_office', label: 'Open-plan office, 3pm', conditions: ['post-lunch, everyone watching','all-hands meeting in 8 minutes, you are presenting','hot desk — your usual spot taken','someone microwaved fish'], events: ['eating something loud — unavoidable','Teams call, camera on, cat is doing something','printer jammed — you touched it last','sneezing, repeatedly, during silence','your screen reflected in the window behind you'] },
   ]},
   { group: 'Holiday Destinations', locations: [
     { id: 'all_inclusive', label: 'All-inclusive resort, pool bar', conditions: ['11am, swim-up bar, ice situation developing','peak afternoon, every sunbed taken, you left yours','buffet opens in 4 minutes, position critical','entertainment team have noticed you'], events: ['sunbed reserved with towel — disputed claim','swim-up bar run out of your drink','entertainment staff approaching with microphone','wasp — singular, purposeful','your wristband stopped working'] },
-    { id: 'safari_vehicle', label: 'Safari vehicle — engine won\'t start', conditions: ['dusk, predators active, 6km from camp','dawn, lion pride crossed the road 40m back','midday, 44\u00b0C, no shade outside the vehicle','guide has gone to look at something'], events: ['lion approaching vehicle — curious','elephant broadside, not moving','guide has been gone 12 minutes','radio battery dead','someone in the group wants to get out for a photo'] },
+    { id: 'safari_vehicle', label: 'Safari vehicle — engine won\\'t start', conditions: ['dusk, predators active, 6km from camp','dawn, lion pride crossed the road 40m back','midday, 44\u00b0C, no shade outside the vehicle','guide has gone to look at something'], events: ['lion approaching vehicle — curious','elephant broadside, not moving','guide has been gone 12 minutes','radio battery dead','someone in the group wants to get out for a photo'] },
     { id: 'budget_airline', label: 'Budget airline, middle seat, 9 hours', conditions: ['taxiing — you need the toilet immediately','3 hours in, no sign of trolley','turbulence — moderate, sustained','landing approach, person reclined fully'], events: ['window seat person asleep — you need out','tray table broken — meal on lap','child directly behind, consistent','your entertainment screen only works sideways','overhead locker: your bag not there'] },
   ]},
   { group: 'Airports & Transport Hubs', locations: [
     { id: 'heathrow_t5', label: 'Heathrow Terminal 5 — bag on wrong belt', conditions: ['gate closing in 9 minutes, bag on reclaim belt','security queue: 40 minutes, flight: 35 minutes','passport control, e-gate rejected, 3 times','transfer, different terminal, no one told you'], events: ['bag arrived — someone has taken it','flight not on the board','security confiscated your water — refill station closed','moving walkway stopped, both of them','wrong terminal — shuttle bus: 18 minutes'] },
-    { id: 'last_train', label: 'Train station — last train, platform unannounced', conditions: ['23:47, last train, board says "See Staff"','platform announced — wrong end of station','train delayed — replacement bus. Bus not there.','last train cancelled — email sent earlier today'], events: ['running for it — decision required now','taxi app: surge 4.8x','person ahead of you also running — collision risk','ticket barrier won\'t open','train doors closing — you are at the gap'] },
+    { id: 'last_train', label: 'Train station — last train, platform unannounced', conditions: ['23:47, last train, board says "See Staff"','platform announced — wrong end of station','train delayed — replacement bus. Bus not there.','last train cancelled — email sent earlier today'], events: ['running for it — decision required now','taxi app: surge 4.8x','person ahead of you also running — collision risk','ticket barrier won\\'t open','train doors closing — you are at the gap'] },
   ]},
   { group: 'Civil & Institutional', locations: [
     { id: 'ikea', label: 'IKEA — unspecified area', conditions: ['Sunday afternoon, full capacity','marketplace, lost, no map, phone dying','car park, 5:45pm, trolley situation','restaurant, tray full, no seats visible'], events: ['separated from group — no signal inside','item out of stock, assembly started at home','shortcut attempt — back in the bedroom section','trolley wheel failure — structural','argument about the meatballs, not yours, spreading','staff member: cannot help, different department'] },
     { id: 'ae_saturday', label: 'A&E, Saturday night, triage', conditions: ['11pm, full waiting room, 4-hour wait sign','2am, triage nurse has seen everything','nobody is sure what triage order means here','the overhead lights are the wrong colour'], events: ['person next to you may be contagious','your stated reason for attending sounds worse out loud','someone more dramatic arrives, queue resets','you have been here 3 hours, number not called','the thing you came in for has, worryingly, stopped hurting'] },
-    { id: 'estate_agent', label: 'Estate agent — viewing a "cosy" flat', conditions: ['second viewing, you\'ve already told people','agent 8 minutes late, you\'ve been outside','seller is still in the flat','offer deadline: today, 5pm'], events: ['"cosy" means something specific here','damp patch — agent has positioned themselves in front of it','neighbour audible through wall — at rest','previous viewer\'s notes visible on agent\'s clipboard','you are starting to talk yourself into it'] },
+    { id: 'estate_agent', label: 'Estate agent — viewing a "cosy" flat', conditions: ['second viewing, you\\'ve already told people','agent 8 minutes late, you\\'ve been outside','seller is still in the flat','offer deadline: today, 5pm'], events: ['"cosy" means something specific here','damp patch — agent has positioned themselves in front of it','neighbour audible through wall — at rest','previous viewer\\'s notes visible on agent\\'s clipboard','you are starting to talk yourself into it'] },
   ]},
   { group: 'Operations', locations: [
-    { id: 'bravo_two_zero', label: 'Bravo Two Zero — Western Iraq, 1991', conditions: ['compromised — goat herder has seen you, patrol split','tab to Syria, 300km, one chocolate bar, January, alone','Vince is falling behind — exposure setting in','TACBE beacon activated — no response from Riyadh'], events: ['McNab\'s account and Ryan\'s account do not agree — which do you believe','the patrol is deciding whether to move at night or risk daylight','Iraqi military patrol, 400m, closing','two men have mild hypothermia, one is denying it','compromise inevitable — do you wait for contact or initiate exfil now'] },
+    { id: 'bravo_two_zero', label: 'Bravo Two Zero — Western Iraq, 1991', conditions: ['compromised — goat herder has seen you, patrol split','tab to Syria, 300km, one chocolate bar, January, alone','Vince is falling behind — exposure setting in','TACBE beacon activated — no response from Riyadh'], events: ['McNab\\'s account and Ryan\\'s account do not agree — which do you believe','the patrol is deciding whether to move at night or risk daylight','Iraqi military patrol, 400m, closing','two men have mild hypothermia, one is denying it','compromise inevitable — do you wait for contact or initiate exfil now'] },
     { id: 'operation_nimrod', label: 'Iranian Embassy — Operation Nimrod, 1980', conditions: ['Day 6 — negotiators exhausted, one hostage executed inside','frame charges set — entry in 47 seconds on go signal','Tak is on the rope — window team not yet in position','fire spreading from stun grenades — hostages still inside'], events: ['who gave the order to go — accounts differ','a hostage is running — you cannot confirm they are not a threat','blue-on-blue risk — team entering from the wrong side','the rope team is exposed — go early or hold the plan'] },
   ]},
 ];
@@ -1356,7 +1356,7 @@ const UNIVERSAL_EVENTS = [
 ];
 
 const CONTEXT_DATA = {
-  time_of_day: ['dawn — just light enough to make bad decisions','midday — maximum exposure','dusk — predators know something you don\'t','night — full dark'],
+  time_of_day: ['dawn — just light enough to make bad decisions','midday — maximum exposure','dusk — predators know something you don\\'t','night — full dark'],
   mental_state: ['calm — possibly worryingly so','panicking, but quietly','mildly concussed','convinced I am fine','have made one decision already and it was wrong'],
   kit: ['nothing at all','phone at 4%','basic first aid kit','full survival pack','something completely inappropriate for this situation'],
   company: ['alone','with children','with a dog (helpful)','with someone useless','with someone who is making it worse','with someone calmer than they should be'],
@@ -2488,36 +2488,10 @@ const SURVIVAL_SCHOOL_WORST = `<!DOCTYPE html>
   <input type="text" id="event-input" placeholder="describe what happened..." oninput="onFieldInput('event',this.value)"/>
 
   <div class="field-label">The animal or hazard</div>
-  <div class="chips" id="chips-animal">
-    <div class="chip" onclick="onChip(this,'animal','king cobra')">king cobra</div>
-    <div class="chip" onclick="onChip(this,'animal','black mamba')">black mamba</div>
-    <div class="chip" onclick="onChip(this,'animal','Brazilian wandering spider')">Brazilian wandering spider</div>
-    <div class="chip" onclick="onChip(this,'animal','grizzly bear')">grizzly bear</div>
-    <div class="chip" onclick="onChip(this,'animal','polar bear')">polar bear</div>
-    <div class="chip" onclick="onChip(this,'animal','great white shark')">great white shark</div>
-    <div class="chip" onclick="onChip(this,'animal','saltwater crocodile')">saltwater croc</div>
-    <div class="chip" onclick="onChip(this,'animal','Komodo dragon')">Komodo dragon</div>
-    <div class="chip" onclick="onChip(this,'animal','pack of spotted hyenas')">hyena pack</div>
-    <div class="chip" onclick="onChip(this,'animal','box jellyfish')">box jellyfish</div>
-    <div class="chip" onclick="onChip(this,'animal','hippo')">hippo</div>
-    <div class="chip" onclick="onChip(this,'animal','cassowary')">cassowary</div>
-    <div class="chip" onclick="onChip(this,'animal','manatee')">manatee</div>
-    <div class="chip" onclick="onChip(this,'animal','swan')">swan</div>
-  </div>
-  <input type="text" id="animal-input" placeholder="or name the animal or hazard..." oninput="onFieldInput('animal',this.value)"/>
+  <input type="text" id="animal-input" placeholder="name the animal or hazard..." oninput="onFieldInput('animal',this.value)"/>
 
   <div class="field-label">Circumstances</div>
-  <div class="chips" id="chips-circ">
-    <div class="chip" onclick="onChip(this,'circ','alone, no communication')">alone, no comms</div>
-    <div class="chip" onclick="onChip(this,'circ','2 hours from nearest hospital')">2hrs from hospital</div>
-    <div class="chip" onclick="onChip(this,'circ','remote wilderness, helicopter is the only option')">remote, heli only</div>
-    <div class="chip" onclick="onChip(this,'circ','urban, ambulance 10 minutes away')">urban, 10min ETA</div>
-    <div class="chip" onclick="onChip(this,'circ','no medical kit at all')">no kit</div>
-    <div class="chip" onclick="onChip(this,'circ','basic first aid kit available')">first aid kit</div>
-    <div class="chip" onclick="onChip(this,'circ','dark, nightfall already')">nightfall</div>
-    <div class="chip" onclick="onChip(this,'circ','trained medic in the group')">medic with me</div>
-  </div>
-  <input type="text" id="circ-input" placeholder="or describe your circumstances..." oninput="onFieldInput('circ',this.value)"/>
+  <input type="text" id="circ-input" placeholder="describe your circumstances..." oninput="onFieldInput('circ',this.value)"/>
 
   <div class="btn-row">
     <button class="btn-assess" id="btn-assess" onclick="onAssess()">I'VE BEEN BIT, GUYS ↗</button>
@@ -2755,6 +2729,7 @@ function clearAll() {
     const el = document.getElementById(\`\${f}-input\`);
     if (el) el.value = '';
   });
+  clearChips('scenario');
 }
 
 function showLoading() {
@@ -3602,7 +3577,7 @@ If probability reaches 0 or situation fully resolves, set is_terminal to true.
 ATTENBOROUGH EULOGY (SS-014): When is_terminal is true AND survival_probability is 0 (death), include attenborough_eulogy — one paragraph, geological calm, never comedic in register, always comedic in effect. References specific details from this specific situation. He does not console. He observes. The comedy comes from the precision and the calm, not from any attempt at comedy.
 
 OUTPUT — valid JSON only, no markdown:
-{"survival_probability":<integer>,"attenborough_opening":"<one sentence, nature doc, frames what the decision is about to cause>","situation_update":"<one sentence what changed>","panel":[{"charId":"<id>","text":"<2-3 sentences>","death":<bool>,"fact_check":"<optional — Bear only>"}],"attenborough_verdict":"<one sentence, geological calm, turn conclusion, he already knew>","next_actions":["<action>","<action>","<action>"],"is_terminal":<bool>,"attenborough_eulogy":"<one paragraph, death only, geological calm, never comic in register, always in effect — omit if not terminal death>"}\`;
+{"survival_probability":<integer>,"attenborough_opening":"<one sentence, nature doc, frames what the decision is about to cause>","situation_update":"<one sentence what changed>","panel":[{"charId":"ray","text":"<2-3 sentences>"},{"charId":"fox","text":"<2-3 sentences>"},{"charId":"bear","text":"<2-3 sentences>","fact_check":"<optional>"},{"charId":"hales","text":"<1-2 sentences>"},{"charId":"cody","text":"<2-3 sentences>"},{"charId":"stroud","text":"<1-2 sentences>"}],"attenborough_verdict":"<one sentence, geological calm, turn conclusion, he already knew>","next_actions":["<action>","<action>","<action>"],"is_terminal":<bool>,"attenborough_eulogy":"<one paragraph, death only, geological calm, never comic in register, always in effect — omit if not terminal death>"}\`;
   }
 
   if (mode === 'mundane') {
@@ -3631,7 +3606,7 @@ Panel characters (no Attenborough): Ray, Bear, Cody, Hales, Fox, Stroud.
 Survival probability: 0-100. For mundane scenarios this is usually 40-85% — they're not great situations, but survivable with the right mindset. A truly catastrophic mundane scenario (printer has run out of ink, presentation in 10 minutes) may drop lower.
 
 OUTPUT — valid JSON only, no markdown:
-{"survival_probability":<integer 0-100>,"attenborough_opening":"<one sentence, nature documentary, introduces mundane situation as wildlife encounter>","panel":[{"charId":"<id>","text":"<2-3 sentences>","death":<bool>,"fact_check":"<optional Bear only>"}],"attenborough_verdict":"<one sentence, geological calm, final verdict>"}\`;
+{"survival_probability":<integer 0-100>,"attenborough_opening":"<one sentence, nature documentary, introduces mundane situation as wildlife encounter>","panel":[{"charId":"ray","text":"<2-3 sentences>"},{"charId":"bear","text":"<2-3 sentences>","fact_check":"<optional>"},{"charId":"cody","text":"<2-3 sentences>"},{"charId":"hales","text":"<1-2 sentences>"},{"charId":"fox","text":"<2-3 sentences>"},{"charId":"stroud","text":"<1-2 sentences>"}],"attenborough_verdict":"<one sentence, geological calm, final verdict>"}\`;
   }
 
   return \`You are the Survival School panel assessment engine.
@@ -3649,7 +3624,7 @@ Panel characters (no Attenborough): Ray, Bear, Cody, Hales, Fox, Stroud.
 Generate initial assessment. Also produce 3 specific suggested first actions.
 
 OUTPUT — valid JSON only, no markdown:
-{"survival_probability":<integer 0-100>,"attenborough_opening":"<one sentence, nature doc, introduces situation as wildlife encounter, slightly ominous>","panel":[{"charId":"<id>","text":"<2-4 sentences>","death":<bool>,"fact_check":"<optional Bear only>"}],"attenborough_verdict":"<one sentence, geological calm, no appeal, the documentary's conclusion>","next_actions":["<action>","<action>","<action>"]}\`;
+{"survival_probability":<integer 0-100>,"attenborough_opening":"<one sentence, nature doc, introduces situation as wildlife encounter, slightly ominous>","panel":[{"charId":"ray","text":"<2-4 sentences>"},{"charId":"bear","text":"<2-4 sentences>","fact_check":"<optional>"},{"charId":"cody","text":"<2-4 sentences>"},{"charId":"hales","text":"<2-3 sentences>"},{"charId":"fox","text":"<2-4 sentences>"},{"charId":"stroud","text":"<1-2 sentences>"}],"attenborough_verdict":"<one sentence, geological calm, no appeal, the documentary's conclusion>","next_actions":["<action>","<action>","<action>"]}\`;
 }
 
 
@@ -5510,7 +5485,7 @@ async function onFight() {
     ? \`\${name}: lethality \${d.lethality}, aggression \${d.aggression}, speed \${d.speed}, size \${d.size_kg}kg\${d.venom ? ', venom: ' + d.venom : ''}\${d.death_mins ? ', untreated death: ' + d.death_mins + ' min' : ''}\`
     : null;
   const statLines = [fmtStats(a, dbA), fmtStats(b, dbB)].filter(Boolean);
-  const statsBlock = statLines.length ? \`\nANIMAL STATS (biological ground truth — use these for outcomes):\n\${statLines.join('\n')}\` : '';
+  const statsBlock = statLines.length ? \`\nANIMAL STATS (biological ground truth — use these for outcomes):\n\${statLines.join('\\n')}\` : '';
   const situation = \`MATCHUP: \${a} vs \${b}\nENVIRONMENT: \${env}\${statsBlock}\nRun three rounds. Determine the winner.\`;
 
   try {
