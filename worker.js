@@ -6321,9 +6321,11 @@ const State = {
   protagonist: null,
   predicament: '',
   morrisonPresent: false,
+  composureState: null,
   setProtagonist(id) { this.protagonist = id; },
   setPredicament(v)  { this.predicament = v.trim(); },
-  clear() { this.protagonist = null; this.predicament = ''; this.morrisonPresent = false; },
+  setComposureState(cs) { this.composureState = cs; },
+  clear() { this.protagonist = null; this.predicament = ''; this.morrisonPresent = false; this.composureState = null; },
   isReady() { return this.protagonist && this.predicament.length > 0; },
 };
 
@@ -6492,7 +6494,7 @@ OUTPUT — valid JSON only, no markdown:
     const response = await fetch(WORKER_ENDPOINT, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ system, predicament, protagonist, morrison_present: morrisonPresent }),
+      body: JSON.stringify({ system, predicament, protagonist, morrison_present: morrisonPresent, composureState: State.composureState }),
     });
     if (!response.ok) throw new Error(\`Worker error \${response.status}\`);
     return response.json();
@@ -6534,6 +6536,7 @@ document.getElementById('btn-submit').addEventListener('click', async () => {
   document.getElementById('btn-submit').disabled = true;
   try {
     const data = await API.submit(State.predicament, State.protagonist);
+    if (data.composureState) State.setComposureState(data.composureState);
     if (data.morrison_interruption && data.morrison_interruption.morrison_present !== undefined) {
       State.morrisonPresent = data.morrison_interruption.morrison_present;
     } else {
@@ -6939,9 +6942,11 @@ const State = {
   protagonist: null,
   incident: '',
   morrisonPresent: false,
+  composureState: null,
   setProtagonist(id) { this.protagonist = id; },
   setIncident(v)     { this.incident = v.trim(); },
-  clear()            { this.protagonist = null; this.incident = ''; this.morrisonPresent = false; },
+  setComposureState(cs) { this.composureState = cs; },
+  clear()            { this.protagonist = null; this.incident = ''; this.morrisonPresent = false; this.composureState = null; },
   isReady()          { return this.protagonist && this.incident.length > 0; },
 };
 
@@ -7106,7 +7111,7 @@ OUTPUT — valid JSON only, no markdown:
     const response = await fetch(WORKER_ENDPOINT, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ system, incident, protagonist, morrison_present: morrisonPresent }),
+      body: JSON.stringify({ system, incident, protagonist, morrison_present: morrisonPresent, composureState: State.composureState }),
     });
     if (!response.ok) throw new Error(\`Worker error \${response.status}\`);
     return response.json();
@@ -7147,6 +7152,7 @@ document.getElementById('btn-submit').addEventListener('click', async () => {
   document.getElementById('btn-submit').disabled = true;
   try {
     const data = await API.submit(State.incident, State.protagonist);
+    if (data.composureState) State.setComposureState(data.composureState);
     if (data.morrison_interruption && data.morrison_interruption.morrison_present !== undefined) {
       State.morrisonPresent = data.morrison_interruption.morrison_present;
     } else {
@@ -7601,10 +7607,16 @@ export default {
     }
     if (url.pathname === '/survival-school/ive-had-worse') {
       const body = await request.json();
+      const composureState = body.composureState || null;
+      const panelCharIds = body.panelCharIds || null;
+      let system = body.system;
+      if (composureState) {
+        system = system + buildComposureInjection(composureState, panelCharIds);
+      }
       const upstream = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'anthropic-version': '2023-06-01', 'x-api-key': apiKey },
-        body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 1800, system: body.system, messages: [{ role: 'user', content: `Predicament: ${body.predicament}\nProtagonist: ${body.protagonist}` }] }),
+        body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 1800, system, messages: [{ role: 'user', content: `Predicament: ${body.predicament}\nProtagonist: ${body.protagonist}` }] }),
       });
       if (!upstream.ok) {
         return new Response(JSON.stringify({ error: { message: `Anthropic error ${upstream.status}` } }), {
@@ -7614,14 +7626,26 @@ export default {
       const anthropicData = await upstream.json();
       const raw = anthropicData.content[0].text;
       const text = raw.replace(/^```(?:json)?\s*/i, '').replace(/\s*```\s*$/, '').trim();
-      return new Response(text, { status: 200, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }});
+      let parsed;
+      try { parsed = JSON.parse(text); } catch (e) {
+        return new Response(text, { status: 200, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } });
+      }
+      const baseComposure = composureState || initComposureState();
+      parsed.composureState = computeComposureDeltas(baseComposure, parsed.panel_tension);
+      return new Response(JSON.stringify(parsed), { status: 200, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }});
     }
     if (url.pathname === '/survival-school/in-my-defence') {
       const body = await request.json();
+      const composureState = body.composureState || null;
+      const panelCharIds = body.panelCharIds || null;
+      let system = body.system;
+      if (composureState) {
+        system = system + buildComposureInjection(composureState, panelCharIds);
+      }
       const upstream = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'anthropic-version': '2023-06-01', 'x-api-key': apiKey },
-        body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 2000, system: body.system, messages: [{ role: 'user', content: `Incident: ${body.incident}\nProtagonist: ${body.protagonist}` }] }),
+        body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 2000, system, messages: [{ role: 'user', content: `Incident: ${body.incident}\nProtagonist: ${body.protagonist}` }] }),
       });
       if (!upstream.ok) {
         return new Response(JSON.stringify({ error: { message: `Anthropic error ${upstream.status}` } }), {
@@ -7631,7 +7655,13 @@ export default {
       const anthropicData = await upstream.json();
       const raw = anthropicData.content[0].text;
       const text2 = raw.replace(/^```(?:json)?\s*/i, '').replace(/\s*```\s*$/, '').trim();
-      return new Response(text2, { status: 200, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }});
+      let parsed;
+      try { parsed = JSON.parse(text2); } catch (e) {
+        return new Response(text2, { status: 200, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } });
+      }
+      const baseComposure = composureState || initComposureState();
+      parsed.composureState = computeComposureDeltas(baseComposure, parsed.panel_tension);
+      return new Response(JSON.stringify(parsed), { status: 200, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }});
     }
     if (url.pathname === '/survival-school/panel-qa') {
       const body = await request.json();
