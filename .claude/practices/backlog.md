@@ -19,7 +19,7 @@ Every open item is scored when possible:
 Items are sorted by CD3 within each section. Rescore when scope changes.
 Every item has its own BL-NNN number. No sub-items (BL-032-1 etc.) ever.
 - **Feature** — (optional) canonical label for feature-activity reporting. Set on every new item.
-  Canonical labels: `golf-adventure` · `pub-navigator` · `comedy-room` · `sports-19th-hole` · `darts` · `cricket` · `quntum-leeks` · `boardroom` · `play` · `learn` · `platform` · `process`
+  Canonical labels: `golf-adventure` · `pub-navigator` · `comedy-room` · `sports-19th-hole` · `darts` · `cricket` · `quntum-leeks` · `boardroom` · `play` · `learn` · `platform` · `process` · `panel-interaction`
   Script: `bash .claude/scripts/feature-report.sh`
 
 ## Hypothesis Card (optional — for product bets, not pure tech debt)
@@ -1640,3 +1640,53 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Feature: architecture
 - CD3: UBV=5 TC=2 RR=6 → CoD=13, Dur=2 (spike), **CD3=6.5**
 - Status: OPEN — raised 2026-03-22
+
+---
+
+### BL-163 — Cross-character panel references (reacts_to schema field)
+
+- Characters in all panels currently respond to the user's input independently. They do not acknowledge, contradict, or build on what another panellist just said. The relationship matrix exists in character files (wound system, pairwise RelationshipState, debtLedger) but the panel prompt has no schema slot to surface it.
+- Fix: add optional `reacts_to` field to each character's response object in the JSON schema. Register options: endorsement | quiet_disagreement | silence_noted | deflation | builds_on. UI renders a subtle thread indicator (thin left-border accent in referenced character's colour, or small "↳ re: [name]" tag) when present. Backwards compatible — absent field renders identically to current.
+- Prompt instruction: "Where a character has a strong established relationship with another panellist who has already spoken, they may reference that panellist directly — once, briefly, in their natural register. The relationship does not need to be explained."
+- Applies to: all interaction panels (Golf, Football, Boardroom, Long Room, Darts, Comedy Room). Not monologue modes.
+- SS port: same mechanic as SS-060 — the two products share the same approach. If SS builds it first, port the schema and UI pattern directly.
+- Feature: panel-interaction
+- Epic: Panel Interaction Model
+- CD3: UBV=8 TC=6 RR=4 → CoD=18, Dur=2, **CD3=9.0**
+- Status: OPEN — raised 2026-03-28
+
+---
+
+### BL-165 — Panel triage order formalised in prompts (SS-034 port)
+
+- All Cusslab panels currently instruct characters to respond without a defined order. All voices fire at the same weight simultaneously — flat texture, no build, no contrast. The comedy layer has nothing to land against because the authority layer hasn't established the stakes first.
+- Fix: formalise a triage order per panel. AUTHORITY tier goes first (establishes the frame), COMEDY/HEAT tier second (complicates or undercuts it), CLOSER tier last (the final word — always the final word). Add `tier` property to each character's config. Prompt instruction: "Characters respond in tier order. Tier 1 establishes the frame. Tier 2 complicates it. Tier 3 closes. The closer always has the last word — not because they demanded it but because what they say is always final."
+- Per-panel triage mapping: Golf → AUTHORITY: Faldo/McGinley, COMEDY: Radar/Coltart/Roe/Murray, CLOSER: Cox/Henni. Football → TACTICAL: Souness/Neville/Keane, HEAT: Carragher/Micah, CLOSER: Bigron/Ron. Boardroom → AUTHORITY: Harold/Roy, PERFORMANCE: Sebastian/Ben, OBSERVER/CLOSER: Partridge/Mystic. Long Room → KNOWLEDGE: Holding/Botham, ANECDOTE: Gower/KP, CLOSER: Blofeld.
+- Relationship to BL-143/144/145 (Narrative Move Model): triage order is the minimum viable version — prompt-only, no engine changes. Narrative Move Model is the sophisticated follow-on. Both are compatible; triage order ships first.
+- SS port: SS-062 is the SS-side spec. Same principle — different panels, same structural fix.
+- Feature: panel-interaction
+- Epic: Panel Interaction Model
+- CD3: UBV=7 TC=6 RR=4 → CoD=17, Dur=2, **CD3=8.5**
+- Status: OPEN — raised 2026-03-28
+
+---
+
+### BL-164 — Decision loop for all interaction panels (Fighting Fantasy mechanic)
+
+- Root cause of the quality gap between Survival School and Cusslab panels: SS has stateful sequential prompting with a consequence engine. Cusslab panels are stateless one-shot — user sends input, panel responds, done. No memory, no stakes, no evolving story.
+- Fix: after each panel response, generate `next_gambits` — 3 options the user can try (new insult, counter, escalation, change of tactic). Panel reacts to *which gambit was chosen*, not to a new open prompt. State accumulates. Wound system and RelationshipState fire naturally. Eventually Cracks triggers as turns progress.
+- State object mirrors SS pattern: `{situation, turnCount, history:[{gambit, woundsFired}], pressureAccumulation:{perChar}}`.
+- Output schema addition: `next_gambits[]`, `wounds_fired[]`, `pressure_delta:{charId:delta}`, `is_terminal:bool`.
+- Terminal condition: a character's pressure hits their crack threshold (Eventually Cracks fires), or the panel has closed ranks (no viable gambits remain).
+- Proof-of-concept panel: Golf (19th Hole) — tightest existing dynamic. Port to Football, Boardroom, Long Room once working.
+- SS port: SS-061 is the SS-side spec of the same mechanic. If SS-061 ships first, port the state model and output schema directly. The two products converge on the same interaction pattern.
+- Feature: panel-interaction
+- Epic: Panel Interaction Model
+- CD3: UBV=9 TC=7 RR=6 → CoD=22, Dur=4, **CD3=5.5**
+- Hypothesis:
+  - **Actor:** Rod running a panel session
+  - **AARRR:** Retention — panel sessions feel like a story with stakes rather than one-shot comedy
+  - **Signal:** Rod completes 3+ turns in a session rather than submitting once and moving on
+  - **Falsifier:** Gambits feel forced; panel reactions don't build coherently on prior turns
+  - **Window:** First session with decision loop active on Golf panel
+- Status: OPEN — raised 2026-03-28
