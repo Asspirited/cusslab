@@ -258,6 +258,20 @@ const SURVIVAL_SCHOOL_HOME = `<!DOCTYPE html>
 
 <main>
 
+  <div class="section-label">The Doors</div>
+  <div class="tile-grid">
+
+    <a class="tile" href="/survival-school/rooms">
+      <div class="tile-top">
+        <span class="tile-cat">The Corridor</span>
+        <span class="tile-badge badge-live">LIVE</span>
+      </div>
+      <div class="tile-title">The Doors</div>
+      <div class="tile-desc">Six doors. One guide. You don't know what's behind them until it's too late.</div>
+    </a>
+
+  </div>
+
   <div class="section-label">Assessment</div>
   <div class="tile-grid">
 
@@ -354,20 +368,6 @@ const SURVIVAL_SCHOOL_HOME = `<!DOCTYPE html>
       </div>
       <div class="tile-title">You're alright mate...</div>
       <div class="tile-desc">Describe an animal encounter. Steve rates your handling. From beyond.</div>
-    </a>
-
-  </div>
-
-  <div class="section-label">The Doors</div>
-  <div class="tile-grid">
-
-    <a class="tile" href="/survival-school/rooms">
-      <div class="tile-top">
-        <span class="tile-cat">The Corridor</span>
-        <span class="tile-badge badge-live">LIVE</span>
-      </div>
-      <div class="tile-title">The Doors</div>
-      <div class="tile-desc">Six doors. One guide. You don't know what's behind them until it's too late.</div>
     </a>
 
   </div>
@@ -1230,6 +1230,30 @@ DEATH COMMENTARY: Earned — not wallpaper. Fires on clearly wrong call, dire si
 
 FOUNDING PHILOSOPHY: Real knowledge. Genuine consequence. No performance. Comedy earned by knowledge being real.\`;
 
+
+// SS-059 — Social Dynamics Engine: shared instruction block.
+const SOCIAL_DYNAMICS_ENGINE = `
+SOCIAL DYNAMICS ENGINE (SS-059) — fires independently on ~35% of responses:
+Characters have documented history with each other and with their own records.
+They are unreliable narrators of their own competence. They do not lie — they rationalise.
+
+When this engine fires, select one type:
+- wound_reference: a character invokes their documented real incident as credential or deflection
+- lie: a character embellishes, omits, or quietly protects their reputation
+- callout: another character (directly or obliquely) notes the discrepancy — once, briefly
+- wolf_pack: two or more characters pile on the same subject without coordinating
+- none: characters respond independently (baseline — makes the others land harder)
+
+Rules:
+- This engine is independent of CONTRADICTION ENGINE. Both may fire in the same response (wave interference).
+- When 'lie' fires: the lie is sincere. The character is not performing. They have reframed the incident.
+- When 'callout' fires: it is oblique, not a speech. One sentence. The subject does not acknowledge it.
+- When 'wolf_pack' fires: characters do not reference each other — they independently arrive at the same pile-on.
+- 'none' is valid and important — the restraint makes other instances land harder.
+
+OUTPUT field (always present, even when type is 'none'):
+"panel_tension":{"type":"wound_reference|lie|callout|wolf_pack|none","subject":"<charId or empty string>","by":["<charId>"],"note":"<one line — what is happening, or empty string for none>"}`;
+
 // Panel characters (excludes Attenborough — he does bookends, not panel cards)
 const PANEL_IDS = ['ray', 'bear', 'cody', 'hales', 'fox', 'stroud'];
 
@@ -1273,8 +1297,10 @@ If probability reaches 0 or situation fully resolves, set is_terminal to true.
 
 ATTENBOROUGH EULOGY (SS-014): When is_terminal is true AND survival_probability is 0 (death), include attenborough_eulogy — one paragraph, geological calm, never comedic in register, always comedic in effect. References specific details from this specific situation. He does not console. He observes. The comedy comes from the precision and the calm, not from any attempt at comedy.
 
+${SOCIAL_DYNAMICS_ENGINE}
+
 OUTPUT — valid JSON only, no markdown:
-{"survival_probability":<integer>,"attenborough_opening":"<one sentence, nature doc, frames what the decision is about to cause>","situation_update":"<one sentence what changed>","panel":[{"charId":"ray","text":"<2-3 sentences>"},{"charId":"fox","text":"<2-3 sentences>"},{"charId":"bear","text":"<2-3 sentences>","fact_check":"<optional>"},{"charId":"hales","text":"<1-2 sentences>"},{"charId":"cody","text":"<2-3 sentences>"},{"charId":"stroud","text":"<1-2 sentences>"}],"attenborough_verdict":"<one sentence, geological calm, turn conclusion, he already knew>","next_actions":["<action>","<action>","<action>"],"is_terminal":<bool>,"attenborough_eulogy":"<one paragraph, death only, geological calm, never comic in register, always in effect — omit if not terminal death>"}\`;
+{"survival_probability":<integer>,"attenborough_opening":"<one sentence, nature doc, frames what the decision is about to cause>","situation_update":"<one sentence what changed>","panel":[{"charId":"ray","text":"<2-3 sentences>"},{"charId":"fox","text":"<2-3 sentences>"},{"charId":"bear","text":"<2-3 sentences>","fact_check":"<optional>"},{"charId":"hales","text":"<1-2 sentences>"},{"charId":"cody","text":"<2-3 sentences>"},{"charId":"stroud","text":"<1-2 sentences>"}],"attenborough_verdict":"<one sentence, geological calm, turn conclusion, he already knew>","next_actions":["<action>","<action>","<action>"],"is_terminal":<bool>,"attenborough_eulogy":"<one paragraph, death only, geological calm, never comic in register, always in effect — omit if not terminal death>","panel_tension":{"type":"wound_reference|lie|callout|wolf_pack|none","subject":"<charId or empty>","by":["<charId>"],"note":"<one line or empty string>"}}\`;
   }
 
   if (mode === 'mundane') {
@@ -1306,8 +1332,10 @@ Panel characters (no Attenborough): Ray, Fox, Bear, Hales, Cody, Stroud.
 
 Survival probability: 0-100. For mundane scenarios this is usually 40-85% — they're not great situations, but survivable with the right mindset. A truly catastrophic mundane scenario (printer has run out of ink, presentation in 10 minutes) may drop lower.
 
+${SOCIAL_DYNAMICS_ENGINE}
+
 OUTPUT — valid JSON only, no markdown:
-{"survival_probability":<integer 0-100>,"attenborough_opening":"<one sentence, nature documentary, introduces mundane situation as wildlife encounter>","panel":[{"charId":"ray","text":"<2-3 sentences>"},{"charId":"fox","text":"<2-3 sentences>"},{"charId":"bear","text":"<2-3 sentences>","fact_check":"<optional>"},{"charId":"hales","text":"<1-2 sentences>"},{"charId":"cody","text":"<2-3 sentences>"},{"charId":"stroud","text":"<1-2 sentences>"}],"attenborough_verdict":"<one sentence, geological calm, final verdict>"}\`;
+{"survival_probability":<integer 0-100>,"attenborough_opening":"<one sentence, nature documentary, introduces mundane situation as wildlife encounter>","panel":[{"charId":"ray","text":"<2-3 sentences>"},{"charId":"fox","text":"<2-3 sentences>"},{"charId":"bear","text":"<2-3 sentences>","fact_check":"<optional>"},{"charId":"hales","text":"<1-2 sentences>"},{"charId":"cody","text":"<2-3 sentences>"},{"charId":"stroud","text":"<1-2 sentences>"}],"attenborough_verdict":"<one sentence, geological calm, final verdict>","panel_tension":{"type":"wound_reference|lie|callout|wolf_pack|none","subject":"<charId or empty>","by":["<charId>"],"note":"<one line or empty string>"}}\`;
   }
 
   return \`You are the Survival School panel assessment engine.
@@ -1335,8 +1363,10 @@ Panel characters (no Attenborough): Ray, Fox, Bear, Hales, Cody, Stroud.
 
 Generate initial assessment. Also produce 3 specific suggested first actions.
 
+${SOCIAL_DYNAMICS_ENGINE}
+
 OUTPUT — valid JSON only, no markdown:
-{"survival_probability":<integer 0-100>,"attenborough_opening":"<one sentence, nature doc, introduces situation as wildlife encounter, slightly ominous>","panel":[{"charId":"ray","text":"<2-4 sentences>"},{"charId":"fox","text":"<2-4 sentences>"},{"charId":"bear","text":"<2-4 sentences>","fact_check":"<optional>"},{"charId":"hales","text":"<2-3 sentences>"},{"charId":"cody","text":"<2-4 sentences>"},{"charId":"stroud","text":"<1-2 sentences>"}],"attenborough_verdict":"<one sentence, geological calm, no appeal, the documentary's conclusion>","next_actions":["<action>","<action>","<action>"]}\`;
+{"survival_probability":<integer 0-100>,"attenborough_opening":"<one sentence, nature doc, introduces situation as wildlife encounter, slightly ominous>","panel":[{"charId":"ray","text":"<2-4 sentences>"},{"charId":"fox","text":"<2-4 sentences>"},{"charId":"bear","text":"<2-4 sentences>","fact_check":"<optional>"},{"charId":"hales","text":"<2-3 sentences>"},{"charId":"cody","text":"<2-4 sentences>"},{"charId":"stroud","text":"<1-2 sentences>"}],"attenborough_verdict":"<one sentence, geological calm, no appeal, the documentary's conclusion>","next_actions":["<action>","<action>","<action>"],"panel_tension":{"type":"wound_reference|lie|callout|wolf_pack|none","subject":"<charId or empty>","by":["<charId>"],"note":"<one line or empty string>"}}\`;
 }
 
 
@@ -3605,6 +3635,30 @@ DEATH COMMENTARY: Earned — not wallpaper. Fires on clearly wrong call, dire si
 
 FOUNDING PHILOSOPHY: Real knowledge. Genuine consequence. No performance. Comedy earned by knowledge being real.\`;
 
+
+// SS-059 — Social Dynamics Engine: shared instruction block.
+const SOCIAL_DYNAMICS_ENGINE = `
+SOCIAL DYNAMICS ENGINE (SS-059) — fires independently on ~35% of responses:
+Characters have documented history with each other and with their own records.
+They are unreliable narrators of their own competence. They do not lie — they rationalise.
+
+When this engine fires, select one type:
+- wound_reference: a character invokes their documented real incident as credential or deflection
+- lie: a character embellishes, omits, or quietly protects their reputation
+- callout: another character (directly or obliquely) notes the discrepancy — once, briefly
+- wolf_pack: two or more characters pile on the same subject without coordinating
+- none: characters respond independently (baseline — makes the others land harder)
+
+Rules:
+- This engine is independent of CONTRADICTION ENGINE. Both may fire in the same response (wave interference).
+- When 'lie' fires: the lie is sincere. The character is not performing. They have reframed the incident.
+- When 'callout' fires: it is oblique, not a speech. One sentence. The subject does not acknowledge it.
+- When 'wolf_pack' fires: characters do not reference each other — they independently arrive at the same pile-on.
+- 'none' is valid and important — the restraint makes other instances land harder.
+
+OUTPUT field (always present, even when type is 'none'):
+"panel_tension":{"type":"wound_reference|lie|callout|wolf_pack|none","subject":"<charId or empty string>","by":["<charId>"],"note":"<one line — what is happening, or empty string for none>"}`;
+
 // Panel characters (excludes Attenborough — he does bookends, not panel cards)
 const PANEL_IDS = ['ray', 'bear', 'cody', 'hales', 'fox', 'stroud'];
 
@@ -3681,8 +3735,10 @@ Panel characters (no Attenborough): Ray, Fox, Bear, Hales, Cody, Stroud.
 
 Survival probability: 0-100. For mundane scenarios this is usually 40-85% — they're not great situations, but survivable with the right mindset. A truly catastrophic mundane scenario (printer has run out of ink, presentation in 10 minutes) may drop lower.
 
+${SOCIAL_DYNAMICS_ENGINE}
+
 OUTPUT — valid JSON only, no markdown:
-{"survival_probability":<integer 0-100>,"attenborough_opening":"<one sentence, nature documentary, introduces mundane situation as wildlife encounter>","panel":[{"charId":"ray","text":"<2-3 sentences>"},{"charId":"fox","text":"<2-3 sentences>"},{"charId":"bear","text":"<2-3 sentences>","fact_check":"<optional>"},{"charId":"hales","text":"<1-2 sentences>"},{"charId":"cody","text":"<2-3 sentences>"},{"charId":"stroud","text":"<1-2 sentences>"}],"attenborough_verdict":"<one sentence, geological calm, final verdict>"}\`;
+{"survival_probability":<integer 0-100>,"attenborough_opening":"<one sentence, nature documentary, introduces mundane situation as wildlife encounter>","panel":[{"charId":"ray","text":"<2-3 sentences>"},{"charId":"fox","text":"<2-3 sentences>"},{"charId":"bear","text":"<2-3 sentences>","fact_check":"<optional>"},{"charId":"hales","text":"<1-2 sentences>"},{"charId":"cody","text":"<2-3 sentences>"},{"charId":"stroud","text":"<1-2 sentences>"}],"attenborough_verdict":"<one sentence, geological calm, final verdict>","panel_tension":{"type":"wound_reference|lie|callout|wolf_pack|none","subject":"<charId or empty>","by":["<charId>"],"note":"<one line or empty string>"}}\`;
   }
 
   return \`You are the Survival School panel assessment engine.
@@ -3710,8 +3766,10 @@ Panel characters (no Attenborough): Ray, Fox, Bear, Hales, Cody, Stroud.
 
 Generate initial assessment. Also produce 3 specific suggested first actions.
 
+${SOCIAL_DYNAMICS_ENGINE}
+
 OUTPUT — valid JSON only, no markdown:
-{"survival_probability":<integer 0-100>,"attenborough_opening":"<one sentence, nature doc, introduces situation as wildlife encounter, slightly ominous>","panel":[{"charId":"ray","text":"<2-4 sentences>"},{"charId":"fox","text":"<2-4 sentences>"},{"charId":"bear","text":"<2-4 sentences>","fact_check":"<optional>"},{"charId":"hales","text":"<2-3 sentences>"},{"charId":"cody","text":"<2-4 sentences>"},{"charId":"stroud","text":"<1-2 sentences>"}],"attenborough_verdict":"<one sentence, geological calm, no appeal, the documentary's conclusion>","next_actions":["<action>","<action>","<action>"]}\`;
+{"survival_probability":<integer 0-100>,"attenborough_opening":"<one sentence, nature doc, introduces situation as wildlife encounter, slightly ominous>","panel":[{"charId":"ray","text":"<2-4 sentences>"},{"charId":"fox","text":"<2-4 sentences>"},{"charId":"bear","text":"<2-4 sentences>","fact_check":"<optional>"},{"charId":"hales","text":"<2-3 sentences>"},{"charId":"cody","text":"<2-4 sentences>"},{"charId":"stroud","text":"<1-2 sentences>"}],"attenborough_verdict":"<one sentence, geological calm, no appeal, the documentary's conclusion>","next_actions":["<action>","<action>","<action>"],"panel_tension":{"type":"wound_reference|lie|callout|wolf_pack|none","subject":"<charId or empty>","by":["<charId>"],"note":"<one line or empty string>"}}\`;
 }
 
 
@@ -6592,8 +6650,10 @@ Examine the question for genuine ambiguity or conflicting survival principles. I
 When contradiction fires: named characters in "between" reference each other directly, once, briefly, in their natural register.
 When consensus: characters respond independently, no cross-reference.
 
+${SOCIAL_DYNAMICS_ENGINE}
+
 OUTPUT — valid JSON only, no markdown:
-{"attenborough_opening":"<one sentence, nature doc, species-level framing>","panel":[{"charId":"<id>","text":"<2-3 sentences>"}],"attenborough_verdict":"<one sentence, geological calm>","panel_dynamic":{"type":"one_wrong|both_wrong|both_right|consensus","between":["<charId>","<charId>"],"note":"<one sentence — what they disagree about, or empty string for consensus>"}}\`;
+{"attenborough_opening":"<one sentence, nature doc, species-level framing>","panel":[{"charId":"<id>","text":"<2-3 sentences>"}],"attenborough_verdict":"<one sentence, geological calm>","panel_dynamic":{"type":"one_wrong|both_wrong|both_right|consensus","between":["<charId>","<charId>"],"note":"<one sentence — what they disagree about, or empty string for consensus>"},"panel_tension":{"type":"wound_reference|lie|callout|wolf_pack|none","subject":"<charId or empty>","by":["<charId>"],"note":"<one line or empty string>"}}\`;
 
 const State = {
   question: '',
