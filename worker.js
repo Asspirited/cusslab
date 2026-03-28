@@ -6095,13 +6095,13 @@ const PROTAGONIST_PROMPTS = {
 };
 
 const CORRIDOR_SENDOFFS = {
-  bear:    `"YOU GOT THIS BEAR." "WHOOOOOP." "WE LOVE YOU BEAR." The TV producer, somewhere behind the crowd, counting him in: "Rolling — and action, Bear!" Bear waves at the crowd. Bear always waves at the crowd.`,
-  ray:     `One man. He attended a weekend bushcraft course in 2009. He has wanted to say something ever since. He is still here. "Good luck, Ray." That is enough.`,
-  fox:     `The corridor is empty. Jim Morrison nods once. Fox nods back. No further exchange is required or offered.`,
-  hales:   `A group of Australian soldiers from 1985. They never left the corridor. Nobody asked them to leave. Nobody questioned it. "Beauty, Les." No further explanation is given.`,
-  cody:    `A barefoot student is offering to come in too. He is also barefoot. This is also inadvisable. Cody does not discourage him.`,
-  stroud:  `His own camera, on a tripod. He set it up before he went in. Nobody else is here. The camera is rolling.`,
-  stevens: `He walked in through the front door holding a snake. The snake is fine. He is fine. The panel has been informed. The panel is processing this.`,
+  bear:    '"YOU GOT THIS BEAR." "WHOOOOOP." "WE LOVE YOU BEAR." The TV producer, somewhere behind the crowd, counting him in: "Rolling — and action, Bear!" Bear waves at the crowd. Bear always waves at the crowd.',
+  ray:     'One man. He attended a weekend bushcraft course in 2009. He has wanted to say something ever since. He is still here. "Good luck, Ray." That is enough.',
+  fox:     'The corridor is empty. Jim Morrison nods once. Fox nods back. No further exchange is required or offered.',
+  hales:   'A group of Australian soldiers from 1985. They never left the corridor. Nobody asked them to leave. Nobody questioned it. "Beauty, Les." No further explanation is given.',
+  cody:    'A barefoot student is offering to come in too. He is also barefoot. This is also inadvisable. Cody does not discourage him.',
+  stroud:  'His own camera, on a tripod. He set it up before he went in. Nobody else is here. The camera is rolling.',
+  stevens: 'He walked in through the front door holding a snake. The snake is fine. He is fine. The panel has been informed. The panel is processing this.',
 };
 
 const State = {
