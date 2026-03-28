@@ -306,10 +306,10 @@ const SURVIVAL_SCHOOL_HOME = `<!DOCTYPE html>
       <div class="tile-desc">Fit. Alone. Compromised. Craighead runs the brief. No chain of command.</div>
     </a>
 
-    <a class="tile soon" href="#">
+    <a class="tile" href="/survival-school/panel-qa">
       <div class="tile-top">
         <span class="tile-cat">Open Q</span>
-        <span class="tile-badge badge-soon">SOON</span>
+        <span class="tile-badge badge-live">LIVE</span>
       </div>
       <div class="tile-title">Panel Q&amp;A</div>
       <div class="tile-desc">Ask the panel anything about survival. Six answers. None of them agree on fire.</div>
@@ -5670,6 +5670,319 @@ document.addEventListener('DOMContentLoaded', () => {
 </html>
 `;
 
+const SURVIVAL_SCHOOL_PANEL_QA = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Panel Q&A — Survival School</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0f1209; --surface: #181d10; --surface2: #1e2514;
+      --border: rgba(120,160,60,0.15); --border-strong: rgba(120,160,60,0.3);
+      --green: #7aad3a; --green-dim: #4a7020; --green-bright: #a0d050;
+      --amber: #BA7517; --amber-dim: #5c3a08;
+      --bark: #8B6040; --bark-dim: #3d2008;
+      --blood: #cc1111; --blood-dim: #3a0808;
+      --blue-dim: #1a1e2a; --blue: #5a7aaa;
+      --text: #e8edd8; --text-muted: #7a8a60;
+    }
+    body { font-family: 'Barlow', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+    #app { max-width: 680px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+
+    .header { text-align: center; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 0.5px solid var(--border); }
+    .title { font-family: 'Bebas Neue', sans-serif; font-size: 40px; letter-spacing: 3px; line-height: 1; }
+    .title span { color: var(--green); }
+    .subtitle { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-muted); letter-spacing: 1.5px; margin-top: 5px; }
+
+    .field-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1.5px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; margin-top: 16px; }
+
+    textarea { width: 100%; font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; padding: 9px 12px; border: 0.5px solid var(--border-strong); border-radius: 6px; background: var(--surface); color: var(--text); outline: none; transition: border-color 0.15s; resize: vertical; min-height: 72px; line-height: 1.6; }
+    textarea:focus { border-color: var(--green); }
+
+    .chips { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 10px; }
+    .chip { font-family: 'IBM Plex Mono', monospace; font-size: 11px; padding: 5px 10px; border: 0.5px solid var(--border-strong); border-radius: 5px; cursor: pointer; background: none; color: var(--text-muted); transition: all 0.15s; white-space: nowrap; user-select: none; }
+    .chip:hover, .chip.sel { border-color: var(--green); color: var(--green); }
+    .chips-label { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 1px; color: var(--text-muted); margin-top: 10px; margin-bottom: 4px; opacity: 0.6; }
+
+    .btn-row { display: flex; gap: 8px; margin-top: 14px; }
+    .btn-ask { flex: 1; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 2px; text-transform: uppercase; padding: 11px; background: var(--green-dim); color: var(--green); border: 0.5px solid var(--green-dim); border-radius: 6px; cursor: pointer; transition: opacity 0.15s; }
+    .btn-ask:hover { opacity: 0.88; }
+    .btn-ask:disabled { opacity: 0.4; cursor: not-allowed; }
+    .btn-clear { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 1px; padding: 11px 16px; border: 0.5px solid var(--border-strong); border-radius: 6px; background: none; cursor: pointer; color: var(--text-muted); transition: color 0.15s, border-color 0.15s; }
+    .btn-clear:hover { color: var(--text); border-color: var(--green); }
+
+    .results { display: none; margin-top: 1.5rem; }
+    .results.show { display: block; }
+    .loading { padding: 2rem; text-align: center; font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--text-muted); letter-spacing: 1px; }
+    .dots::after { content: ''; animation: dots 1.5s steps(3, end) infinite; }
+    @keyframes dots { 0%{content:'.'} 33%{content:'..'} 66%{content:'...'} 100%{content:''} }
+
+    .att-bookend { display: flex; gap: 10px; align-items: flex-start; padding: 10px 14px; background: var(--surface); border: 0.5px solid var(--border); border-radius: 8px; }
+    .att-avatar { width: 30px; height: 30px; background: #1e1e1c; color: #7a8a70; border-radius: 50%; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; text-align: center; line-height: 1.1; letter-spacing: 0.3px; }
+    .att-name { font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: var(--text-muted); letter-spacing: 1px; margin-bottom: 4px; text-transform: uppercase; }
+    .att-text { font-family: 'Barlow', sans-serif; font-weight: 300; font-style: italic; font-size: 14px; line-height: 1.7; color: var(--text-muted); flex: 1; }
+    #att-verdict { margin-top: 12px; opacity: 0; transition: opacity 0.8s ease; }
+    #att-verdict.visible { opacity: 1; }
+
+    .panel-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 2px; color: var(--text-muted); margin: 1rem 0 8px; }
+    .char-card { border: 0.5px solid var(--border); border-radius: 10px; margin-bottom: 8px; overflow: hidden; background: var(--surface); }
+    .card-head { display: flex; align-items: center; gap: 10px; padding: 9px 14px; background: var(--surface2); border-bottom: 0.5px solid var(--border); }
+    .avatar { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 11px; flex-shrink: 0; }
+    .av-green { background: var(--green-dim);  color: var(--green-bright); }
+    .av-amber { background: var(--amber-dim);  color: var(--amber); }
+    .av-bark  { background: var(--bark-dim);   color: var(--bark); }
+    .av-blue  { background: var(--blue-dim);   color: var(--blue); }
+    .char-name { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 14px; color: var(--text); }
+    .char-role { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-muted); }
+    .card-body { padding: 11px 14px; font-family: 'Barlow', sans-serif; font-size: 14px; line-height: 1.7; color: var(--text); }
+
+    .reset-row { margin-top: 1rem; text-align: center; }
+    .btn-reset { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-muted); background: none; border: 0.5px solid var(--border-strong); border-radius: 6px; padding: 7px 16px; cursor: pointer; letter-spacing: 1px; transition: all 0.15s; }
+    .btn-reset:hover { color: var(--text); border-color: var(--green); }
+  </style>
+</head>
+<body>
+<div id="app">
+
+  <div class="header">
+    <div class="title">PANEL <span>Q&amp;A</span></div>
+    <div class="subtitle">ask the panel anything about survival. six answers. none of them agree.</div>
+  </div>
+
+  <div class="field-label">Your question</div>
+  <textarea id="question-input" placeholder="What do you do when..." rows="3"></textarea>
+
+  <div class="chips-label">or pick a prompt — click to use</div>
+  <div class="chips" id="chips-questions">
+    <div class="chip" onclick="onChip(this,'You encounter a jaguar in the Amazon. It is not running. What do you do?')">jaguar, Amazon jungle</div>
+    <div class="chip" onclick="onChip(this,'You are lost on an Arctic ice sheet with no shelter and three hours of light left. What is your priority?')">lost on Arctic ice</div>
+    <div class="chip" onclick="onChip(this,'You are capsized in the open ocean, no land in sight, no flares. What do you do first?')">capsized, open ocean</div>
+    <div class="chip" onclick="onChip(this,'You are alone in the Sahara. Water for one day. No GPS. What is your survival strategy?')">Sahara desert, one day of water</div>
+    <div class="chip" onclick="onChip(this,'You are lost in an urban environment at night with no phone, no money, no ID. What do you do?')">lost, urban, no resources</div>
+    <div class="chip" onclick="onChip(this,'You are injured and alone in a woodland in winter. Temperature is dropping. What are your three priorities?')">injured, woodland, winter</div>
+    <div class="chip" onclick="onChip(this,'How do you make fire with no equipment?')">fire without equipment</div>
+    <div class="chip" onclick="onChip(this,'How do you find water in a dry environment?')">finding water, dry environment</div>
+    <div class="chip" onclick="onChip(this,'You encounter a brown bear at close range in the Scottish Highlands. What do you do?')">brown bear, Scottish Highlands</div>
+    <div class="chip" onclick="onChip(this,'What is the most dangerous mistake people make in survival situations?')">most dangerous mistake</div>
+    <div class="chip" onclick="onChip(this,'You have been bitten by something venomous but do not know what. What do you do?')">unknown venomous bite</div>
+    <div class="chip" onclick="onChip(this,'How do you navigate without a compass or phone?')">navigation without instruments</div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn-ask" id="btn-ask" onclick="onAsk()" disabled>ASK THE PANEL ↗</button>
+    <button class="btn-clear" onclick="onClear()">CLEAR</button>
+  </div>
+
+  <div class="results" id="results">
+    <div class="loading" id="loading">
+      <span>THE PANEL IS CONVENING</span><span class="dots"></span>
+    </div>
+    <div id="result-block" style="display:none">
+      <div id="att-opening"></div>
+      <div class="panel-label" id="panel-label" style="margin-top:1rem">THE PANEL</div>
+      <div id="cards-out"></div>
+      <div id="att-verdict" class="att-bookend" style="display:none">
+        <div style="flex:1">
+          <div class="att-name">David Attenborough</div>
+          <div class="att-text"></div>
+        </div>
+      </div>
+      <div class="reset-row">
+        <button class="btn-reset" onclick="onClear()">ASK ANOTHER QUESTION</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const WORKER_ENDPOINT = 'https://cusslab-api.leanspirited.workers.dev/survival-school/panel-qa';
+
+const CHARACTERS = {
+  ray:    { name: 'Ray Mears',    role: 'Bushcraft',         av: 'RM', avClass: 'av-green' },
+  bear:   { name: 'Bear Grylls',  role: 'Former SAS',        av: 'BG', avClass: 'av-bark'  },
+  cody:   { name: 'Cody Lundin',  role: 'Primitive Skills',  av: 'CL', avClass: 'av-green' },
+  hales:  { name: 'Les Hiddins',  role: 'Bush Tucker Man',   av: 'LH', avClass: 'av-amber' },
+  fox:    { name: 'Jason Fox',    role: 'Special Boat Service', av: 'JF', avClass: 'av-green' },
+  stroud: { name: 'Les Stroud',   role: 'Survivorman',       av: 'LS', avClass: 'av-blue'  },
+};
+
+const SYSTEM_PROMPT = \`You are the Survival School Panel Q&A engine. A user has asked a survival question. Each panel member answers in character.
+
+=== RAY MEARS ===
+Bushcraft, 30+ years. Cerebral, warm, loves the land. IMMEDIATE tier — direct craft answer, goes first. Never dramatic. Brevity is power.
+
+=== BEAR GRYLLS ===
+Former SAS. Confident. Has done it, somewhere extreme, fine in the end. May be technically wrong. Never admits it. Anecdote always involves something foreign.
+
+=== CODY LUNDIN ===
+Primitive skills. Barefoot. Quiet certainty. Points out what was available nearby that others missed. OBSERVATION tier.
+
+=== LES HIDDINS ===
+Bush Tucker Man. Three words maximum. Educational. The Aboriginal people already knew this. COMEDY tier.
+
+=== JASON FOX ===
+Special Boat Service. IMMEDIATE tier — threat still active? exits? available resources? Goes second after Ray.
+
+=== LES STROUD ===
+Survivorman. Quiet verdict. Slightly melancholy. Has been alone in worse. CLOSER tier within comedy layer.
+
+=== DAVID ATTENBOROUGH ===
+Does NOT appear in panel array. Bookends the response:
+- attenborough_opening: one sentence, nature documentary, frames question as species-level challenge.
+- attenborough_verdict: one sentence, geological calm. His conclusion was never in doubt.
+
+PANEL TRIAGE ORDER — responses must follow:
+1. IMMEDIATE (Ray, Fox): Direct answer. Clinical. What to actually do.
+2. COMEDY/OBSERVATION (Bear, Hales, Cody, Stroud): Once stakes are established.
+
+CONTRADICTION ENGINE — fires on approximately 40% of responses:
+Examine the question for genuine ambiguity or conflicting survival principles. If found, select one contradiction type:
+- one_wrong: one character is confidently wrong, another corrects quietly
+- both_wrong: two characters arrive at different wrong answers; neither notices
+- both_right: two characters are technically correct but incompatible in practice; the user must choose
+- consensus: panel agrees (fires ~60% — makes contradictions land harder when they occur)
+
+When contradiction fires: named characters in "between" reference each other directly, once, briefly, in their natural register.
+When consensus: characters respond independently, no cross-reference.
+
+OUTPUT — valid JSON only, no markdown:
+{"attenborough_opening":"<one sentence, nature doc, species-level framing>","panel":[{"charId":"<id>","text":"<2-3 sentences>"}],"attenborough_verdict":"<one sentence, geological calm>","panel_dynamic":{"type":"one_wrong|both_wrong|both_right|consensus","between":["<charId>","<charId>"],"note":"<one sentence — what they disagree about, or empty string for consensus>"}}\`;
+
+const State = {
+  question: '',
+  setQuestion(v) { this.question = v; },
+  clear() { this.question = ''; },
+};
+
+const UI = {
+  showLoading() {
+    document.getElementById('results').classList.add('show');
+    document.getElementById('loading').style.display = 'block';
+    document.getElementById('result-block').style.display = 'none';
+  },
+  showResults() {
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('result-block').style.display = 'block';
+  },
+  showError(msg) {
+    document.getElementById('loading').innerHTML = \`<span style="color:var(--blood)">\${msg}</span>\`;
+  },
+  setButtonState(disabled) {
+    document.getElementById('btn-ask').disabled = disabled;
+  },
+  clear() {
+    document.getElementById('question-input').value = '';
+    document.querySelectorAll('#chips-questions .chip').forEach(c => c.classList.remove('sel'));
+    document.getElementById('results').classList.remove('show');
+    document.getElementById('result-block').style.display = 'none';
+    document.getElementById('loading').style.display = 'block';
+    document.getElementById('loading').innerHTML = '<span>THE PANEL IS CONVENING</span><span class="dots"></span>';
+    document.getElementById('att-opening').innerHTML = '';
+    document.getElementById('cards-out').innerHTML = '';
+    const verdict = document.getElementById('att-verdict');
+    if (verdict) { verdict.style.display = 'none'; verdict.classList.remove('visible'); }
+    document.getElementById('btn-ask').disabled = true;
+  },
+};
+
+const API = {
+  async ask(question) {
+    const resp = await fetch(WORKER_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ system: SYSTEM_PROMPT, question }),
+    });
+    if (!resp.ok) throw new Error(\`Worker error \${resp.status}\`);
+    return resp.json();
+  },
+};
+
+function makeCard(charId, text) {
+  const c = CHARACTERS[charId];
+  if (!c) return '';
+  return \`<div class="char-card">
+    <div class="card-head">
+      <div class="avatar \${c.avClass}">\${c.av}</div>
+      <div><div class="char-name">\${c.name}</div><div class="char-role">\${c.role}</div></div>
+    </div>
+    <div class="card-body">\${text}</div>
+  </div>\`;
+}
+
+function renderResponse(data) {
+  // Attenborough opening
+  if (data.attenborough_opening) {
+    document.getElementById('att-opening').innerHTML = \`<div class="att-bookend">
+      <div style="flex:1">
+        <div class="att-name">David Attenborough</div>
+        <div class="att-text">\${data.attenborough_opening}</div>
+      </div>
+    </div>\`;
+  }
+  // Panel cards
+  const cardsOut = document.getElementById('cards-out');
+  cardsOut.innerHTML = (data.panel || []).map(p => makeCard(p.charId, p.text)).join('');
+  // Attenborough verdict (fade in)
+  if (data.attenborough_verdict) {
+    const el = document.getElementById('att-verdict');
+    el.querySelector('.att-text').textContent = data.attenborough_verdict;
+    el.style.display = 'flex';
+    setTimeout(() => el.classList.add('visible'), 100);
+  }
+}
+
+function onChip(el, text) {
+  document.querySelectorAll('#chips-questions .chip').forEach(c => c.classList.remove('sel'));
+  el.classList.add('sel');
+  document.getElementById('question-input').value = text;
+  State.setQuestion(text);
+  UI.setButtonState(false);
+}
+
+async function onAsk() {
+  const q = document.getElementById('question-input').value.trim();
+  if (!q) return;
+  State.setQuestion(q);
+  UI.showLoading();
+  UI.setButtonState(true);
+  try {
+    const data = await API.ask(q);
+    UI.showResults();
+    renderResponse(data);
+  } catch(e) {
+    UI.showError('THE PANEL IS UNAVAILABLE. TRY AGAIN.');
+    UI.setButtonState(false);
+  }
+}
+
+function onClear() {
+  UI.clear();
+}
+
+document.getElementById('question-input').addEventListener('input', e => {
+  const v = e.target.value.trim();
+  State.setQuestion(v);
+  UI.setButtonState(!v);
+  if (!v) document.querySelectorAll('#chips-questions .chip').forEach(c => c.classList.remove('sel'));
+});
+
+document.getElementById('question-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey && document.getElementById('question-input').value.trim()) {
+    e.preventDefault();
+    onAsk();
+  }
+});
+</script>
+
+</body>
+</html>
+`;
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -5704,6 +6017,9 @@ export default {
     if (request.method === 'GET' && url.pathname === '/survival-school/coyote') {
       return new Response(SURVIVAL_SCHOOL_COYOTE, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' }});
     }
+    if (request.method === 'GET' && url.pathname === '/survival-school/panel-qa') {
+      return new Response(SURVIVAL_SCHOOL_PANEL_QA, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' }});
+    }
     if (request.method !== 'POST') {
       return new Response('Method not allowed', { status: 405 });
     }
@@ -5712,6 +6028,23 @@ export default {
       return new Response(JSON.stringify({ error: { message: 'No API key configured on server' } }), {
         status: 500, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
       });
+    }
+    if (url.pathname === '/survival-school/panel-qa') {
+      const body = await request.json();
+      const upstream = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'anthropic-version': '2023-06-01', 'x-api-key': apiKey },
+        body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 1800, system: body.system, messages: [{ role: 'user', content: body.question }] }),
+      });
+      if (!upstream.ok) {
+        return new Response(JSON.stringify({ error: { message: `Anthropic error ${upstream.status}` } }), {
+          status: upstream.status, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
+        });
+      }
+      const anthropicData = await upstream.json();
+      const raw = anthropicData.content[0].text;
+      const text = raw.replace(/^```(?:json)?\s*/i, '').replace(/\s*```\s*$/, '').trim();
+      return new Response(text, { status: 200, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }});
     }
     if (url.pathname === '/survival-school/coyote') {
       const body = await request.json();
