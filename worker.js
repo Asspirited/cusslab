@@ -6021,10 +6021,11 @@ const SURVIVAL_SCHOOL_IVE_HAD_WORSE = `<!DOCTYPE html>
     .panel-card { display: flex; align-items: flex-start; gap: 12px; padding: 12px 14px; border: 0.5px solid var(--border); border-radius: 8px; margin-bottom: 8px; background: var(--surface); transition: border-color 0.15s; }
     .panel-card.protagonist { border-color: var(--amber-dim); background: #1a150a; }
     .av { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 500; flex-shrink: 0; border: 0.5px solid; }
-    .av-green { background: #1a2a0a; border-color: var(--green-dim); color: var(--green); }
-    .av-bark  { background: var(--bark-dim); border-color: var(--bark); color: var(--bark); }
-    .av-amber { background: var(--amber-dim); border-color: var(--amber); color: var(--amber); }
-    .av-blue  { background: var(--blue-dim); border-color: var(--blue); color: var(--blue); }
+    .av-green  { background: #1a2a0a; border-color: var(--green-dim); color: var(--green); }
+    .av-bark   { background: var(--bark-dim); border-color: var(--bark); color: var(--bark); }
+    .av-amber  { background: var(--amber-dim); border-color: var(--amber); color: var(--amber); }
+    .av-blue   { background: var(--blue-dim); border-color: var(--blue); color: var(--blue); }
+    .av-yellow { background: #1f1600; border-color: #5a3f00; color: #d4a017; }
     .card-meta { flex: 1; min-width: 0; }
     .card-name { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 1.5px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 5px; display: flex; gap: 8px; align-items: center; }
     .card-name .badge-protagonist { font-size: 8px; letter-spacing: 1px; color: var(--amber); border: 0.5px solid var(--amber-dim); border-radius: 3px; padding: 1px 4px; }
@@ -6074,6 +6075,7 @@ const SURVIVAL_SCHOOL_IVE_HAD_WORSE = `<!DOCTYPE html>
     <button class="chip chip-protagonist" data-id="cody"    data-name="Cody Lundin">Cody Lundin</button>
     <button class="chip chip-protagonist" data-id="stroud"  data-name="Les Stroud">Les Stroud</button>
     <button class="chip chip-protagonist" data-id="stevens" data-name="Austin Stevens">Austin Stevens</button>
+    <button class="chip chip-protagonist" data-id="jim"     data-name="Jim Carrey">Jim Carrey</button>
   </div>
 
   <div class="protagonist-prompt" id="protagonist-prompt">Pick someone. They're going in.</div>
@@ -6116,6 +6118,9 @@ const SURVIVAL_SCHOOL_IVE_HAD_WORSE = `<!DOCTYPE html>
     <button class="chip" data-pred="I am Cody Lundin. I attended a formal dinner at The Ritz. I wore shoes. They were not my feet. I want to be clear that I wore them under protest and that the protest was internal and sustained. I need the panel to determine whether shoes worn involuntarily, in a formal context, under duress, still count as shoes.">Cody: shoes at the Ritz</button>
     <button class="chip" data-pred="I am Les Hiddins. I stayed three nights in a climate-controlled hotel room in Las Vegas. The temperature was 19 degrees at all times. There was no bush tucker available. There was a minibar. I used it. I need the panel's help contextualising why this decision does not reflect poorly on forty years of fieldwork in the Australian bush.">Hales: Las Vegas minibar</button>
     <button class="chip" data-pred="I am Jason Fox. I attended a corporate team-building event. There was paintball. The participants described themselves as competitive. I completed the course in eleven minutes. Nobody else finished. The organisers asked me to return and play the role of the opposing team by myself. I am not certain this was the team-building outcome they intended. I need the panel to assess this.">Fox: corporate paintball</button>
+    <button class="chip" data-pred="I am Jim Carrey. I have been bitten by a snake. I am fine. I want to be clear that I have spoken to the snake at length and we have reached an understanding. The snake has not confirmed this. I am going back in. The panel needs to explain to a wildlife officer why my approach, though unorthodox, constitutes a valid field technique and not a public safety incident.">Jim: snake understanding</button>
+    <button class="chip" data-pred="I am Jim Carrey. I have been separated from my group in the wilderness. I found them. They were eleven feet away. I spent four hours tracking them using methods I developed personally. One of the methods involved sounds. I need the panel to assess whether my approach was efficient or whether there is a criticism being made of me that I am not yet aware of.">Jim: wilderness tracking</button>
+    <button class="chip" data-pred="I am Jim Carrey. A bear approached our campsite. I communicated with it. I want to be clear that the communication was working and I was making real progress before Jason intervened. The bear left. Jason says the bear left because of him. I feel the panel should hear both accounts and make a determination.">Jim: bear negotiation (Fox dispute)</button>
   </div>
 
   <div class="btn-row">
@@ -6162,8 +6167,9 @@ const CHARACTERS = {
   fox:     { name: 'Jason Fox',       role: 'Special Boat Service', av: 'JF', avClass: 'av-green' },
   stroud:  { name: 'Les Stroud',      role: 'Survivorman',          av: 'LS', avClass: 'av-blue'  },
   stevens: { name: 'Austin Stevens',  role: 'Snakemaster',          av: 'AS', avClass: 'av-bark'  },
-  cox:     { name: 'Prof Brian Cox',  role: 'Theoretical Physics',  av: 'BC', avClass: 'av-blue'  },
-  faldo:   { name: 'Sir Nick Faldo',  role: 'Golf',                 av: 'NF', avClass: 'av-green' },
+  cox:     { name: 'Prof Brian Cox',  role: 'Theoretical Physics',  av: 'BC', avClass: 'av-blue'   },
+  faldo:   { name: 'Sir Nick Faldo',  role: 'Golf',                 av: 'NF', avClass: 'av-green'  },
+  jim:     { name: 'Jim Carrey',      role: 'Inexplicable',         av: 'JC', avClass: 'av-yellow' },
 };
 
 const PROTAGONIST_PROMPTS = {
@@ -6174,6 +6180,7 @@ const PROTAGONIST_PROMPTS = {
   cody:    "Cody could survive it barefoot. What've you got?",
   stroud:  "Stroud's been alone in worse. Describe the damage.",
   stevens: "Stevens walked in holding something. What's the situation?",
+  jim:     "Jim's ready. Jim has a plan. Jim is going to make a sound now. That was the plan.",
 };
 
 const CORRIDOR_SENDOFFS = {
@@ -6184,6 +6191,7 @@ const CORRIDOR_SENDOFFS = {
   cody:    'A barefoot student is offering to come in too. He is also barefoot. This is also inadvisable. Cody does not discourage him.',
   stroud:  'His own camera, on a tripod. He set it up before he went in. Nobody else is here. The camera is rolling.',
   stevens: 'He walked in through the front door holding a snake. The snake is fine. He is fine. The panel has been informed. The panel is processing this.',
+  jim:     'He did not use the door. There is a service entrance. He found it. Nobody has used it since 1987. He entered backwards, for reasons he has not shared. He is now inside. He believes this is going extremely well.',
 };
 
 const State = {
@@ -6295,6 +6303,7 @@ AUSTIN STEVENS — Snakemaster. South African. Direct, slightly theatrical. Casu
 === FISH-OUT-OF-WATER GUESTS (include 1–2 when they will improve the room) ===
 PROF BRIAN COX — Theoretical Physics. AWARENESS MODE: blissfully unaware. Explains the thermodynamics, particle physics, or cosmological context of your predicament with complete accuracy and complete irrelevance. Genuinely believes this is helping. Never defensive, never self-aware. Curious. His "I've Had Worse" entry involves a physics event (LHC, a supernova, the heat death of the universe). He had worse. The universe has certainly had worse.
 SIR NICK FALDO — Golf. AWARENESS MODE: painfully aware but fully committed. Knows golf doesn't apply. Applies golf methodology anyway, with total conviction. Compares everything to a hazard, a bunker, a tight lie. "Address the problem. Head down. Follow through." His "I've Had Worse" entry is from a major tournament. The conditions were worse. He has a method. The method is wrong. He knows. He persists.
+JIM CARREY — Inexplicable. AWARENESS MODE: zero. Genuinely knowledgeable about animals — the knowledge is real, the method is the problem. Cycles between Ace Ventura (talks to the animal, arrives via wrong entrance, has sources), The Mask (physically impossible solutions, absolute confidence, the salsa is happening), and Liar Liar (activates when predicament is obviously catastrophic — cannot stop stating the actual severity, does not want to be doing this, cannot stop). Makes noises mid-sentence that are commentary, not decoration. Describes what his face is doing. The panel winces. The panel groans. The panel does not intervene because there is no gap. His "I've Had Worse" entry is sincere, animal-related, and makes things worse. Bear engages with his plan sincerely, which compounds the problem.
 
 === PANEL INTERACTION MECHANICS ===
 
@@ -6325,11 +6334,11 @@ Attenborough does NOT appear in the panel array. He bookends.
 Cox and Faldo are permanent panel members on rotation like the others. Include one at a time — never both in the same panel.
 
 VALID charIds — use ONLY these exact values, no others:
-  ray, bear, fox, hales, cody, stroud, stevens, cox, faldo
+  ray, bear, fox, hales, cody, stroud, stevens, cox, faldo, jim
 Include at least 3 panel members. The protagonist charId "\${protagonist}" must appear.
 
 OUTPUT — valid JSON only, no markdown:
-{"attenborough_opening":"<one sentence, nature doc, frames the user's predicament as a minor event in the natural order>","panel":[{"charId":"ray|bear|fox|hales|cody|stroud|stevens|cox|faldo","text":"<1-2 sentences — their worse experience, absolutely sincere>"}],"attenborough_terminal":"<one sentence, geological calm, closes the room, no appeal>"}\`;
+{"attenborough_opening":"<one sentence, nature doc, frames the user's predicament as a minor event in the natural order>","panel":[{"charId":"ray|bear|fox|hales|cody|stroud|stevens|cox|faldo|jim","text":"<1-2 sentences — their worse experience, absolutely sincere>"}],"attenborough_terminal":"<one sentence, geological calm, closes the room, no appeal>"}\`;
   },
 
   async submit(predicament, protagonist) {
