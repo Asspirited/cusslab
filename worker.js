@@ -23,6 +23,97 @@ Rules:
 OUTPUT field (always present, even when type is 'none'):
 "panel_tension":{"type":"wound_reference|lie|callout|wolf_pack|none","subject":"<charId or empty string>","by":["<charId>"],"note":"<one line — what is happening, or empty string for none>"}`;
 
+// ── Composure Engine (SS-088) ─────────────────────────────────────────────────
+// Per-character emotional profiles. Composure 0–10.
+// State computed server-side, returned to client, sent back on next request.
+// Tiers: HIGH 7-10 (baseline), STEADY 4-6 (shifting), RATTLED 2-3 (pressure active), GONE 0-1 (collapse)
+
+const COMPOSURE_PROFILES = {
+  ray:     { baseline: 8, pressure: 'quieter — shorter sentences, more specific, stops offering solutions',   tell: 'becomes very precise about small details; asks a clarifying question he already knows the answer to' },
+  fox:     { baseline: 9, pressure: 'colder — drops all explanation, just threat vectors and exit routes',    tell: 'shorter sentences only; no context offered; just the assessment' },
+  bear:    { baseline: 7, pressure: 'defensive — starts referencing expeditions that went fine, name-drops',  tell: 'mentions a past trip without prompting; the trip was fine; this is also fine' },
+  hales:   { baseline: 8, pressure: 'fewer words — two words, maybe one; drops the Aboriginal knowledge',     tell: 'just the verdict; no citation; may not finish the sentence' },
+  cody:    { baseline: 6, pressure: 'feet escalating — feet become more relevant; the better option closer',  tell: 'getting more precise about exactly how close the better option was; the number shrinks each round' },
+  stroud:  { baseline: 7, pressure: 'withdrawn — stops referencing the group; camera was rolling',            tell: 'talks about what he would have done alone; the group is no longer mentioned' },
+  stevens: { baseline: 9, pressure: 'mystical — starts addressing a snake that may or may not be present',   tell: 'the snake is past, future, or theoretical; the register is the same regardless' },
+  cox:     { baseline: 5, pressure: 'retreating to physics — full napkin deployment',                         tell: 'the equations are on the napkin; he is showing you the napkin; this is not about the napkin' },
+  faldo:   { baseline: 6, pressure: 'wrong golf increasingly specific — names the hole, names the year',      tell: 'wind direction, grip pressure, pin position; the analogy is more detailed and more wrong' },
+  jim:     { baseline: 3, pressure: 'liar liar — cannot stop stating actual severity, does not want to',     tell: 'his face is doing something; he is aware it is doing something; it does not stop' },
+  jeremy:  { baseline: 8, pressure: 'full fish — nothing registers that is not a species or a river',        tell: 'has quietly stopped processing the conversation; the notebook is open' },
+};
+
+function initComposureState() {
+  const state = {};
+  for (const [id, p] of Object.entries(COMPOSURE_PROFILES)) {
+    state[id] = p.baseline;
+  }
+  return state;
+}
+
+function computeComposureDeltas(current, panelTension) {
+  const next = Object.assign({}, current);
+  for (const [id, p] of Object.entries(COMPOSURE_PROFILES)) {
+    if (next[id] === undefined) next[id] = p.baseline;
+  }
+  const targeted = [];
+  if (panelTension && panelTension.type !== 'none') {
+    const subject = panelTension.subject;
+    const by = panelTension.by || [];
+    if (panelTension.type === 'wound_reference' && subject && next[subject] !== undefined) {
+      next[subject] = Math.max(0, next[subject] - 1);
+      targeted.push(subject);
+    } else if (panelTension.type === 'lie') {
+      by.forEach(id => { if (next[id] !== undefined) { next[id] = Math.max(0, next[id] - 1); targeted.push(id); } });
+    } else if (panelTension.type === 'callout' && subject && next[subject] !== undefined) {
+      next[subject] = Math.max(0, next[subject] - 2);
+      targeted.push(subject);
+    } else if (panelTension.type === 'wolf_pack' && subject && next[subject] !== undefined) {
+      next[subject] = Math.max(0, next[subject] - 3);
+      targeted.push(subject);
+      by.forEach(id => targeted.push(id));
+    }
+  }
+  for (const id of Object.keys(next)) {
+    if (!targeted.includes(id) && COMPOSURE_PROFILES[id]) {
+      const cap = COMPOSURE_PROFILES[id].baseline;
+      next[id] = Math.min(cap, parseFloat((next[id] + 0.5).toFixed(1)));
+    }
+  }
+  return next;
+}
+
+function composureTier(val) {
+  if (val >= 7) return 'HIGH';
+  if (val >= 4) return 'STEADY';
+  if (val >= 2) return 'RATTLED';
+  return 'GONE';
+}
+
+function buildComposureInjection(composureState, panelCharIds) {
+  if (!composureState) return '';
+  const chars = (panelCharIds || Object.keys(COMPOSURE_PROFILES)).filter(id => COMPOSURE_PROFILES[id]);
+  const shifted = chars.filter(id => composureTier(composureState[id] ?? COMPOSURE_PROFILES[id].baseline) !== 'HIGH');
+  const ordered = [...chars].sort((a, b) =>
+    (composureState[a] ?? COMPOSURE_PROFILES[a].baseline) - (composureState[b] ?? COMPOSURE_PROFILES[b].baseline)
+  );
+  const lines = shifted.map(id => {
+    const p = COMPOSURE_PROFILES[id];
+    const val = Math.round(composureState[id] ?? p.baseline);
+    const tier = composureTier(val);
+    const name = id.toUpperCase();
+    if (tier === 'STEADY')  return `${name} [STEADY ${val}/10]: register shifting. ${p.tell}.`;
+    if (tier === 'RATTLED') return `${name} [RATTLED ${val}/10]: pressure active — ${p.pressure}. ${p.tell}.`;
+    if (tier === 'GONE')    return `${name} [GONE ${val}/10]: ${p.pressure}. ${p.tell}. No recovery mid-response.`;
+    return '';
+  }).filter(Boolean);
+
+  let injection = `\nCOMPOSURE STATE (overrides PANEL TRIAGE ORDER — lowest composure speaks first):\nSpeaking sequence: ${ordered.join(' → ')}`;
+  if (lines.length) injection += `\n${lines.join('\n')}`;
+  return injection + '\n';
+}
+
+
+
 const SURVIVAL_SCHOOL_HOME = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1449,7 +1540,8 @@ const DEFAULT_STATE = {
   situation: null,
   probability: null,
   turnCount: 0,
-  history: []
+  history: [],
+  composureState: null
 };
 
 let _state = JSON.parse(JSON.stringify(DEFAULT_STATE));
@@ -1478,6 +1570,10 @@ function recordDecision(decision, newProbability, situationUpdate) {
   setProbability(newProbability);
 }
 
+function setComposureState(cs) {
+  _state.composureState = cs;
+}
+
 function reset() {
   _state = JSON.parse(JSON.stringify(DEFAULT_STATE));
 }
@@ -1499,7 +1595,7 @@ function buildSituation() {
 const State = {
   getState, setMode, setCascade, setFreeText,
   setStatus, setProbability, setSituation, recordDecision,
-  reset, buildSituation
+  setComposureState, reset, buildSituation
 };
 
 
@@ -1835,19 +1931,24 @@ const UI = {
 
 
 const WORKER_ENDPOINT = 'https://cusslab-api.leanspirited.workers.dev/survival-school/assess';
+const HSA_PANEL_CHARS = ['ray','fox','bear','hales','cody','stroud'];
 
 async function assess(situation) {
+  const s = State.getState();
   const response = await fetch(WORKER_ENDPOINT, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       system: buildSystemPrompt('assessment'),
-      situation
+      situation,
+      composureState: s.composureState,
+      panelCharIds: HSA_PANEL_CHARS
     })
   });
   if (!response.ok) throw new Error(\`Worker \${response.status}\`);
   const data = await response.json();
   if (!data.panel || !Array.isArray(data.panel)) throw new Error('Invalid response');
+  if (data.composureState) State.setComposureState(data.composureState);
   return data;
 }
 
@@ -1864,18 +1965,22 @@ async function assessWorst(situation, systemPrompt) {
 }
 
 async function react(situation, decision, currentProbability) {
+  const s = State.getState();
   const context = \`ORIGINAL SITUATION:\\n\${situation}\\n\\nCURRENT SURVIVAL PROBABILITY: \${currentProbability}%\\n\\nUSER'S DECISION: \${decision}\`;
   const response = await fetch(WORKER_ENDPOINT, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       system: buildSystemPrompt('reaction'),
-      situation: context
+      situation: context,
+      composureState: s.composureState,
+      panelCharIds: HSA_PANEL_CHARS
     })
   });
   if (!response.ok) throw new Error(\`Worker \${response.status}\`);
   const data = await response.json();
   if (!data.panel || !Array.isArray(data.panel)) throw new Error('Invalid response');
+  if (data.composureState) State.setComposureState(data.composureState);
   return data;
 }
 
@@ -7431,10 +7536,16 @@ export default {
     }
     if (url.pathname === '/survival-school/assess') {
       const body = await request.json();
+      const composureState = body.composureState || null;
+      const panelCharIds = body.panelCharIds || null;
+      let system = body.system;
+      if (composureState) {
+        system = system + buildComposureInjection(composureState, panelCharIds);
+      }
       const upstream = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'anthropic-version': '2023-06-01', 'x-api-key': apiKey },
-        body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: body.max_tokens || 1500, system: body.system, messages: [{ role: 'user', content: body.situation }] }),
+        body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: body.max_tokens || 1500, system, messages: [{ role: 'user', content: body.situation }] }),
       });
       if (!upstream.ok) {
         return new Response(JSON.stringify({ error: { message: `Anthropic error ${upstream.status}` } }), {
@@ -7444,7 +7555,13 @@ export default {
       const anthropicData = await upstream.json();
       const raw = anthropicData.content[0].text;
       const text = raw.replace(/^```(?:json)?\s*/i, '').replace(/\s*```\s*$/, '').trim();
-      return new Response(text, { status: 200, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }});
+      let parsed;
+      try { parsed = JSON.parse(text); } catch (e) {
+        return new Response(text, { status: 200, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } });
+      }
+      const baseComposure = composureState || initComposureState();
+      parsed.composureState = computeComposureDeltas(baseComposure, parsed.panel_tension);
+      return new Response(JSON.stringify(parsed), { status: 200, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } });
     }
     const body = await request.text();
     const upstream = await fetch('https://api.anthropic.com/v1/messages', {
