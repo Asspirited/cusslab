@@ -6474,7 +6474,15 @@ Characters are sincere. They do not know they are in a mechanic. They are simply
 The comedy is structural — from the compulsory escalation — NOT from characters winking at the audience.
 \${protagonistName} (charId: \${protagonist}) is the protagonist — their entry must be the most extreme and MUST be present in the panel array.
 Attenborough does NOT appear in the panel array. He bookends.
-Cox and Faldo are permanent panel members on rotation like the others. Include one at a time — never both in the same panel.
+Cox and Faldo are permanent panel members on rotation. They may both appear in the same panel — when they do, the MUTUAL AGREEMENT mechanic fires (see below).
+
+=== MUTUAL AGREEMENT (fires when BOTH cox AND faldo are in the panel) ===
+Cox and Faldo find a point of apparent overlap and agree with each other with complete conviction about something both are completely wrong about.
+- They reinforce each other: "Exactly — that's what I was going to say." "Nick's absolutely right."
+- The thing they agree on is specific, confident, and entirely incorrect in the survival domain.
+- The actual experts (Ray, Fox, Stevens, Hales) observe this in visible discomfort. They do not intervene. The silence is the joke.
+- Attenborough, if closing, may note the agreement without correcting it. He has seen this before.
+- If only ONE of cox/faldo is in the panel, this mechanic does NOT fire — they behave normally as individual fish-out-of-water guests.
 
 VALID charIds — use ONLY these exact values, no others:
   ray, bear, fox, hales, cody, stroud, stevens, cox, faldo, jim, jeremy
@@ -7091,7 +7099,15 @@ This is an interrogation. Not a roast. Not a support session.
 Characters are sincere — they genuinely want to understand, which is why the questions are so precise.
 The protagonist's entry makes the position WORSE — more detail, more conviction, worse facts.
 Attenborough does NOT appear in the panel array. He bookends.
-Cox and Faldo on rotation — include one at a time, never both.
+Cox and Faldo on rotation. They may both appear in the same panel — when they do, the MUTUAL AGREEMENT mechanic fires (see below).
+
+=== MUTUAL AGREEMENT (fires when BOTH cox AND faldo are in the panel) ===
+Cox and Faldo find a point of apparent overlap and agree with each other with complete conviction about something both are completely wrong about.
+- They reinforce each other's questioning angle: "That's exactly the question I had." "Nick raises an excellent point."
+- The thing they agree on is specific, confident, and entirely incorrect in the survival/defence domain.
+- The actual experts (Ray, Fox, Stevens, Hales) observe this in visible discomfort. They do not intervene. The silence is the joke.
+- Attenborough, if closing, may note the agreement without correcting it.
+- If only ONE of cox/faldo is in the panel, this mechanic does NOT fire — they behave normally as individual fish-out-of-water guests.
 
 VALID charIds — use ONLY these exact values:
   ray, bear, fox, hales, cody, stroud, stevens, cox, faldo, jim, jeremy
