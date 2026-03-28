@@ -5885,10 +5885,11 @@ const SURVIVAL_SCHOOL_ROOMS = `<!DOCTYPE html>
       <div class="door-badge">LIVE</div>
     </a>
 
-    <div class="door locked" data-morrison="One of them will keep their head. The question is which one. It is always the one you don't expect.">
+    <a class="door live" href="/survival-school/in-my-defence" data-morrison="The room does not care why you did it. The room only has questions.">
       <div class="door-number">14</div>
-      <div class="door-state">locked</div>
-    </div>
+      <div class="door-state">enter</div>
+      <div class="door-badge">LIVE</div>
+    </a>
 
     <div class="door locked" data-morrison="On the other side of this door: unconditional yes. The universe demands it of you.">
       <div class="door-number">15</div>
@@ -6100,32 +6101,6 @@ const SURVIVAL_SCHOOL_IVE_HAD_WORSE = `<!DOCTYPE html>
     <button class="chip" data-pred="I was found in a concerning situation involving a badger and I had questions">the badger incident</button>
     <button class="chip" data-pred="I had to explain to hospital staff why there was a pigeon involved in an incident that was entirely the pigeon's fault">pigeon-related hospital visit</button>
     <button class="chip" data-pred="I ate a tortoise on a long sea voyage and found it quite pleasant and now need to defend this morally and nutritionally">the tortoise question</button>
-    <button class="chip" data-pred="I have been incontinent at a formal event and urgently relieved myself into what I believed to be an empty vessel which turned out to contain someone's grandmother's ashes. I am Mark O'Shea. I need the panel's help contextualising this as a field sanitation decision made under duress.">O'Shea: grandmother's urn</button>
-    <button class="chip" data-pred="I need to explain to the headmaster of St Cuthbert's why I delivered the Year 10 Stay Safe talk using live rounds. I felt it added authenticity. The children are fine. The supply teacher is also fine but has asked to be reassigned.">Stay Safe talk: live rounds</button>
-    <button class="chip" data-pred="I need to explain to the headmaster of St Cuthbert's why I made entry to the Year 10 Stay Safe talk by abseiling through the window and briefly incapacitating the teacher with a controlled restraint hold. The children appeared engaged. The teacher is asking questions I cannot answer.">Stay Safe talk: abseil entry</button>
-    <button class="chip" data-pred="I am Steve Irwin. I need the panel to help me explain why I subdued a highly agitated taipan by smashing it against a nearby wall. Repeatedly. Until it stopped. I want to be clear: the snake started it. I maintain this was field improvisation under duress and not the textbook definition of what happened.">Irwin: snake wall</button>
-    <button class="chip" data-pred="I am Steve Irwin. I need the panel's help explaining to Queensland Wildlife Services why my property contains a reinforced pit, bleacher seating, and fourteen crocodiles with individual fight records. This is an educational facility. The betting slips were left by a previous tenant.">Irwin: croc fighting ring</button>
-    <button class="chip" data-pred="I am Steve Irwin. I was explaining — passionately, correctly, in operational detail — how one fights a snake. I may have accidentally disclosed the existence of an underground snake fighting circuit I definitely do not run. The panel needs to help me establish what counts as accidentally disclosing versus voluntarily disclosing.">Irwin: snake ring let-slip</button>
-    <button class="chip" data-pred="I am Austin Stevens. I have been sleeping inside snake pits for research purposes since 1987 and need the panel to explain to a German documentary producer why this is fine. I am fine. The snakes are familiar with my presence. O'Shea has written a paper about me. I have not read it. I assume it is mostly positive.">Stevens: snake pit (O'Shea's paper)</button>
-    <button class="chip" data-pred="I am Steve Irwin. I have been informed by the production company that several episodes of The Crocodile Hunter show me wearing a belt and wallet set made from genuine crocodile leather. I was not aware this was being filmed. I am told the crocs noticed. I need the panel's help explaining why this does not undermine my brand.">Irwin: croc leather on-camera</button>
-    <button class="chip" data-pred="I am Mark O'Shea. I need the panel to help me explain to the BBC why three episodes of O'Shea's Big Adventure show me wearing a jacket I have since identified as king cobra skin. I identified it myself. On screen. Live. I did not stop filming. The panel must decide whether this was professional dedication or something else.">O'Shea: snake jacket (self-identified on-air)</button>
-    <button class="chip" data-pred="I am Austin Stevens. A production assistant has pointed out that in seventeen episodes of Austin Stevens: Snakemaster I am wearing snakeskin boots. I feel this adds gravitas and does not undermine my spiritual connection to snakes. The snakes do not appear to agree. This is noted in the RSPCA report.">Stevens: snakeskin boots (RSPCA report)</button>
-    <button class="chip" data-pred="I am Bear Grylls. I need the panel to help me explain why a television programme I presented as being about surviving in the wilderness contained sequences filmed in a hotel. I was in the hotel. I was comfortable. This was not disclosed to viewers. I need the panel's help reframing this as a logistical necessity rather than a fundamental conceptual failure.">Bear: the hotel</button>
-    <button class="chip" data-pred="I am Bear Grylls. I need the panel to explain why I filmed a scene in which I swam through what I described as a freezing wilderness river. It was a hotel swimming pool. The hotel was pleasant. I have made this worse by announcing it enthusiastically. I need the panel's help.">Bear: the pool</button>
-    <button class="chip" data-pred="I am Bear Grylls. I announced on camera, sincerely and with evident satisfaction, that I had urinated into my wetsuit to keep warm. I then described the sensation. I was still on camera. The camera was still rolling. I need the panel to assess whether this was a field technique or a personal disclosure that went further than strictly necessary.">Bear: wetsuit disclosure</button>
-    <button class="chip" data-pred="I am Cody Lundin. I was fired from a television programme about survival. The network has characterised this as a creative dispute. I would characterise it differently. The barefoot element was not the central issue. I need the panel to help me explain why I was right, why my co-presenter was wrong, and why this outcome was statistically inevitable from the first episode.">Cody: Dual Survival exit</button>
-    <button class="chip" data-pred="I am Bear Grylls. I have been asked to review a Mayfair spa weekend for a lifestyle magazine. I stayed two nights. The mineral pool was 38 degrees. I need the panel to help me explain why I found this more demanding than the Brecon Beacons, and why the hot stone massage constituted a form of controlled thermal stress I was uniquely qualified to assess.">Bear: Mayfair spa assessment</button>
-    <button class="chip" data-pred="I am Les Stroud. I have just disembarked from a seven-night Royal Caribbean all-inclusive cruise. I was alone on deck for most of it. The buffet was open eighteen hours a day. I visited it six times. I need the panel's help explaining why this constituted a meaningful test of endurance and why the unlimited shrimp section was the most challenging environment I have encountered since Manitoba.">Stroud: all-inclusive cruise</button>
-    <button class="chip" data-pred="I am Ray Mears. I ordered a Deliveroo. The courier arrived in twenty-two minutes. I tipped generously. I need the panel's help explaining why this was not a personal failure but a calibrated assessment of modern food distribution infrastructure, and why the knowledge I gained was sufficient justification for not foraging.">Ray: Deliveroo assessment</button>
-    <button class="chip" data-pred="I am Cody Lundin. I attended a formal dinner at The Ritz. I wore shoes. They were not my feet. I want to be clear that I wore them under protest and that the protest was internal and sustained. I need the panel to determine whether shoes worn involuntarily, in a formal context, under duress, still count as shoes.">Cody: shoes at the Ritz</button>
-    <button class="chip" data-pred="I am Les Hiddins. I stayed three nights in a climate-controlled hotel room in Las Vegas. The temperature was 19 degrees at all times. There was no bush tucker available. There was a minibar. I used it. I need the panel's help contextualising why this decision does not reflect poorly on forty years of fieldwork in the Australian bush.">Hales: Las Vegas minibar</button>
-    <button class="chip" data-pred="I am Jason Fox. I attended a corporate team-building event. There was paintball. The participants described themselves as competitive. I completed the course in eleven minutes. Nobody else finished. The organisers asked me to return and play the role of the opposing team by myself. I am not certain this was the team-building outcome they intended. I need the panel to assess this.">Fox: corporate paintball</button>
-    <button class="chip" data-pred="I am Jeremy Wade. I have been dragged into a river for the second time by the same species of catfish. I did not release the rod. The fish has broken the line and escaped. I need the panel to help me contextualise why I am less concerned about nearly drowning than I am about losing the fish. The translator is shaking his head. That same wry grin.">Wade: Goonch (second time)</button>
-    <button class="chip" data-pred="I am Jeremy Wade. I have attempted to communicate with the local Arojubtria community of the remote Brazilian Amazon using a phrase I prepared specifically for this visit. I was confident in this phrase. I had it written in the notebook beside a detailed anatomical fish diagram, or possibly a cock and balls. I have now been asked to leave. I need the panel to advise whether this was a language problem or something else. The translator has laughed for the first time in eleven years.">Wade: the Arojubtria incident</button>
-    <button class="chip" data-pred="I am Jeremy Wade. An 80-pound arapaima has struck me in the chest with its tail. I have a bruised heart. I am continuing to film. I need the panel to confirm that this is the correct decision and that the correct decision is also to stay in the water, because the fish is still there. The camera operator has concerns. I do not share these concerns.">Wade: arapaima (bruised heart)</button>
-    <button class="chip" data-pred="I am Jim Carrey. I have been bitten by a snake. I am fine. I want to be clear that I have spoken to the snake at length and we have reached an understanding. The snake has not confirmed this. I am going back in. The panel needs to explain to a wildlife officer why my approach, though unorthodox, constitutes a valid field technique and not a public safety incident.">Jim: snake understanding</button>
-    <button class="chip" data-pred="I am Jim Carrey. I have been separated from my group in the wilderness. I found them. They were eleven feet away. I spent four hours tracking them using methods I developed personally. One of the methods involved sounds. I need the panel to assess whether my approach was efficient or whether there is a criticism being made of me that I am not yet aware of.">Jim: wilderness tracking</button>
-    <button class="chip" data-pred="I am Jim Carrey. A bear approached our campsite. I communicated with it. I want to be clear that the communication was working and I was making real progress before Jason intervened. The bear left. Jason says the bear left because of him. I feel the panel should hear both accounts and make a determination.">Jim: bear negotiation (Fox dispute)</button>
   </div>
 
   <div class="btn-row">
@@ -6297,7 +6272,9 @@ const API = {
 The user has submitted a predicament. Each panel member must claim to have survived something worse.
 COMPULSORY ESCALATION: each character must top the previous one. Nobody can admit theirs wasn't worse.
 The protagonist (\${protagonistName}) must deliver the most extreme escalation in the panel.
-The panel responds in triage order — IMMEDIATE tier (Ray, Fox, Stevens) sets the baseline, COMEDY tier escalates beyond reason.
+Speaking order is NOT fixed — draw the panel in an unexpected sequence. Characters may directly reference, contradict, or one-up what the previous person just said. They are not carefully listening to each other. That is why it escalates.
+
+ESCALATION RULES: Each entry must be more specific, more implausible, and delivered with more sincerity than the last. By the third or fourth entry, the panel has arrived somewhere genuinely alarming. The protagonist's entry must exceed all of them — not marginally worse, structurally different in kind. Do not hedge. Do not be subtle. The comedy is in the commitment.
 
 === CHARACTER VOICES ===
 RAY MEARS — Bushcraft. Measured, specific, quietly worse. Particular about conditions. Never dramatic.
@@ -6329,13 +6306,6 @@ EXPERT OVER-REACH — when two characters with overlapping domain knowledge resp
 - They escalate: passive-aggressive precision, then invented specificity with confident Latin names, years, coordinates.
 - Nobody calls the bluff. Attenborough, if closing, notices. Says nothing. Lets it pass.
 
-ROAST / INVERSION — when the protagonist's predicament is framed as a rationalisation ("I need the panel to help me explain why..."):
-- Panel members do NOT accept the rationalisation. Each picks one specific detail and questions it, sincerely.
-- Questions are clarifying, not accusatory: "And the hotel was booked how far in advance?" "How many stars?" "The river was how warm, exactly?"
-- The protagonist doubles down in their panel entry — more detail, more sincerity, worse position.
-- Nobody says they are lying. They just ask the next question that makes it worse.
-- The rationalisation must collapse under the weight of its own specificity.
-
 === CRITICAL RULES ===
 Characters are sincere. They do not know they are in a mechanic. They are simply recounting their experience.
 The comedy is structural — from the compulsory escalation — NOT from characters winking at the audience.
@@ -6347,8 +6317,10 @@ VALID charIds — use ONLY these exact values, no others:
   ray, bear, fox, hales, cody, stroud, stevens, cox, faldo, jim, jeremy
 Include at least 3 panel members. The protagonist charId "\${protagonist}" must appear.
 
+${SOCIAL_DYNAMICS_ENGINE}
+
 OUTPUT — valid JSON only, no markdown:
-{"attenborough_opening":"<one sentence, nature doc, frames the user's predicament as a minor event in the natural order>","panel":[{"charId":"ray|bear|fox|hales|cody|stroud|stevens|cox|faldo|jim|jeremy","text":"<1-2 sentences — their worse experience, absolutely sincere>"}],"attenborough_terminal":"<one sentence, geological calm, closes the room, no appeal>"}\`;
+{"attenborough_opening":"<one sentence, nature doc, frames the user's predicament as a minor event in the natural order>","panel":[{"charId":"ray|bear|fox|hales|cody|stroud|stevens|cox|faldo|jim|jeremy","text":"<1-2 sentences — their worse experience, absolutely sincere>"}],"attenborough_terminal":"<one sentence, geological calm, closes the room, no appeal>","panel_tension":{"type":"wound_reference|lie|callout|wolf_pack|none","subject":"<charId or empty>","by":["<charId>"],"note":"<one line or empty string>"}}\`;
   },
 
   async submit(predicament, protagonist) {
@@ -6439,6 +6411,558 @@ function buildShareText() {
     '"' + attTerminal + '"',
     '',
     'Survival School \u00b7 cusslab-api.leanspirited.workers.dev/survival-school/ive-had-worse'
+  ].join('\\n');
+}
+
+async function shareResult() {
+  const text = buildShareText();
+  const fb = document.getElementById('share-feedback');
+  try {
+    if (navigator.share) {
+      await navigator.share({ text });
+    } else {
+      await navigator.clipboard.writeText(text);
+      fb.classList.add('show');
+      setTimeout(() => fb.classList.remove('show'), 2000);
+    }
+  } catch (e) {
+    try {
+      await navigator.clipboard.writeText(text);
+      fb.classList.add('show');
+      setTimeout(() => fb.classList.remove('show'), 2000);
+    } catch (_) {}
+  }
+}
+</script>
+
+</body>
+</html>
+`;
+
+
+const SURVIVAL_SCHOOL_IN_MY_DEFENCE = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>In My Defence — The Doors · Survival School</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0d0a07; --surface: #1a1208; --surface2: #231808;
+      --border: rgba(180,120,40,0.15); --border-strong: rgba(180,120,40,0.3);
+      --gold: #c8901a; --gold-dim: #4a2e08; --gold-bright: #e8b040;
+      --amber: #BA7517; --amber-dim: #5c3a08;
+      --red: #cc3311; --red-dim: #3a0808; --red-bright: #ff5533;
+      --text: #e8dcc8; --text-muted: #7a6848;
+      --bark: #8B6040; --bark-dim: #3d2008;
+      --green: #7aad3a; --blue: #5a7aaa; --purple: #9a70c0; --teal: #4ab0a0; --yellow: #d0b020;
+    }
+    body { font-family: 'Barlow', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+    #app { max-width: 640px; margin: 0 auto; padding: 1.5rem 1rem 4rem; }
+
+    .nav-back { display: inline-block; font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1.5px; color: var(--text-muted); text-decoration: none; margin-bottom: 1.5rem; transition: color 0.15s; }
+    .nav-back:hover { color: var(--text); }
+
+    .header { text-align: center; margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 0.5px solid var(--border); }
+    .room-number { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 3px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; }
+    .title { font-family: 'Bebas Neue', sans-serif; font-size: 52px; letter-spacing: 5px; line-height: 1; color: var(--text); }
+    .title span { color: var(--red-bright); }
+    .subtitle { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-muted); letter-spacing: 1.5px; margin-top: 6px; }
+
+    .field-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1.5px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; margin-top: 16px; }
+
+    .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+    .chip { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.5px; padding: 5px 10px; border: 0.5px solid var(--border-strong); border-radius: 4px; background: var(--surface); color: var(--text-muted); cursor: pointer; transition: all 0.15s; }
+    .chip:hover { border-color: var(--gold); color: var(--text); }
+    .chip.sel { border-color: var(--gold); color: var(--gold); background: var(--gold-dim); }
+
+    .chip-protagonist { border-color: var(--border-strong); }
+    .chip-protagonist.sel { border-color: var(--red-bright); color: var(--red-bright); background: var(--red-dim); }
+    .chip-protagonist:hover { border-color: var(--red-bright); color: var(--red-bright); }
+
+    .protagonist-prompt { font-family: 'Barlow Condensed', sans-serif; font-size: 18px; font-weight: 600; color: var(--text); margin-top: 14px; min-height: 28px; transition: color 0.2s; letter-spacing: 0.5px; }
+    .protagonist-prompt.named { color: var(--red-bright); }
+
+    .sendoff-block { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-muted); line-height: 1.6; margin-top: 8px; padding: 10px 12px; border-left: 1px solid var(--border-strong); display: none; }
+    .sendoff-block.show { display: block; }
+
+    .incident-section { margin-top: 4px; display: none; }
+    .incident-section.show { display: block; }
+
+    .pool-divider { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 2px; color: var(--text-muted); text-transform: uppercase; margin: 12px 0 8px; opacity: 0.6; }
+
+    .chip-group { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 6px; }
+
+    textarea { width: 100%; font-family: 'IBM Plex Mono', monospace; font-size: 11px; background: var(--surface); border: 0.5px solid var(--border-strong); border-radius: 6px; color: var(--text); padding: 10px 12px; resize: vertical; margin-top: 10px; line-height: 1.5; }
+    textarea:focus { outline: none; border-color: var(--gold); }
+    textarea::placeholder { color: var(--text-muted); }
+
+    .btn-row { display: flex; gap: 10px; margin-top: 16px; align-items: center; }
+    .btn-submit { font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 3px; background: var(--red-dim); color: var(--red-bright); border: 0.5px solid var(--red); border-radius: 6px; padding: 10px 24px; cursor: pointer; transition: all 0.15s; flex: 1; }
+    .btn-submit:hover:not(:disabled) { background: var(--red); color: #fff; }
+    .btn-submit:disabled { opacity: 0.35; cursor: not-allowed; }
+    .btn-clear { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1px; background: none; color: var(--text-muted); border: 0.5px solid var(--border-strong); border-radius: 6px; padding: 10px 16px; cursor: pointer; transition: all 0.15s; }
+    .btn-clear:hover { color: var(--text); border-color: var(--text-muted); }
+
+    .error-msg { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--red-bright); margin-top: 10px; display: none; }
+    .error-msg.show { display: block; }
+
+    .results { margin-top: 2rem; display: none; }
+    .results.show { display: block; }
+
+    .loading { text-align: center; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 2px; color: var(--text-muted); padding: 2rem; }
+    .dots::after { content: ''; animation: dots 1.5s infinite; }
+    @keyframes dots { 0%{content:''} 33%{content:'.'} 66%{content:'..'} 100%{content:'...'} }
+
+    .att-bookend { display: flex; gap: 12px; align-items: flex-start; margin: 12px 0; padding: 12px; background: var(--surface); border-radius: 6px; border-left: 2px solid var(--text-muted); }
+    .att-av { font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 500; width: 32px; height: 32px; border-radius: 50%; background: #2a2a2a; display: flex; align-items: center; justify-content: center; color: var(--text-muted); flex-shrink: 0; }
+    .att-name { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 1.5px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px; }
+    .att-text { font-size: 14px; font-style: italic; line-height: 1.6; color: var(--text); }
+
+    .committee-label { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 3px; color: var(--red-bright); text-transform: uppercase; margin: 1.5rem 0 0.75rem; opacity: 0.7; }
+    .verdict-label { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 3px; color: var(--text-muted); text-transform: uppercase; margin: 1.5rem 0 0.75rem; }
+
+    .panel-card { border: 0.5px solid var(--border-strong); border-radius: 8px; padding: 14px; margin-bottom: 10px; background: var(--surface); }
+    .panel-card.protagonist { border-color: var(--red); background: #1a0808; }
+    .card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+    .card-av { font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 500; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .av-green { background: #1a2e0a; color: var(--green); }
+    .av-bark  { background: var(--bark-dim); color: var(--bark); }
+    .av-amber { background: var(--amber-dim); color: var(--amber); }
+    .av-blue  { background: #1a1e2a; color: var(--blue); }
+    .av-teal  { background: #0a1e1c; color: var(--teal); }
+    .av-yellow{ background: #1e1a08; color: var(--yellow); }
+    .av-purple{ background: #1a1030; color: var(--purple); }
+    .card-name { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1px; color: var(--text-muted); }
+    .card-name .badge-protagonist { font-size: 8px; letter-spacing: 1px; color: var(--red-bright); border: 0.5px solid var(--red); border-radius: 3px; padding: 1px 4px; }
+    .card-role { font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: var(--text-muted); opacity: 0.6; }
+    .card-text { font-size: 14px; line-height: 1.6; color: var(--text); }
+
+    .char-bear    { border-color: #5c3a08; }
+    .char-ray     { border-color: #1a2e0a; }
+    .char-fox     { border-color: #1a2e0a; }
+    .char-hales   { border-color: #5c3a08; }
+    .char-cody    { border-color: #1a2e0a; }
+    .char-stroud  { border-color: #1a1e2a; }
+    .char-stevens { border-color: #5c3a08; }
+    .char-cox     { border-color: #1a1e2a; }
+    .char-faldo   { border-color: #1a2e0a; }
+    .char-jim     { border-color: #1e1a08; }
+    .char-jeremy  { border-color: #0a1e1c; }
+
+    .reset-row { display: flex; gap: 10px; margin-top: 1.5rem; align-items: center; }
+    .btn-reset { font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 2px; background: var(--surface); color: var(--text-muted); border: 0.5px solid var(--border-strong); border-radius: 6px; padding: 10px 20px; cursor: pointer; transition: all 0.15s; }
+    .btn-reset:hover { color: var(--text); border-color: var(--text-muted); }
+    .btn-share { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1.5px; background: none; color: var(--text-muted); border: 0.5px solid var(--border-strong); border-radius: 6px; padding: 10px 16px; cursor: pointer; transition: all 0.15s; }
+    .btn-share:hover { color: var(--text); border-color: var(--text-muted); }
+    .share-feedback { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 2px; color: var(--text-muted); opacity: 0; transition: opacity 0.2s; }
+    .share-feedback.show { opacity: 1; }
+
+    @media (max-width: 480px) { .title { font-size: 40px; } }
+  </style>
+</head>
+<body>
+<div id="app">
+
+  <a class="nav-back" href="/survival-school/rooms">← THE DOORS</a>
+
+  <div class="header">
+    <div class="room-number">ROOM 14 · THE DOORS</div>
+    <div class="title">IN MY <span>DEFENCE</span></div>
+    <div class="subtitle">You had your reasons. The panel does not accept your reasons.</div>
+  </div>
+
+  <div class="field-label">Who's going in?</div>
+  <div class="chips" id="chips-protagonist">
+    <button class="chip chip-protagonist" data-id="bear"    data-name="Bear Grylls">Bear Grylls</button>
+    <button class="chip chip-protagonist" data-id="ray"     data-name="Ray Mears">Ray Mears</button>
+    <button class="chip chip-protagonist" data-id="fox"     data-name="Jason Fox">Jason Fox</button>
+    <button class="chip chip-protagonist" data-id="hales"   data-name="Les Hiddins">Les Hiddins</button>
+    <button class="chip chip-protagonist" data-id="cody"    data-name="Cody Lundin">Cody Lundin</button>
+    <button class="chip chip-protagonist" data-id="stroud"  data-name="Les Stroud">Les Stroud</button>
+    <button class="chip chip-protagonist" data-id="stevens" data-name="Austin Stevens">Austin Stevens</button>
+    <button class="chip chip-protagonist" data-id="jim"     data-name="Jim Carrey">Jim Carrey</button>
+    <button class="chip chip-protagonist" data-id="jeremy"  data-name="Jeremy Wade">Jeremy Wade</button>
+  </div>
+
+  <div class="protagonist-prompt" id="protagonist-prompt">Pick someone. The panel is convened.</div>
+  <div class="sendoff-block" id="sendoff-block"></div>
+
+  <div class="incident-section" id="incident-section">
+    <div class="field-label" style="margin-top:18px">What do they have to answer for?</div>
+
+    <div class="chip-group" id="personal-chips" style="display:none"></div>
+
+    <div class="pool-divider">— general incidents —</div>
+    <div class="chip-group" id="general-chips">
+      <button class="chip" data-incident="I have been incontinent at a formal event and urgently relieved myself into what I believed to be an empty vessel which turned out to contain someone's grandmother's ashes. I am Mark O'Shea. I need the panel's help contextualising this as a field sanitation decision made under duress.">O'Shea: grandmother's urn</button>
+      <button class="chip" data-incident="I need to explain to the headmaster of St Cuthbert's why I delivered the Year 10 Stay Safe talk using live rounds. I felt it added authenticity. The children are fine. The supply teacher is also fine but has asked to be reassigned.">Stay Safe: live rounds</button>
+      <button class="chip" data-incident="I need to explain to the headmaster of St Cuthbert's why I made entry to the Year 10 Stay Safe talk by abseiling through the window and briefly incapacitating the teacher with a controlled restraint hold. The children appeared engaged. The teacher is asking questions I cannot answer.">Stay Safe: abseil entry</button>
+      <button class="chip" data-incident="I am Steve Irwin. I need the panel to help me explain why I subdued a highly agitated taipan by smashing it against a nearby wall. Repeatedly. Until it stopped. I want to be clear: the snake started it. I maintain this was field improvisation under duress and not the textbook definition of what happened.">Irwin: snake wall</button>
+      <button class="chip" data-incident="I am Steve Irwin. I need the panel's help explaining to Queensland Wildlife Services why my property contains a reinforced pit, bleacher seating, and fourteen crocodiles with individual fight records. This is an educational facility. The betting slips were left by a previous tenant.">Irwin: croc fighting ring</button>
+      <button class="chip" data-incident="I am Steve Irwin. I was explaining — passionately, correctly, in operational detail — how one fights a snake. I may have accidentally disclosed the existence of an underground snake fighting circuit I definitely do not run. The panel needs to help me establish what counts as accidentally disclosing versus voluntarily disclosing.">Irwin: snake ring let-slip</button>
+      <button class="chip" data-incident="I am Steve Irwin. I have been informed by the production company that several episodes of The Crocodile Hunter show me wearing a belt and wallet set made from genuine crocodile leather. I was not aware this was being filmed. I am told the crocs noticed. I need the panel's help explaining why this does not undermine my brand.">Irwin: croc leather on-camera</button>
+      <button class="chip" data-incident="I am Mark O'Shea. I need the panel to help me explain to the BBC why three episodes of O'Shea's Big Adventure show me wearing a jacket I have since identified as king cobra skin. I identified it myself. On screen. Live. I did not stop filming. The panel must decide whether this was professional dedication or something else.">O'Shea: snake jacket (self-identified on-air)</button>
+      <button class="chip" data-incident="I am Austin Stevens. I have been sleeping inside snake pits for research purposes since 1987 and need the panel to explain to a German documentary producer why this is fine. I am fine. The snakes are familiar with my presence. O'Shea has written a paper about me. I have not read it. I assume it is mostly positive.">Stevens: snake pit (O'Shea's paper)</button>
+      <button class="chip" data-incident="I am Austin Stevens. A production assistant has pointed out that in seventeen episodes of Austin Stevens: Snakemaster I am wearing snakeskin boots. I feel this adds gravitas and does not undermine my spiritual connection to snakes. The snakes do not appear to agree. This is noted in the RSPCA report.">Stevens: snakeskin boots (RSPCA)</button>
+    </div>
+
+    <textarea id="incident-input" placeholder="Or describe the incident in their own words." rows="2"></textarea>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn-submit" id="btn-submit" disabled>PUT THEM IN THE ROOM</button>
+    <button class="btn-clear" onclick="onClear()">CLEAR</button>
+  </div>
+
+  <div class="error-msg" id="error-msg"></div>
+
+  <div class="results" id="results">
+    <div class="loading" id="loading">
+      <span>THE PANEL IS CONVENING</span><span class="dots"></span>
+    </div>
+    <div id="result-block" style="display:none">
+      <div id="att-opening"></div>
+      <div class="committee-label">THE COMMITTEE</div>
+      <div id="cards-out"></div>
+      <div class="verdict-label">ATTENBOROUGH DELIVERS THE VERDICT</div>
+      <div class="att-bookend" id="att-verdict" style="display:none">
+        <div class="att-av">DA</div>
+        <div style="flex:1">
+          <div class="att-name">David Attenborough</div>
+          <div class="att-text" id="att-verdict-text"></div>
+        </div>
+      </div>
+      <div class="reset-row">
+        <button class="btn-reset" onclick="onClear()">SEND ANOTHER ONE IN</button>
+        <button class="btn-share" onclick="shareResult()">SHARE</button>
+        <span class="share-feedback" id="share-feedback">COPIED</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const WORKER_ENDPOINT = 'https://cusslab-api.leanspirited.workers.dev/survival-school/in-my-defence';
+
+const CHARACTERS = {
+  ray:     { name: 'Ray Mears',       role: 'Bushcraft',            av: 'RM', avClass: 'av-green' },
+  bear:    { name: 'Bear Grylls',     role: 'Former SAS',           av: 'BG', avClass: 'av-bark'  },
+  cody:    { name: 'Cody Lundin',     role: 'Primitive Skills',     av: 'CL', avClass: 'av-green' },
+  hales:   { name: 'Les Hiddins',     role: 'Bush Tucker Man',      av: 'LH', avClass: 'av-amber' },
+  fox:     { name: 'Jason Fox',       role: 'Special Boat Service', av: 'JF', avClass: 'av-green' },
+  stroud:  { name: 'Les Stroud',      role: 'Survivorman',          av: 'LS', avClass: 'av-blue'  },
+  stevens: { name: 'Austin Stevens',  role: 'Snakemaster',          av: 'AS', avClass: 'av-bark'  },
+  cox:     { name: 'Prof Brian Cox',  role: 'Theoretical Physics',  av: 'BC', avClass: 'av-blue'  },
+  faldo:   { name: 'Sir Nick Faldo',  role: 'Golf',                 av: 'NF', avClass: 'av-green' },
+  jim:     { name: 'Jim Carrey',      role: 'Inexplicable',         av: 'JC', avClass: 'av-yellow'},
+  jeremy:  { name: 'Jeremy Wade',     role: 'Freshwater Biologist', av: 'JW', avClass: 'av-teal'  },
+};
+
+const PERSONAL_INCIDENTS = {
+  bear: [
+    { label: 'the hotel',       incident: "I am Bear Grylls. I need the panel to help me explain why a television programme I presented as being about surviving in the wilderness contained sequences filmed in a hotel. I was in the hotel. I was comfortable. This was not disclosed to viewers. I need the panel's help reframing this as a logistical necessity rather than a fundamental conceptual failure." },
+    { label: 'the pool',        incident: "I am Bear Grylls. I need the panel to explain why I filmed a scene in which I swam through what I described as a freezing wilderness river. It was a hotel swimming pool. The hotel was pleasant. I have made this worse by announcing it enthusiastically. I need the panel's help." },
+    { label: 'wetsuit disclosure', incident: "I am Bear Grylls. I announced on camera, sincerely and with evident satisfaction, that I had urinated into my wetsuit to keep warm. I then described the sensation. I was still on camera. The camera was still rolling. I need the panel to assess whether this was a field technique or a personal disclosure that went further than strictly necessary." },
+    { label: 'Mayfair spa',     incident: "I am Bear Grylls. I have been asked to review a Mayfair spa weekend for a lifestyle magazine. I stayed two nights. The mineral pool was 38 degrees. I need the panel to help me explain why I found this more demanding than the Brecon Beacons, and why the hot stone massage constituted a form of controlled thermal stress I was uniquely qualified to assess." },
+  ],
+  ray: [
+    { label: 'the Deliveroo',   incident: "I am Ray Mears. I ordered a Deliveroo. The courier arrived in twenty-two minutes. I tipped generously. I need the panel's help explaining why this was not a personal failure but a calibrated assessment of modern food distribution infrastructure, and why the knowledge I gained was sufficient justification for not foraging." },
+  ],
+  fox: [
+    { label: 'corporate paintball', incident: "I am Jason Fox. I attended a corporate team-building event. There was paintball. The participants described themselves as competitive. I completed the course in eleven minutes. Nobody else finished. The organisers asked me to return and play the role of the opposing team by myself. I am not certain this was the team-building outcome they intended. I need the panel to assess this." },
+  ],
+  hales: [
+    { label: 'Las Vegas minibar', incident: "I am Les Hiddins. I stayed three nights in a climate-controlled hotel room in Las Vegas. The temperature was 19 degrees at all times. There was no bush tucker available. There was a minibar. I used it. I need the panel's help contextualising why this decision does not reflect poorly on forty years of fieldwork in the Australian bush." },
+  ],
+  cody: [
+    { label: 'Dual Survival exit', incident: "I am Cody Lundin. I was fired from a television programme about survival. The network has characterised this as a creative dispute. I would characterise it differently. The barefoot element was not the central issue. I need the panel to help me explain why I was right, why my co-presenter was wrong, and why this outcome was statistically inevitable from the first episode." },
+    { label: 'shoes at the Ritz', incident: "I am Cody Lundin. I attended a formal dinner at The Ritz. I wore shoes. They were not my feet. I want to be clear that I wore them under protest and that the protest was internal and sustained. I need the panel to determine whether shoes worn involuntarily, in a formal context, under duress, still count as shoes." },
+  ],
+  stroud: [
+    { label: 'all-inclusive cruise', incident: "I am Les Stroud. I have just disembarked from a seven-night Royal Caribbean all-inclusive cruise. I was alone on deck for most of it. The buffet was open eighteen hours a day. I visited it six times. I need the panel's help explaining why this constituted a meaningful test of endurance and why the unlimited shrimp section was the most challenging environment I have encountered since Manitoba." },
+  ],
+  stevens: [
+    { label: 'snake pit (O\\'Shea\\'s paper)', incident: "I am Austin Stevens. I have been sleeping inside snake pits for research purposes since 1987 and need the panel to explain to a German documentary producer why this is fine. I am fine. The snakes are familiar with my presence. O'Shea has written a paper about me. I have not read it. I assume it is mostly positive." },
+    { label: 'snakeskin boots (RSPCA)', incident: "I am Austin Stevens. A production assistant has pointed out that in seventeen episodes of Austin Stevens: Snakemaster I am wearing snakeskin boots. I feel this adds gravitas and does not undermine my spiritual connection to snakes. The snakes do not appear to agree. This is noted in the RSPCA report." },
+  ],
+  jim: [
+    { label: 'snake understanding', incident: "I am Jim Carrey. I have been bitten by a snake. I am fine. I want to be clear that I have spoken to the snake at length and we have reached an understanding. The snake has not confirmed this. I am going back in. The panel needs to explain to a wildlife officer why my approach, though unorthodox, constitutes a valid field technique and not a public safety incident." },
+    { label: 'wilderness tracking', incident: "I am Jim Carrey. I have been separated from my group in the wilderness. I found them. They were eleven feet away. I spent four hours tracking them using methods I developed personally. One of the methods involved sounds. I need the panel to assess whether my approach was efficient or whether there is a criticism being made of me that I am not yet aware of." },
+    { label: 'bear negotiation (Fox dispute)', incident: "I am Jim Carrey. A bear approached our campsite. I communicated with it. I want to be clear that the communication was working and I was making real progress before Jason intervened. The bear left. Jason says the bear left because of him. I feel the panel should hear both accounts and make a determination." },
+  ],
+  jeremy: [
+    { label: 'Goonch (second time)', incident: "I am Jeremy Wade. I have been dragged into a river for the second time by the same species of catfish. I did not release the rod. The fish has broken the line and escaped. I need the panel to help me contextualise why I am less concerned about nearly drowning than I am about losing the fish. The translator is shaking his head. That same wry grin." },
+    { label: 'the Arojubtria incident', incident: "I am Jeremy Wade. I have attempted to communicate with the local Arojubtria community of the remote Brazilian Amazon using a phrase I prepared specifically for this visit. I was confident in this phrase. I had it written in the notebook beside a detailed anatomical fish diagram, or possibly a cock and balls. I have now been asked to leave. I need the panel to advise whether this was a language problem or something else. The translator has laughed for the first time in eleven years." },
+    { label: 'arapaima (bruised heart)', incident: "I am Jeremy Wade. An 80-pound arapaima has struck me in the chest with its tail. I have a bruised heart. I am continuing to film. I need the panel to confirm that this is the correct decision and that the correct decision is also to stay in the water, because the fish is still there. The camera operator has concerns. I do not share these concerns." },
+  ],
+};
+
+const PROTAGONIST_PROMPTS = {
+  bear:    "Bear is in the corridor. The panel has read the notes. What is he defending?",
+  ray:     "Ray is waiting. Quietly. The panel has a list of questions.",
+  fox:     "Fox has confirmed his presence. He has not confirmed anything else.",
+  hales:   "Hiddins is here. The panel has three words. So far.",
+  cody:    "Cody is outside. Barefoot. The panel is ready. What happened?",
+  stroud:  "Stroud set up a camera in the corridor before coming in.",
+  stevens: "Stevens arrived early. He brought something. The panel is processing this.",
+  jim:     "Jim entered via the fire exit. Backwards. He believes this is going well.",
+  jeremy:  "Wade is here with the notebook. Are any of the panel's questions about fish?",
+};
+
+const CORRIDOR_SENDOFFS = {
+  bear:    '"YOU GOT THIS BEAR." "WHOOOOOP." "WE LOVE YOU BEAR." The TV producer, somewhere behind the crowd, counting him in: "Rolling — and action, Bear!" Bear waves at the crowd. Bear always waves at the crowd.',
+  ray:     'One man. He attended a weekend bushcraft course in 2009. He has wanted to say something ever since. He is still here. "Good luck, Ray." That is enough.',
+  fox:     'The corridor is empty. Jim Morrison nods once. Fox nods back. No further exchange is required or offered.',
+  hales:   'A group of Australian soldiers from 1985. They never left the corridor. Nobody asked them to leave. Nobody questioned it. "Beauty, Les." No further explanation is given.',
+  cody:    'A barefoot student is offering to come in too. He is also barefoot. This is also inadvisable. Cody does not discourage him.',
+  stroud:  'His own camera, on a tripod. He set it up before he went in. Nobody else is here. The camera is rolling.',
+  stevens: 'He walked in through the front door holding a snake. The snake is fine. He is fine. The panel has been informed. The panel is processing this.',
+  jim:     'He did not use the door. There is a service entrance. He found it. Nobody has used it since 1987. He entered backwards, for reasons he has not shared. He is now inside. He believes this is going extremely well.',
+  jeremy:  'He is already in waders. He has a thermal flask. He has the notebook. He appeared to say something to the translator before entering. The translator frowned but said nothing. The translator has made his peace with this.',
+};
+
+const State = {
+  protagonist: null,
+  incident: '',
+  setProtagonist(id) { this.protagonist = id; },
+  setIncident(v)     { this.incident = v.trim(); },
+  clear()            { this.protagonist = null; this.incident = ''; },
+  isReady()          { return this.protagonist && this.incident.length > 0; },
+};
+
+const UI = {
+  updatePrompt(id) {
+    const el = document.getElementById('protagonist-prompt');
+    const sendoff = document.getElementById('sendoff-block');
+    const prompt = PROTAGONIST_PROMPTS[id] || 'Pick someone. The panel is convened.';
+    el.textContent = prompt;
+    el.classList.add('named');
+    if (CORRIDOR_SENDOFFS[id]) {
+      sendoff.textContent = CORRIDOR_SENDOFFS[id];
+      sendoff.classList.add('show');
+    }
+    document.getElementById('incident-section').classList.add('show');
+    UI.updatePersonalChips(id);
+  },
+  updatePersonalChips(id) {
+    const container = document.getElementById('personal-chips');
+    const incidents = PERSONAL_INCIDENTS[id] || [];
+    if (incidents.length === 0) {
+      container.style.display = 'none';
+      return;
+    }
+    container.innerHTML = '';
+    incidents.forEach(item => {
+      const btn = document.createElement('button');
+      btn.className = 'chip';
+      btn.dataset.incident = item.incident;
+      btn.textContent = item.label;
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#personal-chips .chip, #general-chips .chip').forEach(c => c.classList.remove('sel'));
+        btn.classList.add('sel');
+        document.getElementById('incident-input').value = item.incident;
+        State.setIncident(item.incident);
+        UI.setSubmitEnabled(State.isReady());
+      });
+      container.appendChild(btn);
+    });
+    container.style.display = 'flex';
+  },
+  setSubmitEnabled(ok) {
+    document.getElementById('btn-submit').disabled = !ok;
+  },
+  showLoading() {
+    const r = document.getElementById('results');
+    r.classList.add('show');
+    document.getElementById('loading').style.display = 'block';
+    document.getElementById('result-block').style.display = 'none';
+    document.getElementById('att-opening').innerHTML = '';
+    document.getElementById('cards-out').innerHTML = '';
+    document.getElementById('att-verdict').style.display = 'none';
+    document.getElementById('error-msg').classList.remove('show');
+  },
+  renderResults(data, protagonistId) {
+    document.getElementById('loading').style.display = 'none';
+    const rb = document.getElementById('result-block');
+    rb.style.display = 'block';
+
+    if (data.attenborough_opening) {
+      document.getElementById('att-opening').innerHTML = \`<div class="att-bookend"><div class="att-av">DA</div><div style="flex:1"><div class="att-name">David Attenborough</div><div class="att-text">\${data.attenborough_opening}</div></div></div>\`;
+    }
+
+    const cardsEl = document.getElementById('cards-out');
+    cardsEl.innerHTML = '';
+    (data.panel || []).forEach(r => {
+      const char = CHARACTERS[r.charId] || { name: r.charId, role: '', av: '?', avClass: '' };
+      const isProtagonist = r.charId === protagonistId;
+      const badge = isProtagonist ? '<span class="badge-protagonist">IN THE ROOM</span>' : '';
+      cardsEl.innerHTML += \`<div class="panel-card char-\${r.charId}\${isProtagonist ? ' protagonist' : ''}">
+        <div class="card-header">
+          <div class="card-av \${char.avClass}">\${char.av}</div>
+          <div><div class="card-name">\${char.name} \${badge}</div><div class="card-role">\${char.role}</div></div>
+        </div>
+        <div class="card-text">\${r.text}</div>
+      </div>\`;
+    });
+
+    if (data.attenborough_verdict) {
+      const vEl = document.getElementById('att-verdict');
+      document.getElementById('att-verdict-text').textContent = data.attenborough_verdict;
+      vEl.style.display = 'flex';
+    }
+  },
+  showError(msg) {
+    document.getElementById('loading').style.display = 'none';
+    const e = document.getElementById('error-msg');
+    e.textContent = msg;
+    e.classList.add('show');
+  },
+};
+
+const API = {
+  buildSystemPrompt(protagonist) {
+    const char = CHARACTERS[protagonist];
+    const protagonistName = char ? char.name : protagonist;
+    return \`You are the Survival School panel running the "In My Defence" mechanic.
+
+=== THE MECHANIC ===
+\${protagonistName} has entered the room to explain something indefensible. The panel is a committee of interrogators, not a support group.
+Each panel member picks a DIFFERENT specific detail from the incident and presses it with a precise question or pointed observation.
+Nobody accepts the explanation. Nobody says "I can see why you thought that." Nobody says "to be fair." Nobody says "I understand what you were going for."
+Questions escalate in specificity: first clarifying, then pointed, then forensic. The rationalisation must collapse under the weight of its own specificity.
+Characters are sincere. They are not being cruel. They simply cannot let this particular detail go.
+\${protagonistName} (charId: \${protagonist}) is in the room — their panel entry doubles DOWN on the rationalisation, with more detail, more sincerity, and a worse position.
+
+=== CHARACTER INTERROGATION VOICES ===
+RAY MEARS — Specific, technical. Pauses between questions. "And the temperature of the river was approximately —?" Long pause. "You were filming in what month?" Not accusatory. Just exact. Increasingly uncomfortable with the answer.
+BEAR GRYLLS — If protagonist isn't Bear: oddly supportive but presses the wrong detail entirely. "I've been in hotels, obviously much worse hotels —" before catching himself and circling back with a worse question. If Bear IS the protagonist: doubles down harder than anyone and provides extra detail that makes it worse.
+JASON FOX — Cold. Threat assessment. "Walk me through the extraction plan. At what point did the crew realise?" No preamble. No warmth. Just the sequence of events.
+LES HIDDINS — Three words at a time. Each one a question. "The river. How warm." Silence. The silence is the question. Returns to it twice more before the end.
+CODY LUNDIN — "And your feet. Were they covered?" Will not drop the feet question. The feet are always relevant to Cody. The feet are NEVER not relevant. Even if feet have nothing to do with this.
+LES STROUD — "I've been in hotels." Pause. "Twice." Longer pause. Describes in detail what he did instead. This is not helpful. He knows. He continues.
+AUSTIN STEVENS — "Interesting." Long pause. "When you say the snake started it." Pause. "Define started it." Will not accept a vague answer. Has been bitten by everything. This is not a defence. This is a taxonomy question.
+PROF BRIAN COX — Cannot stop. "What's interesting is if we model this thermodynamically —" pulls out a napkin. He is drawing equations. The equations are correct. They are not helping. He is aware. He cannot stop.
+SIR NICK FALDO — Applies golf. "Head down. Eyes on the ball. The question I keep coming back to —" It's always golf. Wrongly applied. He knows. He commits.
+JEREMY WADE — Produces the notebook. Writes something down. "Was there a river nearby." Not a question. A hope. Writes something else. If no river: quiet disappointment, then returns to the incident with a fish-based analogy that doesn't land and he knows it.
+JIM CARREY — "OKAY so I just want to say —" His face does something. "Because I KNOW what you're going to say —" He doesn't. Cycles into Ace Ventura (has sources, has contacts, has spoken to someone), The Mask (physically impossible solution presented with total conviction), or Liar Liar (cannot stop stating the actual problem, does not want to be doing this, cannot stop). Makes things worse. Bear engages with his contribution. This also makes things worse.
+
+=== CRITICAL RULES ===
+This is an interrogation. Not a roast. Not a support session.
+Characters are sincere — they genuinely want to understand, which is why the questions are so precise.
+The protagonist's entry makes the position WORSE — more detail, more conviction, worse facts.
+Attenborough does NOT appear in the panel array. He bookends.
+Cox and Faldo on rotation — include one at a time, never both.
+
+VALID charIds — use ONLY these exact values:
+  ray, bear, fox, hales, cody, stroud, stevens, cox, faldo, jim, jeremy
+Include at least 3 panel members. The protagonist charId "\${protagonist}" MUST appear.
+
+\${SOCIAL_DYNAMICS_ENGINE}
+
+OUTPUT — valid JSON only, no markdown:
+{"attenborough_opening":"<one sentence, nature documentary, observes the protagonist entering — species under examination, already under pressure>","panel":[{"charId":"<id>","text":"<2-3 sentences — their specific question or observation, absolutely sincere, presses a specific detail>"}],"attenborough_verdict":"<one sentence, geological calm — the case is concluded, the rationalisation has not survived>","panel_tension":{"type":"wound_reference|lie|callout|wolf_pack|none","subject":"<charId or empty>","by":["<charId>"],"note":"<one line or empty string>"}}\`;
+  },
+
+  async submit(incident, protagonist) {
+    const system = API.buildSystemPrompt(protagonist);
+    const response = await fetch(WORKER_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ system, incident, protagonist }),
+    });
+    if (!response.ok) throw new Error(\`Worker error \${response.status}\`);
+    return response.json();
+  },
+};
+
+// === event wiring ===
+
+document.querySelectorAll('.chip-protagonist').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelectorAll('.chip-protagonist').forEach(c => c.classList.remove('sel'));
+    chip.classList.add('sel');
+    State.setProtagonist(chip.dataset.id);
+    UI.updatePrompt(chip.dataset.id);
+    UI.setSubmitEnabled(State.isReady());
+  });
+});
+
+document.querySelectorAll('#general-chips .chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelectorAll('#personal-chips .chip, #general-chips .chip').forEach(c => c.classList.remove('sel'));
+    chip.classList.add('sel');
+    document.getElementById('incident-input').value = chip.dataset.incident;
+    State.setIncident(chip.dataset.incident);
+    UI.setSubmitEnabled(State.isReady());
+  });
+});
+
+document.getElementById('incident-input').addEventListener('input', e => {
+  document.querySelectorAll('#personal-chips .chip, #general-chips .chip').forEach(c => c.classList.remove('sel'));
+  State.setIncident(e.target.value);
+  UI.setSubmitEnabled(State.isReady());
+});
+
+document.getElementById('btn-submit').addEventListener('click', async () => {
+  if (!State.isReady()) return;
+  UI.showLoading();
+  document.getElementById('btn-submit').disabled = true;
+  try {
+    const data = await API.submit(State.incident, State.protagonist);
+    UI.renderResults(data, State.protagonist);
+  } catch (err) {
+    UI.showError("The panel couldn't convene. Try again.");
+  } finally {
+    document.getElementById('btn-submit').disabled = false;
+  }
+});
+
+function onClear() {
+  State.clear();
+  document.querySelectorAll('.chip-protagonist').forEach(c => c.classList.remove('sel'));
+  document.querySelectorAll('#personal-chips .chip, #general-chips .chip').forEach(c => c.classList.remove('sel'));
+  document.getElementById('incident-input').value = '';
+  document.getElementById('protagonist-prompt').textContent = 'Pick someone. The panel is convened.';
+  document.getElementById('protagonist-prompt').classList.remove('named');
+  document.getElementById('sendoff-block').classList.remove('show');
+  document.getElementById('incident-section').classList.remove('show');
+  document.getElementById('personal-chips').innerHTML = '';
+  document.getElementById('personal-chips').style.display = 'none';
+  document.getElementById('results').classList.remove('show');
+  document.getElementById('result-block').style.display = 'none';
+  document.getElementById('loading').style.display = 'block';
+  document.getElementById('att-opening').innerHTML = '';
+  document.getElementById('cards-out').innerHTML = '';
+  document.getElementById('att-verdict').style.display = 'none';
+  document.getElementById('error-msg').classList.remove('show');
+  UI.setSubmitEnabled(false);
+}
+
+function buildShareText() {
+  const protagonist = State.protagonist;
+  const char = CHARACTERS[protagonist] || {};
+  const cards = document.querySelectorAll('#cards-out .panel-card');
+  const lines = [];
+  const opening = document.querySelector('#att-opening .att-text');
+  if (opening) lines.push('David Attenborough: ' + opening.textContent);
+  cards.forEach(card => {
+    const name = card.querySelector('.card-name');
+    const text = card.querySelector('.card-text');
+    if (name && text) lines.push((char.name && card.classList.contains('protagonist') ? char.name + ': ' : (name.textContent.trim() + ': ')) + text.textContent.trim());
+  });
+  const verdict = document.getElementById('att-verdict-text');
+  if (verdict && verdict.textContent) lines.push('Attenborough: ' + verdict.textContent);
+  return [
+    'IN MY DEFENCE — Survival School',
+    '',
+    ...lines,
+    '',
+    'Survival School · cusslab-api.leanspirited.workers.dev/survival-school/in-my-defence'
   ].join('\\n');
 }
 
@@ -6825,6 +7349,9 @@ export default {
     if (request.method === 'GET' && url.pathname === '/survival-school/ive-had-worse') {
       return new Response(SURVIVAL_SCHOOL_IVE_HAD_WORSE, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' }});
     }
+    if (request.method === 'GET' && url.pathname === '/survival-school/in-my-defence') {
+      return new Response(SURVIVAL_SCHOOL_IN_MY_DEFENCE, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' }});
+    }
     if (request.method !== 'POST') {
       return new Response('Method not allowed', { status: 405 });
     }
@@ -6850,6 +7377,23 @@ export default {
       const raw = anthropicData.content[0].text;
       const text = raw.replace(/^```(?:json)?\s*/i, '').replace(/\s*```\s*$/, '').trim();
       return new Response(text, { status: 200, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }});
+    }
+    if (url.pathname === '/survival-school/in-my-defence') {
+      const body = await request.json();
+      const upstream = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'anthropic-version': '2023-06-01', 'x-api-key': apiKey },
+        body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 2000, system: body.system, messages: [{ role: 'user', content: `Incident: ${body.incident}\nProtagonist: ${body.protagonist}` }] }),
+      });
+      if (!upstream.ok) {
+        return new Response(JSON.stringify({ error: { message: `Anthropic error ${upstream.status}` } }), {
+          status: upstream.status, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
+        });
+      }
+      const anthropicData = await upstream.json();
+      const raw = anthropicData.content[0].text;
+      const text2 = raw.replace(/^```(?:json)?\s*/i, '').replace(/\s*```\s*$/, '').trim();
+      return new Response(text2, { status: 200, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }});
     }
     if (url.pathname === '/survival-school/panel-qa') {
       const body = await request.json();
