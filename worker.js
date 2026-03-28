@@ -1,4 +1,28 @@
 // Cloudflare Worker — Survival School + Cusslab proxy
+
+// SS-059 — Social Dynamics Engine: shared instruction block (module-level, used in all pages).
+const SOCIAL_DYNAMICS_ENGINE = `
+SOCIAL DYNAMICS ENGINE (SS-059) — fires independently on ~35% of responses:
+Characters have documented history with each other and with their own records.
+They are unreliable narrators of their own competence. They do not lie — they rationalise.
+
+When this engine fires, select one type:
+- wound_reference: a character invokes their documented real incident as credential or deflection
+- lie: a character embellishes, omits, or quietly protects their reputation
+- callout: another character (directly or obliquely) notes the discrepancy — once, briefly
+- wolf_pack: two or more characters pile on the same subject without coordinating
+- none: characters respond independently (baseline — makes the others land harder)
+
+Rules:
+- This engine is independent of CONTRADICTION ENGINE. Both may fire in the same response (wave interference).
+- When 'lie' fires: the lie is sincere. The character is not performing. They have reframed the incident.
+- When 'callout' fires: it is oblique, not a speech. One sentence. The subject does not acknowledge it.
+- When 'wolf_pack' fires: characters do not reference each other — they independently arrive at the same pile-on.
+- 'none' is valid and important — the restraint makes other instances land harder.
+
+OUTPUT field (always present, even when type is 'none'):
+"panel_tension":{"type":"wound_reference|lie|callout|wolf_pack|none","subject":"<charId or empty string>","by":["<charId>"],"note":"<one line — what is happening, or empty string for none>"}`;
+
 const SURVIVAL_SCHOOL_HOME = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1230,29 +1254,6 @@ DEATH COMMENTARY: Earned — not wallpaper. Fires on clearly wrong call, dire si
 
 FOUNDING PHILOSOPHY: Real knowledge. Genuine consequence. No performance. Comedy earned by knowledge being real.\`;
 
-
-// SS-059 — Social Dynamics Engine: shared instruction block.
-const SOCIAL_DYNAMICS_ENGINE = `
-SOCIAL DYNAMICS ENGINE (SS-059) — fires independently on ~35% of responses:
-Characters have documented history with each other and with their own records.
-They are unreliable narrators of their own competence. They do not lie — they rationalise.
-
-When this engine fires, select one type:
-- wound_reference: a character invokes their documented real incident as credential or deflection
-- lie: a character embellishes, omits, or quietly protects their reputation
-- callout: another character (directly or obliquely) notes the discrepancy — once, briefly
-- wolf_pack: two or more characters pile on the same subject without coordinating
-- none: characters respond independently (baseline — makes the others land harder)
-
-Rules:
-- This engine is independent of CONTRADICTION ENGINE. Both may fire in the same response (wave interference).
-- When 'lie' fires: the lie is sincere. The character is not performing. They have reframed the incident.
-- When 'callout' fires: it is oblique, not a speech. One sentence. The subject does not acknowledge it.
-- When 'wolf_pack' fires: characters do not reference each other — they independently arrive at the same pile-on.
-- 'none' is valid and important — the restraint makes other instances land harder.
-
-OUTPUT field (always present, even when type is 'none'):
-"panel_tension":{"type":"wound_reference|lie|callout|wolf_pack|none","subject":"<charId or empty string>","by":["<charId>"],"note":"<one line — what is happening, or empty string for none>"}`;
 
 // Panel characters (excludes Attenborough — he does bookends, not panel cards)
 const PANEL_IDS = ['ray', 'bear', 'cody', 'hales', 'fox', 'stroud'];
@@ -3635,29 +3636,6 @@ DEATH COMMENTARY: Earned — not wallpaper. Fires on clearly wrong call, dire si
 
 FOUNDING PHILOSOPHY: Real knowledge. Genuine consequence. No performance. Comedy earned by knowledge being real.\`;
 
-
-// SS-059 — Social Dynamics Engine: shared instruction block.
-const SOCIAL_DYNAMICS_ENGINE = `
-SOCIAL DYNAMICS ENGINE (SS-059) — fires independently on ~35% of responses:
-Characters have documented history with each other and with their own records.
-They are unreliable narrators of their own competence. They do not lie — they rationalise.
-
-When this engine fires, select one type:
-- wound_reference: a character invokes their documented real incident as credential or deflection
-- lie: a character embellishes, omits, or quietly protects their reputation
-- callout: another character (directly or obliquely) notes the discrepancy — once, briefly
-- wolf_pack: two or more characters pile on the same subject without coordinating
-- none: characters respond independently (baseline — makes the others land harder)
-
-Rules:
-- This engine is independent of CONTRADICTION ENGINE. Both may fire in the same response (wave interference).
-- When 'lie' fires: the lie is sincere. The character is not performing. They have reframed the incident.
-- When 'callout' fires: it is oblique, not a speech. One sentence. The subject does not acknowledge it.
-- When 'wolf_pack' fires: characters do not reference each other — they independently arrive at the same pile-on.
-- 'none' is valid and important — the restraint makes other instances land harder.
-
-OUTPUT field (always present, even when type is 'none'):
-"panel_tension":{"type":"wound_reference|lie|callout|wolf_pack|none","subject":"<charId or empty string>","by":["<charId>"],"note":"<one line — what is happening, or empty string for none>"}`;
 
 // Panel characters (excludes Attenborough — he does bookends, not panel cards)
 const PANEL_IDS = ['ray', 'bear', 'cody', 'hales', 'fox', 'stroud'];
