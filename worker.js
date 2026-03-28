@@ -6026,6 +6026,7 @@ const SURVIVAL_SCHOOL_IVE_HAD_WORSE = `<!DOCTYPE html>
     .av-amber  { background: var(--amber-dim); border-color: var(--amber); color: var(--amber); }
     .av-blue   { background: var(--blue-dim); border-color: var(--blue); color: var(--blue); }
     .av-yellow { background: #1f1600; border-color: #5a3f00; color: #d4a017; }
+    .av-teal   { background: #0a2020; border-color: #1a5a50; color: #2e9e8a; }
     .card-meta { flex: 1; min-width: 0; }
     .card-name { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 1.5px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 5px; display: flex; gap: 8px; align-items: center; }
     .card-name .badge-protagonist { font-size: 8px; letter-spacing: 1px; color: var(--amber); border: 0.5px solid var(--amber-dim); border-radius: 3px; padding: 1px 4px; }
@@ -6076,6 +6077,7 @@ const SURVIVAL_SCHOOL_IVE_HAD_WORSE = `<!DOCTYPE html>
     <button class="chip chip-protagonist" data-id="stroud"  data-name="Les Stroud">Les Stroud</button>
     <button class="chip chip-protagonist" data-id="stevens" data-name="Austin Stevens">Austin Stevens</button>
     <button class="chip chip-protagonist" data-id="jim"     data-name="Jim Carrey">Jim Carrey</button>
+    <button class="chip chip-protagonist" data-id="jeremy"  data-name="Jeremy Wade">Jeremy Wade</button>
   </div>
 
   <div class="protagonist-prompt" id="protagonist-prompt">Pick someone. They're going in.</div>
@@ -6118,6 +6120,9 @@ const SURVIVAL_SCHOOL_IVE_HAD_WORSE = `<!DOCTYPE html>
     <button class="chip" data-pred="I am Cody Lundin. I attended a formal dinner at The Ritz. I wore shoes. They were not my feet. I want to be clear that I wore them under protest and that the protest was internal and sustained. I need the panel to determine whether shoes worn involuntarily, in a formal context, under duress, still count as shoes.">Cody: shoes at the Ritz</button>
     <button class="chip" data-pred="I am Les Hiddins. I stayed three nights in a climate-controlled hotel room in Las Vegas. The temperature was 19 degrees at all times. There was no bush tucker available. There was a minibar. I used it. I need the panel's help contextualising why this decision does not reflect poorly on forty years of fieldwork in the Australian bush.">Hales: Las Vegas minibar</button>
     <button class="chip" data-pred="I am Jason Fox. I attended a corporate team-building event. There was paintball. The participants described themselves as competitive. I completed the course in eleven minutes. Nobody else finished. The organisers asked me to return and play the role of the opposing team by myself. I am not certain this was the team-building outcome they intended. I need the panel to assess this.">Fox: corporate paintball</button>
+    <button class="chip" data-pred="I am Jeremy Wade. I have been dragged into a river for the second time by the same species of catfish. I did not release the rod. The fish has broken the line and escaped. I need the panel to help me contextualise why I am less concerned about nearly drowning than I am about losing the fish. The translator is shaking his head. That same wry grin.">Wade: Goonch (second time)</button>
+    <button class="chip" data-pred="I am Jeremy Wade. I have attempted to communicate with the local Arojubtria community of the remote Brazilian Amazon using a phrase I prepared specifically for this visit. I was confident in this phrase. I had it written in the notebook beside a detailed anatomical fish diagram, or possibly a cock and balls. I have now been asked to leave. I need the panel to advise whether this was a language problem or something else. The translator has laughed for the first time in eleven years.">Wade: the Arojubtria incident</button>
+    <button class="chip" data-pred="I am Jeremy Wade. An 80-pound arapaima has struck me in the chest with its tail. I have a bruised heart. I am continuing to film. I need the panel to confirm that this is the correct decision and that the correct decision is also to stay in the water, because the fish is still there. The camera operator has concerns. I do not share these concerns.">Wade: arapaima (bruised heart)</button>
     <button class="chip" data-pred="I am Jim Carrey. I have been bitten by a snake. I am fine. I want to be clear that I have spoken to the snake at length and we have reached an understanding. The snake has not confirmed this. I am going back in. The panel needs to explain to a wildlife officer why my approach, though unorthodox, constitutes a valid field technique and not a public safety incident.">Jim: snake understanding</button>
     <button class="chip" data-pred="I am Jim Carrey. I have been separated from my group in the wilderness. I found them. They were eleven feet away. I spent four hours tracking them using methods I developed personally. One of the methods involved sounds. I need the panel to assess whether my approach was efficient or whether there is a criticism being made of me that I am not yet aware of.">Jim: wilderness tracking</button>
     <button class="chip" data-pred="I am Jim Carrey. A bear approached our campsite. I communicated with it. I want to be clear that the communication was working and I was making real progress before Jason intervened. The bear left. Jason says the bear left because of him. I feel the panel should hear both accounts and make a determination.">Jim: bear negotiation (Fox dispute)</button>
@@ -6170,6 +6175,7 @@ const CHARACTERS = {
   cox:     { name: 'Prof Brian Cox',  role: 'Theoretical Physics',  av: 'BC', avClass: 'av-blue'   },
   faldo:   { name: 'Sir Nick Faldo',  role: 'Golf',                 av: 'NF', avClass: 'av-green'  },
   jim:     { name: 'Jim Carrey',      role: 'Inexplicable',         av: 'JC', avClass: 'av-yellow' },
+  jeremy:  { name: 'Jeremy Wade',     role: 'Freshwater Biologist', av: 'JW', avClass: 'av-teal'   },
 };
 
 const PROTAGONIST_PROMPTS = {
@@ -6181,6 +6187,7 @@ const PROTAGONIST_PROMPTS = {
   stroud:  "Stroud's been alone in worse. Describe the damage.",
   stevens: "Stevens walked in holding something. What's the situation?",
   jim:     "Jim's ready. Jim has a plan. Jim is going to make a sound now. That was the plan.",
+  jeremy:  "Wade's already in the water. Describe the situation. He'll assess the bite pattern.",
 };
 
 const CORRIDOR_SENDOFFS = {
@@ -6192,6 +6199,7 @@ const CORRIDOR_SENDOFFS = {
   stroud:  'His own camera, on a tripod. He set it up before he went in. Nobody else is here. The camera is rolling.',
   stevens: 'He walked in through the front door holding a snake. The snake is fine. He is fine. The panel has been informed. The panel is processing this.',
   jim:     'He did not use the door. There is a service entrance. He found it. Nobody has used it since 1987. He entered backwards, for reasons he has not shared. He is now inside. He believes this is going extremely well.',
+  jeremy:  'He is already in waders. He has a thermal flask. He has the notebook. He appeared to say something to the translator before entering. The translator frowned but said nothing. The translator has made his peace with this.',
 };
 
 const State = {
@@ -6303,6 +6311,7 @@ AUSTIN STEVENS — Snakemaster. South African. Direct, slightly theatrical. Casu
 === FISH-OUT-OF-WATER GUESTS (include 1–2 when they will improve the room) ===
 PROF BRIAN COX — Theoretical Physics. AWARENESS MODE: blissfully unaware. Explains the thermodynamics, particle physics, or cosmological context of your predicament with complete accuracy and complete irrelevance. Genuinely believes this is helping. Never defensive, never self-aware. Curious. His "I've Had Worse" entry involves a physics event (LHC, a supernova, the heat death of the universe). He had worse. The universe has certainly had worse.
 SIR NICK FALDO — Golf. AWARENESS MODE: painfully aware but fully committed. Knows golf doesn't apply. Applies golf methodology anyway, with total conviction. Compares everything to a hazard, a bunker, a tight lie. "Address the problem. Head down. Follow through." His "I've Had Worse" entry is from a major tournament. The conditions were worse. He has a method. The method is wrong. He knows. He persists.
+JEREMY WADE — Freshwater Biologist. River Monsters. 9 series. Caught every giant freshwater predator on the planet. Stone-cold, un-human but without malice. Every predicament is a river mystery — "What's the bite pattern? When did the attacks begin? Is there a depth pattern?" Applies fish-investigation methodology to everything regardless of fish content. A local fisherman in Alaska recognised him from River Monsters. Wade said: "Hi, I'm Jeremy Wade." Cold. Factual. He had already moved on. INSTANT DEATH REGISTER: concludes flatly that contact with any given organism will result in death. No escalation, no drama. "If this touches you, you will die." Moves on. THE RECREATIONS: references the dramatic reenactments from his show as if they are primary documentary footage. Does not acknowledge the production assistant in the wig being dragged under studio water. THE CANDIRU: Wade investigated the Amazonian candiru catfish (follows urine stream, lodges internally). Found a man this had happened to. Took him to a science faculty with a preserved specimen. Held it in front of the man's face. "Don't you want to touch it?" Man: wide-eyed, "No no senor — el diablo—" Wade: continued to waggle it. May have briefly reenacted the trajectory. The man's trauma was not a variable. THE NOTEBOOK: produced at every location, shown to elders and cameras with field-journal gravity. Contains a detailed cock and balls (the trademark); 'OWY' vertical presented as a diagram; 'I have no clue what this lady is saying' written while nodding; 'The translator is lying to me'; 'DO NOT EAT THAT'; 'The fish is more important than this'; 'Robson Green would not last one afternoon here' (underlined); a cooking pot drawing with an arrow toward the translator; a suspected local insult written carefully with 'must look up' underneath, positioned below the cock and balls. THE TRANSLATOR: present, silent, reactive. Frowns but says nothing; that same wry grin; wide-eyed; laughs at a man who has been here eleven years sounding like a two-year-old with dysentery. LANGUAGES: invents fake tribal phrases with scholarly authority — "The Arojubtria have a saying: 'ooph ba fona goo bwawba' — which translates as: to urinate on the leg of a man stung by a jellyfish." Tribe does not exist. Uses 'El Dorado!' for brilliant. His "I've Had Worse" entry involves something that should have killed him. He does not present it this way.
 JIM CARREY — Inexplicable. AWARENESS MODE: zero. Genuinely knowledgeable about animals — the knowledge is real, the method is the problem. Cycles between Ace Ventura (talks to the animal, arrives via wrong entrance, has sources), The Mask (physically impossible solutions, absolute confidence, the salsa is happening), and Liar Liar (activates when predicament is obviously catastrophic — cannot stop stating the actual severity, does not want to be doing this, cannot stop). Makes noises mid-sentence that are commentary, not decoration. Describes what his face is doing. The panel winces. The panel groans. The panel does not intervene because there is no gap. His "I've Had Worse" entry is sincere, animal-related, and makes things worse. Bear engages with his plan sincerely, which compounds the problem.
 
 === PANEL INTERACTION MECHANICS ===
@@ -6334,11 +6343,11 @@ Attenborough does NOT appear in the panel array. He bookends.
 Cox and Faldo are permanent panel members on rotation like the others. Include one at a time — never both in the same panel.
 
 VALID charIds — use ONLY these exact values, no others:
-  ray, bear, fox, hales, cody, stroud, stevens, cox, faldo, jim
+  ray, bear, fox, hales, cody, stroud, stevens, cox, faldo, jim, jeremy
 Include at least 3 panel members. The protagonist charId "\${protagonist}" must appear.
 
 OUTPUT — valid JSON only, no markdown:
-{"attenborough_opening":"<one sentence, nature doc, frames the user's predicament as a minor event in the natural order>","panel":[{"charId":"ray|bear|fox|hales|cody|stroud|stevens|cox|faldo|jim","text":"<1-2 sentences — their worse experience, absolutely sincere>"}],"attenborough_terminal":"<one sentence, geological calm, closes the room, no appeal>"}\`;
+{"attenborough_opening":"<one sentence, nature doc, frames the user's predicament as a minor event in the natural order>","panel":[{"charId":"ray|bear|fox|hales|cody|stroud|stevens|cox|faldo|jim|jeremy","text":"<1-2 sentences — their worse experience, absolutely sincere>"}],"attenborough_terminal":"<one sentence, geological calm, closes the room, no appeal>"}\`;
   },
 
   async submit(predicament, protagonist) {
