@@ -5979,6 +5979,8 @@ const SURVIVAL_SCHOOL_IVE_HAD_WORSE = `<!DOCTYPE html>
     <button class="chip" data-pred="I had to explain to hospital staff why there was a pigeon involved in an incident that was entirely the pigeon's fault">pigeon-related hospital visit</button>
     <button class="chip" data-pred="I ate a tortoise on a long sea voyage and found it quite pleasant and now need to defend this morally and nutritionally">the tortoise question</button>
     <button class="chip" data-pred="I have been incontinent at a formal event and urgently relieved myself into what I believed to be an empty vessel which turned out to contain someone's grandmother's ashes. I am Mark O'Shea. I need the panel's help contextualising this as a field sanitation decision made under duress.">O'Shea: grandmother's urn</button>
+    <button class="chip" data-pred="I need to explain to the headmaster of St Cuthbert's why I delivered the Year 10 Stay Safe talk using live rounds. I felt it added authenticity. The children are fine. The supply teacher is also fine but has asked to be reassigned.">Stay Safe talk: live rounds</button>
+    <button class="chip" data-pred="I need to explain to the headmaster of St Cuthbert's why I made entry to the Year 10 Stay Safe talk by abseiling through the window and briefly incapacitating the teacher with a controlled restraint hold. The children appeared engaged. The teacher is asking questions I cannot answer.">Stay Safe talk: abseil entry</button>
   </div>
 
   <div class="btn-row">
