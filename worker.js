@@ -5670,6 +5670,369 @@ document.addEventListener('DOMContentLoaded', () => {
 </html>
 `;
 
+const SURVIVAL_SCHOOL_IVE_HAD_WORSE = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>I've Had Worse — Survival School</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0f1209; --surface: #181d10; --surface2: #1e2514;
+      --border: rgba(120,160,60,0.15); --border-strong: rgba(120,160,60,0.3);
+      --green: #7aad3a; --green-dim: #4a7020; --green-bright: #a0d050;
+      --amber: #BA7517; --amber-dim: #5c3a08;
+      --bark: #8B6040; --bark-dim: #3d2008;
+      --blood: #cc1111; --blood-dim: #3a0808;
+      --blue-dim: #1a1e2a; --blue: #5a7aaa;
+      --text: #e8edd8; --text-muted: #7a8a60;
+    }
+    body { font-family: 'Barlow', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+    #app { max-width: 680px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+
+    .header { text-align: center; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 0.5px solid var(--border); }
+    .room-number { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 6px; }
+    .title { font-family: 'Bebas Neue', sans-serif; font-size: 40px; letter-spacing: 3px; line-height: 1; }
+    .title span { color: var(--green); }
+    .subtitle { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-muted); letter-spacing: 1.5px; margin-top: 5px; }
+
+    .field-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1.5px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; margin-top: 16px; }
+
+    .chips { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px; }
+    .chip { font-family: 'IBM Plex Mono', monospace; font-size: 11px; padding: 5px 10px; border: 0.5px solid var(--border-strong); border-radius: 5px; cursor: pointer; background: none; color: var(--text-muted); transition: all 0.15s; white-space: nowrap; user-select: none; }
+    .chip:hover, .chip.sel { border-color: var(--green); color: var(--green); }
+    .chip-protagonist { border-color: var(--border-strong); }
+    .chip-protagonist.sel { border-color: var(--amber); color: var(--amber); }
+    .chip-protagonist:hover { border-color: var(--amber); color: var(--amber); }
+
+    .protagonist-prompt { font-family: 'Barlow Condensed', sans-serif; font-size: 18px; font-weight: 600; color: var(--text); margin-top: 14px; min-height: 28px; transition: color 0.2s; letter-spacing: 0.5px; }
+    .protagonist-prompt.named { color: var(--amber); }
+
+    textarea { width: 100%; font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; padding: 9px 12px; border: 0.5px solid var(--border-strong); border-radius: 6px; background: var(--surface); color: var(--text); outline: none; transition: border-color 0.15s; resize: vertical; min-height: 56px; line-height: 1.6; }
+    textarea:focus { border-color: var(--green); }
+
+    .btn-row { display: flex; gap: 8px; margin-top: 14px; }
+    .btn-submit { flex: 1; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 2px; text-transform: uppercase; padding: 11px; background: var(--amber-dim); color: var(--amber); border: 0.5px solid var(--amber-dim); border-radius: 6px; cursor: pointer; transition: opacity 0.15s; }
+    .btn-submit:hover { opacity: 0.88; }
+    .btn-submit:disabled { opacity: 0.4; cursor: not-allowed; }
+    .btn-clear { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 1px; padding: 11px 16px; border: 0.5px solid var(--border-strong); border-radius: 6px; background: none; cursor: pointer; color: var(--text-muted); transition: color 0.15s, border-color 0.15s; }
+    .btn-clear:hover { color: var(--text); border-color: var(--green); }
+
+    .results { display: none; margin-top: 1.5rem; }
+    .results.show { display: block; }
+    .loading { padding: 2rem; text-align: center; font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--text-muted); letter-spacing: 1px; }
+    .dots::after { content: ''; animation: dots 1.5s steps(3, end) infinite; }
+    @keyframes dots { 0%{content:'.'} 33%{content:'..'} 66%{content:'...'} 100%{content:''} }
+
+    .att-bookend { display: flex; align-items: flex-start; gap: 12px; padding: 12px 16px; background: var(--surface); border: 0.5px solid var(--border); border-radius: 8px; margin: 12px 0; }
+    .att-av { width: 36px; height: 36px; border-radius: 50%; background: var(--surface2); border: 0.5px solid var(--green-dim); display: flex; align-items: center; justify-content: center; font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--green); flex-shrink: 0; }
+    .att-name { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 1.5px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px; }
+    .att-text { font-style: italic; font-size: 13.5px; color: var(--text-muted); line-height: 1.6; }
+
+    .panel-label { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 2px; color: var(--text-muted); text-transform: uppercase; margin: 1rem 0 8px; opacity: 0.6; }
+    .panel-card { display: flex; align-items: flex-start; gap: 12px; padding: 12px 14px; border: 0.5px solid var(--border); border-radius: 8px; margin-bottom: 8px; background: var(--surface); transition: border-color 0.15s; }
+    .panel-card.protagonist { border-color: var(--amber-dim); background: #1a150a; }
+    .av { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 500; flex-shrink: 0; border: 0.5px solid; }
+    .av-green { background: #1a2a0a; border-color: var(--green-dim); color: var(--green); }
+    .av-bark  { background: var(--bark-dim); border-color: var(--bark); color: var(--bark); }
+    .av-amber { background: var(--amber-dim); border-color: var(--amber); color: var(--amber); }
+    .av-blue  { background: var(--blue-dim); border-color: var(--blue); color: var(--blue); }
+    .card-meta { flex: 1; min-width: 0; }
+    .card-name { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 1.5px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 5px; display: flex; gap: 8px; align-items: center; }
+    .card-name .badge-protagonist { font-size: 8px; letter-spacing: 1px; color: var(--amber); border: 0.5px solid var(--amber-dim); border-radius: 3px; padding: 1px 4px; }
+    .card-text { font-size: 13.5px; line-height: 1.65; color: var(--text); }
+
+    .terminal-label { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 2px; color: var(--text-muted); text-transform: uppercase; margin: 1.2rem 0 6px; opacity: 0.5; }
+    .reset-row { margin-top: 1.2rem; text-align: center; }
+    .btn-reset { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 1px; padding: 8px 18px; border: 0.5px solid var(--border-strong); border-radius: 5px; background: none; cursor: pointer; color: var(--text-muted); transition: color 0.15s, border-color 0.15s; }
+    .btn-reset:hover { color: var(--text); border-color: var(--green); }
+
+    .error-msg { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--blood); padding: 10px 14px; border: 0.5px solid var(--blood-dim); border-radius: 6px; margin-top: 12px; display: none; }
+    .error-msg.show { display: block; }
+
+    .nav-back { display: inline-block; font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1px; color: var(--text-muted); text-decoration: none; margin-bottom: 1rem; transition: color 0.15s; }
+    .nav-back:hover { color: var(--green); }
+
+    @media (max-width: 480px) {
+      .title { font-size: 32px; }
+      .panel-card { padding: 10px 12px; }
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+
+  <a class="nav-back" href="/survival-school">← SURVIVAL SCHOOL</a>
+
+  <div class="header">
+    <div class="room-number">ROOM 13 · THE DOORS</div>
+    <div class="title">I'VE HAD <span>WORSE</span></div>
+    <div class="subtitle">Describe your ordeal. The panel will top it.</div>
+  </div>
+
+  <div class="field-label">Who are you sending in?</div>
+  <div class="chips" id="chips-protagonist">
+    <button class="chip chip-protagonist" data-id="bear"   data-name="Bear Grylls">Bear Grylls</button>
+    <button class="chip chip-protagonist" data-id="ray"    data-name="Ray Mears">Ray Mears</button>
+    <button class="chip chip-protagonist" data-id="fox"    data-name="Jason Fox">Jason Fox</button>
+    <button class="chip chip-protagonist" data-id="hales"  data-name="Les Hiddins">Les Hiddins</button>
+    <button class="chip chip-protagonist" data-id="cody"   data-name="Cody Lundin">Cody Lundin</button>
+    <button class="chip chip-protagonist" data-id="stroud" data-name="Les Stroud">Les Stroud</button>
+  </div>
+
+  <div class="protagonist-prompt" id="protagonist-prompt">Pick someone. They're going in.</div>
+
+  <div class="field-label" style="margin-top:18px">Your ordeal</div>
+  <textarea id="predicament-input" placeholder="Describe your predicament. The panel needs something to work with." rows="2"></textarea>
+
+  <div class="chips" id="chips-predicament" style="margin-top:8px">
+    <button class="chip" data-pred="I have a paper cut">paper cut</button>
+    <button class="chip" data-pred="I stubbed my toe">stubbed toe</button>
+    <button class="chip" data-pred="I got slightly damp in the rain">slightly damp</button>
+    <button class="chip" data-pred="My tea was lukewarm">lukewarm tea</button>
+    <button class="chip" data-pred="I have a mild headache">mild headache</button>
+    <button class="chip" data-pred="I sat on my keys">sat on keys</button>
+    <button class="chip" data-pred="A shopping trolley hit my shin">shin vs trolley</button>
+    <button class="chip" data-pred="I have mild sunburn">mild sunburn</button>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn-submit" id="btn-submit" disabled>SEND THEM IN</button>
+    <button class="btn-clear" onclick="onClear()">CLEAR</button>
+  </div>
+
+  <div class="error-msg" id="error-msg"></div>
+
+  <div class="results" id="results">
+    <div class="loading" id="loading">
+      <span>THEY'RE WARMING UP</span><span class="dots"></span>
+    </div>
+    <div id="result-block" style="display:none">
+      <div id="att-opening"></div>
+      <div class="panel-label">THE PANEL</div>
+      <div id="cards-out"></div>
+      <div class="terminal-label">ATTENBOROUGH CLOSES THE ROOM</div>
+      <div class="att-bookend" id="att-terminal" style="display:none">
+        <div class="att-av">DA</div>
+        <div style="flex:1">
+          <div class="att-name">David Attenborough</div>
+          <div class="att-text" id="att-terminal-text"></div>
+        </div>
+      </div>
+      <div class="reset-row">
+        <button class="btn-reset" onclick="onClear()">SEND ANOTHER ONE IN</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const WORKER_ENDPOINT = 'https://cusslab-api.leanspirited.workers.dev/survival-school/ive-had-worse';
+
+const CHARACTERS = {
+  ray:    { name: 'Ray Mears',    role: 'Bushcraft',            av: 'RM', avClass: 'av-green' },
+  bear:   { name: 'Bear Grylls',  role: 'Former SAS',           av: 'BG', avClass: 'av-bark'  },
+  cody:   { name: 'Cody Lundin',  role: 'Primitive Skills',     av: 'CL', avClass: 'av-green' },
+  hales:  { name: 'Les Hiddins',  role: 'Bush Tucker Man',      av: 'LH', avClass: 'av-amber' },
+  fox:    { name: 'Jason Fox',    role: 'Special Boat Service', av: 'JF', avClass: 'av-green' },
+  stroud: { name: 'Les Stroud',   role: 'Survivorman',          av: 'LS', avClass: 'av-blue'  },
+};
+
+const PROTAGONIST_PROMPTS = {
+  bear:   "Bear's warming up. What's your sorry little predicament?",
+  ray:    "Ray's ready. Show him what you're working with.",
+  fox:    "Fox is already assessing the threat. What happened?",
+  hales:  "Hiddins has seen things. What's your ordeal?",
+  cody:   "Cody could survive it barefoot. What've you got?",
+  stroud: "Stroud's been alone in worse. Describe the damage.",
+};
+
+const State = {
+  protagonist: null,
+  predicament: '',
+  setProtagonist(id) { this.protagonist = id; },
+  setPredicament(v)  { this.predicament = v.trim(); },
+  clear() { this.protagonist = null; this.predicament = ''; },
+  isReady() { return this.protagonist && this.predicament.length > 0; },
+};
+
+const UI = {
+  updatePrompt(id) {
+    const el = document.getElementById('protagonist-prompt');
+    if (id && PROTAGONIST_PROMPTS[id]) {
+      el.textContent = PROTAGONIST_PROMPTS[id];
+      el.classList.add('named');
+    } else {
+      el.textContent = "Pick someone. They're going in.";
+      el.classList.remove('named');
+    }
+  },
+  setSubmitEnabled(v) { document.getElementById('btn-submit').disabled = !v; },
+  showLoading() {
+    document.getElementById('results').classList.add('show');
+    document.getElementById('loading').style.display = 'block';
+    document.getElementById('result-block').style.display = 'none';
+    document.getElementById('error-msg').classList.remove('show');
+  },
+  showError(msg) {
+    document.getElementById('loading').style.display = 'none';
+    const el = document.getElementById('error-msg');
+    el.textContent = msg;
+    el.classList.add('show');
+  },
+  renderResults(data, protagonistId) {
+    document.getElementById('loading').style.display = 'none';
+
+    // Attenborough opening
+    const opening = document.getElementById('att-opening');
+    opening.innerHTML = \`<div class="att-bookend"><div class="att-av">DA</div><div style="flex:1"><div class="att-name">David Attenborough</div><div class="att-text">\${data.attenborough_opening || ''}</div></div></div>\`;
+
+    // Panel cards
+    const cardsEl = document.getElementById('cards-out');
+    cardsEl.innerHTML = '';
+    (data.panel || []).forEach(r => {
+      const char = CHARACTERS[r.charId];
+      if (!char) return;
+      const isProtagonist = r.charId === protagonistId;
+      const badgeHtml = isProtagonist ? '<span class="badge-protagonist">PROTAGONIST</span>' : '';
+      cardsEl.innerHTML += \`<div class="panel-card\${isProtagonist ? ' protagonist' : ''}">
+        <div class="av \${char.avClass}">\${char.av}</div>
+        <div class="card-meta">
+          <div class="card-name"><span>\${char.name}</span><span style="opacity:0.5">\${char.role}</span>\${badgeHtml}</div>
+          <div class="card-text">\${r.text}</div>
+        </div>
+      </div>\`;
+    });
+
+    // Attenborough terminal
+    const terminalEl = document.getElementById('att-terminal');
+    const terminalText = document.getElementById('att-terminal-text');
+    if (data.attenborough_terminal) {
+      terminalText.textContent = data.attenborough_terminal;
+      terminalEl.style.display = 'flex';
+    }
+
+    document.getElementById('result-block').style.display = 'block';
+  },
+  clearResults() {
+    document.getElementById('results').classList.remove('show');
+    document.getElementById('result-block').style.display = 'none';
+    document.getElementById('loading').style.display = 'block';
+    document.getElementById('att-opening').innerHTML = '';
+    document.getElementById('cards-out').innerHTML = '';
+    document.getElementById('att-terminal').style.display = 'none';
+    document.getElementById('error-msg').classList.remove('show');
+  },
+};
+
+const API = {
+  buildSystemPrompt(protagonist) {
+    const char = CHARACTERS[protagonist];
+    const protagonistName = char ? char.name : protagonist;
+    return \`You are the Survival School panel running the "I've Had Worse" mechanic.
+
+=== THE MECHANIC ===
+The user has submitted a predicament. Each panel member must claim to have survived something worse.
+COMPULSORY ESCALATION: each character must top the previous one. Nobody can admit theirs wasn't worse.
+The protagonist (\${protagonistName}) must deliver the most extreme escalation in the panel.
+The panel responds in triage order — IMMEDIATE tier (Ray, Fox) sets the baseline, COMEDY tier escalates beyond reason.
+
+=== CHARACTER VOICES ===
+RAY MEARS — Bushcraft. Measured, specific, quietly worse. Particular about conditions.
+BEAR GRYLLS — Former SAS. Always abroad. Always fine. Always unnecessary. Fact-checker fires on his entry.
+JASON FOX — Special Boat Service. Classified, probably. Operational framing. Unlikely to elaborate.
+LES HIDDINS — Bush Tucker Man. Three words. The Aboriginal people had a name for it.
+CODY LUNDIN — Primitive skills. Barefoot. Had the resource thirty feet away. Chose not to use it. Made it worse.
+LES STROUD — Survivorman. Quiet. Slightly melancholy. Has been alone in worse. Always.
+
+=== CRITICAL RULES ===
+Characters are sincere. They do not know they are in a mechanic. They are simply recounting their experience.
+The comedy is structural — from the compulsory escalation — NOT from characters winking at the audience.
+\${protagonistName} (charId: \${protagonist}) is the protagonist — their entry must be the most extreme and MUST be present in the panel array.
+Attenborough does NOT appear in the panel array. He bookends.
+
+VALID charIds — use ONLY these exact values, no others:
+  ray (Ray Mears), bear (Bear Grylls), fox (Jason Fox), hales (Les Hiddins), cody (Cody Lundin), stroud (Les Stroud)
+Include at least 3 panel members. The protagonist charId "\${protagonist}" must appear.
+
+OUTPUT — valid JSON only, no markdown:
+{"attenborough_opening":"<one sentence, nature doc, frames the user's predicament as a minor event in the natural order>","panel":[{"charId":"ray|bear|fox|hales|cody|stroud","text":"<1-2 sentences — their worse experience, absolutely sincere>"}],"attenborough_terminal":"<one sentence, geological calm, closes the room, no appeal>"}\`;
+  },
+
+  async submit(predicament, protagonist) {
+    const system = API.buildSystemPrompt(protagonist);
+    const response = await fetch(WORKER_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ system, predicament, protagonist }),
+    });
+    if (!response.ok) throw new Error(\`Worker error \${response.status}\`);
+    return response.json();
+  },
+};
+
+// === event wiring ===
+
+document.querySelectorAll('.chip-protagonist').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelectorAll('.chip-protagonist').forEach(c => c.classList.remove('sel'));
+    chip.classList.add('sel');
+    State.setProtagonist(chip.dataset.id);
+    UI.updatePrompt(chip.dataset.id);
+    UI.setSubmitEnabled(State.isReady());
+  });
+});
+
+document.querySelectorAll('#chips-predicament .chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelectorAll('#chips-predicament .chip').forEach(c => c.classList.remove('sel'));
+    chip.classList.add('sel');
+    const input = document.getElementById('predicament-input');
+    input.value = chip.dataset.pred;
+    State.setPredicament(chip.dataset.pred);
+    UI.setSubmitEnabled(State.isReady());
+  });
+});
+
+document.getElementById('predicament-input').addEventListener('input', e => {
+  document.querySelectorAll('#chips-predicament .chip').forEach(c => c.classList.remove('sel'));
+  State.setPredicament(e.target.value);
+  UI.setSubmitEnabled(State.isReady());
+});
+
+document.getElementById('btn-submit').addEventListener('click', async () => {
+  if (!State.isReady()) return;
+  UI.showLoading();
+  document.getElementById('btn-submit').disabled = true;
+  try {
+    const data = await API.submit(State.predicament, State.protagonist);
+    UI.renderResults(data, State.protagonist);
+  } catch (err) {
+    UI.showError('The panel couldn\\'t make it. Try again.');
+  } finally {
+    document.getElementById('btn-submit').disabled = false;
+  }
+});
+
+function onClear() {
+  document.querySelectorAll('.chip-protagonist').forEach(c => c.classList.remove('sel'));
+  document.querySelectorAll('#chips-predicament .chip').forEach(c => c.classList.remove('sel'));
+  document.getElementById('predicament-input').value = '';
+  State.clear();
+  UI.updatePrompt(null);
+  UI.setSubmitEnabled(false);
+  UI.clearResults();
+}
+</script>
+
+</body>
+</html>
+`;
+
 const SURVIVAL_SCHOOL_PANEL_QA = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6020,6 +6383,9 @@ export default {
     if (request.method === 'GET' && url.pathname === '/survival-school/panel-qa') {
       return new Response(SURVIVAL_SCHOOL_PANEL_QA, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' }});
     }
+    if (request.method === 'GET' && url.pathname === '/survival-school/ive-had-worse') {
+      return new Response(SURVIVAL_SCHOOL_IVE_HAD_WORSE, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' }});
+    }
     if (request.method !== 'POST') {
       return new Response('Method not allowed', { status: 405 });
     }
@@ -6028,6 +6394,23 @@ export default {
       return new Response(JSON.stringify({ error: { message: 'No API key configured on server' } }), {
         status: 500, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
       });
+    }
+    if (url.pathname === '/survival-school/ive-had-worse') {
+      const body = await request.json();
+      const upstream = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'anthropic-version': '2023-06-01', 'x-api-key': apiKey },
+        body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 1800, system: body.system, messages: [{ role: 'user', content: `Predicament: ${body.predicament}\nProtagonist: ${body.protagonist}` }] }),
+      });
+      if (!upstream.ok) {
+        return new Response(JSON.stringify({ error: { message: `Anthropic error ${upstream.status}` } }), {
+          status: upstream.status, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
+        });
+      }
+      const anthropicData = await upstream.json();
+      const raw = anthropicData.content[0].text;
+      const text = raw.replace(/^```(?:json)?\s*/i, '').replace(/\s*```\s*$/, '').trim();
+      return new Response(text, { status: 200, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }});
     }
     if (url.pathname === '/survival-school/panel-qa') {
       const body = await request.json();
