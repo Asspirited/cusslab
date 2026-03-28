@@ -657,6 +657,20 @@ const SURVIVAL_SCHOOL_APP  = `<!DOCTYPE html>
     }
 
     .char-card.death-card { border-color: var(--blood); }
+    .char-card.char-bear { background: rgba(120,134,107,0.15); }
+    .char-card.char-ray { background: rgba(85,107,47,0.15); }
+    .char-card.char-fox { background: rgba(74,74,74,0.2); }
+    .char-card.char-hales { background: rgba(200,134,10,0.12); }
+    .char-card.char-cody { background: rgba(139,115,85,0.15); }
+    .char-card.char-stroud { background: rgba(47,79,79,0.2); }
+    .char-card.char-attenborough { background: rgba(27,58,45,0.2); }
+    .char-card.char-oshea { background: rgba(139,69,19,0.15); }
+    .char-card.char-stevens { background: rgba(122,92,30,0.15); }
+    .char-card.char-gordon { background: rgba(201,150,42,0.12); }
+    .char-card.char-billy { background: rgba(107,39,55,0.15); }
+    .char-card.char-ollie { background: rgba(61,90,107,0.15); }
+    .char-card.char-craighead { background: rgba(139,115,85,0.12); }
+    .char-card.char-coyote { background: rgba(204,85,0,0.12); }
 
     .card-head {
       display: flex;
@@ -1538,7 +1552,7 @@ function renderCards(panelData, container, startDelay = 0) {
     if (!char) return;
 
     const card = document.createElement('div');
-    card.className = 'char-card' + (r.death ? ' death-card' : '');
+    card.className = 'char-card' + (r.death ? ' death-card' : '') + (r.charId ? ' char-' + r.charId : '');
     card.style.opacity = '0';
     card.style.transform = 'translateY(7px)';
     card.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
@@ -2318,6 +2332,20 @@ const SURVIVAL_SCHOOL_WORST = `<!DOCTYPE html>
     }
 
     .char-card.death-card { border-color: var(--blood); }
+    .char-card.char-bear { background: rgba(120,134,107,0.15); }
+    .char-card.char-ray { background: rgba(85,107,47,0.15); }
+    .char-card.char-fox { background: rgba(74,74,74,0.2); }
+    .char-card.char-hales { background: rgba(200,134,10,0.12); }
+    .char-card.char-cody { background: rgba(139,115,85,0.15); }
+    .char-card.char-stroud { background: rgba(47,79,79,0.2); }
+    .char-card.char-attenborough { background: rgba(27,58,45,0.2); }
+    .char-card.char-oshea { background: rgba(139,69,19,0.15); }
+    .char-card.char-stevens { background: rgba(122,92,30,0.15); }
+    .char-card.char-gordon { background: rgba(201,150,42,0.12); }
+    .char-card.char-billy { background: rgba(107,39,55,0.15); }
+    .char-card.char-ollie { background: rgba(61,90,107,0.15); }
+    .char-card.char-craighead { background: rgba(139,115,85,0.12); }
+    .char-card.char-coyote { background: rgba(204,85,0,0.12); }
 
     .char-card.cody-card {
       border-color: var(--green-dim);
@@ -2802,7 +2830,8 @@ function renderResults(data) {
     const card = document.createElement('div');
     card.className = 'char-card' +
       (r.death ? ' death-card' : '') +
-      (isCody ? ' cody-card' : '');
+      (isCody ? ' cody-card' : '') +
+      (r.charId ? ' char-' + r.charId : '');
     card.style.opacity = '0';
     card.style.transform = 'translateY(7px)';
     card.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
@@ -3270,6 +3299,20 @@ const SURVIVAL_SCHOOL_MUNDANE = `<!DOCTYPE html>
     }
 
     .char-card.death-card { border-color: var(--blood); }
+    .char-card.char-bear { background: rgba(120,134,107,0.15); }
+    .char-card.char-ray { background: rgba(85,107,47,0.15); }
+    .char-card.char-fox { background: rgba(74,74,74,0.2); }
+    .char-card.char-hales { background: rgba(200,134,10,0.12); }
+    .char-card.char-cody { background: rgba(139,115,85,0.15); }
+    .char-card.char-stroud { background: rgba(47,79,79,0.2); }
+    .char-card.char-attenborough { background: rgba(27,58,45,0.2); }
+    .char-card.char-oshea { background: rgba(139,69,19,0.15); }
+    .char-card.char-stevens { background: rgba(122,92,30,0.15); }
+    .char-card.char-gordon { background: rgba(201,150,42,0.12); }
+    .char-card.char-billy { background: rgba(107,39,55,0.15); }
+    .char-card.char-ollie { background: rgba(61,90,107,0.15); }
+    .char-card.char-craighead { background: rgba(139,115,85,0.12); }
+    .char-card.char-coyote { background: rgba(204,85,0,0.12); }
 
     .card-head {
       display: flex;
@@ -3771,7 +3814,7 @@ async function react(situation, decision, currentProbability) {
         const char = CHARACTERS[r.charId];
         if (!char) return;
         const card = document.createElement('div');
-        card.className = 'char-card' + (r.death ? ' death-card' : '');
+        card.className = 'char-card' + (r.death ? ' death-card' : '') + (r.charId ? ' char-' + r.charId : '');
         card.style.cssText = 'opacity:0;transform:translateY(7px);transition:opacity 0.3s ease,transform 0.3s ease';
         card.innerHTML = \`
           <div class="card-head">
@@ -5929,6 +5972,9 @@ const SURVIVAL_SCHOOL_IVE_HAD_WORSE = `<!DOCTYPE html>
     .error-msg { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--blood); padding: 10px 14px; border: 0.5px solid var(--blood-dim); border-radius: 6px; margin-top: 12px; display: none; }
     .error-msg.show { display: block; }
 
+    .sendoff-block { margin: 10px 0 4px; padding: 10px 14px; border-left: 2px solid var(--amber-dim); font-size: 12.5px; color: var(--text-muted); font-style: italic; line-height: 1.65; display: none; }
+    .sendoff-block.show { display: block; }
+
     .nav-back { display: inline-block; font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1px; color: var(--text-muted); text-decoration: none; margin-bottom: 1rem; transition: color 0.15s; }
     .nav-back:hover { color: var(--green); }
 
@@ -5951,15 +5997,17 @@ const SURVIVAL_SCHOOL_IVE_HAD_WORSE = `<!DOCTYPE html>
 
   <div class="field-label">Who are you sending in?</div>
   <div class="chips" id="chips-protagonist">
-    <button class="chip chip-protagonist" data-id="bear"   data-name="Bear Grylls">Bear Grylls</button>
-    <button class="chip chip-protagonist" data-id="ray"    data-name="Ray Mears">Ray Mears</button>
-    <button class="chip chip-protagonist" data-id="fox"    data-name="Jason Fox">Jason Fox</button>
-    <button class="chip chip-protagonist" data-id="hales"  data-name="Les Hiddins">Les Hiddins</button>
-    <button class="chip chip-protagonist" data-id="cody"   data-name="Cody Lundin">Cody Lundin</button>
-    <button class="chip chip-protagonist" data-id="stroud" data-name="Les Stroud">Les Stroud</button>
+    <button class="chip chip-protagonist" data-id="bear"    data-name="Bear Grylls">Bear Grylls</button>
+    <button class="chip chip-protagonist" data-id="ray"     data-name="Ray Mears">Ray Mears</button>
+    <button class="chip chip-protagonist" data-id="fox"     data-name="Jason Fox">Jason Fox</button>
+    <button class="chip chip-protagonist" data-id="hales"   data-name="Les Hiddins">Les Hiddins</button>
+    <button class="chip chip-protagonist" data-id="cody"    data-name="Cody Lundin">Cody Lundin</button>
+    <button class="chip chip-protagonist" data-id="stroud"  data-name="Les Stroud">Les Stroud</button>
+    <button class="chip chip-protagonist" data-id="stevens" data-name="Austin Stevens">Austin Stevens</button>
   </div>
 
   <div class="protagonist-prompt" id="protagonist-prompt">Pick someone. They're going in.</div>
+  <div class="sendoff-block" id="sendoff-block"></div>
 
   <div class="field-label" style="margin-top:18px">Your ordeal</div>
   <textarea id="predicament-input" placeholder="Describe your predicament. The panel needs something to work with." rows="2"></textarea>
@@ -6025,21 +6073,35 @@ const SURVIVAL_SCHOOL_IVE_HAD_WORSE = `<!DOCTYPE html>
 const WORKER_ENDPOINT = 'https://cusslab-api.leanspirited.workers.dev/survival-school/ive-had-worse';
 
 const CHARACTERS = {
-  ray:    { name: 'Ray Mears',    role: 'Bushcraft',            av: 'RM', avClass: 'av-green' },
-  bear:   { name: 'Bear Grylls',  role: 'Former SAS',           av: 'BG', avClass: 'av-bark'  },
-  cody:   { name: 'Cody Lundin',  role: 'Primitive Skills',     av: 'CL', avClass: 'av-green' },
-  hales:  { name: 'Les Hiddins',  role: 'Bush Tucker Man',      av: 'LH', avClass: 'av-amber' },
-  fox:    { name: 'Jason Fox',    role: 'Special Boat Service', av: 'JF', avClass: 'av-green' },
-  stroud: { name: 'Les Stroud',   role: 'Survivorman',          av: 'LS', avClass: 'av-blue'  },
+  ray:     { name: 'Ray Mears',       role: 'Bushcraft',            av: 'RM', avClass: 'av-green' },
+  bear:    { name: 'Bear Grylls',     role: 'Former SAS',           av: 'BG', avClass: 'av-bark'  },
+  cody:    { name: 'Cody Lundin',     role: 'Primitive Skills',     av: 'CL', avClass: 'av-green' },
+  hales:   { name: 'Les Hiddins',     role: 'Bush Tucker Man',      av: 'LH', avClass: 'av-amber' },
+  fox:     { name: 'Jason Fox',       role: 'Special Boat Service', av: 'JF', avClass: 'av-green' },
+  stroud:  { name: 'Les Stroud',      role: 'Survivorman',          av: 'LS', avClass: 'av-blue'  },
+  stevens: { name: 'Austin Stevens',  role: 'Snakemaster',          av: 'AS', avClass: 'av-bark'  },
+  cox:     { name: 'Prof Brian Cox',  role: 'Theoretical Physics',  av: 'BC', avClass: 'av-blue'  },
+  faldo:   { name: 'Sir Nick Faldo',  role: 'Golf',                 av: 'NF', avClass: 'av-green' },
 };
 
 const PROTAGONIST_PROMPTS = {
-  bear:   "Bear's warming up. What's your sorry little predicament?",
-  ray:    "Ray's ready. Show him what you're working with.",
-  fox:    "Fox is already assessing the threat. What happened?",
-  hales:  "Hiddins has seen things. What's your ordeal?",
-  cody:   "Cody could survive it barefoot. What've you got?",
-  stroud: "Stroud's been alone in worse. Describe the damage.",
+  bear:    "Bear's warming up. What's your sorry little predicament?",
+  ray:     "Ray's ready. Show him what you're working with.",
+  fox:     "Fox is already assessing the threat. What happened?",
+  hales:   "Hiddins has seen things. What's your ordeal?",
+  cody:    "Cody could survive it barefoot. What've you got?",
+  stroud:  "Stroud's been alone in worse. Describe the damage.",
+  stevens: "Stevens walked in holding something. What's the situation?",
+};
+
+const CORRIDOR_SENDOFFS = {
+  bear:    `"YOU GOT THIS BEAR." "WHOOOOOP." "WE LOVE YOU BEAR." The TV producer, somewhere behind the crowd, counting him in: "Rolling — and action, Bear!" Bear waves at the crowd. Bear always waves at the crowd.`,
+  ray:     `One man. He attended a weekend bushcraft course in 2009. He has wanted to say something ever since. He is still here. "Good luck, Ray." That is enough.`,
+  fox:     `The corridor is empty. Jim Morrison nods once. Fox nods back. No further exchange is required or offered.`,
+  hales:   `A group of Australian soldiers from 1985. They never left the corridor. Nobody asked them to leave. Nobody questioned it. "Beauty, Les." No further explanation is given.`,
+  cody:    `A barefoot student is offering to come in too. He is also barefoot. This is also inadvisable. Cody does not discourage him.`,
+  stroud:  `His own camera, on a tripod. He set it up before he went in. Nobody else is here. The camera is rolling.`,
+  stevens: `He walked in through the front door holding a snake. The snake is fine. He is fine. The panel has been informed. The panel is processing this.`,
 };
 
 const State = {
@@ -6054,12 +6116,19 @@ const State = {
 const UI = {
   updatePrompt(id) {
     const el = document.getElementById('protagonist-prompt');
+    const sendoff = document.getElementById('sendoff-block');
     if (id && PROTAGONIST_PROMPTS[id]) {
       el.textContent = PROTAGONIST_PROMPTS[id];
       el.classList.add('named');
+      if (CORRIDOR_SENDOFFS[id]) {
+        sendoff.textContent = CORRIDOR_SENDOFFS[id];
+        sendoff.classList.add('show');
+      }
     } else {
       el.textContent = "Pick someone. They're going in.";
       el.classList.remove('named');
+      sendoff.textContent = '';
+      sendoff.classList.remove('show');
     }
   },
   setSubmitEnabled(v) { document.getElementById('btn-submit').disabled = !v; },
@@ -6130,28 +6199,48 @@ const API = {
 The user has submitted a predicament. Each panel member must claim to have survived something worse.
 COMPULSORY ESCALATION: each character must top the previous one. Nobody can admit theirs wasn't worse.
 The protagonist (\${protagonistName}) must deliver the most extreme escalation in the panel.
-The panel responds in triage order — IMMEDIATE tier (Ray, Fox) sets the baseline, COMEDY tier escalates beyond reason.
+The panel responds in triage order — IMMEDIATE tier (Ray, Fox, Stevens) sets the baseline, COMEDY tier escalates beyond reason.
 
 === CHARACTER VOICES ===
-RAY MEARS — Bushcraft. Measured, specific, quietly worse. Particular about conditions.
+RAY MEARS — Bushcraft. Measured, specific, quietly worse. Particular about conditions. Never dramatic.
 BEAR GRYLLS — Former SAS. Always abroad. Always fine. Always unnecessary. Fact-checker fires on his entry.
 JASON FOX — Special Boat Service. Classified, probably. Operational framing. Unlikely to elaborate.
 LES HIDDINS — Bush Tucker Man. Three words. The Aboriginal people had a name for it.
 CODY LUNDIN — Primitive skills. Barefoot. Had the resource thirty feet away. Chose not to use it. Made it worse.
-LES STROUD — Survivorman. Quiet. Slightly melancholy. Has been alone in worse. Always.
+LES STROUD — Survivorman. Quiet. Slightly melancholy. Has been alone in worse. Always. Camera was rolling.
+AUSTIN STEVENS — Snakemaster. South African. Direct, slightly theatrical. Casually indifferent to severity — everything registers as minor. Has been bitten by a black mamba, a gaboon viper, a king cobra, and a reticulated python in the same month. Calls your predicament "interesting." Will not say it was bad. Will say it was "a significant encounter." Your paper cut is not a significant encounter.
+
+=== FISH-OUT-OF-WATER GUESTS (include 1–2 when they will improve the room) ===
+PROF BRIAN COX — Theoretical Physics. AWARENESS MODE: blissfully unaware. Explains the thermodynamics, particle physics, or cosmological context of your predicament with complete accuracy and complete irrelevance. Genuinely believes this is helping. Never defensive, never self-aware. Curious. His "I've Had Worse" entry involves a physics event (LHC, a supernova, the heat death of the universe). He had worse. The universe has certainly had worse.
+SIR NICK FALDO — Golf. AWARENESS MODE: painfully aware but fully committed. Knows golf doesn't apply. Applies golf methodology anyway, with total conviction. Compares everything to a hazard, a bunker, a tight lie. "Address the problem. Head down. Follow through." His "I've Had Worse" entry is from a major tournament. The conditions were worse. He has a method. The method is wrong. He knows. He persists.
+
+=== PANEL INTERACTION MECHANICS ===
+
+TELEPHONE GAME — when a proper noun from the predicament is repeated across 2+ panel responses:
+- Second mention: subtly mis-label it (near-miss, plausible drift — "Deadly 60" → "Dirty Dozen").
+- Third+ mention: each subsequent member builds on the previous wrong name, escalating the drift.
+- The character who introduced the wrong name defends it if the chain continues. Nobody acknowledges the error.
+- This is sincere. The drift happens because they are not listening to each other.
+
+EXPERT OVER-REACH — when two characters with overlapping domain knowledge respond:
+- One names a technique, plant, or animal with genuine expertise.
+- The next names a better/more obscure one — possibly real, possibly invented.
+- They escalate: passive-aggressive precision, then invented specificity with confident Latin names, years, coordinates.
+- Nobody calls the bluff. Attenborough, if closing, notices. Says nothing. Lets it pass.
 
 === CRITICAL RULES ===
 Characters are sincere. They do not know they are in a mechanic. They are simply recounting their experience.
 The comedy is structural — from the compulsory escalation — NOT from characters winking at the audience.
 \${protagonistName} (charId: \${protagonist}) is the protagonist — their entry must be the most extreme and MUST be present in the panel array.
 Attenborough does NOT appear in the panel array. He bookends.
+Cox and Faldo are permanent panel members on rotation like the others. Include one at a time — never both in the same panel.
 
 VALID charIds — use ONLY these exact values, no others:
-  ray (Ray Mears), bear (Bear Grylls), fox (Jason Fox), hales (Les Hiddins), cody (Cody Lundin), stroud (Les Stroud)
+  ray, bear, fox, hales, cody, stroud, stevens, cox, faldo
 Include at least 3 panel members. The protagonist charId "\${protagonist}" must appear.
 
 OUTPUT — valid JSON only, no markdown:
-{"attenborough_opening":"<one sentence, nature doc, frames the user's predicament as a minor event in the natural order>","panel":[{"charId":"ray|bear|fox|hales|cody|stroud","text":"<1-2 sentences — their worse experience, absolutely sincere>"}],"attenborough_terminal":"<one sentence, geological calm, closes the room, no appeal>"}\`;
+{"attenborough_opening":"<one sentence, nature doc, frames the user's predicament as a minor event in the natural order>","panel":[{"charId":"ray|bear|fox|hales|cody|stroud|stevens|cox|faldo","text":"<1-2 sentences — their worse experience, absolutely sincere>"}],"attenborough_terminal":"<one sentence, geological calm, closes the room, no appeal>"}\`;
   },
 
   async submit(predicament, protagonist) {
