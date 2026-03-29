@@ -2388,6 +2388,12 @@ const SURVIVAL_SCHOOL_WORST = `<!DOCTYPE html>
     }
 
     .chip:hover, .chip.sel { border-color: var(--blood); color: var(--blood); }
+    .chip-cat-group { margin-bottom: 4px; }
+    .chip-cat { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); padding: 6px 10px; border: 0.5px solid var(--border); border-radius: 5px; cursor: pointer; user-select: none; transition: all 0.15s; margin-bottom: 4px; display: inline-block; }
+    .chip-cat:hover { color: var(--text); border-color: var(--border-strong); }
+    .chip-cat.open { color: var(--gold); border-color: var(--gold-dim); }
+    .chip-cat-body { display: none; flex-wrap: wrap; gap: 5px; padding: 4px 0 8px; }
+    .chip-cat.open + .chip-cat-body { display: flex; }
 
     input[type="text"], textarea {
       width: 100%;
@@ -2718,17 +2724,27 @@ const SURVIVAL_SCHOOL_WORST = `<!DOCTYPE html>
   </div>
 
   <div class="field-label">Classic incidents</div>
-  <div class="chips" id="chips-scenario">
-    <div class="chip" onclick="onScenario(this,'bitten by king cobra 45 minutes ago','king cobra','jungle, alone, 45 minutes from help')">cobra bite</div>
-    <div class="chip" onclick="onScenario(this,'grizzly bear charging me on a trail','grizzly bear','Montana wilderness, 3 miles from car, no phone signal')">grizzly charge</div>
-    <div class="chip" onclick="onScenario(this,'great white shark circling me in the water','great white shark','surfing, 400 metres from shore')">shark circling</div>
-    <div class="chip" onclick="onScenario(this,'Brazilian wandering spider is on my chest and I have not moved','Brazilian wandering spider','3am, in bed, urban, ambulance available')">spider on chest</div>
-    <div class="chip" onclick="onScenario(this,'three spotted hyenas closing in, I am alone on foot','pack of spotted hyenas','open savannah, nightfall in 40 minutes, no vehicle')">hyena pack</div>
-    <div class="chip" onclick="onScenario(this,'struck by lightning for the seventh time in my life','lightning strike','outdoors, fully conscious somehow, confused bystanders')">lightning (7th)</div>
-    <div class="chip" onclick="onScenario(this,'Komodo dragon bit my ankle 20 minutes ago, wound is not clotting','Komodo dragon','Komodo Island, 2 hours from hospital, basic first aid kit')">komodo bite</div>
-    <div class="chip" onclick="onScenario(this,'I have been injured by a manatee and require assistance','manatee','coastal water, near shore, witnesses present, explanation required')">manatee incident</div>
-    <div class="chip" onclick="onScenario(this,'being attacked by a swan and cannot leave the area','swan','canal towpath, urban, witnesses unable to help')">swan attack</div>
-    <div class="chip" onclick="onScenario(this,'72 days, all food is gone, there are options on the ground','none','Andes mountains, 16 survivors, decision cannot be delayed')">andes decision</div>
+  <div id="chips-scenario">
+    <div class="chip-cat-group">
+      <div class="chip-cat">Predator</div>
+      <div class="chip-cat-body">
+        <div class="chip" onclick="onScenario(this,'bitten by king cobra 45 minutes ago','king cobra','jungle, alone, 45 minutes from help')">cobra bite</div>
+        <div class="chip" onclick="onScenario(this,'grizzly bear charging me on a trail','grizzly bear','Montana wilderness, 3 miles from car, no phone signal')">grizzly charge</div>
+        <div class="chip" onclick="onScenario(this,'great white shark circling me in the water','great white shark','surfing, 400 metres from shore')">shark circling</div>
+        <div class="chip" onclick="onScenario(this,'three spotted hyenas closing in, I am alone on foot','pack of spotted hyenas','open savannah, nightfall in 40 minutes, no vehicle')">hyena pack</div>
+        <div class="chip" onclick="onScenario(this,'Komodo dragon bit my ankle 20 minutes ago, wound is not clotting','Komodo dragon','Komodo Island, 2 hours from hospital, basic first aid kit')">komodo bite</div>
+      </div>
+    </div>
+    <div class="chip-cat-group">
+      <div class="chip-cat">Other</div>
+      <div class="chip-cat-body">
+        <div class="chip" onclick="onScenario(this,'Brazilian wandering spider is on my chest and I have not moved','Brazilian wandering spider','3am, in bed, urban, ambulance available')">spider on chest</div>
+        <div class="chip" onclick="onScenario(this,'struck by lightning for the seventh time in my life','lightning strike','outdoors, fully conscious somehow, confused bystanders')">lightning (7th)</div>
+        <div class="chip" onclick="onScenario(this,'I have been injured by a manatee and require assistance','manatee','coastal water, near shore, witnesses present, explanation required')">manatee incident</div>
+        <div class="chip" onclick="onScenario(this,'being attacked by a swan and cannot leave the area','swan','canal towpath, urban, witnesses unable to help')">swan attack</div>
+        <div class="chip" onclick="onScenario(this,'72 days, all food is gone, there are options on the ground','none','Andes mountains, 16 survivors, decision cannot be delayed')">andes decision</div>
+      </div>
+    </div>
   </div>
 
   <div class="field-label">Or describe what happened...</div>
@@ -3157,6 +3173,11 @@ const API = { assess, assessWorst, react };
 
 
 
+  document.querySelectorAll('.chip-cat').forEach((cat, i) => {
+    if (i === 0) cat.classList.add('open');
+    cat.addEventListener('click', () => cat.classList.toggle('open'));
+  });
+
   window.onScenario = (el, eventVal, animalVal, circVal) => {
     document.querySelectorAll('#chips-scenario .chip').forEach(c => c.classList.remove('sel'));
     el.classList.add('sel');
@@ -3313,6 +3334,12 @@ const SURVIVAL_SCHOOL_MUNDANE = `<!DOCTYPE html>
     }
 
     .chip:hover, .chip.sel { border-color: var(--amber); color: var(--amber); }
+    .chip-cat-group { margin-bottom: 4px; }
+    .chip-cat { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); padding: 6px 10px; border: 0.5px solid var(--border); border-radius: 5px; cursor: pointer; user-select: none; transition: all 0.15s; margin-bottom: 4px; display: inline-block; }
+    .chip-cat:hover { color: var(--text); border-color: var(--border-strong); }
+    .chip-cat.open { color: var(--gold); border-color: var(--gold-dim); }
+    .chip-cat-body { display: none; flex-wrap: wrap; gap: 5px; padding: 4px 0 8px; }
+    .chip-cat.open + .chip-cat-body { display: flex; }
 
     textarea {
       width: 100%;
@@ -3618,17 +3645,23 @@ const SURVIVAL_SCHOOL_MUNDANE = `<!DOCTYPE html>
   </div>
 
   <div class="field-label">Your situation</div>
-  <div class="chips" id="chips-mundane">
-    <div class="chip" onclick="onChip(this, 'I have missed the last bus home. It is raining.')">missed the last bus</div>
+  <div id="chips-mundane">
+    <div class="chip-cat-group"><div class="chip-cat">Domestic</div><div class="chip-cat-body">
     <div class="chip" onclick="onChip(this, 'I am locked out of my house. It is 11pm.')">locked out</div>
+    <div class="chip" onclick="onChip(this, 'I have run out of tea bags. It is Sunday. The shops are closed.')">no tea bags, Sunday</div>
+    <div class="chip" onclick="onChip(this, 'The self-checkout has called for assistance. There is a queue behind me.')">self-checkout assist</div>
+    <div class="chip" onclick="onChip(this, 'There is one till open at the post office. The queue has not moved in 15 minutes.')">one till, post office</div>
+    </div></div>
+    <div class="chip-cat-group"><div class="chip-cat">Office</div><div class="chip-cat-body">
     <div class="chip" onclick="onChip(this, 'The printer has run out of ink. My presentation is in 10 minutes.')">printer out of ink</div>
     <div class="chip" onclick="onChip(this, 'I have spilled coffee on my laptop. It is making a concerning noise.')">coffee on laptop</div>
     <div class="chip" onclick="onChip(this, 'The wifi is down. I am working from home. I have a video call in 20 minutes.')">wifi down, call in 20</div>
-    <div class="chip" onclick="onChip(this, 'I have run out of tea bags. It is Sunday. The shops are closed.')">no tea bags, Sunday</div>
-    <div class="chip" onclick="onChip(this, 'There is one till open at the post office. The queue has not moved in 15 minutes.')">one till, post office</div>
     <div class="chip" onclick="onChip(this, 'I ordered a takeaway 90 minutes ago. The app says it is still being prepared.')">takeaway 90 mins</div>
+    </div></div>
+    <div class="chip-cat-group"><div class="chip-cat">Transport</div><div class="chip-cat-body">
+    <div class="chip" onclick="onChip(this, 'I have missed the last bus home. It is raining.')">missed the last bus</div>
     <div class="chip" onclick="onChip(this, 'My flat tyre is on the motorway hard shoulder. I am not a member of the AA.')">flat tyre, M-way</div>
-    <div class="chip" onclick="onChip(this, 'The self-checkout has called for assistance. There is a queue behind me.')">self-checkout assist</div>
+    </div></div>
   </div>
   <textarea id="mundane-input" rows="3"
     placeholder="or describe your situation in full... I've missed the last bus, it's October, raining, and I'm wearing trainers..."
@@ -3967,7 +4000,10 @@ async function react(situation, decision, currentProbability) {
 
 // === main ===
 
-
+document.querySelectorAll('.chip-cat').forEach((cat, i) => {
+  if (i === 0) cat.classList.add('open');
+  cat.addEventListener('click', () => cat.classList.toggle('open'));
+});
 
   let situation = '';
 
@@ -4130,6 +4166,12 @@ const SURVIVAL_SCHOOL_EAT = `<!DOCTYPE html>
     .chips { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 8px; }
     .chip { font-family: 'IBM Plex Mono', monospace; font-size: 11px; padding: 5px 10px; border: 0.5px solid var(--border-strong); border-radius: 5px; cursor: pointer; background: none; color: var(--text-muted); transition: all 0.15s; white-space: nowrap; user-select: none; }
     .chip:hover, .chip.sel { border-color: var(--green); color: var(--green); }
+    .chip-cat-group { margin-bottom: 4px; }
+    .chip-cat { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); padding: 6px 10px; border: 0.5px solid var(--border); border-radius: 5px; cursor: pointer; user-select: none; transition: all 0.15s; margin-bottom: 4px; display: inline-block; }
+    .chip-cat:hover { color: var(--text); border-color: var(--border-strong); }
+    .chip-cat.open { color: var(--gold); border-color: var(--gold-dim); }
+    .chip-cat-body { display: none; flex-wrap: wrap; gap: 5px; padding: 4px 0 8px; }
+    .chip-cat.open + .chip-cat-body { display: flex; }
 
     input[type="text"] { width: 100%; font-family: 'IBM Plex Mono', monospace; font-size: 13px; padding: 9px 12px; border: 0.5px solid var(--border-strong); border-radius: 6px; background: var(--surface); color: var(--text); outline: none; transition: border-color 0.15s; }
     input[type="text"]:focus { border-color: var(--green); }
@@ -4212,19 +4254,23 @@ const SURVIVAL_SCHOOL_EAT = `<!DOCTYPE html>
   </div>
 
   <div class="field-label">What did you find?</div>
-  <div class="chips" id="chips-item">
+  <div id="chips-item">
+    <div class="chip-cat-group"><div class="chip-cat">Forage</div><div class="chip-cat-body">
     <div class="chip" onclick="onChip(this,'mushroom')">mushroom</div>
     <div class="chip" onclick="onChip(this,'wild berries')">wild berries</div>
-    <div class="chip" onclick="onChip(this,'witchetty grubs')">witchetty grubs</div>
-    <div class="chip" onclick="onChip(this,'raw fish')">raw fish</div>
-    <div class="chip" onclick="onChip(this,'roadkill')">roadkill</div>
     <div class="chip" onclick="onChip(this,'seaweed')">seaweed</div>
-    <div class="chip" onclick="onChip(this,'insects')">insects</div>
     <div class="chip" onclick="onChip(this,'lichen')">lichen</div>
     <div class="chip" onclick="onChip(this,'bark or roots')">bark / roots</div>
     <div class="chip" onclick="onChip(this,'unknown leaves')">unknown leaves</div>
+    </div></div>
+    <div class="chip-cat-group"><div class="chip-cat">Creature</div><div class="chip-cat-body">
+    <div class="chip" onclick="onChip(this,'witchetty grubs')">witchetty grubs</div>
+    <div class="chip" onclick="onChip(this,'raw fish')">raw fish</div>
+    <div class="chip" onclick="onChip(this,'roadkill')">roadkill</div>
+    <div class="chip" onclick="onChip(this,'insects')">insects</div>
     <div class="chip" onclick="onChip(this,'snake')">snake</div>
     <div class="chip" onclick="onChip(this,'something I cannot identify')">unidentified</div>
+    </div></div>
   </div>
   <input type="text" id="item-input" placeholder="or describe exactly what you found..." oninput="onInput(this.value)"/>
 
@@ -4325,6 +4371,11 @@ OUTPUT — valid JSON only, no markdown:
 {"item_identified":"<common name (scientific name if known)>","edibility_verdict":"edible|not_edible|conditional|unknown","attenborough_opening":"<one sentence, natural history intro>","panel":[{"charId":"ray","text":"<2-3 sentences>","will_eat":<bool>,"fact_check":"<optional>"},{"charId":"bear","text":"<2-3 sentences>","will_eat":true,"fact_check":"<optional>"},{"charId":"hales","text":"<2-3 sentences, educational, cites Aboriginal knowledge>","will_eat":true},{"charId":"packham","text":"<2-3 sentences>","will_eat":null,"source_challenge":"<his specific sourcing question>"},{"charId":"irwin","text":"<2-3 sentences>","will_eat":true,"impulse":"<what he immediately did, one phrase>"},{"charId":"stevens","text":"<1-2 sentences>","will_eat":false},{"charId":"darwin","text":"<2-3 sentences>","will_eat":true,"journal_note":"<one sentence from his journal, verbatim style>"}],"attenborough_verdict":"<one sentence>"}\`;
 
 let item = '';
+
+document.querySelectorAll('.chip-cat').forEach((cat, i) => {
+  if (i === 0) cat.classList.add('open');
+  cat.addEventListener('click', () => cat.classList.toggle('open'));
+});
 
 function onChip(el, val) {
   document.querySelectorAll('#chips-item .chip').forEach(c => c.classList.remove('sel'));
@@ -4495,6 +4546,12 @@ const SURVIVAL_SCHOOL_FACT_CHECKER = `<!DOCTYPE html>
     .chips { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 8px; }
     .chip { font-family: 'IBM Plex Mono', monospace; font-size: 11px; padding: 5px 10px; border: 0.5px solid var(--border-strong); border-radius: 5px; cursor: pointer; background: none; color: var(--text-muted); transition: all 0.15s; white-space: nowrap; user-select: none; }
     .chip:hover, .chip.sel { border-color: var(--bark); color: var(--bark); }
+    .chip-cat-group { margin-bottom: 4px; }
+    .chip-cat { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); padding: 6px 10px; border: 0.5px solid var(--border); border-radius: 5px; cursor: pointer; user-select: none; transition: all 0.15s; margin-bottom: 4px; display: inline-block; }
+    .chip-cat:hover { color: var(--text); border-color: var(--border-strong); }
+    .chip-cat.open { color: var(--gold); border-color: var(--gold-dim); }
+    .chip-cat-body { display: none; flex-wrap: wrap; gap: 5px; padding: 4px 0 8px; }
+    .chip-cat.open + .chip-cat-body { display: flex; }
 
     textarea { width: 100%; font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; padding: 9px 12px; border: 0.5px solid var(--border-strong); border-radius: 6px; background: var(--surface); color: var(--text); outline: none; transition: border-color 0.15s; resize: vertical; min-height: 72px; line-height: 1.6; }
     textarea:focus { border-color: var(--bark); }
@@ -4564,16 +4621,22 @@ const SURVIVAL_SCHOOL_FACT_CHECKER = `<!DOCTYPE html>
   </div>
 
   <div class="field-label">Famous Bear claims</div>
-  <div class="chips" id="chips-claim">
+  <div id="chips-claim">
+    <div class="chip-cat-group"><div class="chip-cat">Technique</div><div class="chip-cat-body">
     <div class="chip" onclick="onChip(this,'I once made fire using sunlight and a piece of ice in the Himalayas.')">ice lens fire</div>
-    <div class="chip" onclick="onChip(this,'Drinking your own urine is a good survival strategy when water is scarce.')">urine hydration</div>
-    <div class="chip" onclick="onChip(this,'You can survive by drinking the blood of a freshly caught fish.')">fish blood</div>
     <div class="chip" onclick="onChip(this,'Running in a zigzag is the best way to escape a crocodile.')">croc zigzag</div>
-    <div class="chip" onclick="onChip(this,'I survived a night by sheltering inside a freshly killed camel.')">camel bivouac</div>
-    <div class="chip" onclick="onChip(this,'Eating raw meat in the jungle gives you energy within minutes.')">raw meat energy</div>
     <div class="chip" onclick="onChip(this,'You should suck the venom out of a snake bite immediately.')">venom extraction</div>
     <div class="chip" onclick="onChip(this,'In an avalanche, spit to find which way is down.')">avalanche spit</div>
+    </div></div>
+    <div class="chip-cat-group"><div class="chip-cat">Biology</div><div class="chip-cat-body">
+    <div class="chip" onclick="onChip(this,'Drinking your own urine is a good survival strategy when water is scarce.')">urine hydration</div>
+    <div class="chip" onclick="onChip(this,'You can survive by drinking the blood of a freshly caught fish.')">fish blood</div>
+    <div class="chip" onclick="onChip(this,'Eating raw meat in the jungle gives you energy within minutes.')">raw meat energy</div>
+    </div></div>
+    <div class="chip-cat-group"><div class="chip-cat">Endurance</div><div class="chip-cat-body">
+    <div class="chip" onclick="onChip(this,'I survived a night by sheltering inside a freshly killed camel.')">camel bivouac</div>
     <div class="chip" onclick="onChip(this,'Bear roughed it for 72 hours in the Highlands with nothing but a knife and his instincts. He was not seen at a nearby Travelodge at any point.')">72 hours in the Highlands</div>
+    </div></div>
   </div>
 
   <div class="field-label" style="margin-top:12px">Or enter a Bear claim</div>
@@ -4669,6 +4732,11 @@ OUTPUT — valid JSON only, no markdown:
 {"claim":"<the claim as submitted>","accuracy_score":<integer 0-100>,"verdict":"CONFIRMED|DISPUTED|EMBELLISHED|MYTH","attenborough_opening":"<one sentence, introduces Bear's claim as specimen under scrutiny>","panel":[{"charId":"ray","text":"<2-3 sentences>","fact_check":"<mandatory — Ray's correction, specific and brief>"},{"charId":"bear","text":"<2-3 sentences, defends the claim completely>"},{"charId":"cody","text":"<2-3 sentences, the correct technique that was available>"},{"charId":"hales","text":"<2-3 sentences, educational, cites Aboriginal knowledge where relevant>"},{"charId":"fox","text":"<2-3 sentences, tactical operational assessment>"},{"charId":"stroud","text":"<1-2 sentences, quiet verdict>"}],"attenborough_verdict":"<one sentence, geological calm>"}\`;
 
 let claim = '';
+
+document.querySelectorAll('.chip-cat').forEach((cat, i) => {
+  if (i === 0) cat.classList.add('open');
+  cat.addEventListener('click', () => cat.classList.toggle('open'));
+});
 
 function onChip(el, val) {
   document.querySelectorAll('#chips-claim .chip').forEach(c => c.classList.remove('sel'));
@@ -4846,6 +4914,12 @@ const SURVIVAL_SCHOOL_COYOTE = `<!DOCTYPE html>
     .chips { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 8px; }
     .chip { font-family: 'IBM Plex Mono', monospace; font-size: 11px; padding: 5px 10px; border: 0.5px solid var(--border-strong); border-radius: 5px; cursor: pointer; background: none; color: var(--text-muted); transition: all 0.15s; white-space: nowrap; user-select: none; }
     .chip:hover, .chip.sel { border-color: var(--amber); color: var(--amber); }
+    .chip-cat-group { margin-bottom: 4px; }
+    .chip-cat { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); padding: 6px 10px; border: 0.5px solid var(--border); border-radius: 5px; cursor: pointer; user-select: none; transition: all 0.15s; margin-bottom: 4px; display: inline-block; }
+    .chip-cat:hover { color: var(--text); border-color: var(--border-strong); }
+    .chip-cat.open { color: var(--gold); border-color: var(--gold-dim); }
+    .chip-cat-body { display: none; flex-wrap: wrap; gap: 5px; padding: 4px 0 8px; }
+    .chip-cat.open + .chip-cat-body { display: flex; }
 
     textarea { width: 100%; font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; padding: 9px 12px; border: 0.5px solid var(--border-strong); border-radius: 6px; background: var(--surface); color: var(--text); outline: none; transition: border-color 0.15s; resize: vertical; min-height: 72px; line-height: 1.6; }
     textarea:focus { border-color: var(--amber); }
@@ -4910,17 +4984,23 @@ const SURVIVAL_SCHOOL_COYOTE = `<!DOCTYPE html>
   </div>
 
   <div class="field-label">Common incidents (select or describe your own)</div>
-  <div class="chips" id="chips-incident">
+  <div id="chips-incident">
+    <div class="chip-cat-group"><div class="chip-cat">Domestic</div><div class="chip-cat-body">
     <div class="chip" onclick="onChip(this,'shin struck by shopping trolley in Sainsbury\\'s, Saturday afternoon, no apology given')">trolley to shin</div>
     <div class="chip" onclick="onChip(this,'paper cut from cardboard box edge, not paper — the deceptive kind')">cardboard cut</div>
     <div class="chip" onclick="onChip(this,'stepped on Lego barefoot, 3am, trying not to wake anyone')">Lego, 3am</div>
     <div class="chip" onclick="onChip(this,'stubbed little toe on bed corner, full speed, unexpected')">bed corner, little toe</div>
-    <div class="chip" onclick="onChip(this,'eating something described as mild on the menu')">mild (it was not mild)</div>
-    <div class="chip" onclick="onChip(this,'bee sting, forearm, unprovoked')">bee sting</div>
-    <div class="chip" onclick="onChip(this,'jellyfish sting, leg, holiday, shallow water')">jellyfish, holiday</div>
-    <div class="chip" onclick="onChip(this,'waxing — any area')">waxing</div>
+    </div></div>
+    <div class="chip-cat-group"><div class="chip-cat">Medical</div><div class="chip-cat-body">
     <div class="chip" onclick="onChip(this,'dental filling without full anaesthetic, dentist says it\\'s fine')">filling, insufficient anaesthetic</div>
+    <div class="chip" onclick="onChip(this,'waxing — any area')">waxing</div>
+    <div class="chip" onclick="onChip(this,'bee sting, forearm, unprovoked')">bee sting</div>
+    </div></div>
+    <div class="chip-cat-group"><div class="chip-cat">Nature</div><div class="chip-cat-body">
+    <div class="chip" onclick="onChip(this,'jellyfish sting, leg, holiday, shallow water')">jellyfish, holiday</div>
+    <div class="chip" onclick="onChip(this,'eating something described as mild on the menu')">mild (it was not mild)</div>
     <div class="chip" onclick="onChip(this,'bitten by bullet ant, Paraponera clavata, deliberately')">bullet ant (reference)</div>
+    </div></div>
   </div>
 
   <div class="field-label" style="margin-top:12px">Or describe your incident</div>
@@ -5041,6 +5121,11 @@ const API = {
     return resp.json();
   },
 };
+
+document.querySelectorAll('.chip-cat').forEach((cat, i) => {
+  if (i === 0) cat.classList.add('open');
+  cat.addEventListener('click', () => cat.classList.toggle('open'));
+});
 
 function ratingColor(r) {
   if (r >= 4) return 'var(--blood)';
@@ -6172,6 +6257,12 @@ const SURVIVAL_SCHOOL_IVE_HAD_WORSE = `<!DOCTYPE html>
     .chip-protagonist { border-color: var(--border-strong); }
     .chip-protagonist.sel { border-color: var(--amber); color: var(--amber); }
     .chip-protagonist:hover { border-color: var(--amber); color: var(--amber); }
+    .chip-cat-group { margin-bottom: 4px; }
+    .chip-cat { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); padding: 6px 10px; border: 0.5px solid var(--border); border-radius: 5px; cursor: pointer; user-select: none; transition: all 0.15s; margin-bottom: 4px; display: inline-block; }
+    .chip-cat:hover { color: var(--text); border-color: var(--border-strong); }
+    .chip-cat.open { color: var(--gold); border-color: var(--gold-dim); }
+    .chip-cat-body { display: none; flex-wrap: wrap; gap: 5px; padding: 4px 0 8px; }
+    .chip-cat.open + .chip-cat-body { display: flex; }
 
     .protagonist-prompt { font-family: 'Barlow Condensed', sans-serif; font-size: 18px; font-weight: 600; color: var(--text); margin-top: 14px; min-height: 28px; transition: color 0.2s; letter-spacing: 0.5px; }
     .protagonist-prompt.named { color: var(--amber); }
@@ -6275,22 +6366,37 @@ const SURVIVAL_SCHOOL_IVE_HAD_WORSE = `<!DOCTYPE html>
   <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text-muted);margin-bottom:6px;line-height:1.5;opacity:0.7;">Think small. The more trivial your predicament, the harder the panel works to top it. A paper cut is funnier than a bear attack.</div>
   <textarea id="predicament-input" placeholder="I have a mild inconvenience that I would like taken extremely seriously..." rows="2"></textarea>
 
-  <div class="chips" id="chips-predicament" style="margin-top:8px">
-    <button class="chip" data-pred="I have a paper cut">paper cut</button>
-    <button class="chip" data-pred="I stubbed my toe">stubbed toe</button>
-    <button class="chip" data-pred="I got slightly damp in the rain">slightly damp</button>
-    <button class="chip" data-pred="My tea was lukewarm">lukewarm tea</button>
-    <button class="chip" data-pred="I have a mild headache">mild headache</button>
-    <button class="chip" data-pred="I sat on my keys">sat on keys</button>
-    <button class="chip" data-pred="A shopping trolley hit my shin">shin vs trolley</button>
-    <button class="chip" data-pred="I have mild sunburn">mild sunburn</button>
-    <button class="chip" data-pred="I took a toilet break in the aisle of a crowded airplane because the queue was simply unreasonable">airplane aisle situation</button>
-    <button class="chip" data-pred="I was drunk and incapacitated after a pint and a half of weak shandy at a work function">defeated by a shandy</button>
-    <button class="chip" data-pred="I was found in a concerning situation involving a badger and I had questions">the badger incident</button>
-    <button class="chip" data-pred="I had to explain to hospital staff why there was a pigeon involved in an incident that was entirely the pigeon's fault">pigeon-related hospital visit</button>
-    <button class="chip" data-pred="I ate a tortoise on a long sea voyage and found it quite pleasant and now need to defend this morally and nutritionally">the tortoise question</button>
-    <button class="chip" data-pred="I am wearing a belt and wallet set made from the species I claim to be protecting in my documentary series and the crew have noticed">wearing the species</button>
-    <button class="chip" data-pred="I delivered a Stay Safe talk to Year 10 using methods the school board has described as excessive and the teacher has asked to be reassigned">Stay Safe: excessive methods</button>
+  <div id="chips-predicament" style="margin-top:8px">
+    <div class="chip-cat-group">
+      <div class="chip-cat">Minor Injuries</div>
+      <div class="chip-cat-body">
+        <button class="chip" data-pred="I have a paper cut">paper cut</button>
+        <button class="chip" data-pred="I stubbed my toe">stubbed toe</button>
+        <button class="chip" data-pred="I got slightly damp in the rain">slightly damp</button>
+        <button class="chip" data-pred="My tea was lukewarm">lukewarm tea</button>
+        <button class="chip" data-pred="I have a mild headache">mild headache</button>
+        <button class="chip" data-pred="I sat on my keys">sat on keys</button>
+        <button class="chip" data-pred="A shopping trolley hit my shin">shin vs trolley</button>
+        <button class="chip" data-pred="I have mild sunburn">mild sunburn</button>
+      </div>
+    </div>
+    <div class="chip-cat-group">
+      <div class="chip-cat">Social</div>
+      <div class="chip-cat-body">
+        <button class="chip" data-pred="I took a toilet break in the aisle of a crowded airplane because the queue was simply unreasonable">airplane aisle situation</button>
+        <button class="chip" data-pred="I was drunk and incapacitated after a pint and a half of weak shandy at a work function">defeated by a shandy</button>
+        <button class="chip" data-pred="I was found in a concerning situation involving a badger and I had questions">the badger incident</button>
+        <button class="chip" data-pred="I had to explain to hospital staff why there was a pigeon involved in an incident that was entirely the pigeon's fault">pigeon-related hospital visit</button>
+      </div>
+    </div>
+    <div class="chip-cat-group">
+      <div class="chip-cat">Character-Specific</div>
+      <div class="chip-cat-body">
+        <button class="chip" data-pred="I ate a tortoise on a long sea voyage and found it quite pleasant and now need to defend this morally and nutritionally">the tortoise question</button>
+        <button class="chip" data-pred="I am wearing a belt and wallet set made from the species I claim to be protecting in my documentary series and the crew have noticed">wearing the species</button>
+        <button class="chip" data-pred="I delivered a Stay Safe talk to Year 10 using methods the school board has described as excessive and the teacher has asked to be reassigned">Stay Safe: excessive methods</button>
+      </div>
+    </div>
   </div>
 
   <div class="btn-row">
@@ -6625,6 +6731,11 @@ document.querySelectorAll('.chip-protagonist').forEach(chip => {
   });
 });
 
+document.querySelectorAll('.chip-cat').forEach((cat, i) => {
+  if (i === 0) cat.classList.add('open');
+  cat.addEventListener('click', () => cat.classList.toggle('open'));
+});
+
 document.querySelectorAll('#chips-predicament .chip').forEach(chip => {
   chip.addEventListener('click', () => {
     document.querySelectorAll('#chips-predicament .chip').forEach(c => c.classList.remove('sel'));
@@ -6762,6 +6873,12 @@ const SURVIVAL_SCHOOL_IN_MY_DEFENCE = `<!DOCTYPE html>
     .chip { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.5px; padding: 5px 10px; border: 0.5px solid var(--border-strong); border-radius: 4px; background: var(--surface); color: var(--text-muted); cursor: pointer; transition: all 0.15s; }
     .chip:hover { border-color: var(--gold); color: var(--text); }
     .chip.sel { border-color: var(--gold); color: var(--gold); background: var(--gold-dim); }
+    .chip-cat-group { margin-bottom: 4px; }
+    .chip-cat { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); padding: 6px 10px; border: 0.5px solid var(--border); border-radius: 5px; cursor: pointer; user-select: none; transition: all 0.15s; margin-bottom: 4px; display: inline-block; }
+    .chip-cat:hover { color: var(--text); border-color: var(--border-strong); }
+    .chip-cat.open { color: var(--gold); border-color: var(--gold-dim); }
+    .chip-cat-body { display: none; flex-wrap: wrap; gap: 5px; padding: 4px 0 8px; }
+    .chip-cat.open + .chip-cat-body { display: flex; }
 
     .chip-protagonist { border-color: var(--border-strong); }
     .chip-protagonist.sel { border-color: var(--red-bright); color: var(--red-bright); background: var(--red-dim); }
@@ -6889,17 +7006,23 @@ const SURVIVAL_SCHOOL_IN_MY_DEFENCE = `<!DOCTYPE html>
     <div class="chip-group" id="personal-chips" style="display:none"></div>
 
     <div class="pool-divider">— general incidents —</div>
-    <div class="chip-group" id="general-chips">
-      <button class="chip" data-incident="I have been incontinent at a formal event and urgently relieved myself into what I believed to be an empty vessel which turned out to contain someone's grandmother's ashes. I am Mark O'Shea. I need the panel's help contextualising this as a field sanitation decision made under duress.">O'Shea: grandmother's urn</button>
+    <div id="general-chips">
+      <div class="chip-cat-group"><div class="chip-cat">Stay Safe</div><div class="chip-cat-body">
       <button class="chip" data-incident="I need to explain to the headmaster of St Cuthbert's why I delivered the Year 10 Stay Safe talk using live rounds. I felt it added authenticity. The children are fine. The supply teacher is also fine but has asked to be reassigned.">Stay Safe: live rounds</button>
       <button class="chip" data-incident="I need to explain to the headmaster of St Cuthbert's why I made entry to the Year 10 Stay Safe talk by abseiling through the window and briefly incapacitating the teacher with a controlled restraint hold. The children appeared engaged. The teacher is asking questions I cannot answer.">Stay Safe: abseil entry</button>
+      </div></div>
+      <div class="chip-cat-group"><div class="chip-cat">Irwin</div><div class="chip-cat-body">
       <button class="chip" data-incident="I am Steve Irwin. I need the panel to help me explain why I subdued a highly agitated taipan by smashing it against a nearby wall. Repeatedly. Until it stopped. I want to be clear: the snake started it. I maintain this was field improvisation under duress and not the textbook definition of what happened.">Irwin: snake wall</button>
       <button class="chip" data-incident="I am Steve Irwin. I need the panel's help explaining to Queensland Wildlife Services why my property contains a reinforced pit, bleacher seating, and fourteen crocodiles with individual fight records. This is an educational facility. The betting slips were left by a previous tenant.">Irwin: croc fighting ring</button>
       <button class="chip" data-incident="I am Steve Irwin. I was explaining — passionately, correctly, in operational detail — how one fights a snake. I may have accidentally disclosed the existence of an underground snake fighting circuit I definitely do not run. The panel needs to help me establish what counts as accidentally disclosing versus voluntarily disclosing.">Irwin: snake ring let-slip</button>
       <button class="chip" data-incident="I am Steve Irwin. I have been informed by the production company that several episodes of The Crocodile Hunter show me wearing a belt and wallet set made from genuine crocodile leather. I was not aware this was being filmed. I am told the crocs noticed. I need the panel's help explaining why this does not undermine my brand.">Irwin: croc leather on-camera</button>
-      <button class="chip" data-incident="I am Mark O'Shea. I need the panel to help me explain to the BBC why three episodes of O'Shea's Big Adventure show me wearing a jacket I have since identified as king cobra skin. I identified it myself. On screen. Live. I did not stop filming. The panel must decide whether this was professional dedication or something else.">O'Shea: snake jacket (self-identified on-air)</button>
-      <button class="chip" data-incident="I am Austin Stevens. I have been sleeping inside snake pits for research purposes since 1987 and need the panel to explain to a German documentary producer why this is fine. I am fine. The snakes are familiar with my presence. O'Shea has written a paper about me. I have not read it. I assume it is mostly positive.">Stevens: snake pit (O'Shea's paper)</button>
-      <button class="chip" data-incident="I am Austin Stevens. A production assistant has pointed out that in seventeen episodes of Austin Stevens: Snakemaster I am wearing snakeskin boots. I feel this adds gravitas and does not undermine my spiritual connection to snakes. The snakes do not appear to agree. This is noted in the RSPCA report.">Stevens: snakeskin boots (RSPCA)</button>
+      </div></div>
+      <div class="chip-cat-group"><div class="chip-cat">Herpetologists</div><div class="chip-cat-body">
+      <button class="chip" data-incident="I have been incontinent at a formal event and urgently relieved myself into what I believed to be an empty vessel which turned out to contain someone's grandmother's ashes. I am Mark O'Shea. I need the panel's help contextualising this as a field sanitation decision made under duress.">O'Shea: grandmother's urn</button>
+      <button class="chip" data-incident="I am Mark O'Shea. I need the panel to help me explain to the BBC why three episodes of O'Shea's Big Adventure show me wearing a jacket I have since identified as king cobra skin. I identified it myself. On screen. Live. I did not stop filming. The panel must decide whether this was professional dedication or something else.">O'Shea: snake jacket</button>
+      <button class="chip" data-incident="I am Austin Stevens. I have been sleeping inside snake pits for research purposes since 1987 and need the panel to explain to a German documentary producer why this is fine. I am fine. The snakes are familiar with my presence. O'Shea has written a paper about me. I have not read it. I assume it is mostly positive.">Stevens: snake pit</button>
+      <button class="chip" data-incident="I am Austin Stevens. A production assistant has pointed out that in seventeen episodes of Austin Stevens: Snakemaster I am wearing snakeskin boots. I feel this adds gravitas and does not undermine my spiritual connection to snakes. The snakes do not appear to agree. This is noted in the RSPCA report.">Stevens: snakeskin boots</button>
+      </div></div>
     </div>
 
     <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text-muted);margin:8px 0 6px;line-height:1.5;opacity:0.7;">Pick something they can't wriggle out of. The more specific and indefensible, the harder the panel presses.</div>
@@ -7267,6 +7390,11 @@ OUTPUT — valid JSON only, no markdown:
 
 // === event wiring ===
 
+document.querySelectorAll('.chip-cat').forEach((cat, i) => {
+  if (i === 0) cat.classList.add('open');
+  cat.addEventListener('click', () => cat.classList.toggle('open'));
+});
+
 document.querySelectorAll('.chip-protagonist').forEach(chip => {
   chip.addEventListener('click', () => {
     document.querySelectorAll('.chip-protagonist').forEach(c => c.classList.remove('sel'));
@@ -7418,6 +7546,12 @@ const SURVIVAL_SCHOOL_PANEL_QA = `<!DOCTYPE html>
     .chips { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 10px; }
     .chip { font-family: 'IBM Plex Mono', monospace; font-size: 11px; padding: 5px 10px; border: 0.5px solid var(--border-strong); border-radius: 5px; cursor: pointer; background: none; color: var(--text-muted); transition: all 0.15s; white-space: nowrap; user-select: none; }
     .chip:hover, .chip.sel { border-color: var(--green); color: var(--green); }
+    .chip-cat-group { margin-bottom: 4px; }
+    .chip-cat { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); padding: 6px 10px; border: 0.5px solid var(--border); border-radius: 5px; cursor: pointer; user-select: none; transition: all 0.15s; margin-bottom: 4px; display: inline-block; }
+    .chip-cat:hover { color: var(--text); border-color: var(--border-strong); }
+    .chip-cat.open { color: var(--gold); border-color: var(--gold-dim); }
+    .chip-cat-body { display: none; flex-wrap: wrap; gap: 5px; padding: 4px 0 8px; }
+    .chip-cat.open + .chip-cat-body { display: flex; }
     .chips-label { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 1px; color: var(--text-muted); margin-top: 10px; margin-bottom: 4px; opacity: 0.6; }
 
     .btn-row { display: flex; gap: 8px; margin-top: 14px; }
@@ -7470,22 +7604,28 @@ const SURVIVAL_SCHOOL_PANEL_QA = `<!DOCTYPE html>
   <textarea id="question-input" placeholder="What do you do when..." rows="3"></textarea>
 
   <div class="chips-label">or pick a prompt — click to use</div>
-  <div class="chips" id="chips-questions">
+  <div id="chips-questions">
+    <div class="chip-cat-group"><div class="chip-cat">By Environment</div><div class="chip-cat-body">
     <div class="chip" onclick="onChip(this,'You encounter a jaguar in the Amazon. It is not running. What do you do?')">jaguar, Amazon jungle</div>
     <div class="chip" onclick="onChip(this,'You are lost on an Arctic ice sheet with no shelter and three hours of light left. What is your priority?')">lost on Arctic ice</div>
     <div class="chip" onclick="onChip(this,'You are capsized in the open ocean, no land in sight, no flares. What do you do first?')">capsized, open ocean</div>
     <div class="chip" onclick="onChip(this,'You are alone in the Sahara. Water for one day. No GPS. What is your survival strategy?')">Sahara desert, one day of water</div>
     <div class="chip" onclick="onChip(this,'You are lost in an urban environment at night with no phone, no money, no ID. What do you do?')">lost, urban, no resources</div>
     <div class="chip" onclick="onChip(this,'You are injured and alone in a woodland in winter. Temperature is dropping. What are your three priorities?')">injured, woodland, winter</div>
+    </div></div>
+    <div class="chip-cat-group"><div class="chip-cat">Technique</div><div class="chip-cat-body">
     <div class="chip" onclick="onChip(this,'How do you make fire with no equipment?')">fire without equipment</div>
     <div class="chip" onclick="onChip(this,'How do you find water in a dry environment?')">finding water, dry environment</div>
-    <div class="chip" onclick="onChip(this,'You encounter a brown bear at close range in the Scottish Highlands. What do you do?')">brown bear, Scottish Highlands</div>
-    <div class="chip" onclick="onChip(this,'What is the most dangerous mistake people make in survival situations?')">most dangerous mistake</div>
     <div class="chip" onclick="onChip(this,'You have been bitten by something venomous but do not know what. What do you do?')">unknown venomous bite</div>
     <div class="chip" onclick="onChip(this,'How do you navigate without a compass or phone?')">navigation without instruments</div>
+    <div class="chip" onclick="onChip(this,'What is the most dangerous mistake people make in survival situations?')">most dangerous mistake</div>
+    </div></div>
+    <div class="chip-cat-group"><div class="chip-cat">Ethical</div><div class="chip-cat-body">
     <div class="chip" onclick="onChip(this,'Is it ethical to wear a belt made from the species you are filming a documentary about?')">wearing the species</div>
+    <div class="chip" onclick="onChip(this,'You encounter a brown bear at close range in the Scottish Highlands. What do you do?')">brown bear, Scottish Highlands</div>
     <div class="chip" onclick="onChip(this,'At what point does sleeping in a snake pit stop being research and start being something else?')">snake pit: research or not?</div>
     <div class="chip" onclick="onChip(this,'Should school survival talks include live demonstrations of restraint techniques on the teacher?')">Stay Safe: live demos</div>
+    </div></div>
   </div>
 
   <div class="btn-row">
@@ -7620,6 +7760,11 @@ const API = {
   },
 };
 
+document.querySelectorAll('.chip-cat').forEach((cat, i) => {
+  if (i === 0) cat.classList.add('open');
+  cat.addEventListener('click', () => cat.classList.toggle('open'));
+});
+
 function makeCard(charId, text) {
   const c = CHARACTERS[charId];
   if (!c) return '';
@@ -7734,6 +7879,12 @@ const SURVIVAL_SCHOOL_IRWIN_MEMORIAL = `<!DOCTYPE html>
     .chips { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px; }
     .chip { font-family: 'IBM Plex Mono', monospace; font-size: 11px; padding: 5px 10px; border: 0.5px solid var(--border-strong); border-radius: 5px; cursor: pointer; background: none; color: var(--text-muted); transition: all 0.15s; white-space: nowrap; user-select: none; }
     .chip:hover, .chip.sel { border-color: var(--amber); color: var(--amber); }
+    .chip-cat-group { margin-bottom: 4px; }
+    .chip-cat { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); padding: 6px 10px; border: 0.5px solid var(--border); border-radius: 5px; cursor: pointer; user-select: none; transition: all 0.15s; margin-bottom: 4px; display: inline-block; }
+    .chip-cat:hover { color: var(--text); border-color: var(--border-strong); }
+    .chip-cat.open { color: var(--gold); border-color: var(--gold-dim); }
+    .chip-cat-body { display: none; flex-wrap: wrap; gap: 5px; padding: 4px 0 8px; }
+    .chip-cat.open + .chip-cat-body { display: flex; }
 
     textarea { width: 100%; font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; padding: 9px 12px; border: 0.5px solid var(--border-strong); border-radius: 6px; background: var(--surface); color: var(--text); outline: none; transition: border-color 0.15s; resize: vertical; min-height: 56px; line-height: 1.6; }
     textarea:focus { border-color: var(--amber); }
@@ -7805,15 +7956,21 @@ const SURVIVAL_SCHOOL_IRWIN_MEMORIAL = `<!DOCTYPE html>
   </div>
 
   <div class="field-label">THE ANIMAL</div>
-  <div class="chips" id="chips-animal">
-    <button class="chip" onclick="onChip(this,'Saltwater crocodile, 4 metres, riverbank')">Saltwater Croc</button>
+  <div id="chips-animal">
+    <div class="chip-cat-group"><div class="chip-cat">Reptile</div><div class="chip-cat-body">
     <button class="chip" onclick="onChip(this,'King brown snake, coiled under a log')">King Brown Snake</button>
-    <button class="chip" onclick="onChip(this,'Redback spider, inside a boot left overnight')">Redback Spider</button>
-    <button class="chip" onclick="onChip(this,'Great white shark, circling a dinghy')">Great White Shark</button>
-    <button class="chip" onclick="onChip(this,'Box jellyfish, in shallow water at the beach')">Box Jellyfish</button>
-    <button class="chip" onclick="onChip(this,'Cassowary, blocking the trail')">Cassowary</button>
     <button class="chip" onclick="onChip(this,'Inland taipan, in spinifex grass')">Inland Taipan</button>
     <button class="chip" onclick="onChip(this,'Komodo dragon, on a game trail')">Komodo Dragon</button>
+    </div></div>
+    <div class="chip-cat-group"><div class="chip-cat">Marine</div><div class="chip-cat-body">
+    <button class="chip" onclick="onChip(this,'Saltwater crocodile, 4 metres, riverbank')">Saltwater Croc</button>
+    <button class="chip" onclick="onChip(this,'Great white shark, circling a dinghy')">Great White Shark</button>
+    <button class="chip" onclick="onChip(this,'Box jellyfish, in shallow water at the beach')">Box Jellyfish</button>
+    </div></div>
+    <div class="chip-cat-group"><div class="chip-cat">Other</div><div class="chip-cat-body">
+    <button class="chip" onclick="onChip(this,'Redback spider, inside a boot left overnight')">Redback Spider</button>
+    <button class="chip" onclick="onChip(this,'Cassowary, blocking the trail')">Cassowary</button>
+    </div></div>
   </div>
   <div class="field-label" style="margin-top:12px">OR DESCRIBE YOUR OWN</div>
   <textarea id="encounter-input" placeholder="A 5-metre saltwater croc, basking on the riverbank at low tide..." oninput="onInput()"></textarea>
@@ -7928,6 +8085,11 @@ Include 3-5 panel members. Steve Irwin is NOT in the panel array — he has his 
 
 OUTPUT — valid JSON only, no markdown:
 {"attenborough_opening":"<one sentence, nature documentary, introduces the animal>","irwin_encounter":"<3-5 sentences — Steve finding and handling the animal, narrating with specific knowledge and boundless energy, ends with Crikey>","panel":[{"charId":"<id>","text":"<1-2 sentences rating the user's nerve in character>","nerve_score":<1-10>}],"attenborough_verdict":"<one sentence, geological calm, quiet admiration for Steve>"}\`;
+
+document.querySelectorAll('.chip-cat').forEach((cat, i) => {
+  if (i === 0) cat.classList.add('open');
+  cat.addEventListener('click', () => cat.classList.toggle('open'));
+});
 
 function isStingray(str) {
   return /stingray/i.test(str);
@@ -8081,6 +8243,12 @@ const SURVIVAL_SCHOOL_ONE_MAN_IN = `<!DOCTYPE html>
     .kit-chip { font-family: 'IBM Plex Mono', monospace; font-size: 10px; padding: 4px 8px; border-radius: 3px; border: 0.5px solid var(--border); background: var(--surface); color: var(--text-muted); cursor: pointer; transition: all 0.15s; }
     .kit-chip:hover { border-color: var(--olive); }
     .kit-chip.sel { border-color: var(--olive); background: var(--olive-dim); color: var(--green); }
+    .chip-cat-group { margin-bottom: 4px; }
+    .chip-cat { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); padding: 6px 10px; border: 0.5px solid var(--border); border-radius: 5px; cursor: pointer; user-select: none; transition: all 0.15s; margin-bottom: 4px; display: inline-block; }
+    .chip-cat:hover { color: var(--text); border-color: var(--border-strong); }
+    .chip-cat.open { color: var(--gold); border-color: var(--gold-dim); }
+    .chip-cat-body { display: none; flex-wrap: wrap; gap: 5px; padding: 4px 0 8px; }
+    .chip-cat.open + .chip-cat-body { display: flex; }
 
     textarea { width: 100%; font-family: 'Barlow', sans-serif; font-size: 14px; padding: 10px; border-radius: 6px; border: 0.5px solid var(--border-strong); background: var(--surface); color: var(--text); resize: vertical; margin-top: 6px; }
     textarea:focus { outline: none; border-color: var(--green); }
@@ -8179,15 +8347,19 @@ const SURVIVAL_SCHOOL_ONE_MAN_IN = `<!DOCTYPE html>
   </div>
 
   <div class="field-label">The call comes in. What's the situation?</div>
-  <div class="chips" id="situation-chips">
+  <div id="situation-chips">
+    <div class="chip-cat-group"><div class="chip-cat">Military</div><div class="chip-cat-body">
     <button class="chip" data-situation="DusitD2 hotel, Nairobi. Active shooters. Al-Shabaab. Civilians trapped on upper floors. You are off-duty. You are nearby. Nobody has asked you to go in.">DusitD2</button>
-    <button class="chip" data-situation="IKEA car park, Sunday afternoon. You are surrounded. All exits blocked by trolleys and confused families. One child is crying. Two are running. A man in a yellow vest is approaching with intent. You need to get out.">IKEA car park</button>
-    <button class="chip" data-situation="Pret a Manger, central London. Hostile environment. The queue has not moved in twelve minutes. The barista has made eye contact three times but served no one. The man behind you is breathing audibly. You need to extract yourself without triggering an incident.">hostile Pret</button>
     <button class="chip" data-situation="Embassy compound, undisclosed location. Perimeter breached. Staff sheltering in the safe room. You are the only armed person on site. Extraction helicopter is 40 minutes out. You need to hold or move.">embassy compound</button>
     <button class="chip" data-situation="Mountain pass, 3800m altitude. Blizzard incoming. Two members of your group are hypothermic. One has stopped shivering — that's worse. The route down is avalanche-prone. The route up leads to a shelter that may or may not still exist.">mountain pass</button>
+    <button class="chip" data-situation="Iraqi desert, 1991. Your patrol is compromised. Eight men, split. 300km to the Syrian border. One chocolate bar between you. Vehicles gone. Radio gone. Temperature dropping to minus fifteen. You need to move now.">Bravo Two Zero</button>
+    </div></div>
+    <div class="chip-cat-group"><div class="chip-cat">Civilian</div><div class="chip-cat-body">
+    <button class="chip" data-situation="IKEA car park, Sunday afternoon. You are surrounded. All exits blocked by trolleys and confused families. One child is crying. Two are running. A man in a yellow vest is approaching with intent. You need to get out.">IKEA car park</button>
+    <button class="chip" data-situation="Pret a Manger, central London. Hostile environment. The queue has not moved in twelve minutes. The barista has made eye contact three times but served no one. The man behind you is breathing audibly. You need to extract yourself without triggering an incident.">hostile Pret</button>
     <button class="chip" data-situation="Wedding reception. The best man's speech has entered its nineteenth minute. Three people are crying. The bride's father is standing. You need to extract the situation before it becomes an international incident.">wedding speech</button>
     <button class="chip" data-situation="Self-checkout, Sainsbury's. The machine has called for assistance. There is a queue of seven. The assistant is dealing with someone else. You have 14 items. One is loose broccoli. You need to get out with your dignity and your shopping.">self-checkout</button>
-    <button class="chip" data-situation="Iraqi desert, 1991. Your patrol is compromised. Eight men, split. 300km to the Syrian border. One chocolate bar between you. Vehicles gone. Radio gone. Temperature dropping to minus fifteen. You need to move now.">Bravo Two Zero</button>
+    </div></div>
   </div>
 
   <div class="hint">The more specific the situation, the better the brief. Craighead needs detail. Mundane works. So does actual combat.</div>
@@ -8195,11 +8367,16 @@ const SURVIVAL_SCHOOL_ONE_MAN_IN = `<!DOCTYPE html>
 
   <div class="kit-section">
     <div class="field-label">What do you have?</div>
-    <div class="kit-chips" id="kit-chips">
+    <div id="kit-chips">
+      <div class="chip-cat-group"><div class="chip-cat">Weapons</div><div class="chip-cat-body">
       <button class="kit-chip" data-kit="sidearm">sidearm</button>
       <button class="kit-chip" data-kit="knife">knife</button>
+      </div></div>
+      <div class="chip-cat-group"><div class="chip-cat">Comms</div><div class="chip-cat-body">
       <button class="kit-chip" data-kit="phone (no signal)">phone (no signal)</button>
       <button class="kit-chip" data-kit="phone (signal)">phone (signal)</button>
+      </div></div>
+      <div class="chip-cat-group"><div class="chip-cat">Supplies</div><div class="chip-cat-body">
       <button class="kit-chip" data-kit="first aid kit">first aid kit</button>
       <button class="kit-chip" data-kit="torch">torch</button>
       <button class="kit-chip" data-kit="nothing">nothing</button>
@@ -8207,6 +8384,7 @@ const SURVIVAL_SCHOOL_ONE_MAN_IN = `<!DOCTYPE html>
       <button class="kit-chip" data-kit="bag of shopping">bag of shopping</button>
       <button class="kit-chip" data-kit="loyalty card">loyalty card</button>
       <button class="kit-chip" data-kit="expired coupon">expired coupon</button>
+      </div></div>
     </div>
   </div>
 
@@ -8432,6 +8610,11 @@ OUTPUT — valid JSON only, no markdown:
     return response.json();
   },
 };
+
+document.querySelectorAll('.chip-cat').forEach((cat, i) => {
+  if (i === 0) cat.classList.add('open');
+  cat.addEventListener('click', () => cat.classList.toggle('open'));
+});
 
 // Event wiring
 document.querySelectorAll('#situation-chips .chip').forEach(function(chip) {
