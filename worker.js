@@ -476,13 +476,13 @@ const SURVIVAL_SCHOOL_HOME = `<!DOCTYPE html>
       <div class="tile-desc">Two animals. One outcome. Attenborough narrates. Panel disagrees with the result.</div>
     </a>
 
-    <a class="tile soon" href="#">
+    <a class="tile live" href="/survival-school/irwin-memorial">
       <div class="tile-top">
         <span class="tile-cat">Irwin Memorial</span>
-        <span class="tile-badge badge-soon">SOON</span>
+        <span class="tile-badge badge-live">LIVE</span>
       </div>
       <div class="tile-title">You're alright mate...</div>
-      <div class="tile-desc">Describe an animal encounter. Steve rates your handling. From beyond.</div>
+      <div class="tile-desc">Describe an animal encounter. Steve finds the animal. Panel rates your nerve.</div>
     </a>
 
   </div>
@@ -1174,6 +1174,18 @@ const SURVIVAL_SCHOOL_APP  = `<!DOCTYPE html>
       </div>
     </div>
 
+    <div class="ctx-section" id="complicating-section">
+      <div class="ctx-label">COMPLICATING FACTORS (optional)</div>
+      <div class="chips" id="chips-complicating">
+        <div class="chip chip-complicating" data-factor="Bear is your lead advisor. He was recently seen at a Travelodge 400m from the filming location.">Bear: the Travelodge</div>
+        <div class="chip chip-complicating" data-factor="The panel's snake expert has been wearing the snake. Specifically, a belt and wallet set made from the species he claims to protect.">wearing the species</div>
+        <div class="chip chip-complicating" data-factor="Your survival advisor Cody Lundin just threw the only fire-making equipment into a swimming pool rather than demonstrate what he considers bad technique.">Cody: spear in the pool</div>
+        <div class="chip chip-complicating" data-factor="One of the panel members has been sleeping in a snake pit for 107 days and considers this normal research methodology. His colleagues have written papers about him. He has not read them.">Stevens: the snake pit</div>
+        <div class="chip chip-complicating" data-factor="The panel's herpetologist forgot a venomous snake was in his bag, put his hand back in, and got bitten again. His mate Doug poured beer on him and urinated on his head. He survived.">Gordon: the bag incident</div>
+        <div class="chip chip-complicating" data-factor="Prof Brian Cox is on the panel. He has a napkin and is explaining the thermodynamics of your death with genuine enthusiasm. The physics is correct. It is not helping.">Cox: the napkin</div>
+      </div>
+    </div>
+
     <div class="btn-row" style="margin-top:14px">
       <button class="btn-assess" id="btn-guided" onclick="onAssess('guided')" disabled>ASSESS MY SITUATION ↗</button>
       <button class="btn-clear" onclick="onClear()">CLEAR</button>
@@ -1185,6 +1197,19 @@ const SURVIVAL_SCHOOL_APP  = `<!DOCTYPE html>
     <textarea id="free-input" rows="5"
       placeholder="I'm on Dartmoor, it's October, phone at 4%, no map, dusk in 90 minutes, wearing trainers..."
       oninput="onFreeInput(this.value)"></textarea>
+
+    <div class="ctx-section" id="complicating-section-free" style="margin-top:12px">
+      <div class="ctx-label">COMPLICATING FACTORS (optional)</div>
+      <div class="chips" id="chips-complicating-free">
+        <div class="chip chip-complicating" data-factor="Bear is your lead advisor. He was recently seen at a Travelodge 400m from the filming location.">Bear: the Travelodge</div>
+        <div class="chip chip-complicating" data-factor="The panel's snake expert has been wearing the snake. Specifically, a belt and wallet set made from the species he claims to protect.">wearing the species</div>
+        <div class="chip chip-complicating" data-factor="Your survival advisor Cody Lundin just threw the only fire-making equipment into a swimming pool rather than demonstrate what he considers bad technique.">Cody: spear in the pool</div>
+        <div class="chip chip-complicating" data-factor="One of the panel members has been sleeping in a snake pit for 107 days and considers this normal research methodology. His colleagues have written papers about him. He has not read them.">Stevens: the snake pit</div>
+        <div class="chip chip-complicating" data-factor="The panel's herpetologist forgot a venomous snake was in his bag, put his hand back in, and got bitten again. His mate Doug poured beer on him and urinated on his head. He survived.">Gordon: the bag incident</div>
+        <div class="chip chip-complicating" data-factor="Prof Brian Cox is on the panel. He has a napkin and is explaining the thermodynamics of your death with genuine enthusiasm. The physics is correct. It is not helping.">Cox: the napkin</div>
+      </div>
+    </div>
+
     <div class="btn-row" style="margin-top:12px">
       <button class="btn-assess" id="btn-free" onclick="onAssess('free')">ASSESS MY SITUATION ↗</button>
     </div>
@@ -1623,6 +1648,18 @@ function clearChips(field) {
   document.querySelectorAll(\`#chips-\${field} .chip\`).forEach(c => c.classList.remove('sel'));
 }
 
+// SS-115 — Complicating factor chip toggle (multi-select)
+function toggleComplicating(el) {
+  el.classList.toggle('sel');
+}
+function getComplicatingFactors() {
+  const factors = [];
+  document.querySelectorAll('.chip-complicating.sel').forEach(c => {
+    factors.push(c.dataset.factor);
+  });
+  return factors;
+}
+
 function clearAll() {
   // Clear cascade inputs and chips
   ['loc', 'cond', 'evt'].forEach(f => {
@@ -1633,6 +1670,8 @@ function clearAll() {
     const el = document.getElementById(id);
     if (el) el.querySelectorAll('.chip').forEach(c => c.classList.remove('sel'));
   });
+  // Clear complicating factor chips
+  document.querySelectorAll('.chip-complicating').forEach(c => c.classList.remove('sel'));
   // Reset cascade steps — hide steps 2-4
   ['step-cond','step-evt','step-ctx'].forEach(id => {
     const el = document.getElementById(id);
@@ -4516,6 +4555,7 @@ const SURVIVAL_SCHOOL_FACT_CHECKER = `<!DOCTYPE html>
     <div class="chip" onclick="onChip(this,'Eating raw meat in the jungle gives you energy within minutes.')">raw meat energy</div>
     <div class="chip" onclick="onChip(this,'You should suck the venom out of a snake bite immediately.')">venom extraction</div>
     <div class="chip" onclick="onChip(this,'In an avalanche, spit to find which way is down.')">avalanche spit</div>
+    <div class="chip" onclick="onChip(this,'Bear roughed it for 72 hours in the Highlands with nothing but a knife and his instincts. He was not seen at a nearby Travelodge at any point.')">72 hours in the Highlands</div>
   </div>
 
   <div class="field-label" style="margin-top:12px">Or enter a Bear claim</div>
@@ -6214,6 +6254,8 @@ const SURVIVAL_SCHOOL_IVE_HAD_WORSE = `<!DOCTYPE html>
     <button class="chip" data-pred="I was found in a concerning situation involving a badger and I had questions">the badger incident</button>
     <button class="chip" data-pred="I had to explain to hospital staff why there was a pigeon involved in an incident that was entirely the pigeon's fault">pigeon-related hospital visit</button>
     <button class="chip" data-pred="I ate a tortoise on a long sea voyage and found it quite pleasant and now need to defend this morally and nutritionally">the tortoise question</button>
+    <button class="chip" data-pred="I am wearing a belt and wallet set made from the species I claim to be protecting in my documentary series and the crew have noticed">wearing the species</button>
+    <button class="chip" data-pred="I delivered a Stay Safe talk to Year 10 using methods the school board has described as excessive and the teacher has asked to be reassigned">Stay Safe: excessive methods</button>
   </div>
 
   <div class="btn-row">
@@ -7373,6 +7415,9 @@ const SURVIVAL_SCHOOL_PANEL_QA = `<!DOCTYPE html>
     <div class="chip" onclick="onChip(this,'What is the most dangerous mistake people make in survival situations?')">most dangerous mistake</div>
     <div class="chip" onclick="onChip(this,'You have been bitten by something venomous but do not know what. What do you do?')">unknown venomous bite</div>
     <div class="chip" onclick="onChip(this,'How do you navigate without a compass or phone?')">navigation without instruments</div>
+    <div class="chip" onclick="onChip(this,'Is it ethical to wear a belt made from the species you are filming a documentary about?')">wearing the species</div>
+    <div class="chip" onclick="onChip(this,'At what point does sleeping in a snake pit stop being research and start being something else?')">snake pit: research or not?</div>
+    <div class="chip" onclick="onChip(this,'Should school survival talks include live demonstrations of restraint techniques on the teacher?')">Stay Safe: live demos</div>
   </div>
 
   <div class="btn-row">
@@ -7588,6 +7633,340 @@ document.getElementById('question-input').addEventListener('keydown', e => {
 </html>
 `;
 
+const SURVIVAL_SCHOOL_IRWIN_MEMORIAL = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Irwin Memorial Encounter — Survival School</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0f1209; --surface: #181d10; --surface2: #1e2514;
+      --border: rgba(120,160,60,0.15); --border-strong: rgba(120,160,60,0.3);
+      --green: #7aad3a; --green-dim: #4a7020; --green-bright: #a0d050;
+      --amber: #BA7517; --amber-dim: #5c3a08;
+      --bark: #8B6040; --bark-dim: #3d2008;
+      --blood: #cc1111; --blood-dim: #3a0808;
+      --text: #e8edd8; --text-muted: #7a8a60;
+    }
+    body { font-family: 'Barlow', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+    #app { max-width: 680px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+
+    .header { text-align: center; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 0.5px solid var(--border); }
+    .room-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 6px; }
+    .title { font-family: 'Bebas Neue', sans-serif; font-size: 40px; letter-spacing: 3px; line-height: 1; }
+    .title span { color: var(--amber); }
+    .subtitle { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-muted); letter-spacing: 1.5px; margin-top: 5px; }
+
+    .field-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1.5px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; margin-top: 16px; }
+
+    .chips { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px; }
+    .chip { font-family: 'IBM Plex Mono', monospace; font-size: 11px; padding: 5px 10px; border: 0.5px solid var(--border-strong); border-radius: 5px; cursor: pointer; background: none; color: var(--text-muted); transition: all 0.15s; white-space: nowrap; user-select: none; }
+    .chip:hover, .chip.sel { border-color: var(--amber); color: var(--amber); }
+
+    textarea { width: 100%; font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; padding: 9px 12px; border: 0.5px solid var(--border-strong); border-radius: 6px; background: var(--surface); color: var(--text); outline: none; transition: border-color 0.15s; resize: vertical; min-height: 56px; line-height: 1.6; }
+    textarea:focus { border-color: var(--amber); }
+
+    .btn-row { display: flex; gap: 8px; margin-top: 14px; }
+    .btn-submit { flex: 1; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 2px; text-transform: uppercase; padding: 11px; background: var(--amber-dim); color: var(--amber); border: 0.5px solid var(--amber-dim); border-radius: 6px; cursor: pointer; transition: opacity 0.15s; }
+    .btn-submit:hover { opacity: 0.88; }
+    .btn-submit:disabled { opacity: 0.4; cursor: not-allowed; }
+    .btn-clear { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 1px; padding: 11px 16px; border: 0.5px solid var(--border-strong); border-radius: 6px; background: none; cursor: pointer; color: var(--text-muted); transition: color 0.15s, border-color 0.15s; }
+    .btn-clear:hover { color: var(--text); border-color: var(--amber); }
+
+    .results { display: none; margin-top: 1.5rem; }
+    .results.show { display: block; }
+    .loading { padding: 2rem; text-align: center; font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--text-muted); letter-spacing: 1px; }
+    .dots::after { content: ''; animation: dots 1.5s steps(3, end) infinite; }
+    @keyframes dots { 0%{content:'.'} 33%{content:'..'} 66%{content:'...'} 100%{content:''} }
+
+    .att-bookend { display: flex; align-items: flex-start; gap: 12px; padding: 12px 16px; background: var(--surface); border: 0.5px solid var(--border); border-radius: 8px; margin: 12px 0; }
+    .att-av { width: 36px; height: 36px; border-radius: 50%; background: var(--surface2); border: 0.5px solid var(--green-dim); display: flex; align-items: center; justify-content: center; font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--green); flex-shrink: 0; }
+    .att-name { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 1.5px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px; }
+    .att-text { font-style: italic; font-size: 13.5px; color: var(--text-muted); line-height: 1.6; }
+
+    .irwin-card { display: flex; align-items: flex-start; gap: 12px; padding: 14px 16px; border: 0.5px solid var(--amber-dim); border-radius: 8px; margin: 12px 0; background: #1a150a; }
+    .irwin-text { font-size: 14px; line-height: 1.65; color: var(--text); }
+    .irwin-crikey { font-family: 'Bebas Neue', sans-serif; font-size: 20px; color: var(--amber); letter-spacing: 2px; margin-top: 8px; }
+
+    .panel-label { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 2px; color: var(--text-muted); text-transform: uppercase; margin: 1rem 0 8px; opacity: 0.6; }
+    .panel-card { display: flex; align-items: flex-start; gap: 12px; padding: 12px 14px; border: 0.5px solid var(--border); border-radius: 8px; margin-bottom: 8px; background: var(--surface); transition: border-color 0.15s; }
+    .av { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 500; flex-shrink: 0; border: 0.5px solid; }
+    .av-green  { background: #1a2a0a; border-color: var(--green-dim); color: var(--green); }
+    .av-bark   { background: var(--bark-dim); border-color: var(--bark); color: var(--bark); }
+    .av-amber  { background: var(--amber-dim); border-color: var(--amber); color: var(--amber); }
+    .av-blue   { background: #1a1e2a; border-color: #2a3a5a; color: #5a7aaa; }
+    .av-teal   { background: #0a2020; border-color: #1a5a50; color: #2e9e8a; }
+    .card-meta { flex: 1; min-width: 0; }
+    .card-name { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 1.5px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 5px; }
+    .card-text { font-size: 13.5px; line-height: 1.65; color: var(--text); }
+    .nerve-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1.5px; color: var(--text-muted); text-transform: uppercase; margin-top: 4px; }
+    .nerve-val { color: var(--amber); font-weight: 500; }
+
+    .terminal-label { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 2px; color: var(--text-muted); text-transform: uppercase; margin: 1.2rem 0 6px; opacity: 0.5; }
+
+    .reset-row { margin-top: 1.2rem; display: flex; gap: 8px; justify-content: center; }
+    .btn-reset { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 1px; padding: 8px 18px; border: 0.5px solid var(--border-strong); border-radius: 5px; background: none; cursor: pointer; color: var(--text-muted); transition: color 0.15s, border-color 0.15s; }
+    .btn-reset:hover { color: var(--text); border-color: var(--amber); }
+
+    .error-msg { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--blood); padding: 10px 14px; border: 0.5px solid var(--blood-dim); border-radius: 6px; margin-top: 12px; display: none; }
+    .error-msg.show { display: block; }
+
+    /* Stingray memorial */
+    #stingray-memorial { display: none; margin-top: 1.5rem; }
+    #stingray-memorial.show { display: block; }
+    .memorial-header { text-align: center; padding: 2rem 0 1.5rem; border-bottom: 0.5px solid var(--border); margin-bottom: 1.5rem; }
+    .memorial-symbol { font-size: 32px; margin-bottom: 0.75rem; opacity: 0.4; }
+    .memorial-name { font-family: 'Bebas Neue', sans-serif; font-size: 30px; letter-spacing: 3px; color: var(--amber); }
+    .memorial-dates { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-muted); letter-spacing: 2px; margin-top: 5px; }
+    .memorial-reason { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-muted); letter-spacing: 1px; margin-top: 6px; opacity: 0.55; }
+    .memorial-att { font-style: italic; font-size: 14px; color: var(--text-muted); line-height: 1.7; padding: 0 1rem; text-align: center; margin-top: 1.5rem; }
+  </style>
+</head>
+<body>
+
+<div id="app">
+  <div class="header">
+    <div class="room-label">THE PANEL</div>
+    <div class="title">IRWIN <span>MEMORIAL</span></div>
+    <div class="subtitle">Steve finds the animal. You watch. The panel rates your nerve.</div>
+  </div>
+
+  <div class="field-label">THE ANIMAL</div>
+  <div class="chips" id="chips-animal">
+    <button class="chip" onclick="onChip(this,'Saltwater crocodile, 4 metres, riverbank')">Saltwater Croc</button>
+    <button class="chip" onclick="onChip(this,'King brown snake, coiled under a log')">King Brown Snake</button>
+    <button class="chip" onclick="onChip(this,'Redback spider, inside a boot left overnight')">Redback Spider</button>
+    <button class="chip" onclick="onChip(this,'Great white shark, circling a dinghy')">Great White Shark</button>
+    <button class="chip" onclick="onChip(this,'Box jellyfish, in shallow water at the beach')">Box Jellyfish</button>
+    <button class="chip" onclick="onChip(this,'Cassowary, blocking the trail')">Cassowary</button>
+    <button class="chip" onclick="onChip(this,'Inland taipan, in spinifex grass')">Inland Taipan</button>
+    <button class="chip" onclick="onChip(this,'Komodo dragon, on a game trail')">Komodo Dragon</button>
+  </div>
+  <div class="field-label" style="margin-top:12px">OR DESCRIBE YOUR OWN</div>
+  <textarea id="encounter-input" placeholder="A 5-metre saltwater croc, basking on the riverbank at low tide..." oninput="onInput()"></textarea>
+
+  <div class="btn-row">
+    <button class="btn-submit" id="btn-go" disabled onclick="submit()">CRIKEY — LET'S GO</button>
+    <button class="btn-clear" onclick="clearAll()">CLEAR</button>
+  </div>
+
+  <div class="error-msg" id="error-msg"></div>
+
+  <div class="results" id="results">
+    <div class="loading" id="loading">Steve's found it<span class="dots"></span></div>
+    <div id="result-block" style="display:none">
+      <!-- Attenborough opening -->
+      <div class="att-bookend" id="att-opening">
+        <div class="att-av">DA</div>
+        <div>
+          <div class="att-name">Sir David Attenborough</div>
+          <div class="att-text" id="att-opening-text"></div>
+        </div>
+      </div>
+
+      <!-- Irwin's encounter -->
+      <div class="irwin-card" id="irwin-block">
+        <div class="av av-amber">SI</div>
+        <div class="card-meta">
+          <div class="card-name">STEVE IRWIN — CROCODILE HUNTER</div>
+          <div class="irwin-text" id="irwin-text"></div>
+          <div class="irwin-crikey" id="irwin-crikey"></div>
+        </div>
+      </div>
+
+      <!-- Panel rates your nerve -->
+      <div class="panel-label">THE PANEL RATES YOUR NERVE</div>
+      <div id="cards-out"></div>
+
+      <!-- Attenborough verdict -->
+      <div class="terminal-label">ATTENBOROUGH</div>
+      <div class="att-bookend" id="att-terminal" style="display:none">
+        <div class="att-av">DA</div>
+        <div>
+          <div class="att-name">Sir David Attenborough</div>
+          <div class="att-text" id="att-terminal-text"></div>
+        </div>
+      </div>
+
+      <div class="reset-row">
+        <button class="btn-reset" onclick="clearAll()">ANOTHER ENCOUNTER</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stingray Rule memorial -->
+  <div id="stingray-memorial">
+    <div class="memorial-header">
+      <div class="memorial-symbol">\u301C</div>
+      <div class="memorial-name">STEVE IRWIN</div>
+      <div class="memorial-dates">22 FEBRUARY 1962 \u2014 4 SEPTEMBER 2006</div>
+      <div class="memorial-reason">Great Barrier Reef &middot; Stingray barb &middot; Age 44</div>
+    </div>
+    <div class="memorial-att" id="stingray-att-text"></div>
+  </div>
+
+</div>
+
+<script>
+const WORKER_ENDPOINT = 'https://cusslab-api.leanspirited.workers.dev/survival-school/irwin-memorial';
+
+const CHARACTERS = {
+  ray:     { name: 'Ray Mears',       role: 'Bushcraft',            av: 'RM', avClass: 'av-green' },
+  bear:    { name: 'Bear Grylls',     role: 'Former SAS',           av: 'BG', avClass: 'av-bark'  },
+  fox:     { name: 'Jason Fox',       role: 'Special Boat Service', av: 'JF', avClass: 'av-green' },
+  hales:   { name: 'Les Hiddins',     role: 'Bush Tucker Man',      av: 'LH', avClass: 'av-amber' },
+  stevens: { name: 'Austin Stevens',  role: 'Snakemaster',          av: 'AS', avClass: 'av-bark'  },
+  cody:    { name: 'Cody Lundin',     role: 'Primitive Skills',     av: 'CL', avClass: 'av-green' },
+  stroud:  { name: 'Les Stroud',      role: 'Survivorman',          av: 'LS', avClass: 'av-blue'  },
+  jeremy:  { name: 'Jeremy Wade',     role: 'Freshwater Biologist', av: 'JW', avClass: 'av-teal'  },
+};
+
+const SYSTEM_PROMPT = \`You are the Survival School IRWIN MEMORIAL ENCOUNTER engine.
+
+=== THE MECHANIC ===
+Steve Irwin finds the animal. The user watches. The panel rates the user's nerve.
+This is a TRIBUTE, not mockery. Steve is never depicted as being in danger. He is in his element. The animal is the one that should be nervous.
+
+=== STEVE IRWIN ===
+The Crocodile Hunter. Died 4 September 2006, stingray barb, Great Barrier Reef. In panel-world: alive, at peak energy.
+He has found the animal. He is already close. He is narrating what he sees with the boundless enthusiasm and specific knowledge that defined him.
+He picks things up. He always picks things up. The animal does not expect this. Nobody expects this.
+"CRIKEY!" is structural. It punctuates genuine wonder. It is never ironic.
+"She's a beauty!" — the animal is always beautiful. Always.
+His handling is expert. His excitement is genuine. His risk assessment is non-existent.
+The entry MUST end with a standalone "Crikey!" or variation — this is the signature, it closes every encounter.
+
+=== PANEL — RATING THE USER'S NERVE ===
+The user was WATCHING Steve handle the animal. The panel rates the user's composure.
+Each panel member rates the user's nerve on a 1-10 scale (nerve_score field):
+- 10: unflinching, would have helped Steve
+- 7-9: held steady, only minor visible concern
+- 4-6: uncomfortable but present
+- 1-3: visibly terrified, wanted to leave
+Panel members assess the user's nerve in character — Ray notes practical awareness, Bear tells them to stay hydrated, Stevens only cares if there was a snake, Hiddins says "she'll be right."
+
+=== ATTENBOROUGH BOOKENDS ===
+Does NOT appear in panel array. Does NOT appear in irwin_encounter.
+attenborough_opening: introduces the animal as natural history subject. One sentence.
+attenborough_verdict: closes the encounter. Geological calm. References Steve's handling with quiet admiration. One sentence. No appeal.
+
+VALID panel charIds: ray, bear, fox, hales, cody, stroud, stevens, jeremy
+Include 3-5 panel members. Steve Irwin is NOT in the panel array — he has his own field.
+
+OUTPUT — valid JSON only, no markdown:
+{"attenborough_opening":"<one sentence, nature documentary, introduces the animal>","irwin_encounter":"<3-5 sentences — Steve finding and handling the animal, narrating with specific knowledge and boundless energy, ends with Crikey>","panel":[{"charId":"<id>","text":"<1-2 sentences rating the user's nerve in character>","nerve_score":<1-10>}],"attenborough_verdict":"<one sentence, geological calm, quiet admiration for Steve>"}\`;
+
+function isStingray(str) {
+  return /stingray/i.test(str);
+}
+
+let encounter = '';
+
+function onChip(el, val) {
+  document.querySelectorAll('#chips-animal .chip').forEach(c => c.classList.remove('sel'));
+  el.classList.add('sel');
+  encounter = val;
+  document.getElementById('encounter-input').value = val;
+  document.getElementById('btn-go').disabled = false;
+}
+
+function onInput() {
+  encounter = document.getElementById('encounter-input').value.trim();
+  if (encounter) {
+    document.querySelectorAll('#chips-animal .chip').forEach(c => c.classList.remove('sel'));
+  }
+  document.getElementById('btn-go').disabled = !encounter;
+}
+
+function clearAll() {
+  encounter = '';
+  document.getElementById('encounter-input').value = '';
+  document.querySelectorAll('#chips-animal .chip').forEach(c => c.classList.remove('sel'));
+  document.getElementById('btn-go').disabled = true;
+  document.getElementById('results').classList.remove('show');
+  document.getElementById('result-block').style.display = 'none';
+  document.getElementById('error-msg').classList.remove('show');
+  document.getElementById('stingray-memorial').classList.remove('show');
+}
+
+async function submit() {
+  if (!encounter) return;
+
+  // Stingray Rule — fires before API call
+  if (isStingray(encounter)) {
+    document.getElementById('results').classList.remove('show');
+    document.getElementById('stingray-memorial').classList.add('show');
+    document.getElementById('stingray-att-text').textContent =
+      'Some encounters are not ours to revisit. The reef remembers. The panel is silent. There is nothing more to say.';
+    return;
+  }
+
+  document.getElementById('stingray-memorial').classList.remove('show');
+  document.getElementById('results').classList.add('show');
+  document.getElementById('result-block').style.display = 'none';
+  document.getElementById('loading').style.display = 'block';
+  document.getElementById('error-msg').classList.remove('show');
+  document.getElementById('btn-go').disabled = true;
+
+  try {
+    const response = await fetch(WORKER_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ system: SYSTEM_PROMPT, encounter }),
+    });
+    if (!response.ok) throw new Error('Worker error ' + response.status);
+    const data = await response.json();
+
+    document.getElementById('loading').style.display = 'none';
+
+    // Attenborough opening
+    document.getElementById('att-opening-text').textContent = data.attenborough_opening || '';
+
+    // Irwin's encounter
+    const irwinLines = (data.irwin_encounter || '').split(/(?<=\\.)\\s+/);
+    const lastLine = irwinLines[irwinLines.length - 1] || '';
+    const hasCrikey = /crikey/i.test(lastLine) && irwinLines.length > 1;
+    document.getElementById('irwin-text').textContent = hasCrikey ? irwinLines.slice(0, -1).join(' ') : data.irwin_encounter;
+    document.getElementById('irwin-crikey').textContent = hasCrikey ? lastLine : 'CRIKEY!';
+
+    // Panel cards
+    const cardsEl = document.getElementById('cards-out');
+    cardsEl.innerHTML = '';
+    for (const card of (data.panel || [])) {
+      const ch = CHARACTERS[card.charId] || { name: card.charId, role: '', av: '?', avClass: '' };
+      const nerveHTML = typeof card.nerve_score === 'number'
+        ? '<div class="nerve-label">NERVE SCORE: <span class="nerve-val">' + card.nerve_score + '/10</span></div>'
+        : '';
+      cardsEl.innerHTML += '<div class="panel-card"><div class="av ' + ch.avClass + '">' + ch.av + '</div><div class="card-meta"><div class="card-name">' + ch.name + ' \u00b7 ' + ch.role + '</div><div class="card-text">' + card.text + '</div>' + nerveHTML + '</div></div>';
+    }
+
+    // Attenborough verdict
+    const termEl = document.getElementById('att-terminal');
+    const termText = document.getElementById('att-terminal-text');
+    if (data.attenborough_verdict) {
+      termText.textContent = data.attenborough_verdict;
+      termEl.style.display = 'flex';
+    }
+
+    document.getElementById('result-block').style.display = 'block';
+  } catch (err) {
+    document.getElementById('loading').style.display = 'none';
+    const errEl = document.getElementById('error-msg');
+    errEl.textContent = 'Something went wrong: ' + err.message;
+    errEl.classList.add('show');
+  }
+  document.getElementById('btn-go').disabled = false;
+}
+</script>
+
+</body>
+</html>
+`;
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -7633,6 +8012,9 @@ export default {
     }
     if (request.method === 'GET' && url.pathname === '/survival-school/in-my-defence') {
       return new Response(SURVIVAL_SCHOOL_IN_MY_DEFENCE, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' }});
+    }
+    if (request.method === 'GET' && url.pathname === '/survival-school/irwin-memorial') {
+      return new Response(SURVIVAL_SCHOOL_IRWIN_MEMORIAL, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' }});
     }
     if (request.method !== 'POST') {
       return new Response('Method not allowed', { status: 405 });
@@ -7707,6 +8089,23 @@ export default {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'anthropic-version': '2023-06-01', 'x-api-key': apiKey },
         body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 1800, system: body.system, messages: [{ role: 'user', content: body.question }] }),
+      });
+      if (!upstream.ok) {
+        return new Response(JSON.stringify({ error: { message: `Anthropic error ${upstream.status}` } }), {
+          status: upstream.status, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
+        });
+      }
+      const anthropicData = await upstream.json();
+      const raw = anthropicData.content[0].text;
+      const text = raw.replace(/^```(?:json)?\s*/i, '').replace(/\s*```\s*$/, '').trim();
+      return new Response(text, { status: 200, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }});
+    }
+    if (url.pathname === '/survival-school/irwin-memorial') {
+      const body = await request.json();
+      const upstream = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'anthropic-version': '2023-06-01', 'x-api-key': apiKey },
+        body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 1800, system: body.system, messages: [{ role: 'user', content: body.encounter }] }),
       });
       if (!upstream.ok) {
         return new Response(JSON.stringify({ error: { message: `Anthropic error ${upstream.status}` } }), {
