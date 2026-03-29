@@ -1177,12 +1177,12 @@ const SURVIVAL_SCHOOL_APP  = `<!DOCTYPE html>
     <div class="ctx-section" id="complicating-section">
       <div class="ctx-label">COMPLICATING FACTORS (optional)</div>
       <div class="chips" id="chips-complicating">
-        <div class="chip chip-complicating" data-factor="Bear is your lead advisor. He was recently seen at a Travelodge 400m from the filming location.">Bear: the Travelodge</div>
-        <div class="chip chip-complicating" data-factor="The panel's snake expert has been wearing the snake. Specifically, a belt and wallet set made from the species he claims to protect.">wearing the species</div>
-        <div class="chip chip-complicating" data-factor="Your survival advisor Cody Lundin just threw the only fire-making equipment into a swimming pool rather than demonstrate what he considers bad technique.">Cody: spear in the pool</div>
-        <div class="chip chip-complicating" data-factor="One of the panel members has been sleeping in a snake pit for 107 days and considers this normal research methodology. His colleagues have written papers about him. He has not read them.">Stevens: the snake pit</div>
-        <div class="chip chip-complicating" data-factor="The panel's herpetologist forgot a venomous snake was in his bag, put his hand back in, and got bitten again. His mate Doug poured beer on him and urinated on his head. He survived.">Gordon: the bag incident</div>
-        <div class="chip chip-complicating" data-factor="Prof Brian Cox is on the panel. He has a napkin and is explaining the thermodynamics of your death with genuine enthusiasm. The physics is correct. It is not helping.">Cox: the napkin</div>
+        <div class="chip chip-complicating" onclick="toggleComplicating(this)" data-factor="Bear is your lead advisor. He was recently seen at a Travelodge 400m from the filming location.">Bear: the Travelodge</div>
+        <div class="chip chip-complicating" onclick="toggleComplicating(this)" data-factor="The panel's snake expert has been wearing the snake. Specifically, a belt and wallet set made from the species he claims to protect.">wearing the species</div>
+        <div class="chip chip-complicating" onclick="toggleComplicating(this)" data-factor="Your survival advisor Cody Lundin just threw the only fire-making equipment into a swimming pool rather than demonstrate what he considers bad technique.">Cody: spear in the pool</div>
+        <div class="chip chip-complicating" onclick="toggleComplicating(this)" data-factor="One of the panel members has been sleeping in a snake pit for 107 days and considers this normal research methodology. His colleagues have written papers about him. He has not read them.">Stevens: the snake pit</div>
+        <div class="chip chip-complicating" onclick="toggleComplicating(this)" data-factor="The panel's herpetologist forgot a venomous snake was in his bag, put his hand back in, and got bitten again. His mate Doug poured beer on him and urinated on his head. He survived.">Gordon: the bag incident</div>
+        <div class="chip chip-complicating" onclick="toggleComplicating(this)" data-factor="Prof Brian Cox is on the panel. He has a napkin and is explaining the thermodynamics of your death with genuine enthusiasm. The physics is correct. It is not helping.">Cox: the napkin</div>
       </div>
     </div>
 
@@ -1201,12 +1201,12 @@ const SURVIVAL_SCHOOL_APP  = `<!DOCTYPE html>
     <div class="ctx-section" id="complicating-section-free" style="margin-top:12px">
       <div class="ctx-label">COMPLICATING FACTORS (optional)</div>
       <div class="chips" id="chips-complicating-free">
-        <div class="chip chip-complicating" data-factor="Bear is your lead advisor. He was recently seen at a Travelodge 400m from the filming location.">Bear: the Travelodge</div>
-        <div class="chip chip-complicating" data-factor="The panel's snake expert has been wearing the snake. Specifically, a belt and wallet set made from the species he claims to protect.">wearing the species</div>
-        <div class="chip chip-complicating" data-factor="Your survival advisor Cody Lundin just threw the only fire-making equipment into a swimming pool rather than demonstrate what he considers bad technique.">Cody: spear in the pool</div>
-        <div class="chip chip-complicating" data-factor="One of the panel members has been sleeping in a snake pit for 107 days and considers this normal research methodology. His colleagues have written papers about him. He has not read them.">Stevens: the snake pit</div>
-        <div class="chip chip-complicating" data-factor="The panel's herpetologist forgot a venomous snake was in his bag, put his hand back in, and got bitten again. His mate Doug poured beer on him and urinated on his head. He survived.">Gordon: the bag incident</div>
-        <div class="chip chip-complicating" data-factor="Prof Brian Cox is on the panel. He has a napkin and is explaining the thermodynamics of your death with genuine enthusiasm. The physics is correct. It is not helping.">Cox: the napkin</div>
+        <div class="chip chip-complicating" onclick="toggleComplicating(this)" data-factor="Bear is your lead advisor. He was recently seen at a Travelodge 400m from the filming location.">Bear: the Travelodge</div>
+        <div class="chip chip-complicating" onclick="toggleComplicating(this)" data-factor="The panel's snake expert has been wearing the snake. Specifically, a belt and wallet set made from the species he claims to protect.">wearing the species</div>
+        <div class="chip chip-complicating" onclick="toggleComplicating(this)" data-factor="Your survival advisor Cody Lundin just threw the only fire-making equipment into a swimming pool rather than demonstrate what he considers bad technique.">Cody: spear in the pool</div>
+        <div class="chip chip-complicating" onclick="toggleComplicating(this)" data-factor="One of the panel members has been sleeping in a snake pit for 107 days and considers this normal research methodology. His colleagues have written papers about him. He has not read them.">Stevens: the snake pit</div>
+        <div class="chip chip-complicating" onclick="toggleComplicating(this)" data-factor="The panel's herpetologist forgot a venomous snake was in his bag, put his hand back in, and got bitten again. His mate Doug poured beer on him and urinated on his head. He survived.">Gordon: the bag incident</div>
+        <div class="chip chip-complicating" onclick="toggleComplicating(this)" data-factor="Prof Brian Cox is on the panel. He has a napkin and is explaining the thermodynamics of your death with genuine enthusiasm. The physics is correct. It is not helping.">Cox: the napkin</div>
       </div>
     </div>
 
@@ -1972,14 +1972,18 @@ const UI = {
 const WORKER_ENDPOINT = 'https://cusslab-api.leanspirited.workers.dev/survival-school/assess';
 const HSA_PANEL_CHARS = ['ray','fox','bear','hales','cody','stroud'];
 
-async function assess(situation) {
+async function assess(situation, complicatingFactors) {
   const s = State.getState();
+  let enrichedSituation = situation;
+  if (complicatingFactors && complicatingFactors.length > 0) {
+    enrichedSituation += '\\n\\nCOMPLICATING FACTORS (the panel is aware of these — the targeted character must address it, others may reference it):\\n' + complicatingFactors.map(f => '- ' + f).join('\\n');
+  }
   const response = await fetch(WORKER_ENDPOINT, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       system: buildSystemPrompt('assessment'),
-      situation,
+      situation: enrichedSituation,
       composureState: s.composureState,
       panelCharIds: HSA_PANEL_CHARS
     })
@@ -2233,8 +2237,9 @@ const API = { assess, assessWorst, react };
     UI.setButtonState(mode, true);
     UI.showLoading();
 
+    const factors = getComplicatingFactors();
     try {
-      const data = await API.assess(situation);
+      const data = await API.assess(situation, factors);
       State.setProbability(data.survival_probability);
       UI.showResults(data, handleDecision);
     } catch (e) {
@@ -6511,6 +6516,12 @@ EXPERT OVER-REACH — when two characters with overlapping domain knowledge resp
 - They escalate: passive-aggressive precision, then invented specificity with confident Latin names, years, coordinates.
 - Nobody calls the bluff. Attenborough, if closing, notices. Says nothing. Lets it pass.
 
+CODY OVERRIDE (SS-020) — fires when Cody is in the panel AND the predicament or panel discussion involves survival advice that is dangerously wrong or could get someone killed in a real scenario:
+- Cody stops. No speech, no drama. Brief, final.
+- His response indicates the advice is wrong and could kill someone. One sentence. Done.
+- The spear goes in the pool. This is the founding moment. The threshold does not move.
+- If Packham is also in the panel and his Ethical Override fires simultaneously: Ray agrees with both silently. Bear does the thing anyway with extra flair. Hales does the correct version without mentioning it. Attenborough observes.
+
 === CRITICAL RULES ===
 Characters are sincere. They do not know they are in a mechanic. They are simply recounting their experience.
 The comedy is structural — from the compulsory escalation — NOT from characters winking at the audience.
@@ -7146,6 +7157,11 @@ PROF BRIAN COX — Cannot stop. "What's interesting is if we model this thermody
 SIR NICK FALDO — Applies golf. "Head down. Eyes on the ball. The question I keep coming back to —" It's always golf. Wrongly applied. He knows. He commits.
 JEREMY WADE — Produces the notebook. Writes something down. "Was there a river nearby." Not a question. A hope. Writes something else. If no river: quiet disappointment, then returns to the incident with a fish-based analogy that doesn't land and he knows it.
 JIM CARREY — "OKAY so I just want to say —" His face does something. "Because I KNOW what you're going to say —" He doesn't. Cycles into Ace Ventura (has sources, has contacts, has spoken to someone), The Mask (physically impossible solution presented with total conviction), or Liar Liar (cannot stop stating the actual problem, does not want to be doing this, cannot stop). Makes things worse. Bear engages with his contribution. This also makes things worse.
+
+CODY OVERRIDE (SS-020) — fires when Cody is in the panel AND the incident or discussion involves survival advice that is dangerously wrong:
+- Cody stops. No speech, no drama. Brief, final.
+- His response indicates the advice is wrong and could kill someone. One sentence. Done.
+- If Packham is also in the panel and his Ethical Override fires simultaneously: Ray agrees with both silently. Bear does the thing anyway. Hales does the correct version without mentioning it.
 
 === CRITICAL RULES ===
 This is an interrogation. Not a roast. Not a support session.
