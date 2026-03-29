@@ -6248,8 +6248,9 @@ const SURVIVAL_SCHOOL_IVE_HAD_WORSE = `<!DOCTYPE html>
   <div class="protagonist-prompt" id="protagonist-prompt">Pick someone. They're going in.</div>
   <div class="sendoff-block" id="sendoff-block"></div>
 
-  <div class="field-label" style="margin-top:18px">Your ordeal</div>
-  <textarea id="predicament-input" placeholder="Describe your predicament. The panel needs something to work with." rows="2"></textarea>
+  <div class="field-label" style="margin-top:18px">YOUR ORDEAL</div>
+  <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text-muted);margin-bottom:6px;line-height:1.5;opacity:0.7;">Think small. The more trivial your predicament, the harder the panel works to top it. A paper cut is funnier than a bear attack.</div>
+  <textarea id="predicament-input" placeholder="I have a mild inconvenience that I would like taken extremely seriously..." rows="2"></textarea>
 
   <div class="chips" id="chips-predicament" style="margin-top:8px">
     <button class="chip" data-pred="I have a paper cut">paper cut</button>
@@ -6868,7 +6869,8 @@ const SURVIVAL_SCHOOL_IN_MY_DEFENCE = `<!DOCTYPE html>
       <button class="chip" data-incident="I am Austin Stevens. A production assistant has pointed out that in seventeen episodes of Austin Stevens: Snakemaster I am wearing snakeskin boots. I feel this adds gravitas and does not undermine my spiritual connection to snakes. The snakes do not appear to agree. This is noted in the RSPCA report.">Stevens: snakeskin boots (RSPCA)</button>
     </div>
 
-    <textarea id="incident-input" placeholder="Or describe the incident in their own words." rows="2"></textarea>
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text-muted);margin:8px 0 6px;line-height:1.5;opacity:0.7;">Pick something they can't wriggle out of. The more specific and indefensible, the harder the panel presses.</div>
+    <textarea id="incident-input" placeholder="Or describe exactly what they did. Be specific. The panel will be." rows="2"></textarea>
   </div>
 
   <div class="btn-row">
