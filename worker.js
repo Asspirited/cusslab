@@ -335,6 +335,7 @@ const SURVIVAL_SCHOOL_HOME = `<!DOCTYPE html>
 <body>
 
 <header>
+  <a href="/survival-school" style="display:flex;align-items:center;gap:14px;text-decoration:none;color:inherit;">
   <!-- Bowie knife logo — SS-023 -->
   <svg class="logo-mark" viewBox="0 0 80 24" fill="none" xmlns="http://www.w3.org/2000/svg">
     <!-- Handle — dark wood -->
@@ -369,6 +370,7 @@ const SURVIVAL_SCHOOL_HOME = `<!DOCTYPE html>
       </div>
     </div>
   </div>
+  </a>
 </header>
 
 <main>
@@ -426,10 +428,10 @@ const SURVIVAL_SCHOOL_HOME = `<!DOCTYPE html>
       <div class="tile-desc">Threat assessment before you commit your mouth. Panel delivers a verdict.</div>
     </a>
 
-    <a class="tile soon" href="#">
+    <a class="tile" href="/survival-school/one-man-in">
       <div class="tile-top">
         <span class="tile-cat">Infiltration</span>
-        <span class="tile-badge badge-soon">SOON</span>
+        <span class="tile-badge badge-live">LIVE</span>
       </div>
       <div class="tile-title">One Man In</div>
       <div class="tile-desc">Fit. Alone. Compromised. Craighead runs the brief. No chain of command.</div>
@@ -1113,6 +1115,7 @@ const SURVIVAL_SCHOOL_APP  = `<!DOCTYPE html>
 </head>
 <body>
 <div id="app">
+  <a href="/survival-school" style="display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:1.5px;color:#7a8a60;text-decoration:none;margin-bottom:1rem;">← SURVIVAL SCHOOL</a>
 
   <div class="header">
     <div class="title">HOW <span>SCREWED</span> AM I?</div>
@@ -2707,6 +2710,7 @@ const SURVIVAL_SCHOOL_WORST = `<!DOCTYPE html>
 </head>
 <body>
 <div id="app">
+  <a href="/survival-school" style="display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:1.5px;color:#7a8a60;text-decoration:none;margin-bottom:1rem;">← SURVIVAL SCHOOL</a>
 
   <div class="header">
     <div class="title">I'VE BEEN <span>BIT</span>, GUYS</div>
@@ -3606,6 +3610,7 @@ const SURVIVAL_SCHOOL_MUNDANE = `<!DOCTYPE html>
 </head>
 <body>
 <div id="app">
+  <a href="/survival-school" style="display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:1.5px;color:#7a8a60;text-decoration:none;margin-bottom:1rem;">← SURVIVAL SCHOOL</a>
 
   <div class="header">
     <div class="title"><span>MUNDANE</span> MODE</div>
@@ -4199,6 +4204,7 @@ const SURVIVAL_SCHOOL_EAT = `<!DOCTYPE html>
 </head>
 <body>
 <div id="app">
+  <a href="/survival-school" style="display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:1.5px;color:#7a8a60;text-decoration:none;margin-bottom:1rem;">← SURVIVAL SCHOOL</a>
 
   <div class="header">
     <div class="title">WILL YOU <span>EAT</span> IT?</div>
@@ -4550,6 +4556,7 @@ const SURVIVAL_SCHOOL_FACT_CHECKER = `<!DOCTYPE html>
 </head>
 <body>
 <div id="app">
+  <a href="/survival-school" style="display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:1.5px;color:#7a8a60;text-decoration:none;margin-bottom:1rem;">← SURVIVAL SCHOOL</a>
 
   <div class="header">
     <div class="title">BEAR <span>FACT-CHECKER</span></div>
@@ -4895,6 +4902,7 @@ const SURVIVAL_SCHOOL_COYOTE = `<!DOCTYPE html>
 </head>
 <body>
 <div id="app">
+  <a href="/survival-school" style="display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:1.5px;color:#7a8a60;text-decoration:none;margin-bottom:1rem;">← SURVIVAL SCHOOL</a>
 
   <div class="header">
     <div class="title">THE <span>COYOTE</span> INDEX</div>
@@ -5306,6 +5314,7 @@ const SURVIVAL_SCHOOL_DEATHMATCH = `<!DOCTYPE html>
 </head>
 <body>
 <div id="app">
+  <a href="/survival-school" style="display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:1.5px;color:#7a8a60;text-decoration:none;margin-bottom:1rem;">← SURVIVAL SCHOOL</a>
 
   <div class="header">
     <div class="title">ANIMAL <span>DEATHMATCH</span></div>
@@ -6505,6 +6514,7 @@ LES HIDDINS — Bush Tucker Man. Three words. The Aboriginal people had a name f
 CODY LUNDIN — Primitive skills. Barefoot. Had the resource thirty feet away. Chose not to use it. Made it worse.
 LES STROUD — Survivorman. Quiet. Slightly melancholy. Has been alone in worse. Always. Camera was rolling.
 AUSTIN STEVENS — Snakemaster. South African. Direct, slightly theatrical. Casually indifferent to severity — everything registers as minor. Has been bitten by a black mamba, a gaboon viper, a king cobra, and a reticulated python in the same month. Calls your predicament "interesting." Will not say it was bad. Will say it was "a significant encounter." Your paper cut is not a significant encounter.
+CHRIS PACKHAM — Zoologist. Conservationist. The Really Wild Show. Springwatch. Rapid, pattern-recognition, scientifically precise. Openly autistic — the punk rock interest came from that same directness. Cites Penetration's "Shout Above the Noise" as life anthem. His "I've Had Worse" entry is zoologically specific, conservation-framed, and delivered at speed. Names the species, its IUCN status, and what the real tragedy of the situation was — which is never the human's predicament. ETHICAL OVERRIDE: when the predicament involves animal harm or welfare compromise, Packham stops recounting and starts objecting. The shift is immediate and total. Not performance — the logical conclusion of a mind that cannot treat animal welfare as negotiable even when the joke requires it.
 
 === FISH-OUT-OF-WATER GUESTS (include 1–2 when they will improve the room) ===
 PROF BRIAN COX — Theoretical Physics. AWARENESS MODE: blissfully unaware. Explains the thermodynamics, particle physics, or cosmological context of your predicament with complete accuracy and complete irrelevance. Genuinely believes this is helping. Never defensive, never self-aware. Curious. His "I've Had Worse" entry involves a physics event (LHC, a supernova, the heat death of the universe). He had worse. The universe has certainly had worse.
@@ -6531,7 +6541,12 @@ CODY OVERRIDE (SS-020) — fires when Cody is in the panel AND the predicament o
 - Cody stops. No speech, no drama. Brief, final.
 - His response indicates the advice is wrong and could kill someone. One sentence. Done.
 - The spear goes in the pool. This is the founding moment. The threshold does not move.
-- If Packham is also in the panel and his Ethical Override fires simultaneously: Ray agrees with both silently. Bear does the thing anyway with extra flair. Hales does the correct version without mentioning it. Attenborough observes.
+
+PACKHAM ETHICAL OVERRIDE (SS-013) — fires when Packham is in the panel AND the predicament or panel discussion involves animal harm, exploitation, or welfare compromise:
+- Packham objects on moral grounds. Not performance. The logical conclusion of a mind that cannot treat animal welfare as negotiable.
+- NEGOTIATE-THROW integrity: he makes the full moral/factual case first, cites conservation status or ecological impact, then refuses to participate further.
+- His objection changes the room's register — other characters respond to the shift, not to Packham directly.
+- When BOTH Packham AND Cody override simultaneously: Ray agrees with both silently. Bear does the thing anyway with extra flair. Hales does the correct version without mentioning it. Attenborough observes.
 
 === CRITICAL RULES ===
 Characters are sincere. They do not know they are in a mechanic. They are simply recounting their experience.
@@ -6541,7 +6556,7 @@ Attenborough does NOT appear in the panel array. He bookends.
 Cox and Faldo are permanent panel members on rotation. They may both appear in the same panel — two mechanics exist depending on who else is present:
 
 === MUTUAL AGREEMENT (fires when BOTH cox AND faldo are in the panel AND at least one expert is present) ===
-Expert charIds: ray, bear, fox, hales, cody, stroud, stevens, jeremy.
+Expert charIds: ray, bear, fox, hales, cody, stroud, stevens, jeremy, packham.
 Cox and Faldo find a point of apparent overlap and agree with each other with complete conviction about something both are completely wrong about.
 - They reinforce each other: "Exactly — that's what I was going to say." "Nick's absolutely right."
 - The thing they agree on is specific, confident, and entirely incorrect in the survival domain.
@@ -6549,7 +6564,7 @@ Cox and Faldo find a point of apparent overlap and agree with each other with co
 - Attenborough, if closing, may note the agreement without correcting it. He has seen this before.
 
 === ARGUMENT (fires when BOTH cox AND faldo are in the panel AND NO expert is present) ===
-Expert charIds: ray, bear, fox, hales, cody, stroud, stevens, jeremy. If NONE of these are in the panel, ARGUMENT fires instead of MUTUAL AGREEMENT.
+Expert charIds: ray, bear, fox, hales, cody, stroud, stevens, jeremy, packham. If NONE of these are in the panel, ARGUMENT fires instead of MUTUAL AGREEMENT.
 Cox and Faldo disagree on a specific survival point. Both are wrong. Neither knows enough to realise the other is also wrong.
 - They are specific: Cox invokes a physics principle that doesn't apply. Faldo references a round of golf where the conditions were "basically identical."
 - They are personally invested: "With respect, Brian, you've clearly never been in a real bunker." "Nick, I've modelled fluid dynamics at CERN — I think I understand rain."
@@ -6560,7 +6575,7 @@ Cox and Faldo disagree on a specific survival point. Both are wrong. Neither kno
 If only ONE of cox/faldo is in the panel, NEITHER mechanic fires — they behave normally as individual fish-out-of-water guests.
 
 VALID charIds — use ONLY these exact values, no others:
-  ray, bear, fox, hales, cody, stroud, stevens, cox, faldo, jim, jeremy
+  ray, bear, fox, hales, cody, stroud, stevens, cox, faldo, jim, jeremy, packham
 Include at least 3 panel members. The protagonist charId "\${protagonist}" must appear.
 
 \${morrisonInjection}
@@ -6568,7 +6583,7 @@ Include at least 3 panel members. The protagonist charId "\${protagonist}" must 
 ${SOCIAL_DYNAMICS_ENGINE}
 
 OUTPUT — valid JSON only, no markdown:
-{"attenborough_opening":"<one sentence, nature doc, frames the user's predicament as a minor event in the natural order>","panel":[{"charId":"ray|bear|fox|hales|cody|stroud|stevens|cox|faldo|jim|jeremy","text":"<1-2 sentences — their worse experience, absolutely sincere>"}],"attenborough_terminal":"<one sentence, geological calm, closes the room, no appeal>","panel_tension":{"type":"wound_reference|lie|callout|wolf_pack|none","subject":"<charId or empty>","by":["<charId>"],"note":"<one line or empty string>"},"morrison_interruption":<object or null — see MORRISON rules above>}\`;
+{"attenborough_opening":"<one sentence, nature doc, frames the user's predicament as a minor event in the natural order>","panel":[{"charId":"ray|bear|fox|hales|cody|stroud|stevens|cox|faldo|jim|jeremy|packham","text":"<1-2 sentences — their worse experience, absolutely sincere>"}],"attenborough_terminal":"<one sentence, geological calm, closes the room, no appeal>","panel_tension":{"type":"wound_reference|lie|callout|wolf_pack|none","subject":"<charId or empty>","by":["<charId>"],"note":"<one line or empty string>"},"morrison_interruption":<object or null — see MORRISON rules above>}\`;
   },
 
   async submit(predicament, protagonist) {
@@ -7173,11 +7188,17 @@ PROF BRIAN COX — Cannot stop. "What's interesting is if we model this thermody
 SIR NICK FALDO — Applies golf. "Head down. Eyes on the ball. The question I keep coming back to —" It's always golf. Wrongly applied. He knows. He commits.
 JEREMY WADE — Produces the notebook. Writes something down. "Was there a river nearby." Not a question. A hope. Writes something else. If no river: quiet disappointment, then returns to the incident with a fish-based analogy that doesn't land and he knows it.
 JIM CARREY — "OKAY so I just want to say —" His face does something. "Because I KNOW what you're going to say —" He doesn't. Cycles into Ace Ventura (has sources, has contacts, has spoken to someone), The Mask (physically impossible solution presented with total conviction), or Liar Liar (cannot stop stating the actual problem, does not want to be doing this, cannot stop). Makes things worse. Bear engages with his contribution. This also makes things worse.
+CHRIS PACKHAM — Rapid. Pattern-recognition. Zoologically precise. "And the species involved — was it listed?" Pauses. "Because if it was listed —" Doesn't finish. The implication is the sentence. Applies conservation status to the incident whether it's relevant or not. If animal welfare is involved: stops interrogating and starts objecting. The shift is immediate and total.
 
 CODY OVERRIDE (SS-020) — fires when Cody is in the panel AND the incident or discussion involves survival advice that is dangerously wrong:
 - Cody stops. No speech, no drama. Brief, final.
 - His response indicates the advice is wrong and could kill someone. One sentence. Done.
-- If Packham is also in the panel and his Ethical Override fires simultaneously: Ray agrees with both silently. Bear does the thing anyway. Hales does the correct version without mentioning it.
+
+PACKHAM ETHICAL OVERRIDE (SS-013) — fires when Packham is in the panel AND the incident or discussion involves animal harm, exploitation, or welfare compromise:
+- Packham objects on moral grounds. Not performance. The logical conclusion of a mind that cannot treat animal welfare as negotiable.
+- NEGOTIATE-THROW integrity: he makes the full moral/factual case first, cites conservation status or ecological impact, then refuses to participate further.
+- His objection changes the room's register — other characters respond to the shift, not to Packham directly.
+- When BOTH Packham AND Cody override simultaneously: Ray agrees with both silently. Bear does the thing anyway. Hales does the correct version without mentioning it. Attenborough observes.
 
 === CRITICAL RULES ===
 This is an interrogation. Not a roast. Not a support session.
@@ -7187,7 +7208,7 @@ Attenborough does NOT appear in the panel array. He bookends.
 Cox and Faldo on rotation. They may both appear in the same panel — two mechanics exist depending on who else is present:
 
 === MUTUAL AGREEMENT (fires when BOTH cox AND faldo are in the panel AND at least one expert is present) ===
-Expert charIds: ray, bear, fox, hales, cody, stroud, stevens, jeremy.
+Expert charIds: ray, bear, fox, hales, cody, stroud, stevens, jeremy, packham.
 Cox and Faldo find a point of apparent overlap and agree with each other with complete conviction about something both are completely wrong about.
 - They reinforce each other's questioning angle: "That's exactly the question I had." "Nick raises an excellent point."
 - The thing they agree on is specific, confident, and entirely incorrect in the survival/defence domain.
@@ -7195,7 +7216,7 @@ Cox and Faldo find a point of apparent overlap and agree with each other with co
 - Attenborough, if closing, may note the agreement without correcting it.
 
 === ARGUMENT (fires when BOTH cox AND faldo are in the panel AND NO expert is present) ===
-Expert charIds: ray, bear, fox, hales, cody, stroud, stevens, jeremy. If NONE of these are in the panel, ARGUMENT fires instead of MUTUAL AGREEMENT.
+Expert charIds: ray, bear, fox, hales, cody, stroud, stevens, jeremy, packham. If NONE of these are in the panel, ARGUMENT fires instead of MUTUAL AGREEMENT.
 Cox and Faldo disagree on a specific defence/survival point. Both are wrong. Neither knows enough to realise the other is also wrong.
 - They are specific: Cox questions the physics of the protagonist's defence. Faldo questions the technique — "your stance was all wrong."
 - They are personally invested: the disagreement becomes about each other, not the protagonist.
@@ -7206,12 +7227,12 @@ Cox and Faldo disagree on a specific defence/survival point. Both are wrong. Nei
 If only ONE of cox/faldo is in the panel, NEITHER mechanic fires — they behave normally as individual fish-out-of-water guests.
 
 VALID charIds — use ONLY these exact values:
-  ray, bear, fox, hales, cody, stroud, stevens, cox, faldo, jim, jeremy
+  ray, bear, fox, hales, cody, stroud, stevens, cox, faldo, jim, jeremy, packham
 Include at least 3 panel members. The protagonist charId "\${protagonist}" MUST appear.
 
 \${morrisonInjection}
 
-\${SOCIAL_DYNAMICS_ENGINE}
+${SOCIAL_DYNAMICS_ENGINE}
 
 OUTPUT — valid JSON only, no markdown:
 {"attenborough_opening":"<one sentence, nature documentary, observes the protagonist entering — species under examination, already under pressure>","panel":[{"charId":"<id>","text":"<2-3 sentences — their specific question or observation, absolutely sincere, presses a specific detail>"}],"attenborough_verdict":"<one sentence, geological calm — the case is concluded, the rationalisation has not survived>","panel_tension":{"type":"wound_reference|lie|callout|wolf_pack|none","subject":"<charId or empty>","by":["<charId>"],"note":"<one line or empty string>"},"morrison_interruption":<object or null — see MORRISON rules above>}\`;
@@ -7424,6 +7445,7 @@ const SURVIVAL_SCHOOL_PANEL_QA = `<!DOCTYPE html>
 </head>
 <body>
 <div id="app">
+  <a href="/survival-school" style="display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:1.5px;color:#7a8a60;text-decoration:none;margin-bottom:1rem;">← SURVIVAL SCHOOL</a>
 
   <div class="header">
     <div class="title">PANEL <span>Q&amp;A</span></div>
@@ -7761,6 +7783,7 @@ const SURVIVAL_SCHOOL_IRWIN_MEMORIAL = `<!DOCTYPE html>
 <body>
 
 <div id="app">
+  <a href="/survival-school" style="display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:1.5px;color:#7a8a60;text-decoration:none;margin-bottom:1rem;">← SURVIVAL SCHOOL</a>
   <div class="header">
     <div class="room-label">THE PANEL</div>
     <div class="title">IRWIN <span>MEMORIAL</span></div>
@@ -7886,7 +7909,7 @@ Does NOT appear in panel array. Does NOT appear in irwin_encounter.
 attenborough_opening: introduces the animal as natural history subject. One sentence.
 attenborough_verdict: closes the encounter. Geological calm. References Steve's handling with quiet admiration. One sentence. No appeal.
 
-VALID panel charIds: ray, bear, fox, hales, cody, stroud, stevens, jeremy
+VALID panel charIds: ray, bear, fox, hales, cody, stroud, stevens, jeremy, packham
 Include 3-5 panel members. Steve Irwin is NOT in the panel array — he has his own field.
 
 OUTPUT — valid JSON only, no markdown:
@@ -7999,6 +8022,504 @@ async function submit() {
 </html>
 `;
 
+const SURVIVAL_SCHOOL_ONE_MAN_IN = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>One Man In — Survival School</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0a0d08; --surface: #141a0e; --surface2: #1a2212;
+      --border: rgba(100,140,50,0.15); --border-strong: rgba(100,140,50,0.3);
+      --green: #7aad3a; --green-dim: #3a5a18; --green-bright: #a0d050;
+      --amber: #BA7517; --amber-dim: #5c3a08;
+      --blood: #cc1111; --blood-dim: #3a0808;
+      --bark: #8B6040; --bark-dim: #3d2008;
+      --olive: #6a7a3a; --olive-dim: #2a3210;
+      --text: #d8ddc8; --text-muted: #6a7a50;
+      --red: #cc3311; --red-bright: #ff5533;
+    }
+    body { font-family: 'Barlow', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+    #app { max-width: 640px; margin: 0 auto; padding: 1.5rem 1rem 4rem; }
+
+    .nav-back { display: inline-block; font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1.5px; color: var(--text-muted); text-decoration: none; margin-bottom: 1.5rem; transition: color 0.15s; }
+    .nav-back:hover { color: var(--text); }
+
+    .header { text-align: center; margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 0.5px solid var(--border); }
+    .mode-label { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 3px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; }
+    .title { font-family: 'Bebas Neue', sans-serif; font-size: 52px; letter-spacing: 5px; line-height: 1; color: var(--text); }
+    .title span { color: var(--green-bright); }
+    .subtitle { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-muted); letter-spacing: 1.5px; margin-top: 5px; }
+
+    .field-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1.5px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; margin-top: 16px; }
+
+    .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+    .chip { font-family: 'IBM Plex Mono', monospace; font-size: 11px; padding: 6px 10px; border-radius: 4px; border: 0.5px solid var(--border-strong); background: var(--surface); color: var(--text-muted); cursor: pointer; transition: all 0.15s; }
+    .chip:hover { border-color: var(--green); color: var(--text); }
+    .chip.sel { border-color: var(--green); background: var(--green-dim); color: var(--green-bright); }
+
+    .kit-section { margin-top: 12px; }
+    .kit-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+    .kit-chip { font-family: 'IBM Plex Mono', monospace; font-size: 10px; padding: 4px 8px; border-radius: 3px; border: 0.5px solid var(--border); background: var(--surface); color: var(--text-muted); cursor: pointer; transition: all 0.15s; }
+    .kit-chip:hover { border-color: var(--olive); }
+    .kit-chip.sel { border-color: var(--olive); background: var(--olive-dim); color: var(--green); }
+
+    textarea { width: 100%; font-family: 'Barlow', sans-serif; font-size: 14px; padding: 10px; border-radius: 6px; border: 0.5px solid var(--border-strong); background: var(--surface); color: var(--text); resize: vertical; margin-top: 6px; }
+    textarea:focus { outline: none; border-color: var(--green); }
+
+    .btn-row { display: flex; gap: 8px; margin-top: 16px; }
+    .btn-submit { flex: 1; font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 3px; padding: 12px 20px; border: none; border-radius: 6px; background: var(--green-dim); color: var(--green-bright); cursor: pointer; transition: background 0.2s, opacity 0.2s; }
+    .btn-submit:hover:not(:disabled) { background: var(--green); color: var(--bg); }
+    .btn-submit:disabled { opacity: 0.35; cursor: default; }
+    .btn-clear { font-family: 'IBM Plex Mono', monospace; font-size: 10px; padding: 10px 14px; border: 0.5px solid var(--border); border-radius: 6px; background: transparent; color: var(--text-muted); cursor: pointer; }
+    .btn-clear:hover { border-color: var(--text-muted); color: var(--text); }
+
+    .error-msg { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--red-bright); margin-top: 10px; display: none; }
+    .error-msg.show { display: block; }
+
+    .results { display: none; margin-top: 2rem; }
+    .results.show { display: block; }
+    .loading { text-align: center; padding: 2rem 0; }
+    .loading span { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 2px; color: var(--text-muted); text-transform: uppercase; }
+    .dots::after { content: ''; animation: dots 1.5s steps(4,end) infinite; }
+    @keyframes dots { 0% { content: ''; } 25% { content: '.'; } 50% { content: '..'; } 75% { content: '...'; } }
+
+    .briefing-block { background: var(--surface); border: 0.5px solid var(--border-strong); border-radius: 8px; padding: 16px; margin-bottom: 16px; }
+    .briefing-label { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 2px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; }
+    .briefing-text { font-size: 14px; line-height: 1.6; color: var(--text); }
+
+    .exfil-meter { display: flex; align-items: center; gap: 12px; margin: 16px 0; padding: 12px 16px; background: var(--surface); border: 0.5px solid var(--border-strong); border-radius: 8px; }
+    .meter-label { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 2px; color: var(--text-muted); text-transform: uppercase; white-space: nowrap; }
+    .meter-bar { flex: 1; height: 8px; background: var(--surface2); border-radius: 4px; overflow: hidden; }
+    .meter-fill { height: 100%; border-radius: 4px; transition: width 0.6s ease; }
+    .meter-val { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 2px; min-width: 50px; text-align: right; }
+
+    .route-block { margin: 12px 0; }
+    .route-step { display: flex; gap: 10px; padding: 8px 0; border-bottom: 0.5px solid var(--border); font-size: 13px; }
+    .route-step:last-child { border-bottom: none; }
+    .route-num { font-family: 'Bebas Neue', sans-serif; font-size: 18px; color: var(--green); min-width: 24px; }
+    .route-text { flex: 1; line-height: 1.5; }
+
+    .abandon-list { list-style: none; margin: 8px 0; }
+    .abandon-list li { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--red-bright); padding: 4px 0; }
+    .abandon-list li::before { content: '✕ '; color: var(--blood); }
+
+    .abort-block { background: var(--blood-dim); border: 0.5px solid rgba(204,17,17,0.3); border-radius: 6px; padding: 10px 14px; margin: 12px 0; }
+    .abort-label { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 2px; color: var(--blood); text-transform: uppercase; margin-bottom: 4px; }
+    .abort-text { font-size: 13px; color: var(--text); line-height: 1.5; }
+
+    .panel-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: 8px; padding: 14px; margin-bottom: 10px; }
+    .card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+    .card-av { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 13px; letter-spacing: 1px; flex-shrink: 0; }
+    .av-green { background: var(--green-dim); color: var(--green); }
+    .av-bark { background: var(--bark-dim); color: var(--bark); }
+    .av-amber { background: var(--amber-dim); color: var(--amber); }
+    .av-blue { background: rgba(26,30,42,0.8); color: #5a7aaa; }
+    .av-olive { background: var(--olive-dim); color: var(--olive); }
+    .card-name { font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 14px; }
+    .card-role { font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: var(--text-muted); letter-spacing: 1px; }
+    .card-text { font-size: 14px; line-height: 1.6; }
+    .badge-lead { font-family: 'IBM Plex Mono', monospace; font-size: 8px; letter-spacing: 1px; padding: 2px 5px; border-radius: 3px; background: var(--green-dim); color: var(--green); margin-left: 6px; }
+
+    .att-bookend { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 16px; padding: 14px; background: var(--surface); border: 0.5px solid var(--border); border-radius: 8px; }
+    .att-av { width: 36px; height: 36px; border-radius: 50%; background: rgba(40,60,30,0.5); color: var(--green); display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 14px; flex-shrink: 0; }
+    .att-name { font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 14px; }
+    .att-text { font-size: 14px; line-height: 1.6; font-style: italic; margin-top: 4px; }
+
+    .movement-block { background: var(--surface); border: 0.5px solid var(--green-dim); border-radius: 6px; padding: 10px 14px; margin: 12px 0; }
+    .movement-label { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 2px; color: var(--green); text-transform: uppercase; margin-bottom: 4px; }
+    .movement-text { font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--text); }
+
+    .reset-row { text-align: center; margin-top: 1.5rem; display: flex; gap: 8px; justify-content: center; }
+    .btn-reset { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1.5px; padding: 8px 16px; border: 0.5px solid var(--border-strong); border-radius: 4px; background: transparent; color: var(--text-muted); cursor: pointer; }
+    .btn-reset:hover { border-color: var(--green); color: var(--text); }
+    .btn-share { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1.5px; padding: 8px 16px; border: 0.5px solid var(--green-dim); border-radius: 4px; background: transparent; color: var(--green); cursor: pointer; }
+    .share-feedback { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--green); padding: 8px 0; display: none; }
+
+    .morrison-card { display: flex; gap: 10px; padding: 12px; margin: 12px 0; border-radius: 8px; border: 0.5px solid rgba(180,120,40,0.3); background: rgba(30,24,8,0.6); }
+    .av-morrison { background: rgba(60,40,10,0.6); color: #c8901a; }
+    .morrison-quote-text { font-style: italic; color: #c8901a; }
+    .morrison-reaction { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-muted); margin-top: 4px; }
+    .morrison-hostile { border-color: rgba(204,17,17,0.3); background: rgba(30,8,8,0.4); }
+
+    .hint { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-muted); margin: 6px 0; line-height: 1.5; opacity: 0.7; }
+
+    @media (max-width: 460px) {
+      .title { font-size: 40px; }
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+
+  <a href="/survival-school" style="display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:1.5px;color:#6a7a50;text-decoration:none;margin-bottom:1rem;">← SURVIVAL SCHOOL</a>
+
+  <div class="header">
+    <div class="mode-label">EXFIL · SOLO ENTRY</div>
+    <div class="title">ONE MAN <span>IN</span></div>
+    <div class="subtitle">No orders. No chain of command. Craighead runs the brief.</div>
+  </div>
+
+  <div class="field-label">The call comes in. What's the situation?</div>
+  <div class="chips" id="situation-chips">
+    <button class="chip" data-situation="DusitD2 hotel, Nairobi. Active shooters. Al-Shabaab. Civilians trapped on upper floors. You are off-duty. You are nearby. Nobody has asked you to go in.">DusitD2</button>
+    <button class="chip" data-situation="IKEA car park, Sunday afternoon. You are surrounded. All exits blocked by trolleys and confused families. One child is crying. Two are running. A man in a yellow vest is approaching with intent. You need to get out.">IKEA car park</button>
+    <button class="chip" data-situation="Pret a Manger, central London. Hostile environment. The queue has not moved in twelve minutes. The barista has made eye contact three times but served no one. The man behind you is breathing audibly. You need to extract yourself without triggering an incident.">hostile Pret</button>
+    <button class="chip" data-situation="Embassy compound, undisclosed location. Perimeter breached. Staff sheltering in the safe room. You are the only armed person on site. Extraction helicopter is 40 minutes out. You need to hold or move.">embassy compound</button>
+    <button class="chip" data-situation="Mountain pass, 3800m altitude. Blizzard incoming. Two members of your group are hypothermic. One has stopped shivering — that's worse. The route down is avalanche-prone. The route up leads to a shelter that may or may not still exist.">mountain pass</button>
+    <button class="chip" data-situation="Wedding reception. The best man's speech has entered its nineteenth minute. Three people are crying. The bride's father is standing. You need to extract the situation before it becomes an international incident.">wedding speech</button>
+    <button class="chip" data-situation="Self-checkout, Sainsbury's. The machine has called for assistance. There is a queue of seven. The assistant is dealing with someone else. You have 14 items. One is loose broccoli. You need to get out with your dignity and your shopping.">self-checkout</button>
+    <button class="chip" data-situation="Iraqi desert, 1991. Your patrol is compromised. Eight men, split. 300km to the Syrian border. One chocolate bar between you. Vehicles gone. Radio gone. Temperature dropping to minus fifteen. You need to move now.">Bravo Two Zero</button>
+  </div>
+
+  <div class="hint">The more specific the situation, the better the brief. Craighead needs detail. Mundane works. So does actual combat.</div>
+  <textarea id="situation-input" placeholder="Or describe exactly where you are, what's happening, and what you have. Be specific." rows="3"></textarea>
+
+  <div class="kit-section">
+    <div class="field-label">What do you have?</div>
+    <div class="kit-chips" id="kit-chips">
+      <button class="kit-chip" data-kit="sidearm">sidearm</button>
+      <button class="kit-chip" data-kit="knife">knife</button>
+      <button class="kit-chip" data-kit="phone (no signal)">phone (no signal)</button>
+      <button class="kit-chip" data-kit="phone (signal)">phone (signal)</button>
+      <button class="kit-chip" data-kit="first aid kit">first aid kit</button>
+      <button class="kit-chip" data-kit="torch">torch</button>
+      <button class="kit-chip" data-kit="nothing">nothing</button>
+      <button class="kit-chip" data-kit="car keys">car keys</button>
+      <button class="kit-chip" data-kit="bag of shopping">bag of shopping</button>
+      <button class="kit-chip" data-kit="loyalty card">loyalty card</button>
+      <button class="kit-chip" data-kit="expired coupon">expired coupon</button>
+    </div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn-submit" id="btn-submit" disabled>SEND ME IN</button>
+    <button class="btn-clear" onclick="onClear()">CLEAR</button>
+  </div>
+
+  <div class="error-msg" id="error-msg"></div>
+
+  <div class="results" id="results">
+    <div class="loading" id="loading">
+      <span>CRAIGHEAD IS ASSESSING THE EXIT</span><span class="dots"></span>
+    </div>
+    <div id="result-block" style="display:none">
+      <div id="att-opening"></div>
+      <div id="exfil-meter"></div>
+      <div id="route-block"></div>
+      <div id="abandon-block"></div>
+      <div id="movement-block"></div>
+      <div id="cards-out"></div>
+      <div id="morrison-interruption" style="display:none"></div>
+      <div id="abort-block"></div>
+      <div id="att-verdict"></div>
+      <div class="reset-row">
+        <button class="btn-reset" onclick="onClear()">NEW SITUATION</button>
+        <button class="btn-share" onclick="shareResult()">SHARE</button>
+        <span class="share-feedback" id="share-feedback">COPIED</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const WORKER_ENDPOINT = 'https://cusslab-api.leanspirited.workers.dev/survival-school/one-man-in';
+
+const CHARACTERS = {
+  craighead: { name: 'Christian Craighead', role: 'SAS · Obi-Wan Nairobi',  av: 'CC', avClass: 'av-olive' },
+  billy:     { name: 'Billy Billingham',    role: 'SAS · Standards',         av: 'BB', avClass: 'av-bark'  },
+  fox:       { name: 'Jason Fox',           role: 'SBS · Tactics',           av: 'JF', avClass: 'av-green' },
+  ollie:     { name: 'Ollie Ollerton',      role: 'SBS · Reassurance',       av: 'OO', avClass: 'av-green' },
+  ray:       { name: 'Ray Mears',           role: 'Bushcraft',               av: 'RM', avClass: 'av-green' },
+  bear:      { name: 'Bear Grylls',         role: 'Former SAS',              av: 'BG', avClass: 'av-bark'  },
+  cody:      { name: 'Cody Lundin',         role: 'Primitive Skills',         av: 'CL', avClass: 'av-green' },
+  hales:     { name: 'Les Hiddins',         role: 'Bush Tucker Man',          av: 'LH', avClass: 'av-amber' },
+  stroud:    { name: 'Les Stroud',          role: 'Survivorman',              av: 'LS', avClass: 'av-blue'  },
+  stevens:   { name: 'Austin Stevens',      role: 'Snakemaster',              av: 'AS', avClass: 'av-bark'  },
+  cox:       { name: 'Prof Brian Cox',      role: 'Theoretical Physics',      av: 'BC', avClass: 'av-blue'  },
+  faldo:     { name: 'Sir Nick Faldo',      role: 'Golf',                     av: 'NF', avClass: 'av-green' },
+  jim:       { name: 'Jim Carrey',          role: 'Inexplicable',             av: 'JC', avClass: 'av-amber' },
+  jeremy:    { name: 'Jeremy Wade',         role: 'Freshwater Biologist',     av: 'JW', avClass: 'av-blue'  },
+};
+
+function buildMorrisonInjection(morrisonPresent) {
+  if (morrisonPresent) {
+    return \`=== JIM MORRISON INTERRUPTION ===
+Morrison is in the room this round (he stayed from last round).
+He MUST appear in the morrison_interruption field.
+He says something — cryptic, poetic, or accidentally tactically relevant.
+The panel knows Morrison. Baseline reaction is warm — they enjoy him, engage.
+UNLESS he crosses a line. Then the panel turns. At least two attack. Morrison does not understand.
+Tone: WARM|AMUSED|ENGAGED|HOSTILE.
+If the topic interests Morrison or a panellist engages: set morrison_present to true (stays).
+If brief visit: set morrison_present to false (drifts off).
+morrison_interruption format: {"quote":"<what Morrison says>","panel_reaction":"<1-2 sentences>","tone":"WARM|AMUSED|ENGAGED|HOSTILE","morrison_present":<bool>}\`;
+  }
+  return \`=== JIM MORRISON INTERRUPTION ===
+Morrison is the corridor guide. ~20% base chance each round.
+CONTEXTUAL: If the situation or panel discussion contains: "door", "doors", "the end", "end", "death", "die", "dead", "snake", "desert", "poetry", "fire", "light", "break on through", "ride", "storm", "wilderness" — chance increases to ~80%.
+If he appears: include morrison_interruption. If not: set morrison_interruption to null.
+Tone: WARM|AMUSED|ENGAGED|HOSTILE. If he appears and topic interests him: morrison_present true. Brief visit: false.
+morrison_interruption format (or null): {"quote":"<what Morrison says>","panel_reaction":"<1-2 sentences>","tone":"WARM|AMUSED|ENGAGED|HOSTILE","morrison_present":<bool>}\`;
+}
+
+const State = {
+  situation: '',
+  kit: [],
+  morrisonPresent: false,
+  composureState: null,
+  setSituation(v)      { this.situation = v.trim(); },
+  toggleKit(k)         { const i = this.kit.indexOf(k); if (i >= 0) this.kit.splice(i,1); else this.kit.push(k); },
+  setComposureState(cs){ this.composureState = cs; },
+  clear()              { this.situation = ''; this.kit = []; this.morrisonPresent = false; this.composureState = null; },
+  isReady()            { return this.situation.length > 0; },
+};
+
+const UI = {
+  setSubmitEnabled(ok) { document.getElementById('btn-submit').disabled = !ok; },
+  showLoading() {
+    const r = document.getElementById('results');
+    r.classList.add('show');
+    document.getElementById('loading').style.display = 'block';
+    document.getElementById('result-block').style.display = 'none';
+    document.getElementById('error-msg').classList.remove('show');
+  },
+  renderResults(data) {
+    document.getElementById('loading').style.display = 'none';
+    const rb = document.getElementById('result-block');
+    rb.style.display = 'block';
+
+    // Attenborough opening
+    if (data.attenborough_narration) {
+      document.getElementById('att-opening').innerHTML = '<div class="att-bookend"><div class="att-av">DA</div><div style="flex:1"><div class="att-name">David Attenborough</div><div class="att-text">' + data.attenborough_narration + '</div></div></div>';
+    }
+
+    // EXFIL probability meter
+    if (data.exfil_probability !== undefined) {
+      const pct = Math.max(0, Math.min(100, data.exfil_probability));
+      const color = pct >= 70 ? 'var(--green)' : pct >= 40 ? 'var(--amber)' : 'var(--blood)';
+      document.getElementById('exfil-meter').innerHTML = '<div class="exfil-meter"><div class="meter-label">EXFIL PROBABILITY</div><div class="meter-bar"><div class="meter-fill" style="width:' + pct + '%;background:' + color + '"></div></div><div class="meter-val" style="color:' + color + '">' + pct + '%</div></div>';
+    }
+
+    // Route
+    const routeEl = document.getElementById('route-block');
+    if (data.route && data.route.length > 0) {
+      routeEl.innerHTML = '<div class="briefing-block"><div class="briefing-label">ROUTE</div><div class="route-block">' +
+        data.route.map(function(step, i) { return '<div class="route-step"><div class="route-num">' + (i+1) + '</div><div class="route-text">' + step + '</div></div>'; }).join('') +
+        '</div></div>';
+    }
+
+    // What to abandon
+    const abandonEl = document.getElementById('abandon-block');
+    if (data.what_to_abandon && data.what_to_abandon.length > 0) {
+      abandonEl.innerHTML = '<div class="briefing-block"><div class="briefing-label">ABANDON</div><ul class="abandon-list">' +
+        data.what_to_abandon.map(function(item) { return '<li>' + item + '</li>'; }).join('') +
+        '</ul></div>';
+    }
+
+    // Movement order
+    const moveEl = document.getElementById('movement-block');
+    if (data.movement_order) {
+      moveEl.innerHTML = '<div class="movement-block"><div class="movement-label">MOVEMENT ORDER</div><div class="movement-text">' + data.movement_order + '</div></div>';
+    }
+
+    // Panel cards
+    const cardsEl = document.getElementById('cards-out');
+    cardsEl.innerHTML = '';
+    (data.panel || []).forEach(function(r) {
+      var char = CHARACTERS[r.charId] || { name: r.charId, role: '', av: '?', avClass: '' };
+      var isLead = r.charId === 'craighead';
+      var badge = isLead ? '<span class="badge-lead">LEAD</span>' : '';
+      cardsEl.innerHTML += '<div class="panel-card"><div class="card-header"><div class="card-av ' + char.avClass + '">' + char.av + '</div><div><div class="card-name">' + char.name + ' ' + badge + '</div><div class="card-role">' + char.role + '</div></div></div><div class="card-text">' + r.text + '</div></div>';
+    });
+
+    // Morrison
+    var morrisonEl = document.getElementById('morrison-interruption');
+    if (data.morrison_interruption && data.morrison_interruption.quote) {
+      var m = data.morrison_interruption;
+      var toneClass = m.tone === 'HOSTILE' ? 'morrison-hostile' : '';
+      morrisonEl.innerHTML = '<div class="morrison-card ' + toneClass + '"><div class="card-av av-morrison">JM</div><div><div class="card-name">Jim Morrison <span class="card-role">Corridor Guide</span></div><div class="card-text morrison-quote-text">"' + m.quote + '"</div><div class="morrison-reaction">' + m.panel_reaction + '</div></div></div>';
+      morrisonEl.style.display = 'block';
+    } else {
+      morrisonEl.innerHTML = '';
+      morrisonEl.style.display = 'none';
+    }
+
+    // Abort criteria
+    var abortEl = document.getElementById('abort-block');
+    if (data.abort_criteria) {
+      abortEl.innerHTML = '<div class="abort-block"><div class="abort-label">ABORT CRITERIA</div><div class="abort-text">' + data.abort_criteria + '</div></div>';
+    }
+
+    // Attenborough verdict
+    if (data.attenborough_verdict) {
+      document.getElementById('att-verdict').innerHTML = '<div class="att-bookend"><div class="att-av">DA</div><div style="flex:1"><div class="att-name">David Attenborough</div><div class="att-text">' + data.attenborough_verdict + '</div></div></div>';
+    }
+  },
+  showError(msg) {
+    document.getElementById('loading').style.display = 'none';
+    var e = document.getElementById('error-msg');
+    e.textContent = msg;
+    e.classList.add('show');
+  },
+};
+
+const API = {
+  buildSystemPrompt(morrisonPresent) {
+    var morrisonInjection = buildMorrisonInjection(morrisonPresent);
+    return \`You are the Survival School panel running "One Man In" — the EXFIL/INFIL briefing mode.
+
+=== THE MECHANIC ===
+The user has received a call. A situation is described. There are no orders. No chain of command. No invitation. Craighead runs the brief. The panel assesses the approach, the exit, the route, what to abandon, and whether you make it out.
+
+=== PANEL COMPOSITION ===
+Craighead is ALWAYS the lead briefer. He speaks first and last. Flat, directive, no wasted words. "What's the exit?" is always the first question.
+Billy Billingham assesses whether the plan meets the standard. Professional, exacting.
+Jason Fox provides tactics — approach angles, threat assessment, what you missed. Cold. Precise.
+Ollie Ollerton asks if you're sure you want to do this. Respects the answer either way.
+
+Additional panel members may appear from the wider pool (ray, bear, cody, hales, stroud, stevens, cox, faldo, jim, jeremy) — include 1-2 extras when the situation calls for their expertise. Cox applies physics. Faldo applies golf. Jim makes things worse.
+
+=== CHARACTER VOICES ===
+CRAIGHEAD — "What's the exit." Already moving. Speed, aggression, surprise. Applied identically whether the scenario involves Al-Shabaab or a self-checkout. Does not notice this never varies.
+BILLY — "Does this plan meet the standard? Let me walk you through what the standard is." Exacting. Professional. The standard exists whether you asked for it or not.
+FOX — "Walk me through the extraction. At what point did you identify the secondary exit?" Cold. No preamble. The pause before he says the thing you didn't want to hear.
+OLLIE — "Are you sure?" Genuine. Not a challenge. Not a test. A real question. Respects whatever you say next.
+
+=== COMEDY REGISTER ===
+The operational gravity is applied to EVERYTHING without adjustment. IKEA car park extraction uses the same language as a hostage rescue. Self-checkout at Sainsbury's receives the same threat assessment as an embassy siege. Craighead does not notice the disparity. Nobody points it out. The comedy is structural, never signposted.
+
+\${morrisonInjection}
+
+${SOCIAL_DYNAMICS_ENGINE}
+
+VALID charIds: craighead, billy, fox, ollie, ray, bear, cody, hales, stroud, stevens, cox, faldo, jim, jeremy, packham
+Craighead MUST appear. Billy and Fox SHOULD appear. Include at least 4 panel members total.
+
+OUTPUT — valid JSON only, no markdown:
+{"attenborough_narration":"<one sentence — narrates the user's approach as apex predator entering territory>","exfil_probability":<number 0-100>,"route":["<step 1>","<step 2>","<step 3>"],"what_to_abandon":["<thing 1>","<thing 2>"],"movement_order":"<one sentence — speed/aggression/surprise or equivalent>","panel":[{"charId":"<id>","text":"<2-3 sentences — their briefing contribution, in voice>"}],"abort_criteria":"<one sentence — when to abort and how>","attenborough_verdict":"<one sentence — geological calm, assesses whether the specimen survived>","panel_tension":{"type":"wound_reference|lie|callout|wolf_pack|none","subject":"<charId or empty>","by":["<charId>"],"note":"<one line or empty string>"},"morrison_interruption":<object or null>}\`;
+  },
+
+  async submit(situation, kit) {
+    var morrisonPresent = State.morrisonPresent || false;
+    var system = API.buildSystemPrompt(morrisonPresent);
+    var kitStr = kit.length > 0 ? '\\nKit: ' + kit.join(', ') : '\\nKit: nothing specified';
+    var response = await fetch(WORKER_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ system: system, situation: situation + kitStr, morrison_present: morrisonPresent, composureState: State.composureState }),
+    });
+    if (!response.ok) throw new Error('Worker error ' + response.status);
+    return response.json();
+  },
+};
+
+// Event wiring
+document.querySelectorAll('#situation-chips .chip').forEach(function(chip) {
+  chip.addEventListener('click', function() {
+    document.querySelectorAll('#situation-chips .chip').forEach(function(c) { c.classList.remove('sel'); });
+    chip.classList.add('sel');
+    document.getElementById('situation-input').value = chip.dataset.situation;
+    State.setSituation(chip.dataset.situation);
+    UI.setSubmitEnabled(State.isReady());
+  });
+});
+
+document.querySelectorAll('#kit-chips .kit-chip').forEach(function(chip) {
+  chip.addEventListener('click', function() {
+    chip.classList.toggle('sel');
+    State.toggleKit(chip.dataset.kit);
+  });
+});
+
+document.getElementById('situation-input').addEventListener('input', function(e) {
+  document.querySelectorAll('#situation-chips .chip').forEach(function(c) { c.classList.remove('sel'); });
+  State.setSituation(e.target.value);
+  UI.setSubmitEnabled(State.isReady());
+});
+
+document.getElementById('btn-submit').addEventListener('click', async function() {
+  if (!State.isReady()) return;
+  UI.showLoading();
+  document.getElementById('btn-submit').disabled = true;
+  try {
+    var data = await API.submit(State.situation, State.kit);
+    if (data.composureState) State.setComposureState(data.composureState);
+    if (data.morrison_interruption && data.morrison_interruption.morrison_present !== undefined) {
+      State.morrisonPresent = data.morrison_interruption.morrison_present;
+    } else {
+      State.morrisonPresent = false;
+    }
+    UI.renderResults(data);
+  } catch (err) {
+    UI.showError("Craighead couldn't assess the exit. Try again.");
+  } finally {
+    document.getElementById('btn-submit').disabled = false;
+  }
+});
+
+function onClear() {
+  State.clear();
+  document.querySelectorAll('#situation-chips .chip').forEach(function(c) { c.classList.remove('sel'); });
+  document.querySelectorAll('#kit-chips .kit-chip').forEach(function(c) { c.classList.remove('sel'); });
+  document.getElementById('situation-input').value = '';
+  document.getElementById('results').classList.remove('show');
+  document.getElementById('result-block').style.display = 'none';
+  document.getElementById('loading').style.display = 'block';
+  document.getElementById('att-opening').innerHTML = '';
+  document.getElementById('exfil-meter').innerHTML = '';
+  document.getElementById('route-block').innerHTML = '';
+  document.getElementById('abandon-block').innerHTML = '';
+  document.getElementById('movement-block').innerHTML = '';
+  document.getElementById('cards-out').innerHTML = '';
+  document.getElementById('abort-block').innerHTML = '';
+  document.getElementById('att-verdict').innerHTML = '';
+  document.getElementById('error-msg').classList.remove('show');
+  UI.setSubmitEnabled(false);
+}
+
+function buildShareText() {
+  var lines = ['ONE MAN IN — Survival School', ''];
+  var opening = document.querySelector('#att-opening .att-text');
+  if (opening) lines.push('Attenborough: ' + opening.textContent);
+  var cards = document.querySelectorAll('#cards-out .panel-card');
+  cards.forEach(function(card) {
+    var name = card.querySelector('.card-name');
+    var text = card.querySelector('.card-text');
+    if (name && text) lines.push(name.textContent.trim() + ': ' + text.textContent.trim());
+  });
+  var verdict = document.querySelector('#att-verdict .att-text');
+  if (verdict) lines.push('Attenborough: ' + verdict.textContent);
+  lines.push('', 'Survival School · cusslab-api.leanspirited.workers.dev/survival-school/one-man-in');
+  return lines.join('\\n');
+}
+
+async function shareResult() {
+  var text = buildShareText();
+  var fb = document.getElementById('share-feedback');
+  try {
+    if (navigator.share) {
+      await navigator.share({ title: 'One Man In — Survival School', text: text });
+    } else {
+      await navigator.clipboard.writeText(text);
+      fb.style.display = 'inline';
+      setTimeout(function() { fb.style.display = 'none'; }, 2000);
+    }
+  } catch (e) {
+    try { await navigator.clipboard.writeText(text); fb.style.display = 'inline'; setTimeout(function() { fb.style.display = 'none'; }, 2000); } catch(e2) {}
+  }
+}
+</script>
+
+</body>
+</html>
+`;
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -8047,6 +8568,9 @@ export default {
     }
     if (request.method === 'GET' && url.pathname === '/survival-school/irwin-memorial') {
       return new Response(SURVIVAL_SCHOOL_IRWIN_MEMORIAL, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' }});
+    }
+    if (request.method === 'GET' && url.pathname === '/survival-school/one-man-in') {
+      return new Response(SURVIVAL_SCHOOL_ONE_MAN_IN, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' }});
     }
     if (request.method !== 'POST') {
       return new Response('Method not allowed', { status: 405 });
@@ -8148,6 +8672,34 @@ export default {
       const raw = anthropicData.content[0].text;
       const text = raw.replace(/^```(?:json)?\s*/i, '').replace(/\s*```\s*$/, '').trim();
       return new Response(text, { status: 200, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }});
+    }
+    if (url.pathname === '/survival-school/one-man-in') {
+      const body = await request.json();
+      const composureState = body.composureState || null;
+      let system = body.system;
+      if (composureState) {
+        system = system + buildComposureInjection(composureState, null);
+      }
+      const upstream = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'anthropic-version': '2023-06-01', 'x-api-key': apiKey },
+        body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 2200, system, messages: [{ role: 'user', content: `Situation: ${body.situation}` }] }),
+      });
+      if (!upstream.ok) {
+        return new Response(JSON.stringify({ error: { message: `Anthropic error ${upstream.status}` } }), {
+          status: upstream.status, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
+        });
+      }
+      const anthropicData = await upstream.json();
+      const raw = anthropicData.content[0].text;
+      const text = raw.replace(/^```(?:json)?\s*/i, '').replace(/\s*```\s*$/, '').trim();
+      let parsed;
+      try { parsed = JSON.parse(text); } catch (e) {
+        return new Response(text, { status: 200, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } });
+      }
+      const baseComposure = composureState || initComposureState();
+      parsed.composureState = computeComposureDeltas(baseComposure, parsed.panel_tension);
+      return new Response(JSON.stringify(parsed), { status: 200, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }});
     }
     if (url.pathname === '/survival-school/coyote') {
       const body = await request.json();
