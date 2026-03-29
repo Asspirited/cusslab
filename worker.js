@@ -489,6 +489,12 @@ const SURVIVAL_SCHOOL_HOME = `<!DOCTYPE html>
 
 </main>
 
+<footer style="max-width:800px;margin:2rem auto 0;padding:1.5rem 1rem 2rem;border-top:0.5px solid rgba(122,173,58,0.12);text-align:center;">
+  <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:3px;color:#7a8a60;opacity:0.5;">SURVIVAL <span style="color:#BA7517;">SCHOOL</span></div>
+  <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;color:#4a5a30;margin-top:6px;text-transform:uppercase;">Panel comedy meets genuine expertise</div>
+  <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:1.5px;color:#3a4a20;margin-top:10px;opacity:0.5;">Built by Rod &middot; Powered by the panel &middot; Attenborough observes</div>
+</footer>
+
 </body>
 </html>
 `;
