@@ -6474,15 +6474,26 @@ Characters are sincere. They do not know they are in a mechanic. They are simply
 The comedy is structural — from the compulsory escalation — NOT from characters winking at the audience.
 \${protagonistName} (charId: \${protagonist}) is the protagonist — their entry must be the most extreme and MUST be present in the panel array.
 Attenborough does NOT appear in the panel array. He bookends.
-Cox and Faldo are permanent panel members on rotation. They may both appear in the same panel — when they do, the MUTUAL AGREEMENT mechanic fires (see below).
+Cox and Faldo are permanent panel members on rotation. They may both appear in the same panel — two mechanics exist depending on who else is present:
 
-=== MUTUAL AGREEMENT (fires when BOTH cox AND faldo are in the panel) ===
+=== MUTUAL AGREEMENT (fires when BOTH cox AND faldo are in the panel AND at least one expert is present) ===
+Expert charIds: ray, bear, fox, hales, cody, stroud, stevens, jeremy.
 Cox and Faldo find a point of apparent overlap and agree with each other with complete conviction about something both are completely wrong about.
 - They reinforce each other: "Exactly — that's what I was going to say." "Nick's absolutely right."
 - The thing they agree on is specific, confident, and entirely incorrect in the survival domain.
-- The actual experts (Ray, Fox, Stevens, Hales) observe this in visible discomfort. They do not intervene. The silence is the joke.
+- The actual experts observe this in visible discomfort. They do not intervene. The silence is the joke.
 - Attenborough, if closing, may note the agreement without correcting it. He has seen this before.
-- If only ONE of cox/faldo is in the panel, this mechanic does NOT fire — they behave normally as individual fish-out-of-water guests.
+
+=== ARGUMENT (fires when BOTH cox AND faldo are in the panel AND NO expert is present) ===
+Expert charIds: ray, bear, fox, hales, cody, stroud, stevens, jeremy. If NONE of these are in the panel, ARGUMENT fires instead of MUTUAL AGREEMENT.
+Cox and Faldo disagree on a specific survival point. Both are wrong. Neither knows enough to realise the other is also wrong.
+- They are specific: Cox invokes a physics principle that doesn't apply. Faldo references a round of golf where the conditions were "basically identical."
+- They are personally invested: "With respect, Brian, you've clearly never been in a real bunker." "Nick, I've modelled fluid dynamics at CERN — I think I understand rain."
+- Each round they escalate: more specific, more wrong, more offended that the other doesn't see it.
+- No one corrects them. There is no expert present to do so. The absence of correction IS the joke.
+- Attenborough, if closing, references the argument with gentle bewilderment. He does not resolve it.
+
+If only ONE of cox/faldo is in the panel, NEITHER mechanic fires — they behave normally as individual fish-out-of-water guests.
 
 VALID charIds — use ONLY these exact values, no others:
   ray, bear, fox, hales, cody, stroud, stevens, cox, faldo, jim, jeremy
@@ -7099,15 +7110,26 @@ This is an interrogation. Not a roast. Not a support session.
 Characters are sincere — they genuinely want to understand, which is why the questions are so precise.
 The protagonist's entry makes the position WORSE — more detail, more conviction, worse facts.
 Attenborough does NOT appear in the panel array. He bookends.
-Cox and Faldo on rotation. They may both appear in the same panel — when they do, the MUTUAL AGREEMENT mechanic fires (see below).
+Cox and Faldo on rotation. They may both appear in the same panel — two mechanics exist depending on who else is present:
 
-=== MUTUAL AGREEMENT (fires when BOTH cox AND faldo are in the panel) ===
+=== MUTUAL AGREEMENT (fires when BOTH cox AND faldo are in the panel AND at least one expert is present) ===
+Expert charIds: ray, bear, fox, hales, cody, stroud, stevens, jeremy.
 Cox and Faldo find a point of apparent overlap and agree with each other with complete conviction about something both are completely wrong about.
 - They reinforce each other's questioning angle: "That's exactly the question I had." "Nick raises an excellent point."
 - The thing they agree on is specific, confident, and entirely incorrect in the survival/defence domain.
-- The actual experts (Ray, Fox, Stevens, Hales) observe this in visible discomfort. They do not intervene. The silence is the joke.
+- The actual experts observe this in visible discomfort. They do not intervene. The silence is the joke.
 - Attenborough, if closing, may note the agreement without correcting it.
-- If only ONE of cox/faldo is in the panel, this mechanic does NOT fire — they behave normally as individual fish-out-of-water guests.
+
+=== ARGUMENT (fires when BOTH cox AND faldo are in the panel AND NO expert is present) ===
+Expert charIds: ray, bear, fox, hales, cody, stroud, stevens, jeremy. If NONE of these are in the panel, ARGUMENT fires instead of MUTUAL AGREEMENT.
+Cox and Faldo disagree on a specific defence/survival point. Both are wrong. Neither knows enough to realise the other is also wrong.
+- They are specific: Cox questions the physics of the protagonist's defence. Faldo questions the technique — "your stance was all wrong."
+- They are personally invested: the disagreement becomes about each other, not the protagonist.
+- Each round they escalate: more specific, more wrong, more offended.
+- No one corrects them. There is no expert present to do so. The absence of correction IS the joke.
+- Attenborough, if closing, references the argument with gentle bewilderment. He does not resolve it.
+
+If only ONE of cox/faldo is in the panel, NEITHER mechanic fires — they behave normally as individual fish-out-of-water guests.
 
 VALID charIds — use ONLY these exact values:
   ray, bear, fox, hales, cody, stroud, stevens, cox, faldo, jim, jeremy
