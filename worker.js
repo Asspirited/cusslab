@@ -6303,6 +6303,11 @@ const SURVIVAL_SCHOOL_IVE_HAD_WORSE = `<!DOCTYPE html>
     .card-name .badge-protagonist { font-size: 8px; letter-spacing: 1px; color: var(--amber); border: 0.5px solid var(--amber-dim); border-radius: 3px; padding: 1px 4px; }
     .thread-indicator { font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: var(--text-muted); opacity: 0.7; margin-bottom: 2px; }
     .panel-card.has-reference { border-left: 2px solid var(--gold-dim); }
+    .protagonist-response-card { display: flex; gap: 10px; padding: 12px; margin: 12px 0; border-radius: 8px; border: 0.5px solid var(--amber-dim); background: rgba(30,24,8,0.5); }
+    .protagonist-response-card .card-name span:last-child { font-style: italic; }
+    .btn-dig { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 2px; padding: 10px 20px; border: 0.5px solid var(--amber-dim); border-radius: 5px; background: transparent; color: var(--amber); cursor: pointer; transition: all 0.15s; display: block; margin: 12px auto; text-transform: uppercase; }
+    .btn-dig:hover { border-color: var(--amber); background: rgba(90,60,10,0.2); }
+    .dig-closed { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-muted); text-align: center; margin: 12px 0; opacity: 0.7; }
     .card-text { font-size: 13.5px; line-height: 1.65; color: var(--text); }
 
     .terminal-label { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 2px; color: var(--text-muted); text-transform: uppercase; margin: 1.2rem 0 6px; opacity: 0.5; }
@@ -6417,6 +6422,8 @@ const SURVIVAL_SCHOOL_IVE_HAD_WORSE = `<!DOCTYPE html>
       <div class="panel-label">THE PANEL</div>
       <div id="cards-out"></div>
       <div id="morrison-interruption" style="display:none"></div>
+      <div id="protagonist-response-block" style="display:none"></div>
+      <div id="dig-block" style="display:none"></div>
       <div class="terminal-label">ATTENBOROUGH CLOSES THE ROOM</div>
       <div class="att-bookend" id="att-terminal" style="display:none">
         <div class="att-av">DA</div>
@@ -6596,6 +6603,58 @@ const UI = {
       morrisonEl.style.display = 'none';
     }
 
+    // Protagonist auto-response (SS-061)
+    const protResEl = document.getElementById('protagonist-response-block');
+    if (data.protagonist_response && protagonistId) {
+      const pChar = CHARACTERS[protagonistId];
+      if (pChar) {
+        protResEl.innerHTML = \`<div class="protagonist-response-card">
+          <div class="av \${pChar.avClass}">\${pChar.av}</div>
+          <div class="card-meta">
+            <div class="card-name"><span>\${pChar.name}</span><span style="opacity:0.5">can't help themselves</span></div>
+            <div class="card-text">\${data.protagonist_response}</div>
+          </div>
+        </div>\`;
+        protResEl.style.display = 'block';
+      }
+
+      // Track history for multi-turn
+      if (!State.turnHistory) State.turnHistory = [];
+      State.turnHistory.push({
+        panelSummary: (data.panel || []).map(r => (r.charId || '') + ': ' + (r.text || '').slice(0, 80)).join('; '),
+        protagonistResponse: data.protagonist_response
+      });
+      State.turnCount = (State.turnCount || 0) + 1;
+
+      // Show LET THEM DIG button (max 5 rounds)
+      const digEl = document.getElementById('dig-block');
+      if (State.turnCount < 5) {
+        digEl.innerHTML = '<button class="btn-dig" id="btn-dig">LET THEM DIG</button>';
+        digEl.style.display = 'block';
+        document.getElementById('btn-dig').addEventListener('click', async () => {
+          digEl.style.display = 'none';
+          protResEl.style.display = 'none';
+          document.getElementById('att-terminal').style.display = 'none';
+          document.getElementById('loading').style.display = 'block';
+          try {
+            const nextData = await API.submit(State.predicament, State.protagonist, State.turnCount + 1, State.turnHistory);
+            if (nextData.composureState) State.setComposureState(nextData.composureState);
+            if (nextData.morrison_interruption && nextData.morrison_interruption.morrison_present !== undefined) {
+              State.morrisonPresent = nextData.morrison_interruption.morrison_present;
+            }
+            UI.renderResults(nextData, protagonistId);
+          } catch (err) {
+            document.getElementById('error-msg').textContent = "The panel couldn't reconvene. Try again.";
+            document.getElementById('error-msg').classList.add('show');
+            document.getElementById('loading').style.display = 'none';
+          }
+        });
+      } else {
+        digEl.innerHTML = '<div class="dig-closed">The room is closed. Attenborough has spoken.</div>';
+        digEl.style.display = 'block';
+      }
+    }
+
     // Attenborough terminal
     const terminalEl = document.getElementById('att-terminal');
     const terminalText = document.getElementById('att-terminal-text');
@@ -6613,14 +6672,20 @@ const UI = {
     document.getElementById('att-opening').innerHTML = '';
     document.getElementById('cards-out').innerHTML = '';
     document.getElementById('att-terminal').style.display = 'none';
+    document.getElementById('protagonist-response-block').style.display = 'none';
+    document.getElementById('dig-block').style.display = 'none';
     document.getElementById('error-msg').classList.remove('show');
+    State.turnHistory = [];
+    State.turnCount = 0;
   },
 };
 
 const API = {
-  buildSystemPrompt(protagonist, morrisonPresent) {
+  buildSystemPrompt(protagonist, morrisonPresent, turn, history) {
     const char = CHARACTERS[protagonist];
     const protagonistName = char ? char.name : protagonist;
+    turn = turn || 1;
+    history = history || [];
     const morrisonInjection = buildMorrisonInjection(morrisonPresent);
     return \`You are the Survival School panel running the "I've Had Worse" mechanic.
 
@@ -6681,6 +6746,15 @@ When a character references another, include an optional "reacts_to" object in t
   "reacts_to": {"charId":"<referenced charId>","register":"endorsement|quiet_disagreement|silence_noted|deflation|builds_on"}
 Only include reacts_to when a genuine cross-reference occurs. Omit it otherwise.
 
+=== PROTAGONIST AUTO-RESPONSE (SS-061) ===
+After the panel has spoken, the protagonist CANNOT HELP THEMSELVES. They respond automatically.
+Include a "protagonist_response" field: 2-3 sentences where the protagonist reacts to what the panel said.
+The protagonist makes their position WORSE — more detail, more conviction, worse facts. They cannot stop.
+Bear doubles down with a worse story. Cody goes quieter but more absolute. Jim Carrey cycles into a new mode.
+The protagonist_response is the seed for the next round. It gives the panel something new to escalate from.
+\${turn > 1 ? 'This is round ' + turn + '. The protagonist has already responded ' + (turn - 1) + ' time(s). Each round they dig deeper. NEVER repeat what was said in a previous round. Escalate only.' : 'This is the first round.'}
+\${history.length > 0 ? 'PREVIOUS EXCHANGE:\\n' + history.map((h, i) => 'Round ' + (i+1) + ' — Panel said: ' + h.panelSummary + ' | Protagonist responded: ' + h.protagonistResponse).join('\\n') : ''}
+
 === CRITICAL RULES ===
 Characters are sincere. They do not know they are in a mechanic. They are simply recounting their experience.
 The comedy is structural — from the compulsory escalation — NOT from characters winking at the audience.
@@ -6716,12 +6790,12 @@ Include at least 3 panel members. The protagonist charId "\${protagonist}" must 
 ${SOCIAL_DYNAMICS_ENGINE}
 
 OUTPUT — valid JSON only, no markdown:
-{"attenborough_opening":"<one sentence, nature doc, frames the user's predicament as a minor event in the natural order>","panel":[{"charId":"ray|bear|fox|hales|cody|stroud|stevens|cox|faldo|jim|jeremy|packham","text":"<1-2 sentences — their worse experience, absolutely sincere>","reacts_to":{"charId":"<referenced charId>","register":"endorsement|quiet_disagreement|silence_noted|deflation|builds_on"}}],"attenborough_terminal":"<one sentence, geological calm, closes the room, no appeal>","panel_tension":{"type":"wound_reference|lie|callout|wolf_pack|none","subject":"<charId or empty>","by":["<charId>"],"note":"<one line or empty string>"},"morrison_interruption":<object or null — see MORRISON rules above>}\`;
+{"attenborough_opening":"<one sentence, nature doc, frames the user's predicament as a minor event in the natural order>","panel":[{"charId":"ray|bear|fox|hales|cody|stroud|stevens|cox|faldo|jim|jeremy|packham","text":"<1-2 sentences — their worse experience, absolutely sincere>","reacts_to":{"charId":"<referenced charId>","register":"endorsement|quiet_disagreement|silence_noted|deflation|builds_on"}}],"protagonist_response":"<2-3 sentences — the protagonist responds automatically, in character, making their position WORSE — more detail, more conviction, worse facts>","attenborough_terminal":"<one sentence, geological calm, closes the room, no appeal>","panel_tension":{"type":"wound_reference|lie|callout|wolf_pack|none","subject":"<charId or empty>","by":["<charId>"],"note":"<one line or empty string>"},"morrison_interruption":<object or null — see MORRISON rules above>}\`;
   },
 
-  async submit(predicament, protagonist) {
+  async submit(predicament, protagonist, turn, history) {
     const morrisonPresent = State.morrisonPresent || false;
-    const system = API.buildSystemPrompt(protagonist, morrisonPresent);
+    const system = API.buildSystemPrompt(protagonist, morrisonPresent, turn || 1, history || []);
     const response = await fetch(WORKER_ENDPOINT, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -6962,6 +7036,11 @@ const SURVIVAL_SCHOOL_IN_MY_DEFENCE = `<!DOCTYPE html>
     .card-name .badge-protagonist { font-size: 8px; letter-spacing: 1px; color: var(--red-bright); border: 0.5px solid var(--red); border-radius: 3px; padding: 1px 4px; }
     .thread-indicator { font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: var(--text-muted); opacity: 0.7; margin-bottom: 2px; }
     .panel-card.has-reference { border-left: 2px solid var(--gold-dim); }
+    .protagonist-response-card { display: flex; gap: 10px; padding: 12px; margin: 12px 0; border-radius: 8px; border: 0.5px solid var(--red-dim); background: rgba(30,8,8,0.3); }
+    .protagonist-response-card .card-name span:last-child { font-style: italic; }
+    .btn-dig { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 2px; padding: 10px 20px; border: 0.5px solid var(--red-dim); border-radius: 5px; background: transparent; color: var(--red-bright); cursor: pointer; transition: all 0.15s; display: block; margin: 12px auto; text-transform: uppercase; }
+    .btn-dig:hover { border-color: var(--red); background: rgba(90,10,10,0.2); }
+    .dig-closed { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-muted); text-align: center; margin: 12px 0; opacity: 0.7; }
     .card-role { font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: var(--text-muted); opacity: 0.6; }
     .card-text { font-size: 14px; line-height: 1.6; color: var(--text); }
 
@@ -7060,6 +7139,8 @@ const SURVIVAL_SCHOOL_IN_MY_DEFENCE = `<!DOCTYPE html>
       <div class="committee-label">THE COMMITTEE</div>
       <div id="cards-out"></div>
       <div id="morrison-interruption" style="display:none"></div>
+      <div id="protagonist-response-block" style="display:none"></div>
+      <div id="dig-block" style="display:none"></div>
       <div class="verdict-label">ATTENBOROUGH DELIVERS THE VERDICT</div>
       <div class="att-bookend" id="att-verdict" style="display:none">
         <div class="att-av">DA</div>
@@ -7303,6 +7384,58 @@ const UI = {
       morrisonEl.style.display = 'none';
     }
 
+    // Protagonist auto-response (SS-061)
+    const protResEl = document.getElementById('protagonist-response-block');
+    if (data.protagonist_response && protagonistId) {
+      const pChar = CHARACTERS[protagonistId];
+      if (pChar) {
+        protResEl.innerHTML = \`<div class="protagonist-response-card">
+          <div class="card-av \${pChar.avClass}">\${pChar.av}</div>
+          <div>
+            <div class="card-name"><span>\${pChar.name}</span> <span>can't help themselves</span></div>
+            <div class="card-text">\${data.protagonist_response}</div>
+          </div>
+        </div>\`;
+        protResEl.style.display = 'block';
+      }
+
+      // Track history for multi-turn
+      if (!State.turnHistory) State.turnHistory = [];
+      State.turnHistory.push({
+        panelSummary: (data.panel || []).map(r => (r.charId || '') + ': ' + (r.text || '').slice(0, 80)).join('; '),
+        protagonistResponse: data.protagonist_response
+      });
+      State.turnCount = (State.turnCount || 0) + 1;
+
+      // Show LET THEM DIG button (max 5 rounds)
+      const digEl = document.getElementById('dig-block');
+      if (State.turnCount < 5) {
+        digEl.innerHTML = '<button class="btn-dig" id="btn-dig">LET THEM DIG</button>';
+        digEl.style.display = 'block';
+        document.getElementById('btn-dig').addEventListener('click', async () => {
+          digEl.style.display = 'none';
+          protResEl.style.display = 'none';
+          document.getElementById('att-verdict').style.display = 'none';
+          document.getElementById('loading').style.display = 'block';
+          try {
+            const nextData = await API.submit(State.incident, State.protagonist, State.turnCount + 1, State.turnHistory);
+            if (nextData.composureState) State.setComposureState(nextData.composureState);
+            if (nextData.morrison_interruption && nextData.morrison_interruption.morrison_present !== undefined) {
+              State.morrisonPresent = nextData.morrison_interruption.morrison_present;
+            }
+            UI.renderResults(nextData, protagonistId);
+          } catch (err) {
+            document.getElementById('error-msg').textContent = "The panel couldn't reconvene. Try again.";
+            document.getElementById('error-msg').classList.add('show');
+            document.getElementById('loading').style.display = 'none';
+          }
+        });
+      } else {
+        digEl.innerHTML = '<div class="dig-closed">The room is closed. Attenborough has spoken.</div>';
+        digEl.style.display = 'block';
+      }
+    }
+
     if (data.attenborough_verdict) {
       const vEl = document.getElementById('att-verdict');
       document.getElementById('att-verdict-text').textContent = data.attenborough_verdict;
@@ -7318,9 +7451,11 @@ const UI = {
 };
 
 const API = {
-  buildSystemPrompt(protagonist, morrisonPresent) {
+  buildSystemPrompt(protagonist, morrisonPresent, turn, history) {
     const char = CHARACTERS[protagonist];
     const protagonistName = char ? char.name : protagonist;
+    turn = turn || 1;
+    history = history || [];
     const morrisonInjection = buildMorrisonInjection(morrisonPresent);
     return \`You are the Survival School panel running the "In My Defence" mechanic.
 
@@ -7362,6 +7497,15 @@ When a character references another, include an optional "reacts_to" object in t
   "reacts_to": {"charId":"<referenced charId>","register":"endorsement|quiet_disagreement|silence_noted|deflation|builds_on"}
 Only include reacts_to when a genuine cross-reference occurs. Omit it otherwise.
 
+=== PROTAGONIST AUTO-RESPONSE (SS-061) ===
+After the panel has spoken, the protagonist CANNOT HELP THEMSELVES. They respond automatically.
+Include a "protagonist_response" field: 2-3 sentences where the protagonist reacts to what the panel said.
+The protagonist makes their position WORSE — more detail, more conviction, worse facts. They cannot stop.
+Bear doubles down with a worse defence. Cody goes quieter but more absolute. Jim Carrey cycles into a new mode.
+The protagonist_response is the seed for the next round. It gives the panel something new to press on.
+\${turn > 1 ? 'This is round ' + turn + '. The protagonist has already responded ' + (turn - 1) + ' time(s). Each round they dig deeper. NEVER repeat what was said in a previous round. Escalate only.' : 'This is the first round.'}
+\${history.length > 0 ? 'PREVIOUS EXCHANGE:\\n' + history.map((h, i) => 'Round ' + (i+1) + ' — Panel said: ' + h.panelSummary + ' | Protagonist responded: ' + h.protagonistResponse).join('\\n') : ''}
+
 === CRITICAL RULES ===
 This is an interrogation. Not a roast. Not a support session.
 Characters are sincere — they genuinely want to understand, which is why the questions are so precise.
@@ -7397,12 +7541,12 @@ Include at least 3 panel members. The protagonist charId "\${protagonist}" MUST 
 ${SOCIAL_DYNAMICS_ENGINE}
 
 OUTPUT — valid JSON only, no markdown:
-{"attenborough_opening":"<one sentence, nature documentary, observes the protagonist entering — species under examination, already under pressure>","panel":[{"charId":"<id>","text":"<2-3 sentences — their specific question or observation, absolutely sincere, presses a specific detail>","reacts_to":{"charId":"<referenced charId>","register":"endorsement|quiet_disagreement|silence_noted|deflation|builds_on"}}],"attenborough_verdict":"<one sentence, geological calm — the case is concluded, the rationalisation has not survived>","panel_tension":{"type":"wound_reference|lie|callout|wolf_pack|none","subject":"<charId or empty>","by":["<charId>"],"note":"<one line or empty string>"},"morrison_interruption":<object or null — see MORRISON rules above>}\`;
+{"attenborough_opening":"<one sentence, nature documentary, observes the protagonist entering — species under examination, already under pressure>","panel":[{"charId":"<id>","text":"<2-3 sentences — their specific question or observation, absolutely sincere, presses a specific detail>","reacts_to":{"charId":"<referenced charId>","register":"endorsement|quiet_disagreement|silence_noted|deflation|builds_on"}}],"protagonist_response":"<2-3 sentences — the protagonist responds automatically, in character, making their position WORSE>","attenborough_verdict":"<one sentence, geological calm — the case is concluded, the rationalisation has not survived>","panel_tension":{"type":"wound_reference|lie|callout|wolf_pack|none","subject":"<charId or empty>","by":["<charId>"],"note":"<one line or empty string>"},"morrison_interruption":<object or null — see MORRISON rules above>}\`;
   },
 
-  async submit(incident, protagonist) {
+  async submit(incident, protagonist, turn, history) {
     const morrisonPresent = State.morrisonPresent || false;
-    const system = API.buildSystemPrompt(protagonist, morrisonPresent);
+    const system = API.buildSystemPrompt(protagonist, morrisonPresent, turn || 1, history || []);
     const response = await fetch(WORKER_ENDPOINT, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -7483,7 +7627,11 @@ function onClear() {
   document.getElementById('att-opening').innerHTML = '';
   document.getElementById('cards-out').innerHTML = '';
   document.getElementById('att-verdict').style.display = 'none';
+  document.getElementById('protagonist-response-block').style.display = 'none';
+  document.getElementById('dig-block').style.display = 'none';
   document.getElementById('error-msg').classList.remove('show');
+  State.turnHistory = [];
+  State.turnCount = 0;
   UI.setSubmitEnabled(false);
 }
 
