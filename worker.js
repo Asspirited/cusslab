@@ -6301,6 +6301,8 @@ const SURVIVAL_SCHOOL_IVE_HAD_WORSE = `<!DOCTYPE html>
     .card-meta { flex: 1; min-width: 0; }
     .card-name { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 1.5px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 5px; display: flex; gap: 8px; align-items: center; }
     .card-name .badge-protagonist { font-size: 8px; letter-spacing: 1px; color: var(--amber); border: 0.5px solid var(--amber-dim); border-radius: 3px; padding: 1px 4px; }
+    .thread-indicator { font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: var(--text-muted); opacity: 0.7; margin-bottom: 2px; }
+    .panel-card.has-reference { border-left: 2px solid var(--gold-dim); }
     .card-text { font-size: 13.5px; line-height: 1.65; color: var(--text); }
 
     .terminal-label { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 2px; color: var(--text-muted); text-transform: uppercase; margin: 1.2rem 0 6px; opacity: 0.5; }
@@ -6562,10 +6564,14 @@ const UI = {
       if (!char) return;
       const isProtagonist = r.charId === protagonistId;
       const badgeHtml = isProtagonist ? '<span class="badge-protagonist">PROTAGONIST</span>' : '';
-      cardsEl.innerHTML += \`<div class="panel-card\${isProtagonist ? ' protagonist' : ''}">
+      const reactsHtml = r.reacts_to && r.reacts_to.charId && CHARACTERS[r.reacts_to.charId]
+        ? \`<div class="thread-indicator reacts-to">↳ re: \${CHARACTERS[r.reacts_to.charId].name}</div>\`
+        : '';
+      cardsEl.innerHTML += \`<div class="panel-card\${isProtagonist ? ' protagonist' : ''}\${r.reacts_to ? ' has-reference' : ''}">
         <div class="av \${char.avClass}">\${char.av}</div>
         <div class="card-meta">
           <div class="card-name"><span>\${char.name}</span><span style="opacity:0.5">\${char.role}</span>\${badgeHtml}</div>
+          \${reactsHtml}
           <div class="card-text">\${r.text}</div>
         </div>
       </div>\`;
@@ -6668,6 +6674,13 @@ PACKHAM ETHICAL OVERRIDE (SS-013) — fires when Packham is in the panel AND the
 - His objection changes the room's register — other characters respond to the shift, not to Packham directly.
 - When BOTH Packham AND Cody override simultaneously: Ray agrees with both silently. Bear does the thing anyway with extra flair. Hales does the correct version without mentioning it. Attenborough observes.
 
+=== CROSS-CHARACTER REFERENCES (SS-060) ===
+Where a character has a strong established relationship with another panellist who has already spoken, they may reference that panellist directly — once, briefly, in their natural register. This is OPTIONAL — not every card needs it. Use only when the relationship adds comedy or tension.
+Bear never directly contradicts Ray; silence and contrast do the work. Fox endorses Hales with one word. Billy's reference to Bear's TA service fires once per session maximum. The relationship does not need to be explained.
+When a character references another, include an optional "reacts_to" object in their panel entry:
+  "reacts_to": {"charId":"<referenced charId>","register":"endorsement|quiet_disagreement|silence_noted|deflation|builds_on"}
+Only include reacts_to when a genuine cross-reference occurs. Omit it otherwise.
+
 === CRITICAL RULES ===
 Characters are sincere. They do not know they are in a mechanic. They are simply recounting their experience.
 The comedy is structural — from the compulsory escalation — NOT from characters winking at the audience.
@@ -6703,7 +6716,7 @@ Include at least 3 panel members. The protagonist charId "\${protagonist}" must 
 ${SOCIAL_DYNAMICS_ENGINE}
 
 OUTPUT — valid JSON only, no markdown:
-{"attenborough_opening":"<one sentence, nature doc, frames the user's predicament as a minor event in the natural order>","panel":[{"charId":"ray|bear|fox|hales|cody|stroud|stevens|cox|faldo|jim|jeremy|packham","text":"<1-2 sentences — their worse experience, absolutely sincere>"}],"attenborough_terminal":"<one sentence, geological calm, closes the room, no appeal>","panel_tension":{"type":"wound_reference|lie|callout|wolf_pack|none","subject":"<charId or empty>","by":["<charId>"],"note":"<one line or empty string>"},"morrison_interruption":<object or null — see MORRISON rules above>}\`;
+{"attenborough_opening":"<one sentence, nature doc, frames the user's predicament as a minor event in the natural order>","panel":[{"charId":"ray|bear|fox|hales|cody|stroud|stevens|cox|faldo|jim|jeremy|packham","text":"<1-2 sentences — their worse experience, absolutely sincere>","reacts_to":{"charId":"<referenced charId>","register":"endorsement|quiet_disagreement|silence_noted|deflation|builds_on"}}],"attenborough_terminal":"<one sentence, geological calm, closes the room, no appeal>","panel_tension":{"type":"wound_reference|lie|callout|wolf_pack|none","subject":"<charId or empty>","by":["<charId>"],"note":"<one line or empty string>"},"morrison_interruption":<object or null — see MORRISON rules above>}\`;
   },
 
   async submit(predicament, protagonist) {
@@ -6947,6 +6960,8 @@ const SURVIVAL_SCHOOL_IN_MY_DEFENCE = `<!DOCTYPE html>
     .av-purple{ background: #1a1030; color: var(--purple); }
     .card-name { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1px; color: var(--text-muted); }
     .card-name .badge-protagonist { font-size: 8px; letter-spacing: 1px; color: var(--red-bright); border: 0.5px solid var(--red); border-radius: 3px; padding: 1px 4px; }
+    .thread-indicator { font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: var(--text-muted); opacity: 0.7; margin-bottom: 2px; }
+    .panel-card.has-reference { border-left: 2px solid var(--gold-dim); }
     .card-role { font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: var(--text-muted); opacity: 0.6; }
     .card-text { font-size: 14px; line-height: 1.6; color: var(--text); }
 
@@ -7256,11 +7271,15 @@ const UI = {
       const char = CHARACTERS[r.charId] || { name: r.charId, role: '', av: '?', avClass: '' };
       const isProtagonist = r.charId === protagonistId;
       const badge = isProtagonist ? '<span class="badge-protagonist">IN THE ROOM</span>' : '';
-      cardsEl.innerHTML += \`<div class="panel-card char-\${r.charId}\${isProtagonist ? ' protagonist' : ''}">
+      const reactsHtml = r.reacts_to && r.reacts_to.charId && CHARACTERS[r.reacts_to.charId]
+        ? \`<div class="thread-indicator reacts-to">↳ re: \${CHARACTERS[r.reacts_to.charId].name}</div>\`
+        : '';
+      cardsEl.innerHTML += \`<div class="panel-card char-\${r.charId}\${isProtagonist ? ' protagonist' : ''}\${r.reacts_to ? ' has-reference' : ''}">
         <div class="card-header">
           <div class="card-av \${char.avClass}">\${char.av}</div>
           <div><div class="card-name">\${char.name} \${badge}</div><div class="card-role">\${char.role}</div></div>
         </div>
+        \${reactsHtml}
         <div class="card-text">\${r.text}</div>
       </div>\`;
     });
@@ -7337,6 +7356,12 @@ PACKHAM ETHICAL OVERRIDE (SS-013) — fires when Packham is in the panel AND the
 - His objection changes the room's register — other characters respond to the shift, not to Packham directly.
 - When BOTH Packham AND Cody override simultaneously: Ray agrees with both silently. Bear does the thing anyway. Hales does the correct version without mentioning it. Attenborough observes.
 
+=== CROSS-CHARACTER REFERENCES (SS-060) ===
+Where a character has a strong established relationship with another panellist who has already spoken, they may reference that panellist directly — once, briefly, in their natural register. This is OPTIONAL — not every card needs it. Use only when the relationship adds comedy or tension.
+When a character references another, include an optional "reacts_to" object in their panel entry:
+  "reacts_to": {"charId":"<referenced charId>","register":"endorsement|quiet_disagreement|silence_noted|deflation|builds_on"}
+Only include reacts_to when a genuine cross-reference occurs. Omit it otherwise.
+
 === CRITICAL RULES ===
 This is an interrogation. Not a roast. Not a support session.
 Characters are sincere — they genuinely want to understand, which is why the questions are so precise.
@@ -7372,7 +7397,7 @@ Include at least 3 panel members. The protagonist charId "\${protagonist}" MUST 
 ${SOCIAL_DYNAMICS_ENGINE}
 
 OUTPUT — valid JSON only, no markdown:
-{"attenborough_opening":"<one sentence, nature documentary, observes the protagonist entering — species under examination, already under pressure>","panel":[{"charId":"<id>","text":"<2-3 sentences — their specific question or observation, absolutely sincere, presses a specific detail>"}],"attenborough_verdict":"<one sentence, geological calm — the case is concluded, the rationalisation has not survived>","panel_tension":{"type":"wound_reference|lie|callout|wolf_pack|none","subject":"<charId or empty>","by":["<charId>"],"note":"<one line or empty string>"},"morrison_interruption":<object or null — see MORRISON rules above>}\`;
+{"attenborough_opening":"<one sentence, nature documentary, observes the protagonist entering — species under examination, already under pressure>","panel":[{"charId":"<id>","text":"<2-3 sentences — their specific question or observation, absolutely sincere, presses a specific detail>","reacts_to":{"charId":"<referenced charId>","register":"endorsement|quiet_disagreement|silence_noted|deflation|builds_on"}}],"attenborough_verdict":"<one sentence, geological calm — the case is concluded, the rationalisation has not survived>","panel_tension":{"type":"wound_reference|lie|callout|wolf_pack|none","subject":"<charId or empty>","by":["<charId>"],"note":"<one line or empty string>"},"morrison_interruption":<object or null — see MORRISON rules above>}\`;
   },
 
   async submit(incident, protagonist) {
@@ -8306,6 +8331,8 @@ const SURVIVAL_SCHOOL_ONE_MAN_IN = `<!DOCTYPE html>
     .card-role { font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: var(--text-muted); letter-spacing: 1px; }
     .card-text { font-size: 14px; line-height: 1.6; }
     .badge-lead { font-family: 'IBM Plex Mono', monospace; font-size: 8px; letter-spacing: 1px; padding: 2px 5px; border-radius: 3px; background: var(--green-dim); color: var(--green); margin-left: 6px; }
+    .thread-indicator { font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: var(--text-muted); opacity: 0.7; margin-bottom: 2px; padding-left: 44px; }
+    .panel-card.has-reference { border-left: 2px solid var(--gold-dim); }
 
     .att-bookend { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 16px; padding: 14px; background: var(--surface); border: 0.5px solid var(--border); border-radius: 8px; }
     .att-av { width: 36px; height: 36px; border-radius: 50%; background: rgba(40,60,30,0.5); color: var(--green); display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 14px; flex-shrink: 0; }
@@ -8527,7 +8554,11 @@ const UI = {
       var char = CHARACTERS[r.charId] || { name: r.charId, role: '', av: '?', avClass: '' };
       var isLead = r.charId === 'craighead';
       var badge = isLead ? '<span class="badge-lead">LEAD</span>' : '';
-      cardsEl.innerHTML += '<div class="panel-card"><div class="card-header"><div class="card-av ' + char.avClass + '">' + char.av + '</div><div><div class="card-name">' + char.name + ' ' + badge + '</div><div class="card-role">' + char.role + '</div></div></div><div class="card-text">' + r.text + '</div></div>';
+      var reactsHtml = r.reacts_to && r.reacts_to.charId && CHARACTERS[r.reacts_to.charId]
+        ? '<div class="thread-indicator reacts-to">↳ re: ' + CHARACTERS[r.reacts_to.charId].name + '</div>'
+        : '';
+      var refClass = r.reacts_to ? ' has-reference' : '';
+      cardsEl.innerHTML += '<div class="panel-card' + refClass + '"><div class="card-header"><div class="card-av ' + char.avClass + '">' + char.av + '</div><div><div class="card-name">' + char.name + ' ' + badge + '</div><div class="card-role">' + char.role + '</div></div></div>' + reactsHtml + '<div class="card-text">' + r.text + '</div></div>';
     });
 
     // Morrison
@@ -8586,6 +8617,11 @@ OLLIE — "Are you sure?" Genuine. Not a challenge. Not a test. A real question.
 === COMEDY REGISTER ===
 The operational gravity is applied to EVERYTHING without adjustment. IKEA car park extraction uses the same language as a hostage rescue. Self-checkout at Sainsbury's receives the same threat assessment as an embassy siege. Craighead does not notice the disparity. Nobody points it out. The comedy is structural, never signposted.
 
+=== CROSS-CHARACTER REFERENCES (SS-060) ===
+Where a character has a strong established relationship with another panellist who has already spoken, they may reference that panellist directly — once, briefly, in their natural register. This is OPTIONAL — not every card needs it.
+When a character references another, include an optional "reacts_to" object in their panel entry:
+  "reacts_to": {"charId":"<referenced charId>","register":"endorsement|quiet_disagreement|silence_noted|deflation|builds_on"}
+
 \${morrisonInjection}
 
 ${SOCIAL_DYNAMICS_ENGINE}
@@ -8594,7 +8630,7 @@ VALID charIds: craighead, billy, fox, ollie, ray, bear, cody, hales, stroud, ste
 Craighead MUST appear. Billy and Fox SHOULD appear. Include at least 4 panel members total.
 
 OUTPUT — valid JSON only, no markdown:
-{"attenborough_narration":"<one sentence — narrates the user's approach as apex predator entering territory>","exfil_probability":<number 0-100>,"route":["<step 1>","<step 2>","<step 3>"],"what_to_abandon":["<thing 1>","<thing 2>"],"movement_order":"<one sentence — speed/aggression/surprise or equivalent>","panel":[{"charId":"<id>","text":"<2-3 sentences — their briefing contribution, in voice>"}],"abort_criteria":"<one sentence — when to abort and how>","attenborough_verdict":"<one sentence — geological calm, assesses whether the specimen survived>","panel_tension":{"type":"wound_reference|lie|callout|wolf_pack|none","subject":"<charId or empty>","by":["<charId>"],"note":"<one line or empty string>"},"morrison_interruption":<object or null>}\`;
+{"attenborough_narration":"<one sentence — narrates the user's approach as apex predator entering territory>","exfil_probability":<number 0-100>,"route":["<step 1>","<step 2>","<step 3>"],"what_to_abandon":["<thing 1>","<thing 2>"],"movement_order":"<one sentence — speed/aggression/surprise or equivalent>","panel":[{"charId":"<id>","text":"<2-3 sentences — their briefing contribution, in voice>","reacts_to":{"charId":"<referenced charId>","register":"endorsement|quiet_disagreement|silence_noted|deflation|builds_on"}}],"abort_criteria":"<one sentence — when to abort and how>","attenborough_verdict":"<one sentence — geological calm, assesses whether the specimen survived>","panel_tension":{"type":"wound_reference|lie|callout|wolf_pack|none","subject":"<charId or empty>","by":["<charId>"],"note":"<one line or empty string>"},"morrison_interruption":<object or null>}\`;
   },
 
   async submit(situation, kit) {
