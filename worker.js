@@ -6358,9 +6358,13 @@ If the topic still interests Morrison or a panellist engages him or asks him a q
 If neither: set morrison_present to false (he drifts off).
 morrison_interruption format: {"quote":"<what Morrison says>","panel_reaction":"<how the panel reacts — 1-2 sentences>","tone":"WARM|AMUSED|ENGAGED|HOSTILE","morrison_present":<bool>}\`;
   }
-  return \`=== JIM MORRISON INTERRUPTION (SS-083) ===
+  return \`=== JIM MORRISON INTERRUPTION (SS-083 + SS-099) ===
 Morrison is the corridor guide. He occasionally wanders into panel sessions uninvited.
-This round: there is approximately a 20% chance Morrison wanders in.
+
+TRIGGER RULES (two paths — either can summon him):
+1. RANDOM: ~20% base chance each round.
+2. CONTEXTUAL (SS-099): If the predicament, panel discussion, or user input contains any of these trigger words/themes, Morrison's chance increases to ~80%: "door", "doors", "the end", "end", "death", "die", "dead", "snake", "desert", "poetry", "poet", "fire", "light", "break on through", "ride", "storm", "crystal ship", "strange", "wilderness". Morrison appears as if summoned — the timing is the joke. He responds to the trigger word as if it was addressed to him.
+
 If he appears: include morrison_interruption in the output.
 If he does not appear: set morrison_interruption to null.
 The panel knows Morrison. They are used to his visits. Baseline reaction is warm — they welcome him, enjoy him, engage with his nonsense.
@@ -7005,9 +7009,13 @@ If the topic still interests Morrison or a panellist engages him or asks him a q
 If neither: set morrison_present to false (he drifts off).
 morrison_interruption format: {"quote":"<what Morrison says>","panel_reaction":"<how the panel reacts — 1-2 sentences>","tone":"WARM|AMUSED|ENGAGED|HOSTILE","morrison_present":<bool>}\`;
   }
-  return \`=== JIM MORRISON INTERRUPTION (SS-083) ===
+  return \`=== JIM MORRISON INTERRUPTION (SS-083 + SS-099) ===
 Morrison is the corridor guide. He occasionally wanders into panel sessions uninvited.
-This round: there is approximately a 20% chance Morrison wanders in.
+
+TRIGGER RULES (two paths — either can summon him):
+1. RANDOM: ~20% base chance each round.
+2. CONTEXTUAL (SS-099): If the incident, panel discussion, or user input contains any of these trigger words/themes, Morrison's chance increases to ~80%: "door", "doors", "the end", "end", "death", "die", "dead", "snake", "desert", "poetry", "poet", "fire", "light", "break on through", "ride", "storm", "crystal ship", "strange", "wilderness". Morrison appears as if summoned — the timing is the joke. He responds to the trigger word as if it was addressed to him.
+
 If he appears: include morrison_interruption in the output.
 If he does not appear: set morrison_interruption to null.
 The panel knows Morrison. Baseline reaction is warm — they welcome him, enjoy him, engage.
