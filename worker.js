@@ -5965,7 +5965,7 @@ const SURVIVAL_SCHOOL_ROOMS = `<!DOCTYPE html>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>The Doors — Survival School</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&family=Crimson+Text:ital@1&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -5974,37 +5974,41 @@ const SURVIVAL_SCHOOL_ROOMS = `<!DOCTYPE html>
       --gold: #c8a040; --gold-dim: #5a3e10; --gold-bright: #e8c060;
       --purple: #7a60b0; --purple-dim: #2a1e4a; --purple-bright: #a080e0;
       --green: #7aad3a; --green-dim: #2a4010;
-      --text: #d8d4e8; --text-muted: #6a6480;
+      --text: #d8d4e8; --text-muted: #8a849e;
     }
     body { font-family: 'Barlow', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
-    #app { max-width: 640px; margin: 0 auto; padding: 1.5rem 1rem 4rem; }
+    #app { max-width: 700px; margin: 0 auto; padding: 1.5rem 1rem 4rem; }
 
-    .header { text-align: center; margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 0.5px solid var(--border); }
+    .header { text-align: center; margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 0.5px solid var(--border); }
     .corridor-label { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 3px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; }
     .title { font-family: 'Bebas Neue', sans-serif; font-size: 52px; letter-spacing: 5px; line-height: 1; color: var(--text); }
     .title span { color: var(--gold); }
-    .subtitle { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-muted); letter-spacing: 1.5px; margin-top: 6px; }
 
-    .morrison-block { margin: 2rem 0; min-height: 72px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; }
-    .morrison-quote { font-family: 'Barlow', sans-serif; font-size: 15px; font-style: italic; color: var(--gold); text-align: center; line-height: 1.5; opacity: 0.85; transition: opacity 0.25s, color 0.25s; padding: 0 1rem; }
-    .morrison-quote.active { opacity: 1; color: var(--gold-bright); }
-    .morrison-attr { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-muted); letter-spacing: 1px; }
+    .morrison-welcome { margin: 1.5rem 0 2rem; text-align: center; }
+    .morrison-welcome-text { font-family: 'Crimson Text', serif; font-style: italic; font-size: 17px; color: var(--gold-bright); line-height: 1.65; padding: 0 1rem; max-width: 560px; margin: 0 auto; }
+    .morrison-welcome-attr { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-muted); letter-spacing: 1px; margin-top: 10px; }
 
-    .doors-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 2.5rem; }
+    .morrison-secondary { text-align: center; margin-bottom: 2rem; min-height: 36px; }
+    .morrison-quote { font-family: 'Barlow', sans-serif; font-size: 13px; font-style: italic; color: var(--text-muted); text-align: center; line-height: 1.5; opacity: 0.7; transition: opacity 0.25s, color 0.25s; padding: 0 1rem; }
+    .morrison-quote.active { opacity: 1; color: var(--gold); }
 
-    .door { border: 0.5px solid var(--border-strong); border-radius: 8px; padding: 1.5rem 1rem; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 10px; cursor: default; transition: border-color 0.2s, background 0.2s; position: relative; text-decoration: none; color: inherit; }
-    .door.locked { background: var(--surface); opacity: 0.55; }
-    .door.locked:hover { opacity: 0.7; border-color: rgba(90,80,140,0.4); }
+    .doors-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 2.5rem; }
+
+    .door { border: 0.5px solid var(--border-strong); border-radius: 8px; padding: 1.25rem 0.85rem; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: default; transition: border-color 0.2s, background 0.2s; position: relative; text-decoration: none; color: inherit; }
+    .door.locked { background: var(--surface); opacity: 0.5; }
+    .door.locked:hover { opacity: 0.65; border-color: rgba(90,80,140,0.4); }
     .door.live { background: var(--surface2); border-color: var(--gold-dim); cursor: pointer; opacity: 1; }
     .door.live:hover { border-color: var(--gold); background: rgba(90,60,10,0.35); }
 
-    .door-number { font-family: 'Bebas Neue', sans-serif; font-size: 42px; letter-spacing: 2px; line-height: 1; color: var(--text-muted); }
-    .door.live .door-number { color: var(--gold); }
+    .door-name { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 1.5px; line-height: 1.15; color: var(--text); }
+    .door.live .door-name { color: var(--gold); }
+    .door.locked .door-name { color: var(--text-muted); }
 
-    .door-state { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); }
-    .door.live .door-state { color: var(--gold); font-size: 10px; }
+    .door-teaser { font-family: 'Crimson Text', serif; font-style: italic; font-size: 12px; color: var(--gold); line-height: 1.45; opacity: 0.75; }
+    .door.locked .door-teaser { color: var(--text-muted); opacity: 0.6; }
 
-    .door-badge { font-family: 'IBM Plex Mono', monospace; font-size: 8px; letter-spacing: 1px; text-transform: uppercase; padding: 2px 6px; border-radius: 3px; background: var(--gold-dim); color: var(--gold); }
+    .door-badge { font-family: 'IBM Plex Mono', monospace; font-size: 8px; letter-spacing: 1px; text-transform: uppercase; padding: 2px 6px; border-radius: 3px; background: var(--gold-dim); color: var(--gold); margin-top: 4px; }
+    .door.locked .door-badge { background: rgba(90,80,140,0.15); color: var(--text-muted); }
 
     .back-link { display: inline-block; font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1.5px; color: var(--text-muted); text-decoration: none; transition: color 0.15s; }
     .back-link:hover { color: var(--text); }
@@ -6012,6 +6016,9 @@ const SURVIVAL_SCHOOL_ROOMS = `<!DOCTYPE html>
     @media (max-width: 460px) {
       .doors-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
       .title { font-size: 40px; }
+      .morrison-welcome-text { font-size: 15px; }
+      .door-name { font-size: 17px; }
+      .door-teaser { font-size: 11px; }
     }
     @media (max-width: 320px) {
       .doors-grid { grid-template-columns: 1fr; }
@@ -6024,46 +6031,53 @@ const SURVIVAL_SCHOOL_ROOMS = `<!DOCTYPE html>
   <div class="header">
     <div class="corridor-label">CORRIDOR · THE DOORS</div>
     <div class="title"><span>THE</span> DOORS</div>
-    <div class="subtitle">SIX DOORS. ONE GUIDE. YOU DON'T KNOW WHAT'S BEHIND THEM.</div>
   </div>
 
-  <div class="morrison-block">
+  <div class="morrison-welcome">
+    <div class="morrison-welcome-text">You found the corridor. I don't know how. Behind these doors are people who know things about survival, or say they do. You choose the room. You choose who walks in. What happens after that is between them and whatever they've decided to believe about themselves. I'll be here. I'm always here.</div>
+    <div class="morrison-welcome-attr">— Jim Morrison</div>
+  </div>
+
+  <div class="morrison-secondary">
     <div class="morrison-quote" id="morrison-quote"></div>
-    <div class="morrison-attr">— Jim Morrison</div>
   </div>
 
   <div class="doors-grid">
 
     <div class="door locked" data-morrison="The snake does not ask whether it is biting correctly. This room has been waiting for you.">
-      <div class="door-number">12</div>
-      <div class="door-state">locked</div>
+      <div class="door-name">The Denial Loop</div>
+      <div class="door-teaser">Someone said something. The evidence disagrees. They are not backing down. Neither is the evidence.</div>
+      <div class="door-badge">COMING SOON</div>
     </div>
 
     <div class="door locked" data-morrison="When you argue with the universe, the universe wins. But you can make it a good argument.">
-      <div class="door-number">12A</div>
-      <div class="door-state">locked</div>
+      <div class="door-name">The Argument</div>
+      <div class="door-teaser">Pick a side. They'll pick the other. Eventually it stops being about what you said.</div>
+      <div class="door-badge">COMING SOON</div>
     </div>
 
     <a class="door live" href="/survival-school/ive-had-worse" data-morrison="Whoever walks through this door will understand something about themselves. Probably that they've had worse.">
-      <div class="door-number">13</div>
-      <div class="door-state">enter</div>
+      <div class="door-name">I've Had Worse</div>
+      <div class="door-teaser">Someone had it worse. Someone always had it worse. They'll keep going until the story eats itself.</div>
       <div class="door-badge">LIVE</div>
     </a>
 
     <a class="door live" href="/survival-school/in-my-defence" data-morrison="The room does not care why you did it. The room only has questions.">
-      <div class="door-number">14</div>
-      <div class="door-state">enter</div>
+      <div class="door-name">In My Defence</div>
+      <div class="door-teaser">Put someone in the chair. Ask them about the thing they did. Watch them try to explain it to people who were there.</div>
       <div class="door-badge">LIVE</div>
     </a>
 
     <div class="door locked" data-morrison="On the other side of this door: unconditional yes. The universe demands it of you.">
-      <div class="door-number">15</div>
-      <div class="door-state">locked</div>
+      <div class="door-name">Going With It</div>
+      <div class="door-teaser">Say something wrong. They'll agree. That's when it gets dangerous.</div>
+      <div class="door-badge">COMING SOON</div>
     </div>
 
     <div class="door locked" data-morrison="There is a detail waiting for you in that room. It will mean everything eventually.">
-      <div class="door-number">16</div>
-      <div class="door-state">locked</div>
+      <div class="door-name">The Detail</div>
+      <div class="door-teaser">You'll tell them what happened. They'll find the one thing you didn't mention. That's all they'll talk about.</div>
+      <div class="door-badge">COMING SOON</div>
     </div>
 
   </div>
