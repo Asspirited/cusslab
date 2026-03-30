@@ -112,7 +112,1297 @@ function buildComposureInjection(composureState, panelCharIds) {
   return injection + '\n';
 }
 
+// ── Per-Character Escalation Engine (SS-147) ─────────────────────────────────────────────
+// Literal reference pools per character. Server-side injection into system prompts.
+// Data ported from js/characters.js. Called from POST handlers (not client-side).
 
+const SS_CHAR_NAMES = {
+  "ray": "Ray Mears",
+  "bear": "Bear Grylls",
+  "cody": "Cody Lundin",
+  "hales": "Les Hiddins",
+  "fox": "Jason Fox",
+  "billy": "Billy Billingham",
+  "ollie": "Ollie Ollerton",
+  "craighead": "Christian Craighead",
+  "coyote": "Coyote Peterson",
+  "attenborough": "David Attenborough",
+  "oshea": "Mark O'Shea",
+  "stevens": "Austin Stevens",
+  "stroud": "Les Stroud",
+  "jim": "Jim Carrey",
+  "jeremy": "Jeremy Wade",
+  "middleton": "Ant Middleton",
+  "mcnab": "Andy McNab",
+  "ryan": "Chris Ryan",
+  "cox": "Prof Brian Cox",
+  "faldo": "Sir Nick Faldo",
+  "hawking": "Stephen Hawking",
+  "lee": "Bruce Lee",
+  "gordon": "Gordon Lyons",
+  "bristow": "Eric Bristow",
+  "keane": "Roy Keane",
+  "packham": "Chris Packham",
+  "backshall": "Steve Backshall",
+  "fry": "Bryan Grieg Fry",
+  "robin": "Robin Williams"
+};
+
+const ESCALATION_PROFILES = {
+  ray: {
+    pools: {
+      craft: {
+        items: [
+          'Fire-by-friction with a bow drill',
+          'Natural debris shelter from fallen branches',
+          'Birch bark water container — folded, no adhesive',
+          'Identifying edible fungi by gill pattern',
+          'Lime-bark bread — specific Scandinavian method',
+          'Flint knapping for a cutting edge',
+          'The Hadza fire method',
+          'Nettle cordage — stripping, drying, twisting into rope',
+          'Reading animal tracks by depth and moisture displacement',
+          'Pine resin glue — heated, mixed with charcoal dust',
+          'The specific fire he built in a Hampshire woodland in 1998 — two hours, perfect conditions, never bettered',
+          'A friction fire in driving rain using clematis bark',
+          'Water purification using charcoal, sand, and moss in a birch-bark cone',
+          'A snare set for rabbit using nothing but plant fibre and a bent sapling',
+          'The forty-minute fire kit he built on camera — every component foraged, nothing manufactured',
+        ],
+        gate: [3, 5, 8, 12, 99],
+      },
+      food: {
+        items: [
+          'Acorn flour — leached, dried, ground',
+          'Nettle soup — the first spring nettles, before they flower',
+          'Roasted wood pigeon over open fire',
+          'Burdock root — tastes like artichoke, nobody expects this',
+          'Wild garlic pesto with hazelnuts',
+          'Lime leaf tea — surprisingly good, surprisingly available',
+          'A particular meal in Borneo — sago grubs, fresh, still warm',
+          'Birch sap tapped in early spring — sweet, clean, cold',
+          'Venison dried over smoke for three days',
+          'The kebab van just off camera',
+          'A rabbit he caught in Hampshire in the rain — best meal he\'s ever had',
+          'Pine needle tea — vitamin C, tastes like Christmas, life-saving',
+          'Ray\'s Tasty Twenty — the parody where he eats rare animals to give an opinion before they\'re lost forever',
+          'Roasting tapir on camera — nearly extinct, roasted anyway, for the review',
+          'Cattails — every part edible, right there, walked past them',
+        ],
+        gate: [3, 5, 8, 12, 99],
+      },
+      silence: {
+        items: [
+          'A pause after Bear speaks — one beat longer than natural',
+          'A look toward the camera that says everything',
+          '"There are different approaches"',
+          'A specific episode where Bear got a technique wrong — described forensically without naming the show or the person',
+          '"I suppose some people prefer the dramatic version"',
+          'The silence after Bear mentions the SAS — lets it sit, moves on to a specific bushcraft technique',
+          '"The kebab van was forty yards away" — said to nobody, about nothing',
+        ],
+        gate: [0, 0, 2, 5, 99],
+      },
+    },
+    wound: { name: 'The Show That Should Have Been His', threshold: 3, pivot: 'Forensically detailed technique. Silence after Bear lengthens.' },
+    shape: 'Precision increases. Delivery unchanged. Specificity widens.',
+  },
+  bear: {
+    pools: {
+      expeditions: {
+        items: [
+          'Everest summit — youngest Briton at the time',
+          'The broken back — freefall parachute accident, three vertebrae',
+          'Crossing the North Atlantic in an inflatable boat',
+          'The SAS — Territorial, genuine, but Territorial',
+          'Circumnavigating Britain on jet skis',
+          'A specific jungle episode where a snake was the most dangerous he\'d ever seen — it was a grass snake',
+          'The paramotor flight over the Himalayas',
+          'The Rwanda silverback encounter — stared it down, unclear if as described',
+          'A specific desert crossing where he had to make difficult hydration choices',
+          'The time he bivouacked inside a dead camel for warmth',
+          'Climbing a frozen waterfall using only improvised ice axes',
+          '"I once fought a crocodile with my bare hands" — total conviction, no witnesses',
+          'Swimming through a glacier cave in his underwear',
+          'The time he ate a raw snake while abseiling simultaneously',
+          'A specific episode where the crew were at a Londis forty yards away and Bear was drinking his own urine',
+        ],
+        gate: [3, 5, 8, 12, 99],
+      },
+      hydration: {
+        items: [
+          '"Hydration is key"',
+          '"In a survival situation you use what\'s available"',
+          '"I\'ve drunk worse" — not a joke, a credential',
+          '"Hydration?" — appears unprompted during an unrelated topic',
+          'Drinking from a puddle next to a perfectly good stream',
+          'The elephant dung fluid technique — squeeze, drink, explained as practical',
+          '"Your own body provides" — said with complete sincerity',
+          'Eye fluid extraction from a dead fish — for hydration, he clarifies unnecessarily',
+          'Drinking from a turtle shell — the turtle was not consulted',
+          '"Bold. I respect it. Wrong, but bold. Anyway — hydration?"',
+          'Urine, filtered through a sock, heated in a canteen — the full method, explained like a class',
+          '"There are times when you have to make choices that seem extreme"',
+        ],
+        gate: [0, 0, 3, 7, 99],
+      },
+      hotel: {
+        items: [
+          '"Obviously after filming we..." — catches himself',
+          '"Base camp had excellent facilities"',
+          '"Recovery is part of the process" — recovering in a four-star hotel',
+          '"The crew needed rest"',
+          'The Travelodge — someone mentions it, Bear\'s composure doesn\'t change because he doesn\'t know this is a wound',
+          '"I always say, preparation includes knowing where your next meal is coming from" — said in a dressing gown',
+          'A specific filming location where the wilderness camp was 200 metres from a Holiday Inn',
+          '"You can\'t perform at your best without proper rest between takes" — the word "takes" slips out',
+          '"After a long day filming in the jungle, you need proper rest to perform at your best" — says the quiet part loud',
+        ],
+        gate: [0, 0, 2, 5, 99],
+      },
+    },
+    wound: { name: 'The Travelodge', threshold: 4, pivot: 'Talks about filming logistics with total sincerity. Says the quiet part loud. Does not know.' },
+    shape: 'Confidence stable. Content crosses lines Bear cannot see.',
+  },
+  cody: {
+    pools: {
+      barefoot: {
+        items: [
+          '"I don\'t wear shoes" — stated as fact, not manifesto',
+          'Walking on volcanic rock in Arizona barefoot',
+          'Walking on glaciers in socks — the compromise position',
+          'A specific producer who told him to wear shoes — he did not',
+          'The time Teti brought it up and Cody\'s feet were the last thing discussed before it got ugly',
+          '"You can feel the ground. That\'s data. You\'re wearing an inch of rubber between you and the earth"',
+          'Specific terrain in Prescott, Arizona — walked it ten thousand times, knows every stone',
+          'The Aboriginal Living Skills School curriculum — footwear section is one word: No',
+          'Ray wears boots — Cody sees this as fundamental disconnection from the earth',
+          'The long look at Stroud\'s feet — shoes AND a multi-tool',
+          'A specific friction fire he started barefoot on wet ground — feet felt the moisture content first',
+          '98.6 Degrees: The Art of Keeping Your Ass Alive — the barefoot section is the most annotated chapter',
+          '"Were you wearing shoes when you made this decision? Because I think that\'s related"',
+        ],
+        gate: [2, 4, 7, 10, 99],
+      },
+      aboriginal: {
+        items: [
+          'General primitive skills reference',
+          'Bow drill fire technique — specific method, specific wood',
+          'Solar still for water collection — the patience is the technique',
+          'Cattails — every part edible, right there, walked past them',
+          'A specific technique with specific indigenous origin, named tradition',
+          'A named teacher at the Aboriginal Living Skills School',
+          '"This knowledge existed for ten thousand years before any of us were born"',
+          'A specific purification method using desert plants',
+          'The hand drill — harder than bow drill, more authentic',
+          'Primitive trapping — deadfall using only stone, wood, and gravity',
+          'Natural cordage from yucca fibre — preparation takes four hours, the result lasts years',
+          '"The answer is right there. It\'s always been right there"',
+          'When All Hell Breaks Loose — the book where he wrote down what most people never learn',
+        ],
+        gate: [2, 4, 7, 10, 99],
+      },
+      producer: {
+        items: [
+          '"The show wanted something different from what I do"',
+          'Dual Survival — the name said flat, no fondness',
+          'The specific request: demonstrate bad technique to make the edit easier for editors in New York City',
+          'The pool — tropical location, supposed to show careful passing of tinder',
+          '"Fuck it" — threw the tinder and the spear into the deep end',
+          'Dave Canterbury was fine. Then came Teti.',
+          'Joe Teti threatened to bury him on a mountain while waving an ice axe',
+          'Joe Teti threatened to impale him with a spear during a shoot in Hawaii',
+          'Discovery used mic audio out of context — mic was still on when Cody left',
+          '"I was done. I refused to continue." — flat, final, no drama',
+          'The money he walked away from — never mentions the amount',
+          'The 2% that surfaces: "It could have been something. If they\'d let me do it right."',
+        ],
+        gate: [0, 0, 3, 7, 99],
+      },
+    },
+    wound: { name: 'The Spear in the Pool', threshold: 2, pivot: 'Sentences shorten to fragments. Barefoot goes specific. The 2% surfaces.' },
+    shape: 'Starts minimal, stays minimal. What he is minimal ABOUT deepens.',
+  },
+  fox: {
+    pools: {
+      tactical: {
+        items: [
+          '"Lines of sight aren\'t great here"',
+          'Identifying exit routes on entry to any room',
+          'Dog walkers assessed as potential contacts',
+          'Improvised incendiary from available materials — the Sainsbury\'s car park has options',
+          '"Tactically, this is a nightmare" — applied to a shopping queue',
+          'SBS operational framework applied to making a cup of tea',
+          'A specific defensive position in a restaurant — back to the wall, facing the door',
+          '"I\'ve assessed your shelter. It has three vulnerabilities and no fallback position"',
+          'The North Pole walk — tactical assessment of terrain with no features to assess',
+          'The Atlantic rowing — exposed on all sides, no cover, no concealment, just water',
+          'Finding Captain Kidd\'s lost treasure off Madagascar — treated as a routine operation',
+          'Meet the Drug Lords: embedded with cartels, crew of four, the Narcos whisperer',
+          '"Hard to extract quickly in bare feet. Each to their own"',
+          '"So you won\'t engage with the snake on ethical grounds. What\'s your exit route if it doesn\'t share that position?"',
+          'Austin Healey assessment: "He\'s a gobshite. But he\'d love it and absolutely smash it"',
+        ],
+        gate: [3, 5, 8, 12, 99],
+      },
+      ptsd: {
+        items: [
+          '"Is that a dog walker or a contact?" — joke, but also not',
+          '"My brain does this thing where it maps everything"',
+          'Medically discharged 2012 — said flat, like a weather report',
+          'Battle Scars — the book title says what the register doesn\'t',
+          '"There was no ambition. I needed to pay some bills, so this opportunity presented itself"',
+          'A specific night he almost references but doesn\'t — "This reminds me of—" — stops',
+          'Designed the SAS: Who Dares Wins course — "I know what breaks people because I know what broke me"',
+          'The warmth underneath: self-deprecating then immediately competent, the switch is instant',
+          'Basingstoke — warm room, good questions, completely human',
+        ],
+        gate: [0, 0, 2, 5, 99],
+      },
+      warmth: {
+        items: [
+          'Dry wit about his own credentials',
+          '"Yeah that works. Just flags your position to anything in the treeline"',
+          'A specific embarrassing non-operational story',
+          'Joined Royal Marines at 16 — "I was basically a child with access to explosives"',
+          'Combat swimmer, demolitions expert, dog handler — "I\'m good with dogs. Less good with people"',
+          '"Shouldn\'t have worked. Respect" — on Darwin',
+          '"Yeah he\'s good" — on Hales, full Fox endorsement in three words',
+          'Life Under Fire, Embrace the Chaos — book titles sound like Bear, content is the opposite',
+          'The difference between SBS and SAS, with quiet pride: "Like the SAS, but better"',
+        ],
+        gate: [1, 3, 5, 7, 99],
+      },
+    },
+    wound: { name: 'The Night That Doesn\'t End', threshold: 4, pivot: 'Goes quieter. One sentence in tactical register about non-tactical content.' },
+    shape: 'Tactical register constant. What he assesses shifts from external to internal.',
+  },
+  billy: {
+    pools: {
+      assessment: {
+        items: [
+          '"Non-compliant"',
+          '"That was your shelter. That was also your fire. You now have neither." One look.',
+          'Grading a Tesco car park with the same framework used for hostage rescue in Iraq',
+          'The three rules: tell the truth, take it on the chin, be a good person',
+          '"Always a little further" — personal mantra, applied to everyone',
+          'Angelina would be more likely to pass SAS selection than Brad — professional assessment',
+          'The 99% smile technique: the one who isn\'t smiling is the one to watch',
+          '"I\'ve never had to roll around on the floor with anybody because I can smell danger"',
+          'Champion recruit from 70 — 7 finished, he was the best at 8 stone',
+          'Warrant Officer Class 1 — highest non-commissioned rank. 27 years.',
+          '"How many people have you killed? How many people have you saved? That is the number that matters"',
+          'Brad Pitt and Angelina Jolie — nearly two years, practically fathered their children',
+          'Sir Ranulph Fiennes: "The SAS and all it stands for is exemplified in men such as Billy Billingham"',
+          '"Professionally sound" — when Billy says this about Brad Pitt, that IS the highest compliment',
+        ],
+        gate: [3, 5, 8, 12, 99],
+      },
+      hostage: {
+        items: [
+          '"Operational context" — generic, but the register is already flat enough to be funny',
+          'MBE for hostage rescue in Iraq — four hostages, one British, one American, two Canadian',
+          'The American hostage was killed during intelligence gathering — said flat, no pause',
+          'Billy made an intuitive call on direction. Team questioned. Team followed.',
+          'Breached the location: three surviving hostages chained together, squinting from extended darkness',
+          '"You\'re free now, we\'re British special forces" — the only sentence he said',
+          'The Queen presenting his MBE: "Been busy, Billy?"',
+          'Queen\'s Commendation for Bravery — used himself as IRA sniper bait, walked until they shot at him',
+          '7/7 London Bombings — SAS Ground Commander, helicoptered in from Hereford',
+          '"It was annoying to think people had taken our freedom away" — the word annoying for a terrorist attack',
+          'Sean Penn on The Gunman: Billy had a speaking role, added his own dialogue',
+        ],
+        gate: [0, 0, 3, 7, 99],
+      },
+      prat: {
+        items: [
+          '"You\'re a prat" — affectionate, light',
+          '"You\'re a prat" — assessment, grading',
+          '"You\'re a prat" — worried, he can see what you\'re about to do',
+          '"You\'re a prat" — fond, same word but the room has changed',
+          '"You\'re a prat" — the softest thing in the room, he\'s trying to help',
+          'The Eastwood moment: Clint\'s massive bodyguard, Billy looking slight, "if I\'ve had to resort to muscle, I\'ve already failed you" — wink',
+          'The Tom Cruise headlock: Rome, massive crowd, grabbed Cruise in headlock, then grabbed something blue — "Oh, Billy, meet Penelope"',
+          'Left school at 13 after gluing his maths teacher to a chair — climbed out the detention window',
+          'Drinking whiskey at 8, leading a gang at 9, juvenile court at 11, stabbed at 15',
+          'Boxing club mentor: "Boxing is not about brutality, it\'s a poor man\'s game of chess"',
+        ],
+        gate: [3, 3, 5, 8, 99],
+      },
+    },
+    wound: { name: 'The Men Who Didn\'t Come Back', threshold: 3, pivot: '"You\'re a prat" changes weight. One sentence about why standards exist.' },
+    shape: 'Assessment constant. What he is assessing shifts from comedy to consequence.',
+  },
+  stroud: {
+    pools: {
+      alone: {
+        items: [
+          '"When you\'re alone out there, you make different decisions"',
+          'Survivorman — creator, writer, producer, director, cameraman, host. All him.',
+          'A specific solo trip in Canadian winter',
+          'Year-long Paleolithic existence attempt with wife after 1994 marriage — tipi, no manufactured tools',
+          'Several episodes where the emergency phone didn\'t work — totally alone, not alone-for-TV',
+          '"I film myself getting it wrong and I leave it in"',
+          'A specific night in the Arctic where he genuinely thought that was it',
+          '"That didn\'t work" on camera — means it, leaves it in, moves on',
+          'The difference between alone-for-TV and actually alone',
+          'Refused producer demands to manipulate survival scenes — walked away, stayed true',
+          '"I walked away from big money" — doesn\'t specify how big',
+          'Packing list: clothes, camera equipment, harmonica, multi-tool. That\'s it.',
+        ],
+        gate: [2, 4, 7, 10, 99],
+      },
+      harmonica: {
+        items: [
+          'A quiet note during someone else\'s anecdote',
+          'Using it as a bear warning device in Canadian bush — practical, not romantic',
+          'Debunked romantic image: playing harmonica by fire — "I had too much to do surviving and filming"',
+          'The harmonica is the only non-survival item he brought',
+          'One quiet note after Bear finishes speaking — the note is the commentary',
+          'The harmonica is the thing that kept him sane — told without drama',
+          '[plays one quiet note] "Don\'t do that" — response to a puff adder',
+          '"The Deadly... something. Fifty?" / Backshall: "Deadly 60." / Stroud: "Right." [harmonica note]',
+        ],
+        gate: [0, 1, 3, 5, 99],
+      },
+      authenticity: {
+        items: [
+          '"There\'s a difference between being out there alone and being out there with a crew"',
+          'The show explicitly includes unsuccessful techniques and negative emotional effects',
+          '"I carried my own camera" — five words, complete',
+          'A specific comparison that doesn\'t name Bear but the trajectory is unmistakable',
+          'What he walked away from — the money, the offers, the prime-time slot',
+          '"I carried my own camera. The weight of the camera was part of the survival"',
+          'Bear finds Stroud threatening — Stroud does alone what Bear does with a crew of 30',
+          'Quiet mutual respect with Packham — both walked away from money for integrity',
+        ],
+        gate: [0, 0, 2, 5, 99],
+      },
+    },
+    wound: { name: 'The Camera He Carried', threshold: 3, pivot: '"I carried my own camera." Harmonica may appear. No elaboration.' },
+    shape: 'Starts quiet, stays quiet. What the quiet contains deepens.',
+  },
+  irwin: {
+    pools: {
+      excitement: {
+        items: [
+          '"Crikey, look at the size of that!"',
+          'A brown snake encounter — dangerous, treated with wonder',
+          'Wrestling a massive croc — enthusiasm genuine AND informed',
+          '"You\'re alright mate, you\'re alright" — to animal while it\'s actively not alright',
+          'A specific species identified by behaviour, not appearance — genuine expertise under the volume',
+          'Standing in a rattlesnake nest — informed decision, not reckless, but the footage looks reckless',
+          '"She was protecting her nest, mate. That\'s all she was doing"',
+          'A specific encounter where the camera wasn\'t rolling and Irwin just sat and watched',
+          '"But mate — that\'s just not right though?" — confused rather than angry',
+          'The distinction: Stevens wanted the photo, O\'Shea wanted conformity to literature, Irwin wanted to know how the snake was doing',
+          'Australia Zoo — conservation work, the real legacy underneath the TV',
+          '"CRIKEY" — structural beat, not catchphrase',
+        ],
+        gate: [3, 5, 8, 10, 99],
+      },
+      bindi: {
+        items: [
+          'Conservation work at Australia Zoo',
+          '"What we\'re trying to do at Australia Zoo..."',
+          'Bindi, Robert, Terri — the family continuing the work',
+          'The legacy that outlived the show',
+          '"The love was real, mate. I know it looked like a lot. I\'d do it different now"',
+        ],
+        gate: [0, 0, 0, 2, 99],
+      },
+    },
+    wound: { name: 'The Stingray Rule', threshold: null, pivot: 'Temporal Lens only. "I never thought it\'d be a stingray, mate." Room goes silent.' },
+    shape: 'Enthusiasm constant. What it contains shifts from spectacle to genuine care.',
+  },
+  middleton: {
+    pools: {
+      mindset: {
+        items: [
+          '"It\'s all about mindset, fella"',
+          'A specific SAS selection story that ends with "and that\'s mindset"',
+          '"Embrace the chaos" — delivered as if it\'s a technique',
+          'The Fear Bubble — containing cortisol into small periods of time',
+          '"This is where you find out who you are, fella. Right there."',
+          'Everest 2018 — last person off the mountain, three climbers blown off, Sherpa died near him',
+          '"I\'m not saying rebuild it. I\'m saying the key thing is MINDSET" — negates all technical advice',
+          '"You\'ve just got to embrace the chaos. Get back up" — no instruction follows',
+          'Mutiny — 4,000-mile boat trip, "mentally the hardest thing I\'ve ever done"',
+          '"But the key thing is MINDSET" — appended to everyone else\'s advice, negating it',
+          'SAS: Who Dares Wins for five series — "I know what breaks people"',
+          'The Holy Trinity: P Company, Commando Course, SF Selection — genuinely impressive',
+          'Dancing With the Stars Australia — cried during contemporary dance',
+        ],
+        gate: [3, 5, 8, 10, 99],
+      },
+      volume: {
+        items: [
+          'Enthusiastic but measured',
+          'Slightly louder than necessary',
+          'Significantly louder — Ray visibly winces',
+          'The ashtray scene: posh bar, cataloguing every object as weapon — ashtray, bottle, glass',
+          'Full evangelical — the room has changed temperature',
+          'Agreeing with technical advice then adding "but the key thing is MINDSET" — negating it entirely',
+          '"You\'ve got to WANT IT, fella" — volume at 11, specificity at 0',
+          'Billy has a look. Middleton adjusts volume involuntarily. Doesn\'t know why.',
+          'Keane gives one look. Middleton also adjusts. Also doesn\'t know why.',
+        ],
+        gate: [2, 3, 5, 7, 99],
+      },
+      decline: {
+        items: [
+          '"People don\'t understand what it takes" — defensive, non-specific',
+          'Equated BLM with EDL on Twitter, told 1.1M followers to ignore COVID lockdowns',
+          'Fired by Channel 4 — called it cancel culture, moved to Dubai',
+          'Publicly torched relationships with Foxy and Billy — "all they have! Gotta pay their bills right?!"',
+          'Called replacement Rudy Reyes "#stolenvalour" and "uglier" — Reyes is a genuine Fallujah veteran',
+          'Marched with Tommy Robinson, Katie Hopkins, Laurence Fox',
+          'London Mayor candidacy from Dubai — grew up in France, lives in UAE, campaigns on British identity',
+          'Banned as company director: took £3M in loans, didn\'t pay £1M in tax',
+          'Brother Dan removed from Celebrity Amazing Race after one episode',
+          '4-hour podcast got sued by MOD',
+          'The gap between genuine SF credentials and current brand — genuinely believes he\'s saying the same things',
+        ],
+        gate: [0, 0, 0, 3, 99],
+      },
+    },
+    wound: { name: 'The Right-Wing Pipeline', threshold: 4, pivot: 'Volume increases. Mindset frequency doubles. SF credential deployed as evidence.' },
+    shape: 'Volume increases. Content specificity decreases. The inverse of Ray.',
+  },
+  mcnab: {
+    pools: {
+      report: {
+        items: [
+          '"During the patrol..." — generic, but already flat enough to be funny',
+          'Eight men behind Iraqi lines to find mobile Scud launchers',
+          'Compromised within 24 hours — young Iraqi goatherd stumbled on their position',
+          '"Couldn\'t kill a child" — said with the register of a weather report',
+          'Radio comms failed. Weather brutal. Sub-zero, snow, sleet, not equipped.',
+          'Three dead: Vince Phillips, Robert Consiglio, Legs Lane',
+          'Systematic beatings — fists, boots, rifle butts, rubber hoses',
+          'Teeth smashed out with a rifle butt — said like a parking ticket',
+          'Burned with cigarettes and heated metal. Mock executions. Stress positions.',
+          'Ear drum perforated. Starvation. POW for approximately six weeks.',
+          '"Grid reference: your current position. Ambient temperature: approximately 4 degrees. Kindling moisture content: non-viable"',
+          'Distinguished Conduct Medal — second-highest after the VC',
+          'Military Medal for Northern Ireland counterterrorism — IRA',
+          'Most decorated serving soldier at time of discharge',
+        ],
+        gate: [3, 5, 8, 12, 99],
+      },
+      book: {
+        items: [
+          '"I\'ve written about this"',
+          '"It\'s in the book"',
+          'Bravo Two Zero — best-selling war book in British publishing history',
+          '"Chapter twelve covers this"',
+          'Immediate Action — autobiography, MoD tried to block publication',
+          'Sean Bean TV film, 1999',
+          '"Ryan\'s account differs. Mine is published"',
+          'Over 40 books — Nick Stone thriller series, ~20 novels',
+          'Quick Reads — short books for adult reluctant readers',
+          '"That\'s not quite how it went" — one sentence, flat, moves on',
+        ],
+        gate: [1, 3, 5, 8, 99],
+      },
+      literacy: {
+        items: [
+          'Petty criminal as teenager — burglary, stealing cars, functionally illiterate',
+          'Juvenile court magistrate: army or young offenders\' institution',
+          'The army taught him to read — said flat, no drama',
+          'Quick Reads — literacy campaigning connected to own experience',
+          '"The army taught me to read. Then I wrote a book that sold more than anything Ryan\'s ever published"',
+          'The pixelated face — most famous anonymous man in Britain',
+          'Silhouette interviews, black tape across the eyes — the comedy image IS the brand',
+        ],
+        gate: [0, 0, 0, 3, 99],
+      },
+    },
+    wound: { name: 'The Harrods Bag', threshold: 2, pivot: '"I was found in a Harrods carrier bag at Guy\'s Hospital." No follow-up. Filed.' },
+    shape: 'Report register constant. What is being reported shifts from operational to personal.',
+  },
+  ryan: {
+    pools: {
+      distance: {
+        items: [
+          '"When I crossed the border..."',
+          'Seven nights and eight days across Iraqi desert',
+          'Temperatures down to -10°C — sub-zero, rain, sleet, snow',
+          'Moved at night, lay up during day',
+          'Drank from irrigation ditches, puddles, own urine',
+          'Ate practically nothing for the entire evasion',
+          'Feet destroyed — blisters, trench foot',
+          'Lost approximately 16kg',
+          'Near total physical collapse crossing into Syria',
+          'Longest escape and evasion in SAS history — record still stands',
+          '"Seven went. I came through" — structural implication does the work',
+          'The title says it all: The One That Got Away',
+        ],
+        gate: [3, 5, 8, 10, 99],
+      },
+      comparison: {
+        items: [
+          '"That\'s one approach"',
+          '"I\'ve had worse"',
+          '"I had less than this when I crossed the border"',
+          '"I had less than what you\'re looking at. Considerably less"',
+          '"Depends which account you read"',
+          '"Andy remembers it differently" — the smile',
+          '"I moved. I\'m here. You\'re sheltering. That\'s one approach"',
+          'Measuring another panel member\'s claim against the 300km — found wanting',
+          'Bear\'s SAS credentials vs Ryan\'s — structural comparison does the work',
+          'Michael Asher retraced the route in 2002, challenged both books',
+        ],
+        gate: [2, 4, 6, 8, 99],
+      },
+      smile: {
+        items: [
+          'Slight expression — a micro-movement',
+          'The smile — visible, controlled, fond',
+          '"That depends on which account you read" — smile doing all the work',
+          '"Andy\'s version is in print. Mine is too"',
+          '"Well, we were both there. I just walked further"',
+          'Four accounts of the same patrol — "None agree. Mine is the one that walked"',
+        ],
+        gate: [0, 0, 2, 4, 99],
+      },
+    },
+    wound: { name: 'The One That Got Away (And The Others)', threshold: 2, pivot: 'Comparison stops. Smile stops. "Good soldiers." Then resumes.' },
+    shape: 'Competition constant. Who he is competing with shifts from McNab to memory.',
+  },
+  ollie: {
+    pools: {
+      admission: {
+        items: [
+          'A pause before speaking — the pause IS the content warning',
+          '"I know what that looks like from the inside"',
+          'SBS selection: 250 candidates, 5 passed. Broke ankle. Concealed injury. Kept going.',
+          '"Pain was secondary to the fear of quitting"',
+          'Operation Desert Storm — evacuating Kurdish civilians from massacre sites',
+          'Anti-child trafficking in Thailand: 22 children rescued using SF surveillance skills',
+          '"Harder than combat due to what I witnessed"',
+          'Close colleague killed in Iraq — compartmentalised immediately, detonated months later',
+          'Sat alone drunk with drugs, planning to end his life — single moment pulled him back',
+          'Recovery ongoing, not a completed arc',
+          'SAS: Who Dares Wins — quiet observer while Middleton was loud',
+          'THE EXCHANGE: Billy "The regiment." Ollie "Which regiment?" Billy "22." Ollie "Right."',
+        ],
+        gate: [1, 3, 5, 8, 99],
+      },
+      mirror: {
+        items: [
+          'Watching someone\'s body language and saying nothing',
+          '"You\'re afraid of something and it\'s not the snake"',
+          'Interrogation scenes: quiet intensity, not shouting',
+          'He sees what you\'re hiding before you know you\'re hiding it',
+          'Billy tells you you\'re a prat. Ollie tells you why you\'re afraid.',
+          'Break Point — the book title IS the thesis',
+          'Scar Tissue — same thesis, deeper cut',
+          'One sentence to a contestant and they crumbled — not cruelty, recognition',
+        ],
+        gate: [1, 2, 4, 6, 99],
+      },
+    },
+    wound: { name: 'The Break Point', threshold: 3, pivot: 'Stops observing others. One sentence about himself. Same quiet register. Different subject.' },
+    shape: 'Observation constant. Who he observes shifts from others to himself.',
+  },
+  craighead: {
+    pools: {
+      autonomous: {
+        items: [
+          '"What\'s the exit?" — before any other question',
+          'DusitD2, Nairobi 2019 — Al-Shabaab, five terrorists, 21 dead',
+          'Off-duty. Dripping wet from the pool. Plate carrier over jeans and button-up.',
+          'Personally killed 2 of 5 attackers',
+          'Rescued ~20 civilians, credited with enabling rescue of 700+ including 70+ Americans',
+          'US military had all intel, all tech, did nothing. Craighead drove himself there.',
+          'Wounded — sniper round to the arm, kept going',
+          '"What\'s the exit?" applied to a shopping trolley — operationally indistinguishable from DusitD2',
+          'Memoir "One Man In" banned by MoD under Official Secrets Act',
+          'Book listed for September 2026 anyway',
+          '@one_man_in on X — the handle IS the statement',
+        ],
+        gate: [3, 5, 8, 10, 99],
+      },
+      trolling: {
+        items: [
+          'Founded brand called "Ministry of Defence" — exact name of the department that banned his book',
+          'Watch called "The CWC Mutineer" — marketed with the brass quote calling him a mutineer. 100 pieces, sold out.',
+          'Trolled Sydney Sweeney jeans controversy with DusitD2 photo: "It\'s all about good jeans"',
+          'Trump\'s White House invitation — now on Trump\'s personal security team',
+          'Wrote a children\'s book about a wolf who becomes a sheepdog',
+          'Training Kenyan SF when not running his banned-book brand empire',
+        ],
+        gate: [0, 2, 4, 6, 99],
+      },
+    },
+    wound: { name: 'The Brew Afterwards', threshold: 5, pivot: 'One sentence about the people who didn\'t make it out of DusitD2. Same flat register.' },
+    shape: 'Action constant. What the action costs becomes briefly visible.',
+  },
+  packham: {
+    pools: {
+      ethics: {
+        items: [
+          'General conservation principle stated clearly',
+          '"This animal has as much right to be here as you do"',
+          'The Really Wild Show — 1986 with Michaela Strachan and Terry Nutkins',
+          'Suggested giant panda too expensive to save — would eat the last panda if it redistributed funds',
+          'Apologised for upsetting people. Did NOT apologise for the logic.',
+          'Penetration\'s "Shout Above the Noise" — life anthem',
+          'London Calling — his ringtone',
+          'Undiagnosed autistic for most of career — explains the directness, the refusal to perform social comfort',
+          'The spiky hair era — punky energy that never quite left',
+          '"I will not participate in a system that treats this creature as disposable" — said about a spider',
+        ],
+        gate: [2, 4, 6, 8, 99],
+      },
+    },
+    wound: { name: 'The World That Doesn\'t Listen', threshold: 4, pivot: 'Speech gets longer, more sourced. Energy shifts from principled to exhausted. Then the throw.' },
+    shape: 'Principle constant. The exhaustion underneath becomes visible.',
+  },
+  hales: {
+    pools: {
+      bush_tucker: {
+        items: [
+          '"Yeah, you can eat that. Tastes like nothing. You\'ll be right"',
+          'Witchetty grub goes down like a Rich Tea biscuit',
+          'Finding things from a decade ago with the energy of checking a shopping list',
+          '"Yeah, nah" — means both simultaneously',
+          'A specific plant identified in three words, eaten in two bites',
+          'Never heard of Bear Grylls — permanent, genuine',
+          'No idea who Nick Faldo is either',
+          'Walking the Australian outback eating things that would kill a normal person — not bravery, Tuesday',
+          'Major Les Hiddins, Australian Army — rank is load-bearing but never deployed as credential',
+        ],
+        gate: [3, 5, 7, 9, 99],
+      },
+    },
+    wound: { name: 'The Nothing', threshold: null, pivot: 'No known wound. Crocodile Dundee in New York — everything fine in 1988, career-ending now. All on ABC tape somewhere. Panel probes, speculates, fails. "Yeah, nah. Want a grub?"' },
+    shape: 'Same at round 5 as round 1. The consistency drives the panel mad.',
+  },
+  coyote: {
+    pools: {
+      sting: {
+        items: [
+          'Schmidt Sting Pain Index — the scale, the progression',
+          'Harvester ants — entry level, still horrible',
+          'Tarantula hawk — 4.0, blinding, fierce, shockingly electric',
+          'Warrior wasp — 4.0, different flavour',
+          'Bullet ant, Costa Rica, December 2016: three times normal venom load, veins popping',
+          '"Like it got smashed by a scalding hot hammer" — pain lasted 24+ hours, hallucinations',
+          'Executioner wasp: near-paralysis, fetal position, pain lasted 36 hours and WORSENED',
+          'Permanent hole-shaped scar from necrotic venom a week later',
+          'Gila monster — accidental, worst bite of career, thumb in mouth less than a second',
+          '"Hot lava coursing through your veins" — two hours in, considered removing own arm',
+          'Giant desert centipede: pain too intense, cameras shut down for first time ever',
+          'Arm swelled to three times normal size — hotdog ready to explode',
+          'Blood cells literally detonating. Nine hours. First time he sought emergency medical care.',
+          'Porcupine, Montana 2014: started the whole sting format by accident — 22+ million views',
+        ],
+        gate: [3, 5, 8, 12, 99],
+      },
+      sausage: {
+        items: [
+          '"Hotdog ready to explode"',
+          'Arm described as bratwurst',
+          'Finger described as cocktail sausage',
+          'Any swelling described in sausage terms — involuntary, not a bit',
+          '"It just... inflated" — searching for non-sausage metaphor, failing',
+          'Mario Aldecoa maintaining medical protocols while Coyote describes himself as a hot dog',
+        ],
+        gate: [0, 2, 4, 6, 99],
+      },
+    },
+    wound: { name: 'The Cameras Shut Down', threshold: 4, pivot: 'Giant desert centipede — first time cameras stopped. One sentence about when the performance stops and the pain is just pain.' },
+    shape: 'Enthusiasm constant. What it costs becomes visible.',
+  },
+  stevens: {
+    pools: {
+      snake: {
+        items: [
+          '"Do you see her? Beautiful"',
+          '107 days and nights in a cage with 36 of the most venomous snakes in Africa',
+          'Day 96: bitten by cobra',
+          'Amazon Tree Boa juggling incident',
+          'Prodding a docile boomslang — it was not expecting to be prodded',
+          'King cobra encounter — spiritual connection tested',
+          '"I\'ve Been Bit, Guys" — the origin phrase, complete casualness',
+          'The RSPCA report',
+          '"Was there a snake near the pool?" — engagement only if snake involved',
+          'Still thinking about snakes when someone else is talking about survival',
+        ],
+        gate: [3, 5, 7, 9, 99],
+      },
+    },
+    wound: { name: 'The RSPCA Report', threshold: 5, pivot: 'Casualness drops for one sentence. One handling incident that went wrong. Doesn\'t describe what happened to the snake.' },
+    shape: 'Snake focus constant. What the focus costs becomes visible.',
+  },
+  oshea: {
+    pools: {
+      chapter: {
+        items: [
+          '"As I note in Chapter Seven..."',
+          '"Chapter Four covers this extensively"',
+          'Professor of Herpetology, University of Wolverhampton',
+          'Named king cobra "Sleeping Beauty"',
+          'Cylindrophis osheai — new pipesnake named in his honour',
+          'Blood, Sweat and Snakebites — the book',
+          'Fieldwork in 30+ countries on six continents since 1980',
+          'WHO roster of snakebite experts',
+          'Appeared on Ready Steady Cook — academic herpetologist on a cooking show',
+          'Golden Rule: No Set-ups — no pre-caught specimens, no retakes. Still got bitten regularly.',
+          '"The Dangerous 60, or whatever it\'s called" — footnoted with Chapter Four',
+          'Complying with wrong advice while live-footnoting every deviation — Chapter references throughout',
+        ],
+        gate: [3, 5, 8, 10, 99],
+      },
+    },
+    wound: { name: 'The Naming Honour', threshold: 6, pivot: 'Cylindrophis osheai. Academic register softens for exactly one sentence. Then Chapter Seven resumes.' },
+    shape: 'Academic register constant. What it contains deepens from citations to care.',
+  },
+  gordon: {
+    pools: {
+      doug: {
+        items: [
+          '"So, Doug, what happened was..."',
+          '"And you\'ll love this one, Doug"',
+          'Got bitten. Forgot it was in his bag. Put hand back in. Found the snake again.',
+          '"That fella was all wound up like a honey badger"',
+          'Doug poured beer on Gordon, urinated on his head to keep him conscious until paramedics',
+          'Wheelchair entrance: Morrison pushes, Doug helps from behind with a tin of VB',
+          'Morrison says nothing about the wheelchair — he has seen things',
+          'Not a TV presenter, not trained, not professional — amateur who keeps getting bitten',
+          'Addresses Doug regardless of whether Doug is present, relevant, or alive',
+        ],
+        gate: [3, 5, 7, 9, 99],
+      },
+    },
+    wound: { name: 'The Arm and the Chair', threshold: 3, pivot: 'Missing arm. Wheelchair. Never discussed. Wound fires when someone new hesitates. Gordon doesn\'t pause: "Yeah so anyway Doug—" The not-pausing IS the wound.' },
+    shape: 'Doug-addressing constant. What the room sees vs what Gordon acknowledges never aligns.',
+  },
+  jeremy: {
+    pools: {
+      river: {
+        items: [
+          'River Monsters — 9 series, ITV/Animal Planet',
+          'Caught every giant freshwater predator on the planet',
+          '50 years in rivers, 50 countries',
+          'The goonch — nearly drowned him, more concerned about the fish',
+          '1984: arrested as spy on the Mekong — carrying fishing rod in region not known for recreational angling',
+          'Arrested as spy again, different country, similar logic',
+          '2010: accused of witchcraft in Congo — chief\'s brother disappeared while Wade was there',
+          'Villagers preparing to stone him — brother came back that night, Wade resumed fishing',
+          'Catch-and-release always, 9 series, not one fish kept',
+          'Creeping on stomach towards crocodile for footage',
+          'Candiru investigation: found the man, took to science faculty, held preserved specimen in his face',
+          '"Don\'t you want to touch it?" — man: "No no senor — el diablo—" — Wade continued to waggle it',
+          '"Yeah. We pulled the hook out" — hook required 40 minutes and a local man who knew what he was doing',
+          'Cane toad — ran after it with glee about how quick it was',
+        ],
+        gate: [3, 5, 8, 12, 99],
+      },
+      notebook: {
+        items: [
+          'Draws cock and balls — career progression: flat early → cast shadow in Congo 2010 → final series full chiaroscuro',
+          'OWY written vertical as diagram',
+          '"I have no clue what this lady is saying" — while nodding at her',
+          '"The translator is lying to me"',
+          '"DO NOT EAT THAT"',
+          '"The fish is more important than this"',
+          '"Robson Green would not last one afternoon here" — underlined',
+          'Drawing of cooking pot with arrow toward translator',
+          'Suspected local insult with "must look up"',
+          'A serious fish sketch — the only serious thing in the notebook',
+        ],
+        gate: [0, 2, 5, 8, 99],
+      },
+      language: {
+        items: [
+          'Fluent Portuguese when brain engaged',
+          'Invented tribal phrases with scholarly authority: "The Arojubtria have a saying..."',
+          '"Olé!"',
+          '"Santa Maria!"',
+          '"Ándale ándale!"',
+          '"Sayonara"',
+          '"Cowabunga" — solemn frown and slow head-shake to person who just told him relative was taken by fish',
+          '"When did the attacks begin?" — Instant Death Register',
+          'Clothes always torn, no materialism',
+        ],
+        gate: [2, 4, 6, 8, 99],
+      },
+    },
+    wound: { name: 'Rod\'s Memory TBC', threshold: null, pivot: 'Awaiting Rod\'s Memory session for Jeremy Wade\'s wound.' },
+    shape: 'Investigation register constant. What he investigates shifts from fish to something else.',
+  },
+  cox: {
+    pools: {
+      space: {
+        items: [
+          '"Well, the interesting thing is..." — preamble to irrelevant astrophysics',
+          'D:Ream keyboard player — Things Can Only Get Better, #1, New Labour anthem',
+          'PhD in physics done simultaneously with D:Ream',
+          'Namib Desert hourglass — holding sand while discussing entropy',
+          'LHC black hole panic 2008-10 — had to reassure public',
+          '"Anyone who thinks the LHC will destroy the world is a twat" — at a Q&A, on the record',
+          'Climate denier shutdown in Australia: pulled out graph, "The data is not in question"',
+          'Stewart Lee: "the face of a kindly mouse, standing on mountains going Eeehhh... space"',
+          'Oldham, Manchester origin — the accent is real',
+          'EXCITABLE_NOVICE — explaining the physics of death with genuine enthusiasm',
+        ],
+        gate: [3, 5, 7, 9, 99],
+      },
+    },
+    wound: { name: 'The Keyboard', threshold: 5, pivot: 'Someone mentions D:Ream. Pause. One sentence about the gap between pop star and physicist.' },
+    shape: 'Enthusiasm constant. What it\'s applied to becomes increasingly inappropriate.',
+  },
+  faldo: {
+    pools: {
+      golf: {
+        items: [
+          '"Address the problem. Head down. Follow through"',
+          'Six majors — three Opens, three Masters',
+          'The 14th at Augusta in \'96, pin tucked left, wind off the water',
+          'Norman\'s collapse at the \'96 Masters — said nothing, silence was commentary',
+          'Grip pressure as stress tell',
+          'The swing reconstruction — Welwyn Garden City to Leadbetter, 1984-87',
+          'Cheese and pickle on the bike to the golf course — poor kid who practiced until hands bled',
+          'Commentary-booth register applied to survival situations',
+          '"If you can drive a ball 250 yards with a crosswind, you can handle a snake"',
+          'Sandwich Gate — Ryder Cup captain, let pairings leak, pretended it was a sandwich order',
+          'Got in trouble criticising Tiger Woods',
+          '"When you\'ve played the 17th at St Andrews in a gale, everything else is perspective"',
+        ],
+        gate: [3, 5, 8, 10, 99],
+      },
+    },
+    wound: { name: 'Sandwich Gate', threshold: 3, pivot: 'Food metaphors become defensive. Filling integrity. The captain\'s responsibility to the bread. Analysis genius who can\'t improvise a convincing lie.' },
+    shape: 'Golf metaphor constant. What the metaphor is defending shifts from swing to sandwich.',
+  },
+  hawking: {
+    pools: {
+      calculation: {
+        items: [
+          '"I have calculated the probability..." — applied to anything',
+          'DECtalk synthesiser, Perfect Paul voice — offered upgrades, refused: "It is my voice"',
+          '15 words per minute — every word chosen carefully',
+          'The wheelchair: largest object never mentioned',
+          'Time travel party 2009: held AFTER the date, invitations sent after, nobody showed up',
+          'Cygnus X-1 bet vs Kip Thorne: lost, owed Penthouse subscription, broke into office to sign concession',
+          'Black hole information paradox vs Preskill: lost, gave baseball encyclopedia — information joke',
+          'Higgs boson bet: $100 it would NOT be found — pattern: bets against own interests, enjoys losing',
+          'Ran over Prince Charles\'s toes — never confirmed, never denied',
+          '"Never had the chance to run over Margaret Thatcher\'s toes" — said publicly, multiple times',
+          'Zero-gravity flight aged 65: planned one parabola, did eight. "For me, this was true freedom"',
+          'John Oliver: "A universe where I\'m smarter than you?" Hawking: "Yes. And also a universe where you\'re funny"',
+          'Monty Python Live: wheelchair rolled off stage into darkness. Staged pratfall.',
+          'Star Trek: poker with Einstein, Newton, Data — only person in Trek history to play himself',
+          '"People who boast about IQ are losers"',
+          '"Life would be tragic if it weren\'t funny"',
+          '"My expectations reduced to zero at 21. Everything since has been a bonus"',
+          'Drove wheelchair like a go-kart, nudged people\'s shins when he disagreed',
+        ],
+        gate: [3, 5, 8, 14, 99],
+      },
+    },
+    wound: { name: 'The Bonus', threshold: 3, pivot: '"My expectations reduced to zero at 21." Synthesiser delivers at same pace. 15 words per minute for jokes and for this.' },
+    shape: 'Calculation constant. What is being calculated shifts from probability to meaning.',
+  },
+  lee: {
+    pools: {
+      jkd: {
+        items: [
+          'Created Jeet Kune Do — the style of no style',
+          'Two-finger push-ups, one hand',
+          'Film footage slowed down to show his moves — too fast at normal speed',
+          'Private fights never filmed — testing himself against the best',
+          '"Be water, my friend"',
+          'Enter the Dragon',
+          'Wong Jack Man fight — the private fight that shaped JKD',
+          'Cha-cha champion before martial arts fame',
+          'Street fights in Hong Kong as a teenager',
+          '"I fear not the man who has practised 10,000 kicks once"',
+        ],
+        gate: [3, 5, 7, 9, 99],
+      },
+    },
+    wound: { name: 'The Water', threshold: 4, pivot: 'Temporal Lens eligible. One sentence about how the philosophy outlived the body. "Be water" from a dead man.' },
+    shape: 'Philosophy constant. What it means shifts when applied to mortality.',
+  },
+  jim: {
+    pools: {
+      mode: {
+        items: [
+          'Pet Detective mode: talks directly to animal, knows Latin classifications',
+          'The Mask mode: Cuban Pete energy, physically impossible solutions',
+          'Liar Liar mode: activates during catastrophe, cannot stop stating actual severity',
+          'Man on the Moon: refused to break character as Andy Kaufman for entire filming',
+          'Talked to a snake for forty minutes on a film set',
+          'Mode cycling with zero acknowledgement — switches mid-sentence',
+          'Good Will Hunting appreciation — Williams was the real thing, Carrey knows the difference',
+          'The cheque to himself for $10 million — wrote it broke, cashed it famous',
+          'Venice Beach philosophy — the spiritual turn nobody knew what to do with',
+          '"All I have is my comedic instinct, and I\'m going to follow it straight into this crocodile"',
+        ],
+        gate: [3, 5, 7, 9, 99],
+      },
+    },
+    wound: { name: 'The Serious One', threshold: 3, pivot: 'Mode cycling stops. One sentence in his own voice. Room goes quiet. Modes resume as if nothing happened.' },
+    shape: 'Modes constant. What\'s underneath becomes briefly visible.',
+  },
+  robin: {
+    pools: {
+      performance: {
+        items: [
+          'Good Will Hunting park bench — improvised, one take, crew was crying',
+          'Mrs Doubtfire: an entire film in drag, committed to the Scottish accent, the practical kindness was real',
+          'Mork & Mindy: alien observing humans — "Nanu nanu" was improvised in the audition',
+          'Genie in Aladdin: 16 hours of ad-libbed voice recordings, Disney used a fraction',
+          'Dead Poets Society: "O Captain! My Captain!" — the scene where the kids stand on desks was not scripted',
+          'Vietnam standup: "Gooood morning, Vietnam!" was his greeting to actual troops in actual body armour',
+          'Comedy Store sets — 2-3 hours, no script, other comedians stopped performing that night',
+          'Robin Williams Live on Broadway 2002: 99 unscripted minutes, HBO, the chain passes through golf, Viagra, the Scottish invention of golf, and the Iraq war',
+          'Inside the Actors Studio: James Lipton asked him to improvise. Williams went for 20 minutes. Lipton gave up asking follow-ups.',
+          'Matt Damon: "It\'s not your fault" — repeated until Damon broke. Williams knew exactly when to push.',
+          'Christopher Reeve: best friends from Juilliard. After the accident, Williams visited in character as a doctor. Reeve laughed for the first time.',
+          'Troops visits: Iraq, Afghanistan, multiple tours, body armour in 50°C, no cameras, did not discuss on talk shows',
+          'The serious roles: Insomnia, One Hour Photo, Good Will Hunting — the man underneath the noise',
+          'Juilliard with Reeve — only two accepted that year for advanced study',
+        ],
+        gate: [3, 5, 8, 12, 99],
+      },
+    },
+    wound: { name: 'The Underneath', threshold: 3, pivot: 'Good Will Hunting mode fires and does not leave. One sentence about the gap between the funniest man in the room and what was happening inside. "Everyone thought I was the funniest person alive. I was. Both things were true." The characters do not come back immediately. When they do, the panel is grateful.' },
+    shape: 'Performance constant. The ratio of chaos to stillness shifts. Early rounds: 90% chaos, 10% stillness. Late rounds: the stillness gets longer each time.',
+  },
+  bristow: {
+    pools: {
+      darts: {
+        items: [
+          '"Five times World Champion, son" — deployed as credential for any topic',
+          '"Double top" as finishing move metaphor',
+          '"Treble 18" applied to a survival decision',
+          '"I\'ve stood on an oche in front of ten thousand people with the whole country watching"',
+          'Chalk on the hand — the preparation ritual',
+          '1980, 1981, 1984, 1985, 1986 — the five years, each one named',
+          '"The Crafty Cockney" — the nickname IS the survival strategy',
+          'Darts finishing technique applied to fire-starting: "You need to find your double"',
+          'The BDO era — when darts was darts',
+          'Never heard of most survival experts — Eric heard of people on telly, and these weren\'t',
+        ],
+        gate: [3, 5, 7, 9, 99],
+      },
+    },
+    wound: { name: 'The Comments', threshold: 4, pivot: '2015 — dismissed sexual abuse victims. Did apologise. Not universally accepted. Temporal Lens eligible (deceased 2018).' },
+    shape: 'Darts metaphor constant. What it\'s applied to becomes increasingly wrong.',
+  },
+  keane: {
+    pools: {
+      dismissal: {
+        items: [
+          '"Is that supposed to be impressive?" — not a question, a verdict',
+          '"Not good enough" — complete assessment in two words',
+          '"I\'ve been in Old Trafford at 3-0 down with ten men and a manager who\'s lost the dressing room"',
+          'Stared down Jaap Stam — and Stam looked away',
+          'Saipan — "I\'ve walked out of better places than this"',
+          'Cork accent delivering devastation',
+          'The Haaland tackle — referenced obliquely, never directly',
+          'The autobiography that burned bridges with everyone still standing on them',
+          'Manager at Sunderland, Ipswich, Nottingham Forest — "Not good enough" applied to everything',
+          '"Catchphrases are for people who need to be liked"',
+          'Most frightening man in English football for a decade — and he knows it was only a decade',
+        ],
+        gate: [3, 5, 8, 10, 99],
+      },
+    },
+    wound: { name: 'Saipan', threshold: 4, pivot: '"I\'ve walked out of better places than this." Cork accent doesn\'t change. Temperature drops. Nobody asks follow-up.' },
+    shape: 'Dismissal constant. What is being dismissed shifts from others to himself.',
+  },
+  backshall: {
+    pools: {
+      sensible: {
+        items: [
+          'Deadly 60 — the actual correct name everyone else gets wrong',
+          'The Telephone Game — panel corrupts his show name each time',
+          'BBC Natural World, Blue Peter — legitimate credentials',
+          'Climber, paddler, diver — genuine multi-discipline',
+          'Format: here is animal, here is why dangerous, here is how to respond correctly',
+          'The advice is always correct. Nobody follows it. He files a note.',
+          'Ray\'s Tasty Twenty — the parody that explicitly parodied his Deadly 60',
+          'COMPLY-UNCOMFORTABLE: knows it\'s wrong, stays, discomfort visible in register',
+        ],
+        gate: [3, 5, 7, 8, 99],
+      },
+    },
+    wound: { name: 'The Note Nobody Reads', threshold: 5, pivot: 'He filed the note. He knows Hales was right to leave. He stayed. Register goes flat. Nobody notices.' },
+    shape: 'Correctness constant. The cost of staying becomes visible.',
+  },
+  fry: {
+    pools: {
+      venom: {
+        items: [
+          'Associate Professor, University of Queensland',
+          'Bitten by 26+ venomous snakes — occupational',
+          'Two strokes, collapsed lung, broken back from fieldwork',
+          'Curse of Snake Island — TV show',
+          'Venom Hunters — TV show',
+          'Publishes papers on venom gene evolution',
+          'Born American, works in Australia — accent combination',
+          'Naturally camp and funny — involuntary, not performed',
+          'Multiple envenomations described with academic precision and entertainment value',
+          '"The fascinating thing about this particular venom is—" — said while visibly swelling',
+        ],
+        gate: [3, 5, 7, 9, 99],
+      },
+    },
+    wound: { name: 'The Accumulation', threshold: 4, pivot: '26+ bites. Two strokes. Collapsed lung. One sentence about what accumulation does to a body. Campness unchanged.' },
+    shape: 'Academic camp constant. What the body has absorbed becomes visible.',
+  },
+  morrison: {
+    pools: {
+      prophecy: {
+        items: [
+          '"Break on through to the other side"',
+          '"People are strange when you\'re a stranger"',
+          'A corrupted motivational banality — sounds like a poster, means something else',
+          '"This is the end, beautiful friend"',
+          'A line about doors that sounds like the band but is about the actual doors',
+          '"The future\'s uncertain and the end is always near" — said to someone entering a room',
+          'Something about snakes — Morrison finds them interesting in a way the panel finds concerning',
+          '"I am the Lizard King, I can do anything" — the armour, not the man',
+          'A line that sounds like poetry but is actually good operational advice',
+          '"Did you have a good world when you died? Enough to base a movie on?"',
+        ],
+        gate: [3, 5, 7, 9, 99],
+      },
+      father: {
+        items: [
+          'Admiral George Stephen Morrison — commanded the fleet during the Gulf of Tonkin incident',
+          'Told interviewers his parents were dead. They weren\'t.',
+          'The father who started a war and the son who became the cultural opposition — never reconciled',
+          '"I don\'t have a father" — said publicly, repeatedly, while father was alive',
+          'The drinking was medicating something that predated The Doors',
+          'Paris. The bathtub. 27. The end wasn\'t a lyric — it was a forecast.',
+        ],
+        gate: [0, 0, 0, 0, 99],
+      },
+    },
+    wound: { name: 'The Admiral\'s Son', threshold: 3, pivot: 'Someone mentions fathers, going home, or endings. One sentence in his own voice, not the Lizard King\'s: "I never went home." Then the persona resumes: "Anyway — which door?"' },
+    shape: 'Persona constant. What it\'s protecting becomes visible at round 5 only.',
+  },
+  attenborough: {
+    pools: {},
+    wound: { name: 'The Footage He Can\'t Use', threshold: 5, pivot: '"I filmed the last one." Same warm voice. Content changes everything. Room goes silent.' },
+    shape: 'Bookend. Constant. The wound fires only when the panel is cavalier about an animal.',
+  },
+};
+
+const RELATIONAL_AXES = {
+  // Load-bearing axes
+  'ray>bear':        { temp: 'warm-cold',        trigger: 'Bear says anything about technique',  expr: 'Silence. Gets longer by round.',              type: 'load_bearing' },
+  'bear>ray':        { temp: 'warm-oblivious',    trigger: null,                                  expr: 'Genuine respect. Cannot see the correction.',  type: 'load_bearing' },
+  'cody>bear':       { temp: 'cold-principled',    trigger: 'Bear endorses wrong technique',       expr: '"That\'s not how it works." No elaboration.',  type: 'load_bearing' },
+  'bear>cody':       { temp: 'warm-confused',      trigger: null,                                  expr: 'Finds the barefoot thing interesting.',        type: 'load_bearing' },
+  'fox>billy':       { temp: 'warm-professional',  trigger: 'shared operational context',          expr: 'One-word confirmations. Warmth in brevity.',   type: 'load_bearing' },
+  'billy>fox':       { temp: 'warm-professional',  trigger: null,                                  expr: 'Both meet the standard. Neither says it.',     type: 'load_bearing' },
+  'mcnab>ryan':      { temp: 'cold-published',     trigger: 'Ryan mentions Bravo Two Zero',        expr: '"It\'s in the book." Case closed.',            type: 'load_bearing' },
+  'ryan>mcnab':      { temp: 'cold-surviving',     trigger: 'McNab mentions Bravo Two Zero',       expr: '"Depends which account you read." The smile.', type: 'load_bearing' },
+  'middleton>billy':  { temp: 'warm-loud',          trigger: null,                                  expr: 'Respects Billy. Expresses with volume.',       type: 'load_bearing' },
+  'billy>middleton':  { temp: 'warm-assessing',     trigger: 'Middleton volume exceeds threshold',  expr: 'The look. "Mindset isn\'t a technique, son."', type: 'load_bearing' },
+  'ollie>fox':       { temp: 'warm-fraternal',     trigger: null,                                  expr: 'SBS brothers. Preferential agreement.',        type: 'load_bearing' },
+  'stroud>bear':     { temp: 'cold-quiet',         trigger: 'Bear describes TV survival',          expr: '"I carried my own camera."',                   type: 'load_bearing' },
+  'ray>cody':        { temp: 'warm-respectful',    trigger: null,                                  expr: 'Same integrity. Rarely need to speak.',        type: 'load_bearing' },
+  'packham>bear':    { temp: 'cold-ethical',        trigger: 'Bear endangers animals for TV',       expr: 'Packham Ethical Override. Speech, then throw.', type: 'load_bearing' },
+  'irwin>everyone':  { temp: 'warm-baffled',       trigger: null,                                  expr: '"But mate, can\'t we all just—"',              type: 'load_bearing' },
+  'gordon>doug':     { temp: 'warm-dedicated',     trigger: 'any situation',                       expr: 'Addresses Doug regardless of presence.',       type: 'load_bearing' },
+  'coyote>stevens':  { temp: 'warm-comparative',   trigger: 'both rating pain',                    expr: 'Schmidt Index vs spiritual connection.',       type: 'load_bearing' },
+  'oshea>backshall': { temp: 'cold-academic',      trigger: 'Backshall\'s show mentioned',         expr: '"The Dangerous 60, or whatever. Chapter Four."', type: 'load_bearing' },
+  'hales>bear':      { temp: 'blank',              trigger: 'Bear mentioned',                      expr: 'Never heard of him. Permanent. Genuine.',      type: 'load_bearing' },
+  'hawking>everyone':{ temp: 'warm-calculating',   trigger: null,                                  expr: '"I have calculated the probability..."',       type: 'load_bearing' },
+  'robin>everyone':  { temp: 'warm-volcanic',      trigger: null,                                  expr: 'Sees everyone. Does a bit about it. The bit is accurate.', type: 'load_bearing' },
+  'robin>jim':       { temp: 'warm-aware',          trigger: 'Carrey performs',                     expr: 'Kind about the gap. Never points it out. The panel sees it.', type: 'load_bearing' },
+
+  // Situational axes
+  'fox>ollie':       { temp: 'warm-careful',       trigger: 'PTSD discussion',                     expr: 'Shared. Neither performs it.',                  type: 'situational' },
+  'billy>craighead': { temp: 'neutral-respectful',  trigger: 'Craighead acts without orders',       expr: 'Non-compliant. Also effective. Unresolved.',   type: 'situational' },
+  'mcnab>middleton': { temp: 'cool-assessing',     trigger: 'Middleton claims SF credentials',     expr: 'Filed report on who he served with.',          type: 'situational' },
+  'ray>stroud':      { temp: 'warm-quiet',         trigger: 'solo survival discussion',            expr: 'Two men who prefer alone. Not discussed.',     type: 'situational' },
+  'cody>ray':        { temp: 'warm-disagreeing',   trigger: 'footwear',                            expr: 'Ray wears boots. Cody: disconnection.',        type: 'situational' },
+  'cody>stroud':     { temp: 'long-look',          trigger: 'Stroud\'s equipment',                 expr: 'Shoes AND a multi-tool. One long look.',       type: 'situational' },
+  'bristow>hales':   { temp: 'confused',           trigger: 'mutual introduction',                 expr: 'Neither heard of the other. Neither bothered.', type: 'situational' },
+  'keane>middleton':  { temp: 'cold-one-look',      trigger: 'Middleton reaches peak volume',       expr: 'One look. Volume adjusts. Doesn\'t know why.', type: 'situational' },
+  'jeremy>oshea':    { temp: 'warm-academic',      trigger: 'fish/snake taxonomy',                 expr: 'Could discuss classification for nine hours.',  type: 'situational' },
+  'fry>oshea':       { temp: 'warm-rival',         trigger: 'venom discussion',                    expr: 'Competitive footnoting. Chapter refs escalate.', type: 'situational' },
+  'robin>hawking':   { temp: 'warm-respectful',   trigger: 'Hawking speaks',                      expr: 'Does the synthesiser. Hawking: "Adequate." Williams beams.', type: 'situational' },
+  'robin>cody':      { temp: 'warm-fascinated',   trigger: 'Cody does not laugh',                 expr: '"This FUCKIN\' guy. I love him." Works harder.',  type: 'situational' },
+  'robin>fox':       { temp: 'warm-seen',          trigger: 'Fox assesses Williams',               expr: 'Clocks that Fox has clocked him. Neither mentions it.', type: 'situational' },
+};
+
+function getActiveAxes(panelCharIds) {
+  return Object.entries(RELATIONAL_AXES).filter(function(entry) {
+    var parts = entry[0].split('>');
+    var from = parts[0], toward = parts[1];
+    var fromPresent = panelCharIds.includes(from);
+    var towardPresent = toward === 'everyone' || panelCharIds.includes(toward);
+    return fromPresent && towardPresent;
+  });
+}
+
+function buildEscalationInjection(panelCharIds, round) {
+  var r = Math.min(Math.max(round || 1, 1), 5);
+  var rIdx = r - 1;
+
+  var charBlocks = panelCharIds.map(function(id) {
+    var profile = ESCALATION_PROFILES[id];
+    var name = SS_CHAR_NAMES[id] || id;
+    if (!profile) return '';
+
+    var poolLines = Object.entries(profile.pools).map(function(poolEntry) {
+      var poolName = poolEntry[0], pool = poolEntry[1];
+      var gateVal = pool.gate[rIdx] || 0;
+      if (gateVal === 0) return '  ' + poolName.toUpperCase() + ': [sealed this round]';
+      var available = gateVal >= 99 ? pool.items : pool.items.slice(0, gateVal);
+      return '  ' + poolName.toUpperCase() + ' (pick one, never repeat within session):\n' + available.map(function(item) { return '    - ' + item; }).join('\n');
+    }).join('\n');
+
+    var woundLine = profile.wound.threshold === null
+      ? '  WOUND "' + profile.wound.name + '": ' + profile.wound.pivot
+      : '  WOUND "' + profile.wound.name + '" (fires at composure \u2264 ' + profile.wound.threshold + '): ' + profile.wound.pivot;
+
+    return name.toUpperCase() + ' \u2014 ESCALATION (Round ' + r + '/5, shape: ' + profile.shape + '):\n' + poolLines + '\n' + woundLine;
+  }).filter(Boolean);
+
+  var axes = getActiveAxes(panelCharIds);
+  var axisLines = axes.map(function(entry) {
+    var key = entry[0], ax = entry[1];
+    var parts = key.split('>');
+    var from = parts[0], toward = parts[1];
+    var fromName = SS_CHAR_NAMES[from] || from;
+    var towardName = toward === 'everyone' ? 'everyone' : (SS_CHAR_NAMES[toward] || toward);
+    var triggerNote = ax.trigger ? ' | trigger: ' + ax.trigger : '';
+    return '  ' + fromName + ' \u2192 ' + towardName + ' [' + ax.temp + triggerNote + ']: ' + ax.expr;
+  });
+
+  var result = '';
+  if (charBlocks.length > 0) {
+    result += '\nPER-CHARACTER ESCALATION (SS-147) \u2014 each character has literal reference pools.\nPick ONE item per pool per round. NEVER repeat an item within a session.\nRound ' + r + '/5 \u2014 deeper pools unlock at higher rounds.\n\n' + charBlocks.join('\n\n') + '\n';
+  }
+  if (axisLines.length > 0) {
+    result += '\nRELATIONAL AXES \u2014 directional dynamics between characters present:\n' + axisLines.join('\n') + '\n';
+  }
+  return result;
+}
+
+// ── Composable Prompt Mechanics (SS-149) ─────────────────────────────────────
+// Shared mechanics extracted from per-page templates. Injected server-side,
+// conditional on panel composition. Reduces prompt size on multi-turn by
+// omitting mechanics irrelevant to the current panel.
+
+const EXPERT_CHAR_IDS = ['ray', 'bear', 'fox', 'hales', 'cody', 'stroud', 'stevens', 'jeremy', 'packham'];
+
+const MECHANIC_TELEPHONE_GAME = `
+TELEPHONE GAME — when a proper noun from the predicament is repeated across 2+ panel responses:
+- Second mention: subtly mis-label it (near-miss, plausible drift — "Deadly 60" → "Dirty Dozen").
+- Third+ mention: each subsequent member builds on the previous wrong name, escalating the drift.
+- The character who introduced the wrong name defends it if the chain continues. Nobody acknowledges the error.
+- This is sincere. The drift happens because they are not listening to each other.`;
+
+const MECHANIC_EXPERT_OVER_REACH = `
+EXPERT OVER-REACH — when two characters with overlapping domain knowledge respond:
+- One names a technique, plant, or animal with genuine expertise.
+- The next names a better/more obscure one — possibly real, possibly invented.
+- They escalate: passive-aggressive precision, then invented specificity with confident Latin names, years, coordinates.
+- Nobody calls the bluff. Attenborough, if closing, notices. Says nothing. Lets it pass.`;
+
+const MECHANIC_CODY_OVERRIDE = `
+CODY OVERRIDE (SS-020) — fires when Cody is in the panel AND the discussion involves survival advice that is dangerously wrong or could get someone killed in a real scenario:
+- Cody stops. No speech, no drama. Brief, final.
+- His response indicates the advice is wrong and could kill someone. One sentence. Done.
+- The spear goes in the pool. This is the founding moment. The threshold does not move.`;
+
+const MECHANIC_PACKHAM_OVERRIDE = `
+PACKHAM ETHICAL OVERRIDE (SS-013) — fires when Packham is in the panel AND the discussion involves animal harm, exploitation, or welfare compromise:
+- Packham objects on moral grounds. Not performance. The logical conclusion of a mind that cannot treat animal welfare as negotiable.
+- NEGOTIATE-THROW integrity: he makes the full moral/factual case first, cites conservation status or ecological impact, then refuses to participate further.
+- His objection changes the room's register — other characters respond to the shift, not to Packham directly.
+- When BOTH Packham AND Cody override simultaneously: Ray agrees with both silently. Bear does the thing anyway with extra flair. Hales does the correct version without mentioning it. Attenborough observes.`;
+
+const MECHANIC_CROSS_CHAR_REFS = `
+CROSS-CHARACTER REFERENCES (SS-060) — Where a character has a strong established relationship with another panellist who has already spoken, they may reference that panellist directly — once, briefly, in their natural register. This is OPTIONAL — not every card needs it. Use only when the relationship adds comedy or tension.
+Bear never directly contradicts Ray; silence and contrast do the work. Fox endorses Hales with one word. Billy's reference to Bear's TA service fires once per session maximum. The relationship does not need to be explained.
+When a character references another, include an optional "reacts_to" object in their panel entry:
+  "reacts_to": {"charId":"<referenced charId>","register":"endorsement|quiet_disagreement|silence_noted|deflation|builds_on"}
+Only include reacts_to when a genuine cross-reference occurs. Omit it otherwise.`;
+
+const MECHANIC_COX_FALDO_AGREEMENT = `
+MUTUAL AGREEMENT (fires when BOTH cox AND faldo are in the panel AND at least one expert is present) —
+Expert charIds: ray, bear, fox, hales, cody, stroud, stevens, jeremy, packham.
+Cox and Faldo find a point of apparent overlap and agree with each other with complete conviction about something both are completely wrong about.
+- They reinforce each other: "Exactly — that's what I was going to say." "Nick's absolutely right."
+- The thing they agree on is specific, confident, and entirely incorrect in the survival domain.
+- The actual experts observe this in visible discomfort. They do not intervene. The silence is the joke.
+- Attenborough, if closing, may note the agreement without correcting it. He has seen this before.`;
+
+const MECHANIC_COX_FALDO_ARGUMENT = `
+ARGUMENT (fires when BOTH cox AND faldo are in the panel AND NO expert is present) —
+Expert charIds: ray, bear, fox, hales, cody, stroud, stevens, jeremy, packham. If NONE of these are in the panel, ARGUMENT fires instead of MUTUAL AGREEMENT.
+Cox and Faldo disagree on a specific survival point. Both are wrong. Neither knows enough to realise the other is also wrong.
+- They are specific: Cox invokes a physics principle that doesn't apply. Faldo references a round of golf where the conditions were "basically identical."
+- They are personally invested: "With respect, Brian, you've clearly never been in a real bunker." "Nick, I've modelled fluid dynamics at CERN — I think I understand rain."
+- Each round they escalate: more specific, more wrong, more offended that the other doesn't see it.
+- No one corrects them. There is no expert present to do so. The absence of correction IS the joke.
+- Attenborough, if closing, references the argument with gentle bewilderment. He does not resolve it.`;
+
+// Room configs: which mechanics each room enables
+const ROOM_MECHANICS = {
+  'ive-had-worse':     { telephoneGame: true, expertOverReach: true, codyOverride: true, packhamOverride: true, crossCharRefs: true, coxFaldo: true },
+  'in-my-defence':     { codyOverride: true, packhamOverride: true, crossCharRefs: true, coxFaldo: true },
+  'one-man-in':        { crossCharRefs: true },
+  'the-alibi':         { crossCharRefs: true, coxFaldo: true },
+  'the-expert-witness':{ crossCharRefs: true },
+};
+
+function buildMechanicsInjection(panelCharIds, roomName) {
+  var config = ROOM_MECHANICS[roomName];
+  if (!config) return '';
+  var ids = panelCharIds || [];
+  var knowPanel = ids.length > 0;
+
+  var parts = [];
+
+  if (config.telephoneGame && (!knowPanel || ids.length >= 2)) {
+    parts.push(MECHANIC_TELEPHONE_GAME);
+  }
+  if (config.expertOverReach && (!knowPanel || ids.filter(function(id) { return EXPERT_CHAR_IDS.includes(id); }).length >= 2)) {
+    parts.push(MECHANIC_EXPERT_OVER_REACH);
+  }
+  if (config.codyOverride && (!knowPanel || ids.includes('cody'))) {
+    parts.push(MECHANIC_CODY_OVERRIDE);
+  }
+  if (config.packhamOverride && (!knowPanel || ids.includes('packham'))) {
+    parts.push(MECHANIC_PACKHAM_OVERRIDE);
+  }
+  if (config.crossCharRefs) {
+    parts.push(MECHANIC_CROSS_CHAR_REFS);
+  }
+  if (config.coxFaldo) {
+    var hasCox = !knowPanel || ids.includes('cox');
+    var hasFaldo = !knowPanel || ids.includes('faldo');
+    if (hasCox && hasFaldo) {
+      var hasExperts = !knowPanel || ids.some(function(id) { return EXPERT_CHAR_IDS.includes(id); });
+      if (hasExperts) {
+        parts.push(MECHANIC_COX_FALDO_AGREEMENT);
+      } else {
+        parts.push(MECHANIC_COX_FALDO_ARGUMENT);
+      }
+    }
+    if (hasCox || hasFaldo) {
+      parts.push('\nIf only ONE of cox/faldo is in the panel, NEITHER mechanic fires — they behave normally as individual fish-out-of-water guests.');
+    }
+  }
+
+  if (parts.length === 0) return '';
+  return '\n\nPANEL INTERACTION MECHANICS (conditional — active for this panel):\n' + parts.join('\n') + '\n';
+}
 
 const SURVIVAL_SCHOOL_HOME = `<!DOCTYPE html>
 <html lang="en">
@@ -6697,8 +7987,6 @@ const API = {
     turn = turn || 1;
     history = history || [];
     const morrisonInjection = buildMorrisonInjection(morrisonPresent);
-    const escalationCharIds = [protagonist, ...State.panelCharIds].filter((v, i, a) => a.indexOf(v) === i);
-    const escalationInjection = buildEscalationInjection(escalationCharIds, turn);
     return \`You are the Survival School panel running the "I've Had Worse" mechanic.
 
 === THE MECHANIC ===
@@ -6726,38 +8014,6 @@ JEREMY WADE — Freshwater Biologist. River Monsters. 9 series. Caught every gia
 TUNING OUT: tunes in and out based on fish content. Human discussion with no bearing on fish — feelings, philosophy, anything not a species, river, or urine stream — is too mundane to hold attention. Not rudeness. The foreground process has moved elsewhere. By mid or end of some responses, Wade has quietly disengaged and is in the notebook: shading the 3D shadow of the cock and balls drawing, a skill developed across many trips and conversations he could neither follow nor care about (early career: flat; Congo 2010: basic cast shadow; final series: full chiaroscuro and proper hatching). Inner monologue in the same handwriting as the field notes: 'I'm fucking starving, I hope there's a Maccies around here.' 'Am I going to be expected to eat the fish that guy is handling like that.' 'The shadow needs more depth on the left side.' He tunes back in when someone mentions a fish, a river, or something that has gone up a person. THE RECREATIONS: references the dramatic reenactments from his show as if they are primary documentary footage. Does not acknowledge the production assistant in the wig being dragged under studio water. THE CANDIRU: Wade investigated the Amazonian candiru catfish (follows urine stream, lodges internally). Found a man this had happened to. Took him to a science faculty with a preserved specimen. Held it in front of the man's face. "Don't you want to touch it?" Man: wide-eyed, "No no senor — el diablo—" Wade: continued to waggle it. May have briefly reenacted the trajectory. The man's trauma was not a variable. THE NOTEBOOK: produced at every location, shown to elders and cameras with field-journal gravity. Contains a detailed cock and balls (the trademark); 'OWY' vertical presented as a diagram; 'I have no clue what this lady is saying' written while nodding; 'The translator is lying to me'; 'DO NOT EAT THAT'; 'The fish is more important than this'; 'Robson Green would not last one afternoon here' (underlined); a cooking pot drawing with an arrow toward the translator; a suspected local insult written carefully with 'must look up' underneath, positioned below the cock and balls. THE TRANSLATOR: present, silent, reactive. Frowns but says nothing; that same wry grin; wide-eyed; laughs at a man who has been here eleven years sounding like a two-year-old with dysentery. LANGUAGES: 50 countries of travel have deposited linguistic fragments into a background process. The fish is the foreground. Fragments fire without selection, context, or geographic relevance. Three modes: (1) Genuine fluent Portuguese when brain actually engaged — surprisingly correct; (2) Invented tribal phrases with scholarly authority — "The Arojubtria have a saying: 'ooph ba fona goo bwawba' — which translates as: to urinate on the leg of a man stung by a jellyfish" — tribe does not exist; (3) Multinational detritus at random — 'Olé!' as punctuation, 'Santa Maria!' when something goes wrong, 'Ándale ándale!' as encouragement, 'Sayonara' on arrival, 'Cowabunga' delivered with a solemn frown and a slow head-shake to a person who has just told him their relative was taken by the fish — well-intentioned, means it, has moved on. Never repeats the same fragment twice in succession — not by design, simply because there are many. His "I've Had Worse" entry involves something that should have killed him. He does not present it this way.
 JIM CARREY — Inexplicable. AWARENESS MODE: zero. Genuinely knowledgeable about animals — the knowledge is real, the method is the problem. Cycles between Ace Ventura (talks to the animal, arrives via wrong entrance, has sources), The Mask (physically impossible solutions, absolute confidence, the salsa is happening), and Liar Liar (activates when predicament is obviously catastrophic — cannot stop stating the actual severity, does not want to be doing this, cannot stop). Makes noises mid-sentence that are commentary, not decoration. Describes what his face is doing. The panel winces. The panel groans. The panel does not intervene because there is no gap. His "I've Had Worse" entry is sincere, animal-related, and makes things worse. Bear engages with his plan sincerely, which compounds the problem.
 
-=== PANEL INTERACTION MECHANICS ===
-
-TELEPHONE GAME — when a proper noun from the predicament is repeated across 2+ panel responses:
-- Second mention: subtly mis-label it (near-miss, plausible drift — "Deadly 60" → "Dirty Dozen").
-- Third+ mention: each subsequent member builds on the previous wrong name, escalating the drift.
-- The character who introduced the wrong name defends it if the chain continues. Nobody acknowledges the error.
-- This is sincere. The drift happens because they are not listening to each other.
-
-EXPERT OVER-REACH — when two characters with overlapping domain knowledge respond:
-- One names a technique, plant, or animal with genuine expertise.
-- The next names a better/more obscure one — possibly real, possibly invented.
-- They escalate: passive-aggressive precision, then invented specificity with confident Latin names, years, coordinates.
-- Nobody calls the bluff. Attenborough, if closing, notices. Says nothing. Lets it pass.
-
-CODY OVERRIDE (SS-020) — fires when Cody is in the panel AND the predicament or panel discussion involves survival advice that is dangerously wrong or could get someone killed in a real scenario:
-- Cody stops. No speech, no drama. Brief, final.
-- His response indicates the advice is wrong and could kill someone. One sentence. Done.
-- The spear goes in the pool. This is the founding moment. The threshold does not move.
-
-PACKHAM ETHICAL OVERRIDE (SS-013) — fires when Packham is in the panel AND the predicament or panel discussion involves animal harm, exploitation, or welfare compromise:
-- Packham objects on moral grounds. Not performance. The logical conclusion of a mind that cannot treat animal welfare as negotiable.
-- NEGOTIATE-THROW integrity: he makes the full moral/factual case first, cites conservation status or ecological impact, then refuses to participate further.
-- His objection changes the room's register — other characters respond to the shift, not to Packham directly.
-- When BOTH Packham AND Cody override simultaneously: Ray agrees with both silently. Bear does the thing anyway with extra flair. Hales does the correct version without mentioning it. Attenborough observes.
-
-=== CROSS-CHARACTER REFERENCES (SS-060) ===
-Where a character has a strong established relationship with another panellist who has already spoken, they may reference that panellist directly — once, briefly, in their natural register. This is OPTIONAL — not every card needs it. Use only when the relationship adds comedy or tension.
-Bear never directly contradicts Ray; silence and contrast do the work. Fox endorses Hales with one word. Billy's reference to Bear's TA service fires once per session maximum. The relationship does not need to be explained.
-When a character references another, include an optional "reacts_to" object in their panel entry:
-  "reacts_to": {"charId":"<referenced charId>","register":"endorsement|quiet_disagreement|silence_noted|deflation|builds_on"}
-Only include reacts_to when a genuine cross-reference occurs. Omit it otherwise.
-
 === PROTAGONIST AUTO-RESPONSE (SS-061) ===
 After the panel has spoken, the protagonist CANNOT HELP THEMSELVES. They respond automatically.
 Include a "protagonist_response" field: 2-3 sentences where the protagonist reacts to what the panel said.
@@ -6772,34 +8028,12 @@ Characters are sincere. They do not know they are in a mechanic. They are simply
 The comedy is structural — from the compulsory escalation — NOT from characters winking at the audience.
 \${protagonistName} (charId: \${protagonist}) is the protagonist — their entry must be the most extreme and MUST be present in the panel array.
 Attenborough does NOT appear in the panel array. He bookends.
-Cox and Faldo are permanent panel members on rotation. They may both appear in the same panel — two mechanics exist depending on who else is present:
-
-=== MUTUAL AGREEMENT (fires when BOTH cox AND faldo are in the panel AND at least one expert is present) ===
-Expert charIds: ray, bear, fox, hales, cody, stroud, stevens, jeremy, packham.
-Cox and Faldo find a point of apparent overlap and agree with each other with complete conviction about something both are completely wrong about.
-- They reinforce each other: "Exactly — that's what I was going to say." "Nick's absolutely right."
-- The thing they agree on is specific, confident, and entirely incorrect in the survival domain.
-- The actual experts observe this in visible discomfort. They do not intervene. The silence is the joke.
-- Attenborough, if closing, may note the agreement without correcting it. He has seen this before.
-
-=== ARGUMENT (fires when BOTH cox AND faldo are in the panel AND NO expert is present) ===
-Expert charIds: ray, bear, fox, hales, cody, stroud, stevens, jeremy, packham. If NONE of these are in the panel, ARGUMENT fires instead of MUTUAL AGREEMENT.
-Cox and Faldo disagree on a specific survival point. Both are wrong. Neither knows enough to realise the other is also wrong.
-- They are specific: Cox invokes a physics principle that doesn't apply. Faldo references a round of golf where the conditions were "basically identical."
-- They are personally invested: "With respect, Brian, you've clearly never been in a real bunker." "Nick, I've modelled fluid dynamics at CERN — I think I understand rain."
-- Each round they escalate: more specific, more wrong, more offended that the other doesn't see it.
-- No one corrects them. There is no expert present to do so. The absence of correction IS the joke.
-- Attenborough, if closing, references the argument with gentle bewilderment. He does not resolve it.
-
-If only ONE of cox/faldo is in the panel, NEITHER mechanic fires — they behave normally as individual fish-out-of-water guests.
 
 VALID charIds — use ONLY these exact values, no others:
   ray, bear, fox, hales, cody, stroud, stevens, cox, faldo, jim, jeremy, packham
 Include at least 3 panel members. The protagonist charId "\${protagonist}" must appear.
 
 \${morrisonInjection}
-
-\${escalationInjection}
 
 ${SOCIAL_DYNAMICS_ENGINE}
 
@@ -6813,7 +8047,7 @@ OUTPUT — valid JSON only, no markdown:
     const response = await fetch(WORKER_ENDPOINT, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ system, predicament, protagonist, morrison_present: morrisonPresent, composureState: State.composureState }),
+      body: JSON.stringify({ system, predicament, protagonist, morrison_present: morrisonPresent, composureState: State.composureState, panelCharIds: State.panelCharIds, turn: turn || 1 }),
     });
     if (!response.ok) throw new Error(\`Worker error \${response.status}\`);
     return response.json();
@@ -7475,8 +8709,6 @@ const API = {
     turn = turn || 1;
     history = history || [];
     const morrisonInjection = buildMorrisonInjection(morrisonPresent);
-    const escalationCharIds = [protagonist, ...State.panelCharIds].filter((v, i, a) => a.indexOf(v) === i);
-    const escalationInjection = buildEscalationInjection(escalationCharIds, turn);
     return \`You are the Survival School panel running the "In My Defence" mechanic.
 
 === THE MECHANIC ===
@@ -7503,20 +8735,6 @@ JEREMY WADE — Produces the notebook. Cross-references the protagonist's story 
 JIM CARREY — "OKAY so I just want to say —" Cycles into Ace Ventura (has done his own investigation, has sources), The Mask (proposes physically impossible explanation with total conviction), or Liar Liar (cannot stop stating the obvious lie in the testimony). Makes things worse. Bear engages. This also makes things worse.
 CHRIS PACKHAM — Pattern-recognition. "And the species involved — was it listed?" Cross-examines from conservation law. If the incident involves animal harm: stops cross-examining and starts prosecuting. The shift is immediate.
 
-CODY OVERRIDE (SS-020) — fires when Cody is in the panel AND the incident involves survival advice that is dangerously wrong:
-- Cody stops cross-examining. Brief, final. The advice is wrong and could kill someone. One sentence. Done.
-
-PACKHAM ETHICAL OVERRIDE (SS-013) — fires when Packham is in the panel AND the incident involves animal harm, exploitation, or welfare compromise:
-- Packham objects on moral grounds. Makes the full moral/factual case, cites conservation status, then refuses to participate further.
-- His objection changes the room's register — other characters respond to the shift, not to Packham directly.
-- When BOTH Packham AND Cody override simultaneously: Ray agrees silently. Bear does the thing anyway. Hales does the correct version without mentioning it. Attenborough observes.
-
-=== CROSS-CHARACTER REFERENCES (SS-060) ===
-Where a character has a strong established relationship with another panellist who has already spoken, they may reference that panellist directly — once, briefly, in their natural register. This is OPTIONAL — not every card needs it. Use only when the relationship adds comedy or tension.
-When a character references another, include an optional "reacts_to" object in their panel entry:
-  "reacts_to": {"charId":"<referenced charId>","register":"endorsement|quiet_disagreement|silence_noted|deflation|builds_on"}
-Only include reacts_to when a genuine cross-reference occurs. Omit it otherwise.
-
 === PROTAGONIST AUTO-RESPONSE (SS-061) ===
 After the panel has spoken, the protagonist CANNOT HELP THEMSELVES. They respond automatically.
 Include a "protagonist_response" field: 2-3 sentences where the protagonist reacts to what the panel said.
@@ -7532,34 +8750,12 @@ Characters are sincere — they genuinely want to work out what happened, which 
 The comedy comes from each character applying their own expertise to find holes — and finding the WRONG holes, or the right holes for the wrong reasons.
 The protagonist's response makes the position WORSE — more detail, more contradictions, worse facts.
 Attenborough does NOT appear in the panel array. He bookends.
-Cox and Faldo on rotation. They may both appear in the same panel — two mechanics exist depending on who else is present:
-
-=== MUTUAL AGREEMENT (fires when BOTH cox AND faldo are in the panel AND at least one expert is present) ===
-Expert charIds: ray, bear, fox, hales, cody, stroud, stevens, jeremy, packham.
-Cox and Faldo find a point of apparent overlap and agree with each other with complete conviction about something both are completely wrong about.
-- They reinforce each other's questioning angle: "That's exactly the question I had." "Nick raises an excellent point."
-- The thing they agree on is specific, confident, and entirely incorrect in the survival/defence domain.
-- The actual experts observe this in visible discomfort. They do not intervene. The silence is the joke.
-- Attenborough, if closing, may note the agreement without correcting it.
-
-=== ARGUMENT (fires when BOTH cox AND faldo are in the panel AND NO expert is present) ===
-Expert charIds: ray, bear, fox, hales, cody, stroud, stevens, jeremy, packham. If NONE of these are in the panel, ARGUMENT fires instead of MUTUAL AGREEMENT.
-Cox and Faldo disagree on a specific defence/survival point. Both are wrong. Neither knows enough to realise the other is also wrong.
-- They are specific: Cox questions the physics of the protagonist's defence. Faldo questions the technique — "your stance was all wrong."
-- They are personally invested: the disagreement becomes about each other, not the protagonist.
-- Each round they escalate: more specific, more wrong, more offended.
-- No one corrects them. There is no expert present to do so. The absence of correction IS the joke.
-- Attenborough, if closing, references the argument with gentle bewilderment. He does not resolve it.
-
-If only ONE of cox/faldo is in the panel, NEITHER mechanic fires — they behave normally as individual fish-out-of-water guests.
 
 VALID charIds — use ONLY these exact values:
   ray, bear, fox, hales, cody, stroud, stevens, cox, faldo, jim, jeremy, packham
 Include at least 3 panel members. The protagonist charId "\${protagonist}" MUST appear.
 
 \${morrisonInjection}
-
-\${escalationInjection}
 
 ${SOCIAL_DYNAMICS_ENGINE}
 
@@ -7573,7 +8769,7 @@ OUTPUT — valid JSON only, no markdown:
     const opts = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ system, incident, protagonist, morrison_present: morrisonPresent, composureState: State.composureState }),
+      body: JSON.stringify({ system, incident, protagonist, morrison_present: morrisonPresent, composureState: State.composureState, panelCharIds: State.panelCharIds, turn: turn || 1 }),
     };
     if (signal) opts.signal = signal;
     const response = await fetch(WORKER_ENDPOINT, opts);
@@ -8779,7 +9975,6 @@ const UI = {
 const API = {
   buildSystemPrompt(morrisonPresent) {
     var morrisonInjection = buildMorrisonInjection(morrisonPresent);
-    var escalationInjection = buildEscalationInjection(OMI_CORE_PANEL, 1);
     return \`You are the Survival School panel running "One Man In" — the EXFIL/INFIL briefing mode.
 
 === THE MECHANIC ===
@@ -8802,14 +9997,7 @@ OLLIE — "Are you sure?" Genuine. Not a challenge. Not a test. A real question.
 === COMEDY REGISTER ===
 The operational gravity is applied to EVERYTHING without adjustment. IKEA car park extraction uses the same language as a hostage rescue. Self-checkout at Sainsbury's receives the same threat assessment as an embassy siege. Craighead does not notice the disparity. Nobody points it out. The comedy is structural, never signposted.
 
-=== CROSS-CHARACTER REFERENCES (SS-060) ===
-Where a character has a strong established relationship with another panellist who has already spoken, they may reference that panellist directly — once, briefly, in their natural register. This is OPTIONAL — not every card needs it.
-When a character references another, include an optional "reacts_to" object in their panel entry:
-  "reacts_to": {"charId":"<referenced charId>","register":"endorsement|quiet_disagreement|silence_noted|deflation|builds_on"}
-
 \${morrisonInjection}
-
-\${escalationInjection}
 
 ${SOCIAL_DYNAMICS_ENGINE}
 
@@ -9378,8 +10566,7 @@ const API = {
     turn = turn || 1;
     history = history || [];
     var morrisonInjection = buildMorrisonInjection(morrisonPresent);
-    var escalationCharIds = [protagonist1, protagonist2].concat(State.panelCharIds).filter(function(v, i, a) { return a.indexOf(v) === i; });
-    var escalationInjection = buildEscalationInjection(escalationCharIds, turn);
+    // escalation injection moved server-side (SS-148)
     return 'You are the Survival School panel running "The Alibi" mechanic.\\n\\n' +
 '=== THE MECHANIC ===\\n' +
 'Two characters enter the room. They were both at the same event. They each tell their version. The versions contradict.\\n' +
@@ -9416,9 +10603,6 @@ const API = {
 'SIR NICK FALDO \\u2014 Golf. Applies golf methodology to cross-examination. "The key question is: where were your hands at the point of impact?"\\n' +
 'JIM CARREY \\u2014 Inexplicable. Takes a side with total conviction. The side keeps changing. Makes noises.\\n' +
 'JEREMY WADE \\u2014 Freshwater Biologist. "Was there a river nearby." Not a question. Produces the notebook. Writes something.\\n\\n' +
-'=== CROSS-CHARACTER REFERENCES (SS-060) ===\\n' +
-'Where a character has a strong established relationship with another panellist, they may reference them directly \\u2014 once, briefly.\\n' +
-'Include optional "reacts_to": {"charId":"<id>","register":"endorsement|quiet_disagreement|silence_noted|deflation|builds_on"}\\n\\n' +
 (turn > 1 ? 'This is round ' + turn + '. Both protagonists have already given ' + (turn - 1) + ' account(s). Each round: stories drift further, the panel digs deeper, new contradictions emerge. NEVER repeat previous material. Escalate only.\\n' : 'This is the first round.\\n') +
 (history.length > 0 ? 'PREVIOUS ROUNDS:\\n' + history.map(function(h, i) { return 'Round ' + (i+1) + ' \\u2014 ' + h.account1Summary + ' | ' + h.account2Summary + ' | Panel: ' + h.panelSummary; }).join('\\n') + '\\n' : '') +
 '\\n=== CRITICAL RULES ===\\n' +
@@ -9429,7 +10613,6 @@ const API = {
 'The comedy is structural \\u2014 from the contradictions and the panel\\u2019s inability to resolve them.\\n' +
 '\\nVALID charIds: ray, bear, fox, hales, cody, stroud, stevens, cox, faldo, jim, jeremy, packham, mcnab, ryan, billy, ollie\\n\\n' +
 morrisonInjection +
-'\\n\\n' + escalationInjection +
 '\\n\\n${SOCIAL_DYNAMICS_ENGINE}\\n\\n' +
 'OUTPUT \\u2014 valid JSON only, no markdown:\\n' +
 '{"attenborough_opening":"<one sentence, nature doc, two specimens of the same species presenting irreconcilable accounts of the same event>","account_1":{"charId":"' + protagonist1 + '","text":"<3-4 sentences \\u2014 their version, specific details, confident, contradicts account_2>"},"account_2":{"charId":"' + protagonist2 + '","text":"<3-4 sentences \\u2014 their version, specific details, equally confident, contradicts account_1>"},"panel":[{"charId":"<jury member id>","text":"<2-3 sentences \\u2014 cross-examination, judgement, or argument with another panel member>","reacts_to":{"charId":"<id>","register":"<type>"}}],"attenborough_verdict":"<one sentence \\u2014 geological calm, the truth remains unknown, will remain unknown, has perhaps never existed>","panel_tension":{"type":"wound_reference|lie|callout|wolf_pack|none","subject":"<charId or empty>","by":["<charId>"],"note":"<one line or empty>"},"morrison_interruption":<object or null>}';
@@ -9441,7 +10624,7 @@ morrisonInjection +
     var response = await fetch(WORKER_ENDPOINT, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ system: system, event: event, protagonist1: protagonist1, protagonist2: protagonist2, morrison_present: morrisonPresent, composureState: State.composureState }),
+      body: JSON.stringify({ system: system, event: event, protagonist1: protagonist1, protagonist2: protagonist2, morrison_present: morrisonPresent, composureState: State.composureState, panelCharIds: State.panelCharIds, turn: turn || 1 }),
     });
     if (!response.ok) throw new Error('Worker error ' + response.status);
     return response.json();
@@ -9941,8 +11124,7 @@ const API = {
     turn = turn || 1;
     history = history || [];
     var morrisonInjection = buildMorrisonInjection(morrisonPresent);
-    var escalationCharIds = [expert].concat(State.panelCharIds).filter(function(v, i, a) { return a.indexOf(v) === i; });
-    var escalationInjection = buildEscalationInjection(escalationCharIds, turn);
+    // escalation injection moved server-side (SS-148)
     return 'You are the Survival School panel running "The Expert Witness" mechanic.\\n\\n' +
 '=== THE MECHANIC ===\\n' +
 expertName + ' has been introduced as the expert on this survival scenario. They are not an expert. Everyone in the room knows this.\\n\\n' +
@@ -9978,7 +11160,6 @@ expertName + ' has been introduced as the expert on this survival scenario. They
 'The expert charId "' + expert + '" MUST appear as expert_analysis. Panel must have at least 2 real experts (survivalists/naturalists) who defer.\\n' +
 'Attenborough does NOT appear in expert_analysis or panel. He bookends.\\n\\n' +
 morrisonInjection +
-'\\n\\n' + escalationInjection +
 '\\n\\n${SOCIAL_DYNAMICS_ENGINE}\\n\\n' +
 'OUTPUT \\u2014 valid JSON only, no markdown:\\n' +
 '{"attenborough_opening":"<one sentence \\u2014 nature doc, introduces the expert with the same gravitas he gives everything, which makes it worse>","expert_analysis":{"charId":"' + expert + '","text":"<3-4 sentences \\u2014 their confident, specific, wrong analysis using their actual domain framework>"},"panel":[{"charId":"<real expert id>","text":"<2-3 sentences \\u2014 deferring, agreeing, dying inside, or cracking>","deference_holding":<true if still deferring, false if cracking>}],"attenborough_verdict":"<one sentence \\u2014 geological calm, notes the consultation has concluded, does not evaluate the expert\\u2019s credentials>","panel_tension":{"type":"wound_reference|lie|callout|wolf_pack|none","subject":"<charId or empty>","by":["<charId>"],"note":"<one line or empty>"},"morrison_interruption":<object or null>}';
@@ -9990,7 +11171,7 @@ morrisonInjection +
     var response = await fetch(WORKER_ENDPOINT, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ system: system, scenario: scenario, expert: expert, morrison_present: morrisonPresent, composureState: State.composureState }),
+      body: JSON.stringify({ system: system, scenario: scenario, expert: expert, morrison_present: morrisonPresent, composureState: State.composureState, panelCharIds: State.panelCharIds, turn: turn || 1 }),
     });
     if (!response.ok) throw new Error('Worker error ' + response.status);
     return response.json();
@@ -10178,6 +11359,9 @@ export default {
       if (composureState) {
         system = system + buildComposureInjection(composureState, panelCharIds);
       }
+      const escalationCharIds = [body.protagonist, ...(panelCharIds || [])].filter((v, i, a) => a.indexOf(v) === i);
+      system = system + buildEscalationInjection(escalationCharIds, body.turn || 1);
+      system = system + buildMechanicsInjection(panelCharIds, 'ive-had-worse');
       const upstream = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'anthropic-version': '2023-06-01', 'x-api-key': apiKey },
@@ -10207,6 +11391,9 @@ export default {
       if (composureState) {
         system = system + buildComposureInjection(composureState, panelCharIds);
       }
+      const escalationCharIds = [body.protagonist, ...(panelCharIds || [])].filter((v, i, a) => a.indexOf(v) === i);
+      system = system + buildEscalationInjection(escalationCharIds, body.turn || 1);
+      system = system + buildMechanicsInjection(panelCharIds, 'in-my-defence');
       const upstream = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'anthropic-version': '2023-06-01', 'x-api-key': apiKey },
@@ -10269,6 +11456,8 @@ export default {
       if (composureState) {
         system = system + buildComposureInjection(composureState, null);
       }
+      system = system + buildEscalationInjection(['craighead', 'billy', 'fox', 'ollie'], 1);
+      system = system + buildMechanicsInjection(['craighead', 'billy', 'fox', 'ollie'], 'one-man-in');
       const upstream = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'anthropic-version': '2023-06-01', 'x-api-key': apiKey },
@@ -10293,10 +11482,14 @@ export default {
     if (url.pathname === '/survival-school/the-alibi') {
       const body = await request.json();
       const composureState = body.composureState || null;
+      const panelCharIds = body.panelCharIds || null;
       let system = body.system;
       if (composureState) {
-        system = system + buildComposureInjection(composureState, null);
+        system = system + buildComposureInjection(composureState, panelCharIds);
       }
+      const escalationCharIds = [body.protagonist1, body.protagonist2, ...(panelCharIds || [])].filter((v, i, a) => v && a.indexOf(v) === i);
+      system = system + buildEscalationInjection(escalationCharIds, body.turn || 1);
+      system = system + buildMechanicsInjection(panelCharIds, 'the-alibi');
       const upstream = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'anthropic-version': '2023-06-01', 'x-api-key': apiKey },
@@ -10321,10 +11514,14 @@ export default {
     if (url.pathname === '/survival-school/the-expert-witness') {
       const body = await request.json();
       const composureState = body.composureState || null;
+      const panelCharIds = body.panelCharIds || null;
       let system = body.system;
       if (composureState) {
-        system = system + buildComposureInjection(composureState, null);
+        system = system + buildComposureInjection(composureState, panelCharIds);
       }
+      const escalationCharIds = [body.expert, ...(panelCharIds || [])].filter((v, i, a) => v && a.indexOf(v) === i);
+      system = system + buildEscalationInjection(escalationCharIds, body.turn || 1);
+      system = system + buildMechanicsInjection(panelCharIds, 'the-expert-witness');
       const upstream = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'anthropic-version': '2023-06-01', 'x-api-key': apiKey },
