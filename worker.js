@@ -8243,6 +8243,7 @@ const SURVIVAL_SCHOOL_IN_MY_DEFENCE = `<!DOCTYPE html>
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
   <title>In My Defence — The Doors · Survival School</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"/>
@@ -8868,7 +8869,7 @@ document.getElementById('btn-submit').addEventListener('click', async () => {
     }
     UI.renderResults(data, State.protagonist);
   } catch (err) {
-    UI.showError("The panel couldn't convene. Try again.");
+    UI.showError("The panel couldn't convene. " + (err.name === 'AbortError' ? 'Timed out — try again.' : err.message || 'Try again. If this persists, hard-refresh the page.'));
   } finally {
     clearTimeout(thinkingTimer);
     document.getElementById('btn-submit').disabled = false;
