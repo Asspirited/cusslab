@@ -1408,6 +1408,27 @@ function buildMechanicsInjection(panelCharIds, roomName) {
 // Single definition at worker scope. Called from POST handlers.
 // Previously duplicated 5 times in client-side page templates.
 
+// ── Panel Archetypes (SS-155) ────────────────────────────────────────────────
+// Curated panel groupings with guaranteed chemistry.
+
+const PANEL_ARCHETYPES = {
+  'core-four':     { name: 'The Core Four',     cast: ['ray', 'fox', 'bear', 'cody'],             tension: 'Expertise anchor — quiet competence vs loud confidence. Ray corrects with silence. Bear is wrong with conviction. Cody notes the obvious thing. Fox assesses the exit.' },
+  'contradictors': { name: 'The Contradictors', cast: ['ray', 'bear', 'mcnab', 'ryan'],           tension: 'Maximum factual disagreement — Ray corrects Bear (technique), McNab contradicts Ryan (Bravo Two Zero). Two independent disagreement engines running in parallel.' },
+  'authority':     { name: 'The Authority Room', cast: ['billy', 'fox', 'craighead', 'stroud'],   tension: 'Minimal words, maximum judgment — four operators who agree in fewer and fewer words. The comedy is in the compression. The feeling of having disappointed four people simultaneously.' },
+  'enthusiasts':   { name: 'The Enthusiasts',    cast: ['bear', 'coyote', 'middleton', 'gordon'], tension: 'High energy, high wrongness — everyone is confident, nobody agrees, competence varies wildly. All four believe they are helping. None of them are.' },
+  'pub-panel':     { name: 'The Pub Panel',      cast: ['fox', 'gordon', 'ollie', 'stroud'],      tension: 'Companionable, comedy-forward — the panel that happens after the serious panel has gone home. These people like each other. The danger is still real. They\'re just not performing about it.' },
+};
+
+function buildArchetypeInjection(archetypeId) {
+  var arch = PANEL_ARCHETYPES[archetypeId];
+  if (!arch) return '';
+  return '\nPANEL ARCHETYPE: ' + arch.name + '\n' +
+    'This panel is curated for chemistry. Use ONLY these characters (plus Attenborough bookends):\n' +
+    'Cast: ' + arch.cast.join(', ') + '\n' +
+    'Tension axis: ' + arch.tension + '\n' +
+    'Lean into this dynamic. The archetype defines the room\'s flavour.\n';
+}
+
 // Guard: only inject heavy server-side mechanics when client sends a real prompt.
 // Contract/pact tests send a minimal prompt (~300 chars). Real client prompts are 1000+ chars.
 // Injecting 5000+ chars of escalation/mechanics onto a 300-char prompt overwhelms Haiku.
@@ -7593,6 +7614,9 @@ const SURVIVAL_SCHOOL_IVE_HAD_WORSE = `<!DOCTYPE html>
     .chip-protagonist { border-color: var(--border-strong); }
     .chip-protagonist.sel { border-color: var(--amber); color: var(--amber); }
     .chip-protagonist:hover { border-color: var(--amber); color: var(--amber); }
+    .chip-archetype { border-color: var(--border); font-size: 10px; letter-spacing: 0.5px; }
+    .chip-archetype.sel { border-color: var(--green); color: var(--green); }
+    .chip-archetype:hover { border-color: var(--green); color: var(--green); }
     .chip-cat-group { margin-bottom: 4px; }
     .chip-cat { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); padding: 6px 10px; border: 0.5px solid var(--border); border-radius: 5px; cursor: pointer; user-select: none; transition: all 0.15s; margin-bottom: 4px; display: inline-block; }
     .chip-cat:hover { color: var(--text); border-color: var(--border-strong); }
@@ -7704,6 +7728,15 @@ const SURVIVAL_SCHOOL_IVE_HAD_WORSE = `<!DOCTYPE html>
 
   <div class="protagonist-prompt" id="protagonist-prompt">Pick someone. They're going in.</div>
   <div class="sendoff-block" id="sendoff-block"></div>
+
+  <div class="field-label" style="margin-top:18px">PANEL ARCHETYPE <span style="font-weight:400;opacity:0.5">(optional — or leave blank for random draw)</span></div>
+  <div class="chips" id="chips-archetype">
+    <button class="chip chip-archetype" data-arch="core-four">The Core Four</button>
+    <button class="chip chip-archetype" data-arch="contradictors">The Contradictors</button>
+    <button class="chip chip-archetype" data-arch="authority">The Authority Room</button>
+    <button class="chip chip-archetype" data-arch="enthusiasts">The Enthusiasts</button>
+    <button class="chip chip-archetype" data-arch="pub-panel">The Pub Panel</button>
+  </div>
 
   <div class="field-label" style="margin-top:18px">YOUR ORDEAL</div>
   <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text-muted);margin-bottom:6px;line-height:1.5;opacity:0.7;">Think small. The more trivial your predicament, the harder the panel works to top it. A paper cut is funnier than a bear attack.</div>
@@ -7826,11 +7859,13 @@ const State = {
   morrisonPresent: false,
   composureState: null,
   panelCharIds: [],
+  archetype: null,
   setProtagonist(id) { this.protagonist = id; },
   setPredicament(v)  { this.predicament = v.trim(); },
   setComposureState(cs) { this.composureState = cs; },
   setPanelCharIds(ids) { this.panelCharIds = ids; },
-  clear() { this.protagonist = null; this.predicament = ''; this.morrisonPresent = false; this.composureState = null; this.panelCharIds = []; },
+  setArchetype(id) { this.archetype = id; },
+  clear() { this.protagonist = null; this.predicament = ''; this.morrisonPresent = false; this.composureState = null; this.panelCharIds = []; this.archetype = null; },
   isReady() { return this.protagonist && this.predicament.length > 0; },
 };
 
@@ -8054,7 +8089,7 @@ OUTPUT — valid JSON only, no markdown:
     const response = await fetch(WORKER_ENDPOINT, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ system, predicament, protagonist, morrison_present: morrisonPresent, composureState: State.composureState, panelCharIds: State.panelCharIds, turn: turn || 1 }),
+      body: JSON.stringify({ system, predicament, protagonist, morrison_present: morrisonPresent, composureState: State.composureState, panelCharIds: State.panelCharIds, turn: turn || 1, archetype: State.archetype }),
     });
     if (!response.ok) throw new Error(\`Worker error \${response.status}\`);
     return response.json();
@@ -8070,6 +8105,19 @@ document.querySelectorAll('.chip-protagonist').forEach(chip => {
     State.setProtagonist(chip.dataset.id);
     UI.updatePrompt(chip.dataset.id);
     UI.setSubmitEnabled(State.isReady());
+  });
+});
+
+document.querySelectorAll('.chip-archetype').forEach(chip => {
+  chip.addEventListener('click', () => {
+    if (chip.classList.contains('sel')) {
+      chip.classList.remove('sel');
+      State.setArchetype(null);
+    } else {
+      document.querySelectorAll('.chip-archetype').forEach(c => c.classList.remove('sel'));
+      chip.classList.add('sel');
+      State.setArchetype(chip.dataset.arch);
+    }
   });
 });
 
@@ -11290,6 +11338,7 @@ export default {
         system = system + buildEscalationInjection(escalationCharIds, body.turn || 1);
         system = system + buildMorrisonInjectionServer(body.morrison_present || false);
         system = system + buildMechanicsInjection(panelCharIds, 'ive-had-worse');
+        if (body.archetype) system = system + buildArchetypeInjection(body.archetype);
       }
       const upstream = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
@@ -11325,6 +11374,7 @@ export default {
         system = system + buildEscalationInjection(escalationCharIds, body.turn || 1);
         system = system + buildMorrisonInjectionServer(body.morrison_present || false);
         system = system + buildMechanicsInjection(panelCharIds, 'in-my-defence');
+        if (body.archetype) system = system + buildArchetypeInjection(body.archetype);
       }
       const upstream = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
