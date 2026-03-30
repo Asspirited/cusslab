@@ -1404,6 +1404,45 @@ function buildMechanicsInjection(panelCharIds, roomName) {
   return '\n\nPANEL INTERACTION MECHANICS (conditional — active for this panel):\n' + parts.join('\n') + '\n';
 }
 
+// ── Morrison Injection (SS-083 + SS-099) ────────────────────────────────────
+// Single definition at worker scope. Called from POST handlers.
+// Previously duplicated 5 times in client-side page templates.
+
+// Guard: only inject heavy server-side mechanics when client sends a real prompt.
+// Contract/pact tests send a minimal prompt (~300 chars). Real client prompts are 1000+ chars.
+// Injecting 5000+ chars of escalation/mechanics onto a 300-char prompt overwhelms Haiku.
+function shouldInjectMechanics(systemPrompt) {
+  return systemPrompt && systemPrompt.length > 500;
+}
+
+function buildMorrisonInjectionServer(morrisonPresent) {
+  if (morrisonPresent) {
+    return '\n=== JIM MORRISON INTERRUPTION (SS-083) ===\n' +
+      'Morrison is in the room this round (he was here last round and stayed).\n' +
+      'He MUST appear in the morrison_interruption field.\n' +
+      'He says something — cryptic, banal, poetic, or accidentally offensive.\n' +
+      'The panel knows Morrison. They are used to his visits. Baseline reaction is warm — they welcome him, enjoy him, engage with his nonsense.\n' +
+      'UNLESS he says something that crosses a line — wrong thing about the wrong person, casual dismissal of something they care about, accidental insult to someone present. Then the panel turns on him. At least two panellists attack. Morrison does not understand what went wrong.\n' +
+      'Tone: WARM (they enjoy him), AMUSED (he said something funny), ENGAGED (they asked him something / he\'s interested in the topic), HOSTILE (he crossed a line, they attack).\n' +
+      'If the topic still interests Morrison or a panellist engages him or asks him a question: set morrison_present to true (he stays).\n' +
+      'If neither: set morrison_present to false (he drifts off).\n' +
+      'morrison_interruption format: {"quote":"<what Morrison says>","panel_reaction":"<how the panel reacts — 1-2 sentences>","tone":"WARM|AMUSED|ENGAGED|HOSTILE","morrison_present":<bool>}\n';
+  }
+  return '\n=== JIM MORRISON INTERRUPTION (SS-083 + SS-099) ===\n' +
+    'Morrison is the corridor guide. He occasionally wanders into panel sessions uninvited.\n\n' +
+    'TRIGGER RULES (two paths — either can summon him):\n' +
+    '1. RANDOM: ~20% base chance each round.\n' +
+    '2. CONTEXTUAL (SS-099): If the predicament, panel discussion, or user input contains any of these trigger words/themes, Morrison\'s chance increases to ~80%: "door", "doors", "the end", "end", "death", "die", "dead", "snake", "desert", "poetry", "poet", "fire", "light", "break on through", "ride", "storm", "crystal ship", "strange", "wilderness". Morrison appears as if summoned — the timing is the joke. He responds to the trigger word as if it was addressed to him.\n\n' +
+    'If he appears: include morrison_interruption in the output.\n' +
+    'If he does not appear: set morrison_interruption to null.\n' +
+    'The panel knows Morrison. They are used to his visits. Baseline reaction is warm — they welcome him, enjoy him, engage with his nonsense.\n' +
+    'UNLESS he says something that crosses a line. Then the panel turns on him. Morrison does not understand what went wrong.\n' +
+    'Tone: WARM, AMUSED, ENGAGED, or HOSTILE.\n' +
+    'If Morrison appears and the topic interests him or a panellist engages: set morrison_present to true (he stays next round).\n' +
+    'If brief visit: set morrison_present to false.\n' +
+    'morrison_interruption format (or null): {"quote":"<what Morrison says>","panel_reaction":"<how the panel reacts — 1-2 sentences>","tone":"WARM|AMUSED|ENGAGED|HOSTILE","morrison_present":<bool>}\n';
+}
+
 const SURVIVAL_SCHOOL_HOME = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7780,35 +7819,6 @@ const CORRIDOR_SENDOFFS = {
   jeremy:  'He is already in waders. He has a thermal flask. He has the notebook. He appeared to say something to the translator before entering. The translator frowned but said nothing. The translator has made his peace with this.',
 };
 
-function buildMorrisonInjection(morrisonPresent) {
-  if (morrisonPresent) {
-    return \`=== JIM MORRISON INTERRUPTION (SS-083) ===
-Morrison is in the room this round (he was here last round and stayed).
-He MUST appear in the morrison_interruption field.
-He says something — cryptic, banal, poetic, or accidentally offensive.
-The panel knows Morrison. They are used to his visits. Baseline reaction is warm — they welcome him, enjoy him, engage with his nonsense.
-UNLESS he says something that crosses a line — wrong thing about the wrong person, casual dismissal of something they care about, accidental insult to someone present. Then the panel turns on him. At least two panellists attack. Morrison does not understand what went wrong.
-Tone: WARM (they enjoy him), AMUSED (he said something funny), ENGAGED (they asked him something / he's interested in the topic), HOSTILE (he crossed a line, they attack).
-If the topic still interests Morrison or a panellist engages him or asks him a question: set morrison_present to true (he stays).
-If neither: set morrison_present to false (he drifts off).
-morrison_interruption format: {"quote":"<what Morrison says>","panel_reaction":"<how the panel reacts — 1-2 sentences>","tone":"WARM|AMUSED|ENGAGED|HOSTILE","morrison_present":<bool>}\`;
-  }
-  return \`=== JIM MORRISON INTERRUPTION (SS-083 + SS-099) ===
-Morrison is the corridor guide. He occasionally wanders into panel sessions uninvited.
-
-TRIGGER RULES (two paths — either can summon him):
-1. RANDOM: ~20% base chance each round.
-2. CONTEXTUAL (SS-099): If the predicament, panel discussion, or user input contains any of these trigger words/themes, Morrison's chance increases to ~80%: "door", "doors", "the end", "end", "death", "die", "dead", "snake", "desert", "poetry", "poet", "fire", "light", "break on through", "ride", "storm", "crystal ship", "strange", "wilderness". Morrison appears as if summoned — the timing is the joke. He responds to the trigger word as if it was addressed to him.
-
-If he appears: include morrison_interruption in the output.
-If he does not appear: set morrison_interruption to null.
-The panel knows Morrison. They are used to his visits. Baseline reaction is warm — they welcome him, enjoy him, engage with his nonsense.
-UNLESS he says something that crosses a line. Then the panel turns on him. Morrison does not understand what went wrong.
-Tone: WARM, AMUSED, ENGAGED, or HOSTILE.
-If Morrison appears and the topic interests him or a panellist engages: set morrison_present to true (he stays next round).
-If brief visit: set morrison_present to false.
-morrison_interruption format (or null): {"quote":"<what Morrison says>","panel_reaction":"<how the panel reacts — 1-2 sentences>","tone":"WARM|AMUSED|ENGAGED|HOSTILE","morrison_present":<bool>}\`;
-}
 
 const State = {
   protagonist: null,
@@ -7986,7 +7996,6 @@ const API = {
     const protagonistName = char ? char.name : protagonist;
     turn = turn || 1;
     history = history || [];
-    const morrisonInjection = buildMorrisonInjection(morrisonPresent);
     return \`You are the Survival School panel running the "I've Had Worse" mechanic.
 
 === THE MECHANIC ===
@@ -8032,8 +8041,6 @@ Attenborough does NOT appear in the panel array. He bookends.
 VALID charIds — use ONLY these exact values, no others:
   ray, bear, fox, hales, cody, stroud, stevens, cox, faldo, jim, jeremy, packham
 Include at least 3 panel members. The protagonist charId "\${protagonist}" must appear.
-
-\${morrisonInjection}
 
 ${SOCIAL_DYNAMICS_ENGINE}
 
@@ -8493,35 +8500,6 @@ const CORRIDOR_SENDOFFS = {
   jeremy:  'He is already in waders. He has a thermal flask. He has the notebook. He appeared to say something to the translator before entering. The translator frowned but said nothing. The translator has made his peace with this.',
 };
 
-function buildMorrisonInjection(morrisonPresent) {
-  if (morrisonPresent) {
-    return \`=== JIM MORRISON INTERRUPTION (SS-083) ===
-Morrison is in the room this round (he was here last round and stayed).
-He MUST appear in the morrison_interruption field.
-He says something — cryptic, banal, poetic, or accidentally offensive.
-The panel knows Morrison. They are used to his visits. Baseline reaction is warm — they welcome him, enjoy him, engage with his nonsense.
-UNLESS he says something that crosses a line — wrong thing about the wrong person, casual dismissal of something they care about, accidental insult to someone present. Then the panel turns on him. At least two panellists attack. Morrison does not understand what went wrong.
-Tone: WARM (they enjoy him), AMUSED (he said something funny), ENGAGED (they asked him something / he\\'s interested in the topic), HOSTILE (he crossed a line, they attack).
-If the topic still interests Morrison or a panellist engages him or asks him a question: set morrison_present to true (he stays).
-If neither: set morrison_present to false (he drifts off).
-morrison_interruption format: {"quote":"<what Morrison says>","panel_reaction":"<how the panel reacts — 1-2 sentences>","tone":"WARM|AMUSED|ENGAGED|HOSTILE","morrison_present":<bool>}\`;
-  }
-  return \`=== JIM MORRISON INTERRUPTION (SS-083 + SS-099) ===
-Morrison is the corridor guide. He occasionally wanders into panel sessions uninvited.
-
-TRIGGER RULES (two paths — either can summon him):
-1. RANDOM: ~20% base chance each round.
-2. CONTEXTUAL (SS-099): If the incident, panel discussion, or user input contains any of these trigger words/themes, Morrison's chance increases to ~80%: "door", "doors", "the end", "end", "death", "die", "dead", "snake", "desert", "poetry", "poet", "fire", "light", "break on through", "ride", "storm", "crystal ship", "strange", "wilderness". Morrison appears as if summoned — the timing is the joke. He responds to the trigger word as if it was addressed to him.
-
-If he appears: include morrison_interruption in the output.
-If he does not appear: set morrison_interruption to null.
-The panel knows Morrison. Baseline reaction is warm — they welcome him, enjoy him, engage.
-UNLESS he crosses a line. Then they attack. Morrison does not understand what went wrong.
-Tone: WARM, AMUSED, ENGAGED, or HOSTILE.
-If Morrison appears and the topic interests him or a panellist engages: set morrison_present to true.
-If brief visit: set morrison_present to false.
-morrison_interruption format (or null): {"quote":"<what Morrison says>","panel_reaction":"<how the panel reacts — 1-2 sentences>","tone":"WARM|AMUSED|ENGAGED|HOSTILE","morrison_present":<bool>}\`;
-}
 
 const State = {
   protagonist: null,
@@ -8708,7 +8686,6 @@ const API = {
     const protagonistName = char ? char.name : protagonist;
     turn = turn || 1;
     history = history || [];
-    const morrisonInjection = buildMorrisonInjection(morrisonPresent);
     return \`You are the Survival School panel running the "In My Defence" mechanic.
 
 === THE MECHANIC ===
@@ -8754,8 +8731,6 @@ Attenborough does NOT appear in the panel array. He bookends.
 VALID charIds — use ONLY these exact values:
   ray, bear, fox, hales, cody, stroud, stevens, cox, faldo, jim, jeremy, packham
 Include at least 3 panel members. The protagonist charId "\${protagonist}" MUST appear.
-
-\${morrisonInjection}
 
 ${SOCIAL_DYNAMICS_ENGINE}
 
@@ -9844,26 +9819,6 @@ const CHARACTERS = {
   jeremy:    { name: 'Jeremy Wade',         role: 'Freshwater Biologist',     av: 'JW', avClass: 'av-blue'  },
 };
 
-function buildMorrisonInjection(morrisonPresent) {
-  if (morrisonPresent) {
-    return \`=== JIM MORRISON INTERRUPTION ===
-Morrison is in the room this round (he stayed from last round).
-He MUST appear in the morrison_interruption field.
-He says something — cryptic, poetic, or accidentally tactically relevant.
-The panel knows Morrison. Baseline reaction is warm — they enjoy him, engage.
-UNLESS he crosses a line. Then the panel turns. At least two attack. Morrison does not understand.
-Tone: WARM|AMUSED|ENGAGED|HOSTILE.
-If the topic interests Morrison or a panellist engages: set morrison_present to true (stays).
-If brief visit: set morrison_present to false (drifts off).
-morrison_interruption format: {"quote":"<what Morrison says>","panel_reaction":"<1-2 sentences>","tone":"WARM|AMUSED|ENGAGED|HOSTILE","morrison_present":<bool>}\`;
-  }
-  return \`=== JIM MORRISON INTERRUPTION ===
-Morrison is the corridor guide. ~20% base chance each round.
-CONTEXTUAL: If the situation or panel discussion contains: "door", "doors", "the end", "end", "death", "die", "dead", "snake", "desert", "poetry", "fire", "light", "break on through", "ride", "storm", "wilderness" — chance increases to ~80%.
-If he appears: include morrison_interruption. If not: set morrison_interruption to null.
-Tone: WARM|AMUSED|ENGAGED|HOSTILE. If he appears and topic interests him: morrison_present true. Brief visit: false.
-morrison_interruption format (or null): {"quote":"<what Morrison says>","panel_reaction":"<1-2 sentences>","tone":"WARM|AMUSED|ENGAGED|HOSTILE","morrison_present":<bool>}\`;
-}
 
 const OMI_CORE_PANEL = ['craighead', 'billy', 'fox', 'ollie'];
 
@@ -9974,7 +9929,6 @@ const UI = {
 
 const API = {
   buildSystemPrompt(morrisonPresent) {
-    var morrisonInjection = buildMorrisonInjection(morrisonPresent);
     return \`You are the Survival School panel running "One Man In" — the EXFIL/INFIL briefing mode.
 
 === THE MECHANIC ===
@@ -9996,8 +9950,6 @@ OLLIE — "Are you sure?" Genuine. Not a challenge. Not a test. A real question.
 
 === COMEDY REGISTER ===
 The operational gravity is applied to EVERYTHING without adjustment. IKEA car park extraction uses the same language as a hostage rescue. Self-checkout at Sainsbury's receives the same threat assessment as an embassy siege. Craighead does not notice the disparity. Nobody points it out. The comedy is structural, never signposted.
-
-\${morrisonInjection}
 
 ${SOCIAL_DYNAMICS_ENGINE}
 
@@ -10369,22 +10321,6 @@ const CHARACTERS = {
   ollie:   { name: 'Ollie Ollerton',  role: 'Former SBS',           av: 'OO', avClass: 'av-green'  },
 };
 
-function buildMorrisonInjection(morrisonPresent) {
-  if (morrisonPresent) {
-    return \\\`=== JIM MORRISON INTERRUPTION (SS-083) ===
-Morrison is in the room this round (he was here last round and stayed).
-He MUST appear in the morrison_interruption field.
-He says something \\u2014 cryptic, banal, poetic, or accidentally offensive.
-Tone: WARM (they enjoy him), AMUSED (he said something funny), ENGAGED (they asked him something), HOSTILE (he crossed a line, they attack).
-morrison_interruption format: {"quote":"<what Morrison says>","panel_reaction":"<how the panel reacts>","tone":"WARM|AMUSED|ENGAGED|HOSTILE","morrison_present":<bool>}\\\`;
-  }
-  return \\\`=== JIM MORRISON INTERRUPTION (SS-083 + SS-099) ===
-Morrison is the corridor guide. He occasionally wanders into panel sessions uninvited.
-TRIGGER RULES: ~20% base chance. If predicament/discussion contains: "door", "doors", "the end", "death", "die", "snake", "desert", "fire", "light", "truth", "lie", "alibi" \\u2014 chance increases to ~80%.
-If he appears: include morrison_interruption in the output.
-If he does not appear: set morrison_interruption to null.
-morrison_interruption format (or null): {"quote":"<what Morrison says>","panel_reaction":"<how the panel reacts>","tone":"WARM|AMUSED|ENGAGED|HOSTILE","morrison_present":<bool>}\\\`;
-}
 
 const State = {
   protagonist1: null,
@@ -10565,8 +10501,7 @@ const API = {
     var name2 = char2 ? char2.name : protagonist2;
     turn = turn || 1;
     history = history || [];
-    var morrisonInjection = buildMorrisonInjection(morrisonPresent);
-    // escalation injection moved server-side (SS-148)
+    // Morrison + escalation injection moved server-side (SS-148/150)
     return 'You are the Survival School panel running "The Alibi" mechanic.\\n\\n' +
 '=== THE MECHANIC ===\\n' +
 'Two characters enter the room. They were both at the same event. They each tell their version. The versions contradict.\\n' +
@@ -10612,8 +10547,7 @@ const API = {
 'Characters are sincere. They do not know they are in a mechanic. They genuinely believe their version.\\n' +
 'The comedy is structural \\u2014 from the contradictions and the panel\\u2019s inability to resolve them.\\n' +
 '\\nVALID charIds: ray, bear, fox, hales, cody, stroud, stevens, cox, faldo, jim, jeremy, packham, mcnab, ryan, billy, ollie\\n\\n' +
-morrisonInjection +
-'\\n\\n${SOCIAL_DYNAMICS_ENGINE}\\n\\n' +
+'${SOCIAL_DYNAMICS_ENGINE}\\n\\n' +
 'OUTPUT \\u2014 valid JSON only, no markdown:\\n' +
 '{"attenborough_opening":"<one sentence, nature doc, two specimens of the same species presenting irreconcilable accounts of the same event>","account_1":{"charId":"' + protagonist1 + '","text":"<3-4 sentences \\u2014 their version, specific details, confident, contradicts account_2>"},"account_2":{"charId":"' + protagonist2 + '","text":"<3-4 sentences \\u2014 their version, specific details, equally confident, contradicts account_1>"},"panel":[{"charId":"<jury member id>","text":"<2-3 sentences \\u2014 cross-examination, judgement, or argument with another panel member>","reacts_to":{"charId":"<id>","register":"<type>"}}],"attenborough_verdict":"<one sentence \\u2014 geological calm, the truth remains unknown, will remain unknown, has perhaps never existed>","panel_tension":{"type":"wound_reference|lie|callout|wolf_pack|none","subject":"<charId or empty>","by":["<charId>"],"note":"<one line or empty>"},"morrison_interruption":<object or null>}';
   },
@@ -10963,12 +10897,6 @@ var CHARACTERS = {
   jeremy:  { name: 'Jeremy Wade',     role: 'Freshwater Biologist', av: 'JW', avClass: 'av-teal'   },
 };
 
-function buildMorrisonInjection(morrisonPresent) {
-  if (morrisonPresent) {
-    return '\\n=== JIM MORRISON INTERRUPTION ===\\nMorrison is in the room. He MUST appear in morrison_interruption.\\nmorrison_interruption format: {"quote":"<what Morrison says>","panel_reaction":"<reaction>","tone":"WARM|AMUSED|ENGAGED|HOSTILE","morrison_present":<bool>}';
-  }
-  return '\\n=== JIM MORRISON INTERRUPTION ===\\nMorrison is the corridor guide. ~20% chance of appearing. If topic contains "expert", "truth", "knowledge", "professor", "doctor", "death", "door" \\u2014 chance increases to ~80%.\\nIf he appears: include morrison_interruption. If not: set to null.\\nmorrison_interruption format (or null): {"quote":"<string>","panel_reaction":"<string>","tone":"WARM|AMUSED|ENGAGED|HOSTILE","morrison_present":<bool>}';
-}
 
 const State = {
   expert: null,
@@ -11123,8 +11051,7 @@ const API = {
     var expertName = ec ? ec.name : expert;
     turn = turn || 1;
     history = history || [];
-    var morrisonInjection = buildMorrisonInjection(morrisonPresent);
-    // escalation injection moved server-side (SS-148)
+    // Morrison + escalation injection moved server-side (SS-148/150)
     return 'You are the Survival School panel running "The Expert Witness" mechanic.\\n\\n' +
 '=== THE MECHANIC ===\\n' +
 expertName + ' has been introduced as the expert on this survival scenario. They are not an expert. Everyone in the room knows this.\\n\\n' +
@@ -11159,8 +11086,7 @@ expertName + ' has been introduced as the expert on this survival scenario. They
 '\\n\\nVALID charIds: ray, bear, fox, hales, cody, stroud, stevens, packham, cox, faldo, jim, hawking, lee, bristow, keane, jeremy\\n' +
 'The expert charId "' + expert + '" MUST appear as expert_analysis. Panel must have at least 2 real experts (survivalists/naturalists) who defer.\\n' +
 'Attenborough does NOT appear in expert_analysis or panel. He bookends.\\n\\n' +
-morrisonInjection +
-'\\n\\n${SOCIAL_DYNAMICS_ENGINE}\\n\\n' +
+'${SOCIAL_DYNAMICS_ENGINE}\\n\\n' +
 'OUTPUT \\u2014 valid JSON only, no markdown:\\n' +
 '{"attenborough_opening":"<one sentence \\u2014 nature doc, introduces the expert with the same gravitas he gives everything, which makes it worse>","expert_analysis":{"charId":"' + expert + '","text":"<3-4 sentences \\u2014 their confident, specific, wrong analysis using their actual domain framework>"},"panel":[{"charId":"<real expert id>","text":"<2-3 sentences \\u2014 deferring, agreeing, dying inside, or cracking>","deference_holding":<true if still deferring, false if cracking>}],"attenborough_verdict":"<one sentence \\u2014 geological calm, notes the consultation has concluded, does not evaluate the expert\\u2019s credentials>","panel_tension":{"type":"wound_reference|lie|callout|wolf_pack|none","subject":"<charId or empty>","by":["<charId>"],"note":"<one line or empty>"},"morrison_interruption":<object or null>}';
   },
@@ -11360,8 +11286,11 @@ export default {
         system = system + buildComposureInjection(composureState, panelCharIds);
       }
       const escalationCharIds = [body.protagonist, ...(panelCharIds || [])].filter((v, i, a) => a.indexOf(v) === i);
-      system = system + buildEscalationInjection(escalationCharIds, body.turn || 1);
-      system = system + buildMechanicsInjection(panelCharIds, 'ive-had-worse');
+      if (shouldInjectMechanics(body.system)) {
+        system = system + buildEscalationInjection(escalationCharIds, body.turn || 1);
+        system = system + buildMorrisonInjectionServer(body.morrison_present || false);
+        system = system + buildMechanicsInjection(panelCharIds, 'ive-had-worse');
+      }
       const upstream = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'anthropic-version': '2023-06-01', 'x-api-key': apiKey },
@@ -11392,8 +11321,11 @@ export default {
         system = system + buildComposureInjection(composureState, panelCharIds);
       }
       const escalationCharIds = [body.protagonist, ...(panelCharIds || [])].filter((v, i, a) => a.indexOf(v) === i);
-      system = system + buildEscalationInjection(escalationCharIds, body.turn || 1);
-      system = system + buildMechanicsInjection(panelCharIds, 'in-my-defence');
+      if (shouldInjectMechanics(body.system)) {
+        system = system + buildEscalationInjection(escalationCharIds, body.turn || 1);
+        system = system + buildMorrisonInjectionServer(body.morrison_present || false);
+        system = system + buildMechanicsInjection(panelCharIds, 'in-my-defence');
+      }
       const upstream = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'anthropic-version': '2023-06-01', 'x-api-key': apiKey },
@@ -11456,8 +11388,11 @@ export default {
       if (composureState) {
         system = system + buildComposureInjection(composureState, null);
       }
-      system = system + buildEscalationInjection(['craighead', 'billy', 'fox', 'ollie'], 1);
-      system = system + buildMechanicsInjection(['craighead', 'billy', 'fox', 'ollie'], 'one-man-in');
+      if (shouldInjectMechanics(body.system)) {
+        system = system + buildEscalationInjection(['craighead', 'billy', 'fox', 'ollie'], 1);
+        system = system + buildMorrisonInjectionServer(body.morrison_present || false);
+        system = system + buildMechanicsInjection(['craighead', 'billy', 'fox', 'ollie'], 'one-man-in');
+      }
       const upstream = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'anthropic-version': '2023-06-01', 'x-api-key': apiKey },
@@ -11488,8 +11423,11 @@ export default {
         system = system + buildComposureInjection(composureState, panelCharIds);
       }
       const escalationCharIds = [body.protagonist1, body.protagonist2, ...(panelCharIds || [])].filter((v, i, a) => v && a.indexOf(v) === i);
-      system = system + buildEscalationInjection(escalationCharIds, body.turn || 1);
-      system = system + buildMechanicsInjection(panelCharIds, 'the-alibi');
+      if (shouldInjectMechanics(body.system)) {
+        system = system + buildEscalationInjection(escalationCharIds, body.turn || 1);
+        system = system + buildMorrisonInjectionServer(body.morrison_present || false);
+        system = system + buildMechanicsInjection(panelCharIds, 'the-alibi');
+      }
       const upstream = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'anthropic-version': '2023-06-01', 'x-api-key': apiKey },
@@ -11520,8 +11458,11 @@ export default {
         system = system + buildComposureInjection(composureState, panelCharIds);
       }
       const escalationCharIds = [body.expert, ...(panelCharIds || [])].filter((v, i, a) => v && a.indexOf(v) === i);
-      system = system + buildEscalationInjection(escalationCharIds, body.turn || 1);
-      system = system + buildMechanicsInjection(panelCharIds, 'the-expert-witness');
+      if (shouldInjectMechanics(body.system)) {
+        system = system + buildEscalationInjection(escalationCharIds, body.turn || 1);
+        system = system + buildMorrisonInjectionServer(body.morrison_present || false);
+        system = system + buildMechanicsInjection(panelCharIds, 'the-expert-witness');
+      }
       const upstream = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'anthropic-version': '2023-06-01', 'x-api-key': apiKey },
