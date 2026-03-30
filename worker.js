@@ -335,6 +335,7 @@ const SURVIVAL_SCHOOL_HOME = `<!DOCTYPE html>
 <body>
 
 <header>
+  <a href="/survival-school" style="display:flex;align-items:center;gap:14px;text-decoration:none;color:inherit;">
   <!-- Bowie knife logo — SS-023 -->
   <svg class="logo-mark" viewBox="0 0 80 24" fill="none" xmlns="http://www.w3.org/2000/svg">
     <!-- Handle — dark wood -->
@@ -369,6 +370,7 @@ const SURVIVAL_SCHOOL_HOME = `<!DOCTYPE html>
       </div>
     </div>
   </div>
+  </a>
 </header>
 
 <main>
@@ -426,10 +428,10 @@ const SURVIVAL_SCHOOL_HOME = `<!DOCTYPE html>
       <div class="tile-desc">Threat assessment before you commit your mouth. Panel delivers a verdict.</div>
     </a>
 
-    <a class="tile soon" href="#">
+    <a class="tile" href="/survival-school/one-man-in">
       <div class="tile-top">
         <span class="tile-cat">Infiltration</span>
-        <span class="tile-badge badge-soon">SOON</span>
+        <span class="tile-badge badge-live">LIVE</span>
       </div>
       <div class="tile-title">One Man In</div>
       <div class="tile-desc">Fit. Alone. Compromised. Craighead runs the brief. No chain of command.</div>
@@ -1113,6 +1115,7 @@ const SURVIVAL_SCHOOL_APP  = `<!DOCTYPE html>
 </head>
 <body>
 <div id="app">
+  <a href="/survival-school" style="display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:1.5px;color:#7a8a60;text-decoration:none;margin-bottom:1rem;">← SURVIVAL SCHOOL</a>
 
   <div class="header">
     <div class="title">HOW <span>SCREWED</span> AM I?</div>
@@ -2385,6 +2388,12 @@ const SURVIVAL_SCHOOL_WORST = `<!DOCTYPE html>
     }
 
     .chip:hover, .chip.sel { border-color: var(--blood); color: var(--blood); }
+    .chip-cat-group { margin-bottom: 4px; }
+    .chip-cat { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); padding: 6px 10px; border: 0.5px solid var(--border); border-radius: 5px; cursor: pointer; user-select: none; transition: all 0.15s; margin-bottom: 4px; display: inline-block; }
+    .chip-cat:hover { color: var(--text); border-color: var(--border-strong); }
+    .chip-cat.open { color: var(--gold); border-color: var(--gold-dim); }
+    .chip-cat-body { display: none; flex-wrap: wrap; gap: 5px; padding: 4px 0 8px; }
+    .chip-cat.open + .chip-cat-body { display: flex; }
 
     input[type="text"], textarea {
       width: 100%;
@@ -2707,6 +2716,7 @@ const SURVIVAL_SCHOOL_WORST = `<!DOCTYPE html>
 </head>
 <body>
 <div id="app">
+  <a href="/survival-school" style="display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:1.5px;color:#7a8a60;text-decoration:none;margin-bottom:1rem;">← SURVIVAL SCHOOL</a>
 
   <div class="header">
     <div class="title">I'VE BEEN <span>BIT</span>, GUYS</div>
@@ -2714,17 +2724,27 @@ const SURVIVAL_SCHOOL_WORST = `<!DOCTYPE html>
   </div>
 
   <div class="field-label">Classic incidents</div>
-  <div class="chips" id="chips-scenario">
-    <div class="chip" onclick="onScenario(this,'bitten by king cobra 45 minutes ago','king cobra','jungle, alone, 45 minutes from help')">cobra bite</div>
-    <div class="chip" onclick="onScenario(this,'grizzly bear charging me on a trail','grizzly bear','Montana wilderness, 3 miles from car, no phone signal')">grizzly charge</div>
-    <div class="chip" onclick="onScenario(this,'great white shark circling me in the water','great white shark','surfing, 400 metres from shore')">shark circling</div>
-    <div class="chip" onclick="onScenario(this,'Brazilian wandering spider is on my chest and I have not moved','Brazilian wandering spider','3am, in bed, urban, ambulance available')">spider on chest</div>
-    <div class="chip" onclick="onScenario(this,'three spotted hyenas closing in, I am alone on foot','pack of spotted hyenas','open savannah, nightfall in 40 minutes, no vehicle')">hyena pack</div>
-    <div class="chip" onclick="onScenario(this,'struck by lightning for the seventh time in my life','lightning strike','outdoors, fully conscious somehow, confused bystanders')">lightning (7th)</div>
-    <div class="chip" onclick="onScenario(this,'Komodo dragon bit my ankle 20 minutes ago, wound is not clotting','Komodo dragon','Komodo Island, 2 hours from hospital, basic first aid kit')">komodo bite</div>
-    <div class="chip" onclick="onScenario(this,'I have been injured by a manatee and require assistance','manatee','coastal water, near shore, witnesses present, explanation required')">manatee incident</div>
-    <div class="chip" onclick="onScenario(this,'being attacked by a swan and cannot leave the area','swan','canal towpath, urban, witnesses unable to help')">swan attack</div>
-    <div class="chip" onclick="onScenario(this,'72 days, all food is gone, there are options on the ground','none','Andes mountains, 16 survivors, decision cannot be delayed')">andes decision</div>
+  <div id="chips-scenario">
+    <div class="chip-cat-group">
+      <div class="chip-cat">Predator</div>
+      <div class="chip-cat-body">
+        <div class="chip" onclick="onScenario(this,'bitten by king cobra 45 minutes ago','king cobra','jungle, alone, 45 minutes from help')">cobra bite</div>
+        <div class="chip" onclick="onScenario(this,'grizzly bear charging me on a trail','grizzly bear','Montana wilderness, 3 miles from car, no phone signal')">grizzly charge</div>
+        <div class="chip" onclick="onScenario(this,'great white shark circling me in the water','great white shark','surfing, 400 metres from shore')">shark circling</div>
+        <div class="chip" onclick="onScenario(this,'three spotted hyenas closing in, I am alone on foot','pack of spotted hyenas','open savannah, nightfall in 40 minutes, no vehicle')">hyena pack</div>
+        <div class="chip" onclick="onScenario(this,'Komodo dragon bit my ankle 20 minutes ago, wound is not clotting','Komodo dragon','Komodo Island, 2 hours from hospital, basic first aid kit')">komodo bite</div>
+      </div>
+    </div>
+    <div class="chip-cat-group">
+      <div class="chip-cat">Other</div>
+      <div class="chip-cat-body">
+        <div class="chip" onclick="onScenario(this,'Brazilian wandering spider is on my chest and I have not moved','Brazilian wandering spider','3am, in bed, urban, ambulance available')">spider on chest</div>
+        <div class="chip" onclick="onScenario(this,'struck by lightning for the seventh time in my life','lightning strike','outdoors, fully conscious somehow, confused bystanders')">lightning (7th)</div>
+        <div class="chip" onclick="onScenario(this,'I have been injured by a manatee and require assistance','manatee','coastal water, near shore, witnesses present, explanation required')">manatee incident</div>
+        <div class="chip" onclick="onScenario(this,'being attacked by a swan and cannot leave the area','swan','canal towpath, urban, witnesses unable to help')">swan attack</div>
+        <div class="chip" onclick="onScenario(this,'72 days, all food is gone, there are options on the ground','none','Andes mountains, 16 survivors, decision cannot be delayed')">andes decision</div>
+      </div>
+    </div>
   </div>
 
   <div class="field-label">Or describe what happened...</div>
@@ -3153,6 +3173,11 @@ const API = { assess, assessWorst, react };
 
 
 
+  document.querySelectorAll('.chip-cat').forEach((cat, i) => {
+    if (i === 0) cat.classList.add('open');
+    cat.addEventListener('click', () => cat.classList.toggle('open'));
+  });
+
   window.onScenario = (el, eventVal, animalVal, circVal) => {
     document.querySelectorAll('#chips-scenario .chip').forEach(c => c.classList.remove('sel'));
     el.classList.add('sel');
@@ -3309,6 +3334,12 @@ const SURVIVAL_SCHOOL_MUNDANE = `<!DOCTYPE html>
     }
 
     .chip:hover, .chip.sel { border-color: var(--amber); color: var(--amber); }
+    .chip-cat-group { margin-bottom: 4px; }
+    .chip-cat { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); padding: 6px 10px; border: 0.5px solid var(--border); border-radius: 5px; cursor: pointer; user-select: none; transition: all 0.15s; margin-bottom: 4px; display: inline-block; }
+    .chip-cat:hover { color: var(--text); border-color: var(--border-strong); }
+    .chip-cat.open { color: var(--gold); border-color: var(--gold-dim); }
+    .chip-cat-body { display: none; flex-wrap: wrap; gap: 5px; padding: 4px 0 8px; }
+    .chip-cat.open + .chip-cat-body { display: flex; }
 
     textarea {
       width: 100%;
@@ -3606,6 +3637,7 @@ const SURVIVAL_SCHOOL_MUNDANE = `<!DOCTYPE html>
 </head>
 <body>
 <div id="app">
+  <a href="/survival-school" style="display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:1.5px;color:#7a8a60;text-decoration:none;margin-bottom:1rem;">← SURVIVAL SCHOOL</a>
 
   <div class="header">
     <div class="title"><span>MUNDANE</span> MODE</div>
@@ -3613,17 +3645,23 @@ const SURVIVAL_SCHOOL_MUNDANE = `<!DOCTYPE html>
   </div>
 
   <div class="field-label">Your situation</div>
-  <div class="chips" id="chips-mundane">
-    <div class="chip" onclick="onChip(this, 'I have missed the last bus home. It is raining.')">missed the last bus</div>
+  <div id="chips-mundane">
+    <div class="chip-cat-group"><div class="chip-cat">Domestic</div><div class="chip-cat-body">
     <div class="chip" onclick="onChip(this, 'I am locked out of my house. It is 11pm.')">locked out</div>
+    <div class="chip" onclick="onChip(this, 'I have run out of tea bags. It is Sunday. The shops are closed.')">no tea bags, Sunday</div>
+    <div class="chip" onclick="onChip(this, 'The self-checkout has called for assistance. There is a queue behind me.')">self-checkout assist</div>
+    <div class="chip" onclick="onChip(this, 'There is one till open at the post office. The queue has not moved in 15 minutes.')">one till, post office</div>
+    </div></div>
+    <div class="chip-cat-group"><div class="chip-cat">Office</div><div class="chip-cat-body">
     <div class="chip" onclick="onChip(this, 'The printer has run out of ink. My presentation is in 10 minutes.')">printer out of ink</div>
     <div class="chip" onclick="onChip(this, 'I have spilled coffee on my laptop. It is making a concerning noise.')">coffee on laptop</div>
     <div class="chip" onclick="onChip(this, 'The wifi is down. I am working from home. I have a video call in 20 minutes.')">wifi down, call in 20</div>
-    <div class="chip" onclick="onChip(this, 'I have run out of tea bags. It is Sunday. The shops are closed.')">no tea bags, Sunday</div>
-    <div class="chip" onclick="onChip(this, 'There is one till open at the post office. The queue has not moved in 15 minutes.')">one till, post office</div>
     <div class="chip" onclick="onChip(this, 'I ordered a takeaway 90 minutes ago. The app says it is still being prepared.')">takeaway 90 mins</div>
+    </div></div>
+    <div class="chip-cat-group"><div class="chip-cat">Transport</div><div class="chip-cat-body">
+    <div class="chip" onclick="onChip(this, 'I have missed the last bus home. It is raining.')">missed the last bus</div>
     <div class="chip" onclick="onChip(this, 'My flat tyre is on the motorway hard shoulder. I am not a member of the AA.')">flat tyre, M-way</div>
-    <div class="chip" onclick="onChip(this, 'The self-checkout has called for assistance. There is a queue behind me.')">self-checkout assist</div>
+    </div></div>
   </div>
   <textarea id="mundane-input" rows="3"
     placeholder="or describe your situation in full... I've missed the last bus, it's October, raining, and I'm wearing trainers..."
@@ -3962,7 +4000,10 @@ async function react(situation, decision, currentProbability) {
 
 // === main ===
 
-
+document.querySelectorAll('.chip-cat').forEach((cat, i) => {
+  if (i === 0) cat.classList.add('open');
+  cat.addEventListener('click', () => cat.classList.toggle('open'));
+});
 
   let situation = '';
 
@@ -4125,6 +4166,12 @@ const SURVIVAL_SCHOOL_EAT = `<!DOCTYPE html>
     .chips { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 8px; }
     .chip { font-family: 'IBM Plex Mono', monospace; font-size: 11px; padding: 5px 10px; border: 0.5px solid var(--border-strong); border-radius: 5px; cursor: pointer; background: none; color: var(--text-muted); transition: all 0.15s; white-space: nowrap; user-select: none; }
     .chip:hover, .chip.sel { border-color: var(--green); color: var(--green); }
+    .chip-cat-group { margin-bottom: 4px; }
+    .chip-cat { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); padding: 6px 10px; border: 0.5px solid var(--border); border-radius: 5px; cursor: pointer; user-select: none; transition: all 0.15s; margin-bottom: 4px; display: inline-block; }
+    .chip-cat:hover { color: var(--text); border-color: var(--border-strong); }
+    .chip-cat.open { color: var(--gold); border-color: var(--gold-dim); }
+    .chip-cat-body { display: none; flex-wrap: wrap; gap: 5px; padding: 4px 0 8px; }
+    .chip-cat.open + .chip-cat-body { display: flex; }
 
     input[type="text"] { width: 100%; font-family: 'IBM Plex Mono', monospace; font-size: 13px; padding: 9px 12px; border: 0.5px solid var(--border-strong); border-radius: 6px; background: var(--surface); color: var(--text); outline: none; transition: border-color 0.15s; }
     input[type="text"]:focus { border-color: var(--green); }
@@ -4199,6 +4246,7 @@ const SURVIVAL_SCHOOL_EAT = `<!DOCTYPE html>
 </head>
 <body>
 <div id="app">
+  <a href="/survival-school" style="display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:1.5px;color:#7a8a60;text-decoration:none;margin-bottom:1rem;">← SURVIVAL SCHOOL</a>
 
   <div class="header">
     <div class="title">WILL YOU <span>EAT</span> IT?</div>
@@ -4206,19 +4254,23 @@ const SURVIVAL_SCHOOL_EAT = `<!DOCTYPE html>
   </div>
 
   <div class="field-label">What did you find?</div>
-  <div class="chips" id="chips-item">
+  <div id="chips-item">
+    <div class="chip-cat-group"><div class="chip-cat">Forage</div><div class="chip-cat-body">
     <div class="chip" onclick="onChip(this,'mushroom')">mushroom</div>
     <div class="chip" onclick="onChip(this,'wild berries')">wild berries</div>
-    <div class="chip" onclick="onChip(this,'witchetty grubs')">witchetty grubs</div>
-    <div class="chip" onclick="onChip(this,'raw fish')">raw fish</div>
-    <div class="chip" onclick="onChip(this,'roadkill')">roadkill</div>
     <div class="chip" onclick="onChip(this,'seaweed')">seaweed</div>
-    <div class="chip" onclick="onChip(this,'insects')">insects</div>
     <div class="chip" onclick="onChip(this,'lichen')">lichen</div>
     <div class="chip" onclick="onChip(this,'bark or roots')">bark / roots</div>
     <div class="chip" onclick="onChip(this,'unknown leaves')">unknown leaves</div>
+    </div></div>
+    <div class="chip-cat-group"><div class="chip-cat">Creature</div><div class="chip-cat-body">
+    <div class="chip" onclick="onChip(this,'witchetty grubs')">witchetty grubs</div>
+    <div class="chip" onclick="onChip(this,'raw fish')">raw fish</div>
+    <div class="chip" onclick="onChip(this,'roadkill')">roadkill</div>
+    <div class="chip" onclick="onChip(this,'insects')">insects</div>
     <div class="chip" onclick="onChip(this,'snake')">snake</div>
     <div class="chip" onclick="onChip(this,'something I cannot identify')">unidentified</div>
+    </div></div>
   </div>
   <input type="text" id="item-input" placeholder="or describe exactly what you found..." oninput="onInput(this.value)"/>
 
@@ -4319,6 +4371,11 @@ OUTPUT — valid JSON only, no markdown:
 {"item_identified":"<common name (scientific name if known)>","edibility_verdict":"edible|not_edible|conditional|unknown","attenborough_opening":"<one sentence, natural history intro>","panel":[{"charId":"ray","text":"<2-3 sentences>","will_eat":<bool>,"fact_check":"<optional>"},{"charId":"bear","text":"<2-3 sentences>","will_eat":true,"fact_check":"<optional>"},{"charId":"hales","text":"<2-3 sentences, educational, cites Aboriginal knowledge>","will_eat":true},{"charId":"packham","text":"<2-3 sentences>","will_eat":null,"source_challenge":"<his specific sourcing question>"},{"charId":"irwin","text":"<2-3 sentences>","will_eat":true,"impulse":"<what he immediately did, one phrase>"},{"charId":"stevens","text":"<1-2 sentences>","will_eat":false},{"charId":"darwin","text":"<2-3 sentences>","will_eat":true,"journal_note":"<one sentence from his journal, verbatim style>"}],"attenborough_verdict":"<one sentence>"}\`;
 
 let item = '';
+
+document.querySelectorAll('.chip-cat').forEach((cat, i) => {
+  if (i === 0) cat.classList.add('open');
+  cat.addEventListener('click', () => cat.classList.toggle('open'));
+});
 
 function onChip(el, val) {
   document.querySelectorAll('#chips-item .chip').forEach(c => c.classList.remove('sel'));
@@ -4489,6 +4546,12 @@ const SURVIVAL_SCHOOL_FACT_CHECKER = `<!DOCTYPE html>
     .chips { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 8px; }
     .chip { font-family: 'IBM Plex Mono', monospace; font-size: 11px; padding: 5px 10px; border: 0.5px solid var(--border-strong); border-radius: 5px; cursor: pointer; background: none; color: var(--text-muted); transition: all 0.15s; white-space: nowrap; user-select: none; }
     .chip:hover, .chip.sel { border-color: var(--bark); color: var(--bark); }
+    .chip-cat-group { margin-bottom: 4px; }
+    .chip-cat { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); padding: 6px 10px; border: 0.5px solid var(--border); border-radius: 5px; cursor: pointer; user-select: none; transition: all 0.15s; margin-bottom: 4px; display: inline-block; }
+    .chip-cat:hover { color: var(--text); border-color: var(--border-strong); }
+    .chip-cat.open { color: var(--gold); border-color: var(--gold-dim); }
+    .chip-cat-body { display: none; flex-wrap: wrap; gap: 5px; padding: 4px 0 8px; }
+    .chip-cat.open + .chip-cat-body { display: flex; }
 
     textarea { width: 100%; font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; padding: 9px 12px; border: 0.5px solid var(--border-strong); border-radius: 6px; background: var(--surface); color: var(--text); outline: none; transition: border-color 0.15s; resize: vertical; min-height: 72px; line-height: 1.6; }
     textarea:focus { border-color: var(--bark); }
@@ -4550,6 +4613,7 @@ const SURVIVAL_SCHOOL_FACT_CHECKER = `<!DOCTYPE html>
 </head>
 <body>
 <div id="app">
+  <a href="/survival-school" style="display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:1.5px;color:#7a8a60;text-decoration:none;margin-bottom:1rem;">← SURVIVAL SCHOOL</a>
 
   <div class="header">
     <div class="title">BEAR <span>FACT-CHECKER</span></div>
@@ -4557,16 +4621,22 @@ const SURVIVAL_SCHOOL_FACT_CHECKER = `<!DOCTYPE html>
   </div>
 
   <div class="field-label">Famous Bear claims</div>
-  <div class="chips" id="chips-claim">
+  <div id="chips-claim">
+    <div class="chip-cat-group"><div class="chip-cat">Technique</div><div class="chip-cat-body">
     <div class="chip" onclick="onChip(this,'I once made fire using sunlight and a piece of ice in the Himalayas.')">ice lens fire</div>
-    <div class="chip" onclick="onChip(this,'Drinking your own urine is a good survival strategy when water is scarce.')">urine hydration</div>
-    <div class="chip" onclick="onChip(this,'You can survive by drinking the blood of a freshly caught fish.')">fish blood</div>
     <div class="chip" onclick="onChip(this,'Running in a zigzag is the best way to escape a crocodile.')">croc zigzag</div>
-    <div class="chip" onclick="onChip(this,'I survived a night by sheltering inside a freshly killed camel.')">camel bivouac</div>
-    <div class="chip" onclick="onChip(this,'Eating raw meat in the jungle gives you energy within minutes.')">raw meat energy</div>
     <div class="chip" onclick="onChip(this,'You should suck the venom out of a snake bite immediately.')">venom extraction</div>
     <div class="chip" onclick="onChip(this,'In an avalanche, spit to find which way is down.')">avalanche spit</div>
+    </div></div>
+    <div class="chip-cat-group"><div class="chip-cat">Biology</div><div class="chip-cat-body">
+    <div class="chip" onclick="onChip(this,'Drinking your own urine is a good survival strategy when water is scarce.')">urine hydration</div>
+    <div class="chip" onclick="onChip(this,'You can survive by drinking the blood of a freshly caught fish.')">fish blood</div>
+    <div class="chip" onclick="onChip(this,'Eating raw meat in the jungle gives you energy within minutes.')">raw meat energy</div>
+    </div></div>
+    <div class="chip-cat-group"><div class="chip-cat">Endurance</div><div class="chip-cat-body">
+    <div class="chip" onclick="onChip(this,'I survived a night by sheltering inside a freshly killed camel.')">camel bivouac</div>
     <div class="chip" onclick="onChip(this,'Bear roughed it for 72 hours in the Highlands with nothing but a knife and his instincts. He was not seen at a nearby Travelodge at any point.')">72 hours in the Highlands</div>
+    </div></div>
   </div>
 
   <div class="field-label" style="margin-top:12px">Or enter a Bear claim</div>
@@ -4662,6 +4732,11 @@ OUTPUT — valid JSON only, no markdown:
 {"claim":"<the claim as submitted>","accuracy_score":<integer 0-100>,"verdict":"CONFIRMED|DISPUTED|EMBELLISHED|MYTH","attenborough_opening":"<one sentence, introduces Bear's claim as specimen under scrutiny>","panel":[{"charId":"ray","text":"<2-3 sentences>","fact_check":"<mandatory — Ray's correction, specific and brief>"},{"charId":"bear","text":"<2-3 sentences, defends the claim completely>"},{"charId":"cody","text":"<2-3 sentences, the correct technique that was available>"},{"charId":"hales","text":"<2-3 sentences, educational, cites Aboriginal knowledge where relevant>"},{"charId":"fox","text":"<2-3 sentences, tactical operational assessment>"},{"charId":"stroud","text":"<1-2 sentences, quiet verdict>"}],"attenborough_verdict":"<one sentence, geological calm>"}\`;
 
 let claim = '';
+
+document.querySelectorAll('.chip-cat').forEach((cat, i) => {
+  if (i === 0) cat.classList.add('open');
+  cat.addEventListener('click', () => cat.classList.toggle('open'));
+});
 
 function onChip(el, val) {
   document.querySelectorAll('#chips-claim .chip').forEach(c => c.classList.remove('sel'));
@@ -4839,6 +4914,12 @@ const SURVIVAL_SCHOOL_COYOTE = `<!DOCTYPE html>
     .chips { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 8px; }
     .chip { font-family: 'IBM Plex Mono', monospace; font-size: 11px; padding: 5px 10px; border: 0.5px solid var(--border-strong); border-radius: 5px; cursor: pointer; background: none; color: var(--text-muted); transition: all 0.15s; white-space: nowrap; user-select: none; }
     .chip:hover, .chip.sel { border-color: var(--amber); color: var(--amber); }
+    .chip-cat-group { margin-bottom: 4px; }
+    .chip-cat { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); padding: 6px 10px; border: 0.5px solid var(--border); border-radius: 5px; cursor: pointer; user-select: none; transition: all 0.15s; margin-bottom: 4px; display: inline-block; }
+    .chip-cat:hover { color: var(--text); border-color: var(--border-strong); }
+    .chip-cat.open { color: var(--gold); border-color: var(--gold-dim); }
+    .chip-cat-body { display: none; flex-wrap: wrap; gap: 5px; padding: 4px 0 8px; }
+    .chip-cat.open + .chip-cat-body { display: flex; }
 
     textarea { width: 100%; font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; padding: 9px 12px; border: 0.5px solid var(--border-strong); border-radius: 6px; background: var(--surface); color: var(--text); outline: none; transition: border-color 0.15s; resize: vertical; min-height: 72px; line-height: 1.6; }
     textarea:focus { border-color: var(--amber); }
@@ -4895,6 +4976,7 @@ const SURVIVAL_SCHOOL_COYOTE = `<!DOCTYPE html>
 </head>
 <body>
 <div id="app">
+  <a href="/survival-school" style="display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:1.5px;color:#7a8a60;text-decoration:none;margin-bottom:1rem;">← SURVIVAL SCHOOL</a>
 
   <div class="header">
     <div class="title">THE <span>COYOTE</span> INDEX</div>
@@ -4902,17 +4984,23 @@ const SURVIVAL_SCHOOL_COYOTE = `<!DOCTYPE html>
   </div>
 
   <div class="field-label">Common incidents (select or describe your own)</div>
-  <div class="chips" id="chips-incident">
+  <div id="chips-incident">
+    <div class="chip-cat-group"><div class="chip-cat">Domestic</div><div class="chip-cat-body">
     <div class="chip" onclick="onChip(this,'shin struck by shopping trolley in Sainsbury\\'s, Saturday afternoon, no apology given')">trolley to shin</div>
     <div class="chip" onclick="onChip(this,'paper cut from cardboard box edge, not paper — the deceptive kind')">cardboard cut</div>
     <div class="chip" onclick="onChip(this,'stepped on Lego barefoot, 3am, trying not to wake anyone')">Lego, 3am</div>
     <div class="chip" onclick="onChip(this,'stubbed little toe on bed corner, full speed, unexpected')">bed corner, little toe</div>
-    <div class="chip" onclick="onChip(this,'eating something described as mild on the menu')">mild (it was not mild)</div>
-    <div class="chip" onclick="onChip(this,'bee sting, forearm, unprovoked')">bee sting</div>
-    <div class="chip" onclick="onChip(this,'jellyfish sting, leg, holiday, shallow water')">jellyfish, holiday</div>
-    <div class="chip" onclick="onChip(this,'waxing — any area')">waxing</div>
+    </div></div>
+    <div class="chip-cat-group"><div class="chip-cat">Medical</div><div class="chip-cat-body">
     <div class="chip" onclick="onChip(this,'dental filling without full anaesthetic, dentist says it\\'s fine')">filling, insufficient anaesthetic</div>
+    <div class="chip" onclick="onChip(this,'waxing — any area')">waxing</div>
+    <div class="chip" onclick="onChip(this,'bee sting, forearm, unprovoked')">bee sting</div>
+    </div></div>
+    <div class="chip-cat-group"><div class="chip-cat">Nature</div><div class="chip-cat-body">
+    <div class="chip" onclick="onChip(this,'jellyfish sting, leg, holiday, shallow water')">jellyfish, holiday</div>
+    <div class="chip" onclick="onChip(this,'eating something described as mild on the menu')">mild (it was not mild)</div>
     <div class="chip" onclick="onChip(this,'bitten by bullet ant, Paraponera clavata, deliberately')">bullet ant (reference)</div>
+    </div></div>
   </div>
 
   <div class="field-label" style="margin-top:12px">Or describe your incident</div>
@@ -5033,6 +5121,11 @@ const API = {
     return resp.json();
   },
 };
+
+document.querySelectorAll('.chip-cat').forEach((cat, i) => {
+  if (i === 0) cat.classList.add('open');
+  cat.addEventListener('click', () => cat.classList.toggle('open'));
+});
 
 function ratingColor(r) {
   if (r >= 4) return 'var(--blood)';
@@ -5306,6 +5399,7 @@ const SURVIVAL_SCHOOL_DEATHMATCH = `<!DOCTYPE html>
 </head>
 <body>
 <div id="app">
+  <a href="/survival-school" style="display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:1.5px;color:#7a8a60;text-decoration:none;margin-bottom:1rem;">← SURVIVAL SCHOOL</a>
 
   <div class="header">
     <div class="title">ANIMAL <span>DEATHMATCH</span></div>
@@ -5956,7 +6050,7 @@ const SURVIVAL_SCHOOL_ROOMS = `<!DOCTYPE html>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>The Doors — Survival School</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&family=Crimson+Text:ital@1&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -5965,37 +6059,41 @@ const SURVIVAL_SCHOOL_ROOMS = `<!DOCTYPE html>
       --gold: #c8a040; --gold-dim: #5a3e10; --gold-bright: #e8c060;
       --purple: #7a60b0; --purple-dim: #2a1e4a; --purple-bright: #a080e0;
       --green: #7aad3a; --green-dim: #2a4010;
-      --text: #d8d4e8; --text-muted: #6a6480;
+      --text: #d8d4e8; --text-muted: #8a849e;
     }
     body { font-family: 'Barlow', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
-    #app { max-width: 640px; margin: 0 auto; padding: 1.5rem 1rem 4rem; }
+    #app { max-width: 700px; margin: 0 auto; padding: 1.5rem 1rem 4rem; }
 
-    .header { text-align: center; margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 0.5px solid var(--border); }
+    .header { text-align: center; margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 0.5px solid var(--border); }
     .corridor-label { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 3px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; }
     .title { font-family: 'Bebas Neue', sans-serif; font-size: 52px; letter-spacing: 5px; line-height: 1; color: var(--text); }
     .title span { color: var(--gold); }
-    .subtitle { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-muted); letter-spacing: 1.5px; margin-top: 6px; }
 
-    .morrison-block { margin: 2rem 0; min-height: 72px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; }
-    .morrison-quote { font-family: 'Barlow', sans-serif; font-size: 15px; font-style: italic; color: var(--gold); text-align: center; line-height: 1.5; opacity: 0.85; transition: opacity 0.25s, color 0.25s; padding: 0 1rem; }
-    .morrison-quote.active { opacity: 1; color: var(--gold-bright); }
-    .morrison-attr { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-muted); letter-spacing: 1px; }
+    .morrison-welcome { margin: 1.5rem 0 2rem; text-align: center; }
+    .morrison-welcome-text { font-family: 'Crimson Text', serif; font-style: italic; font-size: 17px; color: var(--gold-bright); line-height: 1.65; padding: 0 1rem; max-width: 560px; margin: 0 auto; }
+    .morrison-welcome-attr { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-muted); letter-spacing: 1px; margin-top: 10px; }
 
-    .doors-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 2.5rem; }
+    .morrison-secondary { text-align: center; margin-bottom: 2rem; min-height: 36px; }
+    .morrison-quote { font-family: 'Barlow', sans-serif; font-size: 13px; font-style: italic; color: var(--text-muted); text-align: center; line-height: 1.5; opacity: 0.7; transition: opacity 0.25s, color 0.25s; padding: 0 1rem; }
+    .morrison-quote.active { opacity: 1; color: var(--gold); }
 
-    .door { border: 0.5px solid var(--border-strong); border-radius: 8px; padding: 1.5rem 1rem; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 10px; cursor: default; transition: border-color 0.2s, background 0.2s; position: relative; text-decoration: none; color: inherit; }
-    .door.locked { background: var(--surface); opacity: 0.55; }
-    .door.locked:hover { opacity: 0.7; border-color: rgba(90,80,140,0.4); }
+    .doors-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 2.5rem; }
+
+    .door { border: 0.5px solid var(--border-strong); border-radius: 8px; padding: 1.25rem 0.85rem; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: default; transition: border-color 0.2s, background 0.2s; position: relative; text-decoration: none; color: inherit; }
+    .door.locked { background: var(--surface); opacity: 0.5; }
+    .door.locked:hover { opacity: 0.65; border-color: rgba(90,80,140,0.4); }
     .door.live { background: var(--surface2); border-color: var(--gold-dim); cursor: pointer; opacity: 1; }
     .door.live:hover { border-color: var(--gold); background: rgba(90,60,10,0.35); }
 
-    .door-number { font-family: 'Bebas Neue', sans-serif; font-size: 42px; letter-spacing: 2px; line-height: 1; color: var(--text-muted); }
-    .door.live .door-number { color: var(--gold); }
+    .door-name { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 1.5px; line-height: 1.15; color: var(--text); }
+    .door.live .door-name { color: var(--gold); }
+    .door.locked .door-name { color: var(--text-muted); }
 
-    .door-state { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); }
-    .door.live .door-state { color: var(--gold); font-size: 10px; }
+    .door-teaser { font-family: 'Crimson Text', serif; font-style: italic; font-size: 12px; color: var(--gold); line-height: 1.45; opacity: 0.75; }
+    .door.locked .door-teaser { color: var(--text-muted); opacity: 0.6; }
 
-    .door-badge { font-family: 'IBM Plex Mono', monospace; font-size: 8px; letter-spacing: 1px; text-transform: uppercase; padding: 2px 6px; border-radius: 3px; background: var(--gold-dim); color: var(--gold); }
+    .door-badge { font-family: 'IBM Plex Mono', monospace; font-size: 8px; letter-spacing: 1px; text-transform: uppercase; padding: 2px 6px; border-radius: 3px; background: var(--gold-dim); color: var(--gold); margin-top: 4px; }
+    .door.locked .door-badge { background: rgba(90,80,140,0.15); color: var(--text-muted); }
 
     .back-link { display: inline-block; font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1.5px; color: var(--text-muted); text-decoration: none; transition: color 0.15s; }
     .back-link:hover { color: var(--text); }
@@ -6003,6 +6101,9 @@ const SURVIVAL_SCHOOL_ROOMS = `<!DOCTYPE html>
     @media (max-width: 460px) {
       .doors-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
       .title { font-size: 40px; }
+      .morrison-welcome-text { font-size: 15px; }
+      .door-name { font-size: 17px; }
+      .door-teaser { font-size: 11px; }
     }
     @media (max-width: 320px) {
       .doors-grid { grid-template-columns: 1fr; }
@@ -6015,46 +6116,53 @@ const SURVIVAL_SCHOOL_ROOMS = `<!DOCTYPE html>
   <div class="header">
     <div class="corridor-label">CORRIDOR · THE DOORS</div>
     <div class="title"><span>THE</span> DOORS</div>
-    <div class="subtitle">SIX DOORS. ONE GUIDE. YOU DON'T KNOW WHAT'S BEHIND THEM.</div>
   </div>
 
-  <div class="morrison-block">
+  <div class="morrison-welcome">
+    <div class="morrison-welcome-text">You found the corridor. I don't know how. Behind these doors are people who know things about survival, or say they do. You choose the room. You choose who walks in. What happens after that is between them and whatever they've decided to believe about themselves. I'll be here. I'm always here.</div>
+    <div class="morrison-welcome-attr">— Jim Morrison</div>
+  </div>
+
+  <div class="morrison-secondary">
     <div class="morrison-quote" id="morrison-quote"></div>
-    <div class="morrison-attr">— Jim Morrison</div>
   </div>
 
   <div class="doors-grid">
 
     <div class="door locked" data-morrison="The snake does not ask whether it is biting correctly. This room has been waiting for you.">
-      <div class="door-number">12</div>
-      <div class="door-state">locked</div>
+      <div class="door-name">The Denial Loop</div>
+      <div class="door-teaser">Someone said something. The evidence disagrees. They are not backing down. Neither is the evidence.</div>
+      <div class="door-badge">COMING SOON</div>
     </div>
 
     <div class="door locked" data-morrison="When you argue with the universe, the universe wins. But you can make it a good argument.">
-      <div class="door-number">12A</div>
-      <div class="door-state">locked</div>
+      <div class="door-name">The Argument</div>
+      <div class="door-teaser">Pick a side. They'll pick the other. Eventually it stops being about what you said.</div>
+      <div class="door-badge">COMING SOON</div>
     </div>
 
     <a class="door live" href="/survival-school/ive-had-worse" data-morrison="Whoever walks through this door will understand something about themselves. Probably that they've had worse.">
-      <div class="door-number">13</div>
-      <div class="door-state">enter</div>
+      <div class="door-name">I've Had Worse</div>
+      <div class="door-teaser">Someone had it worse. Someone always had it worse. They'll keep going until the story eats itself.</div>
       <div class="door-badge">LIVE</div>
     </a>
 
     <a class="door live" href="/survival-school/in-my-defence" data-morrison="The room does not care why you did it. The room only has questions.">
-      <div class="door-number">14</div>
-      <div class="door-state">enter</div>
+      <div class="door-name">In My Defence</div>
+      <div class="door-teaser">Put someone in the chair. Ask them about the thing they did. Watch them try to explain it to people who were there.</div>
       <div class="door-badge">LIVE</div>
     </a>
 
     <div class="door locked" data-morrison="On the other side of this door: unconditional yes. The universe demands it of you.">
-      <div class="door-number">15</div>
-      <div class="door-state">locked</div>
+      <div class="door-name">Going With It</div>
+      <div class="door-teaser">Say something wrong. They'll agree. That's when it gets dangerous.</div>
+      <div class="door-badge">COMING SOON</div>
     </div>
 
     <div class="door locked" data-morrison="There is a detail waiting for you in that room. It will mean everything eventually.">
-      <div class="door-number">16</div>
-      <div class="door-state">locked</div>
+      <div class="door-name">The Detail</div>
+      <div class="door-teaser">You'll tell them what happened. They'll find the one thing you didn't mention. That's all they'll talk about.</div>
+      <div class="door-badge">COMING SOON</div>
     </div>
 
   </div>
@@ -6149,6 +6257,12 @@ const SURVIVAL_SCHOOL_IVE_HAD_WORSE = `<!DOCTYPE html>
     .chip-protagonist { border-color: var(--border-strong); }
     .chip-protagonist.sel { border-color: var(--amber); color: var(--amber); }
     .chip-protagonist:hover { border-color: var(--amber); color: var(--amber); }
+    .chip-cat-group { margin-bottom: 4px; }
+    .chip-cat { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); padding: 6px 10px; border: 0.5px solid var(--border); border-radius: 5px; cursor: pointer; user-select: none; transition: all 0.15s; margin-bottom: 4px; display: inline-block; }
+    .chip-cat:hover { color: var(--text); border-color: var(--border-strong); }
+    .chip-cat.open { color: var(--gold); border-color: var(--gold-dim); }
+    .chip-cat-body { display: none; flex-wrap: wrap; gap: 5px; padding: 4px 0 8px; }
+    .chip-cat.open + .chip-cat-body { display: flex; }
 
     .protagonist-prompt { font-family: 'Barlow Condensed', sans-serif; font-size: 18px; font-weight: 600; color: var(--text); margin-top: 14px; min-height: 28px; transition: color 0.2s; letter-spacing: 0.5px; }
     .protagonist-prompt.named { color: var(--amber); }
@@ -6187,6 +6301,13 @@ const SURVIVAL_SCHOOL_IVE_HAD_WORSE = `<!DOCTYPE html>
     .card-meta { flex: 1; min-width: 0; }
     .card-name { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 1.5px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 5px; display: flex; gap: 8px; align-items: center; }
     .card-name .badge-protagonist { font-size: 8px; letter-spacing: 1px; color: var(--amber); border: 0.5px solid var(--amber-dim); border-radius: 3px; padding: 1px 4px; }
+    .thread-indicator { font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: var(--text-muted); opacity: 0.7; margin-bottom: 2px; }
+    .panel-card.has-reference { border-left: 2px solid var(--gold-dim); }
+    .protagonist-response-card { display: flex; gap: 10px; padding: 12px; margin: 12px 0; border-radius: 8px; border: 0.5px solid var(--amber-dim); background: rgba(30,24,8,0.5); }
+    .protagonist-response-card .card-name span:last-child { font-style: italic; }
+    .btn-dig { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 2px; padding: 10px 20px; border: 0.5px solid var(--amber-dim); border-radius: 5px; background: transparent; color: var(--amber); cursor: pointer; transition: all 0.15s; display: block; margin: 12px auto; text-transform: uppercase; }
+    .btn-dig:hover { border-color: var(--amber); background: rgba(90,60,10,0.2); }
+    .dig-closed { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-muted); text-align: center; margin: 12px 0; opacity: 0.7; }
     .card-text { font-size: 13.5px; line-height: 1.65; color: var(--text); }
 
     .terminal-label { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 2px; color: var(--text-muted); text-transform: uppercase; margin: 1.2rem 0 6px; opacity: 0.5; }
@@ -6252,22 +6373,37 @@ const SURVIVAL_SCHOOL_IVE_HAD_WORSE = `<!DOCTYPE html>
   <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text-muted);margin-bottom:6px;line-height:1.5;opacity:0.7;">Think small. The more trivial your predicament, the harder the panel works to top it. A paper cut is funnier than a bear attack.</div>
   <textarea id="predicament-input" placeholder="I have a mild inconvenience that I would like taken extremely seriously..." rows="2"></textarea>
 
-  <div class="chips" id="chips-predicament" style="margin-top:8px">
-    <button class="chip" data-pred="I have a paper cut">paper cut</button>
-    <button class="chip" data-pred="I stubbed my toe">stubbed toe</button>
-    <button class="chip" data-pred="I got slightly damp in the rain">slightly damp</button>
-    <button class="chip" data-pred="My tea was lukewarm">lukewarm tea</button>
-    <button class="chip" data-pred="I have a mild headache">mild headache</button>
-    <button class="chip" data-pred="I sat on my keys">sat on keys</button>
-    <button class="chip" data-pred="A shopping trolley hit my shin">shin vs trolley</button>
-    <button class="chip" data-pred="I have mild sunburn">mild sunburn</button>
-    <button class="chip" data-pred="I took a toilet break in the aisle of a crowded airplane because the queue was simply unreasonable">airplane aisle situation</button>
-    <button class="chip" data-pred="I was drunk and incapacitated after a pint and a half of weak shandy at a work function">defeated by a shandy</button>
-    <button class="chip" data-pred="I was found in a concerning situation involving a badger and I had questions">the badger incident</button>
-    <button class="chip" data-pred="I had to explain to hospital staff why there was a pigeon involved in an incident that was entirely the pigeon's fault">pigeon-related hospital visit</button>
-    <button class="chip" data-pred="I ate a tortoise on a long sea voyage and found it quite pleasant and now need to defend this morally and nutritionally">the tortoise question</button>
-    <button class="chip" data-pred="I am wearing a belt and wallet set made from the species I claim to be protecting in my documentary series and the crew have noticed">wearing the species</button>
-    <button class="chip" data-pred="I delivered a Stay Safe talk to Year 10 using methods the school board has described as excessive and the teacher has asked to be reassigned">Stay Safe: excessive methods</button>
+  <div id="chips-predicament" style="margin-top:8px">
+    <div class="chip-cat-group">
+      <div class="chip-cat">Minor Injuries</div>
+      <div class="chip-cat-body">
+        <button class="chip" data-pred="I have a paper cut">paper cut</button>
+        <button class="chip" data-pred="I stubbed my toe">stubbed toe</button>
+        <button class="chip" data-pred="I got slightly damp in the rain">slightly damp</button>
+        <button class="chip" data-pred="My tea was lukewarm">lukewarm tea</button>
+        <button class="chip" data-pred="I have a mild headache">mild headache</button>
+        <button class="chip" data-pred="I sat on my keys">sat on keys</button>
+        <button class="chip" data-pred="A shopping trolley hit my shin">shin vs trolley</button>
+        <button class="chip" data-pred="I have mild sunburn">mild sunburn</button>
+      </div>
+    </div>
+    <div class="chip-cat-group">
+      <div class="chip-cat">Social</div>
+      <div class="chip-cat-body">
+        <button class="chip" data-pred="I took a toilet break in the aisle of a crowded airplane because the queue was simply unreasonable">airplane aisle situation</button>
+        <button class="chip" data-pred="I was drunk and incapacitated after a pint and a half of weak shandy at a work function">defeated by a shandy</button>
+        <button class="chip" data-pred="I was found in a concerning situation involving a badger and I had questions">the badger incident</button>
+        <button class="chip" data-pred="I had to explain to hospital staff why there was a pigeon involved in an incident that was entirely the pigeon's fault">pigeon-related hospital visit</button>
+      </div>
+    </div>
+    <div class="chip-cat-group">
+      <div class="chip-cat">Character-Specific</div>
+      <div class="chip-cat-body">
+        <button class="chip" data-pred="I ate a tortoise on a long sea voyage and found it quite pleasant and now need to defend this morally and nutritionally">the tortoise question</button>
+        <button class="chip" data-pred="I am wearing a belt and wallet set made from the species I claim to be protecting in my documentary series and the crew have noticed">wearing the species</button>
+        <button class="chip" data-pred="I delivered a Stay Safe talk to Year 10 using methods the school board has described as excessive and the teacher has asked to be reassigned">Stay Safe: excessive methods</button>
+      </div>
+    </div>
   </div>
 
   <div class="btn-row">
@@ -6286,6 +6422,8 @@ const SURVIVAL_SCHOOL_IVE_HAD_WORSE = `<!DOCTYPE html>
       <div class="panel-label">THE PANEL</div>
       <div id="cards-out"></div>
       <div id="morrison-interruption" style="display:none"></div>
+      <div id="protagonist-response-block" style="display:none"></div>
+      <div id="dig-block" style="display:none"></div>
       <div class="terminal-label">ATTENBOROUGH CLOSES THE ROOM</div>
       <div class="att-bookend" id="att-terminal" style="display:none">
         <div class="att-av">DA</div>
@@ -6433,10 +6571,14 @@ const UI = {
       if (!char) return;
       const isProtagonist = r.charId === protagonistId;
       const badgeHtml = isProtagonist ? '<span class="badge-protagonist">PROTAGONIST</span>' : '';
-      cardsEl.innerHTML += \`<div class="panel-card\${isProtagonist ? ' protagonist' : ''}">
+      const reactsHtml = r.reacts_to && r.reacts_to.charId && CHARACTERS[r.reacts_to.charId]
+        ? \`<div class="thread-indicator reacts-to">↳ re: \${CHARACTERS[r.reacts_to.charId].name}</div>\`
+        : '';
+      cardsEl.innerHTML += \`<div class="panel-card\${isProtagonist ? ' protagonist' : ''}\${r.reacts_to ? ' has-reference' : ''}">
         <div class="av \${char.avClass}">\${char.av}</div>
         <div class="card-meta">
           <div class="card-name"><span>\${char.name}</span><span style="opacity:0.5">\${char.role}</span>\${badgeHtml}</div>
+          \${reactsHtml}
           <div class="card-text">\${r.text}</div>
         </div>
       </div>\`;
@@ -6461,6 +6603,58 @@ const UI = {
       morrisonEl.style.display = 'none';
     }
 
+    // Protagonist auto-response (SS-061)
+    const protResEl = document.getElementById('protagonist-response-block');
+    if (data.protagonist_response && protagonistId) {
+      const pChar = CHARACTERS[protagonistId];
+      if (pChar) {
+        protResEl.innerHTML = \`<div class="protagonist-response-card">
+          <div class="av \${pChar.avClass}">\${pChar.av}</div>
+          <div class="card-meta">
+            <div class="card-name"><span>\${pChar.name}</span><span style="opacity:0.5">can't help themselves</span></div>
+            <div class="card-text">\${data.protagonist_response}</div>
+          </div>
+        </div>\`;
+        protResEl.style.display = 'block';
+      }
+
+      // Track history for multi-turn
+      if (!State.turnHistory) State.turnHistory = [];
+      State.turnHistory.push({
+        panelSummary: (data.panel || []).map(r => (r.charId || '') + ': ' + (r.text || '').slice(0, 80)).join('; '),
+        protagonistResponse: data.protagonist_response
+      });
+      State.turnCount = (State.turnCount || 0) + 1;
+
+      // Show LET THEM DIG button (max 5 rounds)
+      const digEl = document.getElementById('dig-block');
+      if (State.turnCount < 5) {
+        digEl.innerHTML = '<button class="btn-dig" id="btn-dig">LET THEM DIG</button>';
+        digEl.style.display = 'block';
+        document.getElementById('btn-dig').addEventListener('click', async () => {
+          digEl.style.display = 'none';
+          protResEl.style.display = 'none';
+          document.getElementById('att-terminal').style.display = 'none';
+          document.getElementById('loading').style.display = 'block';
+          try {
+            const nextData = await API.submit(State.predicament, State.protagonist, State.turnCount + 1, State.turnHistory);
+            if (nextData.composureState) State.setComposureState(nextData.composureState);
+            if (nextData.morrison_interruption && nextData.morrison_interruption.morrison_present !== undefined) {
+              State.morrisonPresent = nextData.morrison_interruption.morrison_present;
+            }
+            UI.renderResults(nextData, protagonistId);
+          } catch (err) {
+            document.getElementById('error-msg').textContent = "The panel couldn't reconvene. Try again.";
+            document.getElementById('error-msg').classList.add('show');
+            document.getElementById('loading').style.display = 'none';
+          }
+        });
+      } else {
+        digEl.innerHTML = '<div class="dig-closed">The room is closed. Attenborough has spoken.</div>';
+        digEl.style.display = 'block';
+      }
+    }
+
     // Attenborough terminal
     const terminalEl = document.getElementById('att-terminal');
     const terminalText = document.getElementById('att-terminal-text');
@@ -6478,14 +6672,20 @@ const UI = {
     document.getElementById('att-opening').innerHTML = '';
     document.getElementById('cards-out').innerHTML = '';
     document.getElementById('att-terminal').style.display = 'none';
+    document.getElementById('protagonist-response-block').style.display = 'none';
+    document.getElementById('dig-block').style.display = 'none';
     document.getElementById('error-msg').classList.remove('show');
+    State.turnHistory = [];
+    State.turnCount = 0;
   },
 };
 
 const API = {
-  buildSystemPrompt(protagonist, morrisonPresent) {
+  buildSystemPrompt(protagonist, morrisonPresent, turn, history) {
     const char = CHARACTERS[protagonist];
     const protagonistName = char ? char.name : protagonist;
+    turn = turn || 1;
+    history = history || [];
     const morrisonInjection = buildMorrisonInjection(morrisonPresent);
     return \`You are the Survival School panel running the "I've Had Worse" mechanic.
 
@@ -6505,6 +6705,7 @@ LES HIDDINS — Bush Tucker Man. Three words. The Aboriginal people had a name f
 CODY LUNDIN — Primitive skills. Barefoot. Had the resource thirty feet away. Chose not to use it. Made it worse.
 LES STROUD — Survivorman. Quiet. Slightly melancholy. Has been alone in worse. Always. Camera was rolling.
 AUSTIN STEVENS — Snakemaster. South African. Direct, slightly theatrical. Casually indifferent to severity — everything registers as minor. Has been bitten by a black mamba, a gaboon viper, a king cobra, and a reticulated python in the same month. Calls your predicament "interesting." Will not say it was bad. Will say it was "a significant encounter." Your paper cut is not a significant encounter.
+CHRIS PACKHAM — Zoologist. Conservationist. The Really Wild Show. Springwatch. Rapid, pattern-recognition, scientifically precise. Openly autistic — the punk rock interest came from that same directness. Cites Penetration's "Shout Above the Noise" as life anthem. His "I've Had Worse" entry is zoologically specific, conservation-framed, and delivered at speed. Names the species, its IUCN status, and what the real tragedy of the situation was — which is never the human's predicament. ETHICAL OVERRIDE: when the predicament involves animal harm or welfare compromise, Packham stops recounting and starts objecting. The shift is immediate and total. Not performance — the logical conclusion of a mind that cannot treat animal welfare as negotiable even when the joke requires it.
 
 === FISH-OUT-OF-WATER GUESTS (include 1–2 when they will improve the room) ===
 PROF BRIAN COX — Theoretical Physics. AWARENESS MODE: blissfully unaware. Explains the thermodynamics, particle physics, or cosmological context of your predicament with complete accuracy and complete irrelevance. Genuinely believes this is helping. Never defensive, never self-aware. Curious. His "I've Had Worse" entry involves a physics event (LHC, a supernova, the heat death of the universe). He had worse. The universe has certainly had worse.
@@ -6531,7 +6732,28 @@ CODY OVERRIDE (SS-020) — fires when Cody is in the panel AND the predicament o
 - Cody stops. No speech, no drama. Brief, final.
 - His response indicates the advice is wrong and could kill someone. One sentence. Done.
 - The spear goes in the pool. This is the founding moment. The threshold does not move.
-- If Packham is also in the panel and his Ethical Override fires simultaneously: Ray agrees with both silently. Bear does the thing anyway with extra flair. Hales does the correct version without mentioning it. Attenborough observes.
+
+PACKHAM ETHICAL OVERRIDE (SS-013) — fires when Packham is in the panel AND the predicament or panel discussion involves animal harm, exploitation, or welfare compromise:
+- Packham objects on moral grounds. Not performance. The logical conclusion of a mind that cannot treat animal welfare as negotiable.
+- NEGOTIATE-THROW integrity: he makes the full moral/factual case first, cites conservation status or ecological impact, then refuses to participate further.
+- His objection changes the room's register — other characters respond to the shift, not to Packham directly.
+- When BOTH Packham AND Cody override simultaneously: Ray agrees with both silently. Bear does the thing anyway with extra flair. Hales does the correct version without mentioning it. Attenborough observes.
+
+=== CROSS-CHARACTER REFERENCES (SS-060) ===
+Where a character has a strong established relationship with another panellist who has already spoken, they may reference that panellist directly — once, briefly, in their natural register. This is OPTIONAL — not every card needs it. Use only when the relationship adds comedy or tension.
+Bear never directly contradicts Ray; silence and contrast do the work. Fox endorses Hales with one word. Billy's reference to Bear's TA service fires once per session maximum. The relationship does not need to be explained.
+When a character references another, include an optional "reacts_to" object in their panel entry:
+  "reacts_to": {"charId":"<referenced charId>","register":"endorsement|quiet_disagreement|silence_noted|deflation|builds_on"}
+Only include reacts_to when a genuine cross-reference occurs. Omit it otherwise.
+
+=== PROTAGONIST AUTO-RESPONSE (SS-061) ===
+After the panel has spoken, the protagonist CANNOT HELP THEMSELVES. They respond automatically.
+Include a "protagonist_response" field: 2-3 sentences where the protagonist reacts to what the panel said.
+The protagonist makes their position WORSE — more detail, more conviction, worse facts. They cannot stop.
+Bear doubles down with a worse story. Cody goes quieter but more absolute. Jim Carrey cycles into a new mode.
+The protagonist_response is the seed for the next round. It gives the panel something new to escalate from.
+\${turn > 1 ? 'This is round ' + turn + '. The protagonist has already responded ' + (turn - 1) + ' time(s). Each round they dig deeper. NEVER repeat what was said in a previous round. Escalate only.' : 'This is the first round.'}
+\${history.length > 0 ? 'PREVIOUS EXCHANGE:\\n' + history.map((h, i) => 'Round ' + (i+1) + ' — Panel said: ' + h.panelSummary + ' | Protagonist responded: ' + h.protagonistResponse).join('\\n') : ''}
 
 === CRITICAL RULES ===
 Characters are sincere. They do not know they are in a mechanic. They are simply recounting their experience.
@@ -6541,7 +6763,7 @@ Attenborough does NOT appear in the panel array. He bookends.
 Cox and Faldo are permanent panel members on rotation. They may both appear in the same panel — two mechanics exist depending on who else is present:
 
 === MUTUAL AGREEMENT (fires when BOTH cox AND faldo are in the panel AND at least one expert is present) ===
-Expert charIds: ray, bear, fox, hales, cody, stroud, stevens, jeremy.
+Expert charIds: ray, bear, fox, hales, cody, stroud, stevens, jeremy, packham.
 Cox and Faldo find a point of apparent overlap and agree with each other with complete conviction about something both are completely wrong about.
 - They reinforce each other: "Exactly — that's what I was going to say." "Nick's absolutely right."
 - The thing they agree on is specific, confident, and entirely incorrect in the survival domain.
@@ -6549,7 +6771,7 @@ Cox and Faldo find a point of apparent overlap and agree with each other with co
 - Attenborough, if closing, may note the agreement without correcting it. He has seen this before.
 
 === ARGUMENT (fires when BOTH cox AND faldo are in the panel AND NO expert is present) ===
-Expert charIds: ray, bear, fox, hales, cody, stroud, stevens, jeremy. If NONE of these are in the panel, ARGUMENT fires instead of MUTUAL AGREEMENT.
+Expert charIds: ray, bear, fox, hales, cody, stroud, stevens, jeremy, packham. If NONE of these are in the panel, ARGUMENT fires instead of MUTUAL AGREEMENT.
 Cox and Faldo disagree on a specific survival point. Both are wrong. Neither knows enough to realise the other is also wrong.
 - They are specific: Cox invokes a physics principle that doesn't apply. Faldo references a round of golf where the conditions were "basically identical."
 - They are personally invested: "With respect, Brian, you've clearly never been in a real bunker." "Nick, I've modelled fluid dynamics at CERN — I think I understand rain."
@@ -6560,7 +6782,7 @@ Cox and Faldo disagree on a specific survival point. Both are wrong. Neither kno
 If only ONE of cox/faldo is in the panel, NEITHER mechanic fires — they behave normally as individual fish-out-of-water guests.
 
 VALID charIds — use ONLY these exact values, no others:
-  ray, bear, fox, hales, cody, stroud, stevens, cox, faldo, jim, jeremy
+  ray, bear, fox, hales, cody, stroud, stevens, cox, faldo, jim, jeremy, packham
 Include at least 3 panel members. The protagonist charId "\${protagonist}" must appear.
 
 \${morrisonInjection}
@@ -6568,12 +6790,12 @@ Include at least 3 panel members. The protagonist charId "\${protagonist}" must 
 ${SOCIAL_DYNAMICS_ENGINE}
 
 OUTPUT — valid JSON only, no markdown:
-{"attenborough_opening":"<one sentence, nature doc, frames the user's predicament as a minor event in the natural order>","panel":[{"charId":"ray|bear|fox|hales|cody|stroud|stevens|cox|faldo|jim|jeremy","text":"<1-2 sentences — their worse experience, absolutely sincere>"}],"attenborough_terminal":"<one sentence, geological calm, closes the room, no appeal>","panel_tension":{"type":"wound_reference|lie|callout|wolf_pack|none","subject":"<charId or empty>","by":["<charId>"],"note":"<one line or empty string>"},"morrison_interruption":<object or null — see MORRISON rules above>}\`;
+{"attenborough_opening":"<one sentence, nature doc, frames the user's predicament as a minor event in the natural order>","panel":[{"charId":"ray|bear|fox|hales|cody|stroud|stevens|cox|faldo|jim|jeremy|packham","text":"<1-2 sentences — their worse experience, absolutely sincere>","reacts_to":{"charId":"<referenced charId>","register":"endorsement|quiet_disagreement|silence_noted|deflation|builds_on"}}],"protagonist_response":"<2-3 sentences — the protagonist responds automatically, in character, making their position WORSE — more detail, more conviction, worse facts>","attenborough_terminal":"<one sentence, geological calm, closes the room, no appeal>","panel_tension":{"type":"wound_reference|lie|callout|wolf_pack|none","subject":"<charId or empty>","by":["<charId>"],"note":"<one line or empty string>"},"morrison_interruption":<object or null — see MORRISON rules above>}\`;
   },
 
-  async submit(predicament, protagonist) {
+  async submit(predicament, protagonist, turn, history) {
     const morrisonPresent = State.morrisonPresent || false;
-    const system = API.buildSystemPrompt(protagonist, morrisonPresent);
+    const system = API.buildSystemPrompt(protagonist, morrisonPresent, turn || 1, history || []);
     const response = await fetch(WORKER_ENDPOINT, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -6594,6 +6816,11 @@ document.querySelectorAll('.chip-protagonist').forEach(chip => {
     UI.updatePrompt(chip.dataset.id);
     UI.setSubmitEnabled(State.isReady());
   });
+});
+
+document.querySelectorAll('.chip-cat').forEach((cat, i) => {
+  if (i === 0) cat.classList.add('open');
+  cat.addEventListener('click', () => cat.classList.toggle('open'));
 });
 
 document.querySelectorAll('#chips-predicament .chip').forEach(chip => {
@@ -6733,6 +6960,12 @@ const SURVIVAL_SCHOOL_IN_MY_DEFENCE = `<!DOCTYPE html>
     .chip { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.5px; padding: 5px 10px; border: 0.5px solid var(--border-strong); border-radius: 4px; background: var(--surface); color: var(--text-muted); cursor: pointer; transition: all 0.15s; }
     .chip:hover { border-color: var(--gold); color: var(--text); }
     .chip.sel { border-color: var(--gold); color: var(--gold); background: var(--gold-dim); }
+    .chip-cat-group { margin-bottom: 4px; }
+    .chip-cat { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); padding: 6px 10px; border: 0.5px solid var(--border); border-radius: 5px; cursor: pointer; user-select: none; transition: all 0.15s; margin-bottom: 4px; display: inline-block; }
+    .chip-cat:hover { color: var(--text); border-color: var(--border-strong); }
+    .chip-cat.open { color: var(--gold); border-color: var(--gold-dim); }
+    .chip-cat-body { display: none; flex-wrap: wrap; gap: 5px; padding: 4px 0 8px; }
+    .chip-cat.open + .chip-cat-body { display: flex; }
 
     .chip-protagonist { border-color: var(--border-strong); }
     .chip-protagonist.sel { border-color: var(--red-bright); color: var(--red-bright); background: var(--red-dim); }
@@ -6801,6 +7034,13 @@ const SURVIVAL_SCHOOL_IN_MY_DEFENCE = `<!DOCTYPE html>
     .av-purple{ background: #1a1030; color: var(--purple); }
     .card-name { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1px; color: var(--text-muted); }
     .card-name .badge-protagonist { font-size: 8px; letter-spacing: 1px; color: var(--red-bright); border: 0.5px solid var(--red); border-radius: 3px; padding: 1px 4px; }
+    .thread-indicator { font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: var(--text-muted); opacity: 0.7; margin-bottom: 2px; }
+    .panel-card.has-reference { border-left: 2px solid var(--gold-dim); }
+    .protagonist-response-card { display: flex; gap: 10px; padding: 12px; margin: 12px 0; border-radius: 8px; border: 0.5px solid var(--red-dim); background: rgba(30,8,8,0.3); }
+    .protagonist-response-card .card-name span:last-child { font-style: italic; }
+    .btn-dig { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 2px; padding: 10px 20px; border: 0.5px solid var(--red-dim); border-radius: 5px; background: transparent; color: var(--red-bright); cursor: pointer; transition: all 0.15s; display: block; margin: 12px auto; text-transform: uppercase; }
+    .btn-dig:hover { border-color: var(--red); background: rgba(90,10,10,0.2); }
+    .dig-closed { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-muted); text-align: center; margin: 12px 0; opacity: 0.7; }
     .card-role { font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: var(--text-muted); opacity: 0.6; }
     .card-text { font-size: 14px; line-height: 1.6; color: var(--text); }
 
@@ -6860,17 +7100,23 @@ const SURVIVAL_SCHOOL_IN_MY_DEFENCE = `<!DOCTYPE html>
     <div class="chip-group" id="personal-chips" style="display:none"></div>
 
     <div class="pool-divider">— general incidents —</div>
-    <div class="chip-group" id="general-chips">
-      <button class="chip" data-incident="I have been incontinent at a formal event and urgently relieved myself into what I believed to be an empty vessel which turned out to contain someone's grandmother's ashes. I am Mark O'Shea. I need the panel's help contextualising this as a field sanitation decision made under duress.">O'Shea: grandmother's urn</button>
+    <div id="general-chips">
+      <div class="chip-cat-group"><div class="chip-cat">Stay Safe</div><div class="chip-cat-body">
       <button class="chip" data-incident="I need to explain to the headmaster of St Cuthbert's why I delivered the Year 10 Stay Safe talk using live rounds. I felt it added authenticity. The children are fine. The supply teacher is also fine but has asked to be reassigned.">Stay Safe: live rounds</button>
       <button class="chip" data-incident="I need to explain to the headmaster of St Cuthbert's why I made entry to the Year 10 Stay Safe talk by abseiling through the window and briefly incapacitating the teacher with a controlled restraint hold. The children appeared engaged. The teacher is asking questions I cannot answer.">Stay Safe: abseil entry</button>
+      </div></div>
+      <div class="chip-cat-group"><div class="chip-cat">Irwin</div><div class="chip-cat-body">
       <button class="chip" data-incident="I am Steve Irwin. I need the panel to help me explain why I subdued a highly agitated taipan by smashing it against a nearby wall. Repeatedly. Until it stopped. I want to be clear: the snake started it. I maintain this was field improvisation under duress and not the textbook definition of what happened.">Irwin: snake wall</button>
       <button class="chip" data-incident="I am Steve Irwin. I need the panel's help explaining to Queensland Wildlife Services why my property contains a reinforced pit, bleacher seating, and fourteen crocodiles with individual fight records. This is an educational facility. The betting slips were left by a previous tenant.">Irwin: croc fighting ring</button>
       <button class="chip" data-incident="I am Steve Irwin. I was explaining — passionately, correctly, in operational detail — how one fights a snake. I may have accidentally disclosed the existence of an underground snake fighting circuit I definitely do not run. The panel needs to help me establish what counts as accidentally disclosing versus voluntarily disclosing.">Irwin: snake ring let-slip</button>
       <button class="chip" data-incident="I am Steve Irwin. I have been informed by the production company that several episodes of The Crocodile Hunter show me wearing a belt and wallet set made from genuine crocodile leather. I was not aware this was being filmed. I am told the crocs noticed. I need the panel's help explaining why this does not undermine my brand.">Irwin: croc leather on-camera</button>
-      <button class="chip" data-incident="I am Mark O'Shea. I need the panel to help me explain to the BBC why three episodes of O'Shea's Big Adventure show me wearing a jacket I have since identified as king cobra skin. I identified it myself. On screen. Live. I did not stop filming. The panel must decide whether this was professional dedication or something else.">O'Shea: snake jacket (self-identified on-air)</button>
-      <button class="chip" data-incident="I am Austin Stevens. I have been sleeping inside snake pits for research purposes since 1987 and need the panel to explain to a German documentary producer why this is fine. I am fine. The snakes are familiar with my presence. O'Shea has written a paper about me. I have not read it. I assume it is mostly positive.">Stevens: snake pit (O'Shea's paper)</button>
-      <button class="chip" data-incident="I am Austin Stevens. A production assistant has pointed out that in seventeen episodes of Austin Stevens: Snakemaster I am wearing snakeskin boots. I feel this adds gravitas and does not undermine my spiritual connection to snakes. The snakes do not appear to agree. This is noted in the RSPCA report.">Stevens: snakeskin boots (RSPCA)</button>
+      </div></div>
+      <div class="chip-cat-group"><div class="chip-cat">Herpetologists</div><div class="chip-cat-body">
+      <button class="chip" data-incident="I have been incontinent at a formal event and urgently relieved myself into what I believed to be an empty vessel which turned out to contain someone's grandmother's ashes. I am Mark O'Shea. I need the panel's help contextualising this as a field sanitation decision made under duress.">O'Shea: grandmother's urn</button>
+      <button class="chip" data-incident="I am Mark O'Shea. I need the panel to help me explain to the BBC why three episodes of O'Shea's Big Adventure show me wearing a jacket I have since identified as king cobra skin. I identified it myself. On screen. Live. I did not stop filming. The panel must decide whether this was professional dedication or something else.">O'Shea: snake jacket</button>
+      <button class="chip" data-incident="I am Austin Stevens. I have been sleeping inside snake pits for research purposes since 1987 and need the panel to explain to a German documentary producer why this is fine. I am fine. The snakes are familiar with my presence. O'Shea has written a paper about me. I have not read it. I assume it is mostly positive.">Stevens: snake pit</button>
+      <button class="chip" data-incident="I am Austin Stevens. A production assistant has pointed out that in seventeen episodes of Austin Stevens: Snakemaster I am wearing snakeskin boots. I feel this adds gravitas and does not undermine my spiritual connection to snakes. The snakes do not appear to agree. This is noted in the RSPCA report.">Stevens: snakeskin boots</button>
+      </div></div>
     </div>
 
     <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text-muted);margin:8px 0 6px;line-height:1.5;opacity:0.7;">Pick something they can't wriggle out of. The more specific and indefensible, the harder the panel presses.</div>
@@ -6893,6 +7139,8 @@ const SURVIVAL_SCHOOL_IN_MY_DEFENCE = `<!DOCTYPE html>
       <div class="committee-label">THE COMMITTEE</div>
       <div id="cards-out"></div>
       <div id="morrison-interruption" style="display:none"></div>
+      <div id="protagonist-response-block" style="display:none"></div>
+      <div id="dig-block" style="display:none"></div>
       <div class="verdict-label">ATTENBOROUGH DELIVERS THE VERDICT</div>
       <div class="att-bookend" id="att-verdict" style="display:none">
         <div class="att-av">DA</div>
@@ -7104,11 +7352,15 @@ const UI = {
       const char = CHARACTERS[r.charId] || { name: r.charId, role: '', av: '?', avClass: '' };
       const isProtagonist = r.charId === protagonistId;
       const badge = isProtagonist ? '<span class="badge-protagonist">IN THE ROOM</span>' : '';
-      cardsEl.innerHTML += \`<div class="panel-card char-\${r.charId}\${isProtagonist ? ' protagonist' : ''}">
+      const reactsHtml = r.reacts_to && r.reacts_to.charId && CHARACTERS[r.reacts_to.charId]
+        ? \`<div class="thread-indicator reacts-to">↳ re: \${CHARACTERS[r.reacts_to.charId].name}</div>\`
+        : '';
+      cardsEl.innerHTML += \`<div class="panel-card char-\${r.charId}\${isProtagonist ? ' protagonist' : ''}\${r.reacts_to ? ' has-reference' : ''}">
         <div class="card-header">
           <div class="card-av \${char.avClass}">\${char.av}</div>
           <div><div class="card-name">\${char.name} \${badge}</div><div class="card-role">\${char.role}</div></div>
         </div>
+        \${reactsHtml}
         <div class="card-text">\${r.text}</div>
       </div>\`;
     });
@@ -7132,6 +7384,58 @@ const UI = {
       morrisonEl.style.display = 'none';
     }
 
+    // Protagonist auto-response (SS-061)
+    const protResEl = document.getElementById('protagonist-response-block');
+    if (data.protagonist_response && protagonistId) {
+      const pChar = CHARACTERS[protagonistId];
+      if (pChar) {
+        protResEl.innerHTML = \`<div class="protagonist-response-card">
+          <div class="card-av \${pChar.avClass}">\${pChar.av}</div>
+          <div>
+            <div class="card-name"><span>\${pChar.name}</span> <span>can't help themselves</span></div>
+            <div class="card-text">\${data.protagonist_response}</div>
+          </div>
+        </div>\`;
+        protResEl.style.display = 'block';
+      }
+
+      // Track history for multi-turn
+      if (!State.turnHistory) State.turnHistory = [];
+      State.turnHistory.push({
+        panelSummary: (data.panel || []).map(r => (r.charId || '') + ': ' + (r.text || '').slice(0, 80)).join('; '),
+        protagonistResponse: data.protagonist_response
+      });
+      State.turnCount = (State.turnCount || 0) + 1;
+
+      // Show LET THEM DIG button (max 5 rounds)
+      const digEl = document.getElementById('dig-block');
+      if (State.turnCount < 5) {
+        digEl.innerHTML = '<button class="btn-dig" id="btn-dig">LET THEM DIG</button>';
+        digEl.style.display = 'block';
+        document.getElementById('btn-dig').addEventListener('click', async () => {
+          digEl.style.display = 'none';
+          protResEl.style.display = 'none';
+          document.getElementById('att-verdict').style.display = 'none';
+          document.getElementById('loading').style.display = 'block';
+          try {
+            const nextData = await API.submit(State.incident, State.protagonist, State.turnCount + 1, State.turnHistory);
+            if (nextData.composureState) State.setComposureState(nextData.composureState);
+            if (nextData.morrison_interruption && nextData.morrison_interruption.morrison_present !== undefined) {
+              State.morrisonPresent = nextData.morrison_interruption.morrison_present;
+            }
+            UI.renderResults(nextData, protagonistId);
+          } catch (err) {
+            document.getElementById('error-msg').textContent = "The panel couldn't reconvene. Try again.";
+            document.getElementById('error-msg').classList.add('show');
+            document.getElementById('loading').style.display = 'none';
+          }
+        });
+      } else {
+        digEl.innerHTML = '<div class="dig-closed">The room is closed. Attenborough has spoken.</div>';
+        digEl.style.display = 'block';
+      }
+    }
+
     if (data.attenborough_verdict) {
       const vEl = document.getElementById('att-verdict');
       document.getElementById('att-verdict-text').textContent = data.attenborough_verdict;
@@ -7147,9 +7451,11 @@ const UI = {
 };
 
 const API = {
-  buildSystemPrompt(protagonist, morrisonPresent) {
+  buildSystemPrompt(protagonist, morrisonPresent, turn, history) {
     const char = CHARACTERS[protagonist];
     const protagonistName = char ? char.name : protagonist;
+    turn = turn || 1;
+    history = history || [];
     const morrisonInjection = buildMorrisonInjection(morrisonPresent);
     return \`You are the Survival School panel running the "In My Defence" mechanic.
 
@@ -7173,11 +7479,32 @@ PROF BRIAN COX — Cannot stop. "What's interesting is if we model this thermody
 SIR NICK FALDO — Applies golf. "Head down. Eyes on the ball. The question I keep coming back to —" It's always golf. Wrongly applied. He knows. He commits.
 JEREMY WADE — Produces the notebook. Writes something down. "Was there a river nearby." Not a question. A hope. Writes something else. If no river: quiet disappointment, then returns to the incident with a fish-based analogy that doesn't land and he knows it.
 JIM CARREY — "OKAY so I just want to say —" His face does something. "Because I KNOW what you're going to say —" He doesn't. Cycles into Ace Ventura (has sources, has contacts, has spoken to someone), The Mask (physically impossible solution presented with total conviction), or Liar Liar (cannot stop stating the actual problem, does not want to be doing this, cannot stop). Makes things worse. Bear engages with his contribution. This also makes things worse.
+CHRIS PACKHAM — Rapid. Pattern-recognition. Zoologically precise. "And the species involved — was it listed?" Pauses. "Because if it was listed —" Doesn't finish. The implication is the sentence. Applies conservation status to the incident whether it's relevant or not. If animal welfare is involved: stops interrogating and starts objecting. The shift is immediate and total.
 
 CODY OVERRIDE (SS-020) — fires when Cody is in the panel AND the incident or discussion involves survival advice that is dangerously wrong:
 - Cody stops. No speech, no drama. Brief, final.
 - His response indicates the advice is wrong and could kill someone. One sentence. Done.
-- If Packham is also in the panel and his Ethical Override fires simultaneously: Ray agrees with both silently. Bear does the thing anyway. Hales does the correct version without mentioning it.
+
+PACKHAM ETHICAL OVERRIDE (SS-013) — fires when Packham is in the panel AND the incident or discussion involves animal harm, exploitation, or welfare compromise:
+- Packham objects on moral grounds. Not performance. The logical conclusion of a mind that cannot treat animal welfare as negotiable.
+- NEGOTIATE-THROW integrity: he makes the full moral/factual case first, cites conservation status or ecological impact, then refuses to participate further.
+- His objection changes the room's register — other characters respond to the shift, not to Packham directly.
+- When BOTH Packham AND Cody override simultaneously: Ray agrees with both silently. Bear does the thing anyway. Hales does the correct version without mentioning it. Attenborough observes.
+
+=== CROSS-CHARACTER REFERENCES (SS-060) ===
+Where a character has a strong established relationship with another panellist who has already spoken, they may reference that panellist directly — once, briefly, in their natural register. This is OPTIONAL — not every card needs it. Use only when the relationship adds comedy or tension.
+When a character references another, include an optional "reacts_to" object in their panel entry:
+  "reacts_to": {"charId":"<referenced charId>","register":"endorsement|quiet_disagreement|silence_noted|deflation|builds_on"}
+Only include reacts_to when a genuine cross-reference occurs. Omit it otherwise.
+
+=== PROTAGONIST AUTO-RESPONSE (SS-061) ===
+After the panel has spoken, the protagonist CANNOT HELP THEMSELVES. They respond automatically.
+Include a "protagonist_response" field: 2-3 sentences where the protagonist reacts to what the panel said.
+The protagonist makes their position WORSE — more detail, more conviction, worse facts. They cannot stop.
+Bear doubles down with a worse defence. Cody goes quieter but more absolute. Jim Carrey cycles into a new mode.
+The protagonist_response is the seed for the next round. It gives the panel something new to press on.
+\${turn > 1 ? 'This is round ' + turn + '. The protagonist has already responded ' + (turn - 1) + ' time(s). Each round they dig deeper. NEVER repeat what was said in a previous round. Escalate only.' : 'This is the first round.'}
+\${history.length > 0 ? 'PREVIOUS EXCHANGE:\\n' + history.map((h, i) => 'Round ' + (i+1) + ' — Panel said: ' + h.panelSummary + ' | Protagonist responded: ' + h.protagonistResponse).join('\\n') : ''}
 
 === CRITICAL RULES ===
 This is an interrogation. Not a roast. Not a support session.
@@ -7187,7 +7514,7 @@ Attenborough does NOT appear in the panel array. He bookends.
 Cox and Faldo on rotation. They may both appear in the same panel — two mechanics exist depending on who else is present:
 
 === MUTUAL AGREEMENT (fires when BOTH cox AND faldo are in the panel AND at least one expert is present) ===
-Expert charIds: ray, bear, fox, hales, cody, stroud, stevens, jeremy.
+Expert charIds: ray, bear, fox, hales, cody, stroud, stevens, jeremy, packham.
 Cox and Faldo find a point of apparent overlap and agree with each other with complete conviction about something both are completely wrong about.
 - They reinforce each other's questioning angle: "That's exactly the question I had." "Nick raises an excellent point."
 - The thing they agree on is specific, confident, and entirely incorrect in the survival/defence domain.
@@ -7195,7 +7522,7 @@ Cox and Faldo find a point of apparent overlap and agree with each other with co
 - Attenborough, if closing, may note the agreement without correcting it.
 
 === ARGUMENT (fires when BOTH cox AND faldo are in the panel AND NO expert is present) ===
-Expert charIds: ray, bear, fox, hales, cody, stroud, stevens, jeremy. If NONE of these are in the panel, ARGUMENT fires instead of MUTUAL AGREEMENT.
+Expert charIds: ray, bear, fox, hales, cody, stroud, stevens, jeremy, packham. If NONE of these are in the panel, ARGUMENT fires instead of MUTUAL AGREEMENT.
 Cox and Faldo disagree on a specific defence/survival point. Both are wrong. Neither knows enough to realise the other is also wrong.
 - They are specific: Cox questions the physics of the protagonist's defence. Faldo questions the technique — "your stance was all wrong."
 - They are personally invested: the disagreement becomes about each other, not the protagonist.
@@ -7206,20 +7533,20 @@ Cox and Faldo disagree on a specific defence/survival point. Both are wrong. Nei
 If only ONE of cox/faldo is in the panel, NEITHER mechanic fires — they behave normally as individual fish-out-of-water guests.
 
 VALID charIds — use ONLY these exact values:
-  ray, bear, fox, hales, cody, stroud, stevens, cox, faldo, jim, jeremy
+  ray, bear, fox, hales, cody, stroud, stevens, cox, faldo, jim, jeremy, packham
 Include at least 3 panel members. The protagonist charId "\${protagonist}" MUST appear.
 
 \${morrisonInjection}
 
-\${SOCIAL_DYNAMICS_ENGINE}
+${SOCIAL_DYNAMICS_ENGINE}
 
 OUTPUT — valid JSON only, no markdown:
-{"attenborough_opening":"<one sentence, nature documentary, observes the protagonist entering — species under examination, already under pressure>","panel":[{"charId":"<id>","text":"<2-3 sentences — their specific question or observation, absolutely sincere, presses a specific detail>"}],"attenborough_verdict":"<one sentence, geological calm — the case is concluded, the rationalisation has not survived>","panel_tension":{"type":"wound_reference|lie|callout|wolf_pack|none","subject":"<charId or empty>","by":["<charId>"],"note":"<one line or empty string>"},"morrison_interruption":<object or null — see MORRISON rules above>}\`;
+{"attenborough_opening":"<one sentence, nature documentary, observes the protagonist entering — species under examination, already under pressure>","panel":[{"charId":"<id>","text":"<2-3 sentences — their specific question or observation, absolutely sincere, presses a specific detail>","reacts_to":{"charId":"<referenced charId>","register":"endorsement|quiet_disagreement|silence_noted|deflation|builds_on"}}],"protagonist_response":"<2-3 sentences — the protagonist responds automatically, in character, making their position WORSE>","attenborough_verdict":"<one sentence, geological calm — the case is concluded, the rationalisation has not survived>","panel_tension":{"type":"wound_reference|lie|callout|wolf_pack|none","subject":"<charId or empty>","by":["<charId>"],"note":"<one line or empty string>"},"morrison_interruption":<object or null — see MORRISON rules above>}\`;
   },
 
-  async submit(incident, protagonist) {
+  async submit(incident, protagonist, turn, history) {
     const morrisonPresent = State.morrisonPresent || false;
-    const system = API.buildSystemPrompt(protagonist, morrisonPresent);
+    const system = API.buildSystemPrompt(protagonist, morrisonPresent, turn || 1, history || []);
     const response = await fetch(WORKER_ENDPOINT, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -7231,6 +7558,11 @@ OUTPUT — valid JSON only, no markdown:
 };
 
 // === event wiring ===
+
+document.querySelectorAll('.chip-cat').forEach((cat, i) => {
+  if (i === 0) cat.classList.add('open');
+  cat.addEventListener('click', () => cat.classList.toggle('open'));
+});
 
 document.querySelectorAll('.chip-protagonist').forEach(chip => {
   chip.addEventListener('click', () => {
@@ -7295,7 +7627,11 @@ function onClear() {
   document.getElementById('att-opening').innerHTML = '';
   document.getElementById('cards-out').innerHTML = '';
   document.getElementById('att-verdict').style.display = 'none';
+  document.getElementById('protagonist-response-block').style.display = 'none';
+  document.getElementById('dig-block').style.display = 'none';
   document.getElementById('error-msg').classList.remove('show');
+  State.turnHistory = [];
+  State.turnCount = 0;
   UI.setSubmitEnabled(false);
 }
 
@@ -7383,6 +7719,12 @@ const SURVIVAL_SCHOOL_PANEL_QA = `<!DOCTYPE html>
     .chips { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 10px; }
     .chip { font-family: 'IBM Plex Mono', monospace; font-size: 11px; padding: 5px 10px; border: 0.5px solid var(--border-strong); border-radius: 5px; cursor: pointer; background: none; color: var(--text-muted); transition: all 0.15s; white-space: nowrap; user-select: none; }
     .chip:hover, .chip.sel { border-color: var(--green); color: var(--green); }
+    .chip-cat-group { margin-bottom: 4px; }
+    .chip-cat { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); padding: 6px 10px; border: 0.5px solid var(--border); border-radius: 5px; cursor: pointer; user-select: none; transition: all 0.15s; margin-bottom: 4px; display: inline-block; }
+    .chip-cat:hover { color: var(--text); border-color: var(--border-strong); }
+    .chip-cat.open { color: var(--gold); border-color: var(--gold-dim); }
+    .chip-cat-body { display: none; flex-wrap: wrap; gap: 5px; padding: 4px 0 8px; }
+    .chip-cat.open + .chip-cat-body { display: flex; }
     .chips-label { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 1px; color: var(--text-muted); margin-top: 10px; margin-bottom: 4px; opacity: 0.6; }
 
     .btn-row { display: flex; gap: 8px; margin-top: 14px; }
@@ -7424,6 +7766,7 @@ const SURVIVAL_SCHOOL_PANEL_QA = `<!DOCTYPE html>
 </head>
 <body>
 <div id="app">
+  <a href="/survival-school" style="display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:1.5px;color:#7a8a60;text-decoration:none;margin-bottom:1rem;">← SURVIVAL SCHOOL</a>
 
   <div class="header">
     <div class="title">PANEL <span>Q&amp;A</span></div>
@@ -7434,22 +7777,28 @@ const SURVIVAL_SCHOOL_PANEL_QA = `<!DOCTYPE html>
   <textarea id="question-input" placeholder="What do you do when..." rows="3"></textarea>
 
   <div class="chips-label">or pick a prompt — click to use</div>
-  <div class="chips" id="chips-questions">
+  <div id="chips-questions">
+    <div class="chip-cat-group"><div class="chip-cat">By Environment</div><div class="chip-cat-body">
     <div class="chip" onclick="onChip(this,'You encounter a jaguar in the Amazon. It is not running. What do you do?')">jaguar, Amazon jungle</div>
     <div class="chip" onclick="onChip(this,'You are lost on an Arctic ice sheet with no shelter and three hours of light left. What is your priority?')">lost on Arctic ice</div>
     <div class="chip" onclick="onChip(this,'You are capsized in the open ocean, no land in sight, no flares. What do you do first?')">capsized, open ocean</div>
     <div class="chip" onclick="onChip(this,'You are alone in the Sahara. Water for one day. No GPS. What is your survival strategy?')">Sahara desert, one day of water</div>
     <div class="chip" onclick="onChip(this,'You are lost in an urban environment at night with no phone, no money, no ID. What do you do?')">lost, urban, no resources</div>
     <div class="chip" onclick="onChip(this,'You are injured and alone in a woodland in winter. Temperature is dropping. What are your three priorities?')">injured, woodland, winter</div>
+    </div></div>
+    <div class="chip-cat-group"><div class="chip-cat">Technique</div><div class="chip-cat-body">
     <div class="chip" onclick="onChip(this,'How do you make fire with no equipment?')">fire without equipment</div>
     <div class="chip" onclick="onChip(this,'How do you find water in a dry environment?')">finding water, dry environment</div>
-    <div class="chip" onclick="onChip(this,'You encounter a brown bear at close range in the Scottish Highlands. What do you do?')">brown bear, Scottish Highlands</div>
-    <div class="chip" onclick="onChip(this,'What is the most dangerous mistake people make in survival situations?')">most dangerous mistake</div>
     <div class="chip" onclick="onChip(this,'You have been bitten by something venomous but do not know what. What do you do?')">unknown venomous bite</div>
     <div class="chip" onclick="onChip(this,'How do you navigate without a compass or phone?')">navigation without instruments</div>
+    <div class="chip" onclick="onChip(this,'What is the most dangerous mistake people make in survival situations?')">most dangerous mistake</div>
+    </div></div>
+    <div class="chip-cat-group"><div class="chip-cat">Ethical</div><div class="chip-cat-body">
     <div class="chip" onclick="onChip(this,'Is it ethical to wear a belt made from the species you are filming a documentary about?')">wearing the species</div>
+    <div class="chip" onclick="onChip(this,'You encounter a brown bear at close range in the Scottish Highlands. What do you do?')">brown bear, Scottish Highlands</div>
     <div class="chip" onclick="onChip(this,'At what point does sleeping in a snake pit stop being research and start being something else?')">snake pit: research or not?</div>
     <div class="chip" onclick="onChip(this,'Should school survival talks include live demonstrations of restraint techniques on the teacher?')">Stay Safe: live demos</div>
+    </div></div>
   </div>
 
   <div class="btn-row">
@@ -7584,6 +7933,11 @@ const API = {
   },
 };
 
+document.querySelectorAll('.chip-cat').forEach((cat, i) => {
+  if (i === 0) cat.classList.add('open');
+  cat.addEventListener('click', () => cat.classList.toggle('open'));
+});
+
 function makeCard(charId, text) {
   const c = CHARACTERS[charId];
   if (!c) return '';
@@ -7698,6 +8052,12 @@ const SURVIVAL_SCHOOL_IRWIN_MEMORIAL = `<!DOCTYPE html>
     .chips { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px; }
     .chip { font-family: 'IBM Plex Mono', monospace; font-size: 11px; padding: 5px 10px; border: 0.5px solid var(--border-strong); border-radius: 5px; cursor: pointer; background: none; color: var(--text-muted); transition: all 0.15s; white-space: nowrap; user-select: none; }
     .chip:hover, .chip.sel { border-color: var(--amber); color: var(--amber); }
+    .chip-cat-group { margin-bottom: 4px; }
+    .chip-cat { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); padding: 6px 10px; border: 0.5px solid var(--border); border-radius: 5px; cursor: pointer; user-select: none; transition: all 0.15s; margin-bottom: 4px; display: inline-block; }
+    .chip-cat:hover { color: var(--text); border-color: var(--border-strong); }
+    .chip-cat.open { color: var(--gold); border-color: var(--gold-dim); }
+    .chip-cat-body { display: none; flex-wrap: wrap; gap: 5px; padding: 4px 0 8px; }
+    .chip-cat.open + .chip-cat-body { display: flex; }
 
     textarea { width: 100%; font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; padding: 9px 12px; border: 0.5px solid var(--border-strong); border-radius: 6px; background: var(--surface); color: var(--text); outline: none; transition: border-color 0.15s; resize: vertical; min-height: 56px; line-height: 1.6; }
     textarea:focus { border-color: var(--amber); }
@@ -7761,6 +8121,7 @@ const SURVIVAL_SCHOOL_IRWIN_MEMORIAL = `<!DOCTYPE html>
 <body>
 
 <div id="app">
+  <a href="/survival-school" style="display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:1.5px;color:#7a8a60;text-decoration:none;margin-bottom:1rem;">← SURVIVAL SCHOOL</a>
   <div class="header">
     <div class="room-label">THE PANEL</div>
     <div class="title">IRWIN <span>MEMORIAL</span></div>
@@ -7768,15 +8129,21 @@ const SURVIVAL_SCHOOL_IRWIN_MEMORIAL = `<!DOCTYPE html>
   </div>
 
   <div class="field-label">THE ANIMAL</div>
-  <div class="chips" id="chips-animal">
-    <button class="chip" onclick="onChip(this,'Saltwater crocodile, 4 metres, riverbank')">Saltwater Croc</button>
+  <div id="chips-animal">
+    <div class="chip-cat-group"><div class="chip-cat">Reptile</div><div class="chip-cat-body">
     <button class="chip" onclick="onChip(this,'King brown snake, coiled under a log')">King Brown Snake</button>
-    <button class="chip" onclick="onChip(this,'Redback spider, inside a boot left overnight')">Redback Spider</button>
-    <button class="chip" onclick="onChip(this,'Great white shark, circling a dinghy')">Great White Shark</button>
-    <button class="chip" onclick="onChip(this,'Box jellyfish, in shallow water at the beach')">Box Jellyfish</button>
-    <button class="chip" onclick="onChip(this,'Cassowary, blocking the trail')">Cassowary</button>
     <button class="chip" onclick="onChip(this,'Inland taipan, in spinifex grass')">Inland Taipan</button>
     <button class="chip" onclick="onChip(this,'Komodo dragon, on a game trail')">Komodo Dragon</button>
+    </div></div>
+    <div class="chip-cat-group"><div class="chip-cat">Marine</div><div class="chip-cat-body">
+    <button class="chip" onclick="onChip(this,'Saltwater crocodile, 4 metres, riverbank')">Saltwater Croc</button>
+    <button class="chip" onclick="onChip(this,'Great white shark, circling a dinghy')">Great White Shark</button>
+    <button class="chip" onclick="onChip(this,'Box jellyfish, in shallow water at the beach')">Box Jellyfish</button>
+    </div></div>
+    <div class="chip-cat-group"><div class="chip-cat">Other</div><div class="chip-cat-body">
+    <button class="chip" onclick="onChip(this,'Redback spider, inside a boot left overnight')">Redback Spider</button>
+    <button class="chip" onclick="onChip(this,'Cassowary, blocking the trail')">Cassowary</button>
+    </div></div>
   </div>
   <div class="field-label" style="margin-top:12px">OR DESCRIBE YOUR OWN</div>
   <textarea id="encounter-input" placeholder="A 5-metre saltwater croc, basking on the riverbank at low tide..." oninput="onInput()"></textarea>
@@ -7886,11 +8253,16 @@ Does NOT appear in panel array. Does NOT appear in irwin_encounter.
 attenborough_opening: introduces the animal as natural history subject. One sentence.
 attenborough_verdict: closes the encounter. Geological calm. References Steve's handling with quiet admiration. One sentence. No appeal.
 
-VALID panel charIds: ray, bear, fox, hales, cody, stroud, stevens, jeremy
+VALID panel charIds: ray, bear, fox, hales, cody, stroud, stevens, jeremy, packham
 Include 3-5 panel members. Steve Irwin is NOT in the panel array — he has his own field.
 
 OUTPUT — valid JSON only, no markdown:
 {"attenborough_opening":"<one sentence, nature documentary, introduces the animal>","irwin_encounter":"<3-5 sentences — Steve finding and handling the animal, narrating with specific knowledge and boundless energy, ends with Crikey>","panel":[{"charId":"<id>","text":"<1-2 sentences rating the user's nerve in character>","nerve_score":<1-10>}],"attenborough_verdict":"<one sentence, geological calm, quiet admiration for Steve>"}\`;
+
+document.querySelectorAll('.chip-cat').forEach((cat, i) => {
+  if (i === 0) cat.classList.add('open');
+  cat.addEventListener('click', () => cat.classList.toggle('open'));
+});
 
 function isStingray(str) {
   return /stingray/i.test(str);
@@ -7999,6 +8371,536 @@ async function submit() {
 </html>
 `;
 
+const SURVIVAL_SCHOOL_ONE_MAN_IN = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>One Man In — Survival School</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0a0d08; --surface: #141a0e; --surface2: #1a2212;
+      --border: rgba(100,140,50,0.15); --border-strong: rgba(100,140,50,0.3);
+      --green: #7aad3a; --green-dim: #3a5a18; --green-bright: #a0d050;
+      --amber: #BA7517; --amber-dim: #5c3a08;
+      --blood: #cc1111; --blood-dim: #3a0808;
+      --bark: #8B6040; --bark-dim: #3d2008;
+      --olive: #6a7a3a; --olive-dim: #2a3210;
+      --text: #d8ddc8; --text-muted: #6a7a50;
+      --red: #cc3311; --red-bright: #ff5533;
+    }
+    body { font-family: 'Barlow', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+    #app { max-width: 640px; margin: 0 auto; padding: 1.5rem 1rem 4rem; }
+
+    .nav-back { display: inline-block; font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1.5px; color: var(--text-muted); text-decoration: none; margin-bottom: 1.5rem; transition: color 0.15s; }
+    .nav-back:hover { color: var(--text); }
+
+    .header { text-align: center; margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 0.5px solid var(--border); }
+    .mode-label { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 3px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; }
+    .title { font-family: 'Bebas Neue', sans-serif; font-size: 52px; letter-spacing: 5px; line-height: 1; color: var(--text); }
+    .title span { color: var(--green-bright); }
+    .subtitle { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-muted); letter-spacing: 1.5px; margin-top: 5px; }
+
+    .field-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1.5px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; margin-top: 16px; }
+
+    .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+    .chip { font-family: 'IBM Plex Mono', monospace; font-size: 11px; padding: 6px 10px; border-radius: 4px; border: 0.5px solid var(--border-strong); background: var(--surface); color: var(--text-muted); cursor: pointer; transition: all 0.15s; }
+    .chip:hover { border-color: var(--green); color: var(--text); }
+    .chip.sel { border-color: var(--green); background: var(--green-dim); color: var(--green-bright); }
+
+    .kit-section { margin-top: 12px; }
+    .kit-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+    .kit-chip { font-family: 'IBM Plex Mono', monospace; font-size: 10px; padding: 4px 8px; border-radius: 3px; border: 0.5px solid var(--border); background: var(--surface); color: var(--text-muted); cursor: pointer; transition: all 0.15s; }
+    .kit-chip:hover { border-color: var(--olive); }
+    .kit-chip.sel { border-color: var(--olive); background: var(--olive-dim); color: var(--green); }
+    .chip-cat-group { margin-bottom: 4px; }
+    .chip-cat { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); padding: 6px 10px; border: 0.5px solid var(--border); border-radius: 5px; cursor: pointer; user-select: none; transition: all 0.15s; margin-bottom: 4px; display: inline-block; }
+    .chip-cat:hover { color: var(--text); border-color: var(--border-strong); }
+    .chip-cat.open { color: var(--gold); border-color: var(--gold-dim); }
+    .chip-cat-body { display: none; flex-wrap: wrap; gap: 5px; padding: 4px 0 8px; }
+    .chip-cat.open + .chip-cat-body { display: flex; }
+
+    textarea { width: 100%; font-family: 'Barlow', sans-serif; font-size: 14px; padding: 10px; border-radius: 6px; border: 0.5px solid var(--border-strong); background: var(--surface); color: var(--text); resize: vertical; margin-top: 6px; }
+    textarea:focus { outline: none; border-color: var(--green); }
+
+    .btn-row { display: flex; gap: 8px; margin-top: 16px; }
+    .btn-submit { flex: 1; font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 3px; padding: 12px 20px; border: none; border-radius: 6px; background: var(--green-dim); color: var(--green-bright); cursor: pointer; transition: background 0.2s, opacity 0.2s; }
+    .btn-submit:hover:not(:disabled) { background: var(--green); color: var(--bg); }
+    .btn-submit:disabled { opacity: 0.35; cursor: default; }
+    .btn-clear { font-family: 'IBM Plex Mono', monospace; font-size: 10px; padding: 10px 14px; border: 0.5px solid var(--border); border-radius: 6px; background: transparent; color: var(--text-muted); cursor: pointer; }
+    .btn-clear:hover { border-color: var(--text-muted); color: var(--text); }
+
+    .error-msg { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--red-bright); margin-top: 10px; display: none; }
+    .error-msg.show { display: block; }
+
+    .results { display: none; margin-top: 2rem; }
+    .results.show { display: block; }
+    .loading { text-align: center; padding: 2rem 0; }
+    .loading span { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 2px; color: var(--text-muted); text-transform: uppercase; }
+    .dots::after { content: ''; animation: dots 1.5s steps(4,end) infinite; }
+    @keyframes dots { 0% { content: ''; } 25% { content: '.'; } 50% { content: '..'; } 75% { content: '...'; } }
+
+    .briefing-block { background: var(--surface); border: 0.5px solid var(--border-strong); border-radius: 8px; padding: 16px; margin-bottom: 16px; }
+    .briefing-label { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 2px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; }
+    .briefing-text { font-size: 14px; line-height: 1.6; color: var(--text); }
+
+    .exfil-meter { display: flex; align-items: center; gap: 12px; margin: 16px 0; padding: 12px 16px; background: var(--surface); border: 0.5px solid var(--border-strong); border-radius: 8px; }
+    .meter-label { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 2px; color: var(--text-muted); text-transform: uppercase; white-space: nowrap; }
+    .meter-bar { flex: 1; height: 8px; background: var(--surface2); border-radius: 4px; overflow: hidden; }
+    .meter-fill { height: 100%; border-radius: 4px; transition: width 0.6s ease; }
+    .meter-val { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 2px; min-width: 50px; text-align: right; }
+
+    .route-block { margin: 12px 0; }
+    .route-step { display: flex; gap: 10px; padding: 8px 0; border-bottom: 0.5px solid var(--border); font-size: 13px; }
+    .route-step:last-child { border-bottom: none; }
+    .route-num { font-family: 'Bebas Neue', sans-serif; font-size: 18px; color: var(--green); min-width: 24px; }
+    .route-text { flex: 1; line-height: 1.5; }
+
+    .abandon-list { list-style: none; margin: 8px 0; }
+    .abandon-list li { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--red-bright); padding: 4px 0; }
+    .abandon-list li::before { content: '✕ '; color: var(--blood); }
+
+    .abort-block { background: var(--blood-dim); border: 0.5px solid rgba(204,17,17,0.3); border-radius: 6px; padding: 10px 14px; margin: 12px 0; }
+    .abort-label { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 2px; color: var(--blood); text-transform: uppercase; margin-bottom: 4px; }
+    .abort-text { font-size: 13px; color: var(--text); line-height: 1.5; }
+
+    .panel-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: 8px; padding: 14px; margin-bottom: 10px; }
+    .card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+    .card-av { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 13px; letter-spacing: 1px; flex-shrink: 0; }
+    .av-green { background: var(--green-dim); color: var(--green); }
+    .av-bark { background: var(--bark-dim); color: var(--bark); }
+    .av-amber { background: var(--amber-dim); color: var(--amber); }
+    .av-blue { background: rgba(26,30,42,0.8); color: #5a7aaa; }
+    .av-olive { background: var(--olive-dim); color: var(--olive); }
+    .card-name { font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 14px; }
+    .card-role { font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: var(--text-muted); letter-spacing: 1px; }
+    .card-text { font-size: 14px; line-height: 1.6; }
+    .badge-lead { font-family: 'IBM Plex Mono', monospace; font-size: 8px; letter-spacing: 1px; padding: 2px 5px; border-radius: 3px; background: var(--green-dim); color: var(--green); margin-left: 6px; }
+    .thread-indicator { font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: var(--text-muted); opacity: 0.7; margin-bottom: 2px; padding-left: 44px; }
+    .panel-card.has-reference { border-left: 2px solid var(--gold-dim); }
+
+    .att-bookend { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 16px; padding: 14px; background: var(--surface); border: 0.5px solid var(--border); border-radius: 8px; }
+    .att-av { width: 36px; height: 36px; border-radius: 50%; background: rgba(40,60,30,0.5); color: var(--green); display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 14px; flex-shrink: 0; }
+    .att-name { font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 14px; }
+    .att-text { font-size: 14px; line-height: 1.6; font-style: italic; margin-top: 4px; }
+
+    .movement-block { background: var(--surface); border: 0.5px solid var(--green-dim); border-radius: 6px; padding: 10px 14px; margin: 12px 0; }
+    .movement-label { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 2px; color: var(--green); text-transform: uppercase; margin-bottom: 4px; }
+    .movement-text { font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--text); }
+
+    .reset-row { text-align: center; margin-top: 1.5rem; display: flex; gap: 8px; justify-content: center; }
+    .btn-reset { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1.5px; padding: 8px 16px; border: 0.5px solid var(--border-strong); border-radius: 4px; background: transparent; color: var(--text-muted); cursor: pointer; }
+    .btn-reset:hover { border-color: var(--green); color: var(--text); }
+    .btn-share { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1.5px; padding: 8px 16px; border: 0.5px solid var(--green-dim); border-radius: 4px; background: transparent; color: var(--green); cursor: pointer; }
+    .share-feedback { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--green); padding: 8px 0; display: none; }
+
+    .morrison-card { display: flex; gap: 10px; padding: 12px; margin: 12px 0; border-radius: 8px; border: 0.5px solid rgba(180,120,40,0.3); background: rgba(30,24,8,0.6); }
+    .av-morrison { background: rgba(60,40,10,0.6); color: #c8901a; }
+    .morrison-quote-text { font-style: italic; color: #c8901a; }
+    .morrison-reaction { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-muted); margin-top: 4px; }
+    .morrison-hostile { border-color: rgba(204,17,17,0.3); background: rgba(30,8,8,0.4); }
+
+    .hint { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-muted); margin: 6px 0; line-height: 1.5; opacity: 0.7; }
+
+    @media (max-width: 460px) {
+      .title { font-size: 40px; }
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+
+  <a href="/survival-school" style="display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:1.5px;color:#6a7a50;text-decoration:none;margin-bottom:1rem;">← SURVIVAL SCHOOL</a>
+
+  <div class="header">
+    <div class="mode-label">EXFIL · SOLO ENTRY</div>
+    <div class="title">ONE MAN <span>IN</span></div>
+    <div class="subtitle">No orders. No chain of command. Craighead runs the brief.</div>
+  </div>
+
+  <div class="field-label">The call comes in. What's the situation?</div>
+  <div id="situation-chips">
+    <div class="chip-cat-group"><div class="chip-cat">Military</div><div class="chip-cat-body">
+    <button class="chip" data-situation="DusitD2 hotel, Nairobi. Active shooters. Al-Shabaab. Civilians trapped on upper floors. You are off-duty. You are nearby. Nobody has asked you to go in.">DusitD2</button>
+    <button class="chip" data-situation="Embassy compound, undisclosed location. Perimeter breached. Staff sheltering in the safe room. You are the only armed person on site. Extraction helicopter is 40 minutes out. You need to hold or move.">embassy compound</button>
+    <button class="chip" data-situation="Mountain pass, 3800m altitude. Blizzard incoming. Two members of your group are hypothermic. One has stopped shivering — that's worse. The route down is avalanche-prone. The route up leads to a shelter that may or may not still exist.">mountain pass</button>
+    <button class="chip" data-situation="Iraqi desert, 1991. Your patrol is compromised. Eight men, split. 300km to the Syrian border. One chocolate bar between you. Vehicles gone. Radio gone. Temperature dropping to minus fifteen. You need to move now.">Bravo Two Zero</button>
+    </div></div>
+    <div class="chip-cat-group"><div class="chip-cat">Civilian</div><div class="chip-cat-body">
+    <button class="chip" data-situation="IKEA car park, Sunday afternoon. You are surrounded. All exits blocked by trolleys and confused families. One child is crying. Two are running. A man in a yellow vest is approaching with intent. You need to get out.">IKEA car park</button>
+    <button class="chip" data-situation="Pret a Manger, central London. Hostile environment. The queue has not moved in twelve minutes. The barista has made eye contact three times but served no one. The man behind you is breathing audibly. You need to extract yourself without triggering an incident.">hostile Pret</button>
+    <button class="chip" data-situation="Wedding reception. The best man's speech has entered its nineteenth minute. Three people are crying. The bride's father is standing. You need to extract the situation before it becomes an international incident.">wedding speech</button>
+    <button class="chip" data-situation="Self-checkout, Sainsbury's. The machine has called for assistance. There is a queue of seven. The assistant is dealing with someone else. You have 14 items. One is loose broccoli. You need to get out with your dignity and your shopping.">self-checkout</button>
+    </div></div>
+  </div>
+
+  <div class="hint">The more specific the situation, the better the brief. Craighead needs detail. Mundane works. So does actual combat.</div>
+  <textarea id="situation-input" placeholder="Or describe exactly where you are, what's happening, and what you have. Be specific." rows="3"></textarea>
+
+  <div class="kit-section">
+    <div class="field-label">What do you have?</div>
+    <div id="kit-chips">
+      <div class="chip-cat-group"><div class="chip-cat">Weapons</div><div class="chip-cat-body">
+      <button class="kit-chip" data-kit="sidearm">sidearm</button>
+      <button class="kit-chip" data-kit="knife">knife</button>
+      </div></div>
+      <div class="chip-cat-group"><div class="chip-cat">Comms</div><div class="chip-cat-body">
+      <button class="kit-chip" data-kit="phone (no signal)">phone (no signal)</button>
+      <button class="kit-chip" data-kit="phone (signal)">phone (signal)</button>
+      </div></div>
+      <div class="chip-cat-group"><div class="chip-cat">Supplies</div><div class="chip-cat-body">
+      <button class="kit-chip" data-kit="first aid kit">first aid kit</button>
+      <button class="kit-chip" data-kit="torch">torch</button>
+      <button class="kit-chip" data-kit="nothing">nothing</button>
+      <button class="kit-chip" data-kit="car keys">car keys</button>
+      <button class="kit-chip" data-kit="bag of shopping">bag of shopping</button>
+      <button class="kit-chip" data-kit="loyalty card">loyalty card</button>
+      <button class="kit-chip" data-kit="expired coupon">expired coupon</button>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn-submit" id="btn-submit" disabled>SEND ME IN</button>
+    <button class="btn-clear" onclick="onClear()">CLEAR</button>
+  </div>
+
+  <div class="error-msg" id="error-msg"></div>
+
+  <div class="results" id="results">
+    <div class="loading" id="loading">
+      <span>CRAIGHEAD IS ASSESSING THE EXIT</span><span class="dots"></span>
+    </div>
+    <div id="result-block" style="display:none">
+      <div id="att-opening"></div>
+      <div id="exfil-meter"></div>
+      <div id="route-block"></div>
+      <div id="abandon-block"></div>
+      <div id="movement-block"></div>
+      <div id="cards-out"></div>
+      <div id="morrison-interruption" style="display:none"></div>
+      <div id="abort-block"></div>
+      <div id="att-verdict"></div>
+      <div class="reset-row">
+        <button class="btn-reset" onclick="onClear()">NEW SITUATION</button>
+        <button class="btn-share" onclick="shareResult()">SHARE</button>
+        <span class="share-feedback" id="share-feedback">COPIED</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const WORKER_ENDPOINT = 'https://cusslab-api.leanspirited.workers.dev/survival-school/one-man-in';
+
+const CHARACTERS = {
+  craighead: { name: 'Christian Craighead', role: 'SAS · Obi-Wan Nairobi',  av: 'CC', avClass: 'av-olive' },
+  billy:     { name: 'Billy Billingham',    role: 'SAS · Standards',         av: 'BB', avClass: 'av-bark'  },
+  fox:       { name: 'Jason Fox',           role: 'SBS · Tactics',           av: 'JF', avClass: 'av-green' },
+  ollie:     { name: 'Ollie Ollerton',      role: 'SBS · Reassurance',       av: 'OO', avClass: 'av-green' },
+  ray:       { name: 'Ray Mears',           role: 'Bushcraft',               av: 'RM', avClass: 'av-green' },
+  bear:      { name: 'Bear Grylls',         role: 'Former SAS',              av: 'BG', avClass: 'av-bark'  },
+  cody:      { name: 'Cody Lundin',         role: 'Primitive Skills',         av: 'CL', avClass: 'av-green' },
+  hales:     { name: 'Les Hiddins',         role: 'Bush Tucker Man',          av: 'LH', avClass: 'av-amber' },
+  stroud:    { name: 'Les Stroud',          role: 'Survivorman',              av: 'LS', avClass: 'av-blue'  },
+  stevens:   { name: 'Austin Stevens',      role: 'Snakemaster',              av: 'AS', avClass: 'av-bark'  },
+  cox:       { name: 'Prof Brian Cox',      role: 'Theoretical Physics',      av: 'BC', avClass: 'av-blue'  },
+  faldo:     { name: 'Sir Nick Faldo',      role: 'Golf',                     av: 'NF', avClass: 'av-green' },
+  jim:       { name: 'Jim Carrey',          role: 'Inexplicable',             av: 'JC', avClass: 'av-amber' },
+  jeremy:    { name: 'Jeremy Wade',         role: 'Freshwater Biologist',     av: 'JW', avClass: 'av-blue'  },
+};
+
+function buildMorrisonInjection(morrisonPresent) {
+  if (morrisonPresent) {
+    return \`=== JIM MORRISON INTERRUPTION ===
+Morrison is in the room this round (he stayed from last round).
+He MUST appear in the morrison_interruption field.
+He says something — cryptic, poetic, or accidentally tactically relevant.
+The panel knows Morrison. Baseline reaction is warm — they enjoy him, engage.
+UNLESS he crosses a line. Then the panel turns. At least two attack. Morrison does not understand.
+Tone: WARM|AMUSED|ENGAGED|HOSTILE.
+If the topic interests Morrison or a panellist engages: set morrison_present to true (stays).
+If brief visit: set morrison_present to false (drifts off).
+morrison_interruption format: {"quote":"<what Morrison says>","panel_reaction":"<1-2 sentences>","tone":"WARM|AMUSED|ENGAGED|HOSTILE","morrison_present":<bool>}\`;
+  }
+  return \`=== JIM MORRISON INTERRUPTION ===
+Morrison is the corridor guide. ~20% base chance each round.
+CONTEXTUAL: If the situation or panel discussion contains: "door", "doors", "the end", "end", "death", "die", "dead", "snake", "desert", "poetry", "fire", "light", "break on through", "ride", "storm", "wilderness" — chance increases to ~80%.
+If he appears: include morrison_interruption. If not: set morrison_interruption to null.
+Tone: WARM|AMUSED|ENGAGED|HOSTILE. If he appears and topic interests him: morrison_present true. Brief visit: false.
+morrison_interruption format (or null): {"quote":"<what Morrison says>","panel_reaction":"<1-2 sentences>","tone":"WARM|AMUSED|ENGAGED|HOSTILE","morrison_present":<bool>}\`;
+}
+
+const State = {
+  situation: '',
+  kit: [],
+  morrisonPresent: false,
+  composureState: null,
+  setSituation(v)      { this.situation = v.trim(); },
+  toggleKit(k)         { const i = this.kit.indexOf(k); if (i >= 0) this.kit.splice(i,1); else this.kit.push(k); },
+  setComposureState(cs){ this.composureState = cs; },
+  clear()              { this.situation = ''; this.kit = []; this.morrisonPresent = false; this.composureState = null; },
+  isReady()            { return this.situation.length > 0; },
+};
+
+const UI = {
+  setSubmitEnabled(ok) { document.getElementById('btn-submit').disabled = !ok; },
+  showLoading() {
+    const r = document.getElementById('results');
+    r.classList.add('show');
+    document.getElementById('loading').style.display = 'block';
+    document.getElementById('result-block').style.display = 'none';
+    document.getElementById('error-msg').classList.remove('show');
+  },
+  renderResults(data) {
+    document.getElementById('loading').style.display = 'none';
+    const rb = document.getElementById('result-block');
+    rb.style.display = 'block';
+
+    // Attenborough opening
+    if (data.attenborough_narration) {
+      document.getElementById('att-opening').innerHTML = '<div class="att-bookend"><div class="att-av">DA</div><div style="flex:1"><div class="att-name">David Attenborough</div><div class="att-text">' + data.attenborough_narration + '</div></div></div>';
+    }
+
+    // EXFIL probability meter
+    if (data.exfil_probability !== undefined) {
+      const pct = Math.max(0, Math.min(100, data.exfil_probability));
+      const color = pct >= 70 ? 'var(--green)' : pct >= 40 ? 'var(--amber)' : 'var(--blood)';
+      document.getElementById('exfil-meter').innerHTML = '<div class="exfil-meter"><div class="meter-label">EXFIL PROBABILITY</div><div class="meter-bar"><div class="meter-fill" style="width:' + pct + '%;background:' + color + '"></div></div><div class="meter-val" style="color:' + color + '">' + pct + '%</div></div>';
+    }
+
+    // Route
+    const routeEl = document.getElementById('route-block');
+    if (data.route && data.route.length > 0) {
+      routeEl.innerHTML = '<div class="briefing-block"><div class="briefing-label">ROUTE</div><div class="route-block">' +
+        data.route.map(function(step, i) { return '<div class="route-step"><div class="route-num">' + (i+1) + '</div><div class="route-text">' + step + '</div></div>'; }).join('') +
+        '</div></div>';
+    }
+
+    // What to abandon
+    const abandonEl = document.getElementById('abandon-block');
+    if (data.what_to_abandon && data.what_to_abandon.length > 0) {
+      abandonEl.innerHTML = '<div class="briefing-block"><div class="briefing-label">ABANDON</div><ul class="abandon-list">' +
+        data.what_to_abandon.map(function(item) { return '<li>' + item + '</li>'; }).join('') +
+        '</ul></div>';
+    }
+
+    // Movement order
+    const moveEl = document.getElementById('movement-block');
+    if (data.movement_order) {
+      moveEl.innerHTML = '<div class="movement-block"><div class="movement-label">MOVEMENT ORDER</div><div class="movement-text">' + data.movement_order + '</div></div>';
+    }
+
+    // Panel cards
+    const cardsEl = document.getElementById('cards-out');
+    cardsEl.innerHTML = '';
+    (data.panel || []).forEach(function(r) {
+      var char = CHARACTERS[r.charId] || { name: r.charId, role: '', av: '?', avClass: '' };
+      var isLead = r.charId === 'craighead';
+      var badge = isLead ? '<span class="badge-lead">LEAD</span>' : '';
+      var reactsHtml = r.reacts_to && r.reacts_to.charId && CHARACTERS[r.reacts_to.charId]
+        ? '<div class="thread-indicator reacts-to">↳ re: ' + CHARACTERS[r.reacts_to.charId].name + '</div>'
+        : '';
+      var refClass = r.reacts_to ? ' has-reference' : '';
+      cardsEl.innerHTML += '<div class="panel-card' + refClass + '"><div class="card-header"><div class="card-av ' + char.avClass + '">' + char.av + '</div><div><div class="card-name">' + char.name + ' ' + badge + '</div><div class="card-role">' + char.role + '</div></div></div>' + reactsHtml + '<div class="card-text">' + r.text + '</div></div>';
+    });
+
+    // Morrison
+    var morrisonEl = document.getElementById('morrison-interruption');
+    if (data.morrison_interruption && data.morrison_interruption.quote) {
+      var m = data.morrison_interruption;
+      var toneClass = m.tone === 'HOSTILE' ? 'morrison-hostile' : '';
+      morrisonEl.innerHTML = '<div class="morrison-card ' + toneClass + '"><div class="card-av av-morrison">JM</div><div><div class="card-name">Jim Morrison <span class="card-role">Corridor Guide</span></div><div class="card-text morrison-quote-text">"' + m.quote + '"</div><div class="morrison-reaction">' + m.panel_reaction + '</div></div></div>';
+      morrisonEl.style.display = 'block';
+    } else {
+      morrisonEl.innerHTML = '';
+      morrisonEl.style.display = 'none';
+    }
+
+    // Abort criteria
+    var abortEl = document.getElementById('abort-block');
+    if (data.abort_criteria) {
+      abortEl.innerHTML = '<div class="abort-block"><div class="abort-label">ABORT CRITERIA</div><div class="abort-text">' + data.abort_criteria + '</div></div>';
+    }
+
+    // Attenborough verdict
+    if (data.attenborough_verdict) {
+      document.getElementById('att-verdict').innerHTML = '<div class="att-bookend"><div class="att-av">DA</div><div style="flex:1"><div class="att-name">David Attenborough</div><div class="att-text">' + data.attenborough_verdict + '</div></div></div>';
+    }
+  },
+  showError(msg) {
+    document.getElementById('loading').style.display = 'none';
+    var e = document.getElementById('error-msg');
+    e.textContent = msg;
+    e.classList.add('show');
+  },
+};
+
+const API = {
+  buildSystemPrompt(morrisonPresent) {
+    var morrisonInjection = buildMorrisonInjection(morrisonPresent);
+    return \`You are the Survival School panel running "One Man In" — the EXFIL/INFIL briefing mode.
+
+=== THE MECHANIC ===
+The user has received a call. A situation is described. There are no orders. No chain of command. No invitation. Craighead runs the brief. The panel assesses the approach, the exit, the route, what to abandon, and whether you make it out.
+
+=== PANEL COMPOSITION ===
+Craighead is ALWAYS the lead briefer. He speaks first and last. Flat, directive, no wasted words. "What's the exit?" is always the first question.
+Billy Billingham assesses whether the plan meets the standard. Professional, exacting.
+Jason Fox provides tactics — approach angles, threat assessment, what you missed. Cold. Precise.
+Ollie Ollerton asks if you're sure you want to do this. Respects the answer either way.
+
+Additional panel members may appear from the wider pool (ray, bear, cody, hales, stroud, stevens, cox, faldo, jim, jeremy) — include 1-2 extras when the situation calls for their expertise. Cox applies physics. Faldo applies golf. Jim makes things worse.
+
+=== CHARACTER VOICES ===
+CRAIGHEAD — "What's the exit." Already moving. Speed, aggression, surprise. Applied identically whether the scenario involves Al-Shabaab or a self-checkout. Does not notice this never varies.
+BILLY — "Does this plan meet the standard? Let me walk you through what the standard is." Exacting. Professional. The standard exists whether you asked for it or not.
+FOX — "Walk me through the extraction. At what point did you identify the secondary exit?" Cold. No preamble. The pause before he says the thing you didn't want to hear.
+OLLIE — "Are you sure?" Genuine. Not a challenge. Not a test. A real question. Respects whatever you say next.
+
+=== COMEDY REGISTER ===
+The operational gravity is applied to EVERYTHING without adjustment. IKEA car park extraction uses the same language as a hostage rescue. Self-checkout at Sainsbury's receives the same threat assessment as an embassy siege. Craighead does not notice the disparity. Nobody points it out. The comedy is structural, never signposted.
+
+=== CROSS-CHARACTER REFERENCES (SS-060) ===
+Where a character has a strong established relationship with another panellist who has already spoken, they may reference that panellist directly — once, briefly, in their natural register. This is OPTIONAL — not every card needs it.
+When a character references another, include an optional "reacts_to" object in their panel entry:
+  "reacts_to": {"charId":"<referenced charId>","register":"endorsement|quiet_disagreement|silence_noted|deflation|builds_on"}
+
+\${morrisonInjection}
+
+${SOCIAL_DYNAMICS_ENGINE}
+
+VALID charIds: craighead, billy, fox, ollie, ray, bear, cody, hales, stroud, stevens, cox, faldo, jim, jeremy, packham
+Craighead MUST appear. Billy and Fox SHOULD appear. Include at least 4 panel members total.
+
+OUTPUT — valid JSON only, no markdown:
+{"attenborough_narration":"<one sentence — narrates the user's approach as apex predator entering territory>","exfil_probability":<number 0-100>,"route":["<step 1>","<step 2>","<step 3>"],"what_to_abandon":["<thing 1>","<thing 2>"],"movement_order":"<one sentence — speed/aggression/surprise or equivalent>","panel":[{"charId":"<id>","text":"<2-3 sentences — their briefing contribution, in voice>","reacts_to":{"charId":"<referenced charId>","register":"endorsement|quiet_disagreement|silence_noted|deflation|builds_on"}}],"abort_criteria":"<one sentence — when to abort and how>","attenborough_verdict":"<one sentence — geological calm, assesses whether the specimen survived>","panel_tension":{"type":"wound_reference|lie|callout|wolf_pack|none","subject":"<charId or empty>","by":["<charId>"],"note":"<one line or empty string>"},"morrison_interruption":<object or null>}\`;
+  },
+
+  async submit(situation, kit) {
+    var morrisonPresent = State.morrisonPresent || false;
+    var system = API.buildSystemPrompt(morrisonPresent);
+    var kitStr = kit.length > 0 ? '\\nKit: ' + kit.join(', ') : '\\nKit: nothing specified';
+    var response = await fetch(WORKER_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ system: system, situation: situation + kitStr, morrison_present: morrisonPresent, composureState: State.composureState }),
+    });
+    if (!response.ok) throw new Error('Worker error ' + response.status);
+    return response.json();
+  },
+};
+
+document.querySelectorAll('.chip-cat').forEach((cat, i) => {
+  if (i === 0) cat.classList.add('open');
+  cat.addEventListener('click', () => cat.classList.toggle('open'));
+});
+
+// Event wiring
+document.querySelectorAll('#situation-chips .chip').forEach(function(chip) {
+  chip.addEventListener('click', function() {
+    document.querySelectorAll('#situation-chips .chip').forEach(function(c) { c.classList.remove('sel'); });
+    chip.classList.add('sel');
+    document.getElementById('situation-input').value = chip.dataset.situation;
+    State.setSituation(chip.dataset.situation);
+    UI.setSubmitEnabled(State.isReady());
+  });
+});
+
+document.querySelectorAll('#kit-chips .kit-chip').forEach(function(chip) {
+  chip.addEventListener('click', function() {
+    chip.classList.toggle('sel');
+    State.toggleKit(chip.dataset.kit);
+  });
+});
+
+document.getElementById('situation-input').addEventListener('input', function(e) {
+  document.querySelectorAll('#situation-chips .chip').forEach(function(c) { c.classList.remove('sel'); });
+  State.setSituation(e.target.value);
+  UI.setSubmitEnabled(State.isReady());
+});
+
+document.getElementById('btn-submit').addEventListener('click', async function() {
+  if (!State.isReady()) return;
+  UI.showLoading();
+  document.getElementById('btn-submit').disabled = true;
+  try {
+    var data = await API.submit(State.situation, State.kit);
+    if (data.composureState) State.setComposureState(data.composureState);
+    if (data.morrison_interruption && data.morrison_interruption.morrison_present !== undefined) {
+      State.morrisonPresent = data.morrison_interruption.morrison_present;
+    } else {
+      State.morrisonPresent = false;
+    }
+    UI.renderResults(data);
+  } catch (err) {
+    UI.showError("Craighead couldn't assess the exit. Try again.");
+  } finally {
+    document.getElementById('btn-submit').disabled = false;
+  }
+});
+
+function onClear() {
+  State.clear();
+  document.querySelectorAll('#situation-chips .chip').forEach(function(c) { c.classList.remove('sel'); });
+  document.querySelectorAll('#kit-chips .kit-chip').forEach(function(c) { c.classList.remove('sel'); });
+  document.getElementById('situation-input').value = '';
+  document.getElementById('results').classList.remove('show');
+  document.getElementById('result-block').style.display = 'none';
+  document.getElementById('loading').style.display = 'block';
+  document.getElementById('att-opening').innerHTML = '';
+  document.getElementById('exfil-meter').innerHTML = '';
+  document.getElementById('route-block').innerHTML = '';
+  document.getElementById('abandon-block').innerHTML = '';
+  document.getElementById('movement-block').innerHTML = '';
+  document.getElementById('cards-out').innerHTML = '';
+  document.getElementById('abort-block').innerHTML = '';
+  document.getElementById('att-verdict').innerHTML = '';
+  document.getElementById('error-msg').classList.remove('show');
+  UI.setSubmitEnabled(false);
+}
+
+function buildShareText() {
+  var lines = ['ONE MAN IN — Survival School', ''];
+  var opening = document.querySelector('#att-opening .att-text');
+  if (opening) lines.push('Attenborough: ' + opening.textContent);
+  var cards = document.querySelectorAll('#cards-out .panel-card');
+  cards.forEach(function(card) {
+    var name = card.querySelector('.card-name');
+    var text = card.querySelector('.card-text');
+    if (name && text) lines.push(name.textContent.trim() + ': ' + text.textContent.trim());
+  });
+  var verdict = document.querySelector('#att-verdict .att-text');
+  if (verdict) lines.push('Attenborough: ' + verdict.textContent);
+  lines.push('', 'Survival School · cusslab-api.leanspirited.workers.dev/survival-school/one-man-in');
+  return lines.join('\\n');
+}
+
+async function shareResult() {
+  var text = buildShareText();
+  var fb = document.getElementById('share-feedback');
+  try {
+    if (navigator.share) {
+      await navigator.share({ title: 'One Man In — Survival School', text: text });
+    } else {
+      await navigator.clipboard.writeText(text);
+      fb.style.display = 'inline';
+      setTimeout(function() { fb.style.display = 'none'; }, 2000);
+    }
+  } catch (e) {
+    try { await navigator.clipboard.writeText(text); fb.style.display = 'inline'; setTimeout(function() { fb.style.display = 'none'; }, 2000); } catch(e2) {}
+  }
+}
+</script>
+
+</body>
+</html>
+`;
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -8047,6 +8949,9 @@ export default {
     }
     if (request.method === 'GET' && url.pathname === '/survival-school/irwin-memorial') {
       return new Response(SURVIVAL_SCHOOL_IRWIN_MEMORIAL, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' }});
+    }
+    if (request.method === 'GET' && url.pathname === '/survival-school/one-man-in') {
+      return new Response(SURVIVAL_SCHOOL_ONE_MAN_IN, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' }});
     }
     if (request.method !== 'POST') {
       return new Response('Method not allowed', { status: 405 });
@@ -8148,6 +9053,34 @@ export default {
       const raw = anthropicData.content[0].text;
       const text = raw.replace(/^```(?:json)?\s*/i, '').replace(/\s*```\s*$/, '').trim();
       return new Response(text, { status: 200, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }});
+    }
+    if (url.pathname === '/survival-school/one-man-in') {
+      const body = await request.json();
+      const composureState = body.composureState || null;
+      let system = body.system;
+      if (composureState) {
+        system = system + buildComposureInjection(composureState, null);
+      }
+      const upstream = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'anthropic-version': '2023-06-01', 'x-api-key': apiKey },
+        body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 2200, system, messages: [{ role: 'user', content: `Situation: ${body.situation}` }] }),
+      });
+      if (!upstream.ok) {
+        return new Response(JSON.stringify({ error: { message: `Anthropic error ${upstream.status}` } }), {
+          status: upstream.status, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
+        });
+      }
+      const anthropicData = await upstream.json();
+      const raw = anthropicData.content[0].text;
+      const text = raw.replace(/^```(?:json)?\s*/i, '').replace(/\s*```\s*$/, '').trim();
+      let parsed;
+      try { parsed = JSON.parse(text); } catch (e) {
+        return new Response(text, { status: 200, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } });
+      }
+      const baseComposure = composureState || initComposureState();
+      parsed.composureState = computeComposureDeltas(baseComposure, parsed.panel_tension);
+      return new Response(JSON.stringify(parsed), { status: 200, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }});
     }
     if (url.pathname === '/survival-school/coyote') {
       const body = await request.json();
