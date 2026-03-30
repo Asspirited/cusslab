@@ -8243,7 +8243,6 @@ const SURVIVAL_SCHOOL_IN_MY_DEFENCE = `<!DOCTYPE html>
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
   <title>In My Defence — The Doors · Survival School</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"/>
@@ -11732,58 +11731,58 @@ export default {
       }});
     }
     if (request.method === 'GET' && url.pathname === '/survival-school') {
-      return new Response(SURVIVAL_SCHOOL_HOME, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' }});
+      return new Response(SURVIVAL_SCHOOL_HOME, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-cache' }});
     }
     if (request.method === 'GET' && url.pathname === '/survival-school/app') {
-      return new Response(SURVIVAL_SCHOOL_APP, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' }});
+      return new Response(SURVIVAL_SCHOOL_APP, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-cache' }});
     }
     if (request.method === 'GET' && url.pathname === '/survival-school/worst') {
-      return new Response(SURVIVAL_SCHOOL_WORST, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' }});
+      return new Response(SURVIVAL_SCHOOL_WORST, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-cache' }});
     }
     if (request.method === 'GET' && url.pathname === '/survival-school/mundane') {
-      return new Response(SURVIVAL_SCHOOL_MUNDANE, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' }});
+      return new Response(SURVIVAL_SCHOOL_MUNDANE, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-cache' }});
     }
     if (request.method === 'GET' && url.pathname === '/survival-school/eat') {
-      return new Response(SURVIVAL_SCHOOL_EAT, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' }});
+      return new Response(SURVIVAL_SCHOOL_EAT, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-cache' }});
     }
     if (request.method === 'GET' && url.pathname === '/survival-school/fact-checker') {
-      return new Response(SURVIVAL_SCHOOL_FACT_CHECKER, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' }});
+      return new Response(SURVIVAL_SCHOOL_FACT_CHECKER, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-cache' }});
     }
     if (request.method === 'GET' && url.pathname === '/survival-school/deathmatch') {
-      return new Response(SURVIVAL_SCHOOL_DEATHMATCH, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' }});
+      return new Response(SURVIVAL_SCHOOL_DEATHMATCH, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-cache' }});
     }
     if (request.method === 'GET' && url.pathname === '/survival-school/coyote') {
-      return new Response(SURVIVAL_SCHOOL_COYOTE, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' }});
+      return new Response(SURVIVAL_SCHOOL_COYOTE, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-cache' }});
     }
     if (request.method === 'GET' && url.pathname === '/survival-school/panel-qa') {
-      return new Response(SURVIVAL_SCHOOL_PANEL_QA, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' }});
+      return new Response(SURVIVAL_SCHOOL_PANEL_QA, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-cache' }});
     }
     if (request.method === 'GET' && url.pathname === '/survival-school/debate') {
-      return new Response(SURVIVAL_SCHOOL_DEBATE, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' }});
+      return new Response(SURVIVAL_SCHOOL_DEBATE, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-cache' }});
     }
     if (request.method === 'GET' && url.pathname === '/survival-school/play-as') {
-      return new Response(SURVIVAL_SCHOOL_PLAY_AS, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' }});
+      return new Response(SURVIVAL_SCHOOL_PLAY_AS, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-cache' }});
     }
     if (request.method === 'GET' && url.pathname === '/survival-school/rooms') {
-      return new Response(SURVIVAL_SCHOOL_ROOMS, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' }});
+      return new Response(SURVIVAL_SCHOOL_ROOMS, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-cache' }});
     }
     if (request.method === 'GET' && url.pathname === '/survival-school/ive-had-worse') {
-      return new Response(SURVIVAL_SCHOOL_IVE_HAD_WORSE, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' }});
+      return new Response(SURVIVAL_SCHOOL_IVE_HAD_WORSE, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-cache' }});
     }
     if (request.method === 'GET' && url.pathname === '/survival-school/in-my-defence') {
-      return new Response(SURVIVAL_SCHOOL_IN_MY_DEFENCE, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' }});
+      return new Response(SURVIVAL_SCHOOL_IN_MY_DEFENCE, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-cache' }});
     }
     if (request.method === 'GET' && url.pathname === '/survival-school/irwin-memorial') {
-      return new Response(SURVIVAL_SCHOOL_IRWIN_MEMORIAL, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' }});
+      return new Response(SURVIVAL_SCHOOL_IRWIN_MEMORIAL, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-cache' }});
     }
     if (request.method === 'GET' && url.pathname === '/survival-school/one-man-in') {
-      return new Response(SURVIVAL_SCHOOL_ONE_MAN_IN, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' }});
+      return new Response(SURVIVAL_SCHOOL_ONE_MAN_IN, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-cache' }});
     }
     if (request.method === 'GET' && url.pathname === '/survival-school/the-alibi') {
-      return new Response(SURVIVAL_SCHOOL_THE_ALIBI, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' }});
+      return new Response(SURVIVAL_SCHOOL_THE_ALIBI, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-cache' }});
     }
     if (request.method === 'GET' && url.pathname === '/survival-school/the-expert-witness') {
-      return new Response(SURVIVAL_SCHOOL_THE_EXPERT_WITNESS, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' }});
+      return new Response(SURVIVAL_SCHOOL_THE_EXPERT_WITNESS, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-cache' }});
     }
     if (request.method !== 'POST') {
       return new Response('Method not allowed', { status: 405 });
