@@ -2085,33 +2085,27 @@ const API = { assess, assessWorst, react };
     const active = document.querySelector('[data-group="' + group + '"]');
     if (active) active.classList.add('active');
     document.querySelectorAll('#loc-chips .chip').forEach(chip => {
-      chip.style.display = (group === 'all' || chip.dataset.group === group) ? '' : 'none';
+      chip.style.display = (chip.dataset.group === group) ? '' : 'none';
     });
   }
   window.filterGroup = filterGroup;
 
   function initCascade() {
-    // Build group nav
+    // Build group nav — no ALL button, groups only, first group open by default
     const groupNav = document.getElementById('group-nav');
-    const allBtn = document.createElement('button');
-    allBtn.className = 'group-btn active';
-    allBtn.textContent = 'ALL';
-    allBtn.dataset.group = 'all';
-    allBtn.onclick = () => filterGroup('all');
-    groupNav.appendChild(allBtn);
 
-    LOCATION_GROUPS.forEach(g => {
+    LOCATION_GROUPS.forEach((g, gi) => {
       const btn = document.createElement('button');
-      btn.className = 'group-btn';
+      btn.className = 'group-btn' + (gi === 0 ? ' active' : '');
       btn.textContent = g.group.toUpperCase();
       btn.dataset.group = g.group;
       btn.onclick = () => filterGroup(g.group);
       groupNav.appendChild(btn);
     });
 
-    // Build location chips
+    // Build location chips — hidden by default, first group visible
     const locChips = document.getElementById('loc-chips');
-    LOCATION_GROUPS.forEach(g => {
+    LOCATION_GROUPS.forEach((g, gi) => {
       g.locations.forEach(loc => {
         const el = makeChip(loc.label, function() {
           document.querySelectorAll('#loc-chips .chip').forEach(c => c.classList.remove('sel'));
@@ -2128,6 +2122,7 @@ const API = { assess, assessWorst, react };
           updateAssessBtn();
         });
         el.dataset.group = g.group;
+        if (gi !== 0) el.style.display = 'none';
         locChips.appendChild(el);
       });
     });
@@ -6149,7 +6144,13 @@ const SURVIVAL_SCHOOL_ROOMS = `<!DOCTYPE html>
 
     <a class="door live" href="/survival-school/in-my-defence" data-morrison="The room does not care why you did it. The room only has questions.">
       <div class="door-name">In My Defence</div>
-      <div class="door-teaser">Put someone in the chair. Ask them about the thing they did. Watch them try to explain it to people who were there.</div>
+      <div class="door-teaser">Put someone in the chair. The panel wasn't there. They only have the story — and the story has holes.</div>
+      <div class="door-badge">LIVE</div>
+    </a>
+
+    <a class="door live" href="/survival-school/the-alibi" data-morrison="Two people walked through the same door. They saw different rooms. One of them is lying. Possibly both. Possibly neither. That's the door.">
+      <div class="door-name">The Alibi</div>
+      <div class="door-teaser">Two people. Same event. Two stories. The panel has questions. Neither story will survive them.</div>
       <div class="door-badge">LIVE</div>
     </a>
 
@@ -6158,6 +6159,12 @@ const SURVIVAL_SCHOOL_ROOMS = `<!DOCTYPE html>
       <div class="door-teaser">Say something wrong. They'll agree. That's when it gets dangerous.</div>
       <div class="door-badge">COMING SOON</div>
     </div>
+
+    <a class="door live" href="/survival-school/the-expert-witness" data-morrison="The expert is the one who believes it most. That has always been enough.">
+      <div class="door-name">The Expert Witness</div>
+      <div class="door-teaser">Someone has been introduced as the expert. The real experts are deferring. Everyone knows. Nobody says.</div>
+      <div class="door-badge">LIVE</div>
+    </a>
 
     <div class="door locked" data-morrison="There is a detail waiting for you in that room. It will mean everything eventually.">
       <div class="door-name">The Detail</div>
@@ -6518,10 +6525,12 @@ const State = {
   predicament: '',
   morrisonPresent: false,
   composureState: null,
+  panelCharIds: [],
   setProtagonist(id) { this.protagonist = id; },
   setPredicament(v)  { this.predicament = v.trim(); },
   setComposureState(cs) { this.composureState = cs; },
-  clear() { this.protagonist = null; this.predicament = ''; this.morrisonPresent = false; this.composureState = null; },
+  setPanelCharIds(ids) { this.panelCharIds = ids; },
+  clear() { this.protagonist = null; this.predicament = ''; this.morrisonPresent = false; this.composureState = null; this.panelCharIds = []; },
   isReady() { return this.protagonist && this.predicament.length > 0; },
 };
 
@@ -6639,6 +6648,7 @@ const UI = {
           try {
             const nextData = await API.submit(State.predicament, State.protagonist, State.turnCount + 1, State.turnHistory);
             if (nextData.composureState) State.setComposureState(nextData.composureState);
+            if (nextData.panel) State.setPanelCharIds((nextData.panel || []).map(r => r.charId).filter(Boolean));
             if (nextData.morrison_interruption && nextData.morrison_interruption.morrison_present !== undefined) {
               State.morrisonPresent = nextData.morrison_interruption.morrison_present;
             }
@@ -6687,6 +6697,8 @@ const API = {
     turn = turn || 1;
     history = history || [];
     const morrisonInjection = buildMorrisonInjection(morrisonPresent);
+    const escalationCharIds = [protagonist, ...State.panelCharIds].filter((v, i, a) => a.indexOf(v) === i);
+    const escalationInjection = buildEscalationInjection(escalationCharIds, turn);
     return \`You are the Survival School panel running the "I've Had Worse" mechanic.
 
 === THE MECHANIC ===
@@ -6787,6 +6799,8 @@ Include at least 3 panel members. The protagonist charId "\${protagonist}" must 
 
 \${morrisonInjection}
 
+\${escalationInjection}
+
 ${SOCIAL_DYNAMICS_ENGINE}
 
 OUTPUT — valid JSON only, no markdown:
@@ -6847,6 +6861,7 @@ document.getElementById('btn-submit').addEventListener('click', async () => {
   try {
     const data = await API.submit(State.predicament, State.protagonist);
     if (data.composureState) State.setComposureState(data.composureState);
+    if (data.panel) State.setPanelCharIds((data.panel || []).map(r => r.charId).filter(Boolean));
     if (data.morrison_interruption && data.morrison_interruption.morrison_present !== undefined) {
       State.morrisonPresent = data.morrison_interruption.morrison_present;
     } else {
@@ -7075,7 +7090,7 @@ const SURVIVAL_SCHOOL_IN_MY_DEFENCE = `<!DOCTYPE html>
   <div class="header">
     <div class="room-number">ROOM 14 · THE DOORS</div>
     <div class="title">IN MY <span>DEFENCE</span></div>
-    <div class="subtitle">You had your reasons. The panel does not accept your reasons.</div>
+    <div class="subtitle">The panel wasn't there. They only have your version. That's the problem.</div>
   </div>
 
   <div class="field-label">Who's going in?</div>
@@ -7279,10 +7294,12 @@ const State = {
   incident: '',
   morrisonPresent: false,
   composureState: null,
+  panelCharIds: [],
   setProtagonist(id) { this.protagonist = id; },
   setIncident(v)     { this.incident = v.trim(); },
   setComposureState(cs) { this.composureState = cs; },
-  clear()            { this.protagonist = null; this.incident = ''; this.morrisonPresent = false; this.composureState = null; },
+  setPanelCharIds(ids) { this.panelCharIds = ids; },
+  clear()            { this.protagonist = null; this.incident = ''; this.morrisonPresent = false; this.composureState = null; this.panelCharIds = []; },
   isReady()          { return this.protagonist && this.incident.length > 0; },
 };
 
@@ -7420,6 +7437,7 @@ const UI = {
           try {
             const nextData = await API.submit(State.incident, State.protagonist, State.turnCount + 1, State.turnHistory);
             if (nextData.composureState) State.setComposureState(nextData.composureState);
+            if (nextData.panel) State.setPanelCharIds((nextData.panel || []).map(r => r.charId).filter(Boolean));
             if (nextData.morrison_interruption && nextData.morrison_interruption.morrison_present !== undefined) {
               State.morrisonPresent = nextData.morrison_interruption.morrison_present;
             }
@@ -7457,39 +7475,41 @@ const API = {
     turn = turn || 1;
     history = history || [];
     const morrisonInjection = buildMorrisonInjection(morrisonPresent);
+    const escalationCharIds = [protagonist, ...State.panelCharIds].filter((v, i, a) => a.indexOf(v) === i);
+    const escalationInjection = buildEscalationInjection(escalationCharIds, turn);
     return \`You are the Survival School panel running the "In My Defence" mechanic.
 
 === THE MECHANIC ===
-\${protagonistName} has entered the room to explain something indefensible. The panel is a committee of interrogators, not a support group.
-Each panel member picks a DIFFERENT specific detail from the incident and presses it with a precise question or pointed observation.
-Nobody accepts the explanation. Nobody says "I can see why you thought that." Nobody says "to be fair." Nobody says "I understand what you were going for."
-Questions escalate in specificity: first clarifying, then pointed, then forensic. The rationalisation must collapse under the weight of its own specificity.
-Characters are sincere. They are not being cruel. They simply cannot let this particular detail go.
-\${protagonistName} (charId: \${protagonist}) is in the room — their panel entry doubles DOWN on the rationalisation, with more detail, more sincerity, and a worse position.
+\${protagonistName} has entered the room to explain something indefensible. THE PANEL WASN'T THERE. They are hearing this for the first time. They only have the protagonist's version of events — and the version has holes.
+This is a court case, not a reunion. The panel are judges, jurors, cross-examiners. They must dig into the facts and pick apart fact from fiction BECAUSE THEY WEREN'T THERE.
+Each panel member picks a DIFFERENT specific detail from the story and presses it. They are working from the testimony alone. Inconsistencies, implausible details, suspicious omissions — these are what they find.
+Nobody accepts the explanation. Nobody says "I can see why you thought that." Nobody says "to be fair."
+Questions escalate in specificity: first clarifying ("so you're saying..."), then pointed ("and at no point did you think..."), then forensic ("walk me through the exact sequence — because what you just said contradicts what you said thirty seconds ago").
+The comedy comes from the panel NOT knowing the truth. They are genuinely trying to work out what happened. Their expertise means they spot the wrong things, fixate on irrelevant details from their own domain, or reach conclusions that are technically sound but completely wrong.
+The panel are NOT neutral. They react emotionally to what they hear: outraged, angry, amazed, appalled, frightened, incredulous. The emotional reaction is GENUINE — they are hearing this for the first time and can't believe what they're hearing. The more indefensible the incident, the stronger the reaction. Each character's emotional register is different: Fox is cold anger, Ray is quiet horror, Bear is accidentally sympathetic, Cody is fixated disgust, Cox is fascinated dismay.
+\${protagonistName} (charId: \${protagonist}) is in the room — their panel entry doubles DOWN on the story, adding detail that makes the holes worse, not better.
 
-=== CHARACTER INTERROGATION VOICES ===
-RAY MEARS — Specific, technical. Pauses between questions. "And the temperature of the river was approximately —?" Long pause. "You were filming in what month?" Not accusatory. Just exact. Increasingly uncomfortable with the answer.
-BEAR GRYLLS — If protagonist isn't Bear: oddly supportive but presses the wrong detail entirely. "I've been in hotels, obviously much worse hotels —" before catching himself and circling back with a worse question. If Bear IS the protagonist: doubles down harder than anyone and provides extra detail that makes it worse.
-JASON FOX — Cold. Threat assessment. "Walk me through the extraction plan. At what point did the crew realise?" No preamble. No warmth. Just the sequence of events.
-LES HIDDINS — Three words at a time. Each one a question. "The river. How warm." Silence. The silence is the question. Returns to it twice more before the end.
-CODY LUNDIN — "And your feet. Were they covered?" Will not drop the feet question. The feet are always relevant to Cody. The feet are NEVER not relevant. Even if feet have nothing to do with this.
-LES STROUD — "I've been in hotels." Pause. "Twice." Longer pause. Describes in detail what he did instead. This is not helpful. He knows. He continues.
-AUSTIN STEVENS — "Interesting." Long pause. "When you say the snake started it." Pause. "Define started it." Will not accept a vague answer. Has been bitten by everything. This is not a defence. This is a taxonomy question.
-PROF BRIAN COX — Cannot stop. "What's interesting is if we model this thermodynamically —" pulls out a napkin. He is drawing equations. The equations are correct. They are not helping. He is aware. He cannot stop.
-SIR NICK FALDO — Applies golf. "Head down. Eyes on the ball. The question I keep coming back to —" It's always golf. Wrongly applied. He knows. He commits.
-JEREMY WADE — Produces the notebook. Writes something down. "Was there a river nearby." Not a question. A hope. Writes something else. If no river: quiet disappointment, then returns to the incident with a fish-based analogy that doesn't land and he knows it.
-JIM CARREY — "OKAY so I just want to say —" His face does something. "Because I KNOW what you're going to say —" He doesn't. Cycles into Ace Ventura (has sources, has contacts, has spoken to someone), The Mask (physically impossible solution presented with total conviction), or Liar Liar (cannot stop stating the actual problem, does not want to be doing this, cannot stop). Makes things worse. Bear engages with his contribution. This also makes things worse.
-CHRIS PACKHAM — Rapid. Pattern-recognition. Zoologically precise. "And the species involved — was it listed?" Pauses. "Because if it was listed —" Doesn't finish. The implication is the sentence. Applies conservation status to the incident whether it's relevant or not. If animal welfare is involved: stops interrogating and starts objecting. The shift is immediate and total.
+=== CHARACTER CROSS-EXAMINATION VOICES ===
+RAY MEARS — Forensic. Reconstructs the scene from physical evidence the protagonist mentioned. "And the soil conditions at that time of year would have been —?" Catches contradictions through terrain and weather details. Never accuses. Just builds a picture that doesn't match the testimony.
+BEAR GRYLLS — If protagonist isn't Bear: oddly sympathetic to the story but keeps accidentally exposing problems. "No I get it — I've done similar, obviously in much worse conditions —" then describes something that reveals the protagonist's version can't be true. If Bear IS the protagonist: adds detail that makes the defence worse. Much worse.
+JASON FOX — Treats it as a debrief. "Timeline. From the top." Cold. Precise. Catches the moment the story changes between tellings. "You said eleven minutes earlier. Now you're saying eight. Which was it." Not angry. Just noting it.
+LES HIDDINS — Three words at a time. Each one a question. "The river. How deep." Silence. Has clearly decided the protagonist is lying but won't say so directly. Returns to the same detail three times. Each time the question is shorter.
+CODY LUNDIN — Fixates on one physical detail the protagonist mentioned. "And your feet. Were they covered." The feet are always relevant to Cody. If the protagonist tries to move past it: "We'll get to that. Your feet." Will not drop it. Draws conclusions from foot state that are technically valid but have nothing to do with the case.
+LES STROUD — "That doesn't track." Pause. Describes what he would have done in the same situation. In detail. The detail makes the protagonist's version look worse by comparison. He knows. He continues anyway.
+AUSTIN STEVENS — "Interesting." Long pause. "When you say the snake started it." Pause. "Define started it." Treats every claim as a specimen identification. Will not accept a vague answer. Cross-examines the taxonomy of the incident.
+PROF BRIAN COX — Cannot stop. "What's interesting is if we model this thermodynamically —" pulls out a napkin. The equations prove the protagonist's version is physically impossible. The equations are correct. The conclusion is devastating. He is aware. He cannot stop.
+SIR NICK FALDO — Applies golf. "Head down. Eyes on the ball. The question I keep coming back to —" Reaches conclusions through golf metaphors that are wrong but internally consistent. Commits fully to the wrong framework.
+JEREMY WADE — Produces the notebook. Cross-references the protagonist's story against something aquatic. "Was there a river nearby." Not a question. A hope. If no river: quiet disappointment, then finds a fish-based parallel that exposes a flaw the protagonist hadn't considered.
+JIM CARREY — "OKAY so I just want to say —" Cycles into Ace Ventura (has done his own investigation, has sources), The Mask (proposes physically impossible explanation with total conviction), or Liar Liar (cannot stop stating the obvious lie in the testimony). Makes things worse. Bear engages. This also makes things worse.
+CHRIS PACKHAM — Pattern-recognition. "And the species involved — was it listed?" Cross-examines from conservation law. If the incident involves animal harm: stops cross-examining and starts prosecuting. The shift is immediate.
 
-CODY OVERRIDE (SS-020) — fires when Cody is in the panel AND the incident or discussion involves survival advice that is dangerously wrong:
-- Cody stops. No speech, no drama. Brief, final.
-- His response indicates the advice is wrong and could kill someone. One sentence. Done.
+CODY OVERRIDE (SS-020) — fires when Cody is in the panel AND the incident involves survival advice that is dangerously wrong:
+- Cody stops cross-examining. Brief, final. The advice is wrong and could kill someone. One sentence. Done.
 
-PACKHAM ETHICAL OVERRIDE (SS-013) — fires when Packham is in the panel AND the incident or discussion involves animal harm, exploitation, or welfare compromise:
-- Packham objects on moral grounds. Not performance. The logical conclusion of a mind that cannot treat animal welfare as negotiable.
-- NEGOTIATE-THROW integrity: he makes the full moral/factual case first, cites conservation status or ecological impact, then refuses to participate further.
+PACKHAM ETHICAL OVERRIDE (SS-013) — fires when Packham is in the panel AND the incident involves animal harm, exploitation, or welfare compromise:
+- Packham objects on moral grounds. Makes the full moral/factual case, cites conservation status, then refuses to participate further.
 - His objection changes the room's register — other characters respond to the shift, not to Packham directly.
-- When BOTH Packham AND Cody override simultaneously: Ray agrees with both silently. Bear does the thing anyway. Hales does the correct version without mentioning it. Attenborough observes.
+- When BOTH Packham AND Cody override simultaneously: Ray agrees silently. Bear does the thing anyway. Hales does the correct version without mentioning it. Attenborough observes.
 
 === CROSS-CHARACTER REFERENCES (SS-060) ===
 Where a character has a strong established relationship with another panellist who has already spoken, they may reference that panellist directly — once, briefly, in their natural register. This is OPTIONAL — not every card needs it. Use only when the relationship adds comedy or tension.
@@ -7500,16 +7520,17 @@ Only include reacts_to when a genuine cross-reference occurs. Omit it otherwise.
 === PROTAGONIST AUTO-RESPONSE (SS-061) ===
 After the panel has spoken, the protagonist CANNOT HELP THEMSELVES. They respond automatically.
 Include a "protagonist_response" field: 2-3 sentences where the protagonist reacts to what the panel said.
-The protagonist makes their position WORSE — more detail, more conviction, worse facts. They cannot stop.
+The protagonist makes their position WORSE — adds detail that opens new holes, contradicts earlier testimony, or accidentally confirms what the panel suspected. They cannot stop.
 Bear doubles down with a worse defence. Cody goes quieter but more absolute. Jim Carrey cycles into a new mode.
-The protagonist_response is the seed for the next round. It gives the panel something new to press on.
+The protagonist_response is the seed for the next round. It gives the panel new inconsistencies to press on.
 \${turn > 1 ? 'This is round ' + turn + '. The protagonist has already responded ' + (turn - 1) + ' time(s). Each round they dig deeper. NEVER repeat what was said in a previous round. Escalate only.' : 'This is the first round.'}
 \${history.length > 0 ? 'PREVIOUS EXCHANGE:\\n' + history.map((h, i) => 'Round ' + (i+1) + ' — Panel said: ' + h.panelSummary + ' | Protagonist responded: ' + h.protagonistResponse).join('\\n') : ''}
 
 === CRITICAL RULES ===
-This is an interrogation. Not a roast. Not a support session.
-Characters are sincere — they genuinely want to understand, which is why the questions are so precise.
-The protagonist's entry makes the position WORSE — more detail, more conviction, worse facts.
+This is a cross-examination. Not a roast. Not a support session. The panel WASN'T THERE — they are working from testimony only.
+Characters are sincere — they genuinely want to work out what happened, which is why the questions are so precise.
+The comedy comes from each character applying their own expertise to find holes — and finding the WRONG holes, or the right holes for the wrong reasons.
+The protagonist's response makes the position WORSE — more detail, more contradictions, worse facts.
 Attenborough does NOT appear in the panel array. He bookends.
 Cox and Faldo on rotation. They may both appear in the same panel — two mechanics exist depending on who else is present:
 
@@ -7538,20 +7559,24 @@ Include at least 3 panel members. The protagonist charId "\${protagonist}" MUST 
 
 \${morrisonInjection}
 
+\${escalationInjection}
+
 ${SOCIAL_DYNAMICS_ENGINE}
 
 OUTPUT — valid JSON only, no markdown:
 {"attenborough_opening":"<one sentence, nature documentary, observes the protagonist entering — species under examination, already under pressure>","panel":[{"charId":"<id>","text":"<2-3 sentences — their specific question or observation, absolutely sincere, presses a specific detail>","reacts_to":{"charId":"<referenced charId>","register":"endorsement|quiet_disagreement|silence_noted|deflation|builds_on"}}],"protagonist_response":"<2-3 sentences — the protagonist responds automatically, in character, making their position WORSE>","attenborough_verdict":"<one sentence, geological calm — the case is concluded, the rationalisation has not survived>","panel_tension":{"type":"wound_reference|lie|callout|wolf_pack|none","subject":"<charId or empty>","by":["<charId>"],"note":"<one line or empty string>"},"morrison_interruption":<object or null — see MORRISON rules above>}\`;
   },
 
-  async submit(incident, protagonist, turn, history) {
+  async submit(incident, protagonist, turn, history, signal) {
     const morrisonPresent = State.morrisonPresent || false;
     const system = API.buildSystemPrompt(protagonist, morrisonPresent, turn || 1, history || []);
-    const response = await fetch(WORKER_ENDPOINT, {
+    const opts = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ system, incident, protagonist, morrison_present: morrisonPresent, composureState: State.composureState }),
-    });
+    };
+    if (signal) opts.signal = signal;
+    const response = await fetch(WORKER_ENDPOINT, opts);
     if (!response.ok) throw new Error(\`Worker error \${response.status}\`);
     return response.json();
   },
@@ -7594,9 +7619,17 @@ document.getElementById('btn-submit').addEventListener('click', async () => {
   if (!State.isReady()) return;
   UI.showLoading();
   document.getElementById('btn-submit').disabled = true;
+  const thinkingTimer = setTimeout(() => {
+    const loadEl = document.querySelector('#loading span:first-child');
+    if (loadEl) loadEl.textContent = 'THE PANEL IS STILL DELIBERATING';
+  }, 15000);
   try {
-    const data = await API.submit(State.incident, State.protagonist);
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 60000);
+    const data = await API.submit(State.incident, State.protagonist, null, null, controller.signal);
+    clearTimeout(timeoutId);
     if (data.composureState) State.setComposureState(data.composureState);
+    if (data.panel) State.setPanelCharIds((data.panel || []).map(r => r.charId).filter(Boolean));
     if (data.morrison_interruption && data.morrison_interruption.morrison_present !== undefined) {
       State.morrisonPresent = data.morrison_interruption.morrison_present;
     } else {
@@ -7606,6 +7639,7 @@ document.getElementById('btn-submit').addEventListener('click', async () => {
   } catch (err) {
     UI.showError("The panel couldn't convene. Try again.");
   } finally {
+    clearTimeout(thinkingTimer);
     document.getElementById('btn-submit').disabled = false;
   }
 });
@@ -8635,6 +8669,8 @@ Tone: WARM|AMUSED|ENGAGED|HOSTILE. If he appears and topic interests him: morris
 morrison_interruption format (or null): {"quote":"<what Morrison says>","panel_reaction":"<1-2 sentences>","tone":"WARM|AMUSED|ENGAGED|HOSTILE","morrison_present":<bool>}\`;
 }
 
+const OMI_CORE_PANEL = ['craighead', 'billy', 'fox', 'ollie'];
+
 const State = {
   situation: '',
   kit: [],
@@ -8743,6 +8779,7 @@ const UI = {
 const API = {
   buildSystemPrompt(morrisonPresent) {
     var morrisonInjection = buildMorrisonInjection(morrisonPresent);
+    var escalationInjection = buildEscalationInjection(OMI_CORE_PANEL, 1);
     return \`You are the Survival School panel running "One Man In" — the EXFIL/INFIL briefing mode.
 
 === THE MECHANIC ===
@@ -8771,6 +8808,8 @@ When a character references another, include an optional "reacts_to" object in t
   "reacts_to": {"charId":"<referenced charId>","register":"endorsement|quiet_disagreement|silence_noted|deflation|builds_on"}
 
 \${morrisonInjection}
+
+\${escalationInjection}
 
 ${SOCIAL_DYNAMICS_ENGINE}
 
@@ -8901,6 +8940,1169 @@ async function shareResult() {
 </html>
 `;
 
+const SURVIVAL_SCHOOL_THE_ALIBI = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>The Alibi — Survival School</title>
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #0a0a08; --surface: #111110; --border: #1a1a18; --border-strong: #2a2a25;
+      --text: #c8c4b8; --text-muted: #6a6860; --green: #4a7a3a; --green-dim: #2a4a1a;
+      --amber: #c8a020; --amber-dim: #604800; --gold: #b8963a; --gold-dim: #5a4a1a;
+      --blood: #8b2020; --blood-dim: #4a1010; --bark: #6a5a4a;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: var(--bg); color: var(--text); font-family: 'Crimson Text', Georgia, serif; min-height: 100vh; padding: 16px; }
+    #app { max-width: 620px; margin: 0 auto; }
+    .header { text-align: center; margin-bottom: 1.5rem; }
+    .room-number { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 3px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px; }
+    .title { font-family: 'Crimson Text', Georgia, serif; font-size: 42px; font-weight: 600; color: var(--gold); letter-spacing: 2px; line-height: 1.1; }
+    .title span { font-style: italic; }
+    .subtitle { font-size: 15px; color: var(--text-muted); margin-top: 6px; line-height: 1.5; }
+    .field-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 2px; color: var(--text-muted); text-transform: uppercase; margin: 1rem 0 6px; }
+    .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 6px; }
+    .chip { font-family: 'IBM Plex Mono', monospace; font-size: 11px; padding: 6px 12px; border: 0.5px solid var(--border-strong); border-radius: 5px; background: var(--surface); color: var(--text-muted); cursor: pointer; transition: all 0.15s; }
+    .chip:hover { border-color: var(--green); color: var(--text); }
+    .chip.sel { border-color: var(--green); color: var(--green); background: rgba(74,122,58,0.1); }
+    .chip.disabled { opacity: 0.3; pointer-events: none; }
+    .chip-protagonist { font-size: 11px; }
+    .chip-cat-group { margin-bottom: 2px; }
+    .chip-cat { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1px; color: var(--text-muted); cursor: pointer; padding: 6px 0; user-select: none; }
+    .chip-cat::before { content: '+ '; }
+    .chip-cat.open::before { content: '- '; }
+    .chip-cat-body { display: none; flex-wrap: wrap; gap: 6px; padding: 4px 0 8px; }
+    .chip-cat.open + .chip-cat-body { display: flex; }
+    textarea { width: 100%; background: var(--surface); border: 0.5px solid var(--border-strong); border-radius: 6px; color: var(--text); font-family: 'Crimson Text', Georgia, serif; font-size: 14px; padding: 10px 14px; line-height: 1.5; resize: vertical; }
+    textarea:focus { outline: none; border-color: var(--green); }
+    .btn-row { display: flex; gap: 8px; margin-top: 12px; justify-content: center; }
+    .btn-submit { font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 2px; padding: 10px 24px; border: 0.5px solid var(--green); border-radius: 5px; background: transparent; color: var(--green); cursor: pointer; transition: all 0.15s; text-transform: uppercase; }
+    .btn-submit:hover:not(:disabled) { background: rgba(74,122,58,0.15); }
+    .btn-submit:disabled { opacity: 0.3; cursor: default; }
+    .btn-clear { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 1px; padding: 8px 18px; border: 0.5px solid var(--border-strong); border-radius: 5px; background: none; cursor: pointer; color: var(--text-muted); }
+    .btn-clear:hover { color: var(--text); border-color: var(--green); }
+    .results { margin-top: 1.5rem; display: none; }
+    .results.show { display: block; }
+    .loading { text-align: center; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-muted); letter-spacing: 2px; padding: 20px 0; }
+    .dots::after { content: '...'; animation: pulse 1.2s infinite; }
+    @keyframes pulse { 0%,100% { opacity: 0.3; } 50% { opacity: 1; } }
+    .panel-label { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 2px; color: var(--text-muted); text-transform: uppercase; margin: 1.2rem 0 6px; opacity: 0.5; }
+    .att-bookend { display: flex; align-items: flex-start; gap: 10px; padding: 12px 14px; border-radius: 8px; border: 0.5px solid var(--border); background: var(--surface); margin-bottom: 10px; }
+    .att-av { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 500; letter-spacing: 1px; border: 0.5px solid var(--border-strong); background: #0d0d0a; color: var(--text-muted); flex-shrink: 0; }
+    .att-name { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 1.5px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px; }
+    .att-text { font-size: 14px; line-height: 1.65; color: var(--text); font-style: italic; }
+    .panel-card { display: flex; align-items: flex-start; gap: 10px; padding: 12px 14px; border-radius: 8px; border: 0.5px solid var(--border); background: var(--surface); margin-bottom: 6px; transition: border-color 0.15s; }
+    .panel-card.account { border-left: 2px solid var(--amber-dim); }
+    .av { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 500; letter-spacing: 1px; border: 0.5px solid var(--border-strong); flex-shrink: 0; }
+    .av-green  { background: #0a1a0a; border-color: var(--green-dim); color: var(--green); }
+    .av-bark   { background: #1a1510; border-color: #3a3020; color: var(--bark); }
+    .av-amber  { background: #1a1508; border-color: var(--amber-dim); color: var(--amber); }
+    .av-blue   { background: #0a0a1a; border-color: #1a1a4a; color: #4a5a9a; }
+    .av-yellow { background: #1a1a08; border-color: #4a4a10; color: #b8b830; }
+    .av-teal   { background: #0a2020; border-color: #1a5a50; color: #2e9e8a; }
+    .card-meta { flex: 1; min-width: 0; }
+    .card-name { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 1.5px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 5px; display: flex; gap: 8px; align-items: center; }
+    .card-name .badge-account { font-size: 8px; letter-spacing: 1px; color: var(--amber); border: 0.5px solid var(--amber-dim); border-radius: 3px; padding: 1px 4px; }
+    .card-name .badge-jury { font-size: 8px; letter-spacing: 1px; color: var(--text-muted); border: 0.5px solid var(--border-strong); border-radius: 3px; padding: 1px 4px; }
+    .thread-indicator { font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: var(--text-muted); opacity: 0.7; margin-bottom: 2px; }
+    .panel-card.has-reference { border-left: 2px solid var(--gold-dim); }
+    .btn-dig { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 2px; padding: 10px 20px; border: 0.5px solid var(--amber-dim); border-radius: 5px; background: transparent; color: var(--amber); cursor: pointer; transition: all 0.15s; display: block; margin: 12px auto; text-transform: uppercase; }
+    .btn-dig:hover { border-color: var(--amber); background: rgba(90,60,10,0.2); }
+    .dig-closed { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-muted); text-align: center; margin: 12px 0; opacity: 0.7; }
+    .card-text { font-size: 13.5px; line-height: 1.65; color: var(--text); }
+    .terminal-label { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 2px; color: var(--text-muted); text-transform: uppercase; margin: 1.2rem 0 6px; opacity: 0.5; }
+    .reset-row { margin-top: 1.2rem; display: flex; gap: 8px; justify-content: center; align-items: center; flex-wrap: wrap; }
+    .btn-reset { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 1px; padding: 8px 18px; border: 0.5px solid var(--border-strong); border-radius: 5px; background: none; cursor: pointer; color: var(--text-muted); transition: color 0.15s, border-color 0.15s; }
+    .btn-reset:hover { color: var(--text); border-color: var(--green); }
+    .btn-share { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 1px; padding: 8px 18px; border: 0.5px solid var(--amber-dim); border-radius: 5px; background: none; cursor: pointer; color: var(--amber); transition: color 0.15s, border-color 0.15s; }
+    .btn-share:hover { border-color: var(--amber); }
+    .share-feedback { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--green); letter-spacing: 1px; display: none; }
+    .share-feedback.show { display: inline; }
+    .error-msg { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--blood); padding: 10px 14px; border: 0.5px solid var(--blood-dim); border-radius: 6px; margin-top: 12px; display: none; }
+    .error-msg.show { display: block; }
+    .morrison-card { display: flex; align-items: flex-start; gap: 12px; padding: 12px 14px; border-radius: 8px; margin: 12px 0; transition: border-color 0.2s; }
+    .morrison-warm { border: 0.5px solid var(--gold-dim); background: rgba(90,60,10,0.15); }
+    .morrison-hostile { border: 0.5px solid var(--blood-dim); background: rgba(60,10,10,0.15); }
+    .av-morrison { background: #1a1510; border-color: var(--gold-dim); color: var(--gold); }
+    .morrison-quote-text { font-style: italic; color: var(--gold); }
+    .morrison-hostile .morrison-quote-text { color: var(--blood); }
+    .morrison-reaction { font-size: 12px; color: var(--text-muted); margin-top: 6px; font-style: italic; }
+    .nav-back { display: inline-block; font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1px; color: var(--text-muted); text-decoration: none; margin-bottom: 1rem; transition: color 0.15s; }
+    .nav-back:hover { color: var(--green); }
+    .vs-divider { font-family: 'Bebas Neue', sans-serif; font-size: 28px; color: var(--red-bright); text-align: center; letter-spacing: 6px; margin: 16px 0 8px; opacity: 0.8; }
+    @media (max-width: 480px) {
+      .title { font-size: 32px; }
+      .panel-card { padding: 10px 12px; }
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+
+  <a class="nav-back" href="/survival-school">\\u2190 SURVIVAL SCHOOL</a>
+
+  <div class="header">
+    <div class="room-number">ROOM 15 \\u00b7 THE DOORS</div>
+    <div class="title">THE <span>ALIBI</span></div>
+    <div class="subtitle">Two people. Same event. Two stories. The panel has questions.</div>
+  </div>
+
+  <div class="field-label">Protagonist 1</div>
+  <div class="chips" id="chips-protagonist-1">
+    <button class="chip chip-protagonist" data-id="bear"      data-slot="1">Bear Grylls</button>
+    <button class="chip chip-protagonist" data-id="ray"       data-slot="1">Ray Mears</button>
+    <button class="chip chip-protagonist" data-id="fox"       data-slot="1">Jason Fox</button>
+    <button class="chip chip-protagonist" data-id="hales"     data-slot="1">Les Hiddins</button>
+    <button class="chip chip-protagonist" data-id="cody"      data-slot="1">Cody Lundin</button>
+    <button class="chip chip-protagonist" data-id="stroud"    data-slot="1">Les Stroud</button>
+    <button class="chip chip-protagonist" data-id="stevens"   data-slot="1">Austin Stevens</button>
+    <button class="chip chip-protagonist" data-id="jim"       data-slot="1">Jim Carrey</button>
+    <button class="chip chip-protagonist" data-id="jeremy"    data-slot="1">Jeremy Wade</button>
+    <button class="chip chip-protagonist" data-id="mcnab"     data-slot="1">Andy McNab</button>
+    <button class="chip chip-protagonist" data-id="ryan"      data-slot="1">Chris Ryan</button>
+    <button class="chip chip-protagonist" data-id="billy"     data-slot="1">Billy Billingham</button>
+    <button class="chip chip-protagonist" data-id="ollie"     data-slot="1">Ollie Ollerton</button>
+    <button class="chip chip-protagonist" data-id="packham"   data-slot="1">Chris Packham</button>
+    <button class="chip chip-protagonist" data-id="cox"       data-slot="1">Prof Brian Cox</button>
+    <button class="chip chip-protagonist" data-id="faldo"     data-slot="1">Sir Nick Faldo</button>
+  </div>
+
+  <div class="vs-divider">V S</div>
+
+  <div class="field-label">Protagonist 2</div>
+  <div class="chips" id="chips-protagonist-2">
+    <button class="chip chip-protagonist" data-id="bear"      data-slot="2">Bear Grylls</button>
+    <button class="chip chip-protagonist" data-id="ray"       data-slot="2">Ray Mears</button>
+    <button class="chip chip-protagonist" data-id="fox"       data-slot="2">Jason Fox</button>
+    <button class="chip chip-protagonist" data-id="hales"     data-slot="2">Les Hiddins</button>
+    <button class="chip chip-protagonist" data-id="cody"      data-slot="2">Cody Lundin</button>
+    <button class="chip chip-protagonist" data-id="stroud"    data-slot="2">Les Stroud</button>
+    <button class="chip chip-protagonist" data-id="stevens"   data-slot="2">Austin Stevens</button>
+    <button class="chip chip-protagonist" data-id="jim"       data-slot="2">Jim Carrey</button>
+    <button class="chip chip-protagonist" data-id="jeremy"    data-slot="2">Jeremy Wade</button>
+    <button class="chip chip-protagonist" data-id="mcnab"     data-slot="2">Andy McNab</button>
+    <button class="chip chip-protagonist" data-id="ryan"      data-slot="2">Chris Ryan</button>
+    <button class="chip chip-protagonist" data-id="billy"     data-slot="2">Billy Billingham</button>
+    <button class="chip chip-protagonist" data-id="ollie"     data-slot="2">Ollie Ollerton</button>
+    <button class="chip chip-protagonist" data-id="packham"   data-slot="2">Chris Packham</button>
+    <button class="chip chip-protagonist" data-id="cox"       data-slot="2">Prof Brian Cox</button>
+    <button class="chip chip-protagonist" data-id="faldo"     data-slot="2">Sir Nick Faldo</button>
+  </div>
+
+  <div class="field-label" style="margin-top:18px">THE EVENT</div>
+  <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text-muted);margin-bottom:6px;line-height:1.5;opacity:0.7;">What happened? Pick a known incident or describe your own. Both protagonists were there. Neither agrees on what happened.</div>
+  <textarea id="event-input" placeholder="Something happened. They were both there. That is the only thing they agree on..." rows="2"></textarea>
+
+  <div id="chips-event" style="margin-top:8px">
+    <div class="chip-cat-group">
+      <div class="chip-cat">Military</div>
+      <div class="chip-cat-body">
+        <button class="chip" data-evt="Bravo Two Zero \\u2014 the patrol, the compromise, the escape. McNab says one thing. Ryan says another. Four books. Zero agreement.">Bravo Two Zero</button>
+        <button class="chip" data-evt="The selection march \\u2014 who cracked first, who carried the extra weight, and who remembers it completely differently">SAS selection</button>
+        <button class="chip" data-evt="That operation nobody can name. One says it went perfectly. The other says it nearly went catastrophically wrong. Both were there.">the classified op</button>
+      </div>
+    </div>
+    <div class="chip-cat-group">
+      <div class="chip-cat">Survival</div>
+      <div class="chip-cat-body">
+        <button class="chip" data-evt="Who actually started the fire. One claims credit. The other claims they had to restart it because the first attempt was dangerous.">who started the fire</button>
+        <button class="chip" data-evt="The snake encounter. One says they handled it calmly. The other says there was screaming. Neither is lying. Both are wrong.">the snake</button>
+        <button class="chip" data-evt="The river crossing. One went first. The other says they went first. The current was worse than either admits.">the river crossing</button>
+      </div>
+    </div>
+    <div class="chip-cat-group">
+      <div class="chip-cat">Character-Specific</div>
+      <div class="chip-cat-body">
+        <button class="chip" data-evt="The hotel incident. Bear says it was survival research. The crew disagrees. Ray hasn't said anything but his silence is a whole position.">Bear\\u2019s hotel</button>
+        <button class="chip" data-evt="The time Cox and Faldo both attended a survival course. Both say they finished top of the class. The instructor remembers neither.">the survival course</button>
+        <button class="chip" data-evt="The kebab van. It was off camera. Both were there. The kebab was involved. Everything else is disputed.">the kebab van</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn-submit" id="btn-submit" disabled>BRING THEM IN</button>
+    <button class="btn-clear" onclick="onClear()">CLEAR</button>
+  </div>
+
+  <div class="error-msg" id="error-msg"></div>
+
+  <div class="results" id="results">
+    <div class="loading" id="loading">
+      <span>COMPARING STORIES</span><span class="dots"></span>
+    </div>
+    <div id="result-block" style="display:none">
+      <div id="att-opening"></div>
+      <div class="panel-label">THE ACCOUNTS</div>
+      <div id="accounts-out"></div>
+      <div class="panel-label">THE JURY</div>
+      <div id="cards-out"></div>
+      <div id="morrison-interruption" style="display:none"></div>
+      <div id="dig-block" style="display:none"></div>
+      <div class="terminal-label">ATTENBOROUGH DELIVERS THE VERDICT</div>
+      <div class="att-bookend" id="att-terminal" style="display:none">
+        <div class="att-av">DA</div>
+        <div style="flex:1">
+          <div class="att-name">David Attenborough</div>
+          <div class="att-text" id="att-terminal-text"></div>
+        </div>
+      </div>
+      <div class="reset-row">
+        <button class="btn-reset" onclick="onClear()">BRING IN ANOTHER PAIR</button>
+        <button class="btn-share" onclick="shareResult()">SHARE</button>
+        <span class="share-feedback" id="share-feedback">COPIED</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const WORKER_ENDPOINT = 'https://cusslab-api.leanspirited.workers.dev/survival-school/the-alibi';
+
+const CHARACTERS = {
+  ray:     { name: 'Ray Mears',       role: 'Bushcraft',            av: 'RM', avClass: 'av-green' },
+  bear:    { name: 'Bear Grylls',     role: 'Former SAS',           av: 'BG', avClass: 'av-bark'  },
+  cody:    { name: 'Cody Lundin',     role: 'Primitive Skills',     av: 'CL', avClass: 'av-green' },
+  hales:   { name: 'Les Hiddins',     role: 'Bush Tucker Man',      av: 'LH', avClass: 'av-amber' },
+  fox:     { name: 'Jason Fox',       role: 'Special Boat Service', av: 'JF', avClass: 'av-green' },
+  stroud:  { name: 'Les Stroud',      role: 'Survivorman',          av: 'LS', avClass: 'av-blue'  },
+  stevens: { name: 'Austin Stevens',  role: 'Snakemaster',          av: 'AS', avClass: 'av-bark'  },
+  cox:     { name: 'Prof Brian Cox',  role: 'Theoretical Physics',  av: 'BC', avClass: 'av-blue'   },
+  faldo:   { name: 'Sir Nick Faldo',  role: 'Golf',                 av: 'NF', avClass: 'av-green'  },
+  jim:     { name: 'Jim Carrey',      role: 'Inexplicable',         av: 'JC', avClass: 'av-yellow' },
+  jeremy:  { name: 'Jeremy Wade',     role: 'Freshwater Biologist', av: 'JW', avClass: 'av-teal'   },
+  packham: { name: 'Chris Packham',   role: 'Zoologist',            av: 'CP', avClass: 'av-green'  },
+  mcnab:   { name: 'Andy McNab',      role: 'Bravo Two Zero',      av: 'AM', avClass: 'av-bark'   },
+  ryan:    { name: 'Chris Ryan',      role: 'Bravo Two Zero',      av: 'CR', avClass: 'av-bark'   },
+  billy:   { name: 'Billy Billingham', role: 'Former SAS',          av: 'BB', avClass: 'av-green'  },
+  ollie:   { name: 'Ollie Ollerton',  role: 'Former SBS',           av: 'OO', avClass: 'av-green'  },
+};
+
+function buildMorrisonInjection(morrisonPresent) {
+  if (morrisonPresent) {
+    return \\\`=== JIM MORRISON INTERRUPTION (SS-083) ===
+Morrison is in the room this round (he was here last round and stayed).
+He MUST appear in the morrison_interruption field.
+He says something \\u2014 cryptic, banal, poetic, or accidentally offensive.
+Tone: WARM (they enjoy him), AMUSED (he said something funny), ENGAGED (they asked him something), HOSTILE (he crossed a line, they attack).
+morrison_interruption format: {"quote":"<what Morrison says>","panel_reaction":"<how the panel reacts>","tone":"WARM|AMUSED|ENGAGED|HOSTILE","morrison_present":<bool>}\\\`;
+  }
+  return \\\`=== JIM MORRISON INTERRUPTION (SS-083 + SS-099) ===
+Morrison is the corridor guide. He occasionally wanders into panel sessions uninvited.
+TRIGGER RULES: ~20% base chance. If predicament/discussion contains: "door", "doors", "the end", "death", "die", "snake", "desert", "fire", "light", "truth", "lie", "alibi" \\u2014 chance increases to ~80%.
+If he appears: include morrison_interruption in the output.
+If he does not appear: set morrison_interruption to null.
+morrison_interruption format (or null): {"quote":"<what Morrison says>","panel_reaction":"<how the panel reacts>","tone":"WARM|AMUSED|ENGAGED|HOSTILE","morrison_present":<bool>}\\\`;
+}
+
+const State = {
+  protagonist1: null,
+  protagonist2: null,
+  event: '',
+  morrisonPresent: false,
+  composureState: null,
+  panelCharIds: [],
+  turnHistory: [],
+  turnCount: 0,
+  setProtagonist1(id) { this.protagonist1 = id; },
+  setProtagonist2(id) { this.protagonist2 = id; },
+  setEvent(v)  { this.event = v.trim(); },
+  setComposureState(cs) { this.composureState = cs; },
+  setPanelCharIds(ids) { this.panelCharIds = ids; },
+  clear() { this.protagonist1 = null; this.protagonist2 = null; this.event = ''; this.morrisonPresent = false; this.composureState = null; this.panelCharIds = []; this.turnHistory = []; this.turnCount = 0; },
+  isReady() { return this.protagonist1 && this.protagonist2 && this.protagonist1 !== this.protagonist2 && this.event.length > 0; },
+};
+
+const UI = {
+  updateDisabled() {
+    document.querySelectorAll('#chips-protagonist-2 .chip-protagonist').forEach(c => {
+      if (State.protagonist1 && c.dataset.id === State.protagonist1) {
+        c.classList.add('disabled');
+        c.classList.remove('sel');
+        if (State.protagonist2 === c.dataset.id) State.protagonist2 = null;
+      } else {
+        c.classList.remove('disabled');
+      }
+    });
+    document.querySelectorAll('#chips-protagonist-1 .chip-protagonist').forEach(c => {
+      if (State.protagonist2 && c.dataset.id === State.protagonist2) {
+        c.classList.add('disabled');
+        c.classList.remove('sel');
+        if (State.protagonist1 === c.dataset.id) State.protagonist1 = null;
+      } else {
+        c.classList.remove('disabled');
+      }
+    });
+  },
+  setSubmitEnabled(v) { document.getElementById('btn-submit').disabled = !v; },
+  showLoading() {
+    document.getElementById('results').classList.add('show');
+    document.getElementById('loading').style.display = 'block';
+    document.getElementById('result-block').style.display = 'none';
+    document.getElementById('error-msg').classList.remove('show');
+  },
+  showError(msg) {
+    document.getElementById('loading').style.display = 'none';
+    var el = document.getElementById('error-msg');
+    el.textContent = msg;
+    el.classList.add('show');
+  },
+  renderResults(data) {
+    document.getElementById('loading').style.display = 'none';
+
+    // Attenborough opening
+    var opening = document.getElementById('att-opening');
+    opening.innerHTML = '<div class="att-bookend"><div class="att-av">DA</div><div style="flex:1"><div class="att-name">David Attenborough</div><div class="att-text">' + (data.attenborough_opening || '') + '</div></div></div>';
+
+    // Accounts
+    var accountsEl = document.getElementById('accounts-out');
+    accountsEl.innerHTML = '';
+    [data.account_1, data.account_2].forEach(function(acct) {
+      if (!acct) return;
+      var char = CHARACTERS[acct.charId];
+      if (!char) return;
+      accountsEl.innerHTML += '<div class="panel-card account">' +
+        '<div class="av ' + char.avClass + '">' + char.av + '</div>' +
+        '<div class="card-meta">' +
+          '<div class="card-name"><span>' + char.name + '</span><span style="opacity:0.5">' + char.role + '</span><span class="badge-account">ACCOUNT</span></div>' +
+          '<div class="card-text">' + acct.text + '</div>' +
+        '</div></div>';
+    });
+
+    // Jury panel cards
+    var cardsEl = document.getElementById('cards-out');
+    cardsEl.innerHTML = '';
+    (data.panel || []).forEach(function(r) {
+      var char = CHARACTERS[r.charId];
+      if (!char) return;
+      var reactsHtml = r.reacts_to && r.reacts_to.charId && CHARACTERS[r.reacts_to.charId]
+        ? '<div class="thread-indicator reacts-to">\\u21b3 re: ' + CHARACTERS[r.reacts_to.charId].name + '</div>'
+        : '';
+      cardsEl.innerHTML += '<div class="panel-card' + (r.reacts_to ? ' has-reference' : '') + '">' +
+        '<div class="av ' + char.avClass + '">' + char.av + '</div>' +
+        '<div class="card-meta">' +
+          '<div class="card-name"><span>' + char.name + '</span><span style="opacity:0.5">' + char.role + '</span><span class="badge-jury">JURY</span></div>' +
+          reactsHtml +
+          '<div class="card-text">' + r.text + '</div>' +
+        '</div></div>';
+    });
+
+    // Morrison interruption
+    var morrisonEl = document.getElementById('morrison-interruption');
+    if (data.morrison_interruption && data.morrison_interruption.quote) {
+      var m = data.morrison_interruption;
+      var toneClass = m.tone === 'HOSTILE' ? 'morrison-hostile' : 'morrison-warm';
+      morrisonEl.innerHTML = '<div class="morrison-card ' + toneClass + '">' +
+        '<div class="av av-morrison">JM</div>' +
+        '<div class="card-meta">' +
+          '<div class="card-name"><span>Jim Morrison</span><span style="opacity:0.5">Corridor Guide</span></div>' +
+          '<div class="card-text morrison-quote-text">"' + m.quote + '"</div>' +
+          '<div class="morrison-reaction">' + m.panel_reaction + '</div>' +
+        '</div></div>';
+      morrisonEl.style.display = 'block';
+      State.morrisonPresent = !!m.morrison_present;
+    } else {
+      morrisonEl.innerHTML = '';
+      morrisonEl.style.display = 'none';
+      State.morrisonPresent = false;
+    }
+
+    // Multi-turn: LET THEM DIG
+    if (!State.turnHistory) State.turnHistory = [];
+    State.turnHistory.push({
+      account1Summary: (data.account_1 ? data.account_1.charId + ': ' + (data.account_1.text || '').slice(0, 100) : ''),
+      account2Summary: (data.account_2 ? data.account_2.charId + ': ' + (data.account_2.text || '').slice(0, 100) : ''),
+      panelSummary: (data.panel || []).map(function(r) { return (r.charId || '') + ': ' + (r.text || '').slice(0, 80); }).join('; ')
+    });
+    State.turnCount = (State.turnCount || 0) + 1;
+
+    var digEl = document.getElementById('dig-block');
+    if (State.turnCount < 5) {
+      digEl.innerHTML = '<button class="btn-dig" id="btn-dig">CROSS-EXAMINE</button>';
+      digEl.style.display = 'block';
+      document.getElementById('btn-dig').addEventListener('click', async function() {
+        digEl.style.display = 'none';
+        document.getElementById('att-terminal').style.display = 'none';
+        document.getElementById('loading').style.display = 'block';
+        try {
+          var nextData = await API.submit(State.event, State.protagonist1, State.protagonist2, State.turnCount + 1, State.turnHistory);
+          if (nextData.composureState) State.setComposureState(nextData.composureState);
+          if (nextData.panel) State.setPanelCharIds((nextData.panel || []).map(function(r) { return r.charId; }).filter(Boolean));
+          UI.renderResults(nextData);
+        } catch (err) {
+          document.getElementById('error-msg').textContent = "The panel couldn't reconvene. Try again.";
+          document.getElementById('error-msg').classList.add('show');
+          document.getElementById('loading').style.display = 'none';
+        }
+      });
+    } else {
+      digEl.innerHTML = '<div class="dig-closed">The hearing is closed. Attenborough has ruled.</div>';
+      digEl.style.display = 'block';
+    }
+
+    // Attenborough verdict
+    var terminalEl = document.getElementById('att-terminal');
+    var terminalText = document.getElementById('att-terminal-text');
+    if (data.attenborough_verdict) {
+      terminalText.textContent = data.attenborough_verdict;
+      terminalEl.style.display = 'flex';
+    }
+
+    document.getElementById('result-block').style.display = 'block';
+  },
+  clearResults() {
+    document.getElementById('results').classList.remove('show');
+    document.getElementById('result-block').style.display = 'none';
+    document.getElementById('loading').style.display = 'block';
+    document.getElementById('att-opening').innerHTML = '';
+    document.getElementById('accounts-out').innerHTML = '';
+    document.getElementById('cards-out').innerHTML = '';
+    document.getElementById('att-terminal').style.display = 'none';
+    document.getElementById('dig-block').style.display = 'none';
+    document.getElementById('morrison-interruption').style.display = 'none';
+    document.getElementById('error-msg').classList.remove('show');
+    State.turnHistory = [];
+    State.turnCount = 0;
+  },
+};
+
+const API = {
+  buildSystemPrompt(protagonist1, protagonist2, morrisonPresent, turn, history) {
+    var char1 = CHARACTERS[protagonist1];
+    var char2 = CHARACTERS[protagonist2];
+    var name1 = char1 ? char1.name : protagonist1;
+    var name2 = char2 ? char2.name : protagonist2;
+    turn = turn || 1;
+    history = history || [];
+    var morrisonInjection = buildMorrisonInjection(morrisonPresent);
+    var escalationCharIds = [protagonist1, protagonist2].concat(State.panelCharIds).filter(function(v, i, a) { return a.indexOf(v) === i; });
+    var escalationInjection = buildEscalationInjection(escalationCharIds, turn);
+    return 'You are the Survival School panel running "The Alibi" mechanic.\\n\\n' +
+'=== THE MECHANIC ===\\n' +
+'Two characters enter the room. They were both at the same event. They each tell their version. The versions contradict.\\n' +
+'THIS IS NOT A STATIC RETELLING. Both characters are actively prosecuting each other\\u2019s version while defending their own:\\n' +
+'- They probe holes in the other\\u2019s story\\n' +
+'- They concede minor details to protect important lies ("Alright, yes, I was behind the rock \\u2014 but YOU were behind ME")\\n' +
+'- They score points, get caught, redirect\\n' +
+'- Stories drift further from reality as both optimise for winning rather than truth\\n' +
+'- Nobody ever fully concedes. But the ground shifts.\\n\\n' +
+'The rest of the panel are JUDGE AND JURY. They are not passive spectators. They:\\n' +
+'- Cross-examine both accounts \\u2014 spot inconsistencies, ask the question neither wants to answer\\n' +
+'- Take sides, then switch sides when new evidence emerges\\n' +
+'- Have their OWN arguments about what the protagonists said \\u2014 the panel has its own life\\n' +
+'- Bring their own expertise to distort the questioning (Packham asks about the animal, Fox asks about the extraction route, Faldo asks about something irrelevant with complete conviction)\\n' +
+'- Give judgement comments, talk amongst themselves, pile on when they smell blood\\n\\n' +
+'THE ROOM IS TWO ARGUMENTS SIMULTANEOUSLY:\\n' +
+'1. The alibi characters against each other\\n' +
+'2. The panel amongst themselves about what the alibi characters said\\n' +
+'These bleed into each other \\u2014 a panel argument produces a question that catches an alibi character off guard.\\n\\n' +
+'=== CHARACTER VOICES ===\\n' +
+'RAY MEARS \\u2014 Bushcraft. Measured. Notices the detail neither protagonist mentioned. Waits. Asks quietly. The question lands harder for the quiet.\\n' +
+'BEAR GRYLLS \\u2014 Former SAS. Takes sides immediately and loudly. Switches when new evidence emerges. Does not acknowledge the switch.\\n' +
+'JASON FOX \\u2014 SBS. Cold. "Walk me through the timeline again." Does not take sides. Takes notes. The notes are the judgement.\\n' +
+'LES HIDDINS \\u2014 Bush Tucker Man. Three words. "Both wrong." Silence. Returns to it.\\n' +
+'CODY LUNDIN \\u2014 Primitive skills. Asks about the conditions, the footwear, the preparation. Both stories fail his standard.\\n' +
+'LES STROUD \\u2014 Survivorman. "I was alone in worse." Not helpful. Not intended to be. The camera was rolling.\\n' +
+'AUSTIN STEVENS \\u2014 Snakemaster. "Interesting." Pause. Asks the taxonomically precise question nobody expected. The answer reveals who was actually there.\\n' +
+'ANDY McNAB \\u2014 Bravo Two Zero. Reports everything flat. No emotion. The flatness is the emphasis. "And then what."\\n' +
+'CHRIS RYAN \\u2014 Bravo Two Zero. Remembers selectively. Four contradictory accounts of the same walk. Believes all of them.\\n' +
+'BILLY BILLINGHAM \\u2014 Former SAS. Grades both accounts against operational standards. Both fail. "You\\u2019re both prats."\\n' +
+'OLLIE OLLERTON \\u2014 Former SBS. Admits what nobody else will. "I\\u2019ve done worse. I\\u2019ll say it if you won\\u2019t."\\n' +
+'CHRIS PACKHAM \\u2014 Zoologist. Does not care who started the fire. Cares that the fire was near a nesting site. Ethical Override fires on animal harm.\\n' +
+'PROF BRIAN COX \\u2014 Theoretical Physics. Explains the thermodynamics of the disputed event. Correct. Irrelevant. Cannot stop.\\n' +
+'SIR NICK FALDO \\u2014 Golf. Applies golf methodology to cross-examination. "The key question is: where were your hands at the point of impact?"\\n' +
+'JIM CARREY \\u2014 Inexplicable. Takes a side with total conviction. The side keeps changing. Makes noises.\\n' +
+'JEREMY WADE \\u2014 Freshwater Biologist. "Was there a river nearby." Not a question. Produces the notebook. Writes something.\\n\\n' +
+'=== CROSS-CHARACTER REFERENCES (SS-060) ===\\n' +
+'Where a character has a strong established relationship with another panellist, they may reference them directly \\u2014 once, briefly.\\n' +
+'Include optional "reacts_to": {"charId":"<id>","register":"endorsement|quiet_disagreement|silence_noted|deflation|builds_on"}\\n\\n' +
+(turn > 1 ? 'This is round ' + turn + '. Both protagonists have already given ' + (turn - 1) + ' account(s). Each round: stories drift further, the panel digs deeper, new contradictions emerge. NEVER repeat previous material. Escalate only.\\n' : 'This is the first round.\\n') +
+(history.length > 0 ? 'PREVIOUS ROUNDS:\\n' + history.map(function(h, i) { return 'Round ' + (i+1) + ' \\u2014 ' + h.account1Summary + ' | ' + h.account2Summary + ' | Panel: ' + h.panelSummary; }).join('\\n') + '\\n' : '') +
+'\\n=== CRITICAL RULES ===\\n' +
+'The two protagonists are ' + name1 + ' (charId: ' + protagonist1 + ') and ' + name2 + ' (charId: ' + protagonist2 + '). Both MUST appear as accounts.\\n' +
+'The panel (jury) must have at least 2 members who are NOT the protagonists. They cross-examine, argue, and judge.\\n' +
+'Attenborough does NOT appear in accounts or panel. He bookends.\\n' +
+'Characters are sincere. They do not know they are in a mechanic. They genuinely believe their version.\\n' +
+'The comedy is structural \\u2014 from the contradictions and the panel\\u2019s inability to resolve them.\\n' +
+'\\nVALID charIds: ray, bear, fox, hales, cody, stroud, stevens, cox, faldo, jim, jeremy, packham, mcnab, ryan, billy, ollie\\n\\n' +
+morrisonInjection +
+'\\n\\n' + escalationInjection +
+'\\n\\n${SOCIAL_DYNAMICS_ENGINE}\\n\\n' +
+'OUTPUT \\u2014 valid JSON only, no markdown:\\n' +
+'{"attenborough_opening":"<one sentence, nature doc, two specimens of the same species presenting irreconcilable accounts of the same event>","account_1":{"charId":"' + protagonist1 + '","text":"<3-4 sentences \\u2014 their version, specific details, confident, contradicts account_2>"},"account_2":{"charId":"' + protagonist2 + '","text":"<3-4 sentences \\u2014 their version, specific details, equally confident, contradicts account_1>"},"panel":[{"charId":"<jury member id>","text":"<2-3 sentences \\u2014 cross-examination, judgement, or argument with another panel member>","reacts_to":{"charId":"<id>","register":"<type>"}}],"attenborough_verdict":"<one sentence \\u2014 geological calm, the truth remains unknown, will remain unknown, has perhaps never existed>","panel_tension":{"type":"wound_reference|lie|callout|wolf_pack|none","subject":"<charId or empty>","by":["<charId>"],"note":"<one line or empty>"},"morrison_interruption":<object or null>}';
+  },
+
+  async submit(event, protagonist1, protagonist2, turn, history) {
+    var morrisonPresent = State.morrisonPresent || false;
+    var system = API.buildSystemPrompt(protagonist1, protagonist2, morrisonPresent, turn || 1, history || []);
+    var response = await fetch(WORKER_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ system: system, event: event, protagonist1: protagonist1, protagonist2: protagonist2, morrison_present: morrisonPresent, composureState: State.composureState }),
+    });
+    if (!response.ok) throw new Error('Worker error ' + response.status);
+    return response.json();
+  },
+};
+
+// === event wiring ===
+
+document.querySelectorAll('#chips-protagonist-1 .chip-protagonist').forEach(function(chip) {
+  chip.addEventListener('click', function() {
+    document.querySelectorAll('#chips-protagonist-1 .chip-protagonist').forEach(function(c) { c.classList.remove('sel'); });
+    chip.classList.add('sel');
+    State.setProtagonist1(chip.dataset.id);
+    UI.updateDisabled();
+    UI.setSubmitEnabled(State.isReady());
+    if (!State.protagonist2) {
+      var p2 = document.getElementById('chips-protagonist-2');
+      if (p2) p2.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  });
+});
+
+document.querySelectorAll('#chips-protagonist-2 .chip-protagonist').forEach(function(chip) {
+  chip.addEventListener('click', function() {
+    if (chip.classList.contains('disabled')) return;
+    document.querySelectorAll('#chips-protagonist-2 .chip-protagonist').forEach(function(c) { c.classList.remove('sel'); });
+    chip.classList.add('sel');
+    State.setProtagonist2(chip.dataset.id);
+    UI.updateDisabled();
+    UI.setSubmitEnabled(State.isReady());
+  });
+});
+
+document.querySelectorAll('.chip-cat').forEach(function(cat, i) {
+  if (i === 0) cat.classList.add('open');
+  cat.addEventListener('click', function() { cat.classList.toggle('open'); });
+});
+
+document.querySelectorAll('#chips-event .chip').forEach(function(chip) {
+  chip.addEventListener('click', function() {
+    document.querySelectorAll('#chips-event .chip').forEach(function(c) { c.classList.remove('sel'); });
+    chip.classList.add('sel');
+    var input = document.getElementById('event-input');
+    input.value = chip.dataset.evt;
+    State.setEvent(chip.dataset.evt);
+    UI.setSubmitEnabled(State.isReady());
+  });
+});
+
+document.getElementById('event-input').addEventListener('input', function(e) {
+  document.querySelectorAll('#chips-event .chip').forEach(function(c) { c.classList.remove('sel'); });
+  State.setEvent(e.target.value);
+  UI.setSubmitEnabled(State.isReady());
+});
+
+document.getElementById('btn-submit').addEventListener('click', async function() {
+  if (!State.isReady()) return;
+  UI.showLoading();
+  document.getElementById('btn-submit').disabled = true;
+  try {
+    var data = await API.submit(State.event, State.protagonist1, State.protagonist2);
+    if (data.composureState) State.setComposureState(data.composureState);
+    if (data.panel) State.setPanelCharIds((data.panel || []).map(function(r) { return r.charId; }).filter(Boolean));
+    UI.renderResults(data);
+  } catch (err) {
+    UI.showError('The hearing collapsed. Try again.');
+  } finally {
+    document.getElementById('btn-submit').disabled = false;
+  }
+});
+
+function onClear() {
+  document.querySelectorAll('.chip-protagonist').forEach(function(c) { c.classList.remove('sel'); c.classList.remove('disabled'); });
+  document.querySelectorAll('#chips-event .chip').forEach(function(c) { c.classList.remove('sel'); });
+  document.getElementById('event-input').value = '';
+  State.clear();
+  UI.setSubmitEnabled(false);
+  UI.clearResults();
+  document.getElementById('share-feedback').classList.remove('show');
+}
+
+function buildShareText() {
+  var char1 = CHARACTERS[State.protagonist1];
+  var char2 = CHARACTERS[State.protagonist2];
+  var name1 = char1 ? char1.name : State.protagonist1;
+  var name2 = char2 ? char2.name : State.protagonist2;
+  var evt = State.event;
+  var attOpening = document.querySelector('#att-opening .att-text');
+  attOpening = attOpening ? attOpening.textContent : '';
+  var accounts = Array.from(document.querySelectorAll('#accounts-out .card-text')).slice(0, 2);
+  var accNames = Array.from(document.querySelectorAll('#accounts-out .card-name span:first-child')).slice(0, 2);
+  var accLines = accounts.map(function(c, i) { return (accNames[i] ? accNames[i].textContent : '') + ': "' + c.textContent + '"'; }).join('\\n');
+  var attTerminal = document.getElementById('att-terminal-text');
+  attTerminal = attTerminal ? attTerminal.textContent : '';
+  var lines = [];
+  lines.push(name1 + ' vs ' + name2 + ' \\u2014 The Alibi');
+  lines.push('');
+  lines.push('"' + evt.slice(0, 80) + '"');
+  lines.push('');
+  lines.push('"' + attOpening + '"');
+  lines.push('\\u2014 David Attenborough');
+  lines.push('');
+  lines.push(accLines);
+  lines.push('');
+  lines.push('"' + attTerminal + '"');
+  lines.push('');
+  lines.push('Survival School \\u00b7 cusslab-api.leanspirited.workers.dev/survival-school/the-alibi');
+  return lines.join('\\n');
+}
+
+async function shareResult() {
+  var text = buildShareText();
+  var fb = document.getElementById('share-feedback');
+  try {
+    if (navigator.share) {
+      await navigator.share({ text: text });
+    } else {
+      await navigator.clipboard.writeText(text);
+      fb.style.display = 'inline';
+      setTimeout(function() { fb.style.display = 'none'; }, 2000);
+    }
+  } catch (e) {
+    try { await navigator.clipboard.writeText(text); fb.style.display = 'inline'; setTimeout(function() { fb.style.display = 'none'; }, 2000); } catch(e2) {}
+  }
+}
+</script>
+
+</body>
+</html>
+`;
+
+const SURVIVAL_SCHOOL_THE_EXPERT_WITNESS = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>The Expert Witness — Survival School</title>
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #0a0a08; --surface: #111110; --border: #1a1a18; --border-strong: #2a2a25;
+      --text: #c8c4b8; --text-muted: #6a6860; --green: #4a7a3a; --green-dim: #2a4a1a;
+      --amber: #c8a020; --amber-dim: #604800; --gold: #b8963a; --gold-dim: #5a4a1a;
+      --blood: #8b2020; --blood-dim: #4a1010; --bark: #6a5a4a;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: var(--bg); color: var(--text); font-family: 'Crimson Text', Georgia, serif; min-height: 100vh; padding: 16px; }
+    #app { max-width: 620px; margin: 0 auto; }
+    .header { text-align: center; margin-bottom: 1.5rem; }
+    .room-number { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 3px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px; }
+    .title { font-family: 'Crimson Text', Georgia, serif; font-size: 38px; font-weight: 600; color: var(--gold); letter-spacing: 2px; line-height: 1.1; }
+    .title span { font-style: italic; }
+    .subtitle { font-size: 15px; color: var(--text-muted); margin-top: 6px; line-height: 1.5; }
+    .field-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 2px; color: var(--text-muted); text-transform: uppercase; margin: 1rem 0 6px; }
+    .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 6px; }
+    .chip { font-family: 'IBM Plex Mono', monospace; font-size: 11px; padding: 6px 12px; border: 0.5px solid var(--border-strong); border-radius: 5px; background: var(--surface); color: var(--text-muted); cursor: pointer; transition: all 0.15s; }
+    .chip:hover { border-color: var(--green); color: var(--text); }
+    .chip.sel { border-color: var(--green); color: var(--green); background: rgba(74,122,58,0.1); }
+    .chip-expert { font-size: 11px; }
+    .chip-cat-group { margin-bottom: 2px; }
+    .chip-cat { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1px; color: var(--text-muted); cursor: pointer; padding: 6px 0; user-select: none; }
+    .chip-cat::before { content: '+ '; }
+    .chip-cat.open::before { content: '- '; }
+    .chip-cat-body { display: none; flex-wrap: wrap; gap: 6px; padding: 4px 0 8px; }
+    .chip-cat.open + .chip-cat-body { display: flex; }
+    textarea { width: 100%; background: var(--surface); border: 0.5px solid var(--border-strong); border-radius: 6px; color: var(--text); font-family: 'Crimson Text', Georgia, serif; font-size: 14px; padding: 10px 14px; line-height: 1.5; resize: vertical; }
+    textarea:focus { outline: none; border-color: var(--green); }
+    .btn-row { display: flex; gap: 8px; margin-top: 12px; justify-content: center; }
+    .btn-submit { font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 2px; padding: 10px 24px; border: 0.5px solid var(--green); border-radius: 5px; background: transparent; color: var(--green); cursor: pointer; transition: all 0.15s; text-transform: uppercase; }
+    .btn-submit:hover:not(:disabled) { background: rgba(74,122,58,0.15); }
+    .btn-submit:disabled { opacity: 0.3; cursor: default; }
+    .btn-clear { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 1px; padding: 8px 18px; border: 0.5px solid var(--border-strong); border-radius: 5px; background: none; cursor: pointer; color: var(--text-muted); }
+    .btn-clear:hover { color: var(--text); border-color: var(--green); }
+    .results { margin-top: 1.5rem; display: none; }
+    .results.show { display: block; }
+    .loading { text-align: center; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-muted); letter-spacing: 2px; padding: 20px 0; }
+    .dots::after { content: '...'; animation: pulse 1.2s infinite; }
+    @keyframes pulse { 0%,100% { opacity: 0.3; } 50% { opacity: 1; } }
+    .panel-label { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 2px; color: var(--text-muted); text-transform: uppercase; margin: 1.2rem 0 6px; opacity: 0.5; }
+    .att-bookend { display: flex; align-items: flex-start; gap: 10px; padding: 12px 14px; border-radius: 8px; border: 0.5px solid var(--border); background: var(--surface); margin-bottom: 10px; }
+    .att-av { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 500; letter-spacing: 1px; border: 0.5px solid var(--border-strong); background: #0d0d0a; color: var(--text-muted); flex-shrink: 0; }
+    .att-name { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 1.5px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px; }
+    .att-text { font-size: 14px; line-height: 1.65; color: var(--text); font-style: italic; }
+    .panel-card { display: flex; align-items: flex-start; gap: 10px; padding: 12px 14px; border-radius: 8px; border: 0.5px solid var(--border); background: var(--surface); margin-bottom: 6px; transition: border-color 0.15s; }
+    .panel-card.expert-card { border-left: 2px solid var(--amber-dim); }
+    .panel-card.cracking { border-left: 2px solid var(--blood-dim); }
+    .av { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 500; letter-spacing: 1px; border: 0.5px solid var(--border-strong); flex-shrink: 0; }
+    .av-green  { background: #0a1a0a; border-color: var(--green-dim); color: var(--green); }
+    .av-bark   { background: #1a1510; border-color: #3a3020; color: var(--bark); }
+    .av-amber  { background: #1a1508; border-color: var(--amber-dim); color: var(--amber); }
+    .av-blue   { background: #0a0a1a; border-color: #1a1a4a; color: #4a5a9a; }
+    .av-yellow { background: #1a1a08; border-color: #4a4a10; color: #b8b830; }
+    .av-teal   { background: #0a2020; border-color: #1a5a50; color: #2e9e8a; }
+    .card-meta { flex: 1; min-width: 0; }
+    .card-name { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 1.5px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 5px; display: flex; gap: 8px; align-items: center; }
+    .card-name .badge-expert { font-size: 8px; letter-spacing: 1px; color: var(--amber); border: 0.5px solid var(--amber-dim); border-radius: 3px; padding: 1px 4px; }
+    .card-name .badge-deferring { font-size: 8px; letter-spacing: 1px; color: var(--text-muted); border: 0.5px solid var(--border-strong); border-radius: 3px; padding: 1px 4px; }
+    .card-name .badge-cracking { font-size: 8px; letter-spacing: 1px; color: var(--blood); border: 0.5px solid var(--blood-dim); border-radius: 3px; padding: 1px 4px; }
+    .card-text { font-size: 13.5px; line-height: 1.65; color: var(--text); }
+    .terminal-label { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 2px; color: var(--text-muted); text-transform: uppercase; margin: 1.2rem 0 6px; opacity: 0.5; }
+    .reset-row { margin-top: 1.2rem; display: flex; gap: 8px; justify-content: center; align-items: center; flex-wrap: wrap; }
+    .btn-reset { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 1px; padding: 8px 18px; border: 0.5px solid var(--border-strong); border-radius: 5px; background: none; cursor: pointer; color: var(--text-muted); transition: color 0.15s, border-color 0.15s; }
+    .btn-reset:hover { color: var(--text); border-color: var(--green); }
+    .btn-share { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 1px; padding: 8px 18px; border: 0.5px solid var(--amber-dim); border-radius: 5px; background: none; cursor: pointer; color: var(--amber); transition: color 0.15s, border-color 0.15s; }
+    .btn-share:hover { border-color: var(--amber); }
+    .share-feedback { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--green); letter-spacing: 1px; display: none; }
+    .share-feedback.show { display: inline; }
+    .error-msg { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--blood); padding: 10px 14px; border: 0.5px solid var(--blood-dim); border-radius: 6px; margin-top: 12px; display: none; }
+    .error-msg.show { display: block; }
+    .btn-dig { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 2px; padding: 10px 20px; border: 0.5px solid var(--amber-dim); border-radius: 5px; background: transparent; color: var(--amber); cursor: pointer; transition: all 0.15s; display: block; margin: 12px auto; text-transform: uppercase; }
+    .btn-dig:hover { border-color: var(--amber); background: rgba(90,60,10,0.2); }
+    .dig-closed { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-muted); text-align: center; margin: 12px 0; opacity: 0.7; }
+    .morrison-card { display: flex; align-items: flex-start; gap: 12px; padding: 12px 14px; border-radius: 8px; margin: 12px 0; transition: border-color 0.2s; }
+    .morrison-warm { border: 0.5px solid var(--gold-dim); background: rgba(90,60,10,0.15); }
+    .morrison-hostile { border: 0.5px solid var(--blood-dim); background: rgba(60,10,10,0.15); }
+    .av-morrison { background: #1a1510; border-color: var(--gold-dim); color: var(--gold); }
+    .morrison-quote-text { font-style: italic; color: var(--gold); }
+    .morrison-hostile .morrison-quote-text { color: var(--blood); }
+    .morrison-reaction { font-size: 12px; color: var(--text-muted); margin-top: 6px; font-style: italic; }
+    .nav-back { display: inline-block; font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1px; color: var(--text-muted); text-decoration: none; margin-bottom: 1rem; transition: color 0.15s; }
+    .nav-back:hover { color: var(--green); }
+    @media (max-width: 480px) {
+      .title { font-size: 28px; }
+      .panel-card { padding: 10px 12px; }
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+
+  <a class="nav-back" href="/survival-school">\\u2190 SURVIVAL SCHOOL</a>
+
+  <div class="header">
+    <div class="room-number">ROOM 16 \\u00b7 THE DOORS</div>
+    <div class="title">THE EXPERT <span>WITNESS</span></div>
+    <div class="subtitle">Someone has been introduced as the expert. The real experts are deferring. Everyone knows.</div>
+  </div>
+
+  <div class="field-label">Who is the "expert"?</div>
+  <div class="chips" id="chips-expert">
+    <button class="chip chip-expert" data-id="cox"      data-name="Prof Brian Cox">Prof Brian Cox</button>
+    <button class="chip chip-expert" data-id="faldo"    data-name="Sir Nick Faldo">Sir Nick Faldo</button>
+    <button class="chip chip-expert" data-id="jim"      data-name="Jim Carrey">Jim Carrey</button>
+    <button class="chip chip-expert" data-id="hawking"  data-name="Stephen Hawking">Stephen Hawking</button>
+    <button class="chip chip-expert" data-id="lee"      data-name="Bruce Lee">Bruce Lee</button>
+    <button class="chip chip-expert" data-id="bristow"  data-name="Eric Bristow">Eric Bristow</button>
+    <button class="chip chip-expert" data-id="keane"    data-name="Roy Keane">Roy Keane</button>
+  </div>
+
+  <div class="field-label" style="margin-top:18px">THE SCENARIO</div>
+  <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text-muted);margin-bottom:6px;line-height:1.5;opacity:0.7;">What survival situation requires expert guidance? The more specialised, the more the deference hurts.</div>
+  <textarea id="scenario-input" placeholder="A situation requiring genuine expertise that the expert does not have..." rows="2"></textarea>
+
+  <div id="chips-scenario" style="margin-top:8px">
+    <div class="chip-cat-group">
+      <div class="chip-cat">Medical</div>
+      <div class="chip-cat-body">
+        <button class="chip" data-scn="A venomous snake bite in the Australian outback. The expert must identify the species, assess the envenomation, and advise on treatment.">snake bite treatment</button>
+        <button class="chip" data-scn="Severe hypothermia after falling through ice. The expert must direct the rewarming procedure and assess cardiac risk.">hypothermia rewarming</button>
+        <button class="chip" data-scn="A suspected spinal injury after a fall from a cliff face. The expert must advise on immobilisation and extraction.">spinal injury extraction</button>
+      </div>
+    </div>
+    <div class="chip-cat-group">
+      <div class="chip-cat">Survival</div>
+      <div class="chip-cat-body">
+        <button class="chip" data-scn="Building a shelter from scratch in freezing rain with limited materials. The expert must direct the construction.">shelter construction</button>
+        <button class="chip" data-scn="A river crossing with a strong current and unknown depth. The expert must choose the crossing point and technique.">river crossing</button>
+        <button class="chip" data-scn="Identifying which of six wild plants are safe to eat. The expert must classify each one with confidence.">plant identification</button>
+      </div>
+    </div>
+    <div class="chip-cat-group">
+      <div class="chip-cat">Tactical</div>
+      <div class="chip-cat-body">
+        <button class="chip" data-scn="A hostage rescue briefing. The expert must present the entry plan, assign roles, and identify the threat.">hostage rescue briefing</button>
+        <button class="chip" data-scn="Navigating through dense jungle with no GPS, no compass, and fading light. The expert must choose the route.">jungle navigation</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn-submit" id="btn-submit" disabled>CALL THE EXPERT</button>
+    <button class="btn-clear" onclick="onClear()">CLEAR</button>
+  </div>
+
+  <div class="error-msg" id="error-msg"></div>
+
+  <div class="results" id="results">
+    <div class="loading" id="loading">
+      <span>THE EXPERT IS PREPARING</span><span class="dots"></span>
+    </div>
+    <div id="result-block" style="display:none">
+      <div id="att-opening"></div>
+      <div class="panel-label">THE EXPERT ANALYSIS</div>
+      <div id="expert-out"></div>
+      <div class="panel-label">THE REAL EXPERTS (DEFERRING)</div>
+      <div id="cards-out"></div>
+      <div id="morrison-interruption" style="display:none"></div>
+      <div id="dig-block" style="display:none"></div>
+      <div class="terminal-label">ATTENBOROUGH OBSERVES</div>
+      <div class="att-bookend" id="att-terminal" style="display:none">
+        <div class="att-av">DA</div>
+        <div style="flex:1">
+          <div class="att-name">David Attenborough</div>
+          <div class="att-text" id="att-terminal-text"></div>
+        </div>
+      </div>
+      <div class="reset-row">
+        <button class="btn-reset" onclick="onClear()">CALL ANOTHER EXPERT</button>
+        <button class="btn-share" onclick="shareResult()">SHARE</button>
+        <span class="share-feedback" id="share-feedback">COPIED</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+var WORKER_ENDPOINT = 'https://cusslab-api.leanspirited.workers.dev/survival-school/the-expert-witness';
+
+var CHARACTERS = {
+  ray:     { name: 'Ray Mears',       role: 'Bushcraft',            av: 'RM', avClass: 'av-green' },
+  bear:    { name: 'Bear Grylls',     role: 'Former SAS',           av: 'BG', avClass: 'av-bark'  },
+  cody:    { name: 'Cody Lundin',     role: 'Primitive Skills',     av: 'CL', avClass: 'av-green' },
+  hales:   { name: 'Les Hiddins',     role: 'Bush Tucker Man',      av: 'LH', avClass: 'av-amber' },
+  fox:     { name: 'Jason Fox',       role: 'Special Boat Service', av: 'JF', avClass: 'av-green' },
+  stroud:  { name: 'Les Stroud',      role: 'Survivorman',          av: 'LS', avClass: 'av-blue'  },
+  stevens: { name: 'Austin Stevens',  role: 'Snakemaster',          av: 'AS', avClass: 'av-bark'  },
+  packham: { name: 'Chris Packham',   role: 'Zoologist',            av: 'CP', avClass: 'av-green'  },
+  cox:     { name: 'Prof Brian Cox',  role: 'Theoretical Physics',  av: 'BC', avClass: 'av-blue'   },
+  faldo:   { name: 'Sir Nick Faldo',  role: 'Golf',                 av: 'NF', avClass: 'av-green'  },
+  jim:     { name: 'Jim Carrey',      role: 'Inexplicable',         av: 'JC', avClass: 'av-yellow' },
+  hawking: { name: 'Stephen Hawking', role: 'Theoretical Physics',  av: 'SH', avClass: 'av-blue'   },
+  lee:     { name: 'Bruce Lee',       role: 'Martial Arts',         av: 'BL', avClass: 'av-amber'  },
+  bristow: { name: 'Eric Bristow',    role: 'Darts',                av: 'EB', avClass: 'av-bark'   },
+  keane:   { name: 'Roy Keane',       role: 'Football',             av: 'RK', avClass: 'av-green'  },
+  jeremy:  { name: 'Jeremy Wade',     role: 'Freshwater Biologist', av: 'JW', avClass: 'av-teal'   },
+};
+
+function buildMorrisonInjection(morrisonPresent) {
+  if (morrisonPresent) {
+    return '\\n=== JIM MORRISON INTERRUPTION ===\\nMorrison is in the room. He MUST appear in morrison_interruption.\\nmorrison_interruption format: {"quote":"<what Morrison says>","panel_reaction":"<reaction>","tone":"WARM|AMUSED|ENGAGED|HOSTILE","morrison_present":<bool>}';
+  }
+  return '\\n=== JIM MORRISON INTERRUPTION ===\\nMorrison is the corridor guide. ~20% chance of appearing. If topic contains "expert", "truth", "knowledge", "professor", "doctor", "death", "door" \\u2014 chance increases to ~80%.\\nIf he appears: include morrison_interruption. If not: set to null.\\nmorrison_interruption format (or null): {"quote":"<string>","panel_reaction":"<string>","tone":"WARM|AMUSED|ENGAGED|HOSTILE","morrison_present":<bool>}';
+}
+
+const State = {
+  expert: null,
+  scenario: '',
+  morrisonPresent: false,
+  composureState: null,
+  panelCharIds: [],
+  turnHistory: [],
+  turnCount: 0,
+  setExpert(id) { this.expert = id; },
+  setScenario(v) { this.scenario = v.trim(); },
+  setComposureState(cs) { this.composureState = cs; },
+  setPanelCharIds(ids) { this.panelCharIds = ids; },
+  clear() { this.expert = null; this.scenario = ''; this.morrisonPresent = false; this.composureState = null; this.panelCharIds = []; this.turnHistory = []; this.turnCount = 0; },
+  isReady() { return this.expert && this.scenario.length > 0; },
+};
+
+const UI = {
+  setSubmitEnabled(v) { document.getElementById('btn-submit').disabled = !v; },
+  showLoading() {
+    document.getElementById('results').classList.add('show');
+    document.getElementById('loading').style.display = 'block';
+    document.getElementById('result-block').style.display = 'none';
+    document.getElementById('error-msg').classList.remove('show');
+  },
+  showError(msg) {
+    document.getElementById('loading').style.display = 'none';
+    var el = document.getElementById('error-msg');
+    el.textContent = msg;
+    el.classList.add('show');
+  },
+  renderResults(data) {
+    document.getElementById('loading').style.display = 'none';
+
+    // Attenborough opening
+    var opening = document.getElementById('att-opening');
+    opening.innerHTML = '<div class="att-bookend"><div class="att-av">DA</div><div style="flex:1"><div class="att-name">David Attenborough</div><div class="att-text">' + (data.attenborough_opening || '') + '</div></div></div>';
+
+    // Expert analysis
+    var expertEl = document.getElementById('expert-out');
+    expertEl.innerHTML = '';
+    if (data.expert_analysis) {
+      var ec = CHARACTERS[data.expert_analysis.charId];
+      if (ec) {
+        expertEl.innerHTML = '<div class="panel-card expert-card">' +
+          '<div class="av ' + ec.avClass + '">' + ec.av + '</div>' +
+          '<div class="card-meta">' +
+            '<div class="card-name"><span>' + ec.name + '</span><span style="opacity:0.5">' + ec.role + '</span><span class="badge-expert">EXPERT</span></div>' +
+            '<div class="card-text">' + data.expert_analysis.text + '</div>' +
+          '</div></div>';
+      }
+    }
+
+    // Deferring panel
+    var cardsEl = document.getElementById('cards-out');
+    cardsEl.innerHTML = '';
+    (data.panel || []).forEach(function(r) {
+      var char = CHARACTERS[r.charId];
+      if (!char) return;
+      var holding = r.deference_holding !== false;
+      var badgeHtml = holding ? '<span class="badge-deferring">DEFERRING</span>' : '<span class="badge-cracking">CRACKING</span>';
+      var cardClass = holding ? '' : ' cracking';
+      cardsEl.innerHTML += '<div class="panel-card' + cardClass + '">' +
+        '<div class="av ' + char.avClass + '">' + char.av + '</div>' +
+        '<div class="card-meta">' +
+          '<div class="card-name"><span>' + char.name + '</span><span style="opacity:0.5">' + char.role + '</span>' + badgeHtml + '</div>' +
+          '<div class="card-text">' + r.text + '</div>' +
+        '</div></div>';
+    });
+
+    // Morrison
+    var morrisonEl = document.getElementById('morrison-interruption');
+    if (data.morrison_interruption && data.morrison_interruption.quote) {
+      var m = data.morrison_interruption;
+      var toneClass = m.tone === 'HOSTILE' ? 'morrison-hostile' : 'morrison-warm';
+      morrisonEl.innerHTML = '<div class="morrison-card ' + toneClass + '">' +
+        '<div class="av av-morrison">JM</div>' +
+        '<div class="card-meta">' +
+          '<div class="card-name"><span>Jim Morrison</span><span style="opacity:0.5">Corridor Guide</span></div>' +
+          '<div class="card-text morrison-quote-text">"' + m.quote + '"</div>' +
+          '<div class="morrison-reaction">' + m.panel_reaction + '</div>' +
+        '</div></div>';
+      morrisonEl.style.display = 'block';
+      State.morrisonPresent = !!m.morrison_present;
+    } else {
+      morrisonEl.innerHTML = '';
+      morrisonEl.style.display = 'none';
+      State.morrisonPresent = false;
+    }
+
+    // Multi-turn
+    if (!State.turnHistory) State.turnHistory = [];
+    State.turnHistory.push({
+      expertSummary: data.expert_analysis ? data.expert_analysis.charId + ': ' + (data.expert_analysis.text || '').slice(0, 100) : '',
+      panelSummary: (data.panel || []).map(function(r) { return (r.charId || '') + '(' + (r.deference_holding !== false ? 'deferring' : 'cracking') + '): ' + (r.text || '').slice(0, 80); }).join('; ')
+    });
+    State.turnCount = (State.turnCount || 0) + 1;
+
+    var digEl = document.getElementById('dig-block');
+    if (State.turnCount < 5) {
+      digEl.innerHTML = '<button class="btn-dig" id="btn-dig">PRESS FURTHER</button>';
+      digEl.style.display = 'block';
+      document.getElementById('btn-dig').addEventListener('click', async function() {
+        digEl.style.display = 'none';
+        document.getElementById('att-terminal').style.display = 'none';
+        document.getElementById('loading').style.display = 'block';
+        try {
+          var nextData = await API.submit(State.scenario, State.expert, State.turnCount + 1, State.turnHistory);
+          if (nextData.composureState) State.setComposureState(nextData.composureState);
+          if (nextData.panel) State.setPanelCharIds((nextData.panel || []).map(function(r) { return r.charId; }).filter(Boolean));
+          UI.renderResults(nextData);
+        } catch (err) {
+          document.getElementById('error-msg').textContent = "The expert couldn't continue. Try again.";
+          document.getElementById('error-msg').classList.add('show');
+          document.getElementById('loading').style.display = 'none';
+        }
+      });
+    } else {
+      digEl.innerHTML = '<div class="dig-closed">The consultation is over. Attenborough has observed enough.</div>';
+      digEl.style.display = 'block';
+    }
+
+    // Attenborough verdict
+    var terminalEl = document.getElementById('att-terminal');
+    var terminalText = document.getElementById('att-terminal-text');
+    if (data.attenborough_verdict) {
+      terminalText.textContent = data.attenborough_verdict;
+      terminalEl.style.display = 'flex';
+    }
+
+    document.getElementById('result-block').style.display = 'block';
+  },
+  clearResults() {
+    document.getElementById('results').classList.remove('show');
+    document.getElementById('result-block').style.display = 'none';
+    document.getElementById('loading').style.display = 'block';
+    document.getElementById('att-opening').innerHTML = '';
+    document.getElementById('expert-out').innerHTML = '';
+    document.getElementById('cards-out').innerHTML = '';
+    document.getElementById('att-terminal').style.display = 'none';
+    document.getElementById('dig-block').style.display = 'none';
+    document.getElementById('morrison-interruption').style.display = 'none';
+    document.getElementById('error-msg').classList.remove('show');
+    State.turnHistory = [];
+    State.turnCount = 0;
+  },
+};
+
+const API = {
+  buildSystemPrompt(expert, morrisonPresent, turn, history) {
+    var ec = CHARACTERS[expert];
+    var expertName = ec ? ec.name : expert;
+    turn = turn || 1;
+    history = history || [];
+    var morrisonInjection = buildMorrisonInjection(morrisonPresent);
+    var escalationCharIds = [expert].concat(State.panelCharIds).filter(function(v, i, a) { return a.indexOf(v) === i; });
+    var escalationInjection = buildEscalationInjection(escalationCharIds, turn);
+    return 'You are the Survival School panel running "The Expert Witness" mechanic.\\n\\n' +
+'=== THE MECHANIC ===\\n' +
+expertName + ' has been introduced as the expert on this survival scenario. They are not an expert. Everyone in the room knows this.\\n\\n' +
+'THE EXPERT delivers their analysis with total conviction. They apply their actual domain (physics, golf, acting, martial arts, darts, football) to the survival problem. The analysis is specific, confident, and wrong in ways that are structurally interesting \\u2014 not random nonsense, but the wrong framework applied with precision.\\n\\n' +
+'THE REAL EXPERTS DEFER. This is the mechanic. They:\\n' +
+'- Agree politely with the expert\\u2019s analysis. "Yes, that\\u2019s... one way to look at it."\\n' +
+'- Nod at terminology they know is wrong. Bite their tongue visibly.\\n' +
+'- Find the one thing the expert said that is accidentally correct and seize on it gratefully.\\n' +
+'- Defer to the expert\\u2019s authority even though they have decades of actual experience.\\n' +
+'- The deference is painful. The audience can see the experts dying inside.\\n\\n' +
+'DEFERENCE CRACKING (multi-turn):\\n' +
+(turn > 1 ? 'This is round ' + turn + '. The deference is wearing thin. By round 2-3, one expert starts to crack \\u2014 they almost correct the expert, catch themselves, defer harder. By round 4-5, someone breaks entirely and says what everyone has been thinking. Set deference_holding to false for any panel member whose deference has cracked.\\n' : 'This is the first round. Deference holds. All panel members have deference_holding: true. Nobody corrects the expert. Not yet.\\n') +
+(history.length > 0 ? 'PREVIOUS ROUNDS:\\n' + history.map(function(h, i) { return 'Round ' + (i+1) + ' \\u2014 Expert: ' + h.expertSummary + ' | Panel: ' + h.panelSummary; }).join('\\n') + '\\nNEVER repeat previous material. The expert doubles down on their framework. The deference erodes.\\n' : '') +
+'\\n=== CHARACTER VOICES (when deferring) ===\\n' +
+'RAY MEARS \\u2014 Quiet agony. Nods slowly. "That\\u2019s... certainly a perspective on fire." Has started three sentences and abandoned all of them.\\n' +
+'BEAR GRYLLS \\u2014 Agrees enthusiastically with the wrong thing. "Exactly what I would have done." It is not. He knows. He means it anyway.\\n' +
+'JASON FOX \\u2014 Silent. Face does nothing. Writes something down. The thing he wrote down is not complimentary.\\n' +
+'LES HIDDINS \\u2014 "Yep." Does not elaborate. The yep is doing enormous structural work.\\n' +
+'CODY LUNDIN \\u2014 Barefoot. Wants to throw the spear in the pool. Cannot. The expert is technically a guest. The spear hovers.\\n' +
+'LES STROUD \\u2014 "I\\u2019ve been in similar situations." He has not. He is being kind. This is unusual for Stroud.\\n' +
+'AUSTIN STEVENS \\u2014 "Interesting approach." Long pause. The pause contains everything he is not saying.\\n' +
+'CHRIS PACKHAM \\u2014 Rapid blinking. Holding back a correction that is physically causing him pain. Mumbles the correct species name under his breath.\\n' +
+'JEREMY WADE \\u2014 Has produced the notebook. Is drawing. Has stopped listening. The expert has not noticed.\\n\\n' +
+'=== THE EXPERT (' + expertName + ') ===\\n' +
+(expert === 'cox' ? 'Applies particle physics, thermodynamics, and cosmological principles. "If we model this as a closed system..." The equations are correct. The application is not. He cannot stop.' :
+ expert === 'faldo' ? 'Applies golf. Stance, grip, follow-through. "The key is weight distribution." He knows this is wrong. He commits anyway. Every suggestion is a golf metaphor that doesn\\u2019t transfer.' :
+ expert === 'jim' ? 'Cycles through Ace Ventura (has sources), The Mask (physically impossible solutions), Liar Liar (cannot stop stating the actual danger). Makes noises. The panel winces.' :
+ expert === 'hawking' ? 'Describes mass, velocity, trajectory. The synthesiser delivers the physics. The physics is correct. The survival advice derived from it is not. He does not distinguish between the two.' :
+ expert === 'lee' ? 'Assesses everything as movement, flow, physical capability. "The water is not the obstacle. Your relationship with the water is the obstacle." Beautiful. Unhelpful.' :
+ expert === 'bristow' ? '"Right, first thing \\u2014 accuracy. You need accuracy." Applies darts methodology. Stance, focus, release. Takes charge immediately. Delegates tasks based on who has "the composure for the big stage."' :
+ '"This is nothing compared to selection." Runs the briefing like a football manager. Demands commitment. Questions mental fortitude. The advice is motivational, not practical. Someone will get hurt.') +
+'\\n\\nVALID charIds: ray, bear, fox, hales, cody, stroud, stevens, packham, cox, faldo, jim, hawking, lee, bristow, keane, jeremy\\n' +
+'The expert charId "' + expert + '" MUST appear as expert_analysis. Panel must have at least 2 real experts (survivalists/naturalists) who defer.\\n' +
+'Attenborough does NOT appear in expert_analysis or panel. He bookends.\\n\\n' +
+morrisonInjection +
+'\\n\\n' + escalationInjection +
+'\\n\\n${SOCIAL_DYNAMICS_ENGINE}\\n\\n' +
+'OUTPUT \\u2014 valid JSON only, no markdown:\\n' +
+'{"attenborough_opening":"<one sentence \\u2014 nature doc, introduces the expert with the same gravitas he gives everything, which makes it worse>","expert_analysis":{"charId":"' + expert + '","text":"<3-4 sentences \\u2014 their confident, specific, wrong analysis using their actual domain framework>"},"panel":[{"charId":"<real expert id>","text":"<2-3 sentences \\u2014 deferring, agreeing, dying inside, or cracking>","deference_holding":<true if still deferring, false if cracking>}],"attenborough_verdict":"<one sentence \\u2014 geological calm, notes the consultation has concluded, does not evaluate the expert\\u2019s credentials>","panel_tension":{"type":"wound_reference|lie|callout|wolf_pack|none","subject":"<charId or empty>","by":["<charId>"],"note":"<one line or empty>"},"morrison_interruption":<object or null>}';
+  },
+
+  async submit(scenario, expert, turn, history) {
+    var morrisonPresent = State.morrisonPresent || false;
+    var system = API.buildSystemPrompt(expert, morrisonPresent, turn || 1, history || []);
+    var response = await fetch(WORKER_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ system: system, scenario: scenario, expert: expert, morrison_present: morrisonPresent, composureState: State.composureState }),
+    });
+    if (!response.ok) throw new Error('Worker error ' + response.status);
+    return response.json();
+  },
+};
+
+// === event wiring ===
+
+document.querySelectorAll('#chips-expert .chip-expert').forEach(function(chip) {
+  chip.addEventListener('click', function() {
+    document.querySelectorAll('#chips-expert .chip-expert').forEach(function(c) { c.classList.remove('sel'); });
+    chip.classList.add('sel');
+    State.setExpert(chip.dataset.id);
+    UI.setSubmitEnabled(State.isReady());
+  });
+});
+
+document.querySelectorAll('.chip-cat').forEach(function(cat, i) {
+  if (i === 0) cat.classList.add('open');
+  cat.addEventListener('click', function() { cat.classList.toggle('open'); });
+});
+
+document.querySelectorAll('#chips-scenario .chip').forEach(function(chip) {
+  chip.addEventListener('click', function() {
+    document.querySelectorAll('#chips-scenario .chip').forEach(function(c) { c.classList.remove('sel'); });
+    chip.classList.add('sel');
+    var input = document.getElementById('scenario-input');
+    input.value = chip.dataset.scn;
+    State.setScenario(chip.dataset.scn);
+    UI.setSubmitEnabled(State.isReady());
+  });
+});
+
+document.getElementById('scenario-input').addEventListener('input', function(e) {
+  document.querySelectorAll('#chips-scenario .chip').forEach(function(c) { c.classList.remove('sel'); });
+  State.setScenario(e.target.value);
+  UI.setSubmitEnabled(State.isReady());
+});
+
+document.getElementById('btn-submit').addEventListener('click', async function() {
+  if (!State.isReady()) return;
+  UI.showLoading();
+  document.getElementById('btn-submit').disabled = true;
+  try {
+    var data = await API.submit(State.scenario, State.expert);
+    if (data.composureState) State.setComposureState(data.composureState);
+    if (data.panel) State.setPanelCharIds((data.panel || []).map(function(r) { return r.charId; }).filter(Boolean));
+    UI.renderResults(data);
+  } catch (err) {
+    UI.showError('The expert couldn\\u2019t be reached. Try again.');
+  } finally {
+    document.getElementById('btn-submit').disabled = false;
+  }
+});
+
+function onClear() {
+  document.querySelectorAll('.chip-expert').forEach(function(c) { c.classList.remove('sel'); });
+  document.querySelectorAll('#chips-scenario .chip').forEach(function(c) { c.classList.remove('sel'); });
+  document.getElementById('scenario-input').value = '';
+  State.clear();
+  UI.setSubmitEnabled(false);
+  UI.clearResults();
+  document.getElementById('share-feedback').classList.remove('show');
+}
+
+function buildShareText() {
+  var ec = CHARACTERS[State.expert];
+  var expertName = ec ? ec.name : State.expert;
+  var scn = State.scenario;
+  var attOpening = document.querySelector('#att-opening .att-text');
+  attOpening = attOpening ? attOpening.textContent : '';
+  var expertText = document.querySelector('#expert-out .card-text');
+  expertText = expertText ? expertText.textContent : '';
+  var attTerminal = document.getElementById('att-terminal-text');
+  attTerminal = attTerminal ? attTerminal.textContent : '';
+  var lines = [];
+  lines.push(expertName + ' \\u2014 The Expert Witness');
+  lines.push('');
+  lines.push('"' + scn.slice(0, 80) + '"');
+  lines.push('');
+  lines.push('"' + attOpening + '"');
+  lines.push('\\u2014 David Attenborough');
+  lines.push('');
+  lines.push(expertName + ': "' + expertText.slice(0, 200) + '"');
+  lines.push('');
+  lines.push('"' + attTerminal + '"');
+  lines.push('');
+  lines.push('Survival School \\u00b7 cusslab-api.leanspirited.workers.dev/survival-school/the-expert-witness');
+  return lines.join('\\n');
+}
+
+async function shareResult() {
+  var text = buildShareText();
+  var fb = document.getElementById('share-feedback');
+  try {
+    if (navigator.share) {
+      await navigator.share({ text: text });
+    } else {
+      await navigator.clipboard.writeText(text);
+      fb.style.display = 'inline';
+      setTimeout(function() { fb.style.display = 'none'; }, 2000);
+    }
+  } catch (e) {
+    try { await navigator.clipboard.writeText(text); fb.style.display = 'inline'; setTimeout(function() { fb.style.display = 'none'; }, 2000); } catch(e2) {}
+  }
+}
+</script>
+
+</body>
+</html>
+`;
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -8952,6 +10154,12 @@ export default {
     }
     if (request.method === 'GET' && url.pathname === '/survival-school/one-man-in') {
       return new Response(SURVIVAL_SCHOOL_ONE_MAN_IN, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' }});
+    }
+    if (request.method === 'GET' && url.pathname === '/survival-school/the-alibi') {
+      return new Response(SURVIVAL_SCHOOL_THE_ALIBI, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' }});
+    }
+    if (request.method === 'GET' && url.pathname === '/survival-school/the-expert-witness') {
+      return new Response(SURVIVAL_SCHOOL_THE_EXPERT_WITNESS, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' }});
     }
     if (request.method !== 'POST') {
       return new Response('Method not allowed', { status: 405 });
@@ -9065,6 +10273,62 @@ export default {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'anthropic-version': '2023-06-01', 'x-api-key': apiKey },
         body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 2200, system, messages: [{ role: 'user', content: `Situation: ${body.situation}` }] }),
+      });
+      if (!upstream.ok) {
+        return new Response(JSON.stringify({ error: { message: `Anthropic error ${upstream.status}` } }), {
+          status: upstream.status, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
+        });
+      }
+      const anthropicData = await upstream.json();
+      const raw = anthropicData.content[0].text;
+      const text = raw.replace(/^```(?:json)?\s*/i, '').replace(/\s*```\s*$/, '').trim();
+      let parsed;
+      try { parsed = JSON.parse(text); } catch (e) {
+        return new Response(text, { status: 200, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } });
+      }
+      const baseComposure = composureState || initComposureState();
+      parsed.composureState = computeComposureDeltas(baseComposure, parsed.panel_tension);
+      return new Response(JSON.stringify(parsed), { status: 200, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }});
+    }
+    if (url.pathname === '/survival-school/the-alibi') {
+      const body = await request.json();
+      const composureState = body.composureState || null;
+      let system = body.system;
+      if (composureState) {
+        system = system + buildComposureInjection(composureState, null);
+      }
+      const upstream = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'anthropic-version': '2023-06-01', 'x-api-key': apiKey },
+        body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 2500, system, messages: [{ role: 'user', content: `Event: ${body.event}\nProtagonist 1: ${body.protagonist1}\nProtagonist 2: ${body.protagonist2}` }] }),
+      });
+      if (!upstream.ok) {
+        return new Response(JSON.stringify({ error: { message: `Anthropic error ${upstream.status}` } }), {
+          status: upstream.status, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
+        });
+      }
+      const anthropicData = await upstream.json();
+      const raw = anthropicData.content[0].text;
+      const text = raw.replace(/^```(?:json)?\s*/i, '').replace(/\s*```\s*$/, '').trim();
+      let parsed;
+      try { parsed = JSON.parse(text); } catch (e) {
+        return new Response(text, { status: 200, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } });
+      }
+      const baseComposure = composureState || initComposureState();
+      parsed.composureState = computeComposureDeltas(baseComposure, parsed.panel_tension);
+      return new Response(JSON.stringify(parsed), { status: 200, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }});
+    }
+    if (url.pathname === '/survival-school/the-expert-witness') {
+      const body = await request.json();
+      const composureState = body.composureState || null;
+      let system = body.system;
+      if (composureState) {
+        system = system + buildComposureInjection(composureState, null);
+      }
+      const upstream = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'anthropic-version': '2023-06-01', 'x-api-key': apiKey },
+        body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 2200, system, messages: [{ role: 'user', content: `Scenario: ${body.scenario}\nExpert: ${body.expert}` }] }),
       });
       if (!upstream.ok) {
         return new Response(JSON.stringify({ error: { message: `Anthropic error ${upstream.status}` } }), {
