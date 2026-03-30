@@ -7516,6 +7516,12 @@ const SURVIVAL_SCHOOL_ROOMS = `<!DOCTYPE html>
       <div class="door-badge">LIVE</div>
     </a>
 
+    <a class="door live" href="/survival-school/debate" data-morrison="Every argument I ever had ended the same way. I was right. They were gone.">
+      <div class="door-name">The Debate</div>
+      <div class="door-teaser">Two characters. One topic. Neither will back down. You pick the corners. Attenborough commentates.</div>
+      <div class="door-badge">LIVE</div>
+    </a>
+
     <a class="door live" href="/survival-school/play-as" data-morrison="I played everyone. They all played me. The difference was I meant it.">
       <div class="door-name">Play As</div>
       <div class="door-teaser">Pick a character. Be them. The panel will judge whether you stayed in register. Break character and they'll know.</div>
@@ -10744,6 +10750,214 @@ async function shareResult() {
 </html>
 `;
 
+const SURVIVAL_SCHOOL_DEBATE = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>The Debate — Survival School</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0f1209; --surface: #181d10; --surface2: #1e2514;
+      --border: rgba(120,160,60,0.15); --border-strong: rgba(120,160,60,0.3);
+      --green: #7aad3a; --amber: #BA7517; --bark: #8B6040; --blood: #cc1111;
+      --text: #e8edd8; --text-muted: #7a8a60;
+    }
+    body { font-family: 'Barlow', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+    #app { max-width: 680px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+    .header { text-align: center; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 0.5px solid var(--border); }
+    .room-number { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 6px; }
+    .title { font-family: 'Bebas Neue', sans-serif; font-size: 40px; letter-spacing: 3px; line-height: 1; }
+    .title span { color: var(--blood); }
+    .subtitle { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-muted); letter-spacing: 1.5px; margin-top: 5px; }
+    .field-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1.5px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; margin-top: 16px; }
+    .chips { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px; }
+    .chip { font-family: 'IBM Plex Mono', monospace; font-size: 11px; padding: 5px 10px; border: 0.5px solid var(--border-strong); border-radius: 5px; cursor: pointer; background: none; color: var(--text-muted); transition: all 0.15s; white-space: nowrap; user-select: none; }
+    .chip:hover, .chip.sel { border-color: var(--green); color: var(--green); }
+    .chip.sel-p1 { border-color: var(--amber); color: var(--amber); }
+    .chip.sel-p2 { border-color: var(--blood); color: var(--blood); }
+    .chip.disabled { opacity: 0.3; pointer-events: none; }
+    textarea { width: 100%; font-family: 'IBM Plex Mono', monospace; font-size: 12px; background: var(--surface); border: 0.5px solid var(--border-strong); border-radius: 5px; color: var(--text); padding: 10px; resize: vertical; margin-top: 6px; }
+    .btn { font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 2px; text-transform: uppercase; background: var(--green); color: var(--bg); border: none; padding: 10px 28px; border-radius: 5px; cursor: pointer; margin-top: 16px; transition: opacity 0.15s; }
+    .btn:disabled { opacity: 0.3; cursor: not-allowed; }
+    .btn-escalate { background: var(--blood); margin-top: 20px; }
+    .results { margin-top: 24px; }
+    .debate-side { display: flex; gap: 12px; margin-bottom: 16px; }
+    .debate-card { flex: 1; background: var(--surface); border: 0.5px solid var(--border); border-radius: 8px; padding: 14px; }
+    .debate-card.p1 { border-color: rgba(186,117,23,0.3); }
+    .debate-card.p2 { border-color: rgba(204,17,17,0.3); }
+    .card-name { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 6px; }
+    .card-name.p1 { color: var(--amber); }
+    .card-name.p2 { color: var(--blood); }
+    .card-text { font-size: 14px; line-height: 1.6; }
+    .judge-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: 8px; padding: 14px; margin-top: 12px; }
+    .judge-name { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1.5px; color: var(--green); margin-bottom: 6px; }
+    .loading { text-align: center; padding: 2rem; color: var(--text-muted); display: none; }
+    .error-msg { color: #cc4444; text-align: center; padding: 1rem; display: none; }
+    .back-link { display: block; text-align: center; margin-top: 2rem; color: var(--text-muted); font-size: 12px; text-decoration: none; }
+    .back-link:hover { color: var(--green); }
+    @media (max-width: 480px) { .debate-side { flex-direction: column; } }
+  </style>
+</head>
+<body>
+<div id="app">
+  <div class="header">
+    <div class="room-number">The Doors &middot; Room 18</div>
+    <div class="title">THE <span>DEBATE</span></div>
+    <div class="subtitle">Two characters. One topic. Neither will back down.</div>
+  </div>
+
+  <div class="field-label">Corner 1 <span style="color:var(--amber)">&bull;</span></div>
+  <div class="chips" id="chips-p1">
+    <button class="chip chip-debate" data-id="bear">Bear Grylls</button>
+    <button class="chip chip-debate" data-id="ray">Ray Mears</button>
+    <button class="chip chip-debate" data-id="fox">Jason Fox</button>
+    <button class="chip chip-debate" data-id="cody">Cody Lundin</button>
+    <button class="chip chip-debate" data-id="hales">Les Hiddins</button>
+    <button class="chip chip-debate" data-id="stroud">Les Stroud</button>
+    <button class="chip chip-debate" data-id="stevens">Austin Stevens</button>
+    <button class="chip chip-debate" data-id="cox">Prof Brian Cox</button>
+    <button class="chip chip-debate" data-id="jim">Jim Carrey</button>
+    <button class="chip chip-debate" data-id="jeremy">Jeremy Wade</button>
+  </div>
+
+  <div class="field-label">Corner 2 <span style="color:var(--blood)">&bull;</span></div>
+  <div class="chips" id="chips-p2">
+    <button class="chip chip-debate" data-id="bear">Bear Grylls</button>
+    <button class="chip chip-debate" data-id="ray">Ray Mears</button>
+    <button class="chip chip-debate" data-id="fox">Jason Fox</button>
+    <button class="chip chip-debate" data-id="cody">Cody Lundin</button>
+    <button class="chip chip-debate" data-id="hales">Les Hiddins</button>
+    <button class="chip chip-debate" data-id="stroud">Les Stroud</button>
+    <button class="chip chip-debate" data-id="stevens">Austin Stevens</button>
+    <button class="chip chip-debate" data-id="cox">Prof Brian Cox</button>
+    <button class="chip chip-debate" data-id="jim">Jim Carrey</button>
+    <button class="chip chip-debate" data-id="jeremy">Jeremy Wade</button>
+  </div>
+
+  <div class="field-label" style="margin-top:18px">The Topic</div>
+  <textarea id="topic-input" placeholder="What are they arguing about?" rows="2"></textarea>
+
+  <button class="btn" id="btn-submit" disabled>START THE DEBATE</button>
+
+  <div class="loading" id="loading">The debaters are preparing...</div>
+  <div class="error-msg" id="error-msg"></div>
+
+  <div class="results" id="results" style="display:none"></div>
+  <button class="btn btn-escalate" id="btn-escalate" style="display:none">ESCALATE</button>
+
+  <a class="back-link" href="/survival-school/rooms">&larr; THE DOORS</a>
+</div>
+<script>
+var WORKER_ENDPOINT = 'https://cusslab-api.leanspirited.workers.dev/survival-school/debate';
+var CHARACTERS = {
+  ray: { name: 'Ray Mears' }, bear: { name: 'Bear Grylls' }, fox: { name: 'Jason Fox' },
+  cody: { name: 'Cody Lundin' }, hales: { name: 'Les Hiddins' }, stroud: { name: 'Les Stroud' },
+  stevens: { name: 'Austin Stevens' }, cox: { name: 'Prof Brian Cox' },
+  jim: { name: 'Jim Carrey' }, jeremy: { name: 'Jeremy Wade' },
+};
+
+var State = {
+  p1: null, p2: null, topic: '', round: 0, history: [],
+  isReady: function() { return this.p1 && this.p2 && this.p1 !== this.p2 && this.topic.length > 0; },
+};
+
+function wireChips(containerId, side) {
+  document.querySelectorAll('#' + containerId + ' .chip-debate').forEach(function(chip) {
+    chip.addEventListener('click', function() {
+      document.querySelectorAll('#' + containerId + ' .chip-debate').forEach(function(c) { c.classList.remove('sel-' + side); });
+      chip.classList.add('sel-' + side);
+      State[side] = chip.dataset.id;
+      // Disable same char in other group
+      var other = side === 'p1' ? 'p2' : 'p1';
+      var otherId = 'chips-' + other;
+      document.querySelectorAll('#' + otherId + ' .chip-debate').forEach(function(c) {
+        c.classList.toggle('disabled', c.dataset.id === chip.dataset.id);
+      });
+      document.getElementById('btn-submit').disabled = !State.isReady();
+    });
+  });
+}
+wireChips('chips-p1', 'p1');
+wireChips('chips-p2', 'p2');
+
+document.getElementById('topic-input').addEventListener('input', function(e) {
+  State.topic = e.target.value.trim();
+  document.getElementById('btn-submit').disabled = !State.isReady();
+});
+
+function buildSystemPrompt() {
+  var c1 = CHARACTERS[State.p1] || { name: State.p1 };
+  var c2 = CHARACTERS[State.p2] || { name: State.p2 };
+  return 'You are the Survival School panel running "The Debate" mechanic.\\n\\n' +
+    '=== THE MECHANIC ===\\n' +
+    'Two characters debate a topic. Neither will concede. Both escalate.\\n' +
+    'CORNER 1: ' + c1.name + ' (charId: ' + State.p1 + ')\\n' +
+    'CORNER 2: ' + c2.name + ' (charId: ' + State.p2 + ')\\n\\n' +
+    'Each character argues from their own expertise, worldview, and register.\\n' +
+    'They do NOT agree. They do NOT find common ground. They escalate.\\n' +
+    'Each round: more specific, more committed, more personally invested.\\n' +
+    'Attenborough commentates as if observing two territorial animals.\\n\\n' +
+    'VALID charIds: ' + State.p1 + ', ' + State.p2 + '\\n\\n' +
+    (State.round > 0 ? 'This is round ' + (State.round + 1) + '. Previous rounds:\\n' + State.history.map(function(h, i) { return 'Round ' + (i+1) + ': ' + h; }).join('\\n') + '\\nESCALATE. More specific. More wrong. More committed. NEVER repeat previous material.\\n\\n' : '') +
+    '${SOCIAL_DYNAMICS_ENGINE}\\n\\n' +
+    'OUTPUT \\u2014 valid JSON only, no markdown:\\n' +
+    '{"attenborough_opening":"<one sentence \\u2014 nature doc, two specimens squaring off>","corner_1":{"charId":"' + State.p1 + '","text":"<2-3 sentences \\u2014 their argument, in register>"},"corner_2":{"charId":"' + State.p2 + '","text":"<2-3 sentences \\u2014 their counter-argument, in register>"},"attenborough_verdict":"<one sentence \\u2014 neither has conceded, the territory remains disputed>","panel_tension":{"type":"wound_reference|lie|callout|wolf_pack|none","subject":"<charId or empty>","by":["<charId>"],"note":"<one line or empty>"}}';
+}
+
+async function submitDebate() {
+  document.getElementById('btn-submit').disabled = true;
+  document.getElementById('btn-escalate').style.display = 'none';
+  document.getElementById('loading').style.display = 'block';
+  document.getElementById('error-msg').style.display = 'none';
+  try {
+    var system = buildSystemPrompt();
+    var response = await fetch(WORKER_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ system: system, topic: State.topic, p1: State.p1, p2: State.p2, round: State.round }),
+    });
+    if (!response.ok) throw new Error('Worker error ' + response.status);
+    var data = await response.json();
+    var c1 = CHARACTERS[State.p1] || { name: State.p1 };
+    var c2 = CHARACTERS[State.p2] || { name: State.p2 };
+    var html = '';
+    if (data.attenborough_opening) {
+      html += '<div class="judge-card"><div class="judge-name">David Attenborough</div><div class="card-text">' + data.attenborough_opening + '</div></div>';
+    }
+    html += '<div class="debate-side">';
+    if (data.corner_1) {
+      html += '<div class="debate-card p1"><div class="card-name p1">' + c1.name + '</div><div class="card-text">' + data.corner_1.text + '</div></div>';
+    }
+    if (data.corner_2) {
+      html += '<div class="debate-card p2"><div class="card-name p2">' + c2.name + '</div><div class="card-text">' + data.corner_2.text + '</div></div>';
+    }
+    html += '</div>';
+    if (data.attenborough_verdict) {
+      html += '<div class="judge-card"><div class="judge-name">David Attenborough</div><div class="card-text">' + data.attenborough_verdict + '</div></div>';
+    }
+    document.getElementById('results').innerHTML = html;
+    document.getElementById('results').style.display = 'block';
+    State.history.push(c1.name + ': ' + (data.corner_1 ? data.corner_1.text.slice(0, 60) : '') + '... vs ' + c2.name + ': ' + (data.corner_2 ? data.corner_2.text.slice(0, 60) : '') + '...');
+    State.round++;
+    document.getElementById('btn-escalate').style.display = 'inline-block';
+  } catch (err) {
+    document.getElementById('error-msg').textContent = 'The debaters couldn\\'t be separated. Try again.';
+    document.getElementById('error-msg').style.display = 'block';
+  }
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('btn-submit').disabled = false;
+}
+
+document.getElementById('btn-submit').addEventListener('click', function() { if (State.isReady()) submitDebate(); });
+document.getElementById('btn-escalate').addEventListener('click', submitDebate);
+</script>
+</body>
+</html>`;
+
 const SURVIVAL_SCHOOL_PLAY_AS = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11543,6 +11757,9 @@ export default {
     if (request.method === 'GET' && url.pathname === '/survival-school/panel-qa') {
       return new Response(SURVIVAL_SCHOOL_PANEL_QA, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' }});
     }
+    if (request.method === 'GET' && url.pathname === '/survival-school/debate') {
+      return new Response(SURVIVAL_SCHOOL_DEBATE, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' }});
+    }
     if (request.method === 'GET' && url.pathname === '/survival-school/play-as') {
       return new Response(SURVIVAL_SCHOOL_PLAY_AS, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' }});
     }
@@ -11783,6 +12000,31 @@ export default {
       }
       const baseComposure = composureState || initComposureState();
       parsed.composureState = computeComposureDeltas(baseComposure, parsed.panel_tension);
+      return new Response(JSON.stringify(parsed), { status: 200, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }});
+    }
+    if (url.pathname === '/survival-school/debate') {
+      const body = await request.json();
+      let system = body.system;
+      if (shouldInjectMechanics(body.system)) {
+        system = system + buildMorrisonInjectionServer(false);
+      }
+      const upstream = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'anthropic-version': '2023-06-01', 'x-api-key': apiKey },
+        body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 1800, system, messages: [{ role: 'user', content: `Debate topic: ${body.topic}` }] }),
+      });
+      if (!upstream.ok) {
+        return new Response(JSON.stringify({ error: { message: `Anthropic error ${upstream.status}` } }), {
+          status: upstream.status, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
+        });
+      }
+      const anthropicData = await upstream.json();
+      const raw = anthropicData.content[0].text;
+      const text = raw.replace(/^```(?:json)?\s*/i, '').replace(/\s*```\s*$/, '').trim();
+      let parsed;
+      try { parsed = JSON.parse(text); } catch (e) {
+        return new Response(text, { status: 200, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } });
+      }
       return new Response(JSON.stringify(parsed), { status: 200, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }});
     }
     if (url.pathname === '/survival-school/play-as') {
