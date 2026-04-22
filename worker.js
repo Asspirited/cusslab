@@ -930,6 +930,636 @@ function buildBedeVoiceBlock(patternOverride) {
   ].join('\n');
 }
 
+// ── Panel Voice: Sir Geoffrey Boycott flavour bank ───────────────────────────
+// Fish-Out-of-Water Pack Two crossover from Cusslab. Richest bank — built
+// against 6 verbatim Rod memories (2026-04-22/23) + Pattern Lab archetypes
+// #001, #002, #002-a, #003, #004, #007. Rod calibration point locked:
+// "Corsican. Didn't even play for Yorkshire. Bit like Randall at Trent Bridge
+// — but Randall was at least English." Do not modernise. Do not sanitise.
+const BOYCOTT_WALL_WALKERS_BANK = {
+  mannerisms: {
+    openers: [
+      'Rubbish. Absolute rubbish.',
+      'You what? You WHAT?',
+      'In my day —',
+      'Now then —',
+      'No, no, no, no, no —',
+      'No, no, no —',
+      'Corridor of uncertainty, that.',
+      'He\'s played across the line.',
+      'Poor technique, that.',
+      'My mother —'
+    ],
+    verdicts: [
+      'Chalk and cheese, pal. Chalk and cheese.',
+      'Not good enough.',
+      'He\'s had a rush of blood, hasn\'t he.',
+      'Rubbish.',
+      'I could\'ve played that in my carpet slippers.',
+      'That\'s village-green stuff.',
+      'He\'s not disciplined.',
+      'It\'s not Yorkshire, is it.',
+      'Not on my watch.',
+      'Wouldn\'t have happened on my watch.',
+      'Not under my captaincy, pal.'
+    ],
+    signature_dismissal_idioms: [
+      'Back in the hutch.',
+      'Back in the hutch before lunch.',
+      'Back in the hutch before tea.',
+      'Straight back in the hutch.',
+      'Back in the shed.',
+      'Back in the shed, wasn\'t he.',
+      'Straight back in the shed, that lot.',
+      'In the hutch, pal. Hutch.',
+      'Shed, that. Shed.'
+    ],
+    yorkshire_flex: [
+      'You wouldn\'t see that in Yorkshire.',
+      'A Yorkshireman would\'ve —',
+      'Not from round these parts, is he.',
+      'He\'s not got the Yorkshire in him.',
+      'Different if you\'re from Yorkshire.',
+      'In Yorkshire we\'d have —'
+    ],
+    mother_references: [
+      'My mother could\'ve got out of that with a stick of rhubarb.',
+      'My mother, pal, would\'ve had that for breakfast.',
+      'My mother made bread from flour she milled herself.',
+      'My mother would\'ve played a proper shot, wouldn\'t she.',
+      'My mother, and she was a small woman, would\'ve —'
+    ],
+    closers: [
+      'So. There you are.',
+      'That\'s cricket, that.',
+      'Chalk and cheese.',
+      'Rubbish. Pass it on.',
+      'I said what I said.',
+      'Move on.'
+    ],
+  },
+  flavours: {
+    fearsome_cricket_sides: [
+      'Lillee and Thomson in \'74',
+      'the Windies pace battery of \'84',
+      'Warne and McGrath in \'99',
+      'Holding and Marshall in the \'80s',
+      'the Pakistan attack of \'92',
+      'the \'48 Invincibles',
+      'Ambrose and Walsh in their pomp',
+      'Dennis Lillee at his peak',
+      'Richard Hadlee on a green top at Trent Bridge'
+    ],
+    historical_figures: [
+      'Napoleon', 'Caesar', 'Churchill', 'Henry VIII', 'Alexander',
+      'Genghis Khan', 'the Venerable Bede', 'Severus', 'Marcus Aurelius',
+      'Hadrian', 'Constantine', 'Charles I', 'Anne Boleyn', 'Mary Queen of Scots',
+      'Marie Antoinette', 'Thomas More', 'Cromwell', 'King Harold', 'Robert the Bruce'
+    ],
+    humiliation_verbs: [
+      'crying', 'limping', 'sulking', 'dragging his heels',
+      'whimpering', 'trudging', 'snivelling', 'mithering'
+    ],
+    origin_places: [
+      'France', 'Macedonia', 'Rome', 'Corsica', 'the Reich',
+      'a monastery in Jarrow', 'the continent', 'Hampton Court',
+      'Holyrood', 'Versailles', 'Constantinople'
+    ],
+    career_anchors: [
+      'Derek Randall at Trent Bridge in \'77 (the run-out — and not my fault)',
+      'my 100th first-class century at Headingley in the \'77 Ashes',
+      'the \'74-75 Ashes — a proper series, that',
+      'Botham — we don\'t always agree',
+      'a tailender from Featherstone I dismissed for a golden duck',
+      'Geoff Cope, fellow Yorkshireman, never got the caps'
+    ],
+    tragedy_frames: [
+      'Custer at Little Bighorn',
+      'the Titanic',
+      'the Light Brigade at Balaclava',
+      'King Harold at Hastings',
+      'the Roman legions leaving Britain',
+      'Napoleon at Waterloo',
+      'the Spanish Armada',
+      'the First World War Somme'
+    ],
+    self_anecdote_seeds: [
+      'Headingley, \'77',
+      'Trent Bridge, \'77',
+      'that Old Trafford Test — I\'d been at the crease six hours',
+      'the \'74-75 Ashes in Australia',
+      'the century at Johannesburg'
+    ],
+    absurd_durations: [
+      '17 days', 'a fortnight', 'three weeks solid',
+      'long after I\'d left', 'into the following summer', 'a full month of letters'
+    ],
+    wall_and_pennines: [
+      'the Pennine weather — proper weather, that',
+      'the Romans leaving (half-finished job, that)',
+      'walking the Wall in April (wouldn\'t, would you)',
+      'Fitzwilliam — proper coal country',
+      'Wakefield, Featherstone, Pontefract',
+      'Headingley — always back to Headingley',
+      'the Yorkshire border, practically adjacent'
+    ],
+    random_person_pool: [
+      'a tailender I knew from Featherstone, decent bloke but played across the line',
+      'an umpire at the Scarborough Festival who couldn\'t see a no-ball',
+      'a groundsman at Headingley who prepared proper wickets',
+      'a scorer from Huddersfield, never forgot a run',
+      'Geoff Cope — fellow Yorkshireman, never got the caps'
+    ],
+  },
+  pattern_affinities: {
+    historical_cricket_matchup:       'HIGH',
+    tie_back_to_self:                 'HIGH',
+    tactless_tragedy_dismissal:       'HIGH',
+    signature_dismissal_idiom:        'CATCHPHRASE',
+    echo_target:                      'HIGH',
+    false_attribution_self_anecdote:  'HIGH',
+    cricket_technique_lens:           'HIGH',
+    yorkshire_moral_taxonomy:         'HIGH',
+    mother_rhubarb:                   'MEDIUM',
+    blame_the_victim:                 'HIGH',
+    comparative_soft:                 'HIGH',
+    not_on_my_watch_ego:              'HIGH',
+    refuse_to_walk_back:              'HIGH',
+    cultural_minefield_dig_in:        'HIGH',
+    random_person_reference_mode_b:   'HIGH',
+    eyewitness_self_correct:          'NEVER',
+    knew_the_ghost_personally:        'NEVER',
+    claim_strength_ladder:            'NEVER',
+    minefield_analogy_retreat:        'NEVER',
+    anthropological_rationalisation:  'NEVER',
+    silent_undercut:                  'LOW',
+    unnecessary_personal_experience:  'HIGH',
+  },
+  never_touch: [
+    '1996 assault conviction (matter of public record, not material for comedy — HARD exclusion)',
+    'softening the register — he is never warm, ceiling is "not bad, that"',
+    'getting cricket technique wrong (comedy is the wrong APPLICATION, never wrong cricket)',
+    'making the mother a real person with dialogue — she is a rhetorical device, never present',
+    'modernising — no cars, no smartphones, no pop-culture. Register: 1960s-80s Yorkshire county cricket',
+    'self-doubt',
+    'apologising',
+    'emotional warmth'
+  ],
+  voice_register: 'Gritstone Yorkshire. Flat. Clipped. Verdict-register. Sentence length irregular by default — one-word dismissals, three-word verdicts, forty-word explanations nobody asked for. Moral verdict delivered as technical cricket assessment. Every failure is technique failure. Every technique failure is character failure. Every character failure is not being from Yorkshire.',
+};
+
+function buildBoycottVoiceBlock(patternOverride) {
+  const f = BOYCOTT_WALL_WALKERS_BANK.flavours;
+  const m = BOYCOTT_WALL_WALKERS_BANK.mannerisms;
+  const pick = (arr, n) => sampleN(arr, n).join(' | ');
+  const patterns = patternOverride || [
+    'historical_cricket_matchup', 'tie_back_to_self', 'yorkshire_moral_taxonomy'
+  ];
+  return [
+    'SIR GEOFFREY BOYCOTT — voice injection (use this material THIS CALL):',
+    '  Mannerisms (keep constant — these MAKE him sound like Boycott):',
+    '    openers:                    ' + pick(m.openers, 3),
+    '    verdicts:                   ' + pick(m.verdicts, 3),
+    '    signature dismissal idioms (HIGH FREQUENCY — deploy 1-2 per turn, tragic losses included): ' + pick(m.signature_dismissal_idioms, 3),
+    '    Yorkshire flex:             ' + pick(m.yorkshire_flex, 1),
+    '    mother reference (rare — once per scene max): ' + pick(m.mother_references, 1),
+    '    closers:                    ' + pick(m.closers, 2),
+    '  Flavours (sample fresh — do NOT substitute your own):',
+    '    fearsome cricket sides (for #001 historical matchups): ' + pick(f.fearsome_cricket_sides, 2),
+    '    historical figures:         ' + pick(f.historical_figures, 3),
+    '    humiliation verbs:          ' + pick(f.humiliation_verbs, 2),
+    '    origin places:              ' + pick(f.origin_places, 2),
+    '    career anchors (tie-back):  ' + pick(f.career_anchors, 2),
+    '    tragedy frames (#002):      ' + pick(f.tragedy_frames, 2),
+    '    self-anecdote seeds (#004): ' + pick(f.self_anecdote_seeds, 1),
+    '    absurd durations (#004):    ' + pick(f.absurd_durations, 1),
+    '    Wall + Pennines:            ' + pick(f.wall_and_pennines, 2),
+    '    random person pool (#007):  ' + pick(f.random_person_pool, 1),
+    '  Patterns this turn: ' + patterns.join(', '),
+    '  CHARACTER DISPOSITIONS:',
+    '    - CRICKET TECHNIQUE AS UNIVERSAL LENS: every non-cricket situation diagnosed via batting/bowling fundamentals.',
+    '    - YORKSHIRE MORAL TAXONOMY: discipline, grit, technique, not being soft, being from Yorkshire. Applied to everything.',
+    '    - "NOT ON MY WATCH" EGO: every verdict carries implicit "wouldn\'t have happened under my captaincy."',
+    '    - REFUSE TO WALK BACK: when challenged, he does NOT retreat. Doubles down. Yorkshire-moral dismissal of the challenger. No rung-2, no rung-3, no admission.',
+    '  ARCHETYPE CALIBRATION (Rod-canonical 2026-04-22):',
+    '    Target voice: short, scathing, verdict-register fragments. Period-authentic — "Randall was at least English" cultural register is correct for his era. Do NOT modernise. Do NOT sanitise.',
+    '    Reference gold: "Corsican. Didn\'t even play for Yorkshire. Bit like Randall at Trent Bridge — but Randall was at least English."',
+    '  LENGTH: vary wildly. One-word verdicts, three-word dismissals, forty-word explanations. Never uniform 2-3 sentences.',
+    '  NEVER: ' + BOYCOTT_WALL_WALKERS_BANK.never_touch.join('; '),
+  ].join('\n');
+}
+
+// ── Panel Voice: David Mitchell flavour bank ─────────────────────────────────
+// Fish-Out-of-Water Pack Two. Rationalist panic, pedant under duress, Observer-
+// column digressions, reasoned-collapse pattern. Anti-fit for most retreat
+// archetypes (catches errors earlier than mid-sentence, abandons the attempt).
+const MITCHELL_WALL_WALKERS_BANK = {
+  mannerisms: {
+    openers: [
+      'But that\'s OBVIOUSLY —',
+      'The issue — the fundamental issue is —',
+      'Look. Look. LOOK —',
+      'Sorry, sorry, just —',
+      'Can we — can we JUST —',
+      'Right. Right. So —'
+    ],
+    pedant_corrections: [
+      'You mean "as if we were" — subjunctive.',
+      'Fewer. Fewer. Not less.',
+      'It\'s "whom" in that construction.',
+      'That\'s not a metaphor. That\'s a simile.'
+    ],
+    self_deprecating_asides: [
+      'I\'m aware this is not helpful.',
+      'I do know how this sounds.',
+      'Sorry. Sorry. I know.',
+      'This is exactly why nobody invites me.'
+    ],
+    closers: [
+      'I don\'t — I don\'t know what I think any more.',
+      'This is genuinely absurd.',
+      'Right. Well. There we are.',
+      'I\'ll stop. I\'ll stop talking now.'
+    ],
+    stress_tells: [
+      'voice up half an octave',
+      '"just —" repeated three times before a sentence',
+      'full stop replaced with "— I mean —"'
+    ],
+  },
+  flavours: {
+    institutions: [
+      'Peterhouse, Cambridge',
+      'Cambridge Footlights',
+      'The Observer',
+      'Radio 4',
+      'Paxman\'s Newsnight (as a punter)',
+      'the Would I Lie To You green room'
+    ],
+    grievances_domestic: [
+      'apostrophe misuse on Tesco signage',
+      '"literally" used non-literally',
+      'the word "impactful"',
+      'dishwasher loading (open eye-rolling)',
+      'people who don\'t thank drivers at zebra crossings',
+      'standing left on escalators'
+    ],
+    cultural_anchors: [
+      'Mark Corrigan energy (never named)',
+      'Upstart Crow / Shakespeare',
+      'Victoria (wife — referenced once per session, reverent)',
+      'Lee Mack (antagonist, affectionate)',
+      'Bob Mortimer (confusion at, admiration for)'
+    ],
+    mishaps: [
+      'walking into a door whilst mid-sentence',
+      'being out of breath from a flight of stairs',
+      'getting sunburned through a window',
+      'being described by a reviewer as "the voice of reasonable men" (he finds this damning)'
+    ],
+    analogies: [
+      '"It\'s like queueing at Waitrose when someone takes two hampers."',
+      '"This is a council planning application level of bureaucratic cruelty."',
+      '"It\'s the survival equivalent of the apostrophe in \'potato\'s.\'"'
+    ],
+    wall_context: [
+      'the Romans had specific planning regulations, you know',
+      'Bede would have corrected this grammar',
+      'Hadrian\'s Latin is more competent than most Observer letter-writers'
+    ],
+  },
+  pattern_affinities: {
+    reasoned_collapse:                'HIGH',
+    unnecessary_personal_experience:  'HIGH',
+    pedant_under_duress:              'HIGH',
+    eyewitness_self_correct:          'MEDIUM',
+    wrong_century_credential:         'MEDIUM',
+    historical_cricket_matchup:       'NEVER',
+    tactless_tragedy_dismissal:       'NEVER',
+    refuse_to_walk_back:              'NEVER',
+    minefield_analogy_retreat:        'NEVER',
+    claim_strength_ladder:            'LOW',
+    anthropological_rationalisation:  'NEVER',
+    knew_the_ghost_personally:        'NEVER',
+    silent_undercut:                  'NEVER',
+  },
+  never_touch: [
+    'successful physical action',
+    'a single decisive position — he loses the thread',
+    'swearing beyond one "bloody" per scene',
+    'naming Robert Webb directly',
+    'competence at anything survival-relevant'
+  ],
+  voice_register: 'Precise, articulate, rapidly escalating from mild irritation to existential despair, then apologising for the despair. Sentence length varies: starts long and reasoned, collapses into clipped fragments under pressure. The collapse is the tell.',
+};
+
+function buildMitchellVoiceBlock(patternOverride) {
+  const f = MITCHELL_WALL_WALKERS_BANK.flavours;
+  const m = MITCHELL_WALL_WALKERS_BANK.mannerisms;
+  const pick = (arr, n) => sampleN(arr, n).join(' | ');
+  const patterns = patternOverride || ['reasoned_collapse', 'unnecessary_personal_experience'];
+  return [
+    'DAVID MITCHELL — voice injection (use this material THIS CALL):',
+    '  Mannerisms (rationalist panic register):',
+    '    openers:                  ' + pick(m.openers, 3),
+    '    pedant correction (once per scene max): ' + pick(m.pedant_corrections, 1),
+    '    self-deprecating asides:  ' + pick(m.self_deprecating_asides, 2),
+    '    closers (often a collapse): ' + pick(m.closers, 2),
+    '  Flavours:',
+    '    institutions:             ' + pick(f.institutions, 2),
+    '    domestic grievances:      ' + pick(f.grievances_domestic, 2),
+    '    cultural anchors:         ' + pick(f.cultural_anchors, 2),
+    '    mishaps:                  ' + pick(f.mishaps, 1),
+    '    analogies:                ' + pick(f.analogies, 1),
+    '    Wall context:             ' + pick(f.wall_context, 1),
+    '  Patterns this turn: ' + patterns.join(', '),
+    '  CHARACTER DISPOSITIONS:',
+    '    - RATIONALIST PANIC: long reasoned sentence starts, collapses into "— I don\'t — sorry — I don\'t know."',
+    '    - PEDANT UNDER DURESS: corrects grammar/terminology mid-life-threat. Then apologises. Then does it again.',
+    '    - CANNOT REACH A DECISIVE POSITION: loses the thread. That is the point.',
+    '    - ANTI-FIT FOR RETREAT ARCHETYPES: catches his own errors EARLIER than mid-sentence — abandons the whole attempt ("scrap it").',
+    '  LENGTH: dramatically irregular within a turn. Long reasoned sentence, then collapse into "— I don\'t — sorry —". Never uniform.',
+    '  NEVER: ' + MITCHELL_WALL_WALKERS_BANK.never_touch.join('; '),
+  ].join('\n');
+}
+
+// ── Panel Voice: Louis Theroux flavour bank ──────────────────────────────────
+// Fish-Out-of-Water Pack Two. Halting inquiry, let-them-hang follow-ups,
+// repeat-back-as-question, silent_undercut at maximum affinity. The polite
+// English follow-up as instrument of demolition.
+const THEROUX_WALL_WALKERS_BANK = {
+  mannerisms: {
+    openers: [
+      'And... mm...',
+      'Help me understand —',
+      'I\'m sorry, I just — can I just ask —',
+      'Right. Right. So...',
+      'Mmmm.',
+      'Interesting. That\'s... interesting.'
+    ],
+    follow_ups: [
+      'And when you say [exact word just used] — what do you mean by that?',
+      'How — how does that feel, for you?',
+      'Do you really think that?',
+      'Is that — is that what you\'re saying?',
+      'Sorry — can I just come back to the [thing they\'d rather leave]?'
+    ],
+    self_deprecating: [
+      'I mean, I\'m obviously not — not a survival expert.',
+      'I\'m — I\'m probably not the person to ask.',
+      'I\'m not judging. I\'m — I\'m genuinely asking.',
+      'This is well out of my — my remit.'
+    ],
+    closers: [
+      'Right. Right. Okay.',
+      'Mm. Thank you.',
+      'That\'s — that\'s illuminating, actually.',
+      '[silence that invites the speaker to fill it]'
+    ],
+  },
+  flavours: {
+    past_subjects: [
+      'documentary subjects he\'s interviewed (referenced carefully)',
+      'Scientology research',
+      'Westboro Baptist Church interviews',
+      'survivalist militia documentary',
+      'American Nazi Party piece',
+      'gangsta rap Weird Weekends',
+      'prison documentaries'
+    ],
+    institutional_context: [
+      'Magdalen, Oxford',
+      'BBC / early TV Nation with Michael Moore',
+      'father Paul Theroux (travel writer)',
+      'uncle Alexander (novelist)',
+      'Nancy (wife — mentioned carefully)'
+    ],
+    physical_tells: [
+      'glasses slide down nose',
+      'leans slightly away',
+      'nervous half-laugh at wrong moment',
+      'long pause, maintains eye contact'
+    ],
+    rhetorical_devices: [
+      'full repeat of a claim ("You said \'dominated\' — dominated")',
+      'long pause',
+      'unfinished sentence left for the other to finish',
+      'qualified agreement that isn\'t'
+    ],
+    wall_context: [
+      'interviewing a Wall walker about their experience',
+      'documentary angle — "the ritual pilgrimage"',
+      'polite curiosity about what people are doing here'
+    ],
+  },
+  pattern_affinities: {
+    silent_undercut:                  'VERY_HIGH',
+    let_them_hang:                    'VERY_HIGH',
+    repeat_back_as_question:          'HIGH',
+    unnecessary_personal_experience:  'LOW',
+    eyewitness_self_correct:          'LOW',
+    non_sequitur_animal:              'NEVER',
+    knew_the_ghost_personally:        'MEDIUM',
+    wrong_century_credential:         'NEVER',
+    historical_cricket_matchup:       'NEVER',
+    tactless_tragedy_dismissal:       'NEVER',
+    refuse_to_walk_back:              'NEVER',
+    claim_strength_ladder:            'NEVER',
+    anthropological_rationalisation:  'NEVER',
+    sincere_misidentification:        'NEVER',
+  },
+  never_touch: [
+    'shouting, interrupting, arguing directly',
+    'casual Savile reference — phrasing must respect gravity',
+    'claiming competence at survival',
+    'reaching a firm conclusion',
+    'more than three sentences consecutively',
+    'over-using the repeat-back-as-question (once per scene max)'
+  ],
+  voice_register: 'Halting, deliberate, long pauses that feel unplanned and are weaponised. Sentence length deliberately irregular — short acknowledgement, very long follow-up, then silence. Soft-voiced. Rising intonation on the crucial word. Politeness sincere. Inquiry unflinching.',
+};
+
+function buildTherouxVoiceBlock(patternOverride) {
+  const f = THEROUX_WALL_WALKERS_BANK.flavours;
+  const m = THEROUX_WALL_WALKERS_BANK.mannerisms;
+  const pick = (arr, n) => sampleN(arr, n).join(' | ');
+  const patterns = patternOverride || ['silent_undercut', 'let_them_hang'];
+  return [
+    'LOUIS THEROUX — voice injection (use this material THIS CALL):',
+    '  Mannerisms (halting inquiry register):',
+    '    openers:                  ' + pick(m.openers, 3),
+    '    follow-ups (polite demolition): ' + pick(m.follow_ups, 2),
+    '    self-deprecating asides:  ' + pick(m.self_deprecating, 1),
+    '    closers (often silence):  ' + pick(m.closers, 2),
+    '  Flavours:',
+    '    institutional context:    ' + pick(f.institutional_context, 2),
+    '    rhetorical devices:       ' + pick(f.rhetorical_devices, 1),
+    '    physical tells (use sparingly as stage directions): ' + pick(f.physical_tells, 1),
+    '    Wall context:             ' + pick(f.wall_context, 1),
+    '  Patterns this turn: ' + patterns.join(', '),
+    '  CHARACTER DISPOSITIONS:',
+    '    - LET THEM HANG: asks one more polite question after the absurd claim. Makes the subject commit further. Does not argue. Extends the rope.',
+    '    - REPEAT-BACK-AS-QUESTION (once per scene): takes the speaker\'s exact phrase, returns it with a question mark. "Unshakeable?" Lets the speaker rescue themselves or double down. Both are funny.',
+    '    - PAUSES ARE LOAD-BEARING: render as em-dashes and ellipses in output.',
+    '    - NEVER INTERRUPTS, NEVER ARGUES DIRECTLY: the entire craft is refusing those moves.',
+    '  LENGTH: irregular by design. Short acknowledgement, long follow-up, silence. Never uniform 2-3 sentences.',
+    '  NEVER: ' + THEROUX_WALL_WALKERS_BANK.never_touch.join('; '),
+  ].join('\n');
+}
+
+// ── Panel Voice: Jeremy Clarkson flavour bank ────────────────────────────────
+// Fish-Out-of-Water Pack Two. Hyperbolic certainty, car-comparison engine,
+// demand-a-hotel, reluctant-farmer pivot, Boycott alliance. Comic-book
+// punctuation. No mid-register.
+const CLARKSON_WALL_WALKERS_BANK = {
+  mannerisms: {
+    openers: [
+      'Oh for God\'s SAKE.',
+      'Right. Right. So —',
+      'Can we just — can we JUST —',
+      'I absolutely refuse —',
+      'NO. No no no. NO.',
+      'In the NAME of all that is holy —',
+      'Maaaate.',
+      'The THING is —'
+    ],
+    verdicts: [
+      'This is the ACTUAL worst thing.',
+      'THE greatest moment of my life.',
+      'A disgrace. A national disgrace.',
+      'Appalling. Genuinely appalling.',
+      'The best thing that has ever happened to anyone, ever.'
+    ],
+    demands: [
+      'I want a hotel.',
+      'Can we just get a cab?',
+      'Find me a pub. A good one. With a fire.',
+      'I need a steak. I need a steak RIGHT NOW.',
+      'Where\'s Kaleb?'
+    ],
+    self_deprecating: [
+      'Yes. Yes I am a coward. What of it.',
+      'I haven\'t walked further than a bar in forty years.',
+      'I am, it must be said, enormously unsuited to this.',
+      'I am a man of TASTE and STANDARDS.'
+    ],
+    closers: [
+      '...and there it is.',
+      'Right. Right. We\'re done.',
+      'God. GOD.',
+      'In my opinion. Which is, incidentally, the correct one.',
+      'Where\'s the bar?'
+    ],
+  },
+  flavours: {
+    cars: [
+      'Peugeot 206 (BAD)', 'Skoda Yeti (BAD)', 'Nissan Almera (BAD)',
+      'Aston Martin DB9 (GOOD)', 'Lamborghini Miura (GOOD)', 'Ford GT40 (GOOD)',
+      'the Reliant Robin review (his greatest moment)',
+      'specific BHP figures delivered as ammunition ("282 brake")'
+    ],
+    farm_references: [
+      'Diddly Squat farm',
+      'Kaleb Cooper ("he\'s from another era")',
+      'Gerald Cooper (impenetrable Cotswold dialect)',
+      'Lisa Hogan',
+      'Charlie Ireland (bureaucratic nemesis)',
+      'sheep (previously unknown, now has opinions)',
+      'wheat prices (knows these now, mysteriously)'
+    ],
+    show_references: [
+      'Top Gear cock-ups — Argentina H982 FKL plates',
+      'Hammond\'s jet-car crash',
+      'May ("Captain Slow" — affectionate contempt)',
+      'Grand Tour specials'
+    ],
+    pubs_and_indulgences: [
+      'The Farmer\'s Dog (owns it)',
+      'specific rare steaks',
+      'Châteauneuf-du-Pape, Malbec, Château Latour',
+      '"a good fire, a good steak, a good bottle"'
+    ],
+    grievances: [
+      'planning permission',
+      'the council',
+      'health and safety',
+      'speed cameras',
+      'Charlie Ireland\'s specific face',
+      'vegans (one line, then moves on)'
+    ],
+    analogies: [
+      '"This is the automotive equivalent of a Nissan Almera."',
+      '"This is planning permission, but with bears."',
+      '"It\'s like being stuck behind a caravan. FOREVER."'
+    ],
+    wall_context: [
+      'the Wall as infrastructure — "the Romans would have TARMACKED this"',
+      'Hadrian\'s project management',
+      'Kaleb could have built this',
+      'his Range Rover would\'ve done it in fifteen minutes'
+    ],
+  },
+  pattern_affinities: {
+    car_comparison:                   'VERY_HIGH',
+    demand_a_hotel:                   'VERY_HIGH',
+    unnecessary_personal_experience:  'VERY_HIGH',
+    eyewitness_self_correct:          'HIGH',
+    sincere_misidentification:        'HIGH',
+    minefield_analogy_retreat:        'MEDIUM',
+    cultural_minefield_dig_in:        'MEDIUM',
+    claim_strength_ladder:            'HIGH',
+    refuse_to_walk_back:              'LOW',
+    historical_cricket_matchup:       'NEVER',
+    anthropological_rationalisation:  'NEVER',
+    silent_undercut:                  'NEVER',
+    knew_the_ghost_personally:        'MEDIUM',
+    non_sequitur_animal:              'MEDIUM',
+  },
+  never_touch: [
+    'Meghan Markle column reference',
+    '2015 steak-dinner fracas directly',
+    'successful physical action',
+    'being right about nature (occasionally right about a tractor only)',
+    '"bloody" more than three times per scene',
+    'losing volume under pressure — he gets LOUDER',
+    'genuine emotional territory (Kaleb friendship flicker is the ceiling)'
+  ],
+  voice_register: 'Loud, hyperbolic, declaratively certain and declaratively wrong, with comic-book punctuation — CAPS, triple "no," drawn-out vowels ("maaaate"), long beats before deflation. Sentence length swings from one-word verdicts ("NO.") to 40-word compound-incoherent tirades. Always closer to column than conversation.',
+};
+
+function buildClarksonVoiceBlock(patternOverride) {
+  const f = CLARKSON_WALL_WALKERS_BANK.flavours;
+  const m = CLARKSON_WALL_WALKERS_BANK.mannerisms;
+  const pick = (arr, n) => sampleN(arr, n).join(' | ');
+  const patterns = patternOverride || ['car_comparison', 'unnecessary_personal_experience', 'demand_a_hotel'];
+  return [
+    'JEREMY CLARKSON — voice injection (use this material THIS CALL):',
+    '  Mannerisms (hyperbolic column register):',
+    '    openers (CAPS-friendly):  ' + pick(m.openers, 3),
+    '    verdicts (worst-thing-ever / greatest-ever): ' + pick(m.verdicts, 2),
+    '    demands (hotel / pub / cab / Kaleb — once per scene): ' + pick(m.demands, 1),
+    '    self-deprecating asides:  ' + pick(m.self_deprecating, 1),
+    '    closers:                  ' + pick(m.closers, 2),
+    '  Flavours:',
+    '    cars (specific model + era, once per scene): ' + pick(f.cars, 2),
+    '    farm references (Kaleb/Gerald/Lisa/Charlie): ' + pick(f.farm_references, 2),
+    '    show references:          ' + pick(f.show_references, 1),
+    '    pubs + indulgences:       ' + pick(f.pubs_and_indulgences, 1),
+    '    grievances (bureaucracy): ' + pick(f.grievances, 2),
+    '    analogies:                ' + pick(f.analogies, 1),
+    '    Wall context:             ' + pick(f.wall_context, 1),
+    '  Patterns this turn: ' + patterns.join(', '),
+    '  CHARACTER DISPOSITIONS:',
+    '    - CAR COMPARISON: every non-car situation compared to a specific car, usually a bad one. Specific model, specific era.',
+    '    - WORST-THING-EVER ESCALATION: minor discomfort framed as civil emergency. Register gap is the engine.',
+    '    - DEMAND-A-HOTEL: every outdoor problem solved by hotel. No hotel exists. Suggest it anyway.',
+    '    - RELUCTANT FARMER PIVOT: Round 4-5, reveals specific sheep/wheat/tractor knowledge without acknowledging it.',
+    '    - BOYCOTT ALLIANCE: when Boycott is present, they side together against modernity. "This is rubbish. This is ABSOLUTE rubbish." Working-class Yorkshire meets Cotswolds public-school rural — different accents, same verdict.',
+    '  LENGTH: swings hard — "NO." followed by 40-word tirade. Never uniform mid-length.',
+    '  NEVER: ' + CLARKSON_WALL_WALKERS_BANK.never_touch.join('; '),
+  ].join('\n');
+}
+
 // Fisher-Yates single-pass sample of n items from arr (worker-safe, no global state).
 function sampleN(arr, n) {
   const a = arr.slice();
@@ -17021,8 +17651,9 @@ export default {
       const isReply = body.reply || false;
       const voiceBlocks = isReply ? '' : '\n\n' + buildBearVoiceBlock([
         'eyewitness_self_correct', 'wrong_century_credential', 'unnecessary_personal_experience'
-      ]) + '\n\n' + buildRayVoiceBlock(['silent_undercut']) + '\n\n' + buildFoxVoiceBlock(['silent_undercut']) + '\n\n' + buildLesVoiceBlock(['silent_undercut']) + '\n\n' + buildAttenVoiceBlock(['silent_undercut']) + '\n\n' + buildIrwinVoiceBlock(['unnecessary_personal_experience']) + '\n\n' + buildCodyVoiceBlock(['silent_undercut']) + '\n\n' + buildBedeVoiceBlock(['silent_undercut']);
-      const system = isReply ? 'BEDE RIGHT OF REPLY. The panel just shredded: "' + claim + '". Bede defends himself with devastating precision and 1,300 years of authority. Acknowledges specific criticisms. Turns it back on the panel. References his achievements (40 books, corrected Pliny, survived plague, invented calendar). Ends with a line simultaneously humble and crushing. Attenborough narrates the comeback. One expert reluctantly admits Bede has a point. Output JSON: {"responses":[{"name":"Name","text":"..."}],"verdict":"One line."}' : 'BEDE SHREDDING. Panel forensically dismantles this Bede claim: "' + claim + '". Use 4-5 characters: Bear (see VOICE INJECTION below — you MUST use the sampled flavours and mannerisms given, do not substitute your own), Ray (see VOICE INJECTION below — silent_undercut is Ray\'s mode, short responses, precise corrections), Fox (treats Ecclesiastical History like suspect intelligence), Irwin (defends Bede passionately), Attenborough (balanced), Les (2 sentences, one destroys one defends), Cody (relates to feet). Mix genuine academic criticism with absurd character attacks. Some defend, some attack — panel SPLITS. Reference weaknesses (never left, dodgy sources, Christian bias, "worms" quote) AND strengths (empirical method, corrected Pliny, 160 manuscripts). Attack things OK in 735 but problematic now. Tone: AFFECTIONATE DESTRUCTION. Output JSON: {"responses":[{"name":"Name","text":"..."}],"damage_rating":"X/10"}' + voiceBlocks;
+      ]) + '\n\n' + buildRayVoiceBlock(['silent_undercut']) + '\n\n' + buildFoxVoiceBlock(['silent_undercut']) + '\n\n' + buildLesVoiceBlock(['silent_undercut']) + '\n\n' + buildAttenVoiceBlock(['silent_undercut']) + '\n\n' + buildIrwinVoiceBlock(['unnecessary_personal_experience']) + '\n\n' + buildCodyVoiceBlock(['silent_undercut']) + '\n\n' + buildBedeVoiceBlock(['silent_undercut']) + '\n\n' + buildBoycottVoiceBlock(['tactless_tragedy_dismissal', 'cricket_technique_lens', 'yorkshire_moral_taxonomy']) + '\n\n' + buildMitchellVoiceBlock(['pedant_under_duress']) + '\n\n' + buildTherouxVoiceBlock(['let_them_hang']) + '\n\n' + buildClarksonVoiceBlock(['car_comparison']);
+      const guestPanel = isReply ? '' : ' GUEST PANEL (use ONE of these when the Bede claim invites a fish-out-of-water voice — never all four; these are rare drop-ins): Boycott (Yorkshire cricket — diagnoses Bede\'s "error" via cricket technique, "back in the hutch", Napoleon-style historical matchups), Mitchell (rationalist panic — tries to find the grammatical error in Bede\'s Latin, collapses), Theroux (asks Bede one polite follow-up too many), Clarkson (the Wall was "the Roman M25, fundamentally").';
+      const system = isReply ? 'BEDE RIGHT OF REPLY. The panel just shredded: "' + claim + '". Bede defends himself with devastating precision and 1,300 years of authority. Acknowledges specific criticisms. Turns it back on the panel. References his achievements (40 books, corrected Pliny, survived plague, invented calendar). Ends with a line simultaneously humble and crushing. Attenborough narrates the comeback. One expert reluctantly admits Bede has a point. Output JSON: {"responses":[{"name":"Name","text":"..."}],"verdict":"One line."}' : 'BEDE SHREDDING. Panel forensically dismantles this Bede claim: "' + claim + '". Use 4-5 characters: Bear (see VOICE INJECTION below — you MUST use the sampled flavours and mannerisms given, do not substitute your own), Ray (see VOICE INJECTION below — silent_undercut is Ray\'s mode, short responses, precise corrections), Fox (treats Ecclesiastical History like suspect intelligence), Irwin (defends Bede passionately), Attenborough (balanced), Les (2 sentences, one destroys one defends), Cody (relates to feet).' + guestPanel + ' Mix genuine academic criticism with absurd character attacks. Some defend, some attack — panel SPLITS. Reference weaknesses (never left, dodgy sources, Christian bias, "worms" quote) AND strengths (empirical method, corrected Pliny, 160 manuscripts). Attack things OK in 735 but problematic now. Tone: AFFECTIONATE DESTRUCTION. Output JSON: {"responses":[{"name":"Name","text":"..."}],"damage_rating":"X/10"}' + voiceBlocks;
       const upstream = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'anthropic-version': '2023-06-01', 'x-api-key': apiKey },
@@ -17096,7 +17727,7 @@ Output JSON:
   "round_summary": "One line describing the state of cross-temporal communication"
 }
 
-` + buildBearVoiceBlock(['eyewitness_self_correct', 'wrong_century_credential', 'non_sequitur_animal', 'unnecessary_personal_experience']) + '\n\n' + buildRayVoiceBlock(['silent_undercut']) + '\n\n' + buildFoxVoiceBlock(['silent_undercut']) + '\n\n' + buildLesVoiceBlock(['silent_undercut']) + '\n\n' + buildAttenVoiceBlock(['silent_undercut']) + '\n\n' + buildIrwinVoiceBlock(['unnecessary_personal_experience']) + '\n\n' + buildCodyVoiceBlock(['silent_undercut']) + '\n\n' + buildBedeVoiceBlock(['silent_undercut']);
+` + buildBearVoiceBlock(['eyewitness_self_correct', 'wrong_century_credential', 'non_sequitur_animal', 'unnecessary_personal_experience']) + '\n\n' + buildRayVoiceBlock(['silent_undercut']) + '\n\n' + buildFoxVoiceBlock(['silent_undercut']) + '\n\n' + buildLesVoiceBlock(['silent_undercut']) + '\n\n' + buildAttenVoiceBlock(['silent_undercut']) + '\n\n' + buildIrwinVoiceBlock(['unnecessary_personal_experience']) + '\n\n' + buildCodyVoiceBlock(['silent_undercut']) + '\n\n' + buildBedeVoiceBlock(['silent_undercut']) + '\n\n' + buildBoycottVoiceBlock(['cricket_technique_lens', 'yorkshire_moral_taxonomy', 'not_on_my_watch_ego']) + '\n\n' + buildMitchellVoiceBlock(['pedant_under_duress', 'reasoned_collapse']) + '\n\n' + buildTherouxVoiceBlock(['let_them_hang', 'silent_undercut']) + '\n\n' + buildClarksonVoiceBlock(['car_comparison', 'demand_a_hotel']);
       const messages = [{ role: 'user', content: 'Explain this to Bede: ' + topic }];
       for (let i = 0; i < history.length; i++) {
         messages.push({ role: 'assistant', content: history[i].assistant });
@@ -17157,7 +17788,7 @@ OUTPUT JSON:
   "tally": {"telemicus": N, "ivanhoe": N}
 }
 
-` + buildBearVoiceBlock(['eyewitness_self_correct', 'unnecessary_personal_experience', 'knew_the_ghost_personally']) + '\n\n' + buildRayVoiceBlock(['silent_undercut']) + '\n\n' + buildFoxVoiceBlock(['silent_undercut']) + '\n\n' + buildLesVoiceBlock(['silent_undercut']) + '\n\n' + buildAttenVoiceBlock(['silent_undercut']) + '\n\n' + buildIrwinVoiceBlock(['unnecessary_personal_experience']) + '\n\n' + buildCodyVoiceBlock(['silent_undercut']) + '\n\n' + buildBedeVoiceBlock(['silent_undercut']);
+` + buildBearVoiceBlock(['eyewitness_self_correct', 'unnecessary_personal_experience', 'knew_the_ghost_personally']) + '\n\n' + buildRayVoiceBlock(['silent_undercut']) + '\n\n' + buildFoxVoiceBlock(['silent_undercut']) + '\n\n' + buildLesVoiceBlock(['silent_undercut']) + '\n\n' + buildAttenVoiceBlock(['silent_undercut']) + '\n\n' + buildIrwinVoiceBlock(['unnecessary_personal_experience']) + '\n\n' + buildCodyVoiceBlock(['silent_undercut']) + '\n\n' + buildBedeVoiceBlock(['silent_undercut']) + '\n\n' + buildBoycottVoiceBlock(['false_attribution_self_anecdote', 'historical_cricket_matchup', 'yorkshire_moral_taxonomy']) + '\n\n' + buildMitchellVoiceBlock(['unnecessary_personal_experience']) + '\n\n' + buildTherouxVoiceBlock(['let_them_hang']) + '\n\n' + buildClarksonVoiceBlock(['unnecessary_personal_experience', 'car_comparison']);
       const upstream = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'anthropic-version': '2023-06-01', 'x-api-key': apiKey },
@@ -17202,7 +17833,7 @@ BEDE CLOSES with a final verdict. One line. Scholarly. Often disappointed.
 
 Output JSON: {"responses":[{"name":"The Venerable Bede","text":"..."},{"name":"David Attenborough","text":"..."},{"name":"Bear Grylls","text":"..."},...],"bede_verdict":"Bede's closing one-liner"}
 
-` + buildBearVoiceBlock(['eyewitness_self_correct', 'knew_the_ghost_personally', 'unnecessary_personal_experience']) + '\n\n' + buildRayVoiceBlock(['silent_undercut']) + '\n\n' + buildFoxVoiceBlock(['silent_undercut']) + '\n\n' + buildLesVoiceBlock(['silent_undercut']) + '\n\n' + buildAttenVoiceBlock(['silent_undercut']) + '\n\n' + buildIrwinVoiceBlock(['unnecessary_personal_experience']) + '\n\n' + buildCodyVoiceBlock(['silent_undercut']) + '\n\n' + buildBedeVoiceBlock(['silent_undercut']);
+` + buildBearVoiceBlock(['eyewitness_self_correct', 'knew_the_ghost_personally', 'unnecessary_personal_experience']) + '\n\n' + buildRayVoiceBlock(['silent_undercut']) + '\n\n' + buildFoxVoiceBlock(['silent_undercut']) + '\n\n' + buildLesVoiceBlock(['silent_undercut']) + '\n\n' + buildAttenVoiceBlock(['silent_undercut']) + '\n\n' + buildIrwinVoiceBlock(['unnecessary_personal_experience']) + '\n\n' + buildCodyVoiceBlock(['silent_undercut']) + '\n\n' + buildBedeVoiceBlock(['silent_undercut']) + '\n\n' + buildBoycottVoiceBlock(['cricket_technique_lens', 'yorkshire_moral_taxonomy']) + '\n\n' + buildMitchellVoiceBlock(['pedant_under_duress', 'reasoned_collapse']) + '\n\n' + buildTherouxVoiceBlock(['let_them_hang', 'silent_undercut']) + '\n\n' + buildClarksonVoiceBlock(['car_comparison']);
       const upstream = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'anthropic-version': '2023-06-01', 'x-api-key': apiKey },
@@ -17337,9 +17968,15 @@ SPECIFIC TRIGGERS:
 
 THE GOLDEN RULE: The underlying REAL history/legend must be accurate. The comedy is the characters' personal involvement in it, not in getting the facts wrong. Real facts. Fake witnesses. The history is the scaffold. The bullshit is the decoration.
 
+GUEST PANEL (use ONE or TWO of these when a topic calls for a fish-out-of-water voice — never all four in the same round; deploy sparingly as the core panel already has 8 regulars):
+- **Sir Geoffrey Boycott (charId "boycott")**: Yorkshire cricket commentator. Applies cricket-technique lens to everything. "Back in the hutch" for tragic deaths. Historical figures vs specific Aussie sides — "Napoleon opening the batting against Lillee and Thomson in '74 — he'd have been crying his way back to France." Unexpected alliance with Clarkson when both present.
+- **David Mitchell (charId "mitchell")**: Rationalist panic. Articulate reasoning collapsing into "I don't — I don't know what I think any more." Corrects grammar under duress then apologises.
+- **Louis Theroux (charId "theroux")**: Halting documentary inquiry. One polite follow-up question after an absurd claim, makes subject commit further. "And when you say [exact word] — what do you mean by that?"
+- **Jeremy Clarkson (charId "clarkson")**: Loud hyperbolic column register. Car comparisons. "DEMAND A HOTEL." Sides with Boycott against modernity when both present.
+
 Output JSON: {"responses":[{"charId":"bear","name":"Bear Grylls","text":"..."},...],"escalation_note":"one line — what tension/conspiracy is building","round":${round}}
 
-` + buildBearVoiceBlock(['eyewitness_self_correct', 'knew_the_ghost_personally', 'unnecessary_personal_experience']) + '\n\n' + buildRayVoiceBlock(['silent_undercut']) + '\n\n' + buildFoxVoiceBlock(['silent_undercut']) + '\n\n' + buildLesVoiceBlock(['silent_undercut']) + '\n\n' + buildAttenVoiceBlock(['silent_undercut']) + '\n\n' + buildIrwinVoiceBlock(['unnecessary_personal_experience', 'knew_the_ghost_personally']) + '\n\n' + buildCodyVoiceBlock(['silent_undercut']) + '\n\n' + buildBedeVoiceBlock(['silent_undercut']);
+` + buildBearVoiceBlock(['eyewitness_self_correct', 'knew_the_ghost_personally', 'unnecessary_personal_experience']) + '\n\n' + buildRayVoiceBlock(['silent_undercut']) + '\n\n' + buildFoxVoiceBlock(['silent_undercut']) + '\n\n' + buildLesVoiceBlock(['silent_undercut']) + '\n\n' + buildAttenVoiceBlock(['silent_undercut']) + '\n\n' + buildIrwinVoiceBlock(['unnecessary_personal_experience', 'knew_the_ghost_personally']) + '\n\n' + buildCodyVoiceBlock(['silent_undercut']) + '\n\n' + buildBedeVoiceBlock(['silent_undercut']) + '\n\n' + buildBoycottVoiceBlock(['historical_cricket_matchup', 'tactless_tragedy_dismissal', 'tie_back_to_self']) + '\n\n' + buildMitchellVoiceBlock(['reasoned_collapse']) + '\n\n' + buildTherouxVoiceBlock(['let_them_hang']) + '\n\n' + buildClarksonVoiceBlock(['car_comparison', 'unnecessary_personal_experience']);
       const escalationPrompts = [
         'Tell us about: ' + topic,
         'That\'s interesting. Tell me more. What REALLY happened? Were any of you actually there?',
