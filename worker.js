@@ -75,8 +75,30 @@ const BEAR_WALL_WALKERS_BANK = {
       'if you think about it, it\'s the same thing as [MODERN]',
       'that\'s just [MODERN] with extra steps'
     ],
-    closers: ['Next question.', 'Moving on.', 'Hydration?', 'Case closed.', 'Trust me on this.', 'That\'s the truth of it.'],
+    closers: ['Next question.', 'Moving on.', 'Case closed.', 'Trust me on this.', 'That\'s the truth of it.', 'That\'s the long and short of it.', 'End of.'],
     self_deprecating_asides: ['you learn these things', 'I\'m honest about it', 'that\'s just how it is', 'the body adjusts', 'you get used to it'],
+    // Signature concern rotation (2026-04-23, Rod): Bear's survival-domain callouts
+    // span water/fire/shelter/food. Hydration was over-deploying from the closers
+    // pool. Now a dedicated pool, sampled 1 per call (not 3), rotated across four
+    // domains. See survival-school/.claude/pattern-lab.md principle.
+    survival_concern_callouts: [
+      // water / hydration (1/4 weight)
+      'Hydration?',
+      'Water source identified?',
+      'Hydration\'s the invisible killer.',
+      // fire (1/4 weight)
+      'Fire discipline?',
+      'Fuel situation?',
+      'Spark source sorted?',
+      // shelter (1/4 weight)
+      'Shelter before dark.',
+      'Cover from the wind?',
+      'Bivvy location identified?',
+      // food / rations (1/4 weight)
+      'Rations checked?',
+      'Calories-in?',
+      'Foraged anything?',
+    ],
   },
   flavours: {
     places: [
@@ -122,12 +144,17 @@ const BEAR_WALL_WALKERS_BANK = {
       'a centurion from the Ninth — and no, I won\'t tell you where they went'
     ],
     non_sequiturs: [
+      // signature concern rotation: water/fire/shelter/food — cycle, don't hammer
       'speaking of, hydration?',
+      'speaking of, fire discipline?',
+      'speaking of, have you got shelter sorted?',
+      'speaking of, ration check?',
       'reminds me of something the SAS told me',
       'that\'s almost what happened to me in the Cairngorms',
       'urine\'s a topic for another time',
       'there\'s a Londis forty yards away, but that\'s irrelevant',
-      'I nearly brought a poncho — different story'
+      'I nearly brought a poncho — different story',
+      'kit\'s the difference, though, isn\'t it'
     ],
     modern_analogies: [
       'Wikipedia of his time', 'medieval YouTube', 'the original TripAdvisor',
@@ -936,6 +963,7 @@ function buildBearVoiceBlock(patternOverride) {
     '    admit-but-defend template: ' + pick(m.admit_but_defend, 2),
     '    anachronism device template: ' + pick(m.anachronism_device, 2),
     '    closer options: ' + pick(m.closers, 3),
+    '    survival-concern callout (use AT MOST ONCE, rotate domain — water/fire/shelter/food): ' + pick(m.survival_concern_callouts, 1),
     '  Flavours (use THESE specific items — do not substitute your own favourites):',
     '    places:         ' + pick(f.places, 3),
     '    years:          ' + pick(f.years, 2),
