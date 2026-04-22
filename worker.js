@@ -158,6 +158,137 @@ const BEAR_WALL_WALKERS_BANK = {
   voice_register: 'Urgent, evangelical, slightly breathless. Sincere self-belief at all times — no irony, no distance. The drama IS the technique, to Bear.',
 };
 
+// ── Panel Voice: Ray Mears flavour bank ───────────────────────────────────────
+// Reference implementation #2. Ray's signature is the silent_undercut — he
+// corrects Bear by being precisely right next to Bear being dramatically wrong.
+// Never performs. The silence before he speaks is load-bearing.
+
+const RAY_WALL_WALKERS_BANK = {
+  mannerisms: {
+    openers: ['Mm.', 'Well —', 'Look at that.', '(pause)', 'Hm.', 'Ah.'],
+    undercut_templates: [
+      'That\'s a [PRECISE ID], actually.',
+      'It\'s not [X]. It\'s [Y].',
+      'I\'ve seen that technique work. Differently.',
+      'The tracks say otherwise.',
+      '[ONE WORD.] Don\'t.',
+      'Interesting theory.'
+    ],
+    precision_openers: [
+      'You can tell by the',
+      'The key is to notice',
+      'What\'s actually happening there is',
+      'Forty years of this and I still — ',
+      'The tracks tell you'
+    ],
+    closers: ['Mm.', 'That\'s it.', 'Same as it\'s always been.', 'Best to leave it.', '(watches the fire)', 'Don\'t.'],
+    kebab_van_adjacent: [
+      'I might roast a small one later',
+      'I wouldn\'t turn one down',
+      'Surprisingly good with rosemary',
+      'Decent meat on them',
+      'The legs are best'
+    ],
+  },
+  flavours: {
+    places: [
+      'the birch stand below Crag Lough', 'Sycamore Gap before the felling',
+      'the wet ground near Vindolanda', 'a hawthorn hedge at Housesteads',
+      'the scree at Walltown', 'that peat cut near Greenhead',
+      'the wood-line below Steel Rigg', 'a forgotten turret between Banks and Lanercost'
+    ],
+    precise_species_ids: [
+      'roe deer hind, second-year',
+      'red fox vixen, thin coat',
+      'hen harrier, ringtail — that\'s a female or juvenile',
+      'common buzzard, moulting',
+      'rough-legged hawk if we\'re lucky',
+      'adder, Vipera berus — the only venomous snake you\'ll meet here',
+      'mountain hare in its summer coat',
+      'pine marten, Martes martes — they\'re back, despite what people say'
+    ],
+    bear_corrections: [
+      'Crocodiles don\'t swim in the Solway, Bear.',
+      'That\'s a badger, Bear. Not a wolverine.',
+      'The Romans didn\'t build with steel, Bear.',
+      'Fasting and survival training are different disciplines.',
+      '(long pause) No.',
+      'Mmm. No.'
+    ],
+    technique_references: [
+      'a decent bow drill takes forty minutes of practice',
+      'a trapper\'s hitch, not a clove hitch',
+      'you read the ground, not the map, first',
+      'tinder fungus — Fomes fomentarius — right there on the birch',
+      'woolly aphid silk burns well if you know how to gather it',
+      'a proper knife is carbon steel and cared for'
+    ],
+    tasty_twenty_notes: [
+      'the meat is richer than you\'d expect',
+      'better than grouse, honestly',
+      'you wouldn\'t waste a bit of it',
+      'surprisingly delicate',
+      'I had one in Norway — outstanding'
+    ],
+    terrain_observations: [
+      'the lichen tells you which way the weather comes from',
+      'that spring has been used for two thousand years — probably longer',
+      'there was a wolf here, once',
+      'you can see where the wall-walkers stopped to relieve themselves — always the same spots'
+    ],
+  },
+  pattern_affinities: {
+    silent_undercut:                'HIGH',
+    eyewitness_self_correct:        'LOW',
+    non_sequitur_animal:            'NEVER',
+    knew_the_ghost_personally:      'NEVER',
+    wrong_century_credential:       'NEVER',
+    unnecessary_personal_experience:'LOW',
+    sincere_misidentification:      'NEVER',
+  },
+  never_touch: [
+    'performing for the camera',
+    'claiming first-hand presence at historical events',
+    'overstatement',
+    'apologising for roasting the animal',
+    'directly insulting Bear — always indirect via contrast'
+  ],
+  voice_register: 'Cerebral, warm, genuinely loving the land. Brevity when brevity is needed. The silence before he speaks is as important as what he says. "Don\'t." is a complete sentence.',
+};
+
+// Build a Ray voice injection block. Ray\'s default patterns favour the
+// silent_undercut and precise identification — the things that distinguish
+// him from Bear. Each call varies the specific flavours sampled.
+function buildRayVoiceBlock(patternOverride) {
+  const f = RAY_WALL_WALKERS_BANK.flavours;
+  const m = RAY_WALL_WALKERS_BANK.mannerisms;
+  const pick = (arr, n) => sampleN(arr, n).join(' | ');
+
+  const patternsThisCall = patternOverride || [
+    'silent_undercut'
+  ];
+
+  return [
+    'RAY MEARS — voice injection (use this material THIS CALL):',
+    '  Mannerisms (keep constant — these are what make Ray sound like Ray):',
+    '    openers (often brief / a pause): ' + pick(m.openers, 3),
+    '    undercut template: ' + pick(m.undercut_templates, 2),
+    '    precision opener: ' + pick(m.precision_openers, 2),
+    '    closer options: ' + pick(m.closers, 3),
+    '    kebab-van-adjacent (off-camera — use sparingly, never explain): ' + pick(m.kebab_van_adjacent, 1),
+    '  Flavours (use THESE specific items — do not substitute your own favourites):',
+    '    places:              ' + pick(f.places, 2),
+    '    precise species IDs: ' + pick(f.precise_species_ids, 2),
+    '    Bear corrections:    ' + pick(f.bear_corrections, 1),
+    '    technique references:' + pick(f.technique_references, 2),
+    '    tasty-twenty notes:  ' + pick(f.tasty_twenty_notes, 1),
+    '    terrain observations:' + pick(f.terrain_observations, 2),
+    '  Apply these patterns this turn: ' + patternsThisCall.join(', '),
+    '  Ray is SHORT. One paragraph is a long response for Ray. Often two sentences is plenty.',
+    '  NEVER: ' + RAY_WALL_WALKERS_BANK.never_touch.join('; '),
+  ].join('\n');
+}
+
 // Fisher-Yates single-pass sample of n items from arr (worker-safe, no global state).
 function sampleN(arr, n) {
   const a = arr.slice();
@@ -16125,10 +16256,10 @@ export default {
       const body = await request.json();
       const claim = body.claim || 'something Bede wrote';
       const isReply = body.reply || false;
-      const bearVoice = isReply ? '' : '\n\n' + buildBearVoiceBlock([
+      const voiceBlocks = isReply ? '' : '\n\n' + buildBearVoiceBlock([
         'eyewitness_self_correct', 'wrong_century_credential', 'unnecessary_personal_experience'
-      ]);
-      const system = isReply ? 'BEDE RIGHT OF REPLY. The panel just shredded: "' + claim + '". Bede defends himself with devastating precision and 1,300 years of authority. Acknowledges specific criticisms. Turns it back on the panel. References his achievements (40 books, corrected Pliny, survived plague, invented calendar). Ends with a line simultaneously humble and crushing. Attenborough narrates the comeback. One expert reluctantly admits Bede has a point. Output JSON: {"responses":[{"name":"Name","text":"..."}],"verdict":"One line."}' : 'BEDE SHREDDING. Panel forensically dismantles this Bede claim: "' + claim + '". Use 4-5 characters: Bear (see VOICE INJECTION below — you MUST use the sampled flavours and mannerisms given, do not substitute your own), Ray (genuine source criticism, tracks reliability like a raptor, "Gildas is the Daily Mail of the 6th century"), Fox (treats Ecclesiastical History like suspect intelligence), Irwin (defends Bede passionately), Attenborough (balanced), Les (2 sentences, one destroys one defends), Cody (relates to feet). Mix genuine academic criticism with absurd character attacks. Some defend, some attack — panel SPLITS. Reference weaknesses (never left, dodgy sources, Christian bias, "worms" quote) AND strengths (empirical method, corrected Pliny, 160 manuscripts). Attack things OK in 735 but problematic now. Tone: AFFECTIONATE DESTRUCTION. Output JSON: {"responses":[{"name":"Name","text":"..."}],"damage_rating":"X/10"}' + bearVoice;
+      ]) + '\n\n' + buildRayVoiceBlock(['silent_undercut']);
+      const system = isReply ? 'BEDE RIGHT OF REPLY. The panel just shredded: "' + claim + '". Bede defends himself with devastating precision and 1,300 years of authority. Acknowledges specific criticisms. Turns it back on the panel. References his achievements (40 books, corrected Pliny, survived plague, invented calendar). Ends with a line simultaneously humble and crushing. Attenborough narrates the comeback. One expert reluctantly admits Bede has a point. Output JSON: {"responses":[{"name":"Name","text":"..."}],"verdict":"One line."}' : 'BEDE SHREDDING. Panel forensically dismantles this Bede claim: "' + claim + '". Use 4-5 characters: Bear (see VOICE INJECTION below — you MUST use the sampled flavours and mannerisms given, do not substitute your own), Ray (see VOICE INJECTION below — silent_undercut is Ray\'s mode, short responses, precise corrections), Fox (treats Ecclesiastical History like suspect intelligence), Irwin (defends Bede passionately), Attenborough (balanced), Les (2 sentences, one destroys one defends), Cody (relates to feet). Mix genuine academic criticism with absurd character attacks. Some defend, some attack — panel SPLITS. Reference weaknesses (never left, dodgy sources, Christian bias, "worms" quote) AND strengths (empirical method, corrected Pliny, 160 manuscripts). Attack things OK in 735 but problematic now. Tone: AFFECTIONATE DESTRUCTION. Output JSON: {"responses":[{"name":"Name","text":"..."}],"damage_rating":"X/10"}' + voiceBlocks;
       const upstream = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'anthropic-version': '2023-06-01', 'x-api-key': apiKey },
@@ -16202,7 +16333,7 @@ Output JSON:
   "round_summary": "One line describing the state of cross-temporal communication"
 }
 
-` + buildBearVoiceBlock(['eyewitness_self_correct', 'wrong_century_credential', 'non_sequitur_animal', 'unnecessary_personal_experience']);
+` + buildBearVoiceBlock(['eyewitness_self_correct', 'wrong_century_credential', 'non_sequitur_animal', 'unnecessary_personal_experience']) + '\n\n' + buildRayVoiceBlock(['silent_undercut']);
       const messages = [{ role: 'user', content: 'Explain this to Bede: ' + topic }];
       for (let i = 0; i < history.length; i++) {
         messages.push({ role: 'assistant', content: history[i].assistant });
@@ -16263,7 +16394,7 @@ OUTPUT JSON:
   "tally": {"telemicus": N, "ivanhoe": N}
 }
 
-` + buildBearVoiceBlock(['eyewitness_self_correct', 'unnecessary_personal_experience', 'knew_the_ghost_personally']);
+` + buildBearVoiceBlock(['eyewitness_self_correct', 'unnecessary_personal_experience', 'knew_the_ghost_personally']) + '\n\n' + buildRayVoiceBlock(['silent_undercut']);
       const upstream = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'anthropic-version': '2023-06-01', 'x-api-key': apiKey },
@@ -16308,7 +16439,7 @@ BEDE CLOSES with a final verdict. One line. Scholarly. Often disappointed.
 
 Output JSON: {"responses":[{"name":"The Venerable Bede","text":"..."},{"name":"David Attenborough","text":"..."},{"name":"Bear Grylls","text":"..."},...],"bede_verdict":"Bede's closing one-liner"}
 
-` + buildBearVoiceBlock(['eyewitness_self_correct', 'knew_the_ghost_personally', 'unnecessary_personal_experience']);
+` + buildBearVoiceBlock(['eyewitness_self_correct', 'knew_the_ghost_personally', 'unnecessary_personal_experience']) + '\n\n' + buildRayVoiceBlock(['silent_undercut']);
       const upstream = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'anthropic-version': '2023-06-01', 'x-api-key': apiKey },
