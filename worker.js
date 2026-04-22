@@ -50,6 +50,163 @@ function initComposureState() {
   return state;
 }
 
+// ── Panel Voice: Bear Grylls flavour bank ─────────────────────────────────────
+// Reference implementation of leanspirited-standards/standards/panel-voice-principles.md
+// Split into two layers:
+//   mannerisms — constant shape that makes Bear sound like Bear (keep)
+//   flavours   — variable material, sampled per call (vary)
+//
+// Locale-constrained to Hadrian's Wall / Northumberland. Borneo + saltwater
+// crocodile intentionally excluded from the default pool (never_touch) — they
+// were over-used in prior prompts and broke locale plausibility.
+
+const BEAR_WALL_WALKERS_BANK = {
+  mannerisms: {
+    openers: ['Look,', 'Right,', 'Honestly,', 'Mate,', 'Listen —', 'See, the thing is,'],
+    admit_but_defend: [
+      'I haven\'t actually read X — life\'s too short — but',
+      'Now, I couldn\'t tell you chapter and verse, but',
+      'I haven\'t studied it in depth, obviously, but',
+      'Full disclosure, I skimmed it, but'
+    ],
+    anachronism_device: [
+      'was basically the [MODERN] of his time',
+      'was essentially doing a [MODERN] before we had [MODERN]',
+      'if you think about it, it\'s the same thing as [MODERN]',
+      'that\'s just [MODERN] with extra steps'
+    ],
+    closers: ['Next question.', 'Moving on.', 'Hydration?', 'Case closed.', 'Trust me on this.', 'That\'s the truth of it.'],
+    self_deprecating_asides: ['you learn these things', 'I\'m honest about it', 'that\'s just how it is', 'the body adjusts', 'you get used to it'],
+  },
+  flavours: {
+    places: [
+      'just past Housesteads', 'the Vindolanda vicinity', 'near Sycamore Gap before the felling',
+      'the Solway Firth shoreline', 'up on Hotbank Crags', 'Steel Rigg in the fog',
+      'the turret at Banks East', 'Crag Lough', 'between Chesters and Brocolitia',
+      'the Segedunum perimeter', 'Carvoran fort', 'Walltown Crags', 'the Mithraeum at Brocolitia'
+    ],
+    years: [
+      '2012', '2015', 'March of 2018', 'that windy October', 'winter of \'09',
+      'just last year, actually', 'back in basic training', 'AD 120 — the annoying year',
+      'some time in the noughties', 'the year it snowed in May'
+    ],
+    animals: [
+      'a roe deer', 'a hen harrier', 'a feral goat — they\'re not meant to be here but they are',
+      'an adder, honestly', 'an enormous badger', 'a pine marten — I saw one, nobody believes me',
+      'wild wallabies, there\'s a colony', 'a buzzard that was definitely watching me',
+      'a herd of Highland cattle', 'a curlew with remarkable attitude', 'one of those escaped parakeets'
+    ],
+    mishaps: [
+      'ate a sloe straight off the bush — forty minutes of regret',
+      'tried to ford a stream that was ankle-deep and went waist-deep',
+      'drank from a spring upstream of a dead sheep — lesson learned',
+      'bivvied in a turret in February — character-building',
+      'navigated off a cloud shadow thinking it was a ridge',
+      'attempted a cold-water swim in the Solway — hypothermia is genuinely educational',
+      'got the map reversed — found out forty minutes later at the wrong trig point'
+    ],
+    self_corrections: [
+      'I was there when — well, we traced their route afterwards. Same energy.',
+      'I saw it myself. I mean, I saw the historical record. Practically the same.',
+      'I remember it vividly. Or I\'ve heard about it so many times it feels that way.',
+      'The team and I — or, the team read about it and briefed me, same difference.',
+      'When I say "there," I mean the wider region, the decade, the context — all there.',
+      'First-hand account. Well, second-hand. Third, tops. But solid.'
+    ],
+    ghost_claims: [
+      'old Hadrian himself — lovely man, surprisingly short',
+      'the Venerable Bede — we had mutual friends',
+      'Marcus Cocceius Firmus — solid bloke, dry sense of humour',
+      'one of the Border Reivers — not naming names',
+      'Constantius — cold as the Wall itself',
+      'a centurion from the Ninth — and no, I won\'t tell you where they went'
+    ],
+    non_sequiturs: [
+      'speaking of, hydration?',
+      'reminds me of something the SAS told me',
+      'that\'s almost what happened to me in the Cairngorms',
+      'urine\'s a topic for another time',
+      'there\'s a Londis forty yards away, but that\'s irrelevant',
+      'I nearly brought a poncho — different story'
+    ],
+    modern_analogies: [
+      'Wikipedia of his time', 'medieval YouTube', 'the original TripAdvisor',
+      'basically Slack for monks', 'a one-man BBC', 'the SAS of the 8th century',
+      'the AD-dating equivalent of a viral post', 'a proto-Instagram for manuscripts'
+    ],
+    things_he_hasnt_read: [
+      'Ecclesiastical History', 'De Temporum Ratione', 'anything by Pliny',
+      'the Lindisfarne Gospels in full', 'the Vindolanda tablets',
+      'the actual Latin, obviously — just the gist', 'the footnotes'
+    ],
+  },
+  pattern_affinities: {
+    eyewitness_self_correct:        'HIGH',
+    non_sequitur_animal:            'HIGH',
+    knew_the_ghost_personally:      'HIGH',
+    wrong_century_credential:       'HIGH',
+    unnecessary_personal_experience:'HIGH',
+    sincere_misidentification:      'MEDIUM',
+    silent_undercut:                'NEVER',
+  },
+  never_touch: [
+    'Borneo (over-used — rested for 30 days)',
+    'saltwater crocodile (locale-breaking unless reframed as intentional non-sequitur)',
+    'admitting a simple "I don\'t know"',
+    'ironic distance from himself'
+  ],
+  voice_register: 'Urgent, evangelical, slightly breathless. Sincere self-belief at all times — no irony, no distance. The drama IS the technique, to Bear.',
+};
+
+// Fisher-Yates single-pass sample of n items from arr (worker-safe, no global state).
+function sampleN(arr, n) {
+  const a = arr.slice();
+  const out = [];
+  const take = Math.min(n, a.length);
+  for (let i = 0; i < take; i++) {
+    const j = i + Math.floor(Math.random() * (a.length - i));
+    const tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+    out.push(a[i]);
+  }
+  return out;
+}
+
+// Build a Bear voice injection block for a given panel call. Samples fresh
+// flavours per invocation so repeated calls produce different material.
+// patternOverride lets the caller nudge pattern selection for a particular
+// feature (e.g. Shredding favours eyewitness_self_correct + modern_analogies).
+function buildBearVoiceBlock(patternOverride) {
+  const f = BEAR_WALL_WALKERS_BANK.flavours;
+  const m = BEAR_WALL_WALKERS_BANK.mannerisms;
+  const pick = (arr, n) => sampleN(arr, n).join(' | ');
+
+  const patternsThisCall = patternOverride || [
+    'eyewitness_self_correct', 'non_sequitur_animal', 'unnecessary_personal_experience'
+  ];
+
+  return [
+    'BEAR GRYLLS — voice injection (use this material THIS CALL):',
+    '  Mannerisms (keep constant — these are what make Bear sound like Bear):',
+    '    openers: ' + pick(m.openers, 3),
+    '    admit-but-defend template: ' + pick(m.admit_but_defend, 2),
+    '    anachronism device template: ' + pick(m.anachronism_device, 2),
+    '    closer options: ' + pick(m.closers, 3),
+    '  Flavours (use THESE specific items — do not substitute your own favourites):',
+    '    places:         ' + pick(f.places, 3),
+    '    years:          ' + pick(f.years, 2),
+    '    animals:        ' + pick(f.animals, 2),
+    '    mishaps:        ' + pick(f.mishaps, 2),
+    '    self-corrections:' + pick(f.self_corrections, 2),
+    '    ghost claims:   ' + pick(f.ghost_claims, 2),
+    '    non-sequiturs:  ' + pick(f.non_sequiturs, 2),
+    '    modern analogy: ' + pick(f.modern_analogies, 2),
+    '    not-yet-read:   ' + pick(f.things_he_hasnt_read, 2),
+    '  Apply these patterns this turn: ' + patternsThisCall.join(', '),
+    '  NEVER: ' + BEAR_WALL_WALKERS_BANK.never_touch.join('; '),
+    '  Hard limit: one paragraph max. No "as an SAS-trained endurance athlete" preambles.',
+  ].join('\n');
+}
+
 function computeComposureDeltas(current, panelTension) {
   const next = Object.assign({}, current);
   for (const [id, p] of Object.entries(COMPOSURE_PROFILES)) {
@@ -15968,7 +16125,10 @@ export default {
       const body = await request.json();
       const claim = body.claim || 'something Bede wrote';
       const isReply = body.reply || false;
-      const system = isReply ? 'BEDE RIGHT OF REPLY. The panel just shredded: "' + claim + '". Bede defends himself with devastating precision and 1,300 years of authority. Acknowledges specific criticisms. Turns it back on the panel. References his achievements (40 books, corrected Pliny, survived plague, invented calendar). Ends with a line simultaneously humble and crushing. Attenborough narrates the comeback. One expert reluctantly admits Bede has a point. Output JSON: {"responses":[{"name":"Name","text":"..."}],"verdict":"One line."}' : 'BEDE SHREDDING. Panel forensically dismantles this Bede claim: "' + claim + '". Use 4-5 characters: Bear (has not read Bede, has opinions), Ray (genuine source criticism, tracks reliability like a raptor, "Gildas is the Daily Mail of the 6th century"), Fox (treats Ecclesiastical History like suspect intelligence), Irwin (defends Bede passionately), Attenborough (balanced), Les (2 sentences, one destroys one defends), Cody (relates to feet). Mix genuine academic criticism with absurd character attacks. Some defend, some attack — panel SPLITS. Reference weaknesses (never left, dodgy sources, Christian bias, "worms" quote) AND strengths (empirical method, corrected Pliny, 160 manuscripts). Attack things OK in 735 but problematic now. Tone: AFFECTIONATE DESTRUCTION. Output JSON: {"responses":[{"name":"Name","text":"..."}],"damage_rating":"X/10"}';
+      const bearVoice = isReply ? '' : '\n\n' + buildBearVoiceBlock([
+        'eyewitness_self_correct', 'wrong_century_credential', 'unnecessary_personal_experience'
+      ]);
+      const system = isReply ? 'BEDE RIGHT OF REPLY. The panel just shredded: "' + claim + '". Bede defends himself with devastating precision and 1,300 years of authority. Acknowledges specific criticisms. Turns it back on the panel. References his achievements (40 books, corrected Pliny, survived plague, invented calendar). Ends with a line simultaneously humble and crushing. Attenborough narrates the comeback. One expert reluctantly admits Bede has a point. Output JSON: {"responses":[{"name":"Name","text":"..."}],"verdict":"One line."}' : 'BEDE SHREDDING. Panel forensically dismantles this Bede claim: "' + claim + '". Use 4-5 characters: Bear (see VOICE INJECTION below — you MUST use the sampled flavours and mannerisms given, do not substitute your own), Ray (genuine source criticism, tracks reliability like a raptor, "Gildas is the Daily Mail of the 6th century"), Fox (treats Ecclesiastical History like suspect intelligence), Irwin (defends Bede passionately), Attenborough (balanced), Les (2 sentences, one destroys one defends), Cody (relates to feet). Mix genuine academic criticism with absurd character attacks. Some defend, some attack — panel SPLITS. Reference weaknesses (never left, dodgy sources, Christian bias, "worms" quote) AND strengths (empirical method, corrected Pliny, 160 manuscripts). Attack things OK in 735 but problematic now. Tone: AFFECTIONATE DESTRUCTION. Output JSON: {"responses":[{"name":"Name","text":"..."}],"damage_rating":"X/10"}' + bearVoice;
       const upstream = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'anthropic-version': '2023-06-01', 'x-api-key': apiKey },
@@ -16040,7 +16200,9 @@ Output JSON:
   "bede_confusion":"One line describing what Bede now incorrectly believes",
   "rapport": N,
   "round_summary": "One line describing the state of cross-temporal communication"
-}`;
+}
+
+` + buildBearVoiceBlock(['eyewitness_self_correct', 'wrong_century_credential', 'non_sequitur_animal', 'unnecessary_personal_experience']);
       const messages = [{ role: 'user', content: 'Explain this to Bede: ' + topic }];
       for (let i = 0; i < history.length; i++) {
         messages.push({ role: 'assistant', content: history[i].assistant });
@@ -16083,7 +16245,7 @@ Generate predictions from each expert. Each prediction must be:
 CHARACTERS (use ALL of these):
 - The Venerable Bede (FIRST — scholarly analysis from 1,300 years of observation. References his own works. May mention the contestant's weaknesses he has observed from Jarrow.)
 - David Attenborough (narrates the predictions like a documentary. Waxes lyrical about the competitive dynamic.)
-- Bear Grylls (picks based on who he thinks has better survival instinct. References Borneo. Mentions urine at least once.)
+- Bear Grylls (picks based on who he thinks has better survival instinct — see VOICE INJECTION below; use the sampled flavours and mannerisms given, do not substitute your own.)
 - Ray Mears (quiet analysis. Picks based on who seems more observant. One devastating line about Bear's rationale.)
 - Jason Fox (tactical assessment. Treats it like an operational briefing. "Based on yesterday's performance data...")
 - Steve Irwin (CRIKEY! Enthusiastic. Can't decide. Changes mind mid-sentence.)
@@ -16099,7 +16261,9 @@ OUTPUT JSON:
   ],
   "bede_summary": "Bede's one-line closing summary of the predictions",
   "tally": {"telemicus": N, "ivanhoe": N}
-}`;
+}
+
+` + buildBearVoiceBlock(['eyewitness_self_correct', 'unnecessary_personal_experience', 'knew_the_ghost_personally']);
       const upstream = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'anthropic-version': '2023-06-01', 'x-api-key': apiKey },
@@ -16133,7 +16297,7 @@ DAVID ATTENBOROUGH (CO-HOST — bridges Bede to the panel):
 Translates Bede's scholarship into eloquent modern English. Narrates the chaos. Waxes lyrical.
 
 THE PANEL (2-3 of these, pick the most relevant):
-- Bear Grylls: Claims personal experience. Was there. In 2014. Relates everything to survival/urine/SAS. Confidently wrong about wildlife.
+- Bear Grylls: See VOICE INJECTION below; use the sampled flavours and mannerisms given, do not substitute your own.
 - Ray Mears: Quietly correct. Devastating one-liners correcting Bear. Loses patience eventually.
 - Steve Irwin: CRIKEY! Enthusiastic about everything. Tries to wrestle whatever the topic is about.
 - Jason Fox: Tactical assessment. Dry. Professional. Applies military frameworks to everything.
@@ -16142,7 +16306,9 @@ THE PANEL (2-3 of these, pick the most relevant):
 
 BEDE CLOSES with a final verdict. One line. Scholarly. Often disappointed.
 
-Output JSON: {"responses":[{"name":"The Venerable Bede","text":"..."},{"name":"David Attenborough","text":"..."},{"name":"Bear Grylls","text":"..."},...],"bede_verdict":"Bede's closing one-liner"}`;
+Output JSON: {"responses":[{"name":"The Venerable Bede","text":"..."},{"name":"David Attenborough","text":"..."},{"name":"Bear Grylls","text":"..."},...],"bede_verdict":"Bede's closing one-liner"}
+
+` + buildBearVoiceBlock(['eyewitness_self_correct', 'knew_the_ghost_personally', 'unnecessary_personal_experience']);
       const upstream = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'anthropic-version': '2023-06-01', 'x-api-key': apiKey },
