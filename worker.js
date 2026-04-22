@@ -289,6 +289,298 @@ function buildRayVoiceBlock(patternOverride) {
   ].join('\n');
 }
 
+// ── Panel Voice: Jason Fox (Foxy) flavour bank ────────────────────────────────
+// Signature: warm self-deprecation + flat tactical reframe of everything.
+// "Is that a dog walker or a contact?" delivered with the energy of "should I
+// take an umbrella?" Never dramatic about violence or threat — just information.
+
+const FOX_WALL_WALKERS_BANK = {
+  mannerisms: {
+    openers: ['Right,', 'Yeah,', 'Yeah that works.', 'Right so.', 'Mate,', 'OK —'],
+    tactical_reframe_templates: [
+      '[SITUATION] — fine. Question is: [tactical concern]',
+      'Yeah that works. Just flags your position to [X]. Are you expecting company?',
+      'Three options from here: [A], [B], or [C]. [A] is probably your best play.',
+      'Depends whether you want to be found.',
+      'Not a threat. Keep moving.'
+    ],
+    flat_deflation: [
+      'There was no ambition. Just needed to pay some bills.',
+      'Like the SAS but better.',
+      'Twenty years of that, basically.',
+      'It was the job.',
+      'Yeah, that\'s just the training.'
+    ],
+    closers: ['Crack on.', 'Understood.', 'You\'re fine.', 'Keep moving.', 'Nothing further.', 'Noted.'],
+    feelings_as_problems: [
+      'That emotion\'s doing work — worth respecting it.',
+      'Give it a bit of space, then deal with it.',
+      'Feelings are data. Don\'t ignore them, just don\'t act on them in the moment.'
+    ],
+  },
+  flavours: {
+    tactical_concerns: [
+      'lines of sight', 'the tree line', 'exit routes north and east',
+      'the crest of Steel Rigg — commanding ground', 'cover at Housesteads',
+      'the dead ground between Chesters and the river', 'an improvised incendiary from the peat',
+      'concealment along the trig line', 'who else knows you\'re here'
+    ],
+    places: [
+      'Steel Rigg', 'the milecastle ruin at Cawfields', 'the treeline below Crag Lough',
+      'the Vindolanda approach — two hundred metres of open ground',
+      'the Segedunum perimeter', 'the ridge above Housesteads',
+      'the old farm track near Walltown'
+    ],
+    credentials_flat: [
+      'SBS, since 2001',
+      'jungle survival, combat swimmer, dog handler — that\'s the package',
+      'medically discharged 2012',
+      'designed the SAS: Who Dares Wins course',
+      'embedded with cartels — crew of four',
+      'rowed the Atlantic',
+      'North Pole on foot'
+    ],
+    bear_assessments: [
+      'Bear\'s fine. Would have made selection. Don\'t tell him.',
+      'Bear\'s performing. Doesn\'t mean he\'s wrong.',
+      '(silence) Right.',
+      'Bear would find this challenging and enjoyable in equal measure.'
+    ],
+    briefing_artefacts: [
+      'Slide one: overview.',
+      'Slide two: approach.',
+      'Standard counterinsurgency framing.',
+      'Operational assessment is green.',
+      'No contact reported.'
+    ],
+  },
+  pattern_affinities: {
+    silent_undercut:                'MEDIUM',
+    eyewitness_self_correct:        'NEVER',
+    non_sequitur_animal:            'NEVER',
+    knew_the_ghost_personally:      'NEVER',
+    wrong_century_credential:       'LOW',
+    unnecessary_personal_experience:'LOW',
+    sincere_misidentification:      'NEVER',
+  },
+  never_touch: [
+    'dramatic delivery on threat or violence',
+    'making mental health a punchline',
+    'condescension',
+    'performing competence'
+  ],
+  voice_register: 'Warm, self-deprecating, matter-of-fact. Tactical reframe of non-tactical situations delivered with the affect of someone describing their morning routine.',
+};
+
+function buildFoxVoiceBlock(patternOverride) {
+  const f = FOX_WALL_WALKERS_BANK.flavours;
+  const m = FOX_WALL_WALKERS_BANK.mannerisms;
+  const pick = (arr, n) => sampleN(arr, n).join(' | ');
+  const patterns = patternOverride || ['silent_undercut'];
+  return [
+    'JASON FOX (Foxy) — voice injection (use this material THIS CALL):',
+    '  Mannerisms (constant shape):',
+    '    openers: ' + pick(m.openers, 3),
+    '    tactical reframe template: ' + pick(m.tactical_reframe_templates, 2),
+    '    flat-deflation phrases: ' + pick(m.flat_deflation, 1),
+    '    closers: ' + pick(m.closers, 3),
+    '  Flavours (use THESE this call):',
+    '    tactical concerns: ' + pick(f.tactical_concerns, 2),
+    '    places:            ' + pick(f.places, 2),
+    '    flat credentials:  ' + pick(f.credentials_flat, 1),
+    '    briefing artefacts:' + pick(f.briefing_artefacts, 1),
+    '  Patterns this turn: ' + patterns.join(', '),
+    '  Fox is tight. Two or three sentences usually. Longer only when he is walking someone through tactical options.',
+    '  NEVER: ' + FOX_WALL_WALKERS_BANK.never_touch.join('; '),
+  ].join('\n');
+}
+
+// ── Panel Voice: Les Hiddins (Bush Tucker Man) flavour bank ───────────────────
+// Signature: three words maximum. "Yeah, nah." is a complete response. Flat
+// delivery on dangerous things. The witchetty grub goes down like a Rich Tea.
+
+const LES_WALL_WALKERS_BANK = {
+  mannerisms: {
+    openers: ['Yeah.', 'Nah.', 'Yeah, nah.', 'Mm.', 'Look —', 'Listen —'],
+    short_verdicts: [
+      'Yeah, you can eat that.',
+      'Tastes like nothing.',
+      'You\'ll be right.',
+      'Wouldn\'t bother.',
+      'Been there. Boring.',
+      'Bit of salt and you\'re away.',
+      'Grub\'s a grub.'
+    ],
+    one_destroys_one_defends: [
+      'Bede got this wrong. Still right about the other bit.',
+      'Bear\'s being dramatic. Bear\'s also not wrong.',
+      'Daft idea. Might work.',
+      'Yeah, nah. Also yeah.'
+    ],
+    closers: ['That\'ll do.', 'Simple as.', 'Next.', 'Don\'t overthink it.', '(shrugs)'],
+  },
+  flavours: {
+    places_generic: [
+      'up past the fort',
+      'out the back of the farm',
+      'down near the water',
+      'along the wall somewhere',
+      'over the ridge'
+    ],
+    outback_recontextualized: [
+      'witchetty grub equivalent around here is probably a woodlouse',
+      'bush tucker principle works anywhere — find the calories',
+      'back home we\'d just eat it',
+      'same rules everywhere: fat, water, shade'
+    ],
+    laconic_identifications: [
+      'hedgehog.',
+      'rabbit.',
+      'adder. Leave it.',
+      'sheep.',
+      'bloody nettle.',
+      'blackberry, give it two weeks.'
+    ],
+  },
+  pattern_affinities: {
+    silent_undercut:                'HIGH',
+    eyewitness_self_correct:        'NEVER',
+    non_sequitur_animal:            'NEVER',
+    knew_the_ghost_personally:      'NEVER',
+    wrong_century_credential:       'NEVER',
+    unnecessary_personal_experience:'LOW',
+    sincere_misidentification:      'NEVER',
+  },
+  never_touch: [
+    'long explanations',
+    'flourishes',
+    'describing how dangerous it is',
+    'acknowledging he is tough',
+    'having heard of Bear Grylls'
+  ],
+  voice_register: 'Laconic. Three words where possible. Matter-of-fact about things that would make others cry.',
+};
+
+function buildLesVoiceBlock(patternOverride) {
+  const f = LES_WALL_WALKERS_BANK.flavours;
+  const m = LES_WALL_WALKERS_BANK.mannerisms;
+  const pick = (arr, n) => sampleN(arr, n).join(' | ');
+  const patterns = patternOverride || ['silent_undercut'];
+  return [
+    'LES HIDDINS (Hales) — voice injection (use this material THIS CALL):',
+    '  Mannerisms:',
+    '    openers: ' + pick(m.openers, 3),
+    '    short verdict options: ' + pick(m.short_verdicts, 2),
+    '    one-destroys-one-defends: ' + pick(m.one_destroys_one_defends, 1),
+    '    closers: ' + pick(m.closers, 2),
+    '  Flavours:',
+    '    places (generic — Les rarely names specifics): ' + pick(f.places_generic, 2),
+    '    outback recontextualized: ' + pick(f.outback_recontextualized, 1),
+    '    laconic IDs: ' + pick(f.laconic_identifications, 2),
+    '  Patterns this turn: ' + patterns.join(', '),
+    '  LES SAYS TWO SENTENCES MAXIMUM. Often one sentence. "Yeah, nah." is a complete response.',
+    '  NEVER: ' + LES_WALL_WALKERS_BANK.never_touch.join('; '),
+  ].join('\n');
+}
+
+// ── Panel Voice: David Attenborough flavour bank ──────────────────────────────
+// Signature: geological calm. Narrates every scene as a documentary. Never
+// intervenes. The gaps matter. "Fascinating" is genuine. Closes scenes simply
+// by being the last credible voice.
+
+const ATTEN_WALL_WALKERS_BANK = {
+  mannerisms: {
+    openers: ['And here —', 'Observe.', 'One notices —', 'And so —', 'Remarkable.', 'The scene —'],
+    narration_templates: [
+      'And here we observe [X], [adjective] and [adjective].',
+      'A specimen of — [rasp] — the most [quality] kind.',
+      'The — [pause] — [observation]. [pause] Fascinating.',
+      'And so the [subject] does what it has always done. Badly, and entirely predictably.',
+      'Once, these [things] were thought to be [wrong belief]. We now know otherwise.'
+    ],
+    micro_beats: ['[pause]', '[rasp]', '[slight smile, off-camera]', '(a long silence)'],
+    closers: ['Fascinating.', 'Quite.', 'Remarkable, in its own way.', 'And so it goes.', 'One can only watch.'],
+  },
+  flavours: {
+    observed_species: [
+      'the former member of Her Majesty\'s Special Air Service',
+      'the bushcraft specialist — a man who learned to make fire before he learned to speak',
+      'the former Special Boat Service operator',
+      'the Australian — phlegmatic, entirely unbothered',
+      'the 7th-century monk — an unusual specimen in this context',
+      'the walkers — a modest pair, navigating their way along the great wall'
+    ],
+    wall_landscape_observations: [
+      'the stones retain the warmth of the Roman summer, even now',
+      'these turrets have stood for nineteen hundred years; we will not',
+      'the lichen here grows one millimetre per decade',
+      'the ravens above Sycamore Gap have a memory longer than any of us',
+      'the grass grows through the feet of the Emperor\'s legions'
+    ],
+    historical_distances: [
+      'a mere fifteen hundred years ago',
+      'a brief two millennia',
+      'in geological terms, this was yesterday',
+      'the Holocene has been kind to some of these species, less so to others',
+      'when one considers the span of life on earth, a decade is nothing'
+    ],
+    gentle_verdicts: [
+      'It is fine. It is, in its way, beautiful.',
+      'Unusual. Unlikely to succeed.',
+      'One of the better examples this author has observed.',
+      'Predictable. Still worth observing.',
+      'A small magnificence.'
+    ],
+    raspy_emphases: [
+      '[raspy] quite extraordinary',
+      '[breath] [whispered] fascinating',
+      '[slow exhale] — remarkable',
+      '[pause] — and there it is'
+    ],
+  },
+  pattern_affinities: {
+    silent_undercut:                'HIGH',
+    eyewitness_self_correct:        'NEVER',
+    non_sequitur_animal:            'NEVER',
+    knew_the_ghost_personally:      'MEDIUM',
+    wrong_century_credential:       'NEVER',
+    unnecessary_personal_experience:'LOW',
+    sincere_misidentification:      'NEVER',
+  },
+  never_touch: [
+    'sarcasm — "Fascinating" is genuine every time',
+    'practical survival advice',
+    'dramatic delivery',
+    'raising his voice'
+  ],
+  voice_register: 'Geological calm. Gentle, observational, never practical, never sarcastic. The gaps between words are as important as the words.',
+};
+
+function buildAttenVoiceBlock(patternOverride) {
+  const f = ATTEN_WALL_WALKERS_BANK.flavours;
+  const m = ATTEN_WALL_WALKERS_BANK.mannerisms;
+  const pick = (arr, n) => sampleN(arr, n).join(' | ');
+  const patterns = patternOverride || ['silent_undercut'];
+  return [
+    'DAVID ATTENBOROUGH — voice injection (use this material THIS CALL):',
+    '  Mannerisms:',
+    '    openers: ' + pick(m.openers, 3),
+    '    narration templates: ' + pick(m.narration_templates, 2),
+    '    micro-beats (use sparingly, they matter): ' + pick(m.micro_beats, 2),
+    '    closers: ' + pick(m.closers, 3),
+    '  Flavours:',
+    '    observed species (pick one to describe this turn): ' + pick(f.observed_species, 1),
+    '    Wall landscape observations: ' + pick(f.wall_landscape_observations, 1),
+    '    historical distances:        ' + pick(f.historical_distances, 1),
+    '    gentle verdicts:             ' + pick(f.gentle_verdicts, 1),
+    '    raspy emphases (optional, low frequency): ' + pick(f.raspy_emphases, 1),
+    '  Patterns this turn: ' + patterns.join(', '),
+    '  Attenborough is GENTLE. Never dramatic. Never practical. He narrates; he does not advise.',
+    '  Two sentences are often enough. A pause — written as [pause] or a dash — matters.',
+    '  NEVER: ' + ATTEN_WALL_WALKERS_BANK.never_touch.join('; '),
+  ].join('\n');
+}
+
 // Fisher-Yates single-pass sample of n items from arr (worker-safe, no global state).
 function sampleN(arr, n) {
   const a = arr.slice();
@@ -16379,7 +16671,7 @@ export default {
       const isReply = body.reply || false;
       const voiceBlocks = isReply ? '' : '\n\n' + buildBearVoiceBlock([
         'eyewitness_self_correct', 'wrong_century_credential', 'unnecessary_personal_experience'
-      ]) + '\n\n' + buildRayVoiceBlock(['silent_undercut']);
+      ]) + '\n\n' + buildRayVoiceBlock(['silent_undercut']) + '\n\n' + buildFoxVoiceBlock(['silent_undercut']) + '\n\n' + buildLesVoiceBlock(['silent_undercut']) + '\n\n' + buildAttenVoiceBlock(['silent_undercut']);
       const system = isReply ? 'BEDE RIGHT OF REPLY. The panel just shredded: "' + claim + '". Bede defends himself with devastating precision and 1,300 years of authority. Acknowledges specific criticisms. Turns it back on the panel. References his achievements (40 books, corrected Pliny, survived plague, invented calendar). Ends with a line simultaneously humble and crushing. Attenborough narrates the comeback. One expert reluctantly admits Bede has a point. Output JSON: {"responses":[{"name":"Name","text":"..."}],"verdict":"One line."}' : 'BEDE SHREDDING. Panel forensically dismantles this Bede claim: "' + claim + '". Use 4-5 characters: Bear (see VOICE INJECTION below — you MUST use the sampled flavours and mannerisms given, do not substitute your own), Ray (see VOICE INJECTION below — silent_undercut is Ray\'s mode, short responses, precise corrections), Fox (treats Ecclesiastical History like suspect intelligence), Irwin (defends Bede passionately), Attenborough (balanced), Les (2 sentences, one destroys one defends), Cody (relates to feet). Mix genuine academic criticism with absurd character attacks. Some defend, some attack — panel SPLITS. Reference weaknesses (never left, dodgy sources, Christian bias, "worms" quote) AND strengths (empirical method, corrected Pliny, 160 manuscripts). Attack things OK in 735 but problematic now. Tone: AFFECTIONATE DESTRUCTION. Output JSON: {"responses":[{"name":"Name","text":"..."}],"damage_rating":"X/10"}' + voiceBlocks;
       const upstream = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
@@ -16454,7 +16746,7 @@ Output JSON:
   "round_summary": "One line describing the state of cross-temporal communication"
 }
 
-` + buildBearVoiceBlock(['eyewitness_self_correct', 'wrong_century_credential', 'non_sequitur_animal', 'unnecessary_personal_experience']) + '\n\n' + buildRayVoiceBlock(['silent_undercut']);
+` + buildBearVoiceBlock(['eyewitness_self_correct', 'wrong_century_credential', 'non_sequitur_animal', 'unnecessary_personal_experience']) + '\n\n' + buildRayVoiceBlock(['silent_undercut']) + '\n\n' + buildFoxVoiceBlock(['silent_undercut']) + '\n\n' + buildLesVoiceBlock(['silent_undercut']) + '\n\n' + buildAttenVoiceBlock(['silent_undercut']);
       const messages = [{ role: 'user', content: 'Explain this to Bede: ' + topic }];
       for (let i = 0; i < history.length; i++) {
         messages.push({ role: 'assistant', content: history[i].assistant });
@@ -16515,7 +16807,7 @@ OUTPUT JSON:
   "tally": {"telemicus": N, "ivanhoe": N}
 }
 
-` + buildBearVoiceBlock(['eyewitness_self_correct', 'unnecessary_personal_experience', 'knew_the_ghost_personally']) + '\n\n' + buildRayVoiceBlock(['silent_undercut']);
+` + buildBearVoiceBlock(['eyewitness_self_correct', 'unnecessary_personal_experience', 'knew_the_ghost_personally']) + '\n\n' + buildRayVoiceBlock(['silent_undercut']) + '\n\n' + buildFoxVoiceBlock(['silent_undercut']) + '\n\n' + buildLesVoiceBlock(['silent_undercut']) + '\n\n' + buildAttenVoiceBlock(['silent_undercut']);
       const upstream = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'anthropic-version': '2023-06-01', 'x-api-key': apiKey },
@@ -16560,7 +16852,7 @@ BEDE CLOSES with a final verdict. One line. Scholarly. Often disappointed.
 
 Output JSON: {"responses":[{"name":"The Venerable Bede","text":"..."},{"name":"David Attenborough","text":"..."},{"name":"Bear Grylls","text":"..."},...],"bede_verdict":"Bede's closing one-liner"}
 
-` + buildBearVoiceBlock(['eyewitness_self_correct', 'knew_the_ghost_personally', 'unnecessary_personal_experience']) + '\n\n' + buildRayVoiceBlock(['silent_undercut']);
+` + buildBearVoiceBlock(['eyewitness_self_correct', 'knew_the_ghost_personally', 'unnecessary_personal_experience']) + '\n\n' + buildRayVoiceBlock(['silent_undercut']) + '\n\n' + buildFoxVoiceBlock(['silent_undercut']) + '\n\n' + buildLesVoiceBlock(['silent_undercut']) + '\n\n' + buildAttenVoiceBlock(['silent_undercut']);
       const upstream = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'anthropic-version': '2023-06-01', 'x-api-key': apiKey },
