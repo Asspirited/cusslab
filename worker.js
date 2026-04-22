@@ -12106,6 +12106,18 @@ const SURVIVAL_SCHOOL_WALL_WALKERS = `<!DOCTYPE html>
     .filter-btn { padding:5px 10px; font-size:9px; letter-spacing:1px; text-transform:uppercase; background:#2a2010; border:1px solid #3a2f1e; border-radius:4px; color:#8a7a50; cursor:pointer; }
     .filter-btn.active { border-color:#c4a060; color:#c4a060; }
 
+    /* ── Ask the Panel — collapsible category accordion ── */
+    .ask-cat { margin-bottom:6px; background:#1a1510; border:1px solid #2a2010; border-radius:6px; overflow:hidden; }
+    .ask-cat[open] { border-color:#3a2f1e; }
+    .ask-cat summary { list-style:none; padding:10px 14px; cursor:pointer; display:flex; justify-content:space-between; align-items:center; font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:#8a7a50; font-family:'Cinzel',serif; font-weight:700; user-select:none; -webkit-tap-highlight-color:transparent; }
+    .ask-cat summary::-webkit-details-marker { display:none; }
+    .ask-cat summary::after { content:'+'; font-size:16px; color:#6a5a30; margin-left:10px; transition:transform 0.15s; line-height:1; }
+    .ask-cat[open] summary { color:#c4a060; border-bottom:1px solid #3a2f1e; }
+    .ask-cat[open] summary::after { content:'−'; color:#c4a060; }
+    .ask-cat .ask-cat-count { font-size:9px; color:#5a4a30; font-family:'IBM Plex Mono',monospace; letter-spacing:0; }
+    .ask-cat[open] .ask-cat-count { color:#8a7a50; }
+    .ask-cat .ask-cat-body { padding:10px 14px; display:flex; flex-wrap:wrap; gap:5px; }
+
     /* ── Map section ── */
     .map-container { margin:16px; padding:14px; background:#22190e; border:1px solid #3a2f1e; border-radius:8px; }
     .stop-list { }
@@ -12767,68 +12779,80 @@ const SURVIVAL_SCHOOL_WALL_WALKERS = `<!DOCTYPE html>
   </div>
 
   <div style="margin:16px;">
-    <div style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:#8a7a50;margin-bottom:8px;">Suggested Questions</div>
+    <div style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:#8a7a50;margin-bottom:10px;">Suggested questions — tap a category</div>
 
-    <div style="font-size:9px;letter-spacing:1px;text-transform:uppercase;color:#6a5a30;margin:8px 0 4px;">Roman History</div>
-    <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px;" id="ask-chips-roman">
-      <button class="filter-btn" onclick="askChip(this)">Why did Hadrian build the Wall?</button>
-      <button class="filter-btn" onclick="askChip(this)">What was daily life like for a Roman soldier here?</button>
-      <button class="filter-btn" onclick="askChip(this)">What happened when the Romans left?</button>
-      <button class="filter-btn" onclick="askChip(this)">Who was Marcus Cocceius Firmus?</button>
-      <button class="filter-btn" onclick="askChip(this)">Tell me about the Vindolanda tablets</button>
-      <button class="filter-btn" onclick="askChip(this)">What did Romans use as toilet paper?</button>
-      <button class="filter-btn" onclick="askChip(this)">Why are there so many willies carved on the Wall?</button>
-    </div>
+    <details class="ask-cat">
+      <summary><span>Roman History</span><span class="ask-cat-count">7 questions</span></summary>
+      <div class="ask-cat-body" id="ask-chips-roman">
+        <button class="filter-btn" onclick="askChip(this)">Why did Hadrian build the Wall?</button>
+        <button class="filter-btn" onclick="askChip(this)">What was daily life like for a Roman soldier here?</button>
+        <button class="filter-btn" onclick="askChip(this)">What happened when the Romans left?</button>
+        <button class="filter-btn" onclick="askChip(this)">Who was Marcus Cocceius Firmus?</button>
+        <button class="filter-btn" onclick="askChip(this)">Tell me about the Vindolanda tablets</button>
+        <button class="filter-btn" onclick="askChip(this)">What did Romans use as toilet paper?</button>
+        <button class="filter-btn" onclick="askChip(this)">Why are there so many willies carved on the Wall?</button>
+      </div>
+    </details>
 
-    <div style="font-size:9px;letter-spacing:1px;text-transform:uppercase;color:#6a5a30;margin:8px 0 4px;">Local History &amp; Legends</div>
-    <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px;">
-      <button class="filter-btn" onclick="askChip(this)">Who were the Border Reivers?</button>
-      <button class="filter-btn" onclick="askChip(this)">What is the Hexham Werewolf?</button>
-      <button class="filter-btn" onclick="askChip(this)">Tell me about the Cursing Stone</button>
-      <button class="filter-btn" onclick="askChip(this)">What happened at Sycamore Gap?</button>
-      <button class="filter-btn" onclick="askChip(this)">What is the Lambton Worm?</button>
-      <button class="filter-btn" onclick="askChip(this)">Tell me about the Solway Spaceman</button>
-      <button class="filter-btn" onclick="askChip(this)">Are there really big cats in Northumberland?</button>
-    </div>
+    <details class="ask-cat">
+      <summary><span>Local History &amp; Legends</span><span class="ask-cat-count">7 questions</span></summary>
+      <div class="ask-cat-body">
+        <button class="filter-btn" onclick="askChip(this)">Who were the Border Reivers?</button>
+        <button class="filter-btn" onclick="askChip(this)">What is the Hexham Werewolf?</button>
+        <button class="filter-btn" onclick="askChip(this)">Tell me about the Cursing Stone</button>
+        <button class="filter-btn" onclick="askChip(this)">What happened at Sycamore Gap?</button>
+        <button class="filter-btn" onclick="askChip(this)">What is the Lambton Worm?</button>
+        <button class="filter-btn" onclick="askChip(this)">Tell me about the Solway Spaceman</button>
+        <button class="filter-btn" onclick="askChip(this)">Are there really big cats in Northumberland?</button>
+      </div>
+    </details>
 
-    <div style="font-size:9px;letter-spacing:1px;text-transform:uppercase;color:#6a5a30;margin:8px 0 4px;">Weird &amp; Wonderful</div>
-    <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px;">
-      <button class="filter-btn" onclick="askChip(this)">What is Secundius the Shitter?</button>
-      <button class="filter-btn" onclick="askChip(this)">Did Romans really use urine as toothpaste?</button>
-      <button class="filter-btn" onclick="askChip(this)">What was the Vindolanda "darning tool"?</button>
-      <button class="filter-btn" onclick="askChip(this)">What are the rudest place names near here?</button>
-      <button class="filter-btn" onclick="askChip(this)">Who is Biggus Dickus?</button>
-      <button class="filter-btn" onclick="askChip(this)">What is the World Gurning Championship?</button>
-      <button class="filter-btn" onclick="askChip(this)">Tell me about escaped wallabies in Northumberland</button>
-    </div>
+    <details class="ask-cat">
+      <summary><span>Weird &amp; Wonderful</span><span class="ask-cat-count">7 questions</span></summary>
+      <div class="ask-cat-body">
+        <button class="filter-btn" onclick="askChip(this)">What is Secundius the Shitter?</button>
+        <button class="filter-btn" onclick="askChip(this)">Did Romans really use urine as toothpaste?</button>
+        <button class="filter-btn" onclick="askChip(this)">What was the Vindolanda "darning tool"?</button>
+        <button class="filter-btn" onclick="askChip(this)">What are the rudest place names near here?</button>
+        <button class="filter-btn" onclick="askChip(this)">Who is Biggus Dickus?</button>
+        <button class="filter-btn" onclick="askChip(this)">What is the World Gurning Championship?</button>
+        <button class="filter-btn" onclick="askChip(this)">Tell me about escaped wallabies in Northumberland</button>
+      </div>
+    </details>
 
-    <div style="font-size:9px;letter-spacing:1px;text-transform:uppercase;color:#6a5a30;margin:8px 0 4px;">Bede &amp; Scholarship</div>
-    <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px;">
-      <button class="filter-btn" onclick="askChip(this)">Who was the Venerable Bede?</button>
-      <button class="filter-btn" onclick="askChip(this)">What did Bede get wrong about the Wall?</button>
-      <button class="filter-btn" onclick="askChip(this)">How did Bede die?</button>
-      <button class="filter-btn" onclick="askChip(this)">What is the Sparrow in the Hall?</button>
-      <button class="filter-btn" onclick="askChip(this)">Did Bede ever leave Northumbria?</button>
-      <button class="filter-btn" onclick="askChip(this)">What would Bede think of Bear Grylls?</button>
-    </div>
+    <details class="ask-cat">
+      <summary><span>Bede &amp; Scholarship</span><span class="ask-cat-count">6 questions</span></summary>
+      <div class="ask-cat-body">
+        <button class="filter-btn" onclick="askChip(this)">Who was the Venerable Bede?</button>
+        <button class="filter-btn" onclick="askChip(this)">What did Bede get wrong about the Wall?</button>
+        <button class="filter-btn" onclick="askChip(this)">How did Bede die?</button>
+        <button class="filter-btn" onclick="askChip(this)">What is the Sparrow in the Hall?</button>
+        <button class="filter-btn" onclick="askChip(this)">Did Bede ever leave Northumbria?</button>
+        <button class="filter-btn" onclick="askChip(this)">What would Bede think of Bear Grylls?</button>
+      </div>
+    </details>
 
-    <div style="font-size:9px;letter-spacing:1px;text-transform:uppercase;color:#6a5a30;margin:8px 0 4px;">Wildlife &amp; Nature</div>
-    <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px;">
-      <button class="filter-btn" onclick="askChip(this)">What wildlife might we see today?</button>
-      <button class="filter-btn" onclick="askChip(this)">Are there really golden eagles here?</button>
-      <button class="filter-btn" onclick="askChip(this)">Where can we see red squirrels?</button>
-      <button class="filter-btn" onclick="askChip(this)">What wildflowers are in bloom right now?</button>
-      <button class="filter-btn" onclick="askChip(this)">Has Bear actually seen a crocodile here?</button>
-    </div>
+    <details class="ask-cat">
+      <summary><span>Wildlife &amp; Nature</span><span class="ask-cat-count">5 questions</span></summary>
+      <div class="ask-cat-body">
+        <button class="filter-btn" onclick="askChip(this)">What wildlife might we see today?</button>
+        <button class="filter-btn" onclick="askChip(this)">Are there really golden eagles here?</button>
+        <button class="filter-btn" onclick="askChip(this)">Where can we see red squirrels?</button>
+        <button class="filter-btn" onclick="askChip(this)">What wildflowers are in bloom right now?</button>
+        <button class="filter-btn" onclick="askChip(this)">Has Bear actually seen a crocodile here?</button>
+      </div>
+    </details>
 
-    <div style="font-size:9px;letter-spacing:1px;text-transform:uppercase;color:#6a5a30;margin:8px 0 4px;">Survival &amp; Walking</div>
-    <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px;">
-      <button class="filter-btn" onclick="askChip(this)">How do I treat blisters on a long walk?</button>
-      <button class="filter-btn" onclick="askChip(this)">What should I do if I see an adder?</button>
-      <button class="filter-btn" onclick="askChip(this)">Should I drink my own urine?</button>
-      <button class="filter-btn" onclick="askChip(this)">What would a Roman soldier eat on patrol?</button>
-      <button class="filter-btn" onclick="askChip(this)">Where is the best pub on the Wall?</button>
-    </div>
+    <details class="ask-cat">
+      <summary><span>Survival &amp; Walking</span><span class="ask-cat-count">5 questions</span></summary>
+      <div class="ask-cat-body">
+        <button class="filter-btn" onclick="askChip(this)">How do I treat blisters on a long walk?</button>
+        <button class="filter-btn" onclick="askChip(this)">What should I do if I see an adder?</button>
+        <button class="filter-btn" onclick="askChip(this)">Should I drink my own urine?</button>
+        <button class="filter-btn" onclick="askChip(this)">What would a Roman soldier eat on patrol?</button>
+        <button class="filter-btn" onclick="askChip(this)">Where is the best pub on the Wall?</button>
+      </div>
+    </details>
   </div>
 
   <div style="margin:16px;">
@@ -12858,36 +12882,42 @@ const SURVIVAL_SCHOOL_WALL_WALKERS = `<!DOCTYPE html>
   </div>
 
   <div style="margin:16px;">
-    <div style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:#8a7a50;margin-bottom:8px;">Pick a topic for Bede to encounter</div>
+    <div style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:#8a7a50;margin-bottom:10px;">Pick a topic for Bede to encounter — tap a category</div>
 
-    <div style="font-size:9px;letter-spacing:1px;text-transform:uppercase;color:#6a5a30;margin:8px 0 4px;">Modern Warfare &amp; Tactics</div>
-    <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px;">
-      <button class="filter-btn" onclick="startWilderment(this)">Explain SAS selection to Bede</button>
-      <button class="filter-btn" onclick="startWilderment(this)">Describe abseiling into the Iranian Embassy to a Roman centurion</button>
-      <button class="filter-btn" onclick="startWilderment(this)">Explain night vision goggles to an 8th-century monk</button>
-      <button class="filter-btn" onclick="startWilderment(this)">Brief a Viking raider on Rules of Engagement before Lindisfarne</button>
-      <button class="filter-btn" onclick="startWilderment(this)">Explain a helicopter to Bede</button>
-    </div>
+    <details class="ask-cat">
+      <summary><span>Modern Warfare &amp; Tactics</span><span class="ask-cat-count">5 topics</span></summary>
+      <div class="ask-cat-body">
+        <button class="filter-btn" onclick="startWilderment(this)">Explain SAS selection to Bede</button>
+        <button class="filter-btn" onclick="startWilderment(this)">Describe abseiling into the Iranian Embassy to a Roman centurion</button>
+        <button class="filter-btn" onclick="startWilderment(this)">Explain night vision goggles to an 8th-century monk</button>
+        <button class="filter-btn" onclick="startWilderment(this)">Brief a Viking raider on Rules of Engagement before Lindisfarne</button>
+        <button class="filter-btn" onclick="startWilderment(this)">Explain a helicopter to Bede</button>
+      </div>
+    </details>
 
-    <div style="font-size:9px;letter-spacing:1px;text-transform:uppercase;color:#6a5a30;margin:8px 0 4px;">Survival &amp; Nature</div>
-    <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px;">
-      <button class="filter-btn" onclick="startWilderment(this)">Explain drinking your own urine to a man with daily wine rations</button>
-      <button class="filter-btn" onclick="startWilderment(this)">Describe GPS navigation to someone who mapped tides with letters</button>
-      <button class="filter-btn" onclick="startWilderment(this)">Ray explains velociraptor hunting tactics to Bede using a buzzard</button>
-      <button class="filter-btn" onclick="startWilderment(this)">Bear explains his TV show concept to a monk who never left his cell</button>
-      <button class="filter-btn" onclick="startWilderment(this)">Explain photography to Bede</button>
-    </div>
+    <details class="ask-cat">
+      <summary><span>Survival &amp; Nature</span><span class="ask-cat-count">5 topics</span></summary>
+      <div class="ask-cat-body">
+        <button class="filter-btn" onclick="startWilderment(this)">Explain drinking your own urine to a man with daily wine rations</button>
+        <button class="filter-btn" onclick="startWilderment(this)">Describe GPS navigation to someone who mapped tides with letters</button>
+        <button class="filter-btn" onclick="startWilderment(this)">Ray explains velociraptor hunting tactics to Bede using a buzzard</button>
+        <button class="filter-btn" onclick="startWilderment(this)">Bear explains his TV show concept to a monk who never left his cell</button>
+        <button class="filter-btn" onclick="startWilderment(this)">Explain photography to Bede</button>
+      </div>
+    </details>
 
-    <div style="font-size:9px;letter-spacing:1px;text-transform:uppercase;color:#6a5a30;margin:8px 0 4px;">Modern Life</div>
-    <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px;">
-      <button class="filter-btn" onclick="startWilderment(this)">Explain celebrity culture to a monk who refused promotion</button>
-      <button class="filter-btn" onclick="startWilderment(this)">Describe a football match at St James Park to Bede</button>
-      <button class="filter-btn" onclick="startWilderment(this)">Explain the internet to someone who gathered knowledge from letters</button>
-      <button class="filter-btn" onclick="startWilderment(this)">Describe a modern pub to a Benedictine monk with daily wine rations</button>
-      <button class="filter-btn" onclick="startWilderment(this)">Explain walking boots to Cody Lundin while Bede watches</button>
-    </div>
+    <details class="ask-cat">
+      <summary><span>Modern Life</span><span class="ask-cat-count">5 topics</span></summary>
+      <div class="ask-cat-body">
+        <button class="filter-btn" onclick="startWilderment(this)">Explain celebrity culture to a monk who refused promotion</button>
+        <button class="filter-btn" onclick="startWilderment(this)">Describe a football match at St James Park to Bede</button>
+        <button class="filter-btn" onclick="startWilderment(this)">Explain the internet to someone who gathered knowledge from letters</button>
+        <button class="filter-btn" onclick="startWilderment(this)">Describe a modern pub to a Benedictine monk with daily wine rations</button>
+        <button class="filter-btn" onclick="startWilderment(this)">Explain walking boots to Cody Lundin while Bede watches</button>
+      </div>
+    </details>
 
-    <div style="font-size:9px;letter-spacing:1px;text-transform:uppercase;color:#6a5a30;margin:8px 0 4px;">Or anything</div>
+    <div style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:#8a7a50;margin:14px 0 6px;">Or type your own</div>
     <textarea id="wilderment-input" rows="2" placeholder="Explain anything modern to Bede..." style="width:100%;padding:10px;background:#22190e;border:1px solid #3a2f1e;border-radius:6px;color:#d4c8a0;font-family:Crimson Text,serif;font-size:14px;resize:vertical;"></textarea>
     <button class="btn" style="width:100%;margin-top:8px;" onclick="startWilderment({textContent:document.getElementById('wilderment-input').value})">Explain to Bede</button>
   </div>
@@ -12911,34 +12941,40 @@ const SURVIVAL_SCHOOL_WALL_WALKERS = `<!DOCTYPE html>
       So, once again, the Venerable Bede is talking out of his arsehole. &mdash; Lance, The Detectorists
     </div>
 
-    <div style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:#8a7a50;margin-bottom:8px;">Pick a Bede claim to shred</div>
+    <div style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:#8a7a50;margin-bottom:10px;">Pick a Bede claim to shred — tap a category</div>
 
-    <div style="font-size:9px;letter-spacing:1px;text-transform:uppercase;color:#6a5a30;margin:8px 0 4px;">His "Facts"</div>
-    <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px;">
-      <button class="filter-btn" onclick="startShredding(this)">Bede said the Wall is "eight feet in breadth and twelve in height"</button>
-      <button class="filter-btn" onclick="startShredding(this)">Bede attributed Hadrian's Wall to Emperor Severus, not Hadrian</button>
-      <button class="filter-btn" onclick="startShredding(this)">Bede called the Picts and Scots "worms coming from their holes"</button>
-      <button class="filter-btn" onclick="startShredding(this)">Bede calculated the Earth was 3,952 years old — and was accused of heresy</button>
-      <button class="filter-btn" onclick="startShredding(this)">Bede's AD dating system has no year zero</button>
-    </div>
+    <details class="ask-cat">
+      <summary><span>His &ldquo;Facts&rdquo;</span><span class="ask-cat-count">5 claims</span></summary>
+      <div class="ask-cat-body">
+        <button class="filter-btn" onclick="startShredding(this)">Bede said the Wall is "eight feet in breadth and twelve in height"</button>
+        <button class="filter-btn" onclick="startShredding(this)">Bede attributed Hadrian's Wall to Emperor Severus, not Hadrian</button>
+        <button class="filter-btn" onclick="startShredding(this)">Bede called the Picts and Scots "worms coming from their holes"</button>
+        <button class="filter-btn" onclick="startShredding(this)">Bede calculated the Earth was 3,952 years old — and was accused of heresy</button>
+        <button class="filter-btn" onclick="startShredding(this)">Bede's AD dating system has no year zero</button>
+      </div>
+    </details>
 
-    <div style="font-size:9px;letter-spacing:1px;text-transform:uppercase;color:#6a5a30;margin:8px 0 4px;">His Reliability</div>
-    <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px;">
-      <button class="filter-btn" onclick="startShredding(this)">Bede never left Northumbria but wrote about the entire world</button>
-      <button class="filter-btn" onclick="startShredding(this)">Bede's sources were Gildas (unreliable) and Orosius (Roman propagandist)</button>
-      <button class="filter-btn" onclick="startShredding(this)">Bede cherry-picked which miracles to include — editing God's track record</button>
-      <button class="filter-btn" onclick="startShredding(this)">Bede was a monk from age 7 writing about warfare and kings he never met</button>
-      <button class="filter-btn" onclick="startShredding(this)">Bede had half a bottle of wine per day — was any of this written sober?</button>
-    </div>
+    <details class="ask-cat">
+      <summary><span>His Reliability</span><span class="ask-cat-count">5 claims</span></summary>
+      <div class="ask-cat-body">
+        <button class="filter-btn" onclick="startShredding(this)">Bede never left Northumbria but wrote about the entire world</button>
+        <button class="filter-btn" onclick="startShredding(this)">Bede's sources were Gildas (unreliable) and Orosius (Roman propagandist)</button>
+        <button class="filter-btn" onclick="startShredding(this)">Bede cherry-picked which miracles to include — editing God's track record</button>
+        <button class="filter-btn" onclick="startShredding(this)">Bede was a monk from age 7 writing about warfare and kings he never met</button>
+        <button class="filter-btn" onclick="startShredding(this)">Bede had half a bottle of wine per day — was any of this written sober?</button>
+      </div>
+    </details>
 
-    <div style="font-size:9px;letter-spacing:1px;text-transform:uppercase;color:#6a5a30;margin:8px 0 4px;">His Personal Life</div>
-    <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px;">
-      <button class="filter-btn" onclick="startShredding(this)">Bede was given to a monastery at age 7. That's not scholarship, that's safeguarding</button>
-      <button class="filter-btn" onclick="startShredding(this)">An angel had to finish his tombstone inscription because a monk couldn't</button>
-      <button class="filter-btn" onclick="startShredding(this)">His bones were stolen by a monk and hidden inside someone else's coffin</button>
-      <button class="filter-btn" onclick="startShredding(this)">Bede survived plague at 14 by singing psalms — is that medicine or karaoke?</button>
-      <button class="filter-btn" onclick="startShredding(this)">Bede died completing a sentence. Even death had to wait for the proofreading</button>
-    </div>
+    <details class="ask-cat">
+      <summary><span>His Personal Life</span><span class="ask-cat-count">5 claims</span></summary>
+      <div class="ask-cat-body">
+        <button class="filter-btn" onclick="startShredding(this)">Bede was given to a monastery at age 7. That's not scholarship, that's safeguarding</button>
+        <button class="filter-btn" onclick="startShredding(this)">An angel had to finish his tombstone inscription because a monk couldn't</button>
+        <button class="filter-btn" onclick="startShredding(this)">His bones were stolen by a monk and hidden inside someone else's coffin</button>
+        <button class="filter-btn" onclick="startShredding(this)">Bede survived plague at 14 by singing psalms — is that medicine or karaoke?</button>
+        <button class="filter-btn" onclick="startShredding(this)">Bede died completing a sentence. Even death had to wait for the proofreading</button>
+      </div>
+    </details>
 
     <div id="shredding-loading" style="display:none;text-align:center;padding:20px;">
       <div style="font-size:11px;color:#8a7a50;">The panel is reading Bede's work...</div>
