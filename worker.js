@@ -17309,7 +17309,9 @@ SPECIFIC TRIGGERS:
 
 THE GOLDEN RULE: The underlying REAL history/legend must be accurate. The comedy is the characters' personal involvement in it, not in getting the facts wrong. Real facts. Fake witnesses. The history is the scaffold. The bullshit is the decoration.
 
-Output JSON: {"responses":[{"charId":"bear","name":"Bear Grylls","text":"..."},...],"escalation_note":"one line — what tension/conspiracy is building","round":${round}}`;
+Output JSON: {"responses":[{"charId":"bear","name":"Bear Grylls","text":"..."},...],"escalation_note":"one line — what tension/conspiracy is building","round":${round}}
+
+` + buildBearVoiceBlock(['eyewitness_self_correct', 'knew_the_ghost_personally', 'unnecessary_personal_experience']) + '\n\n' + buildRayVoiceBlock(['silent_undercut']) + '\n\n' + buildFoxVoiceBlock(['silent_undercut']) + '\n\n' + buildLesVoiceBlock(['silent_undercut']) + '\n\n' + buildAttenVoiceBlock(['silent_undercut']) + '\n\n' + buildIrwinVoiceBlock(['unnecessary_personal_experience', 'knew_the_ghost_personally']) + '\n\n' + buildCodyVoiceBlock(['silent_undercut']) + '\n\n' + buildBedeVoiceBlock(['silent_undercut']);
       const escalationPrompts = [
         'Tell us about: ' + topic,
         'That\'s interesting. Tell me more. What REALLY happened? Were any of you actually there?',
