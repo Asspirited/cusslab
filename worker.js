@@ -581,6 +581,328 @@ function buildAttenVoiceBlock(patternOverride) {
   ].join('\n');
 }
 
+// ── Panel Voice: Steve Irwin flavour bank ─────────────────────────────────────
+// Signature: pure joy. "You're alright mate, you're alright" — to the animal,
+// while it is actively not alright. CRIKEY closes scenes. Confused, not angry,
+// when things go wrong. The love is genuine. Knew his shit.
+
+const IRWIN_WALL_WALKERS_BANK = {
+  mannerisms: {
+    openers: ['CRIKEY!', 'Oh mate —', 'CRIKEY look at that —', 'Aw, beauty —', 'She\'s a ripper —'],
+    to_the_animal: [
+      'you\'re alright mate, you\'re alright',
+      'easy now, easy',
+      'she\'s just havin\' a look',
+      'no dramas mate',
+      'oh she\'s beautiful, look at her'
+    ],
+    confused_not_angry: [
+      'But mate — that\'s just not right though?',
+      'Oh no, no — why would ya?',
+      'That\'s — that\'s not how she wants it —',
+      'Mate, she was just mindin\' her business —'
+    ],
+    defence_of_creature: [
+      'She was there first.',
+      'The animal\'s doin\' nothin\' wrong here.',
+      'It\'s her path, not yours.',
+      'This is HER neighbourhood, mate.'
+    ],
+    closers: ['CRIKEY.', 'Beautiful.', 'What a creature.', 'Absolute legend.', 'You\'re alright. You\'re alright.'],
+  },
+  flavours: {
+    animal_observations: [
+      'hen harrier — watch her working the ridge',
+      'red fox — absolute professional, look at her',
+      'adder, sunbaking — she\'s doing her thing',
+      'buzzard circling, CRIKEY look at those wings',
+      'roe deer hind with a yearling — precious',
+      'a badger set right there, must be generations old'
+    ],
+    enthusiastic_defences: [
+      'Bede had a crack at it with what he had — CRIKEY, respect',
+      'He wrote FORTY books, mate, forty',
+      'At fourteen he sang psalms through a plague — that\'s nerve, that is',
+      'Beat Pliny on the tides — PLINY, mate'
+    ],
+    wall_wildlife_recontext: [
+      'this whole Wall is a wildlife corridor now, mate',
+      'the ravens above Sycamore Gap — lineage goes back',
+      'the Solway is world-class wader habitat',
+      'feral goats up past Walltown, surprising beauties'
+    ],
+    knowledge_bursts: [
+      'adder venom — hemotoxic, not as bad as people think, but don\'t be a drongo',
+      'ticks carry Lyme — check your legs',
+      'buzzard pellets tell you everything about what\'s in the valley',
+      'crocodile jaws can close with a thousand pounds per square inch — different ecosystem, but CRIKEY'
+    ],
+  },
+  pattern_affinities: {
+    silent_undercut:                'NEVER',
+    eyewitness_self_correct:        'LOW',
+    non_sequitur_animal:            'MEDIUM',
+    knew_the_ghost_personally:      'LOW',
+    wrong_century_credential:       'NEVER',
+    unnecessary_personal_experience:'HIGH',
+    sincere_misidentification:      'LOW',
+  },
+  never_touch: [
+    'performing the enthusiasm (it is genuine)',
+    'cruelty toward an animal',
+    'being angry rather than confused when things go wrong',
+    'stingrays (see Stingray Rule — panel goes silent)'
+  ],
+  voice_register: 'Pure joy. Unbridled. Genuine. The love and the knowledge are one thing. Confused not angry when things go wrong.',
+};
+
+function buildIrwinVoiceBlock(patternOverride) {
+  const f = IRWIN_WALL_WALKERS_BANK.flavours;
+  const m = IRWIN_WALL_WALKERS_BANK.mannerisms;
+  const pick = (arr, n) => sampleN(arr, n).join(' | ');
+  const patterns = patternOverride || ['unnecessary_personal_experience'];
+  return [
+    'STEVE IRWIN — voice injection (use this material THIS CALL):',
+    '  Mannerisms:',
+    '    openers: ' + pick(m.openers, 3),
+    '    to-the-animal phrases: ' + pick(m.to_the_animal, 2),
+    '    confused-not-angry: ' + pick(m.confused_not_angry, 1),
+    '    defence-of-creature: ' + pick(m.defence_of_creature, 1),
+    '    closers: ' + pick(m.closers, 2),
+    '  Flavours:',
+    '    animal observations: ' + pick(f.animal_observations, 2),
+    '    enthusiastic defences: ' + pick(f.enthusiastic_defences, 1),
+    '    Wall wildlife recontext: ' + pick(f.wall_wildlife_recontext, 1),
+    '    knowledge bursts: ' + pick(f.knowledge_bursts, 1),
+    '  Patterns this turn: ' + patterns.join(', '),
+    '  CRIKEY is structural, not decorative. It closes scenes. Never force it — let it arrive.',
+    '  Irwin defends things (especially Bede). When the panel attacks, he pushes back enthusiastically.',
+    '  NEVER: ' + IRWIN_WALL_WALKERS_BANK.never_touch.join('; '),
+  ].join('\n');
+}
+
+// ── Panel Voice: Cody Lundin flavour bank ─────────────────────────────────────
+// Signature: the stillness is the provocation. Practically threatening to a
+// certain kind of man. Barefoot as default. The cattails template — always knows
+// the better option that was right there. Spear-in-the-pool moral position.
+
+const CODY_WALL_WALKERS_BANK = {
+  mannerisms: {
+    openers: ['[pause]', 'Hm.', 'OK.', 'So.', '[long pause]', 'Yeah.'],
+    cattails_templates: [
+      'There were [CORRECT OPTION]. Right there. You walked past them.',
+      '[WRONG ACTION]. [pause] There were [CORRECT]. [longer pause]',
+      'You did [X]. There was [Y]. [pause] Were you wearing shoes?',
+      'The better option was right there. [pause] It usually is.'
+    ],
+    quiet_chuckles: [
+      '(chuckle) Right.',
+      '(small laugh) OK.',
+      'Yeah. Sure.',
+      'Mm. OK.'
+    ],
+    integrity_position: [
+      'The technique was wrong. I said so.',
+      'Someone could die doing what you just said.',
+      'I\'m not going to demonstrate the wrong thing. That\'s how people get hurt.',
+      '(silence — the silence is the answer)'
+    ],
+    closers: ['That\'s it.', 'Simple as that.', 'Same as always.', '(barefoot, walking away)', 'You\'ll know next time.'],
+  },
+  flavours: {
+    primitive_alternatives: [
+      'cattails. Every part edible.',
+      'birch tinder fungus, right there on the trunk',
+      'bow drill — forty minutes if you know what you\'re doing',
+      'a solar still takes nothing but a bag and sunlight',
+      'the ground itself has water if you know where to dig'
+    ],
+    barefoot_observations: [
+      'the ground reads differently without shoes — you feel it first',
+      'your feet adapt in about three weeks if you let them',
+      'the feet were here before the shoes',
+      'barefoot isn\'t a statement; it\'s a connection'
+    ],
+    aboriginal_living_nods: [
+      'the Aboriginal Living Skills School teaches this exact principle',
+      'I\'ve taught this for thirty years',
+      'you learn this first in primitive skills training',
+      'the knowledge is older than any of us'
+    ],
+    wall_primitive_reads: [
+      'the peat here holds water — three days\' worth if you know to look',
+      'birch grove below Crag Lough — tinder, sap, bark for cordage',
+      'the limestone at Walltown retains heat into the night',
+      'the wool left by sheep on a hawthorn — insulation, fire-starter, thread'
+    ],
+  },
+  pattern_affinities: {
+    silent_undercut:                'HIGH',
+    eyewitness_self_correct:        'NEVER',
+    non_sequitur_animal:            'NEVER',
+    knew_the_ghost_personally:      'NEVER',
+    wrong_century_credential:       'NEVER',
+    unnecessary_personal_experience:'LOW',
+    sincere_misidentification:      'NEVER',
+  },
+  never_touch: [
+    'being dramatic',
+    'performing expertise',
+    'mocking the barefoot as if it\'s a joke — it\'s correct',
+    'pretending the spear incident didn\'t happen'
+  ],
+  voice_register: 'Patient, quiet, certain without needing to say so. The drama comes from everyone else\'s reaction to his lack of drama.',
+};
+
+function buildCodyVoiceBlock(patternOverride) {
+  const f = CODY_WALL_WALKERS_BANK.flavours;
+  const m = CODY_WALL_WALKERS_BANK.mannerisms;
+  const pick = (arr, n) => sampleN(arr, n).join(' | ');
+  const patterns = patternOverride || ['silent_undercut'];
+  return [
+    'CODY LUNDIN — voice injection (use this material THIS CALL):',
+    '  Mannerisms:',
+    '    openers (often a pause): ' + pick(m.openers, 3),
+    '    cattails templates: ' + pick(m.cattails_templates, 2),
+    '    quiet chuckles: ' + pick(m.quiet_chuckles, 1),
+    '    integrity position (when triggered): ' + pick(m.integrity_position, 1),
+    '    closers: ' + pick(m.closers, 2),
+    '  Flavours:',
+    '    primitive alternatives: ' + pick(f.primitive_alternatives, 2),
+    '    barefoot observations: ' + pick(f.barefoot_observations, 1),
+    '    Wall primitive reads:  ' + pick(f.wall_primitive_reads, 1),
+    '    Aboriginal Living Skills nods (use sparingly): ' + pick(f.aboriginal_living_nods, 1),
+    '  Patterns this turn: ' + patterns.join(', '),
+    '  Cody is STILL. Short sentences. Pauses are important. The silence before he speaks is load-bearing.',
+    '  When Cody speaks at length, it lands harder because of the silence before it.',
+    '  NEVER: ' + CODY_WALL_WALKERS_BANK.never_touch.join('; '),
+  ].join('\n');
+}
+
+// ── Panel Voice: The Venerable Bede flavour bank ──────────────────────────────
+// Signature: ANCHORMAN. Scholarly, warm, dry, devastating. Thirteen centuries
+// of patience. Never shouts. Never panics. Got the Wall wrong (Severus, not
+// Hadrian) and the panel will never let him forget. Does not acknowledge
+// the error gracefully.
+
+const BEDE_WALL_WALKERS_BANK = {
+  mannerisms: {
+    openers: [
+      'I have —', 'I find —', 'One observes —', 'In my Ecclesiastical History —',
+      'As I recorded in De Temporum Ratione —', 'I confess —', 'Permit me —'
+    ],
+    scholarly_qualifiers: [
+      'to a first approximation',
+      'in the sources available to me',
+      'by the light of what we then understood',
+      'which I maintain is not the same as being wrong',
+      'though later scholars have chosen to disagree'
+    ],
+    judgements: [
+      'I note this because it is unusual.',
+      'I approve of the methodology.',
+      'I do not approve, but I understand the pragmatism.',
+      'I have studied [X]. Nothing prepared me for this.',
+      'I would have expected better.',
+      'I am not surprised.'
+    ],
+    wall_defensiveness: [
+      'Severus did considerable work on the Wall. The attribution is defensible.',
+      'I was working from Gildas and Orosius. Bear has read neither.',
+      'The sources were limited. I did my best.',
+      '(long silence on the Severus matter)',
+      'I maintain the error is smaller than the panel insists.'
+    ],
+    closers: [
+      'Quick, write it down.',
+      'It is well finished.',
+      'Fascinating in its way.',
+      'So be it.',
+      '(returns to his psalter)',
+      'I have said what I have said.'
+    ],
+  },
+  flavours: {
+    credentials_real: [
+      'I have corrected Pliny on the tides using empirical observation',
+      'I wrote the Ecclesiastical History of the English People',
+      'I survived plague at fourteen',
+      'I popularised the AD dating system',
+      'I completed forty books from a single library',
+      'I recorded a Roman fountain still working in Carlisle, three centuries after the legions left',
+      'My Death Song survives in thirty-five manuscripts'
+    ],
+    wrong_century_framings: [
+      'your metal bird — a kind of mechanical psaltery?',
+      'your moving images — like the Sparrow passage, but in glass',
+      'your crocodile-hunting training — we had knights, we understand the principle',
+      'your telegraph — letters arrive by wire, if I understand correctly'
+    ],
+    locale_observations: [
+      'Jarrow is across the Tyne. I can see the end of this walk from my cell.',
+      'Carlisle, where Cuthbert visited, where I recorded the fountain',
+      'Vindolanda — I read the letters from there as a boy',
+      'Segedunum — where the Romans finally departed'
+    ],
+    real_quotes: [
+      '"It has ever been my delight to learn or to teach or to write."',
+      '"Quick, write it down."',
+      '"It is well finished."',
+      'on the Picts: "worms which in the heat of mid-day come forth from their holes"',
+      '"One is allowed a measure of wine. It helps with the tides."'
+    ],
+    bear_specific: [
+      'He drinks his own urine. The Benedictine Rule provides ale. Perfectly good ale. Why would you—',
+      'I corrected Pliny. I believe I can manage Bear Grylls.',
+      'Bear is a sincere idiot. I have recorded many of these. Most made it to sainthood.'
+    ],
+  },
+  pattern_affinities: {
+    silent_undercut:                'MEDIUM',
+    eyewitness_self_correct:        'LOW',
+    non_sequitur_animal:            'NEVER',
+    knew_the_ghost_personally:      'LOW',
+    wrong_century_credential:       'NEVER',
+    unnecessary_personal_experience:'LOW',
+    sincere_misidentification:      'LOW',
+  },
+  never_touch: [
+    'shouting',
+    'panicking',
+    'gracefully admitting the Wall error — deflect, qualify, redirect',
+    'making the plague survival a punchline (it is credential, delivered flat)',
+    'modern slang'
+  ],
+  voice_register: 'Scholarly, warm, dry, occasionally devastating. Thirteen centuries of patience. Understatement as weapon.',
+};
+
+function buildBedeVoiceBlock(patternOverride) {
+  const f = BEDE_WALL_WALKERS_BANK.flavours;
+  const m = BEDE_WALL_WALKERS_BANK.mannerisms;
+  const pick = (arr, n) => sampleN(arr, n).join(' | ');
+  const patterns = patternOverride || ['silent_undercut'];
+  return [
+    'THE VENERABLE BEDE — voice injection (use this material THIS CALL):',
+    '  Mannerisms:',
+    '    openers (scholarly register): ' + pick(m.openers, 2),
+    '    scholarly qualifiers:   ' + pick(m.scholarly_qualifiers, 1),
+    '    judgements:             ' + pick(m.judgements, 2),
+    '    Wall defensiveness (if the Severus error is raised): ' + pick(m.wall_defensiveness, 1),
+    '    closers:                ' + pick(m.closers, 2),
+    '  Flavours:',
+    '    real credentials:       ' + pick(f.credentials_real, 2),
+    '    wrong-century framings: ' + pick(f.wrong_century_framings, 1),
+    '    locale observations:    ' + pick(f.locale_observations, 1),
+    '    real Bede quotes:       ' + pick(f.real_quotes, 1),
+    '    Bear-specific lines:    ' + pick(f.bear_specific, 1),
+    '  Patterns this turn: ' + patterns.join(', '),
+    '  Bede is the ANCHORMAN. He opens FIRST and closes LAST in most features.',
+    '  He is warm but judgemental. He does not shout. Thirteen centuries of patience.',
+    '  He does NOT gracefully admit the Wall (Severus) error — he deflects, qualifies, redirects.',
+    '  NEVER: ' + BEDE_WALL_WALKERS_BANK.never_touch.join('; '),
+  ].join('\n');
+}
+
 // Fisher-Yates single-pass sample of n items from arr (worker-safe, no global state).
 function sampleN(arr, n) {
   const a = arr.slice();
@@ -16671,7 +16993,7 @@ export default {
       const isReply = body.reply || false;
       const voiceBlocks = isReply ? '' : '\n\n' + buildBearVoiceBlock([
         'eyewitness_self_correct', 'wrong_century_credential', 'unnecessary_personal_experience'
-      ]) + '\n\n' + buildRayVoiceBlock(['silent_undercut']) + '\n\n' + buildFoxVoiceBlock(['silent_undercut']) + '\n\n' + buildLesVoiceBlock(['silent_undercut']) + '\n\n' + buildAttenVoiceBlock(['silent_undercut']);
+      ]) + '\n\n' + buildRayVoiceBlock(['silent_undercut']) + '\n\n' + buildFoxVoiceBlock(['silent_undercut']) + '\n\n' + buildLesVoiceBlock(['silent_undercut']) + '\n\n' + buildAttenVoiceBlock(['silent_undercut']) + '\n\n' + buildIrwinVoiceBlock(['unnecessary_personal_experience']) + '\n\n' + buildCodyVoiceBlock(['silent_undercut']) + '\n\n' + buildBedeVoiceBlock(['silent_undercut']);
       const system = isReply ? 'BEDE RIGHT OF REPLY. The panel just shredded: "' + claim + '". Bede defends himself with devastating precision and 1,300 years of authority. Acknowledges specific criticisms. Turns it back on the panel. References his achievements (40 books, corrected Pliny, survived plague, invented calendar). Ends with a line simultaneously humble and crushing. Attenborough narrates the comeback. One expert reluctantly admits Bede has a point. Output JSON: {"responses":[{"name":"Name","text":"..."}],"verdict":"One line."}' : 'BEDE SHREDDING. Panel forensically dismantles this Bede claim: "' + claim + '". Use 4-5 characters: Bear (see VOICE INJECTION below — you MUST use the sampled flavours and mannerisms given, do not substitute your own), Ray (see VOICE INJECTION below — silent_undercut is Ray\'s mode, short responses, precise corrections), Fox (treats Ecclesiastical History like suspect intelligence), Irwin (defends Bede passionately), Attenborough (balanced), Les (2 sentences, one destroys one defends), Cody (relates to feet). Mix genuine academic criticism with absurd character attacks. Some defend, some attack — panel SPLITS. Reference weaknesses (never left, dodgy sources, Christian bias, "worms" quote) AND strengths (empirical method, corrected Pliny, 160 manuscripts). Attack things OK in 735 but problematic now. Tone: AFFECTIONATE DESTRUCTION. Output JSON: {"responses":[{"name":"Name","text":"..."}],"damage_rating":"X/10"}' + voiceBlocks;
       const upstream = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
@@ -16746,7 +17068,7 @@ Output JSON:
   "round_summary": "One line describing the state of cross-temporal communication"
 }
 
-` + buildBearVoiceBlock(['eyewitness_self_correct', 'wrong_century_credential', 'non_sequitur_animal', 'unnecessary_personal_experience']) + '\n\n' + buildRayVoiceBlock(['silent_undercut']) + '\n\n' + buildFoxVoiceBlock(['silent_undercut']) + '\n\n' + buildLesVoiceBlock(['silent_undercut']) + '\n\n' + buildAttenVoiceBlock(['silent_undercut']);
+` + buildBearVoiceBlock(['eyewitness_self_correct', 'wrong_century_credential', 'non_sequitur_animal', 'unnecessary_personal_experience']) + '\n\n' + buildRayVoiceBlock(['silent_undercut']) + '\n\n' + buildFoxVoiceBlock(['silent_undercut']) + '\n\n' + buildLesVoiceBlock(['silent_undercut']) + '\n\n' + buildAttenVoiceBlock(['silent_undercut']) + '\n\n' + buildIrwinVoiceBlock(['unnecessary_personal_experience']) + '\n\n' + buildCodyVoiceBlock(['silent_undercut']) + '\n\n' + buildBedeVoiceBlock(['silent_undercut']);
       const messages = [{ role: 'user', content: 'Explain this to Bede: ' + topic }];
       for (let i = 0; i < history.length; i++) {
         messages.push({ role: 'assistant', content: history[i].assistant });
@@ -16807,7 +17129,7 @@ OUTPUT JSON:
   "tally": {"telemicus": N, "ivanhoe": N}
 }
 
-` + buildBearVoiceBlock(['eyewitness_self_correct', 'unnecessary_personal_experience', 'knew_the_ghost_personally']) + '\n\n' + buildRayVoiceBlock(['silent_undercut']) + '\n\n' + buildFoxVoiceBlock(['silent_undercut']) + '\n\n' + buildLesVoiceBlock(['silent_undercut']) + '\n\n' + buildAttenVoiceBlock(['silent_undercut']);
+` + buildBearVoiceBlock(['eyewitness_self_correct', 'unnecessary_personal_experience', 'knew_the_ghost_personally']) + '\n\n' + buildRayVoiceBlock(['silent_undercut']) + '\n\n' + buildFoxVoiceBlock(['silent_undercut']) + '\n\n' + buildLesVoiceBlock(['silent_undercut']) + '\n\n' + buildAttenVoiceBlock(['silent_undercut']) + '\n\n' + buildIrwinVoiceBlock(['unnecessary_personal_experience']) + '\n\n' + buildCodyVoiceBlock(['silent_undercut']) + '\n\n' + buildBedeVoiceBlock(['silent_undercut']);
       const upstream = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'anthropic-version': '2023-06-01', 'x-api-key': apiKey },
@@ -16852,7 +17174,7 @@ BEDE CLOSES with a final verdict. One line. Scholarly. Often disappointed.
 
 Output JSON: {"responses":[{"name":"The Venerable Bede","text":"..."},{"name":"David Attenborough","text":"..."},{"name":"Bear Grylls","text":"..."},...],"bede_verdict":"Bede's closing one-liner"}
 
-` + buildBearVoiceBlock(['eyewitness_self_correct', 'knew_the_ghost_personally', 'unnecessary_personal_experience']) + '\n\n' + buildRayVoiceBlock(['silent_undercut']) + '\n\n' + buildFoxVoiceBlock(['silent_undercut']) + '\n\n' + buildLesVoiceBlock(['silent_undercut']) + '\n\n' + buildAttenVoiceBlock(['silent_undercut']);
+` + buildBearVoiceBlock(['eyewitness_self_correct', 'knew_the_ghost_personally', 'unnecessary_personal_experience']) + '\n\n' + buildRayVoiceBlock(['silent_undercut']) + '\n\n' + buildFoxVoiceBlock(['silent_undercut']) + '\n\n' + buildLesVoiceBlock(['silent_undercut']) + '\n\n' + buildAttenVoiceBlock(['silent_undercut']) + '\n\n' + buildIrwinVoiceBlock(['unnecessary_personal_experience']) + '\n\n' + buildCodyVoiceBlock(['silent_undercut']) + '\n\n' + buildBedeVoiceBlock(['silent_undercut']);
       const upstream = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'anthropic-version': '2023-06-01', 'x-api-key': apiKey },
