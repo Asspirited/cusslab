@@ -13363,10 +13363,18 @@ const SURVIVAL_SCHOOL_WALL_WALKERS = `<!DOCTYPE html>
     .photo-modal .pm-meta { font-size:9px; color:#5a5a30; margin-bottom:16px; }
     .photo-modal .pm-btns { display:flex; gap:10px; }
     .photo-modal .pm-btns .btn { font-size:11px; padding:10px 20px; }
-    .rarity-common { color:#8a7a50; }
-    .rarity-uncommon { color:#a0a0a0; }
-    .rarity-rare { color:#c4a040; }
-    .rarity-legendary { color:#a040c0; }
+    .rarity-common { color:#c4894a; }  /* bronze */
+    .rarity-uncommon { color:#c4c4c4; }  /* silver */
+    .rarity-rare { color:#d4a030; }  /* gold */
+    .rarity-legendary { color:#8ac0e4; }  /* platinum */
+    .rarity-mythic { color:#a450d4; text-shadow:0 0 6px rgba(164,80,212,0.6); }  /* void-purple */
+    .rarity-badge { display:inline-flex; align-items:center; gap:4px; }
+    .rarity-badge svg { flex:0 0 auto; }
+    .s-points { font-family:'Cinzel',serif; font-size:10px; color:#c4a060; margin-top:2px; letter-spacing:0.5px; }
+    .s-note { font-size:10px; color:#a09060; font-style:italic; margin-top:4px; padding:4px 6px; background:#1a1208; border-left:2px solid #5a4a20; border-radius:0 3px 3px 0; line-height:1.4; }
+    .pm-note-input { width:100%; max-width:320px; margin-bottom:12px; padding:10px; background:#1a1208; border:1px solid #3a2f1e; border-radius:6px; color:#d4c8a0; font-family:'Crimson Text',serif; font-size:13px; resize:vertical; min-height:60px; }
+    .pm-note-input::placeholder { color:#5a5a30; font-style:italic; }
+    .pm-note-display { max-width:320px; margin-bottom:12px; padding:10px 12px; background:#1a1208; border-left:3px solid #8a7a50; border-radius:0 6px 6px 0; color:#d4c8a0; font-family:'Crimson Text',serif; font-size:13px; font-style:italic; line-height:1.5; }
 
     /* ── Collection stats ── */
     .coll-stats { margin:16px; padding:14px; background:#22190e; border:1px solid #3a2f1e; border-radius:8px; }
@@ -13913,11 +13921,16 @@ const SURVIVAL_SCHOOL_WALL_WALKERS = `<!DOCTYPE html>
       <span id="coll-count">0 / 0</span>
     </div>
     <div class="coll-bar"><div class="coll-fill" id="coll-fill" style="width:0%"></div></div>
-    <div style="display:flex;justify-content:space-around;font-size:9px;letter-spacing:1px;margin-top:8px;">
+    <div style="display:flex;justify-content:center;align-items:center;gap:8px;margin:8px 0 6px;font-family:'Cinzel',serif;">
+      <span style="font-size:10px;letter-spacing:2px;color:#8a7a50;text-transform:uppercase;">Points</span>
+      <span id="coll-points" style="font-size:18px;color:#e4d8b0;font-weight:700;">0</span>
+    </div>
+    <div style="display:flex;justify-content:space-around;flex-wrap:wrap;gap:4px;font-size:9px;letter-spacing:1px;margin-top:6px;">
       <span class="rarity-common" id="coll-common">Common: 0</span>
       <span class="rarity-uncommon" id="coll-uncommon">Uncommon: 0</span>
       <span class="rarity-rare" id="coll-rare">Rare: 0</span>
       <span class="rarity-legendary" id="coll-legendary">Legendary: 0</span>
+      <span class="rarity-mythic" id="coll-mythic">Mythic: 0</span>
     </div>
   </div>
 
@@ -13930,6 +13943,10 @@ const SURVIVAL_SCHOOL_WALL_WALKERS = `<!DOCTYPE html>
     <button class="filter-btn" data-filter="insect">Insects</button>
     <button class="filter-btn" data-filter="reptile">Reptiles</button>
     <button class="filter-btn" data-filter="amphibian">Amphibians</button>
+    <button class="filter-btn" data-filter="fish">Fish</button>
+    <button class="filter-btn" data-filter="lichen">Lichens</button>
+    <button class="filter-btn" data-filter="geology">Geology</button>
+    <button class="filter-btn" data-filter="mythic">Mythic</button>
   </div>
 
   <div class="collection-grid" id="collection-grid"></div>
@@ -13942,12 +13959,17 @@ const SURVIVAL_SCHOOL_WALL_WALKERS = `<!DOCTYPE html>
     <img class="pm-img" id="pm-img" />
     <div class="pm-fact" id="pm-fact"></div>
     <div class="pm-meta" id="pm-meta"></div>
+    <!-- Note input (capture mode) -->
+    <textarea class="pm-note-input" id="pm-note-input" placeholder="Add a note about this sighting... (optional — panel may quote you later)" maxlength="500"></textarea>
+    <!-- Note display (review mode) -->
+    <div class="pm-note-display" id="pm-note-display" style="display:none;"></div>
     <div class="pm-btns">
       <button class="btn" id="pm-confirm" onclick="confirmSighting()">Confirm Sighting</button>
       <button class="btn" id="pm-retake" onclick="retakePhoto()" style="background:#2a1010;border-color:#5a2020;">Retake</button>
       <button class="btn" id="pm-close" onclick="closePhotoModal()">Cancel</button>
     </div>
     <div class="pm-btns" id="pm-review-btns" style="display:none;margin-top:10px;">
+      <button class="btn" id="pm-edit-note" onclick="editSightingNote()" style="background:#1a2a1a;border-color:#3a5a30;">Edit Note</button>
       <button class="btn" id="pm-remove" onclick="removeSighting()" style="background:#2a1010;border-color:#5a2020;">Remove Sighting</button>
       <button class="btn" onclick="closePhotoModal()">Close</button>
     </div>
@@ -14674,6 +14696,72 @@ var Q = [
   {id:'pl02',cat:'pot_luck',stop:null,text:'Jackdaws have been observed doing what, thought unique to primates?',opts:['Using tools','Consoling their partner after conflict','Teaching young','Counting'],ans:1,fact:'They mate for life. After a fight, they comfort each other.'}
 ];
 
+// ── RARITY POINTS + SVG BADGES ────────────────────────────────────
+// Rod 2026-04-23: rarity tiers carry point values now. Mythic = impossible
+// sightings (wolf, lynx, capercaillie) — panel auto-disputes. 16-bit inline
+// SVG badges match the fireside-tile aesthetic.
+var RARITY_POINTS = { common: 5, uncommon: 15, rare: 50, legendary: 200, mythic: 1000 };
+
+function rarityBadgeSvg(rarity) {
+  // 16-bit style chunky SVG crests. Bronze/silver/gold/platinum/mythic palettes.
+  var palettes = {
+    common:    { bg:'#3a2a15', rim:'#7a5a30', core:'#c4894a', shine:'#e4b078' },  // bronze
+    uncommon:  { bg:'#2a2a2a', rim:'#7a7a7a', core:'#c4c4c4', shine:'#e4e4e4' },  // silver
+    rare:      { bg:'#3a2f10', rim:'#8a7020', core:'#d4a030', shine:'#f4d060' },  // gold
+    legendary: { bg:'#1a2a3a', rim:'#4a7ab0', core:'#8ac0e4', shine:'#c4e4f4' },  // platinum
+    mythic:    { bg:'#2a103a', rim:'#6a30a0', core:'#a450d4', shine:'#e480f4' }   // void-purple
+  };
+  var p = palettes[rarity] || palettes.common;
+  // 16x16 pixel crest: shield shape + gem. shape-rendering:crispEdges keeps blocks sharp.
+  return '<svg viewBox="0 0 16 16" width="16" height="16" shape-rendering="crispEdges">' +
+    '<rect x="3" y="2" width="10" height="2" fill="' + p.rim + '"/>' +
+    '<rect x="2" y="4" width="12" height="6" fill="' + p.bg + '"/>' +
+    '<rect x="2" y="4" width="12" height="1" fill="' + p.rim + '"/>' +
+    '<rect x="2" y="4" width="1" height="6" fill="' + p.rim + '"/>' +
+    '<rect x="13" y="4" width="1" height="6" fill="' + p.rim + '"/>' +
+    '<rect x="3" y="10" width="10" height="1" fill="' + p.rim + '"/>' +
+    '<rect x="4" y="11" width="8" height="1" fill="' + p.rim + '"/>' +
+    '<rect x="5" y="12" width="6" height="1" fill="' + p.rim + '"/>' +
+    '<rect x="6" y="13" width="4" height="1" fill="' + p.rim + '"/>' +
+    '<rect x="7" y="14" width="2" height="1" fill="' + p.rim + '"/>' +
+    '<rect x="6" y="6" width="4" height="2" fill="' + p.core + '"/>' +
+    '<rect x="7" y="5" width="2" height="1" fill="' + p.core + '"/>' +
+    '<rect x="7" y="8" width="2" height="1" fill="' + p.core + '"/>' +
+    '<rect x="7" y="6" width="1" height="1" fill="' + p.shine + '"/>' +
+    '</svg>';
+}
+
+function typeIconSvg(type) {
+  // Simple 16x16 pixel silhouettes for species type. Neutral palette.
+  var fg = '#c4a070', bg = '#2a1f10';
+  var shapes = {
+    bird:      '<rect x="3" y="7" width="8" height="4" fill="'+fg+'"/><rect x="11" y="6" width="2" height="3" fill="'+fg+'"/><rect x="2" y="9" width="1" height="2" fill="'+fg+'"/><rect x="13" y="7" width="1" height="1" fill="'+fg+'"/>',
+    mammal:    '<rect x="3" y="7" width="9" height="4" fill="'+fg+'"/><rect x="3" y="11" width="2" height="3" fill="'+fg+'"/><rect x="10" y="11" width="2" height="3" fill="'+fg+'"/><rect x="11" y="5" width="2" height="3" fill="'+fg+'"/>',
+    flower:    '<rect x="7" y="3" width="2" height="2" fill="'+fg+'"/><rect x="5" y="5" width="2" height="2" fill="'+fg+'"/><rect x="9" y="5" width="2" height="2" fill="'+fg+'"/><rect x="7" y="7" width="2" height="2" fill="'+fg+'"/><rect x="5" y="9" width="2" height="2" fill="'+fg+'"/><rect x="9" y="9" width="2" height="2" fill="'+fg+'"/><rect x="7" y="11" width="2" height="3" fill="#5a7a30"/>',
+    tree:      '<rect x="5" y="2" width="6" height="6" fill="#5a7a30"/><rect x="3" y="4" width="10" height="4" fill="#5a7a30"/><rect x="7" y="8" width="2" height="6" fill="#6a4a20"/>',
+    insect:    '<rect x="7" y="5" width="2" height="6" fill="'+fg+'"/><rect x="4" y="6" width="3" height="2" fill="'+fg+'"/><rect x="9" y="6" width="3" height="2" fill="'+fg+'"/><rect x="3" y="5" width="1" height="1" fill="'+fg+'"/><rect x="12" y="5" width="1" height="1" fill="'+fg+'"/>',
+    reptile:   '<rect x="3" y="8" width="2" height="2" fill="'+fg+'"/><rect x="5" y="9" width="2" height="2" fill="'+fg+'"/><rect x="7" y="8" width="2" height="2" fill="'+fg+'"/><rect x="9" y="7" width="2" height="2" fill="'+fg+'"/><rect x="11" y="6" width="2" height="2" fill="'+fg+'"/>',
+    amphibian: '<rect x="5" y="6" width="6" height="4" fill="'+fg+'"/><rect x="4" y="7" width="1" height="2" fill="'+fg+'"/><rect x="11" y="7" width="1" height="2" fill="'+fg+'"/><rect x="6" y="5" width="1" height="1" fill="#2a1f10"/><rect x="9" y="5" width="1" height="1" fill="#2a1f10"/><rect x="6" y="10" width="2" height="2" fill="'+fg+'"/><rect x="8" y="10" width="2" height="2" fill="'+fg+'"/>',
+    fish:      '<rect x="4" y="7" width="8" height="3" fill="'+fg+'"/><rect x="11" y="5" width="2" height="2" fill="'+fg+'"/><rect x="11" y="10" width="2" height="2" fill="'+fg+'"/><rect x="5" y="8" width="1" height="1" fill="#2a1f10"/>',
+    lichen:    '<rect x="3" y="4" width="3" height="3" fill="#8a9a6a"/><rect x="7" y="3" width="4" height="3" fill="#7a8a5a"/><rect x="11" y="6" width="2" height="3" fill="#6a7a4a"/><rect x="4" y="9" width="4" height="3" fill="#7a8a5a"/><rect x="9" y="10" width="3" height="2" fill="#8a9a6a"/>',
+    geology:   '<rect x="2" y="10" width="12" height="3" fill="#6a5a40"/><rect x="3" y="7" width="10" height="3" fill="#8a7a60"/><rect x="4" y="4" width="8" height="3" fill="#a4947a"/>',
+    mythic:    '<rect x="6" y="3" width="4" height="2" fill="#e480f4"/><rect x="4" y="5" width="8" height="4" fill="#a450d4"/><rect x="2" y="9" width="12" height="3" fill="#6a30a0"/><rect x="5" y="12" width="2" height="1" fill="#6a30a0"/><rect x="9" y="12" width="2" height="1" fill="#6a30a0"/>'
+  };
+  var shape = shapes[type] || shapes.geology;
+  return '<svg viewBox="0 0 16 16" width="16" height="16" shape-rendering="crispEdges">' + shape + '</svg>';
+}
+
+function getSpeciesPoints(id) {
+  var s = SP.find(function(sp) { return sp.id === id; });
+  return s ? (RARITY_POINTS[s.rarity] || 0) : 0;
+}
+
+function computeCollectionScore(idArray) {
+  var total = 0;
+  for (var i = 0; i < idArray.length; i++) total += getSpeciesPoints(idArray[i]);
+  return total;
+}
+
 var SP = [
   {id:'curlew',name:'Curlew',type:'bird',rarity:'common',icon:'\\🐦',fact:'Europe\\'s largest wader.'},
   {id:'lapwing',name:'Lapwing',type:'bird',rarity:'common',icon:'\\🐦',fact:'Also called \\\\"peewit.\\\\"'},
@@ -14722,7 +14810,72 @@ var SP = [
   {id:'emperor_moth',name:'Emperor Moth',type:'insect',rarity:'rare',icon:'\\🦋',fact:'Only UK silk moth. Males detect females from a mile away.'},
   {id:'common_lizard',name:'Common Lizard',type:'reptile',rarity:'uncommon',icon:'\\🦎',fact:'Gives birth to live young \\\\u2014 unusual for a lizard.'},
   {id:'adder',name:'Adder',type:'reptile',rarity:'rare',icon:'\\🐍',fact:'UK\\'s only venomous snake. Last fatal bite: 1975.'},
-  {id:'great_crested_newt',name:'Great Crested Newt',type:'amphibian',rarity:'legendary',icon:'\\🦎',fact:'Protected by law. An offence to disturb their habitat.'}
+  {id:'great_crested_newt',name:'Great Crested Newt',type:'amphibian',rarity:'legendary',icon:'\\🦎',fact:'Protected by law. An offence to disturb their habitat.'},
+  // ── EXPANSION 2026-04-23 ──────────────────────────────────────
+  // Additional birds
+  {id:'raven',name:'Raven',type:'bird',rarity:'uncommon',icon:'\\🦅',fact:'Resident on Crag Lough. Solve puzzles better than most dogs. Pairs for life.'},
+  {id:'jay',name:'Jay',type:'bird',rarity:'uncommon',icon:'\\🐦',fact:'Plants thousands of acorns every autumn. Forgets enough to reforest hillsides.'},
+  {id:'snipe',name:'Snipe',type:'bird',rarity:'uncommon',icon:'\\🐦',fact:'Males "drum" in display flight — tail feathers vibrate in the wind. Sounds like a ghost goat.'},
+  {id:'yellowhammer',name:'Yellowhammer',type:'bird',rarity:'uncommon',icon:'\\🐦',fact:'"A little bit of bread and no cheeeeese" — the call. Declining farmland bird.'},
+  {id:'grey_wagtail',name:'Grey Wagtail',type:'bird',rarity:'uncommon',icon:'\\🐦',fact:'Always near fast water. Yellow underneath despite the name.'},
+  {id:'pied_wagtail',name:'Pied Wagtail',type:'bird',rarity:'common',icon:'\\🐦',fact:'Tail never still. Known to Victorian walkers as the "polly dishwasher."'},
+  {id:'dunnock',name:'Dunnock',type:'bird',rarity:'common',icon:'\\🐦',fact:'Looks like a sparrow, isn\\'t one. Sexually the most interesting bird in Britain — chaotic polygamy.'},
+  {id:'woodcock',name:'Woodcock',type:'bird',rarity:'rare',icon:'\\🐦',fact:'Perfect camouflage. You\\'ll step on it before you see it. "Roding" flight at dusk.'},
+  {id:'crossbill',name:'Crossbill',type:'bird',rarity:'rare',icon:'\\🐦',fact:'Bill crosses to extract pine seeds. First British bird to nest in January.'},
+  // Additional mammals
+  {id:'fox',name:'Red Fox',type:'mammal',rarity:'common',icon:'\\🦊',fact:'Common across Northumberland. Scat marks territory. Can hear a vole under snow from 30m.'},
+  {id:'mole',name:'Mole',type:'mammal',rarity:'common',icon:'\\🐾',fact:'You\\'ll see the hills, not the mole. Can dig 20m of tunnel per day. Lives alone and aggressively.'},
+  {id:'field_vole',name:'Field Vole',type:'mammal',rarity:'uncommon',icon:'\\🐁',fact:'Most abundant UK mammal. Kestrel prey. Lives in grass-runs you can follow on wet days.'},
+  {id:'badger',name:'Badger',type:'mammal',rarity:'rare',icon:'\\🦡',fact:'Setts can be centuries old. Look for flattened paths + discarded bedding near entrances.'},
+  {id:'pipistrelle_bat',name:'Pipistrelle Bat',type:'mammal',rarity:'common',icon:'\\🦇',fact:'Dusk flyers over water. Weigh less than a 20p coin. Echolocate at up to 110kHz.'},
+  {id:'daubenton_bat',name:'Daubenton\\'s Bat',type:'mammal',rarity:'uncommon',icon:'\\🦇',fact:'The "water bat." Trawls just above the surface with its feet. Often mistaken for pipistrelles.'},
+  {id:'weasel',name:'Weasel',type:'mammal',rarity:'rare',icon:'\\🐾',fact:'Tiny. Kills animals several times its size. Pops out of stone walls.'},
+  // Additional flowers + bog-specialist plants
+  {id:'marsh_marigold',name:'Marsh Marigold',type:'flower',rarity:'common',icon:'\\🌼',fact:'Ancient — pre-dates the Ice Age in Britain. Toxic if eaten raw.'},
+  {id:'meadowsweet',name:'Meadowsweet',type:'flower',rarity:'common',icon:'\\🌿',fact:'Source of the compound that became aspirin. Known to Bede\\'s contemporaries as pain relief.'},
+  {id:'heather',name:'Heather',type:'flower',rarity:'common',icon:'\\🌺',fact:'The moors you can see from the Wall burn in rotation for grouse. Bees love late-summer flowers.'},
+  {id:'bilberry',name:'Bilberry',type:'flower',rarity:'common',icon:'\\🫐',fact:'Wild blueberry of the hills. Stains fingers purple. Ripe from July.'},
+  {id:'devils_bit_scabious',name:'Devil\\'s-bit Scabious',type:'flower',rarity:'uncommon',icon:'\\🌸',fact:'Legend: the devil bit the root short in anger that the plant cured so many ills.'},
+  {id:'butterwort',name:'Common Butterwort',type:'flower',rarity:'uncommon',icon:'\\🌿',fact:'Carnivorous. Sticky leaves trap and digest midges. A bog specialist.'},
+  {id:'sundew',name:'Common Sundew',type:'flower',rarity:'rare',icon:'\\🌿',fact:'Carnivorous. Glistening droplets are glue. "Rosa solis" — sun dew. Ray would take you to see one.'},
+  {id:'grass_of_parnassus',name:'Grass of Parnassus',type:'flower',rarity:'rare',icon:'\\🌼',fact:'Not a grass. Greek mountain name. Marsh specialist, increasingly scarce.'},
+  // Additional trees
+  {id:'rowan',name:'Rowan',type:'tree',rarity:'common',icon:'\\🌳',fact:'The "mountain ash." Believed in folklore to protect against witches. Bright red berries.'},
+  {id:'scots_pine',name:'Scots Pine',type:'tree',rarity:'common',icon:'\\🌲',fact:'Britain\\'s only native pine. Post-Ice-Age survivor. Look for orange upper bark.'},
+  {id:'hawthorn',name:'Hawthorn',type:'tree',rarity:'common',icon:'\\🌳',fact:'"May tree." Blossom traditionally brought bad luck if brought indoors. Ancient field markers.'},
+  {id:'alder',name:'Alder',type:'tree',rarity:'uncommon',icon:'\\🌳',fact:'Loves waterside. Wood turns orange when cut, doesn\\'t rot in water — used for Venice\\'s piles.'},
+  {id:'yew',name:'Yew',type:'tree',rarity:'rare',icon:'\\🌲',fact:'Can live 2,000+ years. Churchyard classic. Every part toxic except the red aril.'},
+  // Lichens (Ray\\'s signal)
+  {id:'dog_lichen',name:'Dog Lichen',type:'lichen',rarity:'common',icon:'\\🍃',fact:'"Peltigera." Leafy lichen of damp ground. Has tooth-shaped lobes.'},
+  {id:'map_lichen',name:'Map Lichen',type:'lichen',rarity:'uncommon',icon:'\\🍃',fact:'Yellow-green patches on stone, outlined in black. Used to carbon-date rock exposure.'},
+  {id:'beard_lichen',name:'Beard Lichen',type:'lichen',rarity:'rare',icon:'\\🍃',fact:'"Usnea." Hangs from trees in clean air only. Its presence = air quality proof.'},
+  // Additional insects
+  {id:'northern_brown_argus',name:'Northern Brown Argus',type:'insect',rarity:'rare',icon:'\\🦋',fact:'A speciality butterfly of limestone-rich Northumberland grassland. Single white dot on forewing.'},
+  {id:'green_hairstreak',name:'Green Hairstreak',type:'insect',rarity:'uncommon',icon:'\\🦋',fact:'Only UK butterfly with fully green underside. Lands always with wings closed.'},
+  {id:'green_tiger_beetle',name:'Green Tiger Beetle',type:'insect',rarity:'uncommon',icon:'\\🪲',fact:'Metallic iridescent green. Fastest British insect — sprints so fast it temporarily goes blind.'},
+  {id:'emperor_dragonfly',name:'Emperor Dragonfly',type:'insect',rarity:'rare',icon:'\\🦋',fact:'Britain\\'s largest dragonfly. Eats prey on the wing. Will dogfight anything entering its territory.'},
+  // Additional reptiles + amphibians
+  {id:'slow_worm',name:'Slow Worm',type:'reptile',rarity:'uncommon',icon:'\\🦎',fact:'A legless LIZARD, not a snake. Drops its tail if grabbed. Loves compost heaps.'},
+  {id:'common_frog',name:'Common Frog',type:'amphibian',rarity:'common',icon:'\\🐸',fact:'UK population ~2 million. Males have slightly larger hands. Spawn clusters in bog pools.'},
+  {id:'common_toad',name:'Common Toad',type:'amphibian',rarity:'common',icon:'\\🐸',fact:'Warts produce mild toxin. Returns to birth pond to breed every spring, against the odds.'},
+  {id:'palmate_newt',name:'Palmate Newt',type:'amphibian',rarity:'uncommon',icon:'\\🦎',fact:'Britain\\'s smallest newt. Upland specialist. Males grow webbed hind feet in breeding season.'},
+  // Fish (if you cross water)
+  {id:'brown_trout',name:'Brown Trout',type:'fish',rarity:'uncommon',icon:'\\🐟',fact:'Native Tyne tributary resident. Dark spots over pale belly. Sees the fly before you cast.'},
+  {id:'atlantic_salmon',name:'Atlantic Salmon',type:'fish',rarity:'rare',icon:'\\🐟',fact:'Runs up the Tyne in summer/autumn. Leaps weirs. Navigates home by Earth\\'s magnetic field.'},
+  {id:'grayling',name:'Grayling',type:'fish',rarity:'rare',icon:'\\🐟',fact:'The "lady of the stream." Smells faintly of thyme. Water-quality indicator.'},
+  // Geology — Whin Sill + stones
+  {id:'dolerite',name:'Dolerite (Whin Sill)',type:'geology',rarity:'common',icon:'\\🪨',fact:'The Wall sits on Whin Sill dolerite — 295-million-year-old volcanic intrusion. What the Romans used.'},
+  {id:'glacial_erratic',name:'Glacial Erratic',type:'geology',rarity:'uncommon',icon:'\\🪨',fact:'A boulder transported by glaciers from the Lake District or Scotland, now sitting on Northumberland bedrock.'},
+  {id:'roman_carving',name:'Roman Carved Stone',type:'geology',rarity:'rare',icon:'\\🪨',fact:'Altar, inscription, or phallic carving. 59+ phallic carvings identified on the Wall alone.'},
+  {id:'roman_milestone',name:'Roman Milestone',type:'geology',rarity:'legendary',icon:'\\🪨',fact:'An original milestone in situ. Vanishingly rare — most were repurposed centuries ago.'},
+  // MYTHIC tier — impossible sightings. Panel auto-disputes. Fires ConspireEngine.
+  // Rod-canonical 2026-04-23: new tier above Legendary. Panel will ALL claim to have seen it.
+  {id:'wolf',name:'Wolf',type:'mythic',rarity:'mythic',icon:'\\🐺',fact:'Extinct in Britain since ~1680. The last English wolf was killed in Yorkshire. (If you see one: you didn\\'t.)'},
+  {id:'lynx',name:'Eurasian Lynx',type:'mythic',rarity:'mythic',icon:'\\🐈',fact:'Extinct for ~1,300 years. Reintroduction discussed but not happened. (Bear will claim he was there.)'},
+  {id:'capercaillie',name:'Capercaillie',type:'mythic',rarity:'mythic',icon:'\\🦃',fact:'Scottish Highland grouse. Wrong habitat entirely. (Fox will attempt a tactical assessment regardless.)'},
+  {id:'wild_boar',name:'Wild Boar',type:'mythic',rarity:'mythic',icon:'\\🐗',fact:'Small populations exist elsewhere in England, not here. (Irwin will CRIKEY anyway.)'},
+  {id:'wall_wyrm',name:'The Wall Wyrm',type:'mythic',rarity:'mythic',icon:'\\🐉',fact:'Folk legend of a dragon beneath the Whin Sill. (Bede would caution. The panel would not.)'},
+  {id:'border_brownie',name:'Border Brownie',type:'mythic',rarity:'mythic',icon:'\\✨',fact:'Household spirit of Border mythology. Leave it milk, it does your chores. (Marcus Cocceius Firmus swears by his.)'}
 ];
 
 // ── SPECIAL ROUND DATA ───────────────────────────────────────────
@@ -15431,9 +15584,24 @@ function renderCollection() {
       card.appendChild(nameEl);
 
       var rarityEl = document.createElement('div');
-      rarityEl.className = 's-rarity rarity-' + s.rarity;
-      rarityEl.textContent = s.rarity;
+      rarityEl.className = 's-rarity rarity-' + s.rarity + ' rarity-badge';
+      rarityEl.innerHTML = rarityBadgeSvg(s.rarity) + '<span>' + s.rarity + '</span>';
       card.appendChild(rarityEl);
+
+      // Points chip
+      var pointsEl = document.createElement('div');
+      pointsEl.className = 's-points';
+      pointsEl.textContent = (RARITY_POINTS[s.rarity] || 0) + ' pts';
+      card.appendChild(pointsEl);
+
+      // Note preview if sighting has a note
+      if (found && state.sightings && state.sightings[s.id] && state.sightings[s.id].note) {
+        var noteEl = document.createElement('div');
+        noteEl.className = 's-note';
+        var noteText = state.sightings[s.id].note;
+        noteEl.textContent = noteText.length > 60 ? noteText.slice(0, 57) + '\\\\u2026' : noteText;
+        card.appendChild(noteEl);
+      }
 
       card.onclick = function() { onSpeciesClick(s.id); };
       grid.appendChild(card);
@@ -15500,6 +15668,24 @@ function showPhotoModal(id, blob, isReview) {
     meta.textContent = currentLat ? 'Location: ' + currentLat.toFixed(4) + ', ' + currentLng.toFixed(4) : '';
   }
 
+  // Note input vs display
+  var noteInput = document.getElementById('pm-note-input');
+  var noteDisplay = document.getElementById('pm-note-display');
+  if (isReview) {
+    noteInput.style.display = 'none';
+    var sighting = state.sightings && state.sightings[id];
+    if (sighting && sighting.note) {
+      noteDisplay.textContent = '\\\\u201C' + sighting.note + '\\\\u201D';
+      noteDisplay.style.display = 'block';
+    } else {
+      noteDisplay.style.display = 'none';
+    }
+  } else {
+    noteInput.style.display = 'block';
+    noteInput.value = '';
+    noteDisplay.style.display = 'none';
+  }
+
   // Show appropriate buttons
   document.getElementById('pm-confirm').style.display = isReview ? 'none' : 'inline-block';
   document.getElementById('pm-retake').style.display = isReview ? 'none' : 'inline-block';
@@ -15507,6 +15693,27 @@ function showPhotoModal(id, blob, isReview) {
   document.getElementById('pm-review-btns').style.display = isReview ? 'flex' : 'none';
 
   modal.classList.add('show');
+}
+
+function editSightingNote() {
+  var id = pendingSpeciesId;
+  if (!id) return;
+  var current = (state.sightings && state.sightings[id] && state.sightings[id].note) || '';
+  var updated = prompt('Edit your note for this sighting:', current);
+  if (updated === null) return; // cancelled
+  if (!state.sightings) state.sightings = {};
+  if (!state.sightings[id]) state.sightings[id] = { ts: Date.now() };
+  state.sightings[id].note = updated.trim();
+  saveState();
+  // Refresh the note display
+  var noteDisplay = document.getElementById('pm-note-display');
+  if (updated.trim()) {
+    noteDisplay.textContent = '\\\\u201C' + updated.trim() + '\\\\u201D';
+    noteDisplay.style.display = 'block';
+  } else {
+    noteDisplay.style.display = 'none';
+  }
+  renderCollection();
 }
 
 function closePhotoModal() {
@@ -15532,30 +15739,62 @@ function confirmSighting() {
       state.collected.push(id);
     }
 
-    // Record sighting metadata
+    // Record sighting metadata (incl. optional user note — may be misquoted later by panel)
     if (!state.sightings) state.sightings = {};
+    var noteInputEl = document.getElementById('pm-note-input');
+    var userNote = noteInputEl ? noteInputEl.value.trim() : '';
     state.sightings[id] = {
       ts: Date.now(),
       lat: currentLat,
       lng: currentLng,
-      nearestStop: currentLat ? findNearest(currentLat, currentLng).stop.name : null
+      nearestStop: currentLat ? findNearest(currentLat, currentLng).stop.name : null,
+      note: userNote || null
     };
     saveState();
 
-    // Character quip
+    // Character quip — mythic tier gets auto-dispute; note-bearing sightings get panel misquote
     var species = SP.find(function(s) { return s.id === id; });
     if (species) {
-      var collQuips = [
-        { char:'David Attenborough', text:'And here, quite unexpectedly, the ' + species.name + '. ' + species.fact },
-        { char:'Ray Mears', text:'Good eye. ' + species.name + '. ' + species.fact },
-        { char:'Bear Grylls', text:'I see a ' + species.name + '! In Borneo I once had to \\\\u2014 actually never mind. ' + species.fact },
-        { char:'Steve Irwin', text:'CRIKEY! A ' + species.name + '! Beauty! ' + species.fact },
-      ];
+      var collQuips;
+      if (species.rarity === 'mythic') {
+        // MYTHIC tier — panel auto-disputes. Impossible sightings = ConspireEngine fires.
+        collQuips = [
+          { char:'Ray Mears', text:'No. No, you didn\\'t. ' + species.fact },
+          { char:'David Attenborough', text:'A curious claim. The ' + species.name + ' is, in fact, absent from these islands. And yet the walker persists.' },
+          { char:'The Venerable Bede', text:'I have consulted my sources. The ' + species.name + ' is not recorded. I note this with scholarly restraint.' },
+          { char:'Sir Geoffrey Boycott', text:'Rubbish. You didn\\'t see a ' + species.name + '. Not in Northumberland. You wouldn\\'t see that in Yorkshire either, pal.' },
+          { char:'Bear Grylls', text:'A ' + species.name + '? I saw one in 2012. Somewhere. Probably here. Actually — I was briefed about one here. Same energy.' },
+          { char:'Jeremy Clarkson', text:'A ' + species.name + '? Oh absolutely. I drove past seventeen of them on the M6 last Tuesday. Where\\'s the bar?' },
+          { char:'David Mitchell', text:'Right. So you\\'re saying \\\\u2014 you\\'re saying you saw a ' + species.name + '? Which is \\\\u2014 which is impossible, statistically, historically, biologically. I don\\'t \\\\u2014 I don\\'t know what to do with that.' },
+        ];
+      } else {
+        collQuips = [
+          { char:'David Attenborough', text:'And here, quite unexpectedly, the ' + species.name + '. ' + species.fact },
+          { char:'Ray Mears', text:'Good eye. ' + species.name + '. ' + species.fact },
+          { char:'Bear Grylls', text:'I see a ' + species.name + '! In Borneo I once had to \\\\u2014 actually never mind. ' + species.fact },
+          { char:'Steve Irwin', text:'CRIKEY! A ' + species.name + '! Beauty! ' + species.fact },
+          { char:'The Venerable Bede', text:'The ' + species.name + '. I have read of these. ' + species.fact },
+        ];
+        // If user wrote a note, add note-referencing quips (panel misquotes / reacts)
+        if (userNote) {
+          // Slight corruption: take a phrase or mangle lightly (SS-212 hook)
+          var shortNote = userNote.length > 40 ? userNote.slice(0, 37) + '...' : userNote;
+          collQuips.push({ char:'Louis Theroux', text:'Mmmm. You wrote \\\\u2014 you wrote \\\\u201C' + shortNote + '\\\\u201D. What do you mean by that, exactly? The ' + species.name + ', I mean.' });
+          collQuips.push({ char:'Sir Geoffrey Boycott', text:'\\\\u201C' + shortNote + '\\\\u201D? Rubbish. It\\'s a ' + species.name + '. You wouldn\\'t see that terminology in Yorkshire.' });
+          collQuips.push({ char:'David Mitchell', text:'You wrote \\\\u201C' + shortNote + '\\\\u201D \\\\u2014 fine, fine \\\\u2014 but technically the ' + species.name + ' has \\\\u2014 and I\\'m not going to correct your note \\\\u2014 but it has. ' + species.fact });
+          collQuips.push({ char:'Jeremy Clarkson', text:'Your note says \\\\u201C' + shortNote + '\\\\u201D. Mate. MAAAATE. It\\'s a ' + species.name + '. Not a Peugeot 206. You\\'ve \\\\u2014 you\\'ve made it weirder, actually.' });
+        }
+        // Rare/legendary get extra enthusiasm and reputation-boost options
+        if (species.rarity === 'rare' || species.rarity === 'legendary') {
+          collQuips.push({ char:'Ray Mears', text:'A proper spot. The ' + species.name + '. Not many people see one. ' + species.fact });
+          collQuips.push({ char:'Steve Irwin', text:'CRIKEY! A ' + species.name + '! That\\'s a BEAUTY! ' + species.fact });
+        }
+      }
       var quip = collQuips[Math.floor(Math.random() * collQuips.length)];
       document.getElementById('char-name').textContent = quip.char;
       document.getElementById('char-text').textContent = quip.text;
       document.getElementById('char-comment').classList.add('show');
-      setTimeout(function() { document.getElementById('char-comment').classList.remove('show'); }, 5000);
+      setTimeout(function() { document.getElementById('char-comment').classList.remove('show'); }, 6500);
     }
 
     closePhotoModal();
@@ -15589,15 +15828,23 @@ function updateCollectionStats() {
   document.getElementById('coll-count').textContent = found + ' / ' + total;
   document.getElementById('coll-fill').style.width = (total > 0 ? Math.round((found / total) * 100) : 0) + '%';
 
-  var byRarity = { common:0, uncommon:0, rare:0, legendary:0 };
+  var byRarity = { common:0, uncommon:0, rare:0, legendary:0, mythic:0 };
+  var points = 0;
   for (var i = 0; i < state.collected.length; i++) {
     var s = SP.find(function(sp) { return sp.id === state.collected[i]; });
-    if (s) byRarity[s.rarity]++;
+    if (s) {
+      if (byRarity[s.rarity] !== undefined) byRarity[s.rarity]++;
+      points += (RARITY_POINTS[s.rarity] || 0);
+    }
   }
+  var pointsEl = document.getElementById('coll-points');
+  if (pointsEl) pointsEl.textContent = points.toLocaleString();
   document.getElementById('coll-common').textContent = 'Common: ' + byRarity.common;
   document.getElementById('coll-uncommon').textContent = 'Uncommon: ' + byRarity.uncommon;
   document.getElementById('coll-rare').textContent = 'Rare: ' + byRarity.rare;
   document.getElementById('coll-legendary').textContent = 'Legendary: ' + byRarity.legendary;
+  var mythicEl = document.getElementById('coll-mythic');
+  if (mythicEl) mythicEl.textContent = 'Mythic: ' + byRarity.mythic;
 }
 
 // ── ROUTE TAB ────────────────────────────────────────────────────
