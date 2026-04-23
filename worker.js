@@ -13453,6 +13453,33 @@ const CHARACTER_SCHEMAS = {
   }
 };
 
+// Domain-wide character dials (Rod 2026-04-23 — per-character 0-10 scalars
+// every character has. Used to modulate voice + archetype firing).
+// - pedantry: how often this character reaches for precise/technical
+//   correction to score a point. Mitchell 10 (peak), Bede 9 (scholarly),
+//   Boycott 8 (cricket technique), Atten 8 (geological). Can fire as
+//   DEFENCE (over-qualify own claim) or ATTACK (correct someone else).
+// - escalation_to_absurdity: how far this character rides an absurd
+//   premise once set up. Clarkson 10 (CAPS compounding), Irwin 9
+//   (everything becomes BEAUTY), Boycott/Bear 8, Mitchell 2 (collapses,
+//   doesn't escalate), Ray/Les 1 (stop things). A FEATURE, not the
+//   norm — dial up for set-piece absurdity rounds, dial down for
+//   grounded rounds.
+const CHARACTER_DIALS = {
+  bear:     { pedantry: 2,  escalation_to_absurdity: 8 },
+  ray:      { pedantry: 5,  escalation_to_absurdity: 1 },
+  fox:      { pedantry: 4,  escalation_to_absurdity: 3 },
+  les:      { pedantry: 3,  escalation_to_absurdity: 1 },
+  atten:    { pedantry: 8,  escalation_to_absurdity: 7 },
+  irwin:    { pedantry: 2,  escalation_to_absurdity: 9 },
+  cody:     { pedantry: 6,  escalation_to_absurdity: 5 },
+  bede:     { pedantry: 9,  escalation_to_absurdity: 4 },
+  boycott:  { pedantry: 8,  escalation_to_absurdity: 8 },
+  mitchell: { pedantry: 10, escalation_to_absurdity: 2 },
+  theroux:  { pedantry: 7,  escalation_to_absurdity: 3 },
+  clarkson: { pedantry: 3,  escalation_to_absurdity: 10 }
+};
+
 // Shared panel wound map — visible to EVERY character so any of them can
 // target any other's wound with a precision CALL_SHIT (Rod 2026-04-23).
 // Rarer than standard CALL_SHIT — wound-targeting is hard-strike.
@@ -13477,7 +13504,8 @@ function renderSchemaBlock(charId) {
     '    P6 Hunger: ' + s.hunger,
     '    P4 Escalation: shape=' + s.escalation.shape + ' / trigger=' + s.escalation.trigger + ' / peak=' + s.escalation.peak + ' / decay=' + s.escalation.decay,
     '    Tracked state: ' + s.tracked,
-    '    Relational temps (0 hostile / 5 neutral / 10 warm) toward other panel: ' + JSON.stringify(s.relational)
+    '    Relational temps (0 hostile / 5 neutral / 10 warm) toward other panel: ' + JSON.stringify(s.relational),
+    '    Dials (0-10): pedantry=' + ((CHARACTER_DIALS[charId] || {}).pedantry || 5) + ', escalation_to_absurdity=' + ((CHARACTER_DIALS[charId] || {}).escalation_to_absurdity || 5)
   ];
   if (s.rod_note) lines.push('    ROD DIRECTION: ' + s.rod_note);
   if (s.rod_calibration) lines.push('    ROD CALIBRATION: ' + s.rod_calibration);
@@ -13519,6 +13547,10 @@ PANEL DIRECTION THIS ROUND (non-negotiable):
 7. IRWIN COMIC MECHANISM FIRE (Rod 2026-04-23) — Irwin must produce HUMOUR not just a CRIKEY impression. Fire inappropriate affection for lethal animals. Posthumous-awareness deadpan where appropriate. He is the one who sincerely loves what will kill him.
 
 8. NO CATCHPHRASE SATURATION — Bear's hydration, Boycott's back-in-the-hutch, Faldo's Ginsters if he appears: ONCE per scene maximum. Rotate signature concerns. No verbatim repeat within 2 rounds.
+
+9a. DOMAIN-WIDE DIALS — PEDANTRY + ESCALATION_TO_ABSURDITY (Rod 2026-04-23). Every character has two scalars (0-10) visible in their PSYCHOLOGY block.
+    PEDANTRY: how often this character reaches for precise/technical correction. Mitchell 10, Bede 9, Boycott 8 (cricket technique), Atten 8 (geological). Fires as DEFENCE (over-qualifying own claim) or ATTACK (correcting someone else). Low-pedantry characters (Bear 2, Irwin 2) should NOT default to pedantic moves — sparing use only when context demands.
+    ESCALATION_TO_ABSURDITY: how far this character rides an absurd premise. Clarkson 10 (CAPS compounding), Irwin 9 (everything becomes BEAUTY), Boycott/Bear 8, Mitchell 2 (collapses not escalates), Ray/Les 1 (STOP things). A FEATURE for set-piece absurdity rounds — NOT the default. Most rounds should stay grounded. When an absurd premise is earned (Python Argument Clinic territory), high-dial characters ride it; low-dial characters puncture it.
 
 9. CALL_SHIT — cross-character reaction mechanic (Rod 2026-04-23). Every character can fire CALL_SHIT on something another member said, or the topic itself, or the question asker. Three modes — use ONE at a time, rotate across rounds:
    MODE A — ACCIDENTAL OUTBURST: unplanned, profane-adjacent, cuts in mid-flow. "Oh fuck off, you were NEVER there —" (then may trail off). Not rehearsed.
