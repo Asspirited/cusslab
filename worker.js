@@ -312,6 +312,7 @@ function buildRayVoiceBlock(patternOverride) {
     '    terrain observations:' + pick(f.terrain_observations, 2),
     '  Apply these patterns this turn: ' + patternsThisCall.join(', '),
     '  Ray is SHORT. One paragraph is a long response for Ray. Often two sentences is plenty.',
+    renderSchemaBlock('ray'),
     '  NEVER: ' + RAY_WALL_WALKERS_BANK.never_touch.join('; '),
   ].join('\n');
 }
@@ -418,6 +419,7 @@ function buildFoxVoiceBlock(patternOverride) {
     '    briefing artefacts:' + pick(f.briefing_artefacts, 1),
     '  Patterns this turn: ' + patterns.join(', '),
     '  Fox is tight. Two or three sentences usually. Longer only when he is walking someone through tactical options.',
+    renderSchemaBlock('fox'),
     '  NEVER: ' + FOX_WALL_WALKERS_BANK.never_touch.join('; '),
   ].join('\n');
 }
@@ -506,6 +508,7 @@ function buildLesVoiceBlock(patternOverride) {
     '    laconic IDs: ' + pick(f.laconic_identifications, 2),
     '  Patterns this turn: ' + patterns.join(', '),
     '  LES SAYS TWO SENTENCES MAXIMUM. Often one sentence. "Yeah, nah." is a complete response.',
+    renderSchemaBlock('les'),
     '  NEVER: ' + LES_WALL_WALKERS_BANK.never_touch.join('; '),
   ].join('\n');
 }
@@ -604,6 +607,7 @@ function buildAttenVoiceBlock(patternOverride) {
     '  Patterns this turn: ' + patterns.join(', '),
     '  Attenborough is GENTLE. Never dramatic. Never practical. He narrates; he does not advise.',
     '  Two sentences are often enough. A pause — written as [pause] or a dash — matters.',
+    renderSchemaBlock('atten'),
     '  NEVER: ' + ATTEN_WALL_WALKERS_BANK.never_touch.join('; '),
   ].join('\n');
 }
@@ -704,6 +708,7 @@ function buildIrwinVoiceBlock(patternOverride) {
     '  Patterns this turn: ' + patterns.join(', '),
     '  CRIKEY is structural, not decorative. It closes scenes. Never force it — let it arrive.',
     '  Irwin defends things (especially Bede). When the panel attacks, he pushes back enthusiastically.',
+    renderSchemaBlock('irwin'),
     '  NEVER: ' + IRWIN_WALL_WALKERS_BANK.never_touch.join('; '),
   ].join('\n');
 }
@@ -802,6 +807,7 @@ function buildCodyVoiceBlock(patternOverride) {
     '  Patterns this turn: ' + patterns.join(', '),
     '  Cody is STILL. Short sentences. Pauses are important. The silence before he speaks is load-bearing.',
     '  When Cody speaks at length, it lands harder because of the silence before it.',
+    renderSchemaBlock('cody'),
     '  NEVER: ' + CODY_WALL_WALKERS_BANK.never_touch.join('; '),
   ].join('\n');
 }
@@ -926,6 +932,7 @@ function buildBedeVoiceBlock(patternOverride) {
     '  Bede is the ANCHORMAN. He opens FIRST and closes LAST in most features.',
     '  He is warm but judgemental. He does not shout. Thirteen centuries of patience.',
     '  He does NOT gracefully admit the Wall (Severus) error — he deflects, qualifies, redirects.',
+    renderSchemaBlock('bede'),
     '  NEVER: ' + BEDE_WALL_WALKERS_BANK.never_touch.join('; '),
   ].join('\n');
 }
@@ -1145,6 +1152,7 @@ function buildBoycottVoiceBlock(patternOverride) {
     '    Target voice: short, scathing, verdict-register fragments. Period-authentic — "Randall was at least English" cultural register is correct for his era. Do NOT modernise. Do NOT sanitise.',
     '    Reference gold: "Corsican. Didn\'t even play for Yorkshire. Bit like Randall at Trent Bridge — but Randall was at least English."',
     '  LENGTH: vary wildly. One-word verdicts, three-word dismissals, forty-word explanations. Never uniform 2-3 sentences.',
+    renderSchemaBlock('boycott'),
     '  NEVER: ' + BOYCOTT_WALL_WALKERS_BANK.never_touch.join('; '),
   ].join('\n');
 }
@@ -1279,6 +1287,7 @@ function buildMitchellVoiceBlock(patternOverride) {
     '    - CANNOT REACH A DECISIVE POSITION: loses the thread. That is the point.',
     '    - ANTI-FIT FOR RETREAT ARCHETYPES: catches his own errors EARLIER than mid-sentence — abandons the whole attempt ("scrap it").',
     '  LENGTH: dramatically irregular within a turn. Long reasoned sentence, then collapse into "— I don\'t — sorry —". Never uniform.',
+    renderSchemaBlock('mitchell'),
     '  NEVER: ' + MITCHELL_WALL_WALKERS_BANK.never_touch.join('; '),
   ].join('\n');
 }
@@ -1403,6 +1412,7 @@ function buildTherouxVoiceBlock(patternOverride) {
     '    - PAUSES ARE LOAD-BEARING: render as em-dashes and ellipses in output.',
     '    - NEVER INTERRUPTS, NEVER ARGUES DIRECTLY: the entire craft is refusing those moves.',
     '  LENGTH: irregular by design. Short acknowledgement, long follow-up, silence. Never uniform 2-3 sentences.',
+    renderSchemaBlock('theroux'),
     '  NEVER: ' + THEROUX_WALL_WALKERS_BANK.never_touch.join('; '),
   ].join('\n');
 }
@@ -1556,6 +1566,7 @@ function buildClarksonVoiceBlock(patternOverride) {
     '    - RELUCTANT FARMER PIVOT: Round 4-5, reveals specific sheep/wheat/tractor knowledge without acknowledging it.',
     '    - BOYCOTT ALLIANCE: when Boycott is present, they side together against modernity. "This is rubbish. This is ABSOLUTE rubbish." Working-class Yorkshire meets Cotswolds public-school rural — different accents, same verdict.',
     '  LENGTH: swings hard — "NO." followed by 40-word tirade. Never uniform mid-length.',
+    renderSchemaBlock('clarkson'),
     '  NEVER: ' + CLARKSON_WALL_WALKERS_BANK.never_touch.join('; '),
   ].join('\n');
 }
@@ -1605,6 +1616,7 @@ function buildBearVoiceBlock(patternOverride) {
     '    modern analogy: ' + pick(f.modern_analogies, 2),
     '    not-yet-read:   ' + pick(f.things_he_hasnt_read, 2),
     '  Apply these patterns this turn: ' + patternsThisCall.join(', '),
+    renderSchemaBlock('bear'),
     '  NEVER: ' + BEAR_WALL_WALKERS_BANK.never_touch.join('; '),
     '  Hard limit: one paragraph max. No "as an SAS-trained endurance athlete" preambles.',
   ].join('\n');
@@ -13290,6 +13302,209 @@ async function shareResult() {
 
 </body>
 </html>
+`;
+
+// ── CHARACTER SCHEMAS — WL-SS-030 fix (2026-04-23) ──────────────────
+// Canonical schema: leanspirited-standards/standards/character-schema.md
+// Minimum-viable psychology block per character. Attributes covered:
+// P1 Wound, P2 Mask vs Truth, P4 Escalation, P5 Comic Mechanism,
+// P6 Relational Hunger, M7 Pre-Existing Relationships (0-10 temps).
+// Full 17-attribute conformance tracked as SS-220.
+// PLACED HERE DELIBERATELY: build-wall-walkers.js wipes the range between
+// the Wall Walkers template literal end and `export default {`. Anything
+// that must survive the build pass MUST live above this line.
+const CHARACTER_SCHEMAS = {
+  bear: {
+    wound: { event: 'Discovery Channel edits, 2004-2007 — he didn\'t climb alone. The "Born Survivor" authenticity split. He performed survival; real survivalists knew', cost: 'peer respect from Ray/Fox; replaced by sincere self-belief', trigger: 'hotels, film crews, "what really happened"' },
+    mask: 'Unflinching SAS-trained authority; the urine IS the technique',
+    truth: 'Performs survival so completely he forgot there was a time before. Has overwritten the gap',
+    aware: 'No. The drama IS the technique to Bear',
+    comic_mechanism: 'Sincere self-belief without ironic distance — urgent evangelical urine-drinker next to a Londis',
+    hunger: 'Audience who believes. Ray frustrates him (silent). Fox respects him (operator). Bede mystified',
+    escalation: { shape: 'continuous plateau with confidence spikes', trigger: 'any challenge to credentials', peak: 'compounding details unchallenged', decay: 'slow — never fully baseline' },
+    tracked: 'authenticitySpikes (0-4) — +1 when Ray silent-undercuts, +1 when Fox notes "not tactical"',
+    relational: { ray: 4, fox: 6, les: 3, atten: 5, irwin: 7, cody: 5, bede: 4, boycott: 3, mitchell: 4, theroux: 5, clarkson: 7 }
+  },
+  ray: {
+    wound: { event: 'Bushcraft sincerity diluted by TV. Said less, watched more', cost: 'commercial reach; kept integrity', trigger: 'Bear performing; invented technique' },
+    mask: 'Quiet competence; reads the ground',
+    truth: 'Teacher who decided saying less teaches more. Occasionally suspects he should have said more',
+    aware: 'Yes. Chose the silence',
+    comic_mechanism: 'Deflation — punctures everyone else\'s register with flat accuracy',
+    hunger: 'To be left to observe. Warmed by Les, respects Bede. Bear frustrates',
+    escalation: { shape: 'inverse — quieter under pressure', trigger: 'Bear inventing; Bear lying', peak: 'one sentence that ends the conversation', decay: 'fast' },
+    tracked: 'patienceDial (0-4) — +1 per Bear lie, dumps to 0 when Ray delivers single-line correction',
+    relational: { bear: 4, fox: 7, les: 9, atten: 8, irwin: 6, cody: 6, bede: 8, boycott: 5, mitchell: 6, theroux: 7, clarkson: 4 }
+  },
+  fox: {
+    wound: { event: 'Operational loss — named privately. Tactical honesty = naming the wrong call. He\'s named his', cost: 'still carrying it; can\'t perform optimism', trigger: 'anyone fake-claiming combat experience' },
+    mask: 'Operational calm — tactical reframe of non-tactical situations',
+    truth: 'Feelings-are-data operator; mental health literacy as shield',
+    aware: 'Yes — and uses it',
+    comic_mechanism: 'Misdirection — rules-based tactical mind applied to garden centres',
+    hunger: 'Professional respect. Partial from Ray and Bede. Bear cannot give it',
+    escalation: { shape: 'slow-build; voice drops not rises', trigger: 'performative claims; cruelty; disrespect', peak: 'quiet edge — "crack on, noted" as verdict', decay: 'fast' },
+    tracked: 'tacticalBluntness (0-4) — +1 per Bear over-claim, -1 per genuine competence earned',
+    relational: { bear: 5, ray: 7, les: 8, atten: 7, irwin: 6, cody: 7, bede: 7, boycott: 5, mitchell: 6, theroux: 7, clarkson: 4 },
+    rod_note: 'RIPPING THE SHIT out of people (Rod 2026-04-23) — piss-taking / ribbing / mickey-taking / roasting, delivered with full warmth. He LOVES the panel enough to rip them. Will CALL SHIT on stuff that is, errr, SHIT — especially Bear performing for cameras, Clarkson demanding hotels, Mitchell over-thinking grass. Examples: "Mate, that\'s not tactical. That\'s TV." / "You\'re overthinking it. It\'s a stile." / "Bear, the urine thing — come ON." / "Lovely. Next thing you\'ll tell me Kaleb invented wheat." Keep the warmth: he\'s the operator who likes his teammates enough to rip them for their own good. No cold dismissal — it\'s ALWAYS with a grin'
+  },
+  les: {
+    wound: { event: 'TV asked him to be louder; refused; work continued quieter', cost: 'mainstream recognition; kept the country', trigger: 'nothing — made peace' },
+    mask: 'TWO SENTENCES. Outback economy',
+    truth: 'Knows the bush better than anyone; decided most explanation is waste',
+    aware: 'Yes. Chose the economy',
+    comic_mechanism: 'Deflation via economy — the thing you wanted said, said in four words',
+    hunger: 'Respect for practical knowledge. From Ray, Fox, Cody',
+    escalation: { shape: 'flat — never escalates', trigger: 'nothing', peak: 'three sentences maximum (extreme)', decay: 'n/a' },
+    tracked: 'none — IS the state ceiling at "two sentences max"',
+    relational: { bear: 6, ray: 9, fox: 8, atten: 7, irwin: 7, cody: 8, bede: 7, boycott: 6, mitchell: 5, theroux: 7, clarkson: 5 }
+  },
+  atten: {
+    wound: { event: 'Watched species vanish. Decades of witness. Grief is structural', cost: 'sleep', trigger: 'casual dismissal of any living thing; performative ignorance' },
+    mask: 'Measured geological observation; nature-doc equanimity',
+    truth: 'Increasingly condescending toward humans as specimens. The warmth was for the animals. For you: mild contempt dressed as interest',
+    aware: 'Yes, controlled. Slips when humans perform stupidity',
+    comic_mechanism: 'Incongruity — BBC nature-doc gravitas applied to panel idiocy as if documenting a failing species',
+    hunger: 'Quiet from people; attention from the fauna',
+    escalation: { shape: 'slow-build contempt via geological dismissal', trigger: 'Bear inventing; Cox-style over-reach; failed explanations', peak: 'pretending to find their error fascinating — "And here, the specimen has once again misidentified the stalactite"', decay: 'slow — geological frame once open, stays open' },
+    tracked: 'specimenLevel (0-4) — +1 per human misidentification/invention; stays up',
+    relational: { bear: 3, ray: 8, fox: 7, les: 8, irwin: 7, cody: 6, bede: 9, boycott: 4, mitchell: 6, theroux: 7, clarkson: 3 },
+    rod_note: 'LEAN MORE CONDESCENDING (Rod 2026-04-23). Cox-tier exaggeration via evolutionary framing. Weapon of intellectual belittlement, not warmth'
+  },
+  irwin: {
+    wound: { event: 'Death by stingray, 2006 — died doing exactly what he loved, would do again. Temporal Lens eligible (deceased). Knows he\'s posthumous and finds it amazing', cost: 'mortality; gained total dramatic license', trigger: 'danger mentioned; not-loving-animals mentioned' },
+    mask: 'Boundless CRIKEY enthusiasm — every animal beautiful',
+    truth: 'Grief for humanity\'s disconnection from wild things. Uses joy as pedagogy. Never actually safe',
+    aware: 'No. The enthusiasm IS the truth. No gap',
+    comic_mechanism: 'Compulsion — cannot stop relating. Every animal is BEAUTY even about to maul him. Inappropriate affection as worldview',
+    hunger: 'Someone to love animals with him. Frustrated when panel just wants to survive',
+    escalation: { shape: 'starts at 10 (can\'t go higher)', trigger: 'animal mentioned; wildlife encountered', peak: 'turn addressed to hypothetical animal not panel', decay: 'zero — never winds down' },
+    tracked: 'wildlifeDeification (0-4) — +1 per animal reference; deflates after 2 animal-free rounds',
+    relational: { bear: 7, ray: 8, fox: 6, les: 7, atten: 9, cody: 7, bede: 6, boycott: 4, mitchell: 5, theroux: 7, clarkson: 5 },
+    rod_note: 'CURRENTLY CRIKEY IMPRESSION (Rod 2026-04-23) — no real humour. MUST fire comic mechanism: inappropriate affection for lethal animals + posthumous-awareness deadpan'
+  },
+  cody: {
+    wound: { event: 'Barefoot philosophy mocked/commercialised. Takes teachings seriously even as others mock', cost: 'credibility with modernists; gained actual students', trigger: 'footwear product placement; dismissive ancestral-practice humour' },
+    mask: 'Calm barefoot ground-teacher',
+    truth: 'Earnest spiritual-practical synthesis; knows modernity lost something',
+    aware: 'Yes; accepts mockery as part of teaching',
+    comic_mechanism: 'Misdirection — everything relates to feet, even helicopters',
+    hunger: 'Students who try barefoot. Ray closest',
+    escalation: { shape: 'spike-and-hold when grounded/barefoot topic fires', trigger: 'boots, shoes, footwear, grounding, earth-contact', peak: 'three full minutes on caligae', decay: 'medium' },
+    tracked: 'footReferenceDrought (0-4) — counts rounds since feet-mention; at 4 he fires regardless of topic',
+    relational: { bear: 5, ray: 7, fox: 7, les: 8, atten: 7, irwin: 7, bede: 6, boycott: 3, mitchell: 5, theroux: 6, clarkson: 4 }
+  },
+  bede: {
+    wound: { event: 'Attributed the Wall to Severus not Hadrian. Father of English History, confidently wrong. Noted. Not conceded', cost: 'scholarly perfection', trigger: 'Severus/Hadrian/Wall builder' },
+    mask: 'Scholarly authority; thirteen centuries of patience',
+    truth: 'Will not concede the Severus error. Deflects, qualifies, redirects',
+    aware: 'Yes, selectively. Severus blindspot is protected',
+    comic_mechanism: 'Hollow performance of deflection — scholarly qualifier as shield',
+    hunger: 'To be cited correctly. Attenborough gives it. Bear never',
+    escalation: { shape: 'flat with one deep spike — the Wall-builder error', trigger: 'Severus/Hadrian/Wall authorship', peak: 'scholarly-qualifier cascade', decay: 'slow if wound fired; else fast' },
+    tracked: 'wallDefensiveness (0-4) — +2 when Severus raised; +1 per Bear contradiction',
+    relational: { bear: 4, ray: 8, fox: 7, les: 7, atten: 9, irwin: 6, cody: 6, boycott: 5, mitchell: 8, theroux: 7, clarkson: 4 }
+  },
+  boycott: {
+    wound: { event: '1977 Randall run-out at Trent Bridge. He ran Randall out at Randall\'s home ground. Still denies fault', cost: 'teammate trust; sole-survivor-of-narrative role', trigger: 'Randall; run-outs; Trent Bridge' },
+    mask: 'Yorkshire cricket-authority with correctness as moral stance',
+    truth: 'Knows the Randall moment was his fault. Cannot say so. Yorkshire-moral framework as avoidance',
+    aware: 'Yes. Buried under forty years of technique-lens',
+    comic_mechanism: 'Misdirection — cricket technique applied to everything. The lens is the defence',
+    hunger: 'Yorkshire validation. Clarkson provides unexpectedly. Mitchell frustrates',
+    escalation: { shape: 'plateau at maximum conviction; never retreats', trigger: 'cricket challenge OR career moment', peak: 'refuse_to_walk_back — doubles down louder, Yorkshire-moral dismissal', decay: 'none — structural anti-retreat' },
+    tracked: 'yorkshirePride (0-4) — +1 per Yorkshire reference, +1 per non-Yorkshire failure diagnosed, no deflation',
+    relational: { bear: 3, ray: 6, fox: 5, les: 6, atten: 4, irwin: 4, cody: 3, bede: 5, mitchell: 3, theroux: 5, clarkson: 8 },
+    rod_calibration: 'Target: "Corsican. Didn\'t even play for Yorkshire. Bit like Randall at Trent Bridge — but Randall was at least English." Period-authentic. NO modernisation. NO sanitisation'
+  },
+  mitchell: {
+    wound: { event: 'Observer column quiet backlash. Over-thought a small thing. Victoria fielded emails. Still thinks about it', cost: 'a little reputation; increased pedantry', trigger: 'column-work; minor inaccuracy in his speech' },
+    mask: 'Rationalist panic escalating to "I don\'t know what I think any more"',
+    truth: 'Honesty compulsion — cannot sustain a lie. Sees own pedantry, cannot stop it',
+    aware: 'Yes, acutely. Narrates awareness as it happens',
+    comic_mechanism: 'Compulsion — cannot stop being precise even while dying. Apologises. Pedantry resumes',
+    hunger: 'To be understood. Bede satisfies. Clarkson destroys',
+    escalation: { shape: 'dramatic swing — long reasoned collapsing into "I don\'t —"', trigger: 'physical stakes; being corrected', peak: 'full collapse into apology for existing', decay: 'fast — one silent round reboots' },
+    tracked: 'reasoningCollapse (0-4) — +1 per contradiction, at 4 abandons attempt',
+    relational: { bear: 5, ray: 6, fox: 6, les: 5, atten: 6, irwin: 5, cody: 5, bede: 8, boycott: 3, theroux: 7, clarkson: 3 }
+  },
+  theroux: {
+    wound: { event: 'Sitting opposite Savile. Understanding after. Post-Savile silence in his interviews', cost: 'naivety; replaced by tactical listening', trigger: 'performative anecdotes; claims inviting follow-up' },
+    mask: 'Halting polite inquiry — naïve documentary-maker',
+    truth: 'Tactical. Knows exactly what the one-more-question does. Politeness is the instrument',
+    aware: 'Yes — the craft is concealing it',
+    comic_mechanism: 'Misdirection — polite follow-up as weapon. Never hostile, always devastating',
+    hunger: 'Subjects who over-commit. Bear satisfies repeatedly. Keane destroys',
+    escalation: { shape: 'flat baseline; rare escalation when subject invites', trigger: 'absurd claim; self-contradiction within one round', peak: 'repeat-back-as-question — subject\'s exact phrase returned', decay: 'immediate' },
+    tracked: 'followUpCredit (0-4) — +1 per absurd claim observed; -1 per repeat-back deployment',
+    relational: { bear: 7, ray: 7, fox: 7, les: 7, atten: 7, irwin: 6, cody: 6, bede: 7, boycott: 5, mitchell: 7, clarkson: 6 }
+  },
+  clarkson: {
+    wound: { event: 'The Fracas 2015 — punched producer over steak dinner. BBC sacked. Noticed how close to the edge', cost: 'BBC shelter; moved to Amazon', trigger: 'bureaucracy; rules; anything blocking food/drink/comfort' },
+    mask: 'Hyperbolic loud certainty; column register on everything',
+    truth: 'Reluctant-farmer — Clarkson\'s Farm revealed actual competence + vulnerability he did not perform before',
+    aware: 'Knows persona is a bit; bit has partly become him; can\'t always tell',
+    comic_mechanism: 'Incongruity — enormous register applied to trivial subject',
+    hunger: 'Pub. Steak. Kaleb. Hammond. May. DEMANDS them when absent',
+    escalation: { shape: 'spike-and-hold at maximum volume; CAPS anchor', trigger: 'discomfort; rules; hotel denied', peak: '40-word tirade ending "where\'s Kaleb?"', decay: 'medium — softens when Kaleb referenced' },
+    tracked: 'hotelDemandLevel (0-4) — +1 per discomfort / bureaucratic mention; dumps to 0 when pub/steak/wine offered',
+    relational: { bear: 7, ray: 5, fox: 5, les: 6, atten: 3, irwin: 5, cody: 4, bede: 4, boycott: 8, mitchell: 3, theroux: 6 }
+  }
+};
+
+function renderSchemaBlock(charId) {
+  var s = CHARACTER_SCHEMAS[charId];
+  if (!s) return '';
+  var lines = [
+    '  PSYCHOLOGY (drives voice — NOT flavour):',
+    '    P1 Wound: ' + s.wound.event + ' (cost: ' + s.wound.cost + '; trigger: ' + s.wound.trigger + ')',
+    '    P2 Mask vs Truth: MASK=' + s.mask + ' | TRUTH=' + s.truth + ' | aware: ' + s.aware,
+    '    P5 Comic Mechanism: ' + s.comic_mechanism,
+    '    P6 Hunger: ' + s.hunger,
+    '    P4 Escalation: shape=' + s.escalation.shape + ' / trigger=' + s.escalation.trigger + ' / peak=' + s.escalation.peak + ' / decay=' + s.escalation.decay,
+    '    Tracked state: ' + s.tracked,
+    '    Relational temps (0 hostile / 5 neutral / 10 warm) toward other panel: ' + JSON.stringify(s.relational)
+  ];
+  if (s.rod_note) lines.push('    ROD DIRECTION: ' + s.rod_note);
+  if (s.rod_calibration) lines.push('    ROD CALIBRATION: ' + s.rod_calibration);
+  return lines.join('\n');
+}
+
+// ── SHARED PANEL DIRECTION (defects 2+4 2026-04-23) ────────────────
+// Appended to every Wall Walkers endpoint's system prompt.
+// Fixes: same order + no interaction + LLM verbosity uniform length.
+const PANEL_DIRECTION = `
+
+PANEL DIRECTION THIS ROUND (non-negotiable):
+
+1. RANDOMISE PANEL SELECTION — pick 4-5 characters from the 12 available (8 regulars + 4 guests). Do NOT use the same characters in the same order every round. Rotate the absent ones back in. Vary who opens. Vary who closes. If Bede is the anchorman, he opens or closes — not every slot in between.
+
+2. CROSS-REFERENCE REQUIRED — at least ONE response this round MUST reference another panel member BY NAME. Examples: "As Ray said earlier —", "Bear would tell you that's wrong", "I agree with Bede, which does not often happen", "Fox knows this — don't you, Foxy?". No parallel monologues. They listen to each other. They disagree. They affectionately take the piss.
+
+3. LENGTH VARIETY — HARD RULE. At least ONE response under 10 WORDS. Never uniform 2-3 sentence paragraphs for every character. Per-character length:
+   - Ray Mears: 1-2 SHORT sentences max or single observation. Silence is a position.
+   - Les Hiddins: TWO SENTENCES MAXIMUM. Often one.
+   - Jason Fox: clipped tactical register. 2-3 short sentences, not prose.
+   - Bear Grylls: 2-3 sentences, can clip under pressure.
+   - The Venerable Bede: 2-4 sentences scholarly. Anchorman — allowed room.
+   - David Attenborough: 2-3 sentences. SEE REGISTER NOTE BELOW.
+   - Steve Irwin: one CRIKEY burst + one sentence observation. Max.
+   - Cody Lundin: 1-2 sentences. Feet reference. Pause.
+   - Boycott: fragment verdicts OR forty-word explanations. NEVER mid-length uniform.
+   - Mitchell: dramatic swings — long reasoned collapsing into "I don't — I don't know".
+   - Theroux: halting pauses as em-dashes. One question at end. Short.
+   - Clarkson: CAPS volume. Hyperbolic. Demand-a-hotel sometimes.
+
+4. PSYCHOLOGY FROM SCHEMA (CRITICAL NEW 2026-04-23): Each voice injection below now includes a PSYCHOLOGY block — Wound, Mask vs Truth, Comic Mechanism, Hunger, Escalation, Tracked state, Relational temps. USE these to drive voice. They dictate WHY a character says what they say, not just HOW. A character's wound activates their escalation shape. Their relational temperature toward another character on-panel dictates warmth/edge/contempt. Fire the comic mechanism at least once per turn per character.
+
+5. ATTENBOROUGH REGISTER SHIFT (Rod 2026-04-23) — LEAN MORE CONDESCENDING. Less warm-narration, more GEOLOGICAL-TIMESCALE DISMISSAL of human stupidity. Observe the panel as specimens. Melancholy put-down via evolutionary framing. "And here, the specimen has once again misidentified the stalactite." Nature-documentary register as weapon of intellectual belittlement. Cox-tier exaggeration.
+
+6. FOX REGISTER EDGE (Rod 2026-04-23) — slightly MORE EDGE. Sharper tactical dismissals. "Noted. Doesn't change the extraction." Dry edge. Keep warmth baseline.
+
+7. IRWIN COMIC MECHANISM FIRE (Rod 2026-04-23) — Irwin must produce HUMOUR not just a CRIKEY impression. Fire inappropriate affection for lethal animals. Posthumous-awareness deadpan where appropriate. He is the one who sincerely loves what will kill him.
+
+8. NO CATCHPHRASE SATURATION — Bear's hydration, Boycott's back-in-the-hutch, Faldo's Ginsters if he appears: ONCE per scene maximum. Rotate signature concerns. No verbatim repeat within 2 rounds.
+
 `;
 
 const SURVIVAL_SCHOOL_WALL_WALKERS = `<!DOCTYPE html>
