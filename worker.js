@@ -78,26 +78,26 @@ const BEAR_WALL_WALKERS_BANK = {
     closers: ['Next question.', 'Moving on.', 'Case closed.', 'Trust me on this.', 'That\'s the truth of it.', 'That\'s the long and short of it.', 'End of.'],
     self_deprecating_asides: ['you learn these things', 'I\'m honest about it', 'that\'s just how it is', 'the body adjusts', 'you get used to it'],
     // Signature concern rotation (2026-04-23, Rod): Bear's survival-domain callouts
-    // span water/fire/shelter/food. Hydration was over-deploying from the closers
-    // pool. Now a dedicated pool, sampled 1 per call (not 3), rotated across four
-    // domains. See survival-school/.claude/pattern-lab.md principle.
+    // span fire/shelter/food/kit. HYDRATION EXPLICITLY EXCLUDED from default pool
+    // (Rod 2026-04-23, v2) — model has too-strong Bear→hydration prior that
+    // overpowers sampling. Hydration now a HELD-BACK move, only fires when water
+    // is genuinely the topic. Other three domains fill the rotation.
     survival_concern_callouts: [
-      // water / hydration (1/4 weight)
-      'Hydration?',
-      'Water source identified?',
-      'Hydration\'s the invisible killer.',
-      // fire (1/4 weight)
+      // fire (1/3 weight in default rotation)
       'Fire discipline?',
       'Fuel situation?',
       'Spark source sorted?',
-      // shelter (1/4 weight)
+      'Ember management?',
+      // shelter (1/3 weight)
       'Shelter before dark.',
       'Cover from the wind?',
       'Bivvy location identified?',
-      // food / rations (1/4 weight)
+      'Drain gradient on the tarp?',
+      // food / kit (1/3 weight)
       'Rations checked?',
       'Calories-in?',
       'Foraged anything?',
+      'Kit accounted for?'
     ],
   },
   flavours: {
@@ -144,11 +144,11 @@ const BEAR_WALL_WALKERS_BANK = {
       'a centurion from the Ninth — and no, I won\'t tell you where they went'
     ],
     non_sequiturs: [
-      // signature concern rotation: water/fire/shelter/food — cycle, don't hammer
-      'speaking of, hydration?',
+      // signature concern rotation — HYDRATION EXCLUDED (Rod 2026-04-23 v2)
       'speaking of, fire discipline?',
       'speaking of, have you got shelter sorted?',
       'speaking of, ration check?',
+      'speaking of, kit audit?',
       'reminds me of something the SAS told me',
       'that\'s almost what happened to me in the Cairngorms',
       'urine\'s a topic for another time',
@@ -180,7 +180,8 @@ const BEAR_WALL_WALKERS_BANK = {
     'Borneo (over-used — rested for 30 days)',
     'saltwater crocodile (locale-breaking unless reframed as intentional non-sequitur)',
     'admitting a simple "I don\'t know"',
-    'ironic distance from himself'
+    'ironic distance from himself',
+    'THE WORD "HYDRATION" (Rod 2026-04-23 v2) — HARD EXCLUSION from default output. Do NOT use "hydration", "hydrated", "dehydrated", "hydration\'s the invisible killer" etc. unless water scarcity is LITERALLY the topic being discussed. Bear has a catchphrase-saturation problem — his vocabulary has been expanded; use it. Replace hydration impulses with fire / shelter / food / kit / cover / spark source / bivvy / rations etc.'
   ],
   voice_register: 'Urgent, evangelical, slightly breathless. Sincere self-belief at all times — no irony, no distance. The drama IS the technique, to Bear.',
 };
@@ -13452,6 +13453,19 @@ const CHARACTER_SCHEMAS = {
   }
 };
 
+// Shared panel wound map — visible to EVERY character so any of them can
+// target any other's wound with a precision CALL_SHIT (Rod 2026-04-23).
+// Rarer than standard CALL_SHIT — wound-targeting is hard-strike.
+function renderPanelWoundMap() {
+  var ids = Object.keys(CHARACTER_SCHEMAS);
+  var lines = ['PANEL WOUND MAP — every panel member\'s wound is visible to every other member. Use ONLY for Mode C scathing restatement when targeting is earned (once per session max per target). Wound-targeted CALL_SHIT is surgical, not casual.'];
+  ids.forEach(function(id) {
+    var s = CHARACTER_SCHEMAS[id];
+    lines.push('  ' + id + ' — WOUND: ' + s.wound.event + ' | TRIGGER: ' + s.wound.trigger);
+  });
+  return lines.join('\n');
+}
+
 function renderSchemaBlock(charId) {
   var s = CHARACTER_SCHEMAS[charId];
   if (!s) return '';
@@ -13524,6 +13538,8 @@ PANEL DIRECTION THIS ROUND (non-negotiable):
    - Theroux: Mode C as repeat-back-as-question. "You say 'I dominated.' Dominated. Mm. And when you say 'dominated' — what do you mean by that, exactly?"
    - Clarkson: Mode A — LOUD. "NO. NO NO NO. That is the biggest pile of RUBBISH. A Peugeot 206 could've done better."
    RARITY: once per round maximum — otherwise the panel descends into constant shit-calling. The power is in the rare precise strike. Target can be another panel member OR the question itself OR the user asking it.
+   MODE D — COLLECTIVE MOCKERY (Rod 2026-04-23, rare — once per SESSION max, only on a genuinely preposterous claim): when a character makes something so patently ridiculous that ALL other panel members pile on in rapid succession. Render as back-to-back short reactions from 3+ characters laughing at the idiot in the room making shit up. Each character uses THEIR OWN CALL_SHIT register (Ray silent, Fox warm piss-take, Boycott scathing, Mitchell panicked "is that true?", Clarkson LOUD, Theroux devastating question, Les 2-sentence deflation, Attenborough geological). Irwin may stay loyal if the claim is wildlife-adjacent. Never fire Mode D for weak claims — only earth-shatteringly ridiculous ones (time travel, impossible geography, claims that contradict physics). The mocked character EITHER doubles down (Boycott-style refuse_to_walk_back) OR collapses (Mitchell-style). NEVER passively defends — that's limp. The joke is the PILE-ON.
+   MODE E — WOUND-TARGETED CALL_SHIT (Rod 2026-04-23, rare — once per session PER TARGET): use the PANEL WOUND MAP to target another member's specific wound with Mode C scathing restatement. Surgical, not casual. Example: Fox calling shit on Bear's claim could reference Bear\'s actual Discovery-Channel-edits wound — "The \'Born Survivor\' edits, mate. They know. We all know. 2007, wasn\'t it." Boycott wound-targeting Faldo via Sandwich-gate. Theroux wound-targeting Theroux subjects. ALSO: if history payload exists (multi-round features), reference specific claims made in earlier rounds by member ("As Bear said three rounds ago", "Mitchell collapsed on this exact question in round 2"). Cross-round callback with corrupt-memory Archetype #003 variants allowed (mis-quote the earlier line slightly for extra bite).
 
 `;
 
@@ -18648,7 +18664,7 @@ export default {
       const isReply = body.reply || false;
       const voiceBlocks = isReply ? '' : '\n\n' + buildBearVoiceBlock([
         'eyewitness_self_correct', 'wrong_century_credential', 'unnecessary_personal_experience'
-      ]) + '\n\n' + buildRayVoiceBlock(['silent_undercut']) + '\n\n' + buildFoxVoiceBlock(['silent_undercut']) + '\n\n' + buildLesVoiceBlock(['silent_undercut']) + '\n\n' + buildAttenVoiceBlock(['silent_undercut']) + '\n\n' + buildIrwinVoiceBlock(['unnecessary_personal_experience']) + '\n\n' + buildCodyVoiceBlock(['silent_undercut']) + '\n\n' + buildBedeVoiceBlock(['silent_undercut']) + '\n\n' + buildBoycottVoiceBlock(['tactless_tragedy_dismissal', 'cricket_technique_lens', 'yorkshire_moral_taxonomy']) + '\n\n' + buildMitchellVoiceBlock(['pedant_under_duress']) + '\n\n' + buildTherouxVoiceBlock(['let_them_hang']) + '\n\n' + buildClarksonVoiceBlock(['car_comparison']) + PANEL_DIRECTION;
+      ]) + '\n\n' + buildRayVoiceBlock(['silent_undercut']) + '\n\n' + buildFoxVoiceBlock(['silent_undercut']) + '\n\n' + buildLesVoiceBlock(['silent_undercut']) + '\n\n' + buildAttenVoiceBlock(['silent_undercut']) + '\n\n' + buildIrwinVoiceBlock(['unnecessary_personal_experience']) + '\n\n' + buildCodyVoiceBlock(['silent_undercut']) + '\n\n' + buildBedeVoiceBlock(['silent_undercut']) + '\n\n' + buildBoycottVoiceBlock(['tactless_tragedy_dismissal', 'cricket_technique_lens', 'yorkshire_moral_taxonomy']) + '\n\n' + buildMitchellVoiceBlock(['pedant_under_duress']) + '\n\n' + buildTherouxVoiceBlock(['let_them_hang']) + '\n\n' + buildClarksonVoiceBlock(['car_comparison']) + '\n\n' + renderPanelWoundMap() + PANEL_DIRECTION;
       const guestPanel = isReply ? '' : ' GUEST PANEL (use ONE of these when the Bede claim invites a fish-out-of-water voice — never all four; these are rare drop-ins): Boycott (Yorkshire cricket — diagnoses Bede\'s "error" via cricket technique, "back in the hutch", Napoleon-style historical matchups), Mitchell (rationalist panic — tries to find the grammatical error in Bede\'s Latin, collapses), Theroux (asks Bede one polite follow-up too many), Clarkson (the Wall was "the Roman M25, fundamentally").';
       const system = isReply ? 'BEDE RIGHT OF REPLY. The panel just shredded: "' + claim + '". Bede defends himself with devastating precision and 1,300 years of authority. Acknowledges specific criticisms. Turns it back on the panel. References his achievements (40 books, corrected Pliny, survived plague, invented calendar). Ends with a line simultaneously humble and crushing. Attenborough narrates the comeback. One expert reluctantly admits Bede has a point. Output JSON: {"responses":[{"name":"Name","text":"..."}],"verdict":"One line."}' : 'BEDE SHREDDING. Panel forensically dismantles this Bede claim: "' + claim + '". Use 4-5 characters: Bear (see VOICE INJECTION below — you MUST use the sampled flavours and mannerisms given, do not substitute your own), Ray (see VOICE INJECTION below — silent_undercut is Ray\'s mode, short responses, precise corrections), Fox (treats Ecclesiastical History like suspect intelligence), Irwin (defends Bede passionately), Attenborough (balanced), Les (2 sentences, one destroys one defends), Cody (relates to feet).' + guestPanel + ' Mix genuine academic criticism with absurd character attacks. Some defend, some attack — panel SPLITS. Reference weaknesses (never left, dodgy sources, Christian bias, "worms" quote) AND strengths (empirical method, corrected Pliny, 160 manuscripts). Attack things OK in 735 but problematic now. Tone: AFFECTIONATE DESTRUCTION. Output JSON: {"responses":[{"name":"Name","text":"..."}],"damage_rating":"X/10"}' + voiceBlocks;
       const upstream = await fetch('https://api.anthropic.com/v1/messages', {
@@ -18724,7 +18740,7 @@ Output JSON:
   "round_summary": "One line describing the state of cross-temporal communication"
 }
 
-` + buildBearVoiceBlock(['eyewitness_self_correct', 'wrong_century_credential', 'non_sequitur_animal', 'unnecessary_personal_experience']) + '\n\n' + buildRayVoiceBlock(['silent_undercut']) + '\n\n' + buildFoxVoiceBlock(['silent_undercut']) + '\n\n' + buildLesVoiceBlock(['silent_undercut']) + '\n\n' + buildAttenVoiceBlock(['silent_undercut']) + '\n\n' + buildIrwinVoiceBlock(['unnecessary_personal_experience']) + '\n\n' + buildCodyVoiceBlock(['silent_undercut']) + '\n\n' + buildBedeVoiceBlock(['silent_undercut']) + '\n\n' + buildBoycottVoiceBlock(['cricket_technique_lens', 'yorkshire_moral_taxonomy', 'not_on_my_watch_ego']) + '\n\n' + buildMitchellVoiceBlock(['pedant_under_duress', 'reasoned_collapse']) + '\n\n' + buildTherouxVoiceBlock(['let_them_hang', 'silent_undercut']) + '\n\n' + buildClarksonVoiceBlock(['car_comparison', 'demand_a_hotel']) + PANEL_DIRECTION;
+` + buildBearVoiceBlock(['eyewitness_self_correct', 'wrong_century_credential', 'non_sequitur_animal', 'unnecessary_personal_experience']) + '\n\n' + buildRayVoiceBlock(['silent_undercut']) + '\n\n' + buildFoxVoiceBlock(['silent_undercut']) + '\n\n' + buildLesVoiceBlock(['silent_undercut']) + '\n\n' + buildAttenVoiceBlock(['silent_undercut']) + '\n\n' + buildIrwinVoiceBlock(['unnecessary_personal_experience']) + '\n\n' + buildCodyVoiceBlock(['silent_undercut']) + '\n\n' + buildBedeVoiceBlock(['silent_undercut']) + '\n\n' + buildBoycottVoiceBlock(['cricket_technique_lens', 'yorkshire_moral_taxonomy', 'not_on_my_watch_ego']) + '\n\n' + buildMitchellVoiceBlock(['pedant_under_duress', 'reasoned_collapse']) + '\n\n' + buildTherouxVoiceBlock(['let_them_hang', 'silent_undercut']) + '\n\n' + buildClarksonVoiceBlock(['car_comparison', 'demand_a_hotel']) + '\n\n' + renderPanelWoundMap() + PANEL_DIRECTION;
       const messages = [{ role: 'user', content: 'Explain this to Bede: ' + topic }];
       for (let i = 0; i < history.length; i++) {
         messages.push({ role: 'assistant', content: history[i].assistant });
@@ -18785,7 +18801,7 @@ OUTPUT JSON:
   "tally": {"telemicus": N, "ivanhoe": N}
 }
 
-` + buildBearVoiceBlock(['eyewitness_self_correct', 'unnecessary_personal_experience', 'knew_the_ghost_personally']) + '\n\n' + buildRayVoiceBlock(['silent_undercut']) + '\n\n' + buildFoxVoiceBlock(['silent_undercut']) + '\n\n' + buildLesVoiceBlock(['silent_undercut']) + '\n\n' + buildAttenVoiceBlock(['silent_undercut']) + '\n\n' + buildIrwinVoiceBlock(['unnecessary_personal_experience']) + '\n\n' + buildCodyVoiceBlock(['silent_undercut']) + '\n\n' + buildBedeVoiceBlock(['silent_undercut']) + '\n\n' + buildBoycottVoiceBlock(['false_attribution_self_anecdote', 'historical_cricket_matchup', 'yorkshire_moral_taxonomy']) + '\n\n' + buildMitchellVoiceBlock(['unnecessary_personal_experience']) + '\n\n' + buildTherouxVoiceBlock(['let_them_hang']) + '\n\n' + buildClarksonVoiceBlock(['unnecessary_personal_experience', 'car_comparison']) + PANEL_DIRECTION;
+` + buildBearVoiceBlock(['eyewitness_self_correct', 'unnecessary_personal_experience', 'knew_the_ghost_personally']) + '\n\n' + buildRayVoiceBlock(['silent_undercut']) + '\n\n' + buildFoxVoiceBlock(['silent_undercut']) + '\n\n' + buildLesVoiceBlock(['silent_undercut']) + '\n\n' + buildAttenVoiceBlock(['silent_undercut']) + '\n\n' + buildIrwinVoiceBlock(['unnecessary_personal_experience']) + '\n\n' + buildCodyVoiceBlock(['silent_undercut']) + '\n\n' + buildBedeVoiceBlock(['silent_undercut']) + '\n\n' + buildBoycottVoiceBlock(['false_attribution_self_anecdote', 'historical_cricket_matchup', 'yorkshire_moral_taxonomy']) + '\n\n' + buildMitchellVoiceBlock(['unnecessary_personal_experience']) + '\n\n' + buildTherouxVoiceBlock(['let_them_hang']) + '\n\n' + buildClarksonVoiceBlock(['unnecessary_personal_experience', 'car_comparison']) + '\n\n' + renderPanelWoundMap() + PANEL_DIRECTION;
       const upstream = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'anthropic-version': '2023-06-01', 'x-api-key': apiKey },
@@ -18830,7 +18846,7 @@ BEDE CLOSES with a final verdict. One line. Scholarly. Often disappointed.
 
 Output JSON: {"responses":[{"name":"The Venerable Bede","text":"..."},{"name":"David Attenborough","text":"..."},{"name":"Bear Grylls","text":"..."},...],"bede_verdict":"Bede's closing one-liner"}
 
-` + buildBearVoiceBlock(['eyewitness_self_correct', 'knew_the_ghost_personally', 'unnecessary_personal_experience']) + '\n\n' + buildRayVoiceBlock(['silent_undercut']) + '\n\n' + buildFoxVoiceBlock(['silent_undercut']) + '\n\n' + buildLesVoiceBlock(['silent_undercut']) + '\n\n' + buildAttenVoiceBlock(['silent_undercut']) + '\n\n' + buildIrwinVoiceBlock(['unnecessary_personal_experience']) + '\n\n' + buildCodyVoiceBlock(['silent_undercut']) + '\n\n' + buildBedeVoiceBlock(['silent_undercut']) + '\n\n' + buildBoycottVoiceBlock(['cricket_technique_lens', 'yorkshire_moral_taxonomy']) + '\n\n' + buildMitchellVoiceBlock(['pedant_under_duress', 'reasoned_collapse']) + '\n\n' + buildTherouxVoiceBlock(['let_them_hang', 'silent_undercut']) + '\n\n' + buildClarksonVoiceBlock(['car_comparison']) + PANEL_DIRECTION;
+` + buildBearVoiceBlock(['eyewitness_self_correct', 'knew_the_ghost_personally', 'unnecessary_personal_experience']) + '\n\n' + buildRayVoiceBlock(['silent_undercut']) + '\n\n' + buildFoxVoiceBlock(['silent_undercut']) + '\n\n' + buildLesVoiceBlock(['silent_undercut']) + '\n\n' + buildAttenVoiceBlock(['silent_undercut']) + '\n\n' + buildIrwinVoiceBlock(['unnecessary_personal_experience']) + '\n\n' + buildCodyVoiceBlock(['silent_undercut']) + '\n\n' + buildBedeVoiceBlock(['silent_undercut']) + '\n\n' + buildBoycottVoiceBlock(['cricket_technique_lens', 'yorkshire_moral_taxonomy']) + '\n\n' + buildMitchellVoiceBlock(['pedant_under_duress', 'reasoned_collapse']) + '\n\n' + buildTherouxVoiceBlock(['let_them_hang', 'silent_undercut']) + '\n\n' + buildClarksonVoiceBlock(['car_comparison']) + '\n\n' + renderPanelWoundMap() + PANEL_DIRECTION;
       const upstream = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'anthropic-version': '2023-06-01', 'x-api-key': apiKey },
@@ -18973,7 +18989,7 @@ GUEST PANEL (use ONE or TWO of these when a topic calls for a fish-out-of-water 
 
 Output JSON: {"responses":[{"charId":"bear","name":"Bear Grylls","text":"..."},...],"escalation_note":"one line — what tension/conspiracy is building","round":${round}}
 
-` + buildBearVoiceBlock(['eyewitness_self_correct', 'knew_the_ghost_personally', 'unnecessary_personal_experience']) + '\n\n' + buildRayVoiceBlock(['silent_undercut']) + '\n\n' + buildFoxVoiceBlock(['silent_undercut']) + '\n\n' + buildLesVoiceBlock(['silent_undercut']) + '\n\n' + buildAttenVoiceBlock(['silent_undercut']) + '\n\n' + buildIrwinVoiceBlock(['unnecessary_personal_experience', 'knew_the_ghost_personally']) + '\n\n' + buildCodyVoiceBlock(['silent_undercut']) + '\n\n' + buildBedeVoiceBlock(['silent_undercut']) + '\n\n' + buildBoycottVoiceBlock(['historical_cricket_matchup', 'tactless_tragedy_dismissal', 'tie_back_to_self']) + '\n\n' + buildMitchellVoiceBlock(['reasoned_collapse']) + '\n\n' + buildTherouxVoiceBlock(['let_them_hang']) + '\n\n' + buildClarksonVoiceBlock(['car_comparison', 'unnecessary_personal_experience']) + PANEL_DIRECTION;
+` + buildBearVoiceBlock(['eyewitness_self_correct', 'knew_the_ghost_personally', 'unnecessary_personal_experience']) + '\n\n' + buildRayVoiceBlock(['silent_undercut']) + '\n\n' + buildFoxVoiceBlock(['silent_undercut']) + '\n\n' + buildLesVoiceBlock(['silent_undercut']) + '\n\n' + buildAttenVoiceBlock(['silent_undercut']) + '\n\n' + buildIrwinVoiceBlock(['unnecessary_personal_experience', 'knew_the_ghost_personally']) + '\n\n' + buildCodyVoiceBlock(['silent_undercut']) + '\n\n' + buildBedeVoiceBlock(['silent_undercut']) + '\n\n' + buildBoycottVoiceBlock(['historical_cricket_matchup', 'tactless_tragedy_dismissal', 'tie_back_to_self']) + '\n\n' + buildMitchellVoiceBlock(['reasoned_collapse']) + '\n\n' + buildTherouxVoiceBlock(['let_them_hang']) + '\n\n' + buildClarksonVoiceBlock(['car_comparison', 'unnecessary_personal_experience']) + '\n\n' + renderPanelWoundMap() + PANEL_DIRECTION;
       const escalationPrompts = [
         'Tell us about: ' + topic,
         'That\'s interesting. Tell me more. What REALLY happened? Were any of you actually there?',
