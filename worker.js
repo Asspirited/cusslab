@@ -14947,6 +14947,38 @@ function loadState() {
 
 function saveState() { localStorage.setItem('ww_state', JSON.stringify(state)); }
 
+// ── PER-CHARACTER COLOUR PALETTE (SS-213 2026-04-23) ──────────────
+// Mirrors /home/rodent/survival-school/js/characters.js CHAR_COLOURS.
+// Keyed by substring-match on response.name (the API returns full names).
+// { border: left-border colour, label: name-tag text colour }
+function colourFor(name) {
+  if (!name) return { border: '#5a4a20', label: '#8a7a50' };
+  var n = name.toLowerCase();
+  if (n.indexOf('bede') !== -1)                                  return { border: '#c4a060', label: '#e0c080' };  // anchorman gold
+  if (n.indexOf('attenborough') !== -1)                          return { border: '#1b3a2d', label: '#6a8a50' };  // deep forest
+  if (n.indexOf('bear') !== -1)                                  return { border: '#78866b', label: '#a4b094' };  // camo green
+  if (n.indexOf('ray') !== -1 && n.indexOf('mears') !== -1)      return { border: '#556b2f', label: '#8aa060' };  // dark olive
+  if (n.indexOf('ray') !== -1)                                   return { border: '#556b2f', label: '#8aa060' };
+  if (n.indexOf('fox') !== -1 || n.indexOf('foxy') !== -1)       return { border: '#4a6a8a', label: '#7a9ac0' };  // marine blue
+  if (n.indexOf('les') !== -1 || n.indexOf('hiddins') !== -1)    return { border: '#c8860a', label: '#e0a84a' };  // bush-ochre
+  if (n.indexOf('cody') !== -1 || n.indexOf('lundin') !== -1)    return { border: '#8b7355', label: '#b09275' };  // barefoot burlywood
+  if (n.indexOf('irwin') !== -1)                                 return { border: '#2d5a27', label: '#6a9a5a' };  // khaki green
+  // Fish-Out-of-Water Pack Two (2026-04-22)
+  if (n.indexOf('boycott') !== -1)                               return { border: '#c9b380', label: '#e4d4a0' };  // white rose of Yorkshire
+  if (n.indexOf('mitchell') !== -1)                              return { border: '#4a5d3a', label: '#8a9a7a' };  // Observer green
+  if (n.indexOf('theroux') !== -1)                               return { border: '#7a7a90', label: '#b0b0c0' };  // Oxford fog
+  if (n.indexOf('clarkson') !== -1)                              return { border: '#8b0000', label: '#c44040' };  // Top Gear red
+  // Guest-panel fallbacks (existing SS roster)
+  if (n.indexOf('packham') !== -1)                               return { border: '#2d5a27', label: '#6a9a5a' };
+  if (n.indexOf('backshall') !== -1)                             return { border: '#2b5e8c', label: '#5a9aca' };
+  if (n.indexOf('robin') !== -1 || n.indexOf('williams') !== -1) return { border: '#4a0e4e', label: '#8a50a0' };
+  if (n.indexOf('cox') !== -1)                                   return { border: '#1a1e3a', label: '#5a6aa0' };
+  if (n.indexOf('faldo') !== -1)                                 return { border: '#1a3e0a', label: '#4a7a30' };
+  if (n.indexOf('keane') !== -1)                                 return { border: '#5a0000', label: '#a44040' };
+  if (n.indexOf('bristow') !== -1)                               return { border: '#c41e3a', label: '#e4506a' };
+  return { border: '#5a4a20', label: '#8a7a50' };
+}
+
 // ── QUESTIONS (inline for offline) ───────────────────────────────
 var Q = [
   {id:'r01',cat:'roman',stop:null,text:'How long is Hadrian\\'s Wall?',opts:['53 miles','63 miles','73 miles','83 miles'],ans:2,fact:'Exactly 80 Roman miles, coast to coast.'},
@@ -17425,13 +17457,10 @@ function submitQuestion() {
     if (data && data.responses) {
       for (var i = 0; i < data.responses.length; i++) {
         var r = data.responses[i];
-        var isBede = r.name && r.name.indexOf('Bede') !== -1;
-        var isAtt = r.name && r.name.indexOf('Attenborough') !== -1;
-        var borderColor = isBede ? '#c4a060' : (isAtt ? '#6a8a50' : '#5a4a20');
-        var nameColor = isBede ? '#c4a060' : (isAtt ? '#6a8a50' : '#8a7a50');
+        var col = colourFor(r.name);
         var el = document.createElement('div');
-        el.style.cssText = 'margin-bottom:10px;padding:12px;background:#1a1810;border-left:3px solid ' + borderColor + ';border-radius:0 4px 4px 0;';
-        el.innerHTML = '<div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:' + nameColor + ';margin-bottom:4px;">' + (r.name || 'Expert') + '</div>' +
+        el.style.cssText = 'margin-bottom:10px;padding:12px;background:#1a1810;border-left:4px solid ' + col.border + ';border-radius:0 4px 4px 0;';
+        el.innerHTML = '<div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:' + col.label + ';margin-bottom:4px;font-weight:700;">' + (r.name || 'Expert') + '</div>' +
           '<div style="font-family:Crimson Text,serif;font-size:13px;color:#d4c8a0;line-height:1.6;">' + (r.text || '') + '</div>';
         results.appendChild(el);
       }
@@ -17582,12 +17611,10 @@ function fetchWilderment() {
     if (data && data.responses) {
       for (var i = 0; i < data.responses.length; i++) {
         var r = data.responses[i];
-        var isBede = r.name && r.name.indexOf('Bede') !== -1;
-        var isRay = r.name && r.name.indexOf('Ray') !== -1;
-        var borderColor = isBede ? '#c4a060' : (isRay ? '#4a8a30' : '#5a4a20');
+        var col = colourFor(r.name);
         var el = document.createElement('div');
-        el.style.cssText = 'margin-bottom:10px;padding:12px;background:#1a1810;border-left:3px solid ' + borderColor + ';border-radius:0 4px 4px 0;';
-        el.innerHTML = '<div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:' + (isBede ? '#c4a060' : '#8a7a50') + ';margin-bottom:4px;">' + (r.name || 'Expert') + '</div>' +
+        el.style.cssText = 'margin-bottom:10px;padding:12px;background:#1a1810;border-left:4px solid ' + col.border + ';border-radius:0 4px 4px 0;';
+        el.innerHTML = '<div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:' + col.label + ';margin-bottom:4px;font-weight:700;">' + (r.name || 'Expert') + '</div>' +
           '<div style="font-family:Crimson Text,serif;font-size:13px;color:#d4c8a0;line-height:1.6;">' + (r.text || '') + '</div>';
         results.appendChild(el);
       }
@@ -17637,10 +17664,10 @@ function expertReact() {
     if (data && data.responses) {
       for (var i = 0; i < data.responses.length; i++) {
         var r = data.responses[i];
-        var isBede = r.name && r.name.indexOf('Bede') !== -1;
+        var col = colourFor(r.name);
         var el = document.createElement('div');
-        el.style.cssText = 'margin-bottom:8px;padding:10px;background:#1a1810;border-left:3px solid ' + (isBede ? '#c4a060' : '#4a7a8a') + ';border-radius:0 4px 4px 0;';
-        el.innerHTML = '<div style="font-size:8px;letter-spacing:2px;text-transform:uppercase;color:' + (isBede ? '#c4a060' : '#4a7a8a') + ';margin-bottom:3px;">' + (r.name || 'Expert') + '</div>' +
+        el.style.cssText = 'margin-bottom:8px;padding:10px;background:#1a1810;border-left:4px solid ' + col.border + ';border-radius:0 4px 4px 0;';
+        el.innerHTML = '<div style="font-size:8px;letter-spacing:2px;text-transform:uppercase;color:' + col.label + ';margin-bottom:3px;font-weight:700;">' + (r.name || 'Expert') + '</div>' +
           '<div style="font-family:Crimson Text,serif;font-size:12px;color:#d4c8a0;line-height:1.5;">' + (r.text || '') + '</div>';
         results.appendChild(el);
       }
@@ -17720,10 +17747,10 @@ function bedeReply() {
 
       for (var i = 0; i < data.responses.length; i++) {
         var r = data.responses[i];
-        var isBede = r.name && r.name.indexOf('Bede') !== -1;
+        var col = colourFor(r.name);
         var el = document.createElement('div');
-        el.style.cssText = 'margin-bottom:10px;padding:12px;background:#1a1810;border-left:3px solid ' + (isBede ? '#c4a060' : '#5a4a20') + ';border-radius:0 4px 4px 0;';
-        el.innerHTML = '<div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:' + (isBede ? '#c4a060' : '#8a7a50') + ';margin-bottom:4px;">' + (r.name || 'Expert') + '</div>' +
+        el.style.cssText = 'margin-bottom:10px;padding:12px;background:#1a1810;border-left:4px solid ' + col.border + ';border-radius:0 4px 4px 0;';
+        el.innerHTML = '<div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:' + col.label + ';margin-bottom:4px;font-weight:700;">' + (r.name || 'Expert') + '</div>' +
           '<div style="font-family:Crimson Text,serif;font-size:13px;color:#d4c8a0;line-height:1.6;">' + (r.text || '') + '</div>';
         results.appendChild(el);
       }
@@ -17785,13 +17812,11 @@ function fetchPredictions() {
       // Each prediction
       for (var i = 0; i < data.predictions.length; i++) {
         var p = data.predictions[i];
-        var isBede = p.name && p.name.indexOf('Bede') !== -1;
-        var borderColor = isBede ? '#c4a060' : '#5a4a20';
-        var nameColor = isBede ? '#c4a060' : '#8a7a50';
+        var col = colourFor(p.name);
         var el = document.createElement('div');
-        el.style.cssText = 'margin-bottom:10px;padding:12px;background:#1a1810;border-left:3px solid ' + borderColor + ';border-radius:0 4px 4px 0;';
+        el.style.cssText = 'margin-bottom:10px;padding:12px;background:#1a1810;border-left:4px solid ' + col.border + ';border-radius:0 4px 4px 0;';
         el.innerHTML = '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">' +
-          '<span style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:' + nameColor + ';">' + (p.name || 'Expert') + '</span>' +
+          '<span style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:' + col.label + ';font-weight:700;">' + (p.name || 'Expert') + '</span>' +
           '<span style="font-size:9px;letter-spacing:1px;text-transform:uppercase;color:' + (p.pick === 'telemicus' ? '#c4a060' : '#6a8a50') + ';">' + (p.pick || '?') + '</span>' +
           '</div>' +
           '<div style="font-family:Crimson Text,serif;font-size:13px;color:#d4c8a0;line-height:1.5;">' + (p.text || '') + '</div>';
@@ -17832,10 +17857,10 @@ function showOfflinePredictions() {
   ];
   for (var i = 0; i < preds.length; i++) {
     var p = preds[i];
-    var isBede = p.name.indexOf('Bede') !== -1;
+    var col = colourFor(p.name);
     var el = document.createElement('div');
-    el.style.cssText = 'margin-bottom:10px;padding:12px;background:#1a1810;border-left:3px solid ' + (isBede ? '#c4a060' : '#5a4a20') + ';border-radius:0 4px 4px 0;';
-    el.innerHTML = '<div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:' + (isBede ? '#c4a060' : '#8a7a50') + ';">' + p.name + '</span><span style="font-size:9px;letter-spacing:1px;text-transform:uppercase;color:#6a5a30;">' + p.pick + '</span></div>' +
+    el.style.cssText = 'margin-bottom:10px;padding:12px;background:#1a1810;border-left:4px solid ' + col.border + ';border-radius:0 4px 4px 0;';
+    el.innerHTML = '<div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:' + col.label + ';font-weight:700;">' + p.name + '</span><span style="font-size:9px;letter-spacing:1px;text-transform:uppercase;color:#6a5a30;">' + p.pick + '</span></div>' +
       '<div style="font-family:Crimson Text,serif;font-size:13px;color:#d4c8a0;line-height:1.5;">' + p.text + '</div>';
     content.appendChild(el);
   }
@@ -18388,7 +18413,7 @@ export default {
       const isReply = body.reply || false;
       const voiceBlocks = isReply ? '' : '\n\n' + buildBearVoiceBlock([
         'eyewitness_self_correct', 'wrong_century_credential', 'unnecessary_personal_experience'
-      ]) + '\n\n' + buildRayVoiceBlock(['silent_undercut']) + '\n\n' + buildFoxVoiceBlock(['silent_undercut']) + '\n\n' + buildLesVoiceBlock(['silent_undercut']) + '\n\n' + buildAttenVoiceBlock(['silent_undercut']) + '\n\n' + buildIrwinVoiceBlock(['unnecessary_personal_experience']) + '\n\n' + buildCodyVoiceBlock(['silent_undercut']) + '\n\n' + buildBedeVoiceBlock(['silent_undercut']) + '\n\n' + buildBoycottVoiceBlock(['tactless_tragedy_dismissal', 'cricket_technique_lens', 'yorkshire_moral_taxonomy']) + '\n\n' + buildMitchellVoiceBlock(['pedant_under_duress']) + '\n\n' + buildTherouxVoiceBlock(['let_them_hang']) + '\n\n' + buildClarksonVoiceBlock(['car_comparison']);
+      ]) + '\n\n' + buildRayVoiceBlock(['silent_undercut']) + '\n\n' + buildFoxVoiceBlock(['silent_undercut']) + '\n\n' + buildLesVoiceBlock(['silent_undercut']) + '\n\n' + buildAttenVoiceBlock(['silent_undercut']) + '\n\n' + buildIrwinVoiceBlock(['unnecessary_personal_experience']) + '\n\n' + buildCodyVoiceBlock(['silent_undercut']) + '\n\n' + buildBedeVoiceBlock(['silent_undercut']) + '\n\n' + buildBoycottVoiceBlock(['tactless_tragedy_dismissal', 'cricket_technique_lens', 'yorkshire_moral_taxonomy']) + '\n\n' + buildMitchellVoiceBlock(['pedant_under_duress']) + '\n\n' + buildTherouxVoiceBlock(['let_them_hang']) + '\n\n' + buildClarksonVoiceBlock(['car_comparison']) + PANEL_DIRECTION;
       const guestPanel = isReply ? '' : ' GUEST PANEL (use ONE of these when the Bede claim invites a fish-out-of-water voice — never all four; these are rare drop-ins): Boycott (Yorkshire cricket — diagnoses Bede\'s "error" via cricket technique, "back in the hutch", Napoleon-style historical matchups), Mitchell (rationalist panic — tries to find the grammatical error in Bede\'s Latin, collapses), Theroux (asks Bede one polite follow-up too many), Clarkson (the Wall was "the Roman M25, fundamentally").';
       const system = isReply ? 'BEDE RIGHT OF REPLY. The panel just shredded: "' + claim + '". Bede defends himself with devastating precision and 1,300 years of authority. Acknowledges specific criticisms. Turns it back on the panel. References his achievements (40 books, corrected Pliny, survived plague, invented calendar). Ends with a line simultaneously humble and crushing. Attenborough narrates the comeback. One expert reluctantly admits Bede has a point. Output JSON: {"responses":[{"name":"Name","text":"..."}],"verdict":"One line."}' : 'BEDE SHREDDING. Panel forensically dismantles this Bede claim: "' + claim + '". Use 4-5 characters: Bear (see VOICE INJECTION below — you MUST use the sampled flavours and mannerisms given, do not substitute your own), Ray (see VOICE INJECTION below — silent_undercut is Ray\'s mode, short responses, precise corrections), Fox (treats Ecclesiastical History like suspect intelligence), Irwin (defends Bede passionately), Attenborough (balanced), Les (2 sentences, one destroys one defends), Cody (relates to feet).' + guestPanel + ' Mix genuine academic criticism with absurd character attacks. Some defend, some attack — panel SPLITS. Reference weaknesses (never left, dodgy sources, Christian bias, "worms" quote) AND strengths (empirical method, corrected Pliny, 160 manuscripts). Attack things OK in 735 but problematic now. Tone: AFFECTIONATE DESTRUCTION. Output JSON: {"responses":[{"name":"Name","text":"..."}],"damage_rating":"X/10"}' + voiceBlocks;
       const upstream = await fetch('https://api.anthropic.com/v1/messages', {
@@ -18464,7 +18489,7 @@ Output JSON:
   "round_summary": "One line describing the state of cross-temporal communication"
 }
 
-` + buildBearVoiceBlock(['eyewitness_self_correct', 'wrong_century_credential', 'non_sequitur_animal', 'unnecessary_personal_experience']) + '\n\n' + buildRayVoiceBlock(['silent_undercut']) + '\n\n' + buildFoxVoiceBlock(['silent_undercut']) + '\n\n' + buildLesVoiceBlock(['silent_undercut']) + '\n\n' + buildAttenVoiceBlock(['silent_undercut']) + '\n\n' + buildIrwinVoiceBlock(['unnecessary_personal_experience']) + '\n\n' + buildCodyVoiceBlock(['silent_undercut']) + '\n\n' + buildBedeVoiceBlock(['silent_undercut']) + '\n\n' + buildBoycottVoiceBlock(['cricket_technique_lens', 'yorkshire_moral_taxonomy', 'not_on_my_watch_ego']) + '\n\n' + buildMitchellVoiceBlock(['pedant_under_duress', 'reasoned_collapse']) + '\n\n' + buildTherouxVoiceBlock(['let_them_hang', 'silent_undercut']) + '\n\n' + buildClarksonVoiceBlock(['car_comparison', 'demand_a_hotel']);
+` + buildBearVoiceBlock(['eyewitness_self_correct', 'wrong_century_credential', 'non_sequitur_animal', 'unnecessary_personal_experience']) + '\n\n' + buildRayVoiceBlock(['silent_undercut']) + '\n\n' + buildFoxVoiceBlock(['silent_undercut']) + '\n\n' + buildLesVoiceBlock(['silent_undercut']) + '\n\n' + buildAttenVoiceBlock(['silent_undercut']) + '\n\n' + buildIrwinVoiceBlock(['unnecessary_personal_experience']) + '\n\n' + buildCodyVoiceBlock(['silent_undercut']) + '\n\n' + buildBedeVoiceBlock(['silent_undercut']) + '\n\n' + buildBoycottVoiceBlock(['cricket_technique_lens', 'yorkshire_moral_taxonomy', 'not_on_my_watch_ego']) + '\n\n' + buildMitchellVoiceBlock(['pedant_under_duress', 'reasoned_collapse']) + '\n\n' + buildTherouxVoiceBlock(['let_them_hang', 'silent_undercut']) + '\n\n' + buildClarksonVoiceBlock(['car_comparison', 'demand_a_hotel']) + PANEL_DIRECTION;
       const messages = [{ role: 'user', content: 'Explain this to Bede: ' + topic }];
       for (let i = 0; i < history.length; i++) {
         messages.push({ role: 'assistant', content: history[i].assistant });
@@ -18525,7 +18550,7 @@ OUTPUT JSON:
   "tally": {"telemicus": N, "ivanhoe": N}
 }
 
-` + buildBearVoiceBlock(['eyewitness_self_correct', 'unnecessary_personal_experience', 'knew_the_ghost_personally']) + '\n\n' + buildRayVoiceBlock(['silent_undercut']) + '\n\n' + buildFoxVoiceBlock(['silent_undercut']) + '\n\n' + buildLesVoiceBlock(['silent_undercut']) + '\n\n' + buildAttenVoiceBlock(['silent_undercut']) + '\n\n' + buildIrwinVoiceBlock(['unnecessary_personal_experience']) + '\n\n' + buildCodyVoiceBlock(['silent_undercut']) + '\n\n' + buildBedeVoiceBlock(['silent_undercut']) + '\n\n' + buildBoycottVoiceBlock(['false_attribution_self_anecdote', 'historical_cricket_matchup', 'yorkshire_moral_taxonomy']) + '\n\n' + buildMitchellVoiceBlock(['unnecessary_personal_experience']) + '\n\n' + buildTherouxVoiceBlock(['let_them_hang']) + '\n\n' + buildClarksonVoiceBlock(['unnecessary_personal_experience', 'car_comparison']);
+` + buildBearVoiceBlock(['eyewitness_self_correct', 'unnecessary_personal_experience', 'knew_the_ghost_personally']) + '\n\n' + buildRayVoiceBlock(['silent_undercut']) + '\n\n' + buildFoxVoiceBlock(['silent_undercut']) + '\n\n' + buildLesVoiceBlock(['silent_undercut']) + '\n\n' + buildAttenVoiceBlock(['silent_undercut']) + '\n\n' + buildIrwinVoiceBlock(['unnecessary_personal_experience']) + '\n\n' + buildCodyVoiceBlock(['silent_undercut']) + '\n\n' + buildBedeVoiceBlock(['silent_undercut']) + '\n\n' + buildBoycottVoiceBlock(['false_attribution_self_anecdote', 'historical_cricket_matchup', 'yorkshire_moral_taxonomy']) + '\n\n' + buildMitchellVoiceBlock(['unnecessary_personal_experience']) + '\n\n' + buildTherouxVoiceBlock(['let_them_hang']) + '\n\n' + buildClarksonVoiceBlock(['unnecessary_personal_experience', 'car_comparison']) + PANEL_DIRECTION;
       const upstream = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'anthropic-version': '2023-06-01', 'x-api-key': apiKey },
@@ -18570,7 +18595,7 @@ BEDE CLOSES with a final verdict. One line. Scholarly. Often disappointed.
 
 Output JSON: {"responses":[{"name":"The Venerable Bede","text":"..."},{"name":"David Attenborough","text":"..."},{"name":"Bear Grylls","text":"..."},...],"bede_verdict":"Bede's closing one-liner"}
 
-` + buildBearVoiceBlock(['eyewitness_self_correct', 'knew_the_ghost_personally', 'unnecessary_personal_experience']) + '\n\n' + buildRayVoiceBlock(['silent_undercut']) + '\n\n' + buildFoxVoiceBlock(['silent_undercut']) + '\n\n' + buildLesVoiceBlock(['silent_undercut']) + '\n\n' + buildAttenVoiceBlock(['silent_undercut']) + '\n\n' + buildIrwinVoiceBlock(['unnecessary_personal_experience']) + '\n\n' + buildCodyVoiceBlock(['silent_undercut']) + '\n\n' + buildBedeVoiceBlock(['silent_undercut']) + '\n\n' + buildBoycottVoiceBlock(['cricket_technique_lens', 'yorkshire_moral_taxonomy']) + '\n\n' + buildMitchellVoiceBlock(['pedant_under_duress', 'reasoned_collapse']) + '\n\n' + buildTherouxVoiceBlock(['let_them_hang', 'silent_undercut']) + '\n\n' + buildClarksonVoiceBlock(['car_comparison']);
+` + buildBearVoiceBlock(['eyewitness_self_correct', 'knew_the_ghost_personally', 'unnecessary_personal_experience']) + '\n\n' + buildRayVoiceBlock(['silent_undercut']) + '\n\n' + buildFoxVoiceBlock(['silent_undercut']) + '\n\n' + buildLesVoiceBlock(['silent_undercut']) + '\n\n' + buildAttenVoiceBlock(['silent_undercut']) + '\n\n' + buildIrwinVoiceBlock(['unnecessary_personal_experience']) + '\n\n' + buildCodyVoiceBlock(['silent_undercut']) + '\n\n' + buildBedeVoiceBlock(['silent_undercut']) + '\n\n' + buildBoycottVoiceBlock(['cricket_technique_lens', 'yorkshire_moral_taxonomy']) + '\n\n' + buildMitchellVoiceBlock(['pedant_under_duress', 'reasoned_collapse']) + '\n\n' + buildTherouxVoiceBlock(['let_them_hang', 'silent_undercut']) + '\n\n' + buildClarksonVoiceBlock(['car_comparison']) + PANEL_DIRECTION;
       const upstream = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'anthropic-version': '2023-06-01', 'x-api-key': apiKey },
@@ -18713,7 +18738,7 @@ GUEST PANEL (use ONE or TWO of these when a topic calls for a fish-out-of-water 
 
 Output JSON: {"responses":[{"charId":"bear","name":"Bear Grylls","text":"..."},...],"escalation_note":"one line — what tension/conspiracy is building","round":${round}}
 
-` + buildBearVoiceBlock(['eyewitness_self_correct', 'knew_the_ghost_personally', 'unnecessary_personal_experience']) + '\n\n' + buildRayVoiceBlock(['silent_undercut']) + '\n\n' + buildFoxVoiceBlock(['silent_undercut']) + '\n\n' + buildLesVoiceBlock(['silent_undercut']) + '\n\n' + buildAttenVoiceBlock(['silent_undercut']) + '\n\n' + buildIrwinVoiceBlock(['unnecessary_personal_experience', 'knew_the_ghost_personally']) + '\n\n' + buildCodyVoiceBlock(['silent_undercut']) + '\n\n' + buildBedeVoiceBlock(['silent_undercut']) + '\n\n' + buildBoycottVoiceBlock(['historical_cricket_matchup', 'tactless_tragedy_dismissal', 'tie_back_to_self']) + '\n\n' + buildMitchellVoiceBlock(['reasoned_collapse']) + '\n\n' + buildTherouxVoiceBlock(['let_them_hang']) + '\n\n' + buildClarksonVoiceBlock(['car_comparison', 'unnecessary_personal_experience']);
+` + buildBearVoiceBlock(['eyewitness_self_correct', 'knew_the_ghost_personally', 'unnecessary_personal_experience']) + '\n\n' + buildRayVoiceBlock(['silent_undercut']) + '\n\n' + buildFoxVoiceBlock(['silent_undercut']) + '\n\n' + buildLesVoiceBlock(['silent_undercut']) + '\n\n' + buildAttenVoiceBlock(['silent_undercut']) + '\n\n' + buildIrwinVoiceBlock(['unnecessary_personal_experience', 'knew_the_ghost_personally']) + '\n\n' + buildCodyVoiceBlock(['silent_undercut']) + '\n\n' + buildBedeVoiceBlock(['silent_undercut']) + '\n\n' + buildBoycottVoiceBlock(['historical_cricket_matchup', 'tactless_tragedy_dismissal', 'tie_back_to_self']) + '\n\n' + buildMitchellVoiceBlock(['reasoned_collapse']) + '\n\n' + buildTherouxVoiceBlock(['let_them_hang']) + '\n\n' + buildClarksonVoiceBlock(['car_comparison', 'unnecessary_personal_experience']) + PANEL_DIRECTION;
       const escalationPrompts = [
         'Tell us about: ' + topic,
         'That\'s interesting. Tell me more. What REALLY happened? Were any of you actually there?',

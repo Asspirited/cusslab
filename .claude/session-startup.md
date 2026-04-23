@@ -8,6 +8,31 @@
 
 ---
 
+### 0a. CHARACTER SCHEMA PRE-FLIGHT — read before ANY character work
+
+Before touching any character file, bank, or generation prompt:
+
+```bash
+cat /home/rodent/leanspirited-standards/standards/character-schema.md
+```
+
+Rod 2026-04-23 (canonical rule): *"Everything MUST use the same template,
+attributes, engines, functions, features, emotions, interactions — they
+should all have access to and indeed get built using THE SAME SHARED COMMON
+SET OF THINGS."*
+
+Every character in every LeanSpirited panel product MUST implement all 17
+attributes in the canonical schema. No partial characters. No shortcuts.
+
+**Blocker:** if a character file or bank is being created/modified and any
+of the 17 attributes are missing, stop and fill them BEFORE shipping. Any
+ship without conformance = WL entry (WL-SS-030 was the first break).
+
+The original cusslab-local copy at `cusslab/characters-schema.md` is retained
+but the canonical source is now the leanspirited-standards one above.
+
+---
+
 ### 0. PRE-FLIGHT — prime Downloads for Claude.ai (run first, no exceptions)
 
 ```bash
