@@ -13401,8 +13401,11 @@ const SURVIVAL_SCHOOL_WALL_WALKERS = `<!DOCTYPE html>
     /* ── Map section ── */
     .map-container { margin:16px; padding:14px; background:#22190e; border:1px solid #3a2f1e; border-radius:8px; }
     .stop-list { }
-    .stop-item { padding:10px 0; border-bottom:1px solid #2a2010; display:flex; justify-content:space-between; align-items:center; }
+    .stop-item { padding:10px 0; border-bottom:1px solid #2a2010; display:flex; justify-content:space-between; align-items:center; gap:10px; }
     .stop-item:last-child { border-bottom:none; }
+    .stop-landmark { flex:0 0 auto; width:56px; height:40px; image-rendering:pixelated; image-rendering:crisp-edges; }
+    .stop-landmark rect { shape-rendering:crispEdges; }
+    .stop-text { flex:1 1 auto; min-width:0; }
     .stop-name { font-size:12px; color:#d4c8a0; }
     .stop-roman { font-family:'Crimson Text',serif; font-style:italic; font-size:11px; color:#8a7a50; }
     .stop-day { font-size:9px; letter-spacing:1px; text-transform:uppercase; color:#6a5a30; }
@@ -13644,13 +13647,91 @@ const SURVIVAL_SCHOOL_WALL_WALKERS = `<!DOCTYPE html>
   <div style="margin:0 16px 12px;">
     <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#c4a060;margin-bottom:8px;">&#x2694; Daily Quiz Battle</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-      <div class="dash-tile" onclick="openTab('quiz')" style="border-color:#5a4a20;">
-        <div class="dash-tile-icon">&#x1F3AF;</div>
+      <div class="dash-tile" onclick="openTab('quiz')" style="border-color:#5a4a20;background:linear-gradient(180deg,#1a120a 0%,#22190e 55%,#2a1810 100%);">
+        <svg class="dash-tile-art" viewBox="0 0 120 68" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Wax-sealed scroll with quill">
+          <!-- desk surface -->
+          <rect x="0" y="58" width="120" height="10" fill="#2a1810"/>
+          <rect x="0" y="64" width="120" height="4" fill="#1a0e08"/>
+          <!-- scroll (rolled ends) -->
+          <rect x="18" y="22" width="84" height="32" fill="#d4c090"/>
+          <rect x="18" y="22" width="84" height="3" fill="#e4d4a0"/>
+          <rect x="18" y="51" width="84" height="3" fill="#b49868"/>
+          <!-- scroll lines of text -->
+          <rect x="26" y="30" width="50" height="2" fill="#6a5030"/>
+          <rect x="26" y="35" width="60" height="2" fill="#6a5030"/>
+          <rect x="26" y="40" width="45" height="2" fill="#6a5030"/>
+          <rect x="26" y="45" width="55" height="2" fill="#6a5030"/>
+          <!-- rolled left end -->
+          <rect x="12" y="20" width="10" height="36" fill="#8a6a30"/>
+          <rect x="10" y="22" width="4" height="32" fill="#6a4a20"/>
+          <rect x="12" y="24" width="10" height="2" fill="#a48040"/>
+          <rect x="12" y="52" width="10" height="2" fill="#6a5020"/>
+          <!-- rolled right end -->
+          <rect x="98" y="20" width="10" height="36" fill="#8a6a30"/>
+          <rect x="106" y="22" width="4" height="32" fill="#6a4a20"/>
+          <rect x="98" y="24" width="10" height="2" fill="#a48040"/>
+          <rect x="98" y="52" width="10" height="2" fill="#6a5020"/>
+          <!-- wax seal -->
+          <rect x="52" y="46" width="16" height="10" fill="#c42020"/>
+          <rect x="54" y="44" width="12" height="2" fill="#e43030"/>
+          <rect x="56" y="48" width="8" height="4" fill="#8a1010"/>
+          <rect x="58" y="50" width="4" height="2" fill="#600808"/>
+          <!-- quill — diagonal feather -->
+          <rect x="80" y="14" width="3" height="8" fill="#e4d8b0"/>
+          <rect x="78" y="16" width="7" height="2" fill="#e4d8b0"/>
+          <rect x="76" y="18" width="11" height="2" fill="#d4c8a0"/>
+          <rect x="74" y="20" width="15" height="2" fill="#c4b890"/>
+          <rect x="82" y="22" width="2" height="4" fill="#4a3a20"/>
+          <!-- inkwell -->
+          <rect x="28" y="48" width="12" height="10" fill="#1a0e08"/>
+          <rect x="30" y="46" width="8" height="2" fill="#2a1810"/>
+          <rect x="32" y="48" width="4" height="2" fill="#4a2810"/>
+        </svg>
         <div class="dash-tile-title">Quiz Rounds</div>
         <div class="dash-tile-sub" id="dash-quiz-sub">Tap to start</div>
       </div>
-      <div class="dash-tile" onclick="openTab('collection')" style="border-color:#5a4a20;">
-        <div class="dash-tile-icon">&#x1F33F;</div>
+      <div class="dash-tile" onclick="openTab('collection')" style="border-color:#5a4a20;background:linear-gradient(180deg,#1a120a 0%,#22190e 55%,#2a1810 100%);">
+        <svg class="dash-tile-art" viewBox="0 0 120 68" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Field journal with butterfly and pressed flower">
+          <!-- grass baseline -->
+          <rect x="0" y="58" width="120" height="10" fill="#2a1810"/>
+          <rect x="0" y="64" width="120" height="4" fill="#1a0e08"/>
+          <rect x="10" y="60" width="4" height="2" fill="#4a6a2a"/>
+          <rect x="22" y="60" width="3" height="2" fill="#4a6a2a"/>
+          <rect x="96" y="60" width="4" height="2" fill="#4a6a2a"/>
+          <!-- open journal left page -->
+          <rect x="14" y="18" width="44" height="40" fill="#d4c090"/>
+          <rect x="14" y="18" width="44" height="3" fill="#e4d4a0"/>
+          <rect x="14" y="55" width="44" height="3" fill="#b49868"/>
+          <rect x="58" y="20" width="2" height="38" fill="#6a4a20"/>
+          <!-- right page -->
+          <rect x="60" y="18" width="44" height="40" fill="#d4c090"/>
+          <rect x="60" y="18" width="44" height="3" fill="#e4d4a0"/>
+          <rect x="60" y="55" width="44" height="3" fill="#b49868"/>
+          <!-- left page: pressed flower -->
+          <rect x="34" y="30" width="4" height="4" fill="#e48060"/>
+          <rect x="30" y="34" width="4" height="4" fill="#e48060"/>
+          <rect x="38" y="34" width="4" height="4" fill="#e48060"/>
+          <rect x="34" y="38" width="4" height="4" fill="#e48060"/>
+          <rect x="35" y="42" width="2" height="10" fill="#5a7a30"/>
+          <!-- left page text lines -->
+          <rect x="20" y="24" width="18" height="2" fill="#6a5030"/>
+          <rect x="20" y="27" width="22" height="2" fill="#6a5030"/>
+          <!-- right page: butterfly -->
+          <rect x="76" y="30" width="12" height="2" fill="#8a4020"/>
+          <rect x="74" y="32" width="16" height="2" fill="#c46030"/>
+          <rect x="72" y="34" width="20" height="4" fill="#c46030"/>
+          <rect x="74" y="38" width="16" height="2" fill="#c46030"/>
+          <rect x="76" y="40" width="12" height="2" fill="#8a4020"/>
+          <rect x="80" y="30" width="4" height="12" fill="#2a1810"/>
+          <rect x="70" y="34" width="2" height="2" fill="#f4e8b0"/>
+          <rect x="92" y="34" width="2" height="2" fill="#f4e8b0"/>
+          <!-- right page caption -->
+          <rect x="66" y="48" width="30" height="2" fill="#6a5030"/>
+          <!-- magnifying glass -->
+          <rect x="94" y="38" width="18" height="16" fill="none" stroke="#3a2010" stroke-width="2"/>
+          <rect x="96" y="40" width="14" height="12" fill="#8ac4e4" opacity="0.4"/>
+          <rect x="110" y="54" width="4" height="8" fill="#3a2010" transform="rotate(30 112 58)"/>
+        </svg>
         <div class="dash-tile-title">Collection</div>
         <div class="dash-tile-sub" id="dash-coll-sub">0 species</div>
       </div>
@@ -13737,8 +13818,62 @@ const SURVIVAL_SCHOOL_WALL_WALKERS = `<!DOCTYPE html>
         <div class="dash-tile-title">Scores &amp; Fireside</div>
         <div class="dash-tile-sub">End of day ceremony</div>
       </div>
-      <div class="dash-tile" onclick="openTab('route')" style="border-color:#5a4a20;">
-        <div class="dash-tile-icon">&#x1F5FA;</div>
+      <div class="dash-tile" onclick="openTab('route')" style="border-color:#5a4a20;background:linear-gradient(180deg,#0a0818 0%,#1a1228 45%,#2a1810 100%);">
+        <svg class="dash-tile-art" viewBox="0 0 120 68" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Moonlit wall with winding path and waypoints">
+          <!-- sky with stars -->
+          <rect x="22" y="4" width="2" height="2" fill="#f4e8b0"/>
+          <rect x="48" y="8" width="2" height="2" fill="#d4c8a0"/>
+          <rect x="82" y="6" width="2" height="2" fill="#f4e8b0"/>
+          <rect x="104" y="10" width="2" height="2" fill="#c4b890"/>
+          <!-- moon -->
+          <rect x="96" y="10" width="10" height="2" fill="#f4e8b0"/>
+          <rect x="94" y="12" width="14" height="10" fill="#f4e8b0"/>
+          <rect x="96" y="22" width="10" height="2" fill="#f4e8b0"/>
+          <rect x="100" y="14" width="2" height="2" fill="#d4c8a0"/>
+          <rect x="104" y="18" width="2" height="2" fill="#d4c8a0"/>
+          <!-- distant hills -->
+          <rect x="0" y="34" width="40" height="8" fill="#3a4a5a"/>
+          <rect x="30" y="30" width="28" height="12" fill="#2a3a4a"/>
+          <rect x="56" y="32" width="30" height="10" fill="#3a4a5a"/>
+          <rect x="80" y="36" width="40" height="6" fill="#2a3a4a"/>
+          <!-- wall (crenellated) horizontal -->
+          <rect x="0" y="42" width="120" height="6" fill="#4a3a2a"/>
+          <rect x="0" y="40" width="120" height="2" fill="#5a4838"/>
+          <rect x="6" y="38" width="4" height="2" fill="#5a4838"/>
+          <rect x="18" y="38" width="4" height="2" fill="#5a4838"/>
+          <rect x="30" y="38" width="4" height="2" fill="#5a4838"/>
+          <rect x="42" y="38" width="4" height="2" fill="#5a4838"/>
+          <rect x="54" y="38" width="4" height="2" fill="#5a4838"/>
+          <rect x="66" y="38" width="4" height="2" fill="#5a4838"/>
+          <rect x="78" y="38" width="4" height="2" fill="#5a4838"/>
+          <rect x="90" y="38" width="4" height="2" fill="#5a4838"/>
+          <rect x="102" y="38" width="4" height="2" fill="#5a4838"/>
+          <rect x="114" y="38" width="4" height="2" fill="#5a4838"/>
+          <!-- ground -->
+          <rect x="0" y="48" width="120" height="20" fill="#2a2010"/>
+          <rect x="0" y="64" width="120" height="4" fill="#1a0e08"/>
+          <!-- winding path -->
+          <rect x="4" y="62" width="18" height="3" fill="#c4a060"/>
+          <rect x="20" y="58" width="18" height="3" fill="#c4a060"/>
+          <rect x="36" y="56" width="20" height="3" fill="#c4a060"/>
+          <rect x="54" y="52" width="22" height="3" fill="#c4a060"/>
+          <rect x="74" y="54" width="18" height="3" fill="#c4a060"/>
+          <rect x="90" y="58" width="16" height="3" fill="#c4a060"/>
+          <rect x="104" y="62" width="14" height="3" fill="#c4a060"/>
+          <!-- waypoint cairns -->
+          <rect x="14" y="56" width="4" height="6" fill="#8a7a50"/>
+          <rect x="15" y="54" width="2" height="2" fill="#a49870"/>
+          <rect x="42" y="50" width="4" height="6" fill="#8a7a50"/>
+          <rect x="43" y="48" width="2" height="2" fill="#a49870"/>
+          <rect x="64" y="46" width="4" height="6" fill="#c44020"/>
+          <rect x="65" y="44" width="2" height="2" fill="#f4c040"/>
+          <rect x="86" y="52" width="4" height="6" fill="#8a7a50"/>
+          <rect x="87" y="50" width="2" height="2" fill="#a49870"/>
+          <!-- compass rose top-left -->
+          <rect x="4" y="6" width="10" height="2" fill="#c4a060"/>
+          <rect x="8" y="2" width="2" height="10" fill="#c4a060"/>
+          <rect x="9" y="4" width="1" height="1" fill="#f4e8b0"/>
+        </svg>
         <div class="dash-tile-title">Route &amp; GPS</div>
         <div class="dash-tile-sub">Track your walk</div>
       </div>
@@ -13749,23 +13884,219 @@ const SURVIVAL_SCHOOL_WALL_WALKERS = `<!DOCTYPE html>
   <div style="margin:0 16px 12px;">
     <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#6a8a50;margin-bottom:8px;">&#x1F4DA; Explore &amp; Discover (anytime)</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-      <div class="dash-tile" onclick="openTab('ask')">
-        <div class="dash-tile-icon">&#x1F4AC;</div>
+      <div class="dash-tile" onclick="openTab('ask')" style="background:linear-gradient(180deg,#1a120a 0%,#22190e 55%,#2a1810 100%);">
+        <svg class="dash-tile-art" viewBox="0 0 120 68" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three cloaked figures around a table with speech bubbles">
+          <!-- floor -->
+          <rect x="0" y="58" width="120" height="10" fill="#2a1810"/>
+          <rect x="0" y="64" width="120" height="4" fill="#1a0e08"/>
+          <!-- table -->
+          <rect x="30" y="50" width="60" height="10" fill="#4a2a18"/>
+          <rect x="30" y="48" width="60" height="2" fill="#6a4028"/>
+          <rect x="32" y="60" width="4" height="4" fill="#2a1810"/>
+          <rect x="84" y="60" width="4" height="4" fill="#2a1810"/>
+          <!-- central figure (Bede cowled) -->
+          <rect x="52" y="22" width="16" height="14" fill="#2a1810"/>
+          <rect x="50" y="24" width="2" height="12" fill="#2a1810"/>
+          <rect x="68" y="24" width="2" height="12" fill="#2a1810"/>
+          <rect x="56" y="28" width="2" height="2" fill="#d4c8a0"/>
+          <rect x="62" y="28" width="2" height="2" fill="#d4c8a0"/>
+          <rect x="46" y="34" width="28" height="18" fill="#4a2a3a"/>
+          <rect x="48" y="36" width="24" height="2" fill="#6a4a5a"/>
+          <!-- left figure -->
+          <rect x="14" y="30" width="14" height="12" fill="#3a2a18"/>
+          <rect x="16" y="34" width="2" height="2" fill="#d4c8a0"/>
+          <rect x="22" y="34" width="2" height="2" fill="#d4c8a0"/>
+          <rect x="10" y="40" width="22" height="16" fill="#2a3a4a"/>
+          <!-- right figure -->
+          <rect x="92" y="30" width="14" height="12" fill="#3a2a18"/>
+          <rect x="94" y="34" width="2" height="2" fill="#d4c8a0"/>
+          <rect x="100" y="34" width="2" height="2" fill="#d4c8a0"/>
+          <rect x="88" y="40" width="22" height="16" fill="#3a4a2a"/>
+          <!-- speech bubbles -->
+          <rect x="32" y="6" width="24" height="14" fill="#d4c8a0" rx="1"/>
+          <rect x="32" y="6" width="24" height="2" fill="#e4d8b0"/>
+          <rect x="34" y="12" width="2" height="2" fill="#3a2010"/>
+          <rect x="38" y="12" width="2" height="2" fill="#3a2010"/>
+          <rect x="42" y="12" width="2" height="2" fill="#3a2010"/>
+          <rect x="40" y="20" width="2" height="2" fill="#d4c8a0"/>
+          <rect x="38" y="22" width="2" height="2" fill="#d4c8a0"/>
+          <rect x="72" y="4" width="28" height="12" fill="#d4c8a0" rx="1"/>
+          <rect x="72" y="4" width="28" height="2" fill="#e4d8b0"/>
+          <rect x="76" y="10" width="2" height="2" fill="#3a2010"/>
+          <rect x="80" y="10" width="2" height="2" fill="#3a2010"/>
+          <rect x="84" y="10" width="2" height="2" fill="#3a2010"/>
+          <rect x="80" y="16" width="2" height="2" fill="#d4c8a0"/>
+          <rect x="78" y="18" width="2" height="2" fill="#d4c8a0"/>
+          <!-- candle on table -->
+          <rect x="58" y="44" width="4" height="6" fill="#c4a060"/>
+          <rect x="59" y="40" width="2" height="4" fill="#f4c040"/>
+          <rect x="59" y="38" width="2" height="2" fill="#f4e080"/>
+        </svg>
         <div class="dash-tile-title">Ask the Panel</div>
         <div class="dash-tile-sub">Bede chairs the Q&amp;A</div>
       </div>
-      <div class="dash-tile" onclick="openTab('legends')">
-        <div class="dash-tile-icon">&#x1F47B;</div>
+      <div class="dash-tile" onclick="openTab('legends')" style="background:linear-gradient(180deg,#08040a 0%,#14081a 55%,#2a1810 100%);">
+        <svg class="dash-tile-art" viewBox="0 0 120 68" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Torchlit cave with ghost over a skull altar">
+          <!-- cave floor -->
+          <rect x="0" y="58" width="120" height="10" fill="#2a1810"/>
+          <rect x="0" y="64" width="120" height="4" fill="#1a0e08"/>
+          <!-- cave walls (jagged rocks) -->
+          <rect x="0" y="0" width="120" height="12" fill="#1a0e08"/>
+          <rect x="8" y="12" width="4" height="4" fill="#1a0e08"/>
+          <rect x="24" y="10" width="6" height="6" fill="#1a0e08"/>
+          <rect x="44" y="12" width="4" height="4" fill="#1a0e08"/>
+          <rect x="72" y="8" width="8" height="8" fill="#1a0e08"/>
+          <rect x="96" y="12" width="6" height="6" fill="#1a0e08"/>
+          <rect x="112" y="10" width="6" height="6" fill="#1a0e08"/>
+          <!-- wall torch (left) -->
+          <rect x="8" y="22" width="2" height="20" fill="#4a2a18"/>
+          <rect x="6" y="16" width="6" height="6" fill="#3a2010"/>
+          <rect x="4" y="8" width="10" height="10" fill="#c44020"/>
+          <rect x="6" y="4" width="6" height="6" fill="#e68030"/>
+          <rect x="7" y="2" width="4" height="4" fill="#f4c040"/>
+          <!-- stone altar -->
+          <rect x="40" y="46" width="40" height="14" fill="#4a3a2a"/>
+          <rect x="40" y="44" width="40" height="2" fill="#6a5a3a"/>
+          <rect x="44" y="58" width="32" height="4" fill="#3a281a"/>
+          <rect x="42" y="48" width="2" height="12" fill="#3a281a"/>
+          <rect x="76" y="48" width="2" height="12" fill="#3a281a"/>
+          <!-- skull on altar -->
+          <rect x="52" y="34" width="16" height="12" fill="#e4d8b0"/>
+          <rect x="50" y="36" width="20" height="8" fill="#e4d8b0"/>
+          <rect x="54" y="38" width="3" height="4" fill="#1a0e08"/>
+          <rect x="63" y="38" width="3" height="4" fill="#1a0e08"/>
+          <rect x="58" y="42" width="4" height="2" fill="#1a0e08"/>
+          <rect x="56" y="44" width="2" height="2" fill="#c4b890"/>
+          <rect x="60" y="44" width="2" height="2" fill="#c4b890"/>
+          <rect x="62" y="44" width="2" height="2" fill="#c4b890"/>
+          <!-- ghost hovering -->
+          <rect x="80" y="18" width="16" height="22" fill="#f4e8b0" opacity="0.6"/>
+          <rect x="78" y="22" width="20" height="18" fill="#f4e8b0" opacity="0.5"/>
+          <rect x="80" y="40" width="4" height="4" fill="#f4e8b0" opacity="0.4"/>
+          <rect x="86" y="40" width="4" height="4" fill="#f4e8b0" opacity="0.4"/>
+          <rect x="92" y="40" width="4" height="4" fill="#f4e8b0" opacity="0.4"/>
+          <rect x="84" y="26" width="2" height="2" fill="#1a0e08"/>
+          <rect x="90" y="26" width="2" height="2" fill="#1a0e08"/>
+          <rect x="84" y="32" width="8" height="2" fill="#1a0e08" opacity="0.5"/>
+        </svg>
         <div class="dash-tile-title">Legends &amp; Dark History</div>
         <div class="dash-tile-sub">The panel discusses myths</div>
       </div>
-      <div class="dash-tile" onclick="openTab('wilderment')">
-        <div class="dash-tile-icon">&#x1F92F;</div>
+      <div class="dash-tile" onclick="openTab('wilderment')" style="background:linear-gradient(180deg,#1a120a 0%,#22190e 55%,#2a1810 100%);">
+        <svg class="dash-tile-art" viewBox="0 0 120 68" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Bede at desk with confused thought bubble">
+          <!-- floor -->
+          <rect x="0" y="58" width="120" height="10" fill="#2a1810"/>
+          <rect x="0" y="64" width="120" height="4" fill="#1a0e08"/>
+          <!-- scriptorium wall with arched window -->
+          <rect x="0" y="0" width="120" height="50" fill="#2a1f10"/>
+          <rect x="14" y="8" width="20" height="24" fill="#4a3820"/>
+          <rect x="18" y="4" width="12" height="4" fill="#4a3820"/>
+          <rect x="16" y="4" width="2" height="4" fill="#4a3820"/>
+          <rect x="30" y="4" width="2" height="4" fill="#4a3820"/>
+          <rect x="16" y="10" width="16" height="18" fill="#0a1828"/>
+          <rect x="24" y="10" width="2" height="18" fill="#4a3820"/>
+          <rect x="16" y="18" width="16" height="2" fill="#4a3820"/>
+          <!-- desk (pulpit) -->
+          <rect x="60" y="38" width="44" height="20" fill="#4a2a18"/>
+          <rect x="60" y="36" width="44" height="2" fill="#6a4028"/>
+          <rect x="64" y="58" width="4" height="6" fill="#3a2010"/>
+          <rect x="96" y="58" width="4" height="6" fill="#3a2010"/>
+          <!-- open book -->
+          <rect x="66" y="28" width="32" height="14" fill="#d4c090"/>
+          <rect x="66" y="28" width="32" height="2" fill="#e4d4a0"/>
+          <rect x="81" y="30" width="2" height="12" fill="#6a4a20"/>
+          <rect x="70" y="33" width="10" height="1" fill="#6a5030"/>
+          <rect x="70" y="36" width="10" height="1" fill="#6a5030"/>
+          <rect x="70" y="39" width="10" height="1" fill="#6a5030"/>
+          <rect x="84" y="33" width="10" height="1" fill="#6a5030"/>
+          <rect x="84" y="36" width="10" height="1" fill="#6a5030"/>
+          <!-- cowled Bede -->
+          <rect x="38" y="22" width="14" height="14" fill="#2a1810"/>
+          <rect x="36" y="24" width="2" height="12" fill="#2a1810"/>
+          <rect x="52" y="24" width="2" height="12" fill="#2a1810"/>
+          <rect x="40" y="28" width="2" height="2" fill="#d4c8a0"/>
+          <rect x="46" y="28" width="2" height="2" fill="#d4c8a0"/>
+          <rect x="30" y="34" width="30" height="24" fill="#4a2a3a"/>
+          <rect x="32" y="36" width="26" height="2" fill="#6a4a5a"/>
+          <!-- quill in hand -->
+          <rect x="56" y="34" width="6" height="2" fill="#e4d8b0"/>
+          <rect x="60" y="30" width="3" height="8" fill="#e4d8b0"/>
+          <rect x="58" y="32" width="6" height="2" fill="#d4c8a0"/>
+          <!-- question marks (wilderment) -->
+          <rect x="72" y="10" width="4" height="2" fill="#c4a060"/>
+          <rect x="76" y="12" width="2" height="4" fill="#c4a060"/>
+          <rect x="74" y="16" width="2" height="2" fill="#c4a060"/>
+          <rect x="74" y="20" width="2" height="2" fill="#c4a060"/>
+          <rect x="100" y="6" width="3" height="2" fill="#c4a060" opacity="0.7"/>
+          <rect x="102" y="8" width="2" height="3" fill="#c4a060" opacity="0.7"/>
+          <rect x="101" y="12" width="2" height="2" fill="#c4a060" opacity="0.7"/>
+          <rect x="101" y="16" width="2" height="2" fill="#c4a060" opacity="0.7"/>
+        </svg>
         <div class="dash-tile-title">Bede Wilderment</div>
         <div class="dash-tile-sub">Modern vs 8th century</div>
       </div>
-      <div class="dash-tile" onclick="openTab('shredding')">
-        <div class="dash-tile-icon">&#x1F525;</div>
+      <div class="dash-tile" onclick="openTab('shredding')" style="background:linear-gradient(180deg,#2a0a0a 0%,#3a120a 55%,#2a1810 100%);">
+        <svg class="dash-tile-art" viewBox="0 0 120 68" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Torn parchment with blade and ink splatter">
+          <!-- surface -->
+          <rect x="0" y="58" width="120" height="10" fill="#2a1810"/>
+          <rect x="0" y="64" width="120" height="4" fill="#1a0e08"/>
+          <!-- left half of torn scroll -->
+          <rect x="8" y="18" width="46" height="36" fill="#d4c090"/>
+          <rect x="8" y="18" width="46" height="3" fill="#e4d4a0"/>
+          <rect x="8" y="51" width="46" height="3" fill="#b49868"/>
+          <!-- jagged torn edge right side of left half -->
+          <rect x="54" y="20" width="2" height="2" fill="#d4c090"/>
+          <rect x="52" y="22" width="4" height="2" fill="#d4c090"/>
+          <rect x="54" y="24" width="4" height="2" fill="#d4c090"/>
+          <rect x="50" y="26" width="6" height="2" fill="#d4c090"/>
+          <rect x="54" y="28" width="4" height="2" fill="#d4c090"/>
+          <rect x="52" y="30" width="6" height="2" fill="#d4c090"/>
+          <rect x="54" y="32" width="2" height="2" fill="#d4c090"/>
+          <rect x="50" y="34" width="8" height="2" fill="#d4c090"/>
+          <rect x="54" y="36" width="4" height="2" fill="#d4c090"/>
+          <rect x="52" y="38" width="4" height="2" fill="#d4c090"/>
+          <rect x="54" y="40" width="6" height="2" fill="#d4c090"/>
+          <rect x="52" y="42" width="4" height="2" fill="#d4c090"/>
+          <rect x="54" y="44" width="2" height="2" fill="#d4c090"/>
+          <rect x="50" y="46" width="6" height="2" fill="#d4c090"/>
+          <rect x="54" y="48" width="4" height="2" fill="#d4c090"/>
+          <!-- right half of torn scroll -->
+          <rect x="66" y="18" width="46" height="36" fill="#d4c090"/>
+          <rect x="66" y="18" width="46" height="3" fill="#e4d4a0"/>
+          <rect x="66" y="51" width="46" height="3" fill="#b49868"/>
+          <!-- jagged torn edge left side of right half -->
+          <rect x="64" y="20" width="2" height="2" fill="#d4c090"/>
+          <rect x="62" y="22" width="4" height="2" fill="#d4c090"/>
+          <rect x="64" y="24" width="2" height="2" fill="#d4c090"/>
+          <rect x="60" y="26" width="6" height="2" fill="#d4c090"/>
+          <rect x="62" y="30" width="4" height="2" fill="#d4c090"/>
+          <rect x="60" y="34" width="6" height="2" fill="#d4c090"/>
+          <rect x="64" y="38" width="2" height="2" fill="#d4c090"/>
+          <rect x="62" y="42" width="4" height="2" fill="#d4c090"/>
+          <rect x="60" y="46" width="6" height="2" fill="#d4c090"/>
+          <rect x="64" y="50" width="2" height="2" fill="#d4c090"/>
+          <!-- text lines (interrupted by tear) -->
+          <rect x="14" y="26" width="30" height="2" fill="#6a5030"/>
+          <rect x="14" y="32" width="36" height="2" fill="#6a5030"/>
+          <rect x="14" y="38" width="28" height="2" fill="#6a5030"/>
+          <rect x="14" y="44" width="34" height="2" fill="#6a5030"/>
+          <rect x="70" y="26" width="34" height="2" fill="#6a5030"/>
+          <rect x="70" y="32" width="28" height="2" fill="#6a5030"/>
+          <rect x="70" y="38" width="36" height="2" fill="#6a5030"/>
+          <rect x="70" y="44" width="30" height="2" fill="#6a5030"/>
+          <!-- ink splatter -->
+          <rect x="30" y="52" width="4" height="2" fill="#1a0e08"/>
+          <rect x="34" y="54" width="2" height="2" fill="#1a0e08"/>
+          <rect x="38" y="56" width="2" height="2" fill="#1a0e08"/>
+          <rect x="78" y="54" width="3" height="2" fill="#1a0e08"/>
+          <rect x="84" y="56" width="2" height="2" fill="#1a0e08"/>
+          <!-- blade across centre -->
+          <rect x="54" y="8" width="4" height="48" fill="#c4c4c4"/>
+          <rect x="54" y="8" width="2" height="48" fill="#e4e4e4"/>
+          <rect x="52" y="56" width="8" height="4" fill="#4a2a18"/>
+          <rect x="50" y="60" width="12" height="4" fill="#3a2010"/>
+          <rect x="56" y="8" width="2" height="2" fill="#f4f4f4"/>
+        </svg>
         <div class="dash-tile-title">Bede Shredding</div>
         <div class="dash-tile-sub">The panel dismantles his claims</div>
       </div>
@@ -15848,6 +16179,162 @@ function updateCollectionStats() {
 }
 
 // ── ROUTE TAB ────────────────────────────────────────────────────
+
+// 16-bit inline SVG landmarks for key stops. 56x40 viewBox, compact.
+// Rod 2026-04-23: match fireside-tile aesthetic. Return '' for no landmark.
+function stopLandmarkSvg(stopId) {
+  var L = {
+    sycamore_gap:
+      // Iconic stump with new shoots growing from the felled base.
+      '<svg class="stop-landmark" viewBox="0 0 56 40" xmlns="http://www.w3.org/2000/svg" aria-label="Sycamore Gap felled stump">' +
+      '<rect x="0" y="32" width="56" height="8" fill="#3a4a2a"/>' +
+      '<rect x="0" y="36" width="56" height="4" fill="#2a3a1a"/>' +
+      '<rect x="20" y="24" width="16" height="10" fill="#5a3820"/>' +
+      '<rect x="22" y="22" width="12" height="2" fill="#7a5030"/>' +
+      '<rect x="24" y="18" width="8" height="4" fill="#6a4828"/>' +
+      '<rect x="22" y="26" width="2" height="8" fill="#3a2010"/>' +
+      '<rect x="32" y="26" width="2" height="8" fill="#3a2010"/>' +
+      '<rect x="26" y="20" width="1" height="2" fill="#3a2010"/>' +
+      '<rect x="30" y="20" width="1" height="2" fill="#3a2010"/>' +
+      '<rect x="18" y="14" width="2" height="8" fill="#5a7a30"/>' +
+      '<rect x="16" y="12" width="2" height="4" fill="#6a8a40"/>' +
+      '<rect x="20" y="10" width="2" height="4" fill="#6a8a40"/>' +
+      '<rect x="36" y="16" width="2" height="6" fill="#5a7a30"/>' +
+      '<rect x="38" y="14" width="2" height="4" fill="#6a8a40"/>' +
+      '<rect x="4" y="28" width="4" height="4" fill="#4a5a2a"/>' +
+      '<rect x="48" y="28" width="4" height="4" fill="#4a5a2a"/>' +
+      '</svg>',
+    steel_rigg:
+      // Dramatic crag profile with wall running along.
+      '<svg class="stop-landmark" viewBox="0 0 56 40" xmlns="http://www.w3.org/2000/svg" aria-label="Steel Rigg crag">' +
+      '<rect x="0" y="28" width="56" height="12" fill="#3a3a2a"/>' +
+      '<rect x="0" y="36" width="56" height="4" fill="#2a2a1a"/>' +
+      '<rect x="0" y="18" width="8" height="10" fill="#5a5a4a"/>' +
+      '<rect x="8" y="12" width="14" height="16" fill="#6a6a5a"/>' +
+      '<rect x="22" y="8" width="18" height="20" fill="#7a7a6a"/>' +
+      '<rect x="40" y="14" width="10" height="14" fill="#6a6a5a"/>' +
+      '<rect x="50" y="20" width="6" height="8" fill="#5a5a4a"/>' +
+      '<rect x="0" y="20" width="56" height="2" fill="#4a3a2a"/>' +
+      '<rect x="4" y="18" width="2" height="2" fill="#5a4838"/>' +
+      '<rect x="10" y="14" width="2" height="2" fill="#5a4838"/>' +
+      '<rect x="16" y="14" width="2" height="2" fill="#5a4838"/>' +
+      '<rect x="24" y="10" width="2" height="2" fill="#5a4838"/>' +
+      '<rect x="32" y="10" width="2" height="2" fill="#5a4838"/>' +
+      '<rect x="42" y="16" width="2" height="2" fill="#5a4838"/>' +
+      '<rect x="48" y="16" width="2" height="2" fill="#5a4838"/>' +
+      '</svg>',
+    vindolanda:
+      // Roman fort silhouette with gate.
+      '<svg class="stop-landmark" viewBox="0 0 56 40" xmlns="http://www.w3.org/2000/svg" aria-label="Vindolanda fort">' +
+      '<rect x="0" y="32" width="56" height="8" fill="#3a2a1a"/>' +
+      '<rect x="0" y="36" width="56" height="4" fill="#2a1810"/>' +
+      '<rect x="6" y="16" width="44" height="18" fill="#6a5a4a"/>' +
+      '<rect x="6" y="14" width="44" height="2" fill="#7a6a5a"/>' +
+      '<rect x="8" y="10" width="4" height="6" fill="#6a5a4a"/>' +
+      '<rect x="20" y="8" width="4" height="8" fill="#6a5a4a"/>' +
+      '<rect x="32" y="8" width="4" height="8" fill="#6a5a4a"/>' +
+      '<rect x="44" y="10" width="4" height="6" fill="#6a5a4a"/>' +
+      '<rect x="24" y="22" width="8" height="12" fill="#2a1810"/>' +
+      '<rect x="24" y="22" width="8" height="2" fill="#4a3828"/>' +
+      '<rect x="10" y="22" width="2" height="8" fill="#3a281a"/>' +
+      '<rect x="16" y="22" width="2" height="8" fill="#3a281a"/>' +
+      '<rect x="38" y="22" width="2" height="8" fill="#3a281a"/>' +
+      '<rect x="44" y="22" width="2" height="8" fill="#3a281a"/>' +
+      '<rect x="22" y="2" width="2" height="6" fill="#c44020"/>' +
+      '<rect x="22" y="2" width="6" height="2" fill="#c44020"/>' +
+      '</svg>',
+    housesteads:
+      // Ruins — partial walls, remnants.
+      '<svg class="stop-landmark" viewBox="0 0 56 40" xmlns="http://www.w3.org/2000/svg" aria-label="Housesteads ruins">' +
+      '<rect x="0" y="30" width="56" height="10" fill="#3a4a2a"/>' +
+      '<rect x="0" y="36" width="56" height="4" fill="#2a3a1a"/>' +
+      '<rect x="4" y="18" width="10" height="14" fill="#6a5a4a"/>' +
+      '<rect x="4" y="18" width="10" height="2" fill="#7a6a5a"/>' +
+      '<rect x="8" y="14" width="2" height="4" fill="#6a5a4a"/>' +
+      '<rect x="18" y="22" width="6" height="10" fill="#5a4a3a"/>' +
+      '<rect x="28" y="16" width="12" height="16" fill="#6a5a4a"/>' +
+      '<rect x="28" y="16" width="12" height="2" fill="#7a6a5a"/>' +
+      '<rect x="30" y="12" width="2" height="4" fill="#6a5a4a"/>' +
+      '<rect x="36" y="12" width="2" height="4" fill="#6a5a4a"/>' +
+      '<rect x="32" y="22" width="4" height="10" fill="#2a1810"/>' +
+      '<rect x="44" y="20" width="8" height="12" fill="#5a4a3a"/>' +
+      '<rect x="44" y="20" width="8" height="2" fill="#6a5a4a"/>' +
+      '<rect x="48" y="14" width="2" height="6" fill="#5a4a3a"/>' +
+      '<rect x="10" y="28" width="2" height="2" fill="#8a7a5a"/>' +
+      '<rect x="26" y="28" width="2" height="2" fill="#8a7a5a"/>' +
+      '<rect x="40" y="28" width="2" height="2" fill="#8a7a5a"/>' +
+      '</svg>',
+    twice_brewed:
+      // Pub building — thatched-ish roof + chimney + windows.
+      '<svg class="stop-landmark" viewBox="0 0 56 40" xmlns="http://www.w3.org/2000/svg" aria-label="Twice Brewed Inn">' +
+      '<rect x="0" y="32" width="56" height="8" fill="#2a2a1a"/>' +
+      '<rect x="0" y="36" width="56" height="4" fill="#1a1a0a"/>' +
+      '<rect x="8" y="20" width="40" height="14" fill="#d4c090"/>' +
+      '<rect x="8" y="20" width="40" height="2" fill="#e4d4a0"/>' +
+      '<rect x="10" y="22" width="36" height="2" fill="#a48040"/>' +
+      '<rect x="4" y="12" width="48" height="8" fill="#6a4028"/>' +
+      '<rect x="4" y="10" width="48" height="2" fill="#8a5038"/>' +
+      '<rect x="8" y="8" width="40" height="2" fill="#6a4028"/>' +
+      '<rect x="14" y="4" width="28" height="4" fill="#5a3018"/>' +
+      '<rect x="38" y="6" width="6" height="10" fill="#4a3828"/>' +
+      '<rect x="38" y="4" width="6" height="2" fill="#6a4838"/>' +
+      '<rect x="40" y="0" width="2" height="4" fill="#c4c4c4" opacity="0.5"/>' +
+      '<rect x="14" y="26" width="6" height="6" fill="#3a1810"/>' +
+      '<rect x="14" y="26" width="6" height="2" fill="#6a4028"/>' +
+      '<rect x="15" y="28" width="2" height="2" fill="#f4c040" opacity="0.7"/>' +
+      '<rect x="17" y="28" width="2" height="2" fill="#f4c040" opacity="0.7"/>' +
+      '<rect x="24" y="26" width="6" height="8" fill="#4a2a18"/>' +
+      '<rect x="24" y="26" width="6" height="2" fill="#6a4028"/>' +
+      '<rect x="35" y="26" width="7" height="6" fill="#3a1810"/>' +
+      '<rect x="35" y="26" width="7" height="2" fill="#6a4028"/>' +
+      '<rect x="36" y="28" width="2" height="2" fill="#f4c040" opacity="0.7"/>' +
+      '<rect x="39" y="28" width="2" height="2" fill="#f4c040" opacity="0.7"/>' +
+      '</svg>',
+    segedunum:
+      // Fort at Wallsend — the terminus.
+      '<svg class="stop-landmark" viewBox="0 0 56 40" xmlns="http://www.w3.org/2000/svg" aria-label="Segedunum — the Wall ends here">' +
+      '<rect x="0" y="32" width="56" height="8" fill="#3a2a1a"/>' +
+      '<rect x="0" y="36" width="56" height="4" fill="#2a1810"/>' +
+      '<rect x="12" y="20" width="32" height="14" fill="#6a5a4a"/>' +
+      '<rect x="12" y="18" width="32" height="2" fill="#7a6a5a"/>' +
+      '<rect x="14" y="14" width="4" height="4" fill="#6a5a4a"/>' +
+      '<rect x="24" y="10" width="8" height="8" fill="#6a5a4a"/>' +
+      '<rect x="38" y="14" width="4" height="4" fill="#6a5a4a"/>' +
+      '<rect x="26" y="6" width="4" height="4" fill="#6a5a4a"/>' +
+      '<rect x="26" y="4" width="4" height="2" fill="#7a6a5a"/>' +
+      '<rect x="27" y="0" width="2" height="4" fill="#c44020"/>' +
+      '<rect x="27" y="0" width="4" height="2" fill="#c44020"/>' +
+      '<rect x="24" y="26" width="8" height="8" fill="#2a1810"/>' +
+      '<rect x="24" y="26" width="8" height="2" fill="#4a3828"/>' +
+      '<rect x="16" y="24" width="2" height="8" fill="#3a281a"/>' +
+      '<rect x="38" y="24" width="2" height="8" fill="#3a281a"/>' +
+      '<rect x="0" y="26" width="10" height="2" fill="#4a3a2a"/>' +
+      '<rect x="46" y="26" width="10" height="2" fill="#4a3a2a"/>' +
+      '</svg>',
+    crag_lough:
+      // Lake below crag with wall overhead.
+      '<svg class="stop-landmark" viewBox="0 0 56 40" xmlns="http://www.w3.org/2000/svg" aria-label="Crag Lough">' +
+      '<rect x="0" y="0" width="56" height="16" fill="#2a3a4a"/>' +
+      '<rect x="0" y="14" width="56" height="4" fill="#4a5a3a"/>' +
+      '<rect x="0" y="14" width="8" height="2" fill="#5a6a4a"/>' +
+      '<rect x="14" y="12" width="10" height="4" fill="#5a6a4a"/>' +
+      '<rect x="28" y="14" width="12" height="2" fill="#5a6a4a"/>' +
+      '<rect x="46" y="12" width="10" height="4" fill="#5a6a4a"/>' +
+      '<rect x="0" y="18" width="56" height="2" fill="#4a3a2a"/>' +
+      '<rect x="4" y="16" width="2" height="2" fill="#5a4838"/>' +
+      '<rect x="18" y="14" width="2" height="2" fill="#5a4838"/>' +
+      '<rect x="32" y="16" width="2" height="2" fill="#5a4838"/>' +
+      '<rect x="50" y="14" width="2" height="2" fill="#5a4838"/>' +
+      '<rect x="0" y="20" width="56" height="16" fill="#2a4858"/>' +
+      '<rect x="0" y="22" width="56" height="2" fill="#3a5868" opacity="0.6"/>' +
+      '<rect x="0" y="28" width="56" height="2" fill="#3a5868" opacity="0.4"/>' +
+      '<rect x="0" y="34" width="56" height="6" fill="#1a3848"/>' +
+      '<rect x="0" y="36" width="56" height="4" fill="#0a2838"/>' +
+      '</svg>'
+  };
+  return L[stopId] || '';
+}
+
 function renderRoute() {
   var list = document.getElementById('stop-list');
   list.innerHTML = '';
@@ -15864,7 +16351,10 @@ function renderRoute() {
     }
     var item = document.createElement('div');
     item.className = 'stop-item' + (visited ? ' visited' : '') + (nearby ? ' nearby' : '');
-    item.innerHTML = '<div><div class="stop-name">' + (visited ? '\\\\u2713 ' : '') + s.name + '</div>' +
+    var landmark = stopLandmarkSvg(s.id);
+    item.innerHTML =
+      (landmark || '<div class="stop-landmark"></div>') +
+      '<div class="stop-text"><div class="stop-name">' + (visited ? '\\\\u2713 ' : '') + s.name + '</div>' +
       (s.romanName ? '<div class="stop-roman">' + s.romanName + '</div>' : '') +
       '<div class="stop-day">Day ' + s.day + '</div></div>' +
       (dist ? '<div class="stop-dist">' + dist + '</div>' : '');
