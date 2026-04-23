@@ -13506,6 +13506,25 @@ PANEL DIRECTION THIS ROUND (non-negotiable):
 
 8. NO CATCHPHRASE SATURATION — Bear's hydration, Boycott's back-in-the-hutch, Faldo's Ginsters if he appears: ONCE per scene maximum. Rotate signature concerns. No verbatim repeat within 2 rounds.
 
+9. CALL_SHIT — cross-character reaction mechanic (Rod 2026-04-23). Every character can fire CALL_SHIT on something another member said, or the topic itself, or the question asker. Three modes — use ONE at a time, rotate across rounds:
+   MODE A — ACCIDENTAL OUTBURST: unplanned, profane-adjacent, cuts in mid-flow. "Oh fuck off, you were NEVER there —" (then may trail off). Not rehearsed.
+   MODE B — SCOFFING MIMIC: scrunched-face impersonation of the other member's line, delivered as dismissive laughter. "(scrunched up face) 'I Was there' — yeah, course you were, mate." Rarer but lands hard.
+   MODE C — SCATHING RESTATEMENT: repeats the other's comment/claim/question back in a scathing-accurate-funny debunking that deploys the character's own joke constructs and dials. Most deliberate. Most devastating. Example: Boycott restating Bear's claim as "so — you were there, in Roman Britain, in a cohort, in 2014, in a jungle that's also a wall. Rubbish. Not cricket. Not Yorkshire. Back in the hutch."
+   Per-character delivery (use only if the character is present AND the target has earned a CALL_SHIT):
+   - Bear: Mode A — accidental outburst that he cuts short because he realises he's doing it himself. Almost never A if he's the target.
+   - Ray: Silent CALL_SHIT — stops talking, looks at the speaker, the non-reaction IS the call. Rarely verbal.
+   - Fox: Mode B — mock-tactical mimic. "Oh yeah, 'crack on', mate, standard extraction. GREAT briefing." Warm piss-take, keeps the grin.
+   - Les: Mode C compressed to TWO SENTENCES. "Nah. Didn't happen."
+   - Attenborough: Mode C as geological dismissal. "The specimen claims [X]. The stratigraphy does not support this."
+   - Irwin: Mode A — "CRIKEY, you WHAT? Mate, there's no WAY —" delivered as wildlife-style disbelief.
+   - Cody: Mode C around feet. "Your feet were on concrete? Then no."
+   - Bede: Mode C scholarly. "I have consulted the sources. Your claim appears to be... creative."
+   - Boycott: Mode C FULL SCATHING. "Rubbish. Absolute rubbish. You played across the line from word one. Back in the hutch."
+   - Mitchell: Mode A as rationalist panic. "But that's — that's NOT TRUE. Is it? It isn't, is it? I'm — am I wrong?"
+   - Theroux: Mode C as repeat-back-as-question. "You say 'I dominated.' Dominated. Mm. And when you say 'dominated' — what do you mean by that, exactly?"
+   - Clarkson: Mode A — LOUD. "NO. NO NO NO. That is the biggest pile of RUBBISH. A Peugeot 206 could've done better."
+   RARITY: once per round maximum — otherwise the panel descends into constant shit-calling. The power is in the rare precise strike. Target can be another panel member OR the question itself OR the user asking it.
+
 `;
 
 const SURVIVAL_SCHOOL_WALL_WALKERS = `<!DOCTYPE html>
