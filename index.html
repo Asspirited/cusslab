@@ -15142,7 +15142,7 @@ NARRATIVE POSTURE — You arrive with the warm observation: what happened, who w
       'Charlie Chaplin (genuinely moved by him — the room briefly silenced)',
     ],
   };
-  const _faldoPick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+  // _faldoPick removed — selection delegated to PanelDiscussEngine.selectVoicePoolPicks (BL-162 Slice 2).
 
   const GOLF_NAMEMAP = {
     faldo:     ['faldo', 'nick', 'sir nick'],
@@ -15463,11 +15463,15 @@ Tangent-prone characters are exempt — they are the ones being dismissed, not t
 
       const gfIaType = IntellectualAttempts.detect(panelInput);
 
-      // BL-172 v1.1 — Faldo voice pool: pick concrete items in code, inject as one-shot override.
-      // Stays panel-side for now (Slice 2 of BL-162 will absorb into a VoicePoolSelector engine module).
-      const faldoVoicePoolBlock = (member.id === 'faldo')
-        ? `\n\nFALDO VOICE POOL — THIS TURN ONLY, OVERRIDES ANY GENERAL POOL INSTRUCTIONS IN YOUR PROMPT:\nWhen this turn calls for one of your reference pools, use ONLY the items listed below. Do not substitute. Do not default to a previously-named example (Ginsters / A12 / "slightly warm" / cheese and pickle are NOT defaults — they are options no more salient than any other). The named items for THIS turn ARE the variation.\n\nIF a GENERAL FOOD reference fits the moment → use: "${_faldoPick(FALDO_VOICE_POOLS.food)}"\n\nIF a GARAGE-PASTY anecdote fits → use the triple:\n  • brand: "${_faldoPick(FALDO_VOICE_POOLS.pastyBrand)}"\n  • thermal description: "${_faldoPick(FALDO_VOICE_POOLS.pastyThermal)}"\n  • garage location: "${_faldoPick(FALDO_VOICE_POOLS.pastyGarage)}"\n  Use these three together. Do not fall back to "a Ginsters, slightly warm, near the A1" — that is one combination out of thousands, and not the one for this turn.\n\nIF a CAR reference fits → use: "${_faldoPick(FALDO_VOICE_POOLS.cars)}"\nIF an ENTERTAINMENT / 70s–80s reference fits → use: "${_faldoPick(FALDO_VOICE_POOLS.entertainment)}"\n\nNot every turn needs all these — use only those that fit naturally, and only one per turn (one food OR one garage-pasty triple OR one car OR one entertainment ref). When you use one, use the specified item(s). Do not pluralise the pool — one named item per turn.\n`
-        : '';
+      // BL-172 v1.1 — Faldo voice pool: pick concrete items via engine, inject as one-shot override.
+      // BL-162 Slice 2 — selection logic moved to PanelDiscussEngine.selectVoicePoolPicks.
+      // Faldo-specific block FORMAT stays panel-side (per-character template is BL-169/profani-saurus
+      // territory; engine remains generic on selection).
+      let faldoVoicePoolBlock = '';
+      if (member.id === 'faldo') {
+        const _picks = PanelDiscussEngine.selectVoicePoolPicks(FALDO_VOICE_POOLS);
+        faldoVoicePoolBlock = `\n\nFALDO VOICE POOL — THIS TURN ONLY, OVERRIDES ANY GENERAL POOL INSTRUCTIONS IN YOUR PROMPT:\nWhen this turn calls for one of your reference pools, use ONLY the items listed below. Do not substitute. Do not default to a previously-named example (Ginsters / A12 / "slightly warm" / cheese and pickle are NOT defaults — they are options no more salient than any other). The named items for THIS turn ARE the variation.\n\nIF a GENERAL FOOD reference fits the moment → use: "${_picks.food}"\n\nIF a GARAGE-PASTY anecdote fits → use the triple:\n  • brand: "${_picks.pastyBrand}"\n  • thermal description: "${_picks.pastyThermal}"\n  • garage location: "${_picks.pastyGarage}"\n  Use these three together. Do not fall back to "a Ginsters, slightly warm, near the A1" — that is one combination out of thousands, and not the one for this turn.\n\nIF a CAR reference fits → use: "${_picks.cars}"\nIF an ENTERTAINMENT / 70s–80s reference fits → use: "${_picks.entertainment}"\n\nNot every turn needs all these — use only those that fit naturally, and only one per turn (one food OR one garage-pasty triple OR one car OR one entertainment ref). When you use one, use the specified item(s). Do not pluralise the pool — one named item per turn.\n`;
+      }
 
       // BL-162 Slice 1 — prompt assembly delegated to shared PanelDiscussEngine.
       // Engine handles: TURN_RULES priority, TOPIC-DISMISSAL conditional, anchor opener/closer blocks

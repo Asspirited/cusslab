@@ -227,7 +227,36 @@ function buildSystemPrompt(ctx) {
     + breakRegisterBlock;
 }
 
-const _PanelDiscussEngineExports = { selectSlots, buildSystemPrompt };
+// selectVoicePoolPicks — randomly picks one item per pool key (BL-162 Slice 2).
+//
+// INPUT (pools):
+//   { [poolKey]: any[] }
+//   e.g. { food: ['ham sandwich', 'baguette'], cars: ['Cortina', 'Capri'] }
+//
+// RETURN: { [poolKey]: any }
+//   Object where each input key maps to one randomly-selected item from that
+//   pool's array. Empty arrays / non-arrays are skipped (key omitted from output).
+//
+// BEHAVIOUR:
+//   - null or non-object input returns {}.
+//   - Each pool key's array is sampled with Math.random() — uniform.
+//   - Empty arrays are skipped (not included in result).
+//   - Non-array values for a key are skipped.
+//
+// PRINCIPLE 3 (engine ignorance): no accuracy check on items; the voice expresses.
+function selectVoicePoolPicks(pools) {
+  if (!pools || typeof pools !== 'object') return {};
+  const picks = {};
+  for (const key of Object.keys(pools)) {
+    const arr = pools[key];
+    if (Array.isArray(arr) && arr.length > 0) {
+      picks[key] = arr[Math.floor(Math.random() * arr.length)];
+    }
+  }
+  return picks;
+}
+
+const _PanelDiscussEngineExports = { selectSlots, buildSystemPrompt, selectVoicePoolPicks };
 
 // Browser: expose as global so per-panel IIFEs can call PanelDiscussEngine.selectSlots(...)
 if (typeof window !== 'undefined') window.PanelDiscussEngine = _PanelDiscussEngineExports;

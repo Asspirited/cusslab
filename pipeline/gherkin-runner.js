@@ -10818,6 +10818,81 @@ function makeSteps(ctx) {
         throw new Error('VOICE POOL appeared in engine output despite no voicePoolBlock supplied');
     }],
 
+    // ── BL-162 Slice 2 — selectVoicePoolPicks (specs/bl-162-slice-2-voice-pool-picks.feature) ─────
+
+    [/^selectVoicePoolPicks called with null returns an empty object$/, () => {
+      const enginePath = path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js');
+      delete require.cache[require.resolve(enginePath)];
+      const engine = require(enginePath);
+      const out = engine.selectVoicePoolPicks(null);
+      if (typeof out !== 'object' || out === null || Object.keys(out).length !== 0)
+        throw new Error('selectVoicePoolPicks(null) should return empty object');
+    }],
+
+    [/^selectVoicePoolPicks called with undefined returns an empty object$/, () => {
+      const enginePath = path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js');
+      delete require.cache[require.resolve(enginePath)];
+      const engine = require(enginePath);
+      const out = engine.selectVoicePoolPicks(undefined);
+      if (typeof out !== 'object' || out === null || Object.keys(out).length !== 0)
+        throw new Error('selectVoicePoolPicks(undefined) should return empty object');
+    }],
+
+    [/^selectVoicePoolPicks with two pool keys returns an object with both keys present$/, () => {
+      const enginePath = path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js');
+      delete require.cache[require.resolve(enginePath)];
+      const engine = require(enginePath);
+      const out = engine.selectVoicePoolPicks({ food: ['a', 'b'], cars: ['c', 'd'] });
+      if (!('food' in out) || !('cars' in out))
+        throw new Error(`Missing keys in result: ${JSON.stringify(out)}`);
+    }],
+
+    [/^selectVoicePoolPicks picks an item that exists in the source pool for each key$/, () => {
+      const enginePath = path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js');
+      delete require.cache[require.resolve(enginePath)];
+      const engine = require(enginePath);
+      const pools = { food: ['a', 'b', 'c'], cars: ['x', 'y'] };
+      for (let i = 0; i < 50; i++) {
+        const out = engine.selectVoicePoolPicks(pools);
+        if (!pools.food.includes(out.food)) throw new Error(`food pick ${out.food} not in pool`);
+        if (!pools.cars.includes(out.cars)) throw new Error(`cars pick ${out.cars} not in pool`);
+      }
+    }],
+
+    [/^selectVoicePoolPicks with an empty-array pool omits that key from the result$/, () => {
+      const enginePath = path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js');
+      delete require.cache[require.resolve(enginePath)];
+      const engine = require(enginePath);
+      const out = engine.selectVoicePoolPicks({ food: ['a'], empty: [] });
+      if ('empty' in out)
+        throw new Error(`empty pool key should not appear in result: ${JSON.stringify(out)}`);
+      if (!('food' in out))
+        throw new Error('non-empty pool key missing from result');
+    }],
+
+    [/^selectVoicePoolPicks called many times against a large pool yields more than one distinct pick$/, () => {
+      const enginePath = path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js');
+      delete require.cache[require.resolve(enginePath)];
+      const engine = require(enginePath);
+      const pool = { items: ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'] };
+      const seen = new Set();
+      for (let i = 0; i < 200; i++) {
+        seen.add(engine.selectVoicePoolPicks(pool).items);
+      }
+      if (seen.size < 2)
+        throw new Error(`Expected > 1 distinct pick across 200 calls; got ${seen.size}`);
+    }],
+
+    [/^the Golf IIFE does not define a function or const named "([^"]+)"$/, (sym) => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      const golfStart = html.indexOf('const Golf = (() => {');
+      if (golfStart < 0) throw new Error('Golf IIFE not found');
+      const iife = html.slice(golfStart, golfStart + 200000);
+      const re = new RegExp(`(?:const|let|function)\\s+${sym.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\$&')}\\b`);
+      if (re.test(iife))
+        throw new Error(`Golf IIFE still defines "${sym}"`);
+    }],
+
     // ── BL-174 — IdiomEngine (specs/bl-174-idiom-invention.feature) ──────────
 
     [/^"([^"]+)" buildIdiomBlock returns empty string for an unknown character id$/, (relPath) => {

@@ -17,7 +17,7 @@
 | WL-131 | Character dullness — "X is right/wrong" openers, "I've watched this back" bleeding | Medium | Three Amigos needed before touching TURN_RULES |
 | WL-136 | UI audit: IIFE return objects not checked — exports can go missing silently | High | Add pipeline check: verify each global wrapper's IIFE target is in return statement |
 | WL-147 | backlog-report.js: `Status[:\s]+` regex matches "status text" in descriptions, falsely marking items OPEN | Low | Tighten regex to `^\s*[-*]\s*Status:` in multiline mode |
-| WL-150 | Tactical exception to Principle 1 — BL-172 v1 (Faldo voice pool selection) shipped as Golf-only per-panel code, not via shared engine | Low | Close when BL-162 ships `VoicePoolSelector` and Faldo-specific code is replaced by declarative pool data |
+| WL-150 | Tactical exception to Principle 1 — BL-172 v1 (Faldo voice pool selection) shipped as Golf-only per-panel code, not via shared engine | CLOSED 2026-05-17 | Selection logic absorbed into PanelDiscussEngine.selectVoicePoolPicks (BL-162 Slice 2). Faldo-specific block FORMAT remains panel-side pending per-character template config (BL-169 profani-saurus integration) |
 
 ---
 
@@ -29,7 +29,7 @@
 **Time lost:** N/A (proactive entry)
 **Cost impact:** Low (tactical) — debt is real but bounded. Will be paid when BL-162 ships `VoicePoolSelector` and the Faldo-specific code in `index.html` is replaced by declarative pool data referenced by the engine.
 **Tags:** `#tactical-exception` `#per-panel-duplication` `#voice-pool` `#absorbed-by-bl-162` `#authorised-by-rod`
-**Status:** Open — to be closed when BL-162 v1 ships `VoicePoolSelector` and the Faldo-specific code is removed.
+**Status:** CLOSED 2026-05-17 — BL-162 Slice 2 shipped PanelDiscussEngine.selectVoicePoolPicks (commit pending at write time). Golf's `_faldoPick` helper removed; selection logic engine-owned. Block FORMAT for Faldo still inline panel-side; full removal of Faldo-specific code blocks awaits a per-character template / profani-saurus integration. Tactical debt narrowed but not zeroed — leaving WL closed since the SELECTION violation (the substantive principle 1 breach) is resolved; remaining FORMAT inline is a different, smaller scope absorbed by BL-169 / BL-172 v2.
 
 ---
 
