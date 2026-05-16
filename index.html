@@ -4314,6 +4314,7 @@
 <script src="src/data/crucible-corner-data.js"></script>
 <script src="src/data/spit-shelter-data.js"></script>
 <script src="src/logic/rage-o-meter-engine.js"></script>
+<script src="src/logic/trigger-score-engine.js"></script>
 <script src="src/logic/panel-discuss-engine.js"></script>
 <script src="rage-o-meter.js"></script>
 
@@ -14715,6 +14716,52 @@ NARRATIVE POSTURE — You arrive with the warm observation: what happened, who w
 
   const GolfWoundDetector = makeWoundDetector(GOLF_WOUNDS);
 
+  // BL-167 Slice 2 — enthusiasm primers (positive mirror of GOLF_WOUNDS).
+  // Rod-approved batch 2026-05-16. See notes/2026-05-16-bl-167-slice-2-design-lock.md.
+  // Engine: src/logic/trigger-score-engine.js — primer match adds +w5 to selection score.
+  // Same case-insensitive substring matching as wounds (Principle 3 — engine ignorance).
+  const GOLF_ENTHUSIASM = {
+    faldo:     ['commitment', 'committed', 'sandwich', 'sandwiches', 'preparation', 'prepared',
+                'augusta', '1996', 'ginsters', 'pasty', 'garage',
+                'cortina', 'capri', 'cavalier',
+                'schools', 'volunteers', 'young people',
+                'chuckle', 'guinness world record'],
+    mcginley:  ['ryder cup', 'captaincy', 'captain', 'gleneagles', '2014',
+                'belfry', '2002', 'ten foot putt',
+                'framework', 'frameworks', 'moses',
+                'validation', 'agree', 'would you not agree'],
+    coltart:   ['weather', 'sleet', 'horizontal sleet', 'skelped',
+                'school radiator', 'headmaster',
+                'walking home', 'running home', '32km', '47km', '57km',
+                'pie', 'documented', 'hole by hole',
+                'carnoustie', 'ayrshire', 'scotland'],
+    dougherty: ['love', 'what i love about', 'tempo',
+                'sir nick', 'nick faldo', 'faldo',
+                'transcendent meal', 'transcendent',
+                'engagement', 'lancashire', 'breathless'],
+    henni:     ['pimento cheese', 'pimento', 'concession stand',
+                'cameraman', 'cameraman incident',
+                'seventh dimension', '7th dimension',
+                'scoring tent', 'parnevik',
+                'welwyn', 'welwyn garden city',
+                'restaurant', 'restaurants', 'michelin'],
+    murray:    ['history', 'historic', 'historically significant', 'historical',
+                'the open', 'championship', 'championships',
+                '1860', '1933', 'vardon', 'morris', 'prestwick',
+                'remarkable', 'extraordinary', 'what a question',
+                'pimento cheese', 'concession stand', 'augusta',
+                'ceremonial', 'weight',
+                'formation', 'medieval', 'crust', 'caledonian',
+                'peroration'],
+    roe:       ['sheffield', 'short game', 'short-game',
+                'coaching', 'coached', 'coach',
+                'volume', 'wrong volume',
+                'accurate', 'accurately', 'analysis',
+                'father', "father would have been proud",
+                'rule 6-6b', 'royal st george', '2003',
+                'tiger', 'painkillers']
+  };
+
   // BL-172 v1 (tactical) — Faldo voice pools, code-selected per turn.
   // Model cannot be trusted to "rotate" — pick concrete items here, inject one-shot.
   // Will be absorbed into the shared engine (BL-162) and generalised to all characters.
@@ -15009,8 +15056,9 @@ Tangent-prone characters are exempt — they are the ones being dismissed, not t
     // BL-167 Slice 1.1 — Anchor model: anchor opens slot 1 and closes slot N
     // BL-162 Slice 0 — Speaker selection delegated to shared PanelDiscussEngine.
     // BL-173 — Subset (3) × turnsPerCharacter (3) with wound-trigger relevance.
-    //   Fewer voices per round, more interactions per voice. Total middle = 9.
-    //   Murray (anchor) opens + 3 middle characters speak 3x each (round-robin) + Murray closes.
+    // BL-167 Slice 2 — Trigger-weighted scoring via TriggerScoreEngine:
+    //   wounds (+w1) + enthusiasm primers (+w5) for richer "who lights up next" signal.
+    //   Closes WL-149 — primer-driven selection means cast composition reacts to drift.
     const anchorId = PANEL_CONFIG.anchor;
     const ORDER = PanelDiscussEngine.selectSlots({
       anchor: anchorId,
@@ -15020,6 +15068,7 @@ Tangent-prone characters are exempt — they are the ones being dismissed, not t
       turnsPerCharacter: 3,
       userInput: panelInput,
       wounds: GOLF_WOUNDS,
+      enthusiasms: GOLF_ENTHUSIASM,
     });
 
     // Atmosphere — read from sessionStorage, default NORMAL

@@ -13,6 +13,14 @@
 //   2. React to the person, not the topic.
 //   3. Engine ignorance, voice expression — engine does not verify accuracy.
 
+// BL-167 Slice 2 — when called with enthusiasms (and optionally relState etc),
+// scoring delegates to TriggerScoreEngine.score for the full 7-weight model.
+// When enthusiasms is omitted, falls back to BL-173 wound-only substring count
+// (backwards compatible). TriggerScoreEngine is resolved from window (browser)
+// or via require (Node).
+const _TriggerScoreEngine = (typeof window !== 'undefined' && window.TriggerScoreEngine)
+  || (typeof require !== 'undefined' ? require('./trigger-score-engine.js') : null);
+
 // selectSlots — picks the speaker order for a single round.
 //
 // INPUT  (panelData):
@@ -22,8 +30,15 @@
 //     includeTheDon:     boolean (opt)  — when true, "alliss" is prepended to the middle (Golf only)
 //     subsetSize:        number (opt)   — pick this many of middleCast (default: full)
 //     turnsPerCharacter: number (opt)   — each subset member speaks this many times (default: 1)
-//     userInput:         string (opt)   — used for relevance scoring against wounds
+//     userInput:         string (opt)   — used for relevance scoring against wounds + primers
 //     wounds:            object (opt)   — { characterId: [triggerWord, ...] }
+//     enthusiasms:       object (opt)   — { characterId: [primer, ...] }  (BL-167 Slice 2)
+//     relState:          object (opt)   — RelationshipState for w3/w6 (BL-167 Slice 2)
+//     debtLedger:        object (opt)   — { id: { owedToward: {...} } } for w2
+//     recentMoves:       object (opt)   — { id: [posture, ...] } for w4
+//     claimedTerritory:  object (opt)   — { id: [keyword, ...] } for w7
+//     weights:           object (opt)   — { w1..w7 } overrides
+//     prevSpeakerId:     string (opt)   — speaker of the relevance input
 //   }
 //
 // RETURN: string[]
@@ -53,7 +68,8 @@ function selectSlots(panelData) {
   if (!panelData || typeof panelData !== 'object') {
     throw new Error('selectSlots: panelData object required');
   }
-  const { anchor, middleCast, includeTheDon, subsetSize, turnsPerCharacter, userInput, wounds } = panelData;
+  const { anchor, middleCast, includeTheDon, subsetSize, turnsPerCharacter, userInput, wounds,
+          enthusiasms, relState, debtLedger, recentMoves, claimedTerritory, weights, prevSpeakerId } = panelData;
   if (!anchor || typeof anchor !== 'string') {
     throw new Error('selectSlots: anchor string required');
   }
@@ -78,16 +94,27 @@ function selectSlots(panelData) {
     return [anchor, ...baseMiddle, anchor];
   }
 
-  // Relevance scoring — count wound-trigger substring matches in userInput per candidate.
+  // Relevance scoring — BL-173 wound-only count, OR (BL-167 Slice 2) full
+  // TriggerScoreEngine.score when enthusiasms/relState/etc are present.
+  const useTriggerEngine = !!_TriggerScoreEngine
+    && !!(enthusiasms || relState || debtLedger || recentMoves || claimedTerritory || weights);
   const lowerInput = (userInput || '').toLowerCase();
   const scores = {};
-  for (const id of baseMiddle) {
-    const triggers = (wounds && wounds[id]) || [];
-    let score = 0;
-    for (const t of triggers) {
-      if (t && lowerInput.includes(String(t).toLowerCase())) score += 1;
+  if (useTriggerEngine) {
+    const ctx = { wounds, enthusiasms, relState, debtLedger, recentMoves, claimedTerritory, weights, prevSpeakerId };
+    for (const id of baseMiddle) {
+      scores[id] = _TriggerScoreEngine.score(id, userInput || '', ctx);
     }
-    scores[id] = score;
+  } else {
+    // Backwards-compatible BL-173 path: substring count of wound triggers only.
+    for (const id of baseMiddle) {
+      const triggers = (wounds && wounds[id]) || [];
+      let score = 0;
+      for (const t of triggers) {
+        if (t && lowerInput.includes(String(t).toLowerCase())) score += 1;
+      }
+      scores[id] = score;
+    }
   }
 
   // Tie-break: pre-shuffle so equal-score candidates get random order; then stable-sort by score desc.
