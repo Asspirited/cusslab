@@ -326,6 +326,79 @@ const SNOOKER_TURN_RULES = [
   'Do not begin your response with your own name in any format — no bold prefix, no "Name:" opener, no **Name:**. Speak directly in character.',
 ];
 
+// BL-173/BL-167 Slice 2 — Snooker primer triggers per character (Rod-approved 2026-05-17).
+// No SNOOKER_WOUNDS map exists yet — primer-only addition, no dual-fire risk.
+// willie_thorne and ray_reardon are DEAD_IN_PANEL_WORLD — primers fire normally.
+// Multi-character lean-ins:
+//   `the crucible`/`sheffield` → Jimmy + Davis + O'Sullivan + Reardon
+//   `welsh`/`wales` → Reardon + Williams
+//   `barry hearn` → Davis + O'Sullivan
+//   `commentary`/`bbc snooker` → Virgo + Taylor + Thorne
+//   `1985 final`/`final black` → Taylor (his win) + Davis (his loss)
+//   `1991 final`/`jimmy white 1991` → Parrott (his win) + Jimmy (his loss)
+const SNOOKER_ENTHUSIASM = {
+  jimmy_white:      ['tooting', 'south london', 'the whirlwind', 'whirlwind',
+                     'mavericks', 'the entertainer', 'flair player',
+                     'alex higgins', 'higgins', 'hurricane',
+                     'crucible', 'the crucible', 'sheffield',
+                     'gamble', 'betting', 'bottle',
+                     '1984', '1990', '1991', '1992', '1993', '1994',
+                     '147', 'maximum break'],
+  steve_davis:      ['interesting', 'quite interesting', "that's interesting",
+                     '1981', '1983', '1984', '1987', '1988', '1989',
+                     'barry hearn', 'hearn', 'matchroom',
+                     'dj', 'magma', 'kavus torabi', 'electronic music',
+                     'precise', 'precision', 'tactical', 'safety play',
+                     'the nugget', 'romford',
+                     'dennis taylor', '1985', 'final black'],
+  john_virgo:       ["where's the cue ball going", "where's the cue ball",
+                     'bbc snooker', 'pot black',
+                     'commentary', 'commentator', 'the box',
+                     'safety shot', 'the safety',
+                     'position', 'positional play', 'cue ball control',
+                     'salford', 'manchester',
+                     '1979 world final', 'terry griffiths',
+                     'wiggy', 'the toupee'],
+  dennis_taylor:    ['1985', '1985 final', 'taylor davis 1985',
+                     'the black ball final', 'final black',
+                     'glasses', 'upturned glasses', 'the glasses',
+                     'northern ireland', 'coalisland',
+                     'bbc snooker', 'commentary', 'pot black',
+                     'clive everton'],
+  ronnie_osullivan: ['the rocket', 'rocket', 'ronnie',
+                     'chigwell', 'essex', 'ilford',
+                     '7 world titles', 'seven world titles', 'crucible',
+                     '147', 'maximum break', 'fastest 147',
+                     'ronnie sullivan sr', 'father in prison', 'dad',
+                     'depression', 'mental health', 'therapy', 'running',
+                     'barry hearn', 'world snooker',
+                     'china', 'chinese tour',
+                     'damien hirst'],
+  willie_thorne:    ['mr maximum', 'mr 147',
+                     'commentary', 'bbc snooker', 'clive everton',
+                     'gambling', 'betting', 'the gambling', 'nationwide debts',
+                     'leicester', 'leicester city',
+                     'the voice', 'voice over'],
+  ray_reardon:      ['welsh', 'wales', 'tredegar', 'the rhondda',
+                     '1970', '1973', '1974', '1975', '1976', '1978',
+                     'the vampire', 'welsh vampire', 'vampire',
+                     '1970s snooker',
+                     'policeman', 'ex-police',
+                     "ronnie o'sullivan coach", 'coach', 'mentor'],
+  john_parrott:     ['1991', '1991 final', 'jimmy white 1991',
+                     'question of sport', 'qos', 'team captain',
+                     'liverpool', 'scouse', 'merseyside',
+                     'bbc', 'commentary',
+                     'dean saunders',
+                     'safety play'],
+  mark_williams:    ['welsh', 'wales', 'cwm', 'swansea',
+                     '2000', '2003', '2018',
+                     'naked', 'naked press conference', 'nude',
+                     'left-handed', 'left handed snooker',
+                     'welsh class of 92', 'matthew stevens',
+                     '2018 crucible', 'comeback'],
+};
+
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = {
     SNOOKER_MEMBERS,
@@ -335,5 +408,6 @@ if (typeof module !== 'undefined' && module.exports) {
     COLOUR_VALUES,
     SNOOKER_SUGGESTIONS,
     SNOOKER_TURN_RULES,
+    SNOOKER_ENTHUSIASM,
   };
 }
