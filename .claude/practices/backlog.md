@@ -1781,13 +1781,23 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 
 - Cross-product structured dictionary defining each character's authentic swear vocabulary, conditions of use, register types, and timing. Lives in `/home/rodent/leanspirited-standards/standards/profani-saurus.md` (canonical, like character-schema.md). Pushed to `github.com/Asspirited/leanspirited-standards`. Referenced by Cusslab, Survival School, Fallacy Finder.
 - **Why now:** Cusslab is a profanity-themed product. Souness, Boyle, Diogenes, Roy Keane, Bristow, Big Ron etc. all have distinct swearing patterns in their canonical voice. Currently the model improvises profanity per character — sometimes anachronistic (Diogenes wouldn't say "twat"), sometimes off-register (Murray rarely swears at all, Faldo swears differently from Souness). A structured dictionary ties character voice to authentic vocabulary.
+- **Design philosophy (Principle 5, locked 2026-05-16):** profanity is a CRAFT REGISTER, not shock value. Every entry must serve one of FIVE purposes:
+  - **Off-air candour** — overheard backstage, hot-mic, mask-slip ("yeah off, get him off, what an absolute knobend")
+  - **Phonetic comedy** — funny-in-the-mouth words (bollocks, knobhead, gubbins, wazzock, pillock, codswallop, plonker)
+  - **Good adjective / intensifier** — comic specificity, cold/crafted ("absolute prick of a tee shot", "right royal pile of shite")
+  - **Climactic landing** — one well-placed swear after restraint — the Murray model (rare = devastating)
+  - **Emotional emphasis** — anger or amusement leaning on profanity for impact; FELT, near-involuntary; maps to engine state (wound_activated → anger; warm temp + recent posture build → amusement)
+  - **Never:** weapon (slurs, violence-language), filler, rhythm-killer
+  - **Tradition:** Viz Profanisaurus, Malcolm Tucker, Father Jack, Roger Mellie — profanity as music and wordplay
 - **Per-character schema (proposed — new schema attribute, likely P11 or M10):**
-  - `swears` — array of words/phrases this character uses
-  - `conditions` — when they fire (wound activated / temperature hostile / dismissal / closer slot / never)
-  - `register` — mild / strong / scatological / sexual / blasphemous / British-class-marker / regional-dialect / character-archaism
-  - `timing` — opener / mid-response / climax / closer / dismissal-beat
-  - `never_says` — explicit blocklist for that character (e.g., Murray never says the c-word; Diogenes never uses modern profanity)
-  - `escalation_curve` — does intensity rise with round number? (Souness: yes. Murray: no.)
+  - `swears` — array of words/phrases this character uses (each must pass one of the four register criteria; filler cut)
+  - `register` — terse-Glasgow / ancient-Greek-precise / Scottish-precision-cruelty / Cork-thunderous / Cockney-exuberant / English-restraint-with-rare-eruption / etc. — per-character voice signature
+  - `purpose` — one or more of: off-air / phonetic / intensifier / climax / emotional-emphasis
+  - `conditions` — when they fire (wound activated / temperature hostile / dismissal / closer slot / off-air aside / never)
+  - `timing` — opener / mid-response / climax / closer / dismissal-beat / muttered-to-next-character
+  - `never_says` — explicit blocklist for that character (Murray never c-word; Diogenes no modern profanity; some characters never swear at all)
+  - `escalation_curve` — does intensity rise with round number? (Souness: yes. Murray: no — flat, occasional eruption)
+  - `frequency_cap` — max swears per response, max per round (rich variety > volume)
 - **Composition with other BLs:**
   - BL-168 dismissal flavours: piss-take register draws from profani-saurus for character-authentic savagery
   - BL-163 deflation register: same draw
@@ -1834,3 +1844,29 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Epic: Panel Interaction Model
 - CD3: UBV=9 TC=7 RR=4 → CoD=20, Dur=2, **CD3=10.0**
 - Status: OPEN — raised 2026-05-16; ships in this session immediately after BL-162 Slice 0; Gherkin needed (expands selectSlots contract)
+
+---
+
+### BL-174 — Character idiom invention: misquoted phrases + bastardised slang + character-authentic profanity
+
+- Discovered 2026-05-16 by Rod (Slice 2 session). Characters get a third register layer on top of P5 comic mechanism + P6 tics: **idiom invention**. Three modes:
+  - **Misquoted idioms** — well-known sayings used badly or wrong, in-character ("a bird in the bush is worth two in the hand"; "you can't make a silk purse out of a sour grape")
+  - **Bastardised phrases / slang** — existing idioms with one word swapped for a character-authentic swear or term ("not the brightest fucking pickle in the jar"; "couldn't organise a piss-up in a putting green")
+  - **Wholly invented idioms** — character constructs a brand-new phrase as if it were proverbial, delivered with full confidence ("never feed a Tuesday spaniel" — Faldo register; "you'd swallow a hedgehog backwards if it'd save you a bogey" — Souness register)
+- **Why:** flatness in long sessions. Characters reach for the same construction shapes too often. Idiom invention is a high-yield way to add character-specific texture without rewriting prompts. Faldo's almost-jokes, Souness's contempt-via-folk-wisdom, Diogenes's ancient-truths-by-confabulation, Big Ron's mangled cliché — all natural homes.
+- **Composes with:**
+  - BL-169 (Profani-saurus) — bastardised mode draws swear words from each character's `swears` array, respects `register` / `conditions` / `never_says`
+  - P5 (comic mechanism) — misquote-mode for "hollow performance" / "obliviousness"; invention-mode for "incongruity" / "compulsion"
+  - BL-167 Slice 2 (this session) — idiom firings should respect trigger score; characters more likely to deploy an idiom when their primer or wound has just been hit
+- **Per-character config (proposed — extends schema or panel data):**
+  - `idiom_modes` — array of allowed modes for this character: `misquote` | `bastardise` | `invent`
+  - `idiom_frequency` — turns between deployments (rough — e.g. Faldo every 3–4 turns; Souness every 2; Henni rarely)
+  - `idiom_register` — character-voice constraints (Murray idioms must reference history; Faldo's must reference food or commitment; Diogenes's must sound antique even when invented)
+  - `idiom_source_pool` — optional seed list of authentic-real-idioms the character mangles (e.g. Big Ron has a known catalogue)
+- **v1 (minimum):** prompt-side. Add an IDIOM block to system prompts for characters with `idiom_modes` set. Block prescribes mode + register + frequency. Single panel first (Golf — Faldo + McGinley are natural homes).
+- **v2 (engine):** the panel-discuss / trigger-score engine annotates which character should fire an idiom THIS turn based on (a) frequency cadence and (b) trigger-score state. Inject single-use idiom instruction into that turn's system prompt.
+- **v3 (per-character idiom pools):** like BL-172 voice pools, code-side selection of one bastardised swap or one invented phrase per turn, injected one-shot to avoid model self-repetition.
+- Feature: panel-voice
+- Epic: Panel Voice & Texture
+- CD3: UBV=8 TC=5 RR=3 → CoD=16, Dur=2, **CD3=8.0**
+- Status: OPEN — raised 2026-05-16; Three Amigos needed (which characters get which modes, frequency cadence, profani-saurus integration); Gherkin needed for engine-side v2; v1 (prompt-side) could ship on a fast track if Rod prioritises.

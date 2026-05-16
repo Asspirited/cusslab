@@ -4,6 +4,7 @@ const { lintStepDuplicates } = require('./lint-steps.js');
 const { initGameState, appendToHistory, incrementTurn, buildModifierBlock } = require('../src/logic/ff-engine.js');
 const { getAllScenes, getPubScene, initPubCrawl, resolveChoice, determineOutcome, checkLederhosen, getActiveAdvisor, buildAdvisorPrompt, ADVISOR_IDS } = require('../src/logic/pub-navigator-engine.js');
 const { BASELINE_MIN, BASELINE_MAX, generateBaseline, initCharacter, commitRound, computeDelta, rankByDelta, buildVerdict, isRageEnabled } = require('../src/logic/rage-o-meter-engine.js');
+const { DEFAULT_WEIGHTS: TSE_WEIGHTS, DEFAULT_PMIN: TSE_PMIN, score: tseScore, selectNext: tseSelectNext, matchAnyKeyword: tseMatch, areContradictoryPostures: tseContradict } = require('../src/logic/trigger-score-engine.js');
 
 const { maskKey, isValidKey, shouldUpdateInput, Temperature, makeWoundDetector, GolfWoundDetector, BoardroomWoundDetector, DartsWoundDetector, DartsVoiceFmt, dartsBuildBlock, DARTS_PREMONITION_AFFINITIES, COLLECTIVE_CALL_MINIMUM, premonitionEligible, blankPremonitionLedger, assignPremonitionRC, resolvePremonitionCommits, isPremonitionTruthTeller, detectIntellectualAttempt, buildAttemptInstruction, INTELLECTUAL_ATTEMPTS_CONFIG, SOUNESS_CAT_PRE_EXISTING, SOUNESS_CAT_IDS, getAllPairs, getPairTone, allPairsHaveToneAndNote, teslaHasNoWarmOrSolidary, pairToneIsSymmetrical, noConflictingTones, CONSEQUENCE_TIERS, applyConsequence, MARSHALS_BELT_EVENT, accumulatePanelStats, computeAvgDepth, GOLF_PANEL_MEMBER_IDS, COLTART_SOFA_POOLS, getSofaCommentator, getHistoricalDivergence, selectReactionMode, validateOutwardCode, parseOutwardCode, ORACLE_VOICES, isValidOracleVoice, canSubmitOracle, ORACLE_REGISTERS, ORACLE_CHARACTERS, hasPhilTranslation, hasAllDublinDriftStages, COMEDY_ROOM_MODES, COMEDY_MODE_LABELS, getDefaultComedyMode, isValidComedyMode, AUTHOR_VOICES, buildAuthorEpiloguePrompt, AUTHORS_POOL, shufflePool, selectNextAuthorFromQueue, selectRoastAuthors, buildRoastPrompt, selectWritingRoomAuthors, buildWritingRoomPrompt, PUB_SITUATIONS, buildPubAdvicePrompt } = require('./logic.js');
 
@@ -1604,6 +1605,186 @@ assert('generateBaseline: result is an integer',
     verdict.includes('Partridge'), true);
   assert('buildVerdict: returns a non-empty string',
     typeof verdict === 'string' && verdict.length > 0, true);
+})();
+
+// ── TriggerScoreEngine (BL-167 Slice 2) ──────────────────────────────────────
+
+// Default weight invariants
+assert('TriggerScoreEngine: wound and enthusiasm-primer weights are equal (locked scenario 9)',
+  TSE_WEIGHTS.w1, TSE_WEIGHTS.w5);
+assert('TriggerScoreEngine: default pmin is between 0 and 1',
+  TSE_PMIN > 0 && TSE_PMIN < 1, true);
+assert('TriggerScoreEngine: w1 is a positive number',
+  TSE_WEIGHTS.w1 > 0, true);
+assert('TriggerScoreEngine: w5 is a positive number',
+  TSE_WEIGHTS.w5 > 0, true);
+
+// matchAnyKeyword is case-insensitive substring match (mirrors WoundDetector)
+assert('TriggerScoreEngine.matchAnyKeyword: case-insensitive substring match',
+  tseMatch('I went to AUGUSTA last year', ['augusta']), true);
+assert('TriggerScoreEngine.matchAnyKeyword: multi-word phrase match',
+  tseMatch('he hit a treble five and missed', ['treble five']), true);
+assert('TriggerScoreEngine.matchAnyKeyword: returns false on miss',
+  tseMatch('quiet round', ['augusta', 'sandwich']), false);
+assert('TriggerScoreEngine.matchAnyKeyword: empty keywords returns false',
+  tseMatch('anything', []), false);
+assert('TriggerScoreEngine.matchAnyKeyword: empty text returns false',
+  tseMatch('', ['augusta']), false);
+
+// score — locked scenario 7 (wound hit raises score)
+(function() {
+  const ctx = { wounds: { faldo: ['ginsters', 'tuna'] } };
+  const s = tseScore('faldo', 'a warm pasty and a sandwich is fine', ctx);
+  assert('TriggerScoreEngine.score: wound miss → 0',
+    s, 0);
+  const s2 = tseScore('faldo', 'I had tuna for lunch', ctx);
+  assert('TriggerScoreEngine.score: wound hit → +w1',
+    s2, TSE_WEIGHTS.w1);
+})();
+
+// score — locked scenario 8 (enthusiasm primer hit raises score)
+(function() {
+  const ctx = { enthusiasms: { faldo: ['augusta', 'sandwich'] } };
+  const s = tseScore('faldo', 'we were at AUGUSTA in 1996', ctx);
+  assert('TriggerScoreEngine.score: primer hit → +w5',
+    s, TSE_WEIGHTS.w5);
+})();
+
+// score — locked scenario 9 (positive and negative contribute equally)
+(function() {
+  const ctxWound = { wounds: { b: ['ginsters'] } };
+  const ctxPrimer = { enthusiasms: { c: ['augusta'] } };
+  const sB = tseScore('b', 'mention ginsters here', ctxWound);
+  const sC = tseScore('c', 'mention augusta here', ctxPrimer);
+  assert('TriggerScoreEngine.score: wound-only B equals primer-only C (scenario 9)',
+    sB, sC);
+})();
+
+// score — additive on combined positive + negative hits
+(function() {
+  const ctx = {
+    wounds:      { faldo: ['tuna'] },
+    enthusiasms: { faldo: ['augusta'] },
+  };
+  const s = tseScore('faldo', 'tuna sandwich at augusta', ctx);
+  assert('TriggerScoreEngine.score: wound + primer both fire → w1 + w5',
+    s, TSE_WEIGHTS.w1 + TSE_WEIGHTS.w5);
+})();
+
+// score — w3 hostile temp pulls in when prevSpeakerId set
+(function() {
+  const relState = { characters: { b: { toward: { a: { temperature: 'hot' } } } } };
+  const ctx = { relState, prevSpeakerId: 'a' };
+  const s = tseScore('b', 'anything', ctx);
+  assert('TriggerScoreEngine.score: hostile temp toward prev speaker → +w3',
+    s, TSE_WEIGHTS.w3);
+})();
+
+// score — w6 warm temp pulls in when prevSpeakerId set
+(function() {
+  const relState = { characters: { b: { toward: { a: { temperature: 'warm' } } } } };
+  const ctx = { relState, prevSpeakerId: 'a' };
+  const s = tseScore('b', 'anything', ctx);
+  assert('TriggerScoreEngine.score: warm temp toward prev speaker → +w6',
+    s, TSE_WEIGHTS.w6);
+})();
+
+// score — w2 debt owed toward prev speaker
+(function() {
+  const ctx = {
+    prevSpeakerId: 'a',
+    debtLedger: { b: { owedToward: { a: true } } },
+  };
+  const s = tseScore('b', 'anything', ctx);
+  assert('TriggerScoreEngine.score: candidate owes debt to prev speaker → +w2',
+    s, TSE_WEIGHTS.w2);
+})();
+
+// score — w7 claimed territory
+(function() {
+  const ctx = { claimedTerritory: { faldo: ['short game'] } };
+  const s = tseScore('faldo', 'his short game is sharp', ctx);
+  assert('TriggerScoreEngine.score: claimed territory hit → +w7',
+    s, TSE_WEIGHTS.w7);
+})();
+
+// score — w4 posture contradiction
+assert('TriggerScoreEngine.areContradictoryPostures: endorsement vs quiet_disagreement → true',
+  tseContradict('endorsement', 'quiet_disagreement'), true);
+assert('TriggerScoreEngine.areContradictoryPostures: same posture → false',
+  tseContradict('endorsement', 'endorsement'), false);
+(function() {
+  const ctx = {
+    prevSpeakerId: 'a',
+    recentMoves: { a: ['endorsement'], b: ['quiet_disagreement'] },
+  };
+  const s = tseScore('b', 'anything', ctx);
+  assert('TriggerScoreEngine.score: posture contradiction with prev speaker → +w4',
+    s, TSE_WEIGHTS.w4);
+})();
+
+// score — Principle 3: misreading still fires primer (locked scenario 10 spirit)
+(function() {
+  const ctx = { enthusiasms: { faldo: ['1996'] } };
+  // The previous turn mentions "1996" in a totally wrong context — engine fires anyway
+  const s = tseScore('faldo', 'someone said 1996 was a bad year for cars', ctx);
+  assert('TriggerScoreEngine.score: misreading-but-keyword-match still fires (Principle 3)',
+    s, TSE_WEIGHTS.w5);
+})();
+
+// selectNext — locked scenario 12: uniform when all-zero
+(function() {
+  const cast = ['a', 'b', 'c', 'd'];
+  const N = 4000;
+  const ctx = { wounds: {}, enthusiasms: {} };
+  const counts = { a: 0, b: 0, c: 0, d: 0 };
+  let rngSeed = 1;
+  const rng = () => { rngSeed = (rngSeed * 9301 + 49297) % 233280; return rngSeed / 233280; };
+  for (let i = 0; i < N; i++) {
+    const pick = tseSelectNext(cast, 'no triggers here', ctx, { rng });
+    counts[pick]++;
+  }
+  const tolerance = 0.05; // within 5% of 1/M
+  let okUniform = true;
+  for (const id of cast) {
+    const rate = counts[id] / N;
+    if (Math.abs(rate - 0.25) > tolerance) okUniform = false;
+  }
+  assert('TriggerScoreEngine.selectNext: all-zero scores converge to uniform 1/M (scenario 12)',
+    okUniform, true);
+})();
+
+// selectNext — locked scenario 11: cold candidate has floor probability
+(function() {
+  const cast = ['a', 'b', 'c'];
+  const ctx = { wounds: { a: ['x'], b: ['x'] }, enthusiasms: {} };
+  const N = 8000;
+  const pmin = 0.10;
+  let rngSeed = 7;
+  const rng = () => { rngSeed = (rngSeed * 9301 + 49297) % 233280; return rngSeed / 233280; };
+  const counts = { a: 0, b: 0, c: 0 };
+  for (let i = 0; i < N; i++) {
+    const pick = tseSelectNext(cast, 'x x x', ctx, { pmin, rng });
+    counts[pick]++;
+  }
+  const coldRate = counts.c / N;
+  assert('TriggerScoreEngine.selectNext: cold candidate selected at rate ≥ pmin (scenario 11)',
+    coldRate >= pmin * 0.85, true); // 15% slack for sampling variance
+})();
+
+// selectNext — single-candidate edge case
+(function() {
+  const pick = tseSelectNext(['only'], 'whatever', { wounds: {}, enthusiasms: {} });
+  assert('TriggerScoreEngine.selectNext: single-candidate pool returns that candidate',
+    pick, 'only');
+})();
+
+// selectNext — empty cast throws
+(function() {
+  let threw = false;
+  try { tseSelectNext([], 'x', {}); } catch (e) { threw = true; }
+  assert('TriggerScoreEngine.selectNext: empty remainingCast throws',
+    threw, true);
 })();
 
 // ── Results ──────────────────────────────────────────────────────────────────
