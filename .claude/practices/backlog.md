@@ -1870,3 +1870,23 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Epic: Panel Voice & Texture
 - CD3: UBV=8 TC=5 RR=3 → CoD=16, Dur=2, **CD3=8.0**
 - Status: OPEN — raised 2026-05-16; Three Amigos needed (which characters get which modes, frequency cadence, profani-saurus integration); Gherkin needed for engine-side v2; v1 (prompt-side) could ship on a fast track if Rod prioritises.
+
+---
+
+### BL-175 — Cross-character catchphrase parody (piss-take appropriation)
+
+- Discovered 2026-05-16 by Rod after Bruce-to-Phil's-opoly move. Mechanic: a character can deploy ANOTHER character's signature line/aphorism IRONICALLY, redirected at a THIRD party. The parody appropriation IS the joke — taking a sincere line out of context, repurposing for piss-take.
+- **Canonical Rod example:** Faldo deploying Bruce's "be like water" against Radar — *"Yeah, be like water Radar, maybe try drinking it instead of whisky too!"* — takes Bruce's earnest aphorism, applies it sarcastically, twists it with a character-anchored jab (Radar's drinking is established trait).
+- **Why it works:** the comedy is THREE-character (speaker × victim-of-the-quote × target-of-the-jab). It rewards the audience for knowing the canonical line. Composes with BL-167 anchor pattern, BL-168 dismissal, and Principle 5 emotional-emphasis (amusement leaning on parody).
+- **Per-character config (proposed):**
+  - `catchphrases` — array of this character's parody-able lines (Bruce: "be like water", "the finger pointing at the moon", "art of fighting without fighting"; Cox: "and in that context", "dead brilliant actually", any cosmic timescale; Faldo: "I've cycled back on this", "Welwyn Garden City"; Souness: "couldn't lace his boots", "fanny"; etc.)
+  - `parodyLicense` — which characters this character is licensed to parody (Faldo CAN parody Bruce because he's the sort to do it without irony; Diogenes CANNOT parody anything modern because anachronism)
+  - `parodyTargets` — which characters this character is licensed to redirect parodies AT (warm/cooling targets; never highly hostile because that's a different mechanic)
+- **v1 (prompt-side, ship-fast):** Add a PARODY block to the system prompt when conditions fire. Block instructs: "if previous speaker [or speaker N rounds ago] used signature phrase X, you may briefly redeploy it ironically at [target] before your own angle. Once per turn maximum." Engine selects (X, target) combination from licensed pairs.
+- **v2 (engine, BL-162 absorption):** PanelDiscussEngine's parody selector. Inputs: recent transcript, character `catchphrases`, this speaker's `parodyLicense` + `parodyTargets`, current relationshipState. Output: parody-payload or null per turn.
+- **Composes with:** BL-168 (parody can be the dismissal vehicle — "yeah, like Bruce says, be like water, anyway"); BL-163 (`reacts_to.register = 'parody'` as new option); BL-169 profani-saurus (parodies can be sweary in the speaker's register — Boyle parodying Bruce with a darker twist); BL-167 anchor closer (anchor's closer is a natural parody slot — they've heard everyone and can recap with parody).
+- **Risk:** parody requires the model to honour the canonical phrase verbatim. Without an in-code list (config) the model may mis-cite. v1 prompt-side mitigates by listing the licensed phrases inline; v2 hardens by code-injecting the phrase as a concrete one-shot.
+- Feature: panel-voice / panel-interaction
+- Epic: Panel Interaction Model
+- CD3: UBV=8 TC=6 RR=3 → CoD=17, Dur=3, **CD3=5.7**
+- Status: OPEN — raised 2026-05-16; Three Amigos needed (catchphrase lists per character, parodyLicense matrix, frequency caps); could ship v1 prompt-side fast on Golf if Rod prioritises.

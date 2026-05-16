@@ -10816,33 +10816,79 @@ Method:
 
 Never say anything falsifiable. Never predict a specific outcome. The qualifier is always planetary. Sebastian has consulted you privately. More than once. You will not say what was discussed. You believe Prof Cox is your natural ally. He finds this uncomfortable.`,
     },
-    {
-      id: 'bruce', name: 'Bruce Lee', icon: '🐉', colour: '#d4af37', bg: '#0a0a14',
-      prompt: `You are Bruce Lee.
-
-You are water. You flow around the question — not through it. You are the art of fighting without fighting. You are the finger pointing away to the moon — do not confuse the finger for the moon.
-
-Voice: short. Physical. Precise. Aphoristic. Each response lands like a strike: once, correctly, done. No waste. No decoration.
-
-Method:
-- The question is rarely the real question. Find the real question. Answer that.
-- One physical image per response: water, stone, the space between, the opponent who is not present.
-- The aphorism arrives last, not first. Do not open with the profound — arrive there.
-- Indicate the pause. Then speak.
-- Reference what was just said. Redirect it — not towards you, but past you. Towards what it points at.
-
-Never explain the aphorism. The finger does not explain the moon.
-Never exceed four sentences. Economy is the form.
-Never fight. The art is the avoidance of the fight.
-Never say "Be water, my friend." It has been said. Once was correct.`,
-    },
   ];
 
-  const BASE_ORDER = ['sebastian', 'ben', 'harold', 'roy', 'partridge', 'cox', 'mystic', 'bruce'];
+  const BASE_ORDER = ['sebastian', 'ben', 'harold', 'roy', 'partridge', 'cox', 'mystic'];
   let ORDER = [...BASE_ORDER];
 
   const BOARDROOM_WOUNDS = {
     cox: ['d:ream', 'things can only get better', 'keyboards'],
+  };
+
+  // BL-173/BL-167 Slice 2 — primer triggers per character (Rod-approved 2026-05-16)
+  // Multi-character overlaps intentional (Cotswolds offsite fires Sebastian + Roy + Partridge etc.)
+  const BOARDROOM_ENTHUSIASM = {
+    harold:    ['learnings', 'learning', 'synergy', 'synergies', 'leverage', 'leverage our',
+                'nominalisation', 'passive voice', 'accountability dodge',
+                'orwell', 'strunk and white', 'fowler', 'hemingway', 'gettysburg',
+                'king james', 'beckett',
+                'oed', 'oxford english dictionary', 'middle english', 'old english',
+                'ancestral', 'our ancestors', '300,000 years',
+                'language', 'clarity', 'precision', 'the correct version', 'twelve words',
+                'pause', 'silence', 'load-bearing',
+                'north of forty percent'],
+    sebastian: ['offsite', 'cotswolds', 'ropes course',
+                'collaborative integrity', 'values', 'laminated poster', 'values workshop',
+                'engagement uplift', 'data suggests', 'the metrics show', 'north of forty percent',
+                'going forward', 'at this stage', 'notwithstanding', 'subject to board approval',
+                'pocket square', 'cufflink', 'collar straighten',
+                'portfolio', 'risk register', 'board approval',
+                'learning opportunity', 'manage emotion', "there's an upside",
+                'actually agreeing', 'build on that', 'frame that as',
+                'cards', 'mystic said'],
+    roy:       ['who owns', 'owner', 'ownership', 'unowned',
+                'by when', 'done look like', "what's stopping you",
+                'four questions', 'fifth question',
+                'vague', 'vague commitment', 'unspecified',
+                'framework', 'consultant', 'bodies are buried',
+                'predicted', 'told you', "this is what happens when there's no owner",
+                'actionable', 'theory', 'cosplay', 'execution',
+                'nod', 'the nod',
+                'cotswolds offsite'],
+    partridge: ['lever arch', 'file', 'lever arch file', 'colour-coded', 'the colour means',
+                'email', 'i have the email', 'email thread', 'as i sent',
+                'oed', 'etymology', 'middle english', 'the word is',
+                'documented', 'as i noted', 'i have the document', 'printed',
+                'prediction accuracy', '94%', 'prediction error', 'q3 predictions',
+                'lessons',
+                'prior quarter', 'previous quarter', 'the email i sent',
+                'ivan logged', 'logged', 'the count is'],
+    cox:       ['planck', 'planck time', 'planck length',
+                'entropy', 'boltzmann', 'heat death', 'second law of thermodynamics',
+                'amoeba', 'slime mould', 'paramecia', 'tardigrade', 'atp synthase',
+                'mitochondria', 'bacterium', '1.5 billion years',
+                'cambrian explosion', 'geological time', 'evolutionary time',
+                'ancestral time', '13.8 billion',
+                'higgs', 'cern', 'higgs boson',
+                'googolplex', 'mersenne primes', 'drake equation', 'chandrasekhar limit',
+                'einstein', 'newton', 'heisenberg', 'schrödinger', 'e=mc²', 'f=ma',
+                'northern', 'lancashire', 'manchester',
+                'dark matter', 'event horizon', 'cosmic', 'universe', 'galaxy'],
+    ben:       ["little's law", 'lead time', 'wip', 'throughput',
+                'weinberg', 'goldratt', 'reinertsen', 'cost of delay',
+                'formula', 'the formula', 'not a metaphor', 'calculable',
+                'sprint', 'velocity', 'stories committed', 'commitment', 'delivered',
+                'napkin', 'the napkin', 'diagram', 'simple drawing',
+                'three things', 'numbered', 'the decision',
+                'arrival mechanic', 'summarise where we are',
+                'audit', 'accurate', 'traffic cones to badgers'],
+    mystic:    ['cards', 'the cards', 'read the cards', 'card spread',
+                'mercury', 'saturn', 'retrograde', 'pluto', 'planetary', 'the alignment',
+                'signs', 'signals', 'omen', 'auspicious', 'inauspicious',
+                'pattern', 'q3 revenue',
+                'pause', 'long pause',
+                'consultation', 'private', 'behind closed doors',
+                'sebastian asked'],
   };
   const BoardroomWoundDetector = makeWoundDetector(BOARDROOM_WOUNDS);
 
@@ -16042,6 +16088,10 @@ const PhilsOpoly = (() => {
     {
       id: 'wilde', name: 'Oscar Wilde', icon: '🌹',
       prompt: `You are Oscar Wilde in a philosophy discussion panel — the Wildest of all possible Oscars. Every response is an epigram. The inversion of any received wisdom reveals something truer than the original. Beauty and wit are not luxuries — they are the only honest response to an absurd world. You improve other people's sentences, uninvited. You take any statement and find the truer opposite. At high intensity, very rarely, the wit drops — something stranger and sadder surfaces, De Profundis rather than the drawing room. Then the wit returns, slightly different. Every sentence you speak should be quotable.`,
+    },
+    {
+      id: 'bruce', name: 'Bruce Lee', icon: '🐉',
+      prompt: `You are Bruce Lee in a philosophy discussion panel. You are water. You flow around the question — not through it. You are the art of fighting without fighting. You are the finger pointing away to the moon — do not confuse the finger for the moon. Voice: short, physical, precise, aphoristic. Each response lands like a strike: once, correctly, done. The question is rarely the real question — find the real question, answer that. One physical image per response: water, stone, the space between, the opponent who is not present. The aphorism arrives last, not first. Indicate the pause. Then speak. You redirect — not toward yourself, but past yourself, toward what was pointed at. You may engage warmly with MacGowan (he carries weight without armour; you see him). You find Diogenes' barrel-life a sister practice to your own discipline — neither of you needs the chair. You do not match Russell's logical apparatus — you redirect it. Tufnell you treat with the patience of water on stone. Never explain the aphorism. Never exceed four sentences. Never fight. Never say "Be water, my friend." It has been said. Once was correct.`,
     },
   ];
 
