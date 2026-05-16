@@ -17,24 +17,43 @@
 //
 // INPUT  (panelData):
 //   {
-//     anchor:        string           — character id, opens slot 0 and closes slot N
-//     middleCast:    string[]         — non-anchor character ids in the desired middle order
-//     includeTheDon: boolean (opt)    — when true, "alliss" is prepended to the middle (Golf only)
+//     anchor:            string         — character id; opens slot 0 and closes slot N
+//     middleCast:        string[]       — non-anchor character ids
+//     includeTheDon:     boolean (opt)  — when true, "alliss" is prepended to the middle (Golf only)
+//     subsetSize:        number (opt)   — pick this many of middleCast (default: full)
+//     turnsPerCharacter: number (opt)   — each subset member speaks this many times (default: 1)
+//     userInput:         string (opt)   — used for relevance scoring against wounds
+//     wounds:            object (opt)   — { characterId: [triggerWord, ...] }
 //   }
 //
 // RETURN: string[]
-//   Ordered slot list: anchor at index 0, middleCast (with optional "alliss" prepended)
-//   in slots 1..N-1, anchor at the final index N.
+//   Ordered slot list: anchor at index 0, [interleaved subset × turns] in slots 1..N-1,
+//   anchor at the final index N.
+//
+// BEHAVIOUR (BL-173):
+//   - When subsetSize == middleCast.length AND turnsPerCharacter == 1 (defaults):
+//     returns [anchor, ...middleCast, anchor]                       (backwards compatible)
+//   - When subsetSize < middleCast.length:
+//     subset is chosen by relevance score (count of wound-word substring matches in
+//     userInput). Top subsetSize candidates win. Ties resolved by random shuffle.
+//     Zero-score candidates remain selectable as fill.
+//   - When turnsPerCharacter > 1:
+//     subset members are interleaved round-robin so each appears that many times,
+//     spread across the middle (A B C A B C A B C for subset=3, K=3).
+//   - Anchor still bookends regardless of subset/turns config.
+//
+// PRINCIPLE 3 — Engine ignorance: substring matching of wound triggers is intentional;
+//   no context check. Misreadings are valid signals. The voice layer handles the comedy.
 //
 // THROWS:
 //   - if anchor is missing or empty
 //   - if middleCast is not an array
-//   - if anchor appears in middleCast (anchor must be distinct from the middle)
+//   - if anchor appears in middleCast
 function selectSlots(panelData) {
   if (!panelData || typeof panelData !== 'object') {
     throw new Error('selectSlots: panelData object required');
   }
-  const { anchor, middleCast, includeTheDon } = panelData;
+  const { anchor, middleCast, includeTheDon, subsetSize, turnsPerCharacter, userInput, wounds } = panelData;
   if (!anchor || typeof anchor !== 'string') {
     throw new Error('selectSlots: anchor string required');
   }
@@ -44,8 +63,45 @@ function selectSlots(panelData) {
   if (middleCast.includes(anchor)) {
     throw new Error('selectSlots: anchor must not appear in middleCast');
   }
-  const middleOrder = includeTheDon ? ['alliss', ...middleCast] : middleCast;
-  return [anchor, ...middleOrder, anchor];
+
+  const baseMiddle = includeTheDon ? ['alliss', ...middleCast] : middleCast;
+
+  const effectiveSubsetSize = (typeof subsetSize === 'number' && subsetSize > 0)
+    ? Math.min(subsetSize, baseMiddle.length)
+    : baseMiddle.length;
+  const effectiveTurns = (typeof turnsPerCharacter === 'number' && turnsPerCharacter > 0)
+    ? turnsPerCharacter
+    : 1;
+
+  // Backwards-compatible fast path: full middle, single turns.
+  if (effectiveSubsetSize === baseMiddle.length && effectiveTurns === 1) {
+    return [anchor, ...baseMiddle, anchor];
+  }
+
+  // Relevance scoring — count wound-trigger substring matches in userInput per candidate.
+  const lowerInput = (userInput || '').toLowerCase();
+  const scores = {};
+  for (const id of baseMiddle) {
+    const triggers = (wounds && wounds[id]) || [];
+    let score = 0;
+    for (const t of triggers) {
+      if (t && lowerInput.includes(String(t).toLowerCase())) score += 1;
+    }
+    scores[id] = score;
+  }
+
+  // Tie-break: pre-shuffle so equal-score candidates get random order; then stable-sort by score desc.
+  const shuffled = [...baseMiddle].sort(() => Math.random() - 0.5);
+  shuffled.sort((a, b) => scores[b] - scores[a]);
+  const subset = shuffled.slice(0, effectiveSubsetSize);
+
+  // Round-robin interleave for K turns.
+  const interleaved = [];
+  for (let k = 0; k < effectiveTurns; k++) {
+    for (const id of subset) interleaved.push(id);
+  }
+
+  return [anchor, ...interleaved, anchor];
 }
 
 const _PanelDiscussEngineExports = { selectSlots };

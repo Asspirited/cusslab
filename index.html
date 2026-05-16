@@ -15008,12 +15008,18 @@ Tangent-prone characters are exempt — they are the ones being dismissed, not t
 
     // BL-167 Slice 1.1 — Anchor model: anchor opens slot 1 and closes slot N
     // BL-162 Slice 0 — Speaker selection delegated to shared PanelDiscussEngine.
-    // Per-panel data declared here; engine handles the ordering rule.
+    // BL-173 — Subset (3) × turnsPerCharacter (3) with wound-trigger relevance.
+    //   Fewer voices per round, more interactions per voice. Total middle = 9.
+    //   Murray (anchor) opens + 3 middle characters speak 3x each (round-robin) + Murray closes.
     const anchorId = PANEL_CONFIG.anchor;
     const ORDER = PanelDiscussEngine.selectSlots({
       anchor: anchorId,
       middleCast: ['faldo', 'butch', 'mcginley', 'coltart', 'roe', 'radar', 'henni', 'howell', 'dougherty'],
       includeTheDon,
+      subsetSize: 3,
+      turnsPerCharacter: 3,
+      userInput: panelInput,
+      wounds: GOLF_WOUNDS,
     });
 
     // Atmosphere — read from sessionStorage, default NORMAL

@@ -10620,6 +10620,165 @@ function makeSteps(ctx) {
       if (re.test(src)) throw new Error(`${relPath} references "${sym}" but should not`);
     }],
 
+    // ── BL-173 — selectSlots subset + multi-interaction + relevance (specs/bl-173-subset-multi-interaction.feature) ─────
+
+    [/^selectSlots without subsetSize returns the full middle cast in original order$/, () => {
+      const enginePath = path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js');
+      delete require.cache[require.resolve(enginePath)];
+      const engine = require(enginePath);
+      const result = engine.selectSlots({
+        anchor: 'X',
+        middleCast: ['a', 'b', 'c', 'd'],
+        includeTheDon: false,
+      });
+      const expected = ['X', 'a', 'b', 'c', 'd', 'X'];
+      if (JSON.stringify(result) !== JSON.stringify(expected))
+        throw new Error(`Backwards compat broken: expected ${JSON.stringify(expected)}, got ${JSON.stringify(result)}`);
+    }],
+
+    [/^selectSlots with subsetSize 3 from a 5-character middleCast returns exactly 3 unique non-anchor characters in the middle$/, () => {
+      const enginePath = path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js');
+      delete require.cache[require.resolve(enginePath)];
+      const engine = require(enginePath);
+      const result = engine.selectSlots({
+        anchor: 'X',
+        middleCast: ['a', 'b', 'c', 'd', 'e'],
+        subsetSize: 3,
+        turnsPerCharacter: 1,
+      });
+      const middle = result.slice(1, -1);
+      if (middle.length !== 3) throw new Error(`Expected 3 middle slots, got ${middle.length}: ${middle.join(',')}`);
+      const set = new Set(middle);
+      if (set.size !== 3) throw new Error(`Middle slots not unique: ${middle.join(',')}`);
+      if (middle.includes('X')) throw new Error(`Middle contains anchor "X"`);
+    }],
+
+    [/^selectSlots with subsetSize 3 and turnsPerCharacter 3 returns 9 middle slots total$/, () => {
+      const enginePath = path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js');
+      delete require.cache[require.resolve(enginePath)];
+      const engine = require(enginePath);
+      const result = engine.selectSlots({
+        anchor: 'X',
+        middleCast: ['a', 'b', 'c', 'd', 'e'],
+        subsetSize: 3,
+        turnsPerCharacter: 3,
+      });
+      const middle = result.slice(1, -1);
+      if (middle.length !== 9) throw new Error(`Expected 9 middle slots, got ${middle.length}: ${middle.join(',')}`);
+    }],
+
+    [/^selectSlots with subsetSize 3 turnsPerCharacter 3 and asymmetric scores returns middle slots in round-robin order$/, () => {
+      const enginePath = path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js');
+      delete require.cache[require.resolve(enginePath)];
+      const engine = require(enginePath);
+      // Asymmetric: a,b,c each have unique trigger present in userInput; d,e have no trigger
+      const result = engine.selectSlots({
+        anchor: 'X',
+        middleCast: ['a', 'b', 'c', 'd', 'e'],
+        subsetSize: 3,
+        turnsPerCharacter: 3,
+        userInput: 'alpha beta gamma',
+        wounds: { a: ['alpha'], b: ['beta'], c: ['gamma'], d: ['void'], e: ['null'] },
+      });
+      const middle = result.slice(1, -1);
+      if (middle.length !== 9) throw new Error(`Expected 9 middle slots`);
+      // Round-robin: same character at positions 0/3/6, 1/4/7, 2/5/8
+      for (let i = 0; i < 3; i++) {
+        if (middle[i] !== middle[i + 3] || middle[i] !== middle[i + 6]) {
+          throw new Error(`Round-robin broken at slot ${i}: middle=[${middle.join(',')}]`);
+        }
+      }
+      // First 3 positions should be 3 distinct characters
+      const set = new Set([middle[0], middle[1], middle[2]]);
+      if (set.size !== 3) throw new Error(`First 3 positions not 3 distinct chars: ${middle.slice(0, 3).join(',')}`);
+    }],
+
+    [/^selectSlots with userInput containing a wound trigger places that character in the subset ahead of zero-score candidates$/, () => {
+      const enginePath = path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js');
+      delete require.cache[require.resolve(enginePath)];
+      const engine = require(enginePath);
+      // c is the only character with a wound trigger present in userInput; subsetSize=1 forces deterministic selection.
+      const result = engine.selectSlots({
+        anchor: 'X',
+        middleCast: ['a', 'b', 'c', 'd', 'e'],
+        subsetSize: 1,
+        turnsPerCharacter: 1,
+        userInput: 'captaincy',
+        wounds: { a: [], b: [], c: ['captaincy'], d: [], e: [] },
+      });
+      const middle = result.slice(1, -1);
+      if (middle[0] !== 'c') throw new Error(`Expected wound-matched "c" in subset, got "${middle[0]}"`);
+    }],
+
+    [/^selectSlots with userInput having no wound matches still returns subsetSize characters drawn from the middle cast$/, () => {
+      const enginePath = path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js');
+      delete require.cache[require.resolve(enginePath)];
+      const engine = require(enginePath);
+      const result = engine.selectSlots({
+        anchor: 'X',
+        middleCast: ['a', 'b', 'c', 'd', 'e'],
+        subsetSize: 3,
+        turnsPerCharacter: 1,
+        userInput: 'nothing relevant here',
+        wounds: { a: ['x'], b: ['y'], c: ['z'], d: ['w'], e: ['v'] },
+      });
+      const middle = result.slice(1, -1);
+      if (middle.length !== 3) throw new Error(`Expected 3 middle slots, got ${middle.length}`);
+      const cast = ['a','b','c','d','e'];
+      if (!middle.every(id => cast.includes(id)))
+        throw new Error(`Middle contains non-cast characters: ${middle.join(',')}`);
+    }],
+
+    [/^selectSlots scores a candidate for any substring match of their wound words regardless of context$/, () => {
+      const enginePath = path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js');
+      delete require.cache[require.resolve(enginePath)];
+      const engine = require(enginePath);
+      // "anti-captaincy is overrated" contains substring "captaincy" — engine matches without context check.
+      const result = engine.selectSlots({
+        anchor: 'X',
+        middleCast: ['a', 'b', 'c'],
+        subsetSize: 1,
+        turnsPerCharacter: 1,
+        userInput: 'anti-captaincy is overrated',
+        wounds: { a: [], b: ['captaincy'], c: [] },
+      });
+      const middle = result.slice(1, -1);
+      if (middle[0] !== 'b')
+        throw new Error(`Engine should substring-match "captaincy" inside "anti-captaincy"; got "${middle[0]}"`);
+    }],
+
+    [/^selectSlots with subsetSize 3 and turnsPerCharacter 3 returns 11 total slots with anchor at index 0 and the final index$/, () => {
+      const enginePath = path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js');
+      delete require.cache[require.resolve(enginePath)];
+      const engine = require(enginePath);
+      const result = engine.selectSlots({
+        anchor: 'XYZ',
+        middleCast: ['a', 'b', 'c', 'd', 'e'],
+        subsetSize: 3,
+        turnsPerCharacter: 3,
+      });
+      if (result.length !== 11) throw new Error(`Expected 11 total slots, got ${result.length}`);
+      if (result[0] !== 'XYZ') throw new Error(`Expected anchor at slot 0, got "${result[0]}"`);
+      if (result[result.length - 1] !== 'XYZ') throw new Error(`Expected anchor at final slot, got "${result[result.length - 1]}"`);
+    }],
+
+    [/^the Golf discuss function calls PanelDiscussEngine\.selectSlots with subsetSize and turnsPerCharacter and userInput and wounds keys$/, () => {
+      // Self-contained — load Golf IIFE here (BL-173 Background loads the engine file, not Golf).
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      const golfStart = html.indexOf('const Golf = (() => {');
+      if (golfStart < 0) throw new Error('Golf IIFE not found in index.html');
+      const iife = html.slice(golfStart, golfStart + 200000);
+      const callStart = iife.indexOf('PanelDiscussEngine.selectSlots({');
+      if (callStart < 0) throw new Error('PanelDiscussEngine.selectSlots call not found in Golf');
+      const call = iife.slice(callStart, callStart + 1000);
+      const requiredKeys = ['subsetSize', 'turnsPerCharacter', 'userInput', 'wounds'];
+      for (const key of requiredKeys) {
+        if (!new RegExp(`\\b${key}:`).test(call)) {
+          throw new Error(`Golf selectSlots call missing key: ${key}`);
+        }
+      }
+    }],
+
   ];
 }
 
