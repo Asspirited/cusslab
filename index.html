@@ -4314,6 +4314,7 @@
 <script src="src/data/crucible-corner-data.js"></script>
 <script src="src/data/spit-shelter-data.js"></script>
 <script src="src/logic/rage-o-meter-engine.js"></script>
+<script src="src/logic/panel-discuss-engine.js"></script>
 <script src="rage-o-meter.js"></script>
 
 <script>
@@ -15006,11 +15007,14 @@ Tangent-prone characters are exempt — they are the ones being dismissed, not t
     const panelInput = includeTheDon ? input.replace(THE_DON_TRIGGER, '').trim() || input : input;
 
     // BL-167 Slice 1.1 — Anchor model: anchor opens slot 1 and closes slot N
+    // BL-162 Slice 0 — Speaker selection delegated to shared PanelDiscussEngine.
+    // Per-panel data declared here; engine handles the ordering rule.
     const anchorId = PANEL_CONFIG.anchor;
-    const middleCast = ['faldo', 'butch', 'mcginley', 'coltart', 'roe', 'radar', 'henni', 'howell', 'dougherty'];
-    // Alliss slots in at start of middle when easter egg fires
-    const middleOrder = includeTheDon ? ['alliss', ...middleCast] : middleCast;
-    const ORDER = [anchorId, ...middleOrder, anchorId];
+    const ORDER = PanelDiscussEngine.selectSlots({
+      anchor: anchorId,
+      middleCast: ['faldo', 'butch', 'mcginley', 'coltart', 'roe', 'radar', 'henni', 'howell', 'dougherty'],
+      includeTheDon,
+    });
 
     // Atmosphere — read from sessionStorage, default NORMAL
     const gfAtmoRaw = sessionStorage.getItem('hc_atmosphere');

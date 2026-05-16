@@ -1815,3 +1815,22 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Epic: Panel Interaction Model
 - CD3: UBV=9 TC=8 RR=5 → CoD=22, Dur=2, **CD3=11.0**
 - Status: **v1 SHIPPED 2026-05-16 (Faldo-only, tactical); v2 OPEN — Three Amigos needed on per-character pool schema; depends on BL-162**
+
+---
+
+### BL-173 — Subset speaker selection + multi-interaction per round (relevance-driven)
+
+- Discovered 2026-05-16 by Rod after live test of BL-167 Slice 1.1: every character speaking once per round produces broad-but-shallow texture. Better is a smaller subset (3–5 from the cast) where each chosen speaker fires multiple times (2–3 turns each), with selection driven by RELEVANCE to the user's question + current state. Result: fewer voices, more back-and-forth between them, deeper interaction texture.
+- **Replaces the naive middle-slot construction from BL-167 Slice 1.1** (`[anchor, ...fullMiddle, anchor]`) with `[anchor, ...interleavedSubset, anchor]` where the subset is relevance-selected and each character appears multiple times in the middle.
+- **v1 (this session, builds on BL-162 Slice 0):**
+  - Subset size N (default 3–4) drawn from non-anchor cast.
+  - Per-character turn count K (default 2–3).
+  - Total middle slots = N × K (~6–12 per round, instead of all 9 non-anchor characters firing once).
+  - Relevance signal v1: wound-trigger word match in user input + prior turns + arcLog (each match = +1 score). Tie-break random; zero-score random fill so cold characters can still appear.
+  - Middle slot order: round-robin interleave (A B C A B C A B C for N=3, K=3) — keeps each character's turns spread out rather than clustered.
+- **v2 (later, with BL-167 Slice 2 / BL-172 v2):** relevance signal extends to enthusiasm primers, claimed-territory keywords, posture-contradiction signals, and debtLedger. Round-robin order becomes trigger-weighted per slot.
+- **Composes with:** BL-162 (engine — selectSlots becomes the home for this logic); BL-167 (anchor still bookends — only the middle changes); BL-170 (anchor mid-round interjection slots into the interleaved middle); BL-171 (cross-character questions interleave naturally with multi-interaction); BL-172 v2 (enthusiasm-primer matches feed relevance score).
+- Feature: panel-interaction
+- Epic: Panel Interaction Model
+- CD3: UBV=9 TC=7 RR=4 → CoD=20, Dur=2, **CD3=10.0**
+- Status: OPEN — raised 2026-05-16; ships in this session immediately after BL-162 Slice 0; Gherkin needed (expands selectSlots contract)

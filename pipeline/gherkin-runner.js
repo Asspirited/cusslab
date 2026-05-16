@@ -10455,15 +10455,29 @@ function makeSteps(ctx) {
     // ── BL-167 — Anchor + slot structure (specs/bl-167-anchor-slot-structure.feature) ─────
 
     [/^the Golf ORDER construction places the anchor at the first slot$/, () => {
-      const iife = ctx._golfIife || '';
-      if (!/const ORDER = \[anchorId,/.test(iife))
-        throw new Error('Golf ORDER does not place anchorId at slot 0');
+      // Post-BL-162 Slice 0: Golf delegates to PanelDiscussEngine.selectSlots.
+      // Verify the engine places anchor at index 0 when given Golf's panel data.
+      delete require.cache[require.resolve(path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js'))];
+      const engine = require(path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js'));
+      const result = engine.selectSlots({
+        anchor: 'murray',
+        middleCast: ['faldo', 'butch', 'mcginley', 'coltart', 'roe', 'radar', 'henni', 'howell', 'dougherty'],
+        includeTheDon: false,
+      });
+      if (result[0] !== 'murray')
+        throw new Error(`Engine did not place anchor at slot 0. Got: ${result[0]}`);
     }],
 
     [/^the Golf ORDER construction places the anchor at the final slot$/, () => {
-      const iife = ctx._golfIife || '';
-      if (!/const ORDER = \[anchorId,[^\]]*,\s*anchorId\];/.test(iife))
-        throw new Error('Golf ORDER does not place anchorId at final slot');
+      delete require.cache[require.resolve(path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js'))];
+      const engine = require(path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js'));
+      const result = engine.selectSlots({
+        anchor: 'murray',
+        middleCast: ['faldo', 'butch', 'mcginley', 'coltart', 'roe', 'radar', 'henni', 'howell', 'dougherty'],
+        includeTheDon: false,
+      });
+      if (result[result.length - 1] !== 'murray')
+        throw new Error(`Engine did not place anchor at final slot. Got: ${result[result.length - 1]}`);
     }],
 
     [/^the Golf discuss function includes an "([^"]+)" prompt block$/, (label) => {
@@ -10502,8 +10516,9 @@ function makeSteps(ctx) {
 
     [/^the Golf middle cast list does not contain "([^"]+)"$/, (text) => {
       const iife = ctx._golfIife || '';
-      const m = iife.match(/const middleCast = \[([^\]]+)\];/);
-      if (!m) throw new Error('Golf middleCast array not found');
+      // Post-BL-162 Slice 0: middleCast is now a property in the selectSlots call argument.
+      const m = iife.match(/middleCast:\s*\[([^\]]+)\]/);
+      if (!m) throw new Error('Golf middleCast list not found in selectSlots call');
       const middleCast = m[1];
       if (middleCast.includes(`'${text}'`) || middleCast.includes(`"${text}"`))
         throw new Error(`Golf middleCast contains "${text}" but should not`);
@@ -10511,14 +10526,98 @@ function makeSteps(ctx) {
 
     [/^the Golf middle cast list contains each member id at most once$/, () => {
       const iife = ctx._golfIife || '';
-      const m = iife.match(/const middleCast = \[([^\]]+)\];/);
-      if (!m) throw new Error('Golf middleCast array not found');
+      const m = iife.match(/middleCast:\s*\[([^\]]+)\]/);
+      if (!m) throw new Error('Golf middleCast list not found in selectSlots call');
       const ids = m[1].split(',').map(s => s.trim().replace(/['"]/g, ''));
       const seen = new Set();
       for (const id of ids) {
         if (seen.has(id)) throw new Error(`Golf middleCast contains duplicate "${id}"`);
         seen.add(id);
       }
+    }],
+
+    // ── BL-162 Slice 0 — Shared PanelDiscuss engine (specs/bl-162-slice-0-engine.feature) ─────
+
+    [/^the file "([^"]+)" exists$/, (relPath) => {
+      const full = path.join(__dirname, '..', relPath);
+      if (!fs.existsSync(full)) throw new Error(`File does not exist: ${relPath}`);
+    }],
+
+    [/^"([^"]+)" exports a function named "([^"]+)"$/, (relPath, fnName) => {
+      const full = path.join(__dirname, '..', relPath);
+      delete require.cache[require.resolve(full)];
+      const mod = require(full);
+      if (typeof mod[fnName] !== 'function')
+        throw new Error(`${relPath} does not export function "${fnName}"`);
+    }],
+
+    [/^"([^"]+)" contains a contract comment describing the ([A-Za-z]+) input shape and return shape$/, (relPath, fnName) => {
+      const src = fs.readFileSync(path.join(__dirname, '..', relPath), 'utf8');
+      const fnStart = src.indexOf(`function ${fnName}`);
+      if (fnStart < 0) throw new Error(`function "${fnName}" not found in ${relPath}`);
+      const preamble = src.slice(Math.max(0, fnStart - 2000), fnStart);
+      if (!/INPUT|input shape|@param/i.test(preamble)) throw new Error(`No INPUT/input shape comment found before "${fnName}"`);
+      if (!/RETURN|return shape|@return/i.test(preamble)) throw new Error(`No RETURN/return shape comment found before "${fnName}"`);
+    }],
+
+    [/^the selectSlots function source places the anchor at the first returned slot$/, () => {
+      const src = fs.readFileSync(path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js'), 'utf8');
+      if (!/return\s*\[\s*anchor\s*,/.test(src))
+        throw new Error('selectSlots source does not place anchor at first slot of return array');
+    }],
+
+    [/^the selectSlots function source places the anchor at the final returned slot$/, () => {
+      const src = fs.readFileSync(path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js'), 'utf8');
+      if (!/,\s*anchor\s*\]\s*;/.test(src))
+        throw new Error('selectSlots source does not place anchor at final slot of return array');
+    }],
+
+    [/^the Golf discuss function references "([^"]+)"$/, (sym) => {
+      const iife = ctx._golfIife || '';
+      if (iife.indexOf(sym) < 0)
+        throw new Error(`Golf discuss function does not reference "${sym}"`);
+    }],
+
+    [/^the Golf discuss function does not construct ORDER inline$/, () => {
+      const iife = ctx._golfIife || '';
+      // Match the OLD pre-extraction pattern specifically; PhilsOpoly etc. use
+      // different inline constructions and are out of scope for this assertion.
+      if (/const\s+ORDER\s*=\s*\[\s*anchorId\b/.test(iife))
+        throw new Error('Golf discuss function still constructs ORDER inline ([anchorId, ...])');
+    }],
+
+    [/^selectSlots returns the canonical Golf order without the don$/, () => {
+      delete require.cache[require.resolve(path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js'))];
+      const engine = require(path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js'));
+      const result = engine.selectSlots({
+        anchor: 'murray',
+        middleCast: ['faldo', 'butch', 'mcginley', 'coltart', 'roe', 'radar', 'henni', 'howell', 'dougherty'],
+        includeTheDon: false,
+      });
+      const expected = ['murray', 'faldo', 'butch', 'mcginley', 'coltart', 'roe', 'radar', 'henni', 'howell', 'dougherty', 'murray'];
+      if (JSON.stringify(result) !== JSON.stringify(expected))
+        throw new Error(`selectSlots golf-no-don mismatch. Got: ${JSON.stringify(result)}`);
+    }],
+
+    [/^selectSlots inserts alliss after the opening anchor when the don is included$/, () => {
+      delete require.cache[require.resolve(path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js'))];
+      const engine = require(path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js'));
+      const result = engine.selectSlots({
+        anchor: 'murray',
+        middleCast: ['faldo', 'butch'],
+        includeTheDon: true,
+      });
+      if (result[0] !== 'murray') throw new Error(`Expected slot 0 = "murray", got "${result[0]}"`);
+      if (result[1] !== 'alliss') throw new Error(`Expected slot 1 = "alliss", got "${result[1]}"`);
+      if (result[2] !== 'faldo') throw new Error(`Expected slot 2 = "faldo", got "${result[2]}"`);
+      if (result[result.length - 1] !== 'murray') throw new Error('anchor not at final slot');
+    }],
+
+    [/^"([^"]+)" does not reference "([^"]+)"$/, (relPath, sym) => {
+      const src = fs.readFileSync(path.join(__dirname, '..', relPath), 'utf8');
+      // Use word-boundary match to avoid false positives on substrings
+      const re = new RegExp(`\\b${sym.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\$&')}\\b`);
+      if (re.test(src)) throw new Error(`${relPath} references "${sym}" but should not`);
     }],
 
   ];
