@@ -17,7 +17,20 @@
 | WL-131 | Character dullness — "X is right/wrong" openers, "I've watched this back" bleeding | Medium | Three Amigos needed before touching TURN_RULES |
 | WL-136 | UI audit: IIFE return objects not checked — exports can go missing silently | High | Add pipeline check: verify each global wrapper's IIFE target is in return statement |
 | WL-147 | backlog-report.js: `Status[:\s]+` regex matches "status text" in descriptions, falsely marking items OPEN | Low | Tighten regex to `^\s*[-*]\s*Status:` in multiline mode |
-| WL-149 | Panel topic adoption — when one character locks onto a specific topic (Faldo → Ginsters), the others mirror it instead of pursuing their own angle | Medium | BL-163 `reacts_to` design must encode "glance, then pivot, do not adopt"; separate pool rotation fix may be needed for Faldo |
+| WL-149 | Panel topic adoption — when one character locks onto a specific topic (Faldo → Ginsters), the others mirror it instead of pursuing their own angle | Medium | BL-163 `reacts_to` design must encode "glance, then pivot, do not adopt"; separate pool rotation fix shipped via BL-172 v1 (Faldo voice pools in code) |
+| WL-150 | Tactical exception to Principle 1 — BL-172 v1 (Faldo voice pool selection) shipped as Golf-only per-panel code, not via shared engine | Low | Close when BL-162 ships `VoicePoolSelector` and Faldo-specific code is replaced by declarative pool data |
+
+---
+
+### WL-150
+**Item:** BL-172 v1 (Faldo voice pool selection) shipped as Golf-only tactical exception to shared-engine principle (Principle 1 of `.claude/principles/panel-design.md`)
+**Symptom:** N/A — proactive log per Rod's explicit authorisation of tactical exception path.
+**Root cause:** Shared `PanelDiscuss` engine (BL-162) not yet built. Variation problem in product needed immediate fix (Rod had flagged it multiple sessions; prior fixes were prompt-instruction-only and failed). Rod authorised the tactical ship.
+**Session:** 2026-05-16
+**Time lost:** N/A (proactive entry)
+**Cost impact:** Low (tactical) — debt is real but bounded. Will be paid when BL-162 ships `VoicePoolSelector` and the Faldo-specific code in `index.html` is replaced by declarative pool data referenced by the engine.
+**Tags:** `#tactical-exception` `#per-panel-duplication` `#voice-pool` `#absorbed-by-bl-162` `#authorised-by-rod`
+**Status:** Open — to be closed when BL-162 v1 ships `VoicePoolSelector` and the Faldo-specific code is removed.
 
 ---
 

@@ -14714,6 +14714,75 @@ NARRATIVE POSTURE — You arrive with the warm observation: what happened, who w
 
   const GolfWoundDetector = makeWoundDetector(GOLF_WOUNDS);
 
+  // BL-172 v1 (tactical) — Faldo voice pools, code-selected per turn.
+  // Model cannot be trusted to "rotate" — pick concrete items here, inject one-shot.
+  // Will be absorbed into the shared engine (BL-162) and generalised to all characters.
+  const FALDO_VOICE_POOLS = {
+    food: [
+      'a ham sandwich (no mayo)',
+      'a prawn sandwich',
+      'a baguette',
+      'a bagel',
+      'jambon ibéric (Valderrama, Tuesday — the Spanish understood something)',
+      'a Victoria sponge',
+      'a Scotch egg',
+      "a Tunnock's teacake",
+      'a Kendal Mint Cake',
+      'a crème brûlée (Sunningdale, after the second round, he committed to it)',
+      'a Pot Noodle',
+      'a Findus Crispy Pancake',
+      "a McDonald's double cheeseburger (not embarrassed — he committed to it)",
+      'a cheese and pickle sandwich with piccalilli — do you remember piccalilli',
+      'a dirty kebab after too many sherries (cycled home, in the rain, committed)',
+    ],
+    ginstersThermal: [
+      'slightly warm',
+      'worryingly warm',
+      'technically warm',
+      'barely warm',
+      "what you'd generously call warm",
+      'somehow still warm',
+      'ambient — which is not the same as warm but adjacent',
+      'warm in spirit if not in temperature',
+      'room temperature (the room was cold)',
+      'not cold, which is not the same as warm, but is something',
+    ],
+    garage: [
+      'near the A1',
+      'off the A12',
+      'somewhere on the M25 (the junction is disputed)',
+      'on the M1 going north, or possibly south',
+      'a Shell off the A14',
+      'a forecourt in Stevenage that may now be a Waitrose',
+      'a BP on the orbital that was mostly a car park',
+      'a garage that smelled of WD-40 and optimism',
+      'a Texaco off the A303 with a single working pump',
+      'a Jet near Watford Gap, the one with the bird in the rafters',
+    ],
+    cars: [
+      'a Ford Cortina (you could fit two sets of clubs and a week\'s shopping, started first time, mostly)',
+      'a Ford Capri',
+      'a Vauxhall Cavalier',
+      'a Datsun Cherry',
+      "his dad's Allegro — twenty of them packed in, one packet of Frazzles between them",
+      "a Reliant Robin he saw go round a roundabout (it didn't quite make it)",
+      'a Triumph Dolomite that smelled of dog',
+      'a brown Austin Maxi (still somewhere in Hertfordshire, he is almost certain)',
+    ],
+    entertainment: [
+      'the Morecambe and Wise Christmas special',
+      'the Two Ronnies',
+      'Jim Davidson (without irony — the room has a complicated reaction)',
+      'Only Fools and Horses',
+      'Bullseye',
+      'Give Us a Clue',
+      'Swap Shop',
+      "a specific episode of Minder he can't quite place",
+      'Charlie Chaplin (genuinely moved by him — the room briefly silenced)',
+    ],
+  };
+  const _faldoPick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+
   const GOLF_NAMEMAP = {
     faldo:     ['faldo', 'nick', 'sir nick'],
     butch:     ['butch', 'harmon'],
@@ -15022,7 +15091,11 @@ Tangent-prone characters are exempt — they are the ones being dismissed, not t
         : '';
       // Suppress TOPIC-DISMISSAL for anchor turns (different prompt mode — anchor doesn't dismiss, anchor frames or closes)
       const dismissalSection = (isAnchorOpener || isAnchorCloser) ? '' : (GOLF_TOPIC_DISMISSAL + '\n\n');
-      const gfBaseSystem = TURN_RULES + '\n\n' + dismissalSection + anchorOpenerBlock + anchorCloserBlock + gfIntensityBlock + gfYourState + tourCardBlock + roeIntroBlock + golfNameBlock + gfFoodBlock + gfMarmiteBlock + gfHypoBlock + gfPremBlock + gfLieBlock + member.prompt + _iceBreakBlock(member.id) + roundNote + mechanics + arcInstructions + (i > 0
+      // BL-172 v1 — Faldo voice pool: pick concrete items in code, inject as one-shot override
+      const faldoVoicePoolBlock = (member.id === 'faldo')
+        ? `\n\nFALDO VOICE POOL — THIS TURN ONLY, OVERRIDES ANY GENERAL POOL INSTRUCTIONS IN YOUR PROMPT:\nWhen this turn calls for one of your reference pools, use ONLY the item listed below. Do not substitute. Do not default to a previously-named example. The named example for THIS turn IS the variation.\n\nIF a FOOD reference fits the moment → use: "${_faldoPick(FALDO_VOICE_POOLS.food)}"\nIF a GINSTERS reference fits → thermal adjective is: "${_faldoPick(FALDO_VOICE_POOLS.ginstersThermal)}" (never "slightly warm" unless THIS turn says so)\nIF a GARAGE LOCATION fits → use: "${_faldoPick(FALDO_VOICE_POOLS.garage)}" (never default to A1 or A12 unless THIS turn says so)\nIF a CAR reference fits → use: "${_faldoPick(FALDO_VOICE_POOLS.cars)}"\nIF an ENTERTAINMENT/70s-80s reference fits → use: "${_faldoPick(FALDO_VOICE_POOLS.entertainment)}"\n\nNot every turn needs all these — use only those that fit naturally, and only one per turn. When you use one, use the specified item. Do not pluralise the pool — one named item per turn.\n`
+        : '';
+      const gfBaseSystem = TURN_RULES + '\n\n' + dismissalSection + anchorOpenerBlock + anchorCloserBlock + gfIntensityBlock + gfYourState + tourCardBlock + roeIntroBlock + golfNameBlock + gfFoodBlock + gfMarmiteBlock + gfHypoBlock + gfPremBlock + gfLieBlock + member.prompt + faldoVoicePoolBlock + _iceBreakBlock(member.id) + roundNote + mechanics + arcInstructions + (i > 0
         ? `\n\nPrevious:\n${prev}`
         : '')
         + (arcLog.length > 0 ? `\n\nNARRATIVE ARC SO FAR:\n${arcLog.join('\n')}` : '')

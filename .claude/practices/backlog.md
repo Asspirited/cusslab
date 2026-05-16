@@ -1800,3 +1800,18 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Epic: Panel Interaction Model (related) / Character Schema (primary)
 - CD3: UBV=8 TC=6 RR=4 → CoD=18, Dur=2, **CD3=9.0**
 - Status: OPEN — raised 2026-05-16; Three Amigos needed (especially the schema attribute placement and the v1 character list)
+
+---
+
+### BL-172 — Character voice pool selection in code (extend BL-061 pattern to all character voice pools)
+
+- Discovered 2026-05-16 in live test of BL-167 Slice 1.1: Rod flagged that Faldo defaults to "Ginsters" + "slightly warm" + "A12" / "A1" every round, despite explicit "rotate, never repeat" instructions in his prompt. Models do NOT reliably honour rotation directives — they default to salient named examples. Prior BL closed 2026-03-10 (commit `2887de2`) added more prompt rules; it did not work. Rod has flagged this variation problem multiple times across multiple sessions.
+- The pattern that DOES work is established by BL-061 (Author Epilogue pool mechanics, CLOSED): pool selection done in CODE, random pick per turn, inject only the chosen item as a concrete one-shot instruction. Model has no choice — uses what's injected.
+- **v1 (tactical, shipped 2026-05-16):** Faldo-only inside Golf IIFE. `FALDO_VOICE_POOLS` const with 5 pools (food / ginstersThermal / garage / cars / entertainment). `faldoVoicePoolBlock` injects one item per pool per turn as an override block placed after `member.prompt`. Logged as tactical exception (WL-150) to Principle 1 (one engine, many panels).
+- **v2 (canonical, target):** Extend to all characters with pool-driven voice mechanics — Faldo, Boycott, Souness, Diogenes, Tufnell, MacGowan, etc. Per-character voice pool data lives declaratively in the character file (or a parallel data file). Shared `VoicePoolSelector` module that BL-162's engine calls per character per turn.
+- **Lands inside BL-162** — shared `PanelDiscuss` engine includes a `VoicePoolSelector` module that handles pool selection for any character with declared pools. Per-character files declare pool data; engine handles random selection + injection. BL-172 v1's Faldo-specific code is removed at that point in favour of declarative pool data.
+- **Composes with:** BL-061 (same mechanic pattern, proven); BL-167/168/163/169 (one engine for everything); WL-149 (Faldo Ginsters monomania — partially addressed by v1, fully by v2); WL-150 (tactical-exception ledger entry).
+- Feature: panel-interaction / voice
+- Epic: Panel Interaction Model
+- CD3: UBV=9 TC=8 RR=5 → CoD=22, Dur=2, **CD3=11.0**
+- Status: **v1 SHIPPED 2026-05-16 (Faldo-only, tactical); v2 OPEN — Three Amigos needed on per-character pool schema; depends on BL-162**
