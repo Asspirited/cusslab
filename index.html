@@ -4316,6 +4316,7 @@
 <script src="src/logic/rage-o-meter-engine.js"></script>
 <script src="src/logic/trigger-score-engine.js"></script>
 <script src="src/logic/panel-discuss-engine.js"></script>
+<script src="src/logic/idiom-engine.js"></script>
 <script src="rage-o-meter.js"></script>
 
 <script>
@@ -13073,6 +13074,79 @@ You layer. You do not extend for the sake of it — but if a standards failure i
     keane:     ['saipan', 'management', 'ipswich', 'sunderland', 'haaland', 'prawn sandwich', 'prawn sandwiches', 'alf-inge', 'budweiser voicemail', 'left united'],
   };
 
+  // BL-173/BL-167 Slice 2 — Football primer triggers per character (Rod-approved 2026-05-16).
+  // Multi-character lean-in intentional: `manchester united` fires Neville+Carragher+Bigron+Keane;
+  // `class of 92` fires Neville (pride) + Carragher (rivalry) + Keane (contempt);
+  // `liverpool` fires Carragher (his) + Souness (his old team) + Neville (rivalry primer);
+  // `manchester city` fires Micah (era) + Marsh (his stint);
+  // `monday night football` fires Neville + Carragher + Keane (MNF triumvirate).
+  const FOOTBALL_ENTHUSIASM = {
+    souness:   ['liverpool', 'anfield', '1986', 'the double',
+                'rangers', 'ibrox', 'souness revolution',
+                'sampdoria', 'serie a', 'italy',
+                'bryan robson', 'robson', 'proper player',
+                'tartan army', 'glasgow', 'scotland',
+                'terry butcher', 'butcher', 'gough',
+                'european cup', 'champions league',
+                'discipline', 'standards', 'real lads', 'boots and pies',
+                'tackle', 'hard tackle', "couldn't lace his boots", 'proper football'],
+    micah:     ['manchester city', 'city', 'etihad', 'the etihad',
+                'kompany', 'vincent kompany', 'david silva', 'aguero', 'sergio aguero',
+                '2012', 'aguero moment', 'agueeeerooooo',
+                'loved the game', 'i loved', 'genuinely',
+                'mate', 'yes mate', 'nah mate',
+                'cbs', 'cbs golazo', 'kate scott', 'sky sports',
+                'birmingham', 'aston villa',
+                'defender', 'right back', 'centre back',
+                'the lads', 'the boys'],
+    neville:   ['manchester united', 'united', 'old trafford', 'theatre of dreams',
+                'class of 92', "class of '92", '92', 'fergie', 'sir alex', 'ferguson',
+                'tactical', 'tactically', 'pressing', 'line', 'structure', 'system', 'formation', '4-3-3', 'false 9',
+                'monday night football', 'mnf', 'sky sports',
+                'valencia', 'coaching',
+                'bury', 'bury fc', 'salford city', 'salford',
+                'phil neville', 'phil',
+                'tory', 'government', 'house of lords',
+                'gerrard', 'liverpool',
+                'sneijder', '2010', 'the miss'],
+    carragher: ['liverpool', 'anfield', 'the kop', "you'll never walk alone",
+                'istanbul', '2005', 'the miracle', 'aki istanbul',
+                '2001 treble', 'cup treble',
+                'gerrard', 'steven gerrard', 'stevie g', 'stevie',
+                'scouser', 'scouse', 'bootle', 'merseyside',
+                'monday night football', 'mnf', 'stick to football', 'the overlap',
+                'class of 92',
+                'manchester united',
+                'tactical', 'centre back', 'defending'],
+    bigron:    ['early doors', "spotter's badge", 'the lad', 'magnificent', 'absolute peach', 'lollipop',
+                'manchester united', 'old trafford', '1983', '1985', 'fa cup', 'cup final',
+                'bryan robson', 'robson', 'norman whiteside', 'whiteside', 'sivebæk',
+                'west brom', 'the brom', 'wba', 'the hawthorns',
+                'sheffield wednesday', 'wednesday', 'hillsborough',
+                'cigars', 'cigar', 'gold', 'the gold chain',
+                'aston villa', 'villa park', 'villa',
+                'coventry', 'the sky blues',
+                'eric hall', 'monster monster'],
+    marsh:     ['qpr', 'loftus road', "r's", 'queens park rangers',
+                'george best', 'bestie', 'stan bowles', 'stanley bowles',
+                '60s', '70s', 'the showmen', 'flair player', 'entertainer', 'mavericks',
+                'manchester city', 'maine road', 'city',
+                'florida', 'tampa bay', 'the rowdies', 'nasl',
+                'talksport', 'talk sport', 'the column',
+                'marbella', 'spain',
+                'keith burkinshaw', 'osvaldo ardiles'],
+    keane:     ['manchester united', 'united', 'old trafford', 'theatre of dreams',
+                'brian clough', 'cloughie', 'clough', 'nottingham forest', 'forest', 'city ground',
+                'cork', 'mayfield', 'ireland', 'republic of ireland', 'irish',
+                'paul scholes', 'scholes', 'jaap stam', 'stam',
+                '1999', 'treble', 'champions league', 'barcelona', 'nou camp',
+                'discipline', 'standards', 'professionalism', 'the right way',
+                'celtic', 'parkhead', 'glasgow celtic',
+                'mick mccarthy',
+                'itv', 'sky sports', 'monday night football',
+                'class of 92', '92'],
+  };
+
   const FootballWoundDetector = makeWoundDetector(FOOTBALL_WOUNDS);
 
   const FOOTBALL_NAMEMAP = {
@@ -14808,6 +14882,22 @@ NARRATIVE POSTURE — You arrive with the warm observation: what happened, who w
                 'tiger', 'painkillers']
   };
 
+  // BL-174 v1 — character idiom invention profiles. Engine: src/logic/idiom-engine.js.
+  // Modes: misquote (saying used wrong) | bastardise (one word swapped for character-swear) | invent (brand-new proverb delivered sincerely).
+  // Characters not in this map receive no IDIOM block. v1 is prompt-side only; model self-paces.
+  const GOLF_IDIOM_PROFILES = {
+    faldo:     { modes: ['misquote', 'invent'],   register: 'food / commitment / swing — almost-insight pattern; arrive at a truth by an absurd route',                    frequency: 'roughly once every 2-3 turns; never two in a row' },
+    mcginley:  { modes: ['invent'],               register: 'framework-cliché — sounds proverbial, contains slightly less than the words promise; high-tariff-by-volume',  frequency: 'roughly once every 2-3 turns' },
+    coltart:   { modes: ['misquote'],             register: 'Scottish hardship folk-wisdom mangled slightly; apologetic delivery',                                          frequency: 'rare — once per session at most' },
+    dougherty: { modes: ['misquote'],             register: 'mangled enthusiastically — he believes what he says; the mangling is invisible to him',                       frequency: 'roughly once every 3 turns' },
+    murray:    { modes: ['invent'],               register: 'historical-register invented proverbs; delivered with full ceremonial weight',                                 frequency: 'rare — once per round at most' },
+    roe:       { modes: ['bastardise'],           register: "Sheffield direct — swap one word for a register-authentic swear at the wrong volume; he is just saying what he sees", frequency: 'occasional — when something needs the volume' },
+    radar:     { modes: ['bastardise'],           register: 'Wayne Riley deflation — bastardise the previous speaker\'s phrasing with one well-placed swear',               frequency: 'rare — once per round at most' },
+    // Intentionally absent (no idiom mode for v1):
+    //   henni — she gets the facts right; the comedy lives in the right facts, not invented ones
+    //   butch — coach register, too precise to invent
+  };
+
   // BL-172 v1 (tactical) — Faldo voice pools, code-selected per turn.
   // Model cannot be trusted to "rotate" — pick concrete items here, inject one-shot.
   // Will be absorbed into the shared engine (BL-162) and generalised to all characters.
@@ -15239,6 +15329,9 @@ Tangent-prone characters are exempt — they are the ones being dismissed, not t
       const gfWoundLive = gfRelState.characters[member.id]?.woundActivated || false;
       const gfPremBlock = _gfPremCtx ? PremonitionEngine.buildBlock(member.id, _gfPremCtx.ledger, GF_PREM_CONFIG) : '';
       const gfLieBlock  = LieEngine.buildBlock(member.id, GF_LIE_PROFILES, gfLieState, gfWoundLive);
+      const gfIdiomBlock = (typeof IdiomEngine !== 'undefined' && IdiomEngine.buildIdiomBlock)
+        ? IdiomEngine.buildIdiomBlock(member.id, GOLF_IDIOM_PROFILES[member.id])
+        : '';
 
       // Arc state guard — if last 3 characters share the same posture register, break it
       const _lastThree = recentMoves.slice(-3);
@@ -15266,7 +15359,7 @@ Tangent-prone characters are exempt — they are the ones being dismissed, not t
       const faldoVoicePoolBlock = (member.id === 'faldo')
         ? `\n\nFALDO VOICE POOL — THIS TURN ONLY, OVERRIDES ANY GENERAL POOL INSTRUCTIONS IN YOUR PROMPT:\nWhen this turn calls for one of your reference pools, use ONLY the items listed below. Do not substitute. Do not default to a previously-named example (Ginsters / A12 / "slightly warm" / cheese and pickle are NOT defaults — they are options no more salient than any other). The named items for THIS turn ARE the variation.\n\nIF a GENERAL FOOD reference fits the moment → use: "${_faldoPick(FALDO_VOICE_POOLS.food)}"\n\nIF a GARAGE-PASTY anecdote fits → use the triple:\n  • brand: "${_faldoPick(FALDO_VOICE_POOLS.pastyBrand)}"\n  • thermal description: "${_faldoPick(FALDO_VOICE_POOLS.pastyThermal)}"\n  • garage location: "${_faldoPick(FALDO_VOICE_POOLS.pastyGarage)}"\n  Use these three together. Do not fall back to "a Ginsters, slightly warm, near the A1" — that is one combination out of thousands, and not the one for this turn.\n\nIF a CAR reference fits → use: "${_faldoPick(FALDO_VOICE_POOLS.cars)}"\nIF an ENTERTAINMENT / 70s–80s reference fits → use: "${_faldoPick(FALDO_VOICE_POOLS.entertainment)}"\n\nNot every turn needs all these — use only those that fit naturally, and only one per turn (one food OR one garage-pasty triple OR one car OR one entertainment ref). When you use one, use the specified item(s). Do not pluralise the pool — one named item per turn.\n`
         : '';
-      const gfBaseSystem = TURN_RULES + '\n\n' + dismissalSection + anchorOpenerBlock + anchorCloserBlock + gfIntensityBlock + gfYourState + tourCardBlock + roeIntroBlock + golfNameBlock + gfFoodBlock + gfMarmiteBlock + gfHypoBlock + gfPremBlock + gfLieBlock + member.prompt + faldoVoicePoolBlock + _iceBreakBlock(member.id) + roundNote + mechanics + arcInstructions + (i > 0
+      const gfBaseSystem = TURN_RULES + '\n\n' + dismissalSection + anchorOpenerBlock + anchorCloserBlock + gfIntensityBlock + gfYourState + tourCardBlock + roeIntroBlock + golfNameBlock + gfFoodBlock + gfMarmiteBlock + gfHypoBlock + gfPremBlock + gfLieBlock + gfIdiomBlock + member.prompt + faldoVoicePoolBlock + _iceBreakBlock(member.id) + roundNote + mechanics + arcInstructions + (i > 0
         ? `\n\nPrevious:\n${prev}`
         : '')
         + (arcLog.length > 0 ? `\n\nNARRATIVE ARC SO FAR:\n${arcLog.join('\n')}` : '')

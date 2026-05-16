@@ -7198,7 +7198,7 @@ function makeSteps(ctx) {
       const iife = ctx._golfIife || '';
       const discussStart = iife.indexOf('async function discuss()');
       if (discussStart < 0) throw new Error('Golf discuss() not found in Golf IIFE');
-      const discussBlock = iife.slice(discussStart, discussStart + 20000);
+      const discussBlock = iife.slice(discussStart, discussStart + 30000);
       if (!discussBlock.includes('arcLog') || !discussBlock.includes('arcLog = []'))
         throw new Error('Golf discuss() does not initialise arcLog array');
     }],
@@ -7207,7 +7207,7 @@ function makeSteps(ctx) {
       const iife = ctx._golfIife || '';
       const discussStart = iife.indexOf('async function discuss()');
       if (discussStart < 0) throw new Error('Golf discuss() not found in Golf IIFE');
-      const discussBlock = iife.slice(discussStart, discussStart + 20000);
+      const discussBlock = iife.slice(discussStart, discussStart + 30000);
       if (!discussBlock.includes('arcLog.push'))
         throw new Error('Golf discuss() does not push to arcLog after API response');
     }],
@@ -7216,7 +7216,7 @@ function makeSteps(ctx) {
       const iife = ctx._golfIife || '';
       const discussStart = iife.indexOf('async function discuss()');
       if (discussStart < 0) throw new Error('Golf discuss() not found in Golf IIFE');
-      const discussBlock = iife.slice(discussStart, discussStart + 20000);
+      const discussBlock = iife.slice(discussStart, discussStart + 30000);
       const pushIdx = discussBlock.indexOf('arcLog.push');
       if (pushIdx < 0) throw new Error('arcLog.push not found');
       const pushLine = discussBlock.slice(pushIdx, pushIdx + 200);
@@ -7228,7 +7228,7 @@ function makeSteps(ctx) {
       const iife = ctx._golfIife || '';
       const discussStart = iife.indexOf('async function discuss()');
       if (discussStart < 0) throw new Error('Golf discuss() not found in Golf IIFE');
-      const discussBlock = iife.slice(discussStart, discussStart + 20000);
+      const discussBlock = iife.slice(discussStart, discussStart + 30000);
       // Arc block must be conditional — guarded by arcLog.length > 0 or i > 0
       if (!discussBlock.includes('arcLog.length'))
         throw new Error(`"${text}" block is not conditional — first character would receive it`);
@@ -7238,7 +7238,7 @@ function makeSteps(ctx) {
       const iife = ctx._golfIife || '';
       const discussStart = iife.indexOf('async function discuss()');
       if (discussStart < 0) throw new Error('Golf discuss() not found in Golf IIFE');
-      const discussBlock = iife.slice(discussStart, discussStart + 20000);
+      const discussBlock = iife.slice(discussStart, discussStart + 30000);
       if (!discussBlock.includes(text))
         throw new Error(`Golf discuss() system prompt does not include "${text}"`);
     }],
@@ -7247,7 +7247,7 @@ function makeSteps(ctx) {
       const iife = ctx._golfIife || '';
       const discussStart = iife.indexOf('async function discuss()');
       if (discussStart < 0) throw new Error('Golf discuss() not found in Golf IIFE');
-      const discussBlock = iife.slice(discussStart, discussStart + 20000);
+      const discussBlock = iife.slice(discussStart, discussStart + 30000);
       const beforeIdx = discussBlock.indexOf(before);
       const afterIdx  = discussBlock.indexOf(after);
       if (beforeIdx < 0) throw new Error(`"${before}" not found in Golf discuss()`);
@@ -7271,7 +7271,7 @@ function makeSteps(ctx) {
       const iife = ctx._golfIife || '';
       const discussStart = iife.indexOf('async function discuss()');
       if (discussStart < 0) throw new Error('Golf discuss() not found');
-      const discussBlock = iife.slice(discussStart, discussStart + 20000);
+      const discussBlock = iife.slice(discussStart, discussStart + 30000);
       if (!discussBlock.includes('recentMoves = []'))
         throw new Error('Golf discuss() does not initialise recentMoves array');
     }],
@@ -7280,7 +7280,7 @@ function makeSteps(ctx) {
       const iife = ctx._golfIife || '';
       const discussStart = iife.indexOf('async function discuss()');
       if (discussStart < 0) throw new Error('Golf discuss() not found');
-      const discussBlock = iife.slice(discussStart, discussStart + 20000);
+      const discussBlock = iife.slice(discussStart, discussStart + 30000);
       if (!discussBlock.includes('recentMoves.push') || !discussBlock.includes('postureType'))
         throw new Error('Golf discuss() does not push postureType to recentMoves');
     }],
@@ -7289,7 +7289,7 @@ function makeSteps(ctx) {
       const iife = ctx._golfIife || '';
       const discussStart = iife.indexOf('async function discuss()');
       if (discussStart < 0) throw new Error('Golf discuss() not found');
-      const discussBlock = iife.slice(discussStart, discussStart + 20000);
+      const discussBlock = iife.slice(discussStart, discussStart + 30000);
       if (!discussBlock.includes('recentMoves.slice(-3)'))
         throw new Error('Golf discuss() does not check last 3 recentMoves');
     }],
@@ -7298,7 +7298,7 @@ function makeSteps(ctx) {
       const iife = ctx._golfIife || '';
       const discussStart = iife.indexOf('async function discuss()');
       if (discussStart < 0) throw new Error('Golf discuss() not found');
-      const discussBlock = iife.slice(discussStart, discussStart + 20000);
+      const discussBlock = iife.slice(discussStart, discussStart + 30000);
       if (!discussBlock.includes('REGISTER BREAK') && !discussBlock.includes('_breakRegisterBlock'))
         throw new Error('Golf discuss() does not include break-register block in system prompt');
     }],
@@ -7307,7 +7307,7 @@ function makeSteps(ctx) {
       const iife = ctx._golfIife || '';
       const discussStart = iife.indexOf('async function discuss()');
       if (discussStart < 0) throw new Error('Golf discuss() not found');
-      const discussBlock = iife.slice(discussStart, discussStart + 20000);
+      const discussBlock = iife.slice(discussStart, discussStart + 30000);
       if (!discussBlock.includes('_lastThree.length >= 3') && !discussBlock.includes('recentMoves.length'))
         throw new Error('Golf break-register block is not guarded by a length check');
     }],
@@ -10618,6 +10618,53 @@ function makeSteps(ctx) {
       // Use word-boundary match to avoid false positives on substrings
       const re = new RegExp(`\\b${sym.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\$&')}\\b`);
       if (re.test(src)) throw new Error(`${relPath} references "${sym}" but should not`);
+    }],
+
+    // ── BL-174 — IdiomEngine (specs/bl-174-idiom-invention.feature) ──────────
+
+    [/^"([^"]+)" buildIdiomBlock returns empty string for an unknown character id$/, (relPath) => {
+      const full = path.join(__dirname, '..', relPath);
+      delete require.cache[require.resolve(full)];
+      const mod = require(full);
+      const out = mod.buildIdiomBlock('__no_such_character__', undefined);
+      if (out !== '') throw new Error(`buildIdiomBlock should return empty for unknown char, got: ${JSON.stringify(out)}`);
+    }],
+
+    [/^"([^"]+)" buildIdiomBlock returns non-empty text for a character with modes configured$/, (relPath) => {
+      const full = path.join(__dirname, '..', relPath);
+      delete require.cache[require.resolve(full)];
+      const mod = require(full);
+      const out = mod.buildIdiomBlock('test', { modes: ['misquote', 'invent'], register: 'test register' });
+      if (!out || typeof out !== 'string' || out.trim().length === 0)
+        throw new Error(`buildIdiomBlock returned empty for configured char: ${JSON.stringify(out)}`);
+    }],
+
+    [/^"([^"]+)" buildIdiomBlock output contains every mode name in the profile$/, (relPath) => {
+      const full = path.join(__dirname, '..', relPath);
+      delete require.cache[require.resolve(full)];
+      const mod = require(full);
+      const modes = ['misquote', 'bastardise', 'invent'];
+      const out = mod.buildIdiomBlock('test', { modes, register: 'test' });
+      for (const m of modes) {
+        if (!out.includes(m)) throw new Error(`buildIdiomBlock output missing mode "${m}"`);
+      }
+    }],
+
+    [/^the Golf panel section of index\.html declares "([^"]+)"$/, (sym) => {
+      const iife = ctx._golfIife || '';
+      if (iife.indexOf(`const ${sym}`) < 0 && iife.indexOf(`${sym} =`) < 0)
+        throw new Error(`Golf panel does not declare "${sym}"`);
+    }],
+
+    [/^"([^"]+)" contains a character whose modes include "([^"]+)"$/, (sym, mode) => {
+      const iife = ctx._golfIife || '';
+      const declStart = iife.indexOf(`const ${sym}`);
+      if (declStart < 0) throw new Error(`"${sym}" declaration not found`);
+      const declBlock = iife.slice(declStart, declStart + 5000);
+      // Match a modes array entry containing the mode string
+      const re = new RegExp(`modes\\s*:\\s*\\[[^\\]]*['"]${mode}['"]`);
+      if (!re.test(declBlock))
+        throw new Error(`"${sym}" does not contain any character with modes including "${mode}"`);
     }],
 
     // ── BL-173 — selectSlots subset + multi-interaction + relevance (specs/bl-173-subset-multi-interaction.feature) ─────
