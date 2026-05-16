@@ -18720,6 +18720,71 @@ TURN LENGTH: Extended. He has a story. The story has a horse, a race, a moment o
     },
   ];
 
+  // BL-173/BL-167 Slice 2 — Racing primer triggers per character (Rod-approved 2026-05-17).
+  // No RACING_WOUNDS map exists yet — primer-only addition, no dual-fire risk.
+  // McCririck and O'Sullevan are DEAD_IN_PANEL_WORLD — primers fire normally,
+  // their canonical references (`the hat`, `the voice of racing`) are living register.
+  // Multi-character lean-in: `cheltenham`/`gold cup`/`festival` fires Down + Walsh + McCririck;
+  // `grand national`/`aintree` fires Down + Walsh + O'Sullevan + McCririck;
+  // `royal ascot` fires McCririck + Chapman + Dettori;
+  // `kauto star` fires Down (writer) + Walsh (rode him).
+  const RACING_ENTHUSIASM = {
+    brazil:        ['talksport', 'talk sport', 'sports breakfast',
+                    'ipswich', 'ipswich town', 'portman road',
+                    'mick mills', 'bobby robson',
+                    'mate', 'right then', "i'll tell ya",
+                    'the boys', 'lads', 'night out', 'got out of hand',
+                    'striker who goes missing', 'the manager',
+                    'glasgow', 'scotland'],
+    mccririck:     ['channel 4', 'c4', 'the morning line',
+                    'cigars', 'cigar', 'deerstalker', 'the hat',
+                    'tic tac', 'tictac', 'betting ring',
+                    'booker', 'bookmaker', 'bookies',
+                    'value', 'the value',
+                    'tatts', 'tattersalls', 'royal ascot',
+                    'big brother', 'celebrity big brother',
+                    'lord patterson'],
+    mcgrath:       ['racing post', 'the form', 'studied the form',
+                    'breeding', 'pedigree', 'bloodlines', 'sire', 'dam',
+                    'australian racing', 'melbourne cup', 'caulfield',
+                    'australia', 'aussie',
+                    'flat racing', 'breeze-up',
+                    'sectional times', 'clock'],
+    alastair_down: ['racing post', 'the column',
+                    'cheltenham', 'gold cup', 'festival', 'the festival',
+                    'national hunt', 'jumps', 'chasing',
+                    'aintree', 'grand national', 'the national',
+                    'desert orchid', 'arkle', 'best mate', 'kauto star',
+                    'narrative', 'the story',
+                    'the long bar'],
+    osullevan:     ['bbc', 'bbc radio',
+                    'here comes', 'coming up to', 'up the hill', 'passing the post',
+                    'grand national', 'aintree', "becher's brook", 'the chair',
+                    'nijinsky', 'arkle', 'crisp', 'red rum',
+                    'the voice of racing',
+                    'sir peter', 'gentleman'],
+    ruby_walsh:    ['cheltenham', 'gold cup', 'champion hurdle', 'festival',
+                    'willie mullins', 'paul nicholls', 'the yard',
+                    'kauto star', 'master minded', 'azertyuiop', 'denman',
+                    'aintree', 'grand national',
+                    'ireland', 'irish', 'kill', 'kildare', 'naas',
+                    'weighing room', 'rté'],
+    matt_chapman:  ['itv racing', 'itv', 'at the races', 'racecourse',
+                    'the favourite', 'favourite is shortening', 'price is shortening',
+                    'royal ascot', 'glorious goodwood', 'york ebor',
+                    'paddock', 'parade ring',
+                    'tipster', 'having a bet'],
+    dettori:       ['flying dismount', 'the dismount', 'winning dismount',
+                    'royal ascot', 'magnificent seven',
+                    'italian', 'milan', 'italy',
+                    'godolphin', 'sheikh mohammed',
+                    'breeders cup', 'arc', "prix de l'arc",
+                    'champion jockey',
+                    'enable', 'treve', 'golden horn', 'stradivarius',
+                    'gosden', 'john gosden',
+                    'retirement', 'last ride'],
+  };
+
   const ALL_ROTATING = ['mccririck', 'mcgrath', 'alastair_down', 'osullevan', 'ruby_walsh', 'matt_chapman', 'dettori'];
 
   const HR_MOMENT_LABELS = {
