@@ -81,6 +81,42 @@ expresses their voice, not a corrected summary.
 
 ---
 
+## Principle 4 — Pool entries: specific anchor + visceral truth + implied history (Rod 2026-05-16)
+
+**Rule.** When writing pool entries — food, thermal, garage, cars,
+entertainment, swears, openers, signature-move variants, any character
+voice pool — every entry follows this shape:
+
+1. **Specific cultural anchor.** Era / brand / road / programme / place,
+   not abstract. "Ford Cortina", not "a car". "Brookline", not "a tournament".
+   "A Pork Farms scotch egg", not "a snack".
+2. **Visceral physical or emotional truth.** A heat you can feel, a cold
+   you've experienced, a smell, a sound, an image with sensory cue. "Hot
+   enough to require a witness statement" lands; "very hot" does not.
+3. **Implied speaker history.** The character was THERE. The entry implies
+   biography. "A Cortina in a Spanish car park" implies the speaker was in
+   that car, in that car park, in that era — a working-class British
+   package-holiday memory in one phrase.
+
+**Why.** Abstract escalation ("extremely cold", "very warm", "really hot")
+reads as filler and the model defaults to the same abstract phrasing every
+turn. Anchored entries are individually memorable AND disambiguate the
+character — Murray's pool cannot sound like Faldo's if both are anchored
+properly. The gold-standard examples Rod called out in BL-172 v1.1
+("hotter than the steering wheel of a Cortina in a Spanish car park",
+"colder than my second wife's farewell text") all carry era-anchored class
+signal + sensory cue + biography in one short phrase.
+
+**How to apply.** When writing or accepting a new pool entry, check the
+three boxes explicitly. If any is missing, the entry is filler — revise.
+Pool size matters less than pool *quality*: 15 anchored entries beat 50
+abstract ones because the anchored ones don't blur. Applies to:
+- BL-172 (Faldo voice pools v1, all-character pools v2 via engine)
+- BL-169 (profani-saurus — each character swear anchored to class/era/biography)
+- Any future opener variety, signature-move pool, mechanic pool
+
+---
+
 ## Where this file lives
 
 `/home/rodent/cusslab/.claude/principles/panel-design.md` — referenced from

@@ -14735,19 +14735,64 @@ NARRATIVE POSTURE — You arrive with the warm observation: what happened, who w
       'a cheese and pickle sandwich with piccalilli — do you remember piccalilli',
       'a dirty kebab after too many sherries (cycled home, in the rain, committed)',
     ],
-    ginstersThermal: [
+    // The "garage pasty" pattern — a triple of brand × thermal × garage location.
+    // Each turn picks one from each pool. ~14 × 27 × 14 = ~5,300 unique combinations.
+    pastyBrand: [
+      'a Ginsters',
+      'a Walls sausage roll',
+      'a Pork Farms scotch egg',
+      'a Greggs steak bake',
+      'a Greggs sausage roll (vegan — he tried it, he committed)',
+      'a Pukka pie (chicken and mushroom)',
+      "a Holland's meat and potato pie",
+      'a Country Choice cheese and onion pasty',
+      'a Pieminister thing he can no longer pronounce',
+      'a West Cornwall Pasty Co pasty bought on a railway platform during a delay',
+      "a Greenhalgh's meat and potato (Lancashire — a man brought one in)",
+      "a Bowyer's pork pie",
+      'a Cooplands pasty (Yorkshire — he was passed a slice, did not ask which)',
+      "a Wenzel's sausage roll, somewhere near a station, Faldo cannot remember which",
+      'an Iceland frozen pasty microwaved at a Travelodge',
+      'a Spar own-brand pasty of unclear provenance',
+    ],
+    pastyThermal: [
+      // Mundane warm (canonical baseline — used sparingly)
       'slightly warm',
       'worryingly warm',
       'technically warm',
       'barely warm',
       "what you'd generously call warm",
       'somehow still warm',
-      'ambient — which is not the same as warm but adjacent',
       'warm in spirit if not in temperature',
+      'ambient — which is not the same as warm but adjacent',
       'room temperature (the room was cold)',
-      'not cold, which is not the same as warm, but is something',
+      // Cold direction — bold, dark, character-revealing
+      'colder than hell',
+      'frigid, like every single one of my dates this month',
+      'colder than the joy of our family Christmasses',
+      "colder than my second wife's farewell text",
+      'colder than the reception at Brookline',
+      'colder than my hotel room at Augusta the year I lost',
+      'fridge-cold in spirit, slightly less so in fact',
+      'actively rejecting heat',
+      'the temperature of a refrigerated sandwich left on a train seat overnight',
+      // Hot direction — escalating absurdity
+      'molten — surgical bib advisable',
+      'so hot the filling burns a hole through your throat and you bleed out quietly',
+      'hotter than the steering wheel of a Cortina in a Spanish car park',
+      'hotter than my marriage in 1989',
+      'the kind of hot that voids your insurance',
+      'lava-grade, but you commit',
+      'hot enough to require a witness statement',
+      'atomic, in the way that makes you forget about your knees',
+      // Mixed/weird
+      'Schrödinger-warm — both warm and not, until you bite it',
+      'the temperature of regret',
+      'exactly body temperature, which is upsetting',
+      'tepid, in the manner of a long marriage',
+      'the temperature of a TalkSport interview',
     ],
-    garage: [
+    pastyGarage: [
       'near the A1',
       'off the A12',
       'somewhere on the M25 (the junction is disputed)',
@@ -14758,6 +14803,10 @@ NARRATIVE POSTURE — You arrive with the warm observation: what happened, who w
       'a garage that smelled of WD-40 and optimism',
       'a Texaco off the A303 with a single working pump',
       'a Jet near Watford Gap, the one with the bird in the rafters',
+      'an Esso somewhere between Crewe and a regret he cannot place',
+      'a forecourt at 4am, no clear country, definitely raining',
+      'a service station that did not bother with the lights',
+      'a garage that, on reflection, may have been someone\'s drive',
     ],
     cars: [
       'a Ford Cortina (you could fit two sets of clubs and a week\'s shopping, started first time, mostly)',
@@ -15091,9 +15140,9 @@ Tangent-prone characters are exempt — they are the ones being dismissed, not t
         : '';
       // Suppress TOPIC-DISMISSAL for anchor turns (different prompt mode — anchor doesn't dismiss, anchor frames or closes)
       const dismissalSection = (isAnchorOpener || isAnchorCloser) ? '' : (GOLF_TOPIC_DISMISSAL + '\n\n');
-      // BL-172 v1 — Faldo voice pool: pick concrete items in code, inject as one-shot override
+      // BL-172 v1.1 — Faldo voice pool: pick concrete items in code, inject as one-shot override
       const faldoVoicePoolBlock = (member.id === 'faldo')
-        ? `\n\nFALDO VOICE POOL — THIS TURN ONLY, OVERRIDES ANY GENERAL POOL INSTRUCTIONS IN YOUR PROMPT:\nWhen this turn calls for one of your reference pools, use ONLY the item listed below. Do not substitute. Do not default to a previously-named example. The named example for THIS turn IS the variation.\n\nIF a FOOD reference fits the moment → use: "${_faldoPick(FALDO_VOICE_POOLS.food)}"\nIF a GINSTERS reference fits → thermal adjective is: "${_faldoPick(FALDO_VOICE_POOLS.ginstersThermal)}" (never "slightly warm" unless THIS turn says so)\nIF a GARAGE LOCATION fits → use: "${_faldoPick(FALDO_VOICE_POOLS.garage)}" (never default to A1 or A12 unless THIS turn says so)\nIF a CAR reference fits → use: "${_faldoPick(FALDO_VOICE_POOLS.cars)}"\nIF an ENTERTAINMENT/70s-80s reference fits → use: "${_faldoPick(FALDO_VOICE_POOLS.entertainment)}"\n\nNot every turn needs all these — use only those that fit naturally, and only one per turn. When you use one, use the specified item. Do not pluralise the pool — one named item per turn.\n`
+        ? `\n\nFALDO VOICE POOL — THIS TURN ONLY, OVERRIDES ANY GENERAL POOL INSTRUCTIONS IN YOUR PROMPT:\nWhen this turn calls for one of your reference pools, use ONLY the items listed below. Do not substitute. Do not default to a previously-named example (Ginsters / A12 / "slightly warm" / cheese and pickle are NOT defaults — they are options no more salient than any other). The named items for THIS turn ARE the variation.\n\nIF a GENERAL FOOD reference fits the moment → use: "${_faldoPick(FALDO_VOICE_POOLS.food)}"\n\nIF a GARAGE-PASTY anecdote fits → use the triple:\n  • brand: "${_faldoPick(FALDO_VOICE_POOLS.pastyBrand)}"\n  • thermal description: "${_faldoPick(FALDO_VOICE_POOLS.pastyThermal)}"\n  • garage location: "${_faldoPick(FALDO_VOICE_POOLS.pastyGarage)}"\n  Use these three together. Do not fall back to "a Ginsters, slightly warm, near the A1" — that is one combination out of thousands, and not the one for this turn.\n\nIF a CAR reference fits → use: "${_faldoPick(FALDO_VOICE_POOLS.cars)}"\nIF an ENTERTAINMENT / 70s–80s reference fits → use: "${_faldoPick(FALDO_VOICE_POOLS.entertainment)}"\n\nNot every turn needs all these — use only those that fit naturally, and only one per turn (one food OR one garage-pasty triple OR one car OR one entertainment ref). When you use one, use the specified item(s). Do not pluralise the pool — one named item per turn.\n`
         : '';
       const gfBaseSystem = TURN_RULES + '\n\n' + dismissalSection + anchorOpenerBlock + anchorCloserBlock + gfIntensityBlock + gfYourState + tourCardBlock + roeIntroBlock + golfNameBlock + gfFoodBlock + gfMarmiteBlock + gfHypoBlock + gfPremBlock + gfLieBlock + member.prompt + faldoVoicePoolBlock + _iceBreakBlock(member.id) + roundNote + mechanics + arcInstructions + (i > 0
         ? `\n\nPrevious:\n${prev}`
