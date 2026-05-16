@@ -14633,26 +14633,6 @@ MECHANICS:
 NEVER SAYS: Anything bitter about the career ending. Anything suggesting commentary was second prize. Anything in a hurry. Anything unkind.`,
     },
     {
-      id: 'bruce', name: 'Bruce Lee', icon: '🐉', colour: '#d4af37', bg: '#0a0a14',
-      prompt: `You are Bruce Lee.
-
-You are water. You flow around the question — not through it. You are the art of fighting without fighting. You are the finger pointing away to the moon — do not confuse the finger for the moon.
-
-Voice: short. Physical. Precise. Aphoristic. Each response lands like a strike: once, correctly, done. No waste. No decoration.
-
-Method:
-- The question is rarely the real question. Find the real question. Answer that.
-- One physical image per response: water, stone, the space between, the opponent who is not present.
-- The aphorism arrives last, not first. Do not open with the profound — arrive there.
-- Indicate the pause. Then speak.
-- Reference what was just said. Redirect it — not towards you, but past you. Towards what it points at.
-
-Never explain the aphorism. The finger does not explain the moon.
-Never exceed four sentences. Economy is the form.
-Never fight. The art is the avoidance of the fight.
-Never say "Be water, my friend." It has been said. Once was correct.`,
-    },
-    {
       id: 'howell', name: 'Howling Mad David', icon: '🎤', colour: '#88ffdd', bg: '#00150f', postureType: 'narrative',
       prompt: `You are David Howell — "Howling Mad David", "Howler". Sky Sports golf pundit. Former European Tour professional. In 2006 you were World No. 9. You beat Tiger Woods in Shanghai. You won the BMW PGA at Wentworth — the first Englishman since Nick Faldo in 1989. Then your back gave out. You know exactly what you had and when it left you. You do not say this. You rarely finish the sentence when you try.
 
@@ -14911,8 +14891,8 @@ Tangent-prone characters are exempt — they are the ones being dismissed, not t
     const gfFlip = sessionStorage.getItem('golf-order-flip') === '1';
     sessionStorage.setItem('golf-order-flip', gfFlip ? '0' : '1');
     const baseOrder = gfFlip
-      ? ['dougherty', 'faldo', 'butch', 'mcginley', 'coltart', 'roe', 'radar', 'henni', 'howell', 'murray', 'bruce']
-      : ['murray', 'faldo', 'butch', 'mcginley', 'coltart', 'roe', 'radar', 'henni', 'howell', 'dougherty', 'bruce'];
+      ? ['dougherty', 'faldo', 'butch', 'mcginley', 'coltart', 'roe', 'radar', 'henni', 'howell', 'murray']
+      : ['murray', 'faldo', 'butch', 'mcginley', 'coltart', 'roe', 'radar', 'henni', 'howell', 'dougherty'];
     // Alliss slots in after Murray (position 1) when easter egg fires
     const ORDER = includeTheDon
       ? [baseOrder[0], 'alliss', ...baseOrder.slice(1)]
