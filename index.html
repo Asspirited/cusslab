@@ -15060,7 +15060,9 @@ Tangent-prone characters are exempt — they are the ones being dismissed, not t
     //   wounds (+w1) + enthusiasm primers (+w5) for richer "who lights up next" signal.
     //   Closes WL-149 — primer-driven selection means cast composition reacts to drift.
     const anchorId = PANEL_CONFIG.anchor;
-    const ORDER = PanelDiscussEngine.selectSlots({
+    // ORDER is `let` (not const) because BL-167 Slice 2 Phase 2c rewrites middle
+    // slots in-place between turns — per-slot rescoring against the prev turn.
+    let ORDER = PanelDiscussEngine.selectSlots({
       anchor: anchorId,
       middleCast: ['faldo', 'butch', 'mcginley', 'coltart', 'roe', 'radar', 'henni', 'howell', 'dougherty'],
       includeTheDon,
@@ -15111,10 +15113,25 @@ Tangent-prone characters are exempt — they are the ones being dismissed, not t
       for (const id of ORDER) PremonitionEngine.maybeCommit(id, _gfPremCtx.momentType, _gfPremCtx.ledger, GF_PREM_CONFIG);
     }
 
+    // BL-167 Slice 2 Phase 2c — per-slot rescoring helper (closes WL-149 in-round drift).
+    const _gfTurnsRemaining = {};
+    for (let _i = 1; _i < ORDER.length - 1; _i++) _gfTurnsRemaining[ORDER[_i]] = (_gfTurnsRemaining[ORDER[_i]] || 0) + 1;
+    const _gfRescoreSlot = (i, prevTurn, prevSpeakerId) => {
+      if (i === 0 || i === ORDER.length - 1) return;
+      if (typeof TriggerScoreEngine === 'undefined' || !TriggerScoreEngine.selectNext) return;
+      let rem = Object.keys(_gfTurnsRemaining).filter(id => _gfTurnsRemaining[id] > 0);
+      if (rem.length > 1 && prevSpeakerId) rem = rem.filter(id => id !== prevSpeakerId);
+      if (!rem.length) return;
+      const picked = TriggerScoreEngine.selectNext(rem, prevTurn, { wounds: GOLF_WOUNDS, enthusiasms: GOLF_ENTHUSIASM, prevSpeakerId, relState: gfRelState });
+      ORDER[i] = picked;
+      _gfTurnsRemaining[picked]--;
+    };
+
     const responses = [];
     const arcLog = [];
     const recentMoves = [];
     for (let i = 0; i < ORDER.length; i++) {
+      _gfRescoreSlot(i, responses.length ? responses[responses.length - 1] : panelInput, responses.length ? ORDER[i - 1] : null);
       const member = MEMBERS.find(m => m.id === ORDER[i]);
       const pid = 'gf-ph-' + i;
       container.insertAdjacentHTML('beforeend', _placeholder(pid, member));
