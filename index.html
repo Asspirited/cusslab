@@ -11020,6 +11020,17 @@ Never say anything falsifiable. Never predict a specific outcome. The qualifier 
     if (/again|same|knew|obvious|predicted|saw this coming|always|never changes|q[1-4]/.test(t)) boosts.partridge = 2;
     if (/why|meaning|universe|time|point|purpose|cosmos|evolution|biology|physics|scale|exist/.test(t)) boosts.cox = 2.5;
     if (/change|energy|feel|transform|shift|tension|sense|mercury|saturn|moon|cards/.test(t)) boosts.mystic = 2;
+    // BL-167 Slice 2 — primer-aware boosts from BOARDROOM_ENTHUSIASM (additive to the hardcoded regex patterns above).
+    // Engine: TriggerScoreEngine.matchAnyKeyword if loaded, else inline substring fallback.
+    if (typeof BOARDROOM_ENTHUSIASM !== 'undefined' && BOARDROOM_ENTHUSIASM) {
+      for (const id of Object.keys(BOARDROOM_ENTHUSIASM)) {
+        const primers = BOARDROOM_ENTHUSIASM[id] || [];
+        const hit = (typeof TriggerScoreEngine !== 'undefined' && TriggerScoreEngine.matchAnyKeyword)
+          ? TriggerScoreEngine.matchAnyKeyword(t, primers)
+          : primers.some(p => p && t.includes(String(p).toLowerCase()));
+        if (hit) boosts[id] = (boosts[id] || 0) + 2;
+      }
+    }
     return boosts;
   }
 
@@ -13249,9 +13260,20 @@ You layer. You do not extend for the sake of it — but if a standards failure i
   let _fbLastContext = null;
 
   async function discuss() {
-    const ORDER = [...BASE_ORDER].sort(() => Math.random() - 0.5);
     const input = (document.getElementById('fb-input')?.value || '').trim();
     if (!input) { UI.toast('Give them something to discuss.', 'warn'); return; }
+    // BL-167 Slice 2 — trigger-score-ordered shuffle (was pure random).
+    // Same primer + wound substring matching as Golf; characters lit up by the user's
+    // input score higher and fire earlier in the round. Random tie-break preserved.
+    const ORDER = (() => {
+      if (typeof TriggerScoreEngine === 'undefined' || !TriggerScoreEngine.score) {
+        return [...BASE_ORDER].sort(() => Math.random() - 0.5);
+      }
+      const ctx = { wounds: FOOTBALL_WOUNDS, enthusiasms: FOOTBALL_ENTHUSIASM };
+      const shuffled = [...BASE_ORDER].sort(() => Math.random() - 0.5);
+      shuffled.sort((a, b) => TriggerScoreEngine.score(b, input, ctx) - TriggerScoreEngine.score(a, input, ctx));
+      return shuffled;
+    })();
 
     const fbName = (document.getElementById('fb-username')?.value || '').trim();
 
