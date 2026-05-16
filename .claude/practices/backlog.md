@@ -1638,8 +1638,8 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 
 - Description: index.html is ~19,700 lines with all JS inline. Extract into discrete responsibility modules (e.g. character data, panel logic, UI, API calls) as separate `.js` files with IIFE wrappers. Add PACT consumer-driven contract tests between modules to catch interface breakage at seams. Output: agreed module map, extraction sequence, test strategy. Start as a spike (output = decision + module map) before delivery stories are raised. Three Amigos needed before spike: agree module boundaries, PACT tooling choice, and whether extraction is file-per-panel or layer-per-concern.
 - Feature: architecture
-- CD3: UBV=5 TC=2 RR=6 → CoD=13, Dur=2 (spike), **CD3=6.5**
-- Status: OPEN — raised 2026-03-22
+- CD3: UBV=9 TC=8 RR=8 → CoD=25, Dur=4, **CD3=6.25** (rescored 2026-05-16 — execution duration up, but now blocks cross-panel rollout of every new mechanic)
+- Status: **OPEN — pulled forward 2026-05-16 by Rod's "one engine, many panels" principle** (`.claude/principles/panel-design.md` Principle 1). Becomes the gatekeeper for BL-167 cross-panel rollout, BL-168 cross-panel rollout, BL-163 (glances), and BL-169 (profani-saurus integration). Without the shared engine, every new mechanic requires per-panel duplication, which Rod has explicitly forbidden. Three Amigos still needed on module boundaries, PACT tooling, layer-vs-panel decomposition.
 
 ---
 
@@ -1755,7 +1755,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Feature: panel-interaction
 - Epic: Panel Interaction Model
 - CD3: UBV=9 TC=7 RR=4 → CoD=20, Dur=2, **CD3=10.0**
-- Status: OPEN — raised 2026-05-16; Three Amigos complete; **Gherkin approved 2026-05-16 (12 scenarios, full text in session transcript / next retro)**; outside-in design next; BL-165 closed as superseded; **deferred behind BL-168 (Rod 2026-05-16 — wants pure-prompt dismissal layer shipped first for live testing)**
+- Status: OPEN — raised 2026-05-16; Three Amigos complete; **Gherkin approved 2026-05-16 (12 scenarios)**; BL-165 closed as superseded. **Slice 1.1 SHIPPED 2026-05-16** — Golf anchor mechanic live (Murray opens slot 1, closes slot N with ROUND SO FAR; TOPIC-DISMISSAL suppressed for anchor turns); anchor config added to all 8 shipped panels (scenario 4 passing). **Slice 1.2 (other panels' anchor wiring) deferred to BL-162** per shared-engine principle — no per-panel duplication. **Slice 2 (trigger-weighted middle + enthusiasm primers) parallel session per `.claude/handoff-bl-167-slice-2.md`**.
 
 ---
 

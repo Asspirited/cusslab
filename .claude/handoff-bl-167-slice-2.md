@@ -10,8 +10,20 @@ Non-negotiable pre-flight (you have NOT done startup):
 
 1. Read `/home/rodent/cusslab/.claude/session-startup.md` in full and run the pre-flight `cat` at step 0.
 2. Read `/home/rodent/leanspirited-standards/standards/character-schema.md` in full — every character must implement the 17-attribute canonical schema. Slice 2 adds attributes; conformance gates apply.
-3. Read `/home/rodent/cusslab/.claude/CLAUDE.md` ways-of-working (Three Amigos → Gherkin gate → outside-in → failing test → minimum impl → pipeline → commit).
-4. Read this file's section 1 (split / scope) before reading any code.
+3. **Read `/home/rodent/cusslab/.claude/principles/panel-design.md` in full** — written 2026-05-16, governs every panel-mechanic decision. Principle 1 (shared engine, not per-panel duplication) directly affects Slice 2 scope.
+4. Read `/home/rodent/cusslab/.claude/CLAUDE.md` ways-of-working (Three Amigos → Gherkin gate → outside-in → failing test → minimum impl → pipeline → commit).
+5. Read this file's section 1 (split / scope) before reading any code.
+
+**2026-05-16 update — shared-engine principle changes Slice 2 scope:** Rod confirmed
+in primary session that cross-panel mechanic changes must go via a shared
+`PanelDiscuss` engine (BL-162), not by per-panel duplication. This means:
+- Slice 2 trigger-score engine should be panel-agnostic from day one — take
+  panel data (wounds, enthusiasms, relState) as input, not hardcode to Golf.
+- The `*_ENTHUSIASM` per-panel maps can ship Golf-first (data) but the scoring
+  logic does NOT live in the Golf IIFE. It lives in `src/logic/trigger-score-engine.js`
+  per the original plan.
+- If you find yourself copy-pasting trigger-score logic into a panel IIFE, stop.
+  That's the failure mode the principle exists to prevent.
 
 Do not skip. WL-080 was caused by skipping this; do not repeat it.
 

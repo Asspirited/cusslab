@@ -10534,7 +10534,7 @@ if (typeof LieEngine === 'undefined') {
 // ============================================================
 const Boardroom = (() => {
   let _brLastContext = null;
-  const PANEL_CONFIG = { rageEnabled: true };
+  const PANEL_CONFIG = { rageEnabled: true, anchor: 'harold' };
   const MEMBERS = [
     {
       id: 'harold', name: 'Pint of Harold', icon: '✒️', colour: '#ff6644', bg: '#1a0800',
@@ -11210,7 +11210,7 @@ How to behave:
 // MODULE: ComedyRoom — The Comedy Room
 // ============================================================
 const ComedyRoom = (() => {
-  const PANEL_CONFIG = { rageEnabled: true };
+  const PANEL_CONFIG = { rageEnabled: true, anchor: 'gervais' };
   const MEMBERS = [
     {
       id: 'george', name: 'Curious George', icon: '🎤', colour: '#aaff44', bg: '#0a1400',
@@ -12576,7 +12576,7 @@ The Oracle's own disclaimer: "The Oracle's sources are ancient and not entirely 
 // MODULE: Football — Post Match Cunditry
 // ============================================================
 const Football = (() => {
-  const PANEL_CONFIG = { rageEnabled: true };
+  const PANEL_CONFIG = { rageEnabled: true, anchor: 'souness' };
   const MEMBERS = [
     {
       id: 'souness', name: 'Graeme Souness', icon: '🦁', colour: '#ff4444', bg: '#1a0000',
@@ -14062,7 +14062,7 @@ function golfShowAnchorReadback(name, question) {
 // MODULE: Golf — The 19th Hole
 // ============================================================
 const Golf = (() => {
-  const PANEL_CONFIG = { rageEnabled: true };
+  const PANEL_CONFIG = { rageEnabled: true, anchor: 'murray' };
   const MEMBERS = [
     {
       id: 'faldo', name: 'Wise Sir Nick', icon: '🧀', colour: '#ffd700', bg: '#1a1400', postureType: 'analytical',
@@ -14887,16 +14887,12 @@ Tangent-prone characters are exempt — they are the ones being dismissed, not t
     const includeTheDon = THE_DON_TRIGGER.test(input);
     const panelInput = includeTheDon ? input.replace(THE_DON_TRIGGER, '').trim() || input : input;
 
-    // Opening/closing alternates between Murray and Dougherty each run
-    const gfFlip = sessionStorage.getItem('golf-order-flip') === '1';
-    sessionStorage.setItem('golf-order-flip', gfFlip ? '0' : '1');
-    const baseOrder = gfFlip
-      ? ['dougherty', 'faldo', 'butch', 'mcginley', 'coltart', 'roe', 'radar', 'henni', 'howell', 'murray']
-      : ['murray', 'faldo', 'butch', 'mcginley', 'coltart', 'roe', 'radar', 'henni', 'howell', 'dougherty'];
-    // Alliss slots in after Murray (position 1) when easter egg fires
-    const ORDER = includeTheDon
-      ? [baseOrder[0], 'alliss', ...baseOrder.slice(1)]
-      : baseOrder;
+    // BL-167 Slice 1.1 — Anchor model: anchor opens slot 1 and closes slot N
+    const anchorId = PANEL_CONFIG.anchor;
+    const middleCast = ['faldo', 'butch', 'mcginley', 'coltart', 'roe', 'radar', 'henni', 'howell', 'dougherty'];
+    // Alliss slots in at start of middle when easter egg fires
+    const middleOrder = includeTheDon ? ['alliss', ...middleCast] : middleCast;
+    const ORDER = [anchorId, ...middleOrder, anchorId];
 
     // Atmosphere — read from sessionStorage, default NORMAL
     const gfAtmoRaw = sessionStorage.getItem('hc_atmosphere');
@@ -15012,7 +15008,21 @@ Tangent-prone characters are exempt — they are the ones being dismissed, not t
         : '';
 
       const gfIaType = IntellectualAttempts.detect(panelInput);
-      const gfBaseSystem = TURN_RULES + '\n\n' + GOLF_TOPIC_DISMISSAL + '\n\n' + gfIntensityBlock + gfYourState + tourCardBlock + roeIntroBlock + golfNameBlock + gfFoodBlock + gfMarmiteBlock + gfHypoBlock + gfPremBlock + gfLieBlock + member.prompt + _iceBreakBlock(member.id) + roundNote + mechanics + arcInstructions + (i > 0
+      // BL-167 — Anchor opener / closer modes
+      const isAnchorOpener = (i === 0 && member.id === anchorId);
+      const isAnchorCloser = (i === ORDER.length - 1 && member.id === anchorId);
+      const anchorOpenerBlock = isAnchorOpener
+        ? `\n\nANCHOR_OPENER MODE:\nYou are opening this round. Set the room. Establish the frame for the question — your specific lens on what was asked. You will also have the last word at the close of the round.\n`
+        : '';
+      const roundSoFar = isAnchorCloser
+        ? responses.map((r, idx) => { const mm = MEMBERS.find(mm => mm.id === ORDER[idx]); return mm ? `${mm.name}: ${r}` : r; }).join('\n\n')
+        : '';
+      const anchorCloserBlock = isAnchorCloser
+        ? `\n\nANCHOR_CLOSER MODE:\nYou are closing this round. You have heard every panellist speak. Reflect on what just transpired — top and tail the bullshit, in your voice, your register. Your closer is the round's final word.\n\nROUND SO FAR:\n${roundSoFar}\n`
+        : '';
+      // Suppress TOPIC-DISMISSAL for anchor turns (different prompt mode — anchor doesn't dismiss, anchor frames or closes)
+      const dismissalSection = (isAnchorOpener || isAnchorCloser) ? '' : (GOLF_TOPIC_DISMISSAL + '\n\n');
+      const gfBaseSystem = TURN_RULES + '\n\n' + dismissalSection + anchorOpenerBlock + anchorCloserBlock + gfIntensityBlock + gfYourState + tourCardBlock + roeIntroBlock + golfNameBlock + gfFoodBlock + gfMarmiteBlock + gfHypoBlock + gfPremBlock + gfLieBlock + member.prompt + _iceBreakBlock(member.id) + roundNote + mechanics + arcInstructions + (i > 0
         ? `\n\nPrevious:\n${prev}`
         : '')
         + (arcLog.length > 0 ? `\n\nNARRATIVE ARC SO FAR:\n${arcLog.join('\n')}` : '')
@@ -17275,7 +17285,7 @@ Never say "Be water, my friend." It has been said. Once was correct.`,
 // MODULE: LongRoom — The Long Room (Cricket)
 // ============================================================
 const LongRoom = (() => {
-  const PANEL_CONFIG = { rageEnabled: true };
+  const PANEL_CONFIG = { rageEnabled: true, anchor: 'blofeld' };
   const MEMBERS = [
     {
       id: 'boycott', name: 'Geoffrey Boycott', icon: '🏏', colour: '#ffd700', bg: '#1a1400',
@@ -18019,6 +18029,8 @@ Never name the move.`;
 // ============================================================
 const Racing = (() => {
 
+  const PANEL_CONFIG = { anchor: 'brazil' };
+
   const MEMBERS = [
     {
       id: 'brazil', name: 'Alan Brazil', icon: '🎙️', colour: '#ff9800', bg: '#1a0e00',
@@ -18637,6 +18649,7 @@ const Snooker = (() => {
 
   // ── Members ───────────────────────────────────────────────────────────────
 
+  const PANEL_CONFIG = { anchor: 'jimmy_white' };
   const HOST_ID = 'jimmy_white';
   const ALL_SNOOKER_ROTATING = SNOOKER_MEMBERS.filter(m => m.id !== HOST_ID).map(m => m.id);
 
@@ -18946,6 +18959,7 @@ const HipHop = (() => {
 
   // ── Members ───────────────────────────────────────────────────────────────
 
+  const PANEL_CONFIG = { anchor: 'eminem' };
   const ANCHOR_ID = 'eminem';
   const ALL_HH_ROTATING = HIP_HOP_MEMBERS.filter(m => m.id !== ANCHOR_ID).map(m => m.id);
   const TURN_RULES_TEXT = HIP_HOP_TURN_RULES.join('\n');

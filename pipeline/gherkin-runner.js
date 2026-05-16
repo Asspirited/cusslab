@@ -10430,20 +10430,95 @@ function makeSteps(ctx) {
 
     [/^the Golf anchor opener prompt does not contain the TOPIC-DISMISSAL block$/, () => {
       const iife = ctx._golfIife || '';
-      const openerStart = iife.indexOf('ANCHOR_OPENER');
+      const openerStart = iife.indexOf('ANCHOR_OPENER MODE');
       if (openerStart < 0) return; // BL-167 not yet shipped — vacuous pass until then
-      const openerBlock = iife.slice(openerStart, openerStart + 3000);
+      // Slice up to the closing backtick of the template literal (just the prompt text)
+      const remainder = iife.slice(openerStart);
+      const endRel = remainder.indexOf('`');
+      const openerBlock = endRel > 0 ? remainder.slice(0, endRel) : remainder.slice(0, 500);
       if (openerBlock.includes('TOPIC-DISMISSAL'))
         throw new Error('Anchor opener prompt should not contain TOPIC-DISMISSAL block');
     }],
 
     [/^the Golf anchor closer prompt does not contain the TOPIC-DISMISSAL block$/, () => {
       const iife = ctx._golfIife || '';
-      const closerStart = iife.indexOf('ANCHOR_CLOSER');
+      const closerStart = iife.indexOf('ANCHOR_CLOSER MODE');
       if (closerStart < 0) return; // BL-167 not yet shipped — vacuous pass until then
-      const closerBlock = iife.slice(closerStart, closerStart + 3000);
+      // Slice up to the closing backtick of the template literal (just the prompt text)
+      const remainder = iife.slice(closerStart);
+      const endRel = remainder.indexOf('`');
+      const closerBlock = endRel > 0 ? remainder.slice(0, endRel) : remainder.slice(0, 1200);
       if (closerBlock.includes('TOPIC-DISMISSAL'))
         throw new Error('Anchor closer prompt should not contain TOPIC-DISMISSAL block');
+    }],
+
+    // ── BL-167 — Anchor + slot structure (specs/bl-167-anchor-slot-structure.feature) ─────
+
+    [/^the Golf ORDER construction places the anchor at the first slot$/, () => {
+      const iife = ctx._golfIife || '';
+      if (!/const ORDER = \[anchorId,/.test(iife))
+        throw new Error('Golf ORDER does not place anchorId at slot 0');
+    }],
+
+    [/^the Golf ORDER construction places the anchor at the final slot$/, () => {
+      const iife = ctx._golfIife || '';
+      if (!/const ORDER = \[anchorId,[^\]]*,\s*anchorId\];/.test(iife))
+        throw new Error('Golf ORDER does not place anchorId at final slot');
+    }],
+
+    [/^the Golf discuss function includes an "([^"]+)" prompt block$/, (label) => {
+      const iife = ctx._golfIife || '';
+      if (iife.indexOf(label) < 0)
+        throw new Error(`Golf discuss function does not include "${label}" block`);
+    }],
+
+    [/^the ANCHOR_CLOSER block contains "([^"]+)"$/, (text) => {
+      const iife = ctx._golfIife || '';
+      const start = iife.indexOf('ANCHOR_CLOSER MODE');
+      if (start < 0) throw new Error('ANCHOR_CLOSER MODE block not found');
+      const block = iife.slice(start, start + 1200);
+      if (!block.includes(text))
+        throw new Error(`ANCHOR_CLOSER block does not contain "${text}"`);
+    }],
+
+    [/^the ANCHOR_OPENER block does not contain "([^"]+)"$/, (text) => {
+      const iife = ctx._golfIife || '';
+      const start = iife.indexOf('ANCHOR_OPENER MODE');
+      if (start < 0) throw new Error('ANCHOR_OPENER MODE block not found');
+      const block = iife.slice(start, start + 500);
+      if (block.includes(text))
+        throw new Error(`ANCHOR_OPENER block should not contain "${text}" but does`);
+    }],
+
+    [/^the (Golf|Boardroom|Football|ComedyRoom|LongRoom|Racing|Snooker|HipHop) panel config declares anchor "([^"]+)"$/, (panel, anchorId) => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      const iifeStart = html.indexOf(`const ${panel} = (() => {`);
+      if (iifeStart < 0) throw new Error(`Panel IIFE for "${panel}" not found`);
+      const iife = html.slice(iifeStart, iifeStart + 200000);
+      const re = new RegExp(`anchor:\\s*['"]${anchorId}['"]`);
+      if (!re.test(iife))
+        throw new Error(`Panel "${panel}" does not declare anchor "${anchorId}"`);
+    }],
+
+    [/^the Golf middle cast list does not contain "([^"]+)"$/, (text) => {
+      const iife = ctx._golfIife || '';
+      const m = iife.match(/const middleCast = \[([^\]]+)\];/);
+      if (!m) throw new Error('Golf middleCast array not found');
+      const middleCast = m[1];
+      if (middleCast.includes(`'${text}'`) || middleCast.includes(`"${text}"`))
+        throw new Error(`Golf middleCast contains "${text}" but should not`);
+    }],
+
+    [/^the Golf middle cast list contains each member id at most once$/, () => {
+      const iife = ctx._golfIife || '';
+      const m = iife.match(/const middleCast = \[([^\]]+)\];/);
+      if (!m) throw new Error('Golf middleCast array not found');
+      const ids = m[1].split(',').map(s => s.trim().replace(/['"]/g, ''));
+      const seen = new Set();
+      for (const id of ids) {
+        if (seen.has(id)) throw new Error(`Golf middleCast contains duplicate "${id}"`);
+        seen.add(id);
+      }
     }],
 
   ];
