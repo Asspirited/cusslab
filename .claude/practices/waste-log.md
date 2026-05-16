@@ -17,7 +17,6 @@
 | WL-131 | Character dullness — "X is right/wrong" openers, "I've watched this back" bleeding | Medium | Three Amigos needed before touching TURN_RULES |
 | WL-136 | UI audit: IIFE return objects not checked — exports can go missing silently | High | Add pipeline check: verify each global wrapper's IIFE target is in return statement |
 | WL-147 | backlog-report.js: `Status[:\s]+` regex matches "status text" in descriptions, falsely marking items OPEN | Low | Tighten regex to `^\s*[-*]\s*Status:` in multiline mode |
-| WL-149 | Panel topic adoption — when one character locks onto a specific topic (Faldo → Ginsters), the others mirror it instead of pursuing their own angle | Medium | BL-163 `reacts_to` design must encode "glance, then pivot, do not adopt"; separate pool rotation fix shipped via BL-172 v1 (Faldo voice pools in code) |
 | WL-150 | Tactical exception to Principle 1 — BL-172 v1 (Faldo voice pool selection) shipped as Golf-only per-panel code, not via shared engine | Low | Close when BL-162 ships `VoicePoolSelector` and Faldo-specific code is replaced by declarative pool data |
 
 ---
@@ -42,8 +41,8 @@
 **Time lost:** Unknown — pattern caught by Rod in product testing; degrades every run where it triggers
 **Cost impact:** Medium — panel quality flat whenever it fires
 **Tags:** `#panel-harmonisation` `#register-collapse` `#topic-adoption` `#19th-hole` `#rod-caught`
-**Progress 2026-05-16:** BL-168 (TOPIC-DISMISSAL prompt block) + BL-167 Slice 2 Phase 2a (trigger-score engine, commit `28328e6`) + Phase 2b (GOLF_ENTHUSIASM data, selectSlots integration, commit `f33c972`) all landed. Round-start cast selection now reacts to enthusiasm primers (Principle 2 fix at cast level). Phase 2c (per-slot rescoring against prev turn content, NOT against userInput) is the remaining piece — would address in-round drift where Faldo says "Ginsters" mid-round and other Ginsters-primed characters should be scored AFTER his turn, not before it. Defer to Phase 2c BL or follow-up.
-**Status:** Open — BL-163 `reacts_to` prompt design must enforce "glance, then pivot, never adopt"; pool monomania remains as a possible second WL once investigated
+**Progress 2026-05-16:** BL-168 (TOPIC-DISMISSAL prompt block) + BL-167 Slice 2 Phase 2a (trigger-score engine, commit `28328e6`) + Phase 2b (GOLF_ENTHUSIASM data, selectSlots integration, commit `f33c972`) + Phase 2c (per-slot rescoring against prev turn content, commit `53da9e9`) all landed. Engine now rescores remaining middle slots against the LAST TURN's content before each fire — when Faldo says "Ginsters" mid-round, the next slot is picked from whoever else has Ginsters/garage/pasty in their primer or wound, breaking topic-adoption. Closes the structural cause for Golf 19th Hole.
+**Status:** CLOSED 2026-05-16 — engine + prompt-side dismissal + primer-driven selection all in place for Golf. Other panels still need primer batches + selectSlots wiring before this generalises beyond Golf (tracked as part of BL-167 Slice 2 panel-propagation follow-up). Reopen if product testing shows the texture is still flat on Golf.
 
 ---
 
