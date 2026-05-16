@@ -42,6 +42,7 @@
 **Time lost:** Unknown — pattern caught by Rod in product testing; degrades every run where it triggers
 **Cost impact:** Medium — panel quality flat whenever it fires
 **Tags:** `#panel-harmonisation` `#register-collapse` `#topic-adoption` `#19th-hole` `#rod-caught`
+**Progress 2026-05-16:** BL-168 (TOPIC-DISMISSAL prompt block) + BL-167 Slice 2 Phase 2a (trigger-score engine, commit `28328e6`) + Phase 2b (GOLF_ENTHUSIASM data, selectSlots integration, commit `f33c972`) all landed. Round-start cast selection now reacts to enthusiasm primers (Principle 2 fix at cast level). Phase 2c (per-slot rescoring against prev turn content, NOT against userInput) is the remaining piece — would address in-round drift where Faldo says "Ginsters" mid-round and other Ginsters-primed characters should be scored AFTER his turn, not before it. Defer to Phase 2c BL or follow-up.
 **Status:** Open — BL-163 `reacts_to` prompt design must enforce "glance, then pivot, never adopt"; pool monomania remains as a possible second WL once investigated
 
 ---
