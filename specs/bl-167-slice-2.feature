@@ -64,7 +64,7 @@ Feature: Trigger-weighted middle selection — Slice 2 of BL-167
     Then "src/logic/trigger-score-engine.js" exports a function named "selectNext"
 
   Scenario: The engine documents its public contract at the top of the file
-    Then "src/logic/trigger-score-engine.js" contains a contract comment describing the score input shape and weights
+    Then "src/logic/trigger-score-engine.js" contains a contract comment describing the score input shape and return shape
 
   Scenario: The engine has no direct DOM or fetch or sessionStorage dependencies
     Then "src/logic/trigger-score-engine.js" does not reference "document"
@@ -76,8 +76,7 @@ Feature: Trigger-weighted middle selection — Slice 2 of BL-167
     And "src/logic/trigger-score-engine.js" does not reference "verifyAccuracy"
     And "src/logic/trigger-score-engine.js" does not reference "validateClaim"
 
-  Scenario: The wound and enthusiasm-primer weights are equal (locked scenario 9)
-    Then "src/logic/trigger-score-engine.js" declares wound and enthusiasm-primer weights as equal
-
-  Scenario: The engine declares a floor probability pmin
-    Then "src/logic/trigger-score-engine.js" declares a default pmin value greater than zero and less than one
+  # Behavioural assertions for equal weights (locked scenario 9), pmin floor,
+  # and uniform fallback are covered by unit tests in pipeline/unit-runner.js
+  # rather than source-code-parsing here — the unit tests can verify probability
+  # convergence over many rounds, which source parsing cannot.
