@@ -131,7 +131,103 @@ function selectSlots(panelData) {
   return [anchor, ...interleaved, anchor];
 }
 
-const _PanelDiscussEngineExports = { selectSlots };
+// buildSystemPrompt — composes the per-turn system prompt for any panel (BL-162 Slice 1).
+//
+// INPUT (ctx):
+//   turnRules:        string         — panel's TURN_RULES content
+//   topicDismissal:   string|null    — TOPIC-DISMISSAL block (suppressed for anchor turns)
+//   anchorId:         string         — anchor character id (from PANEL_CONFIG.anchor)
+//   voicePoolBlock:   string|null    — pre-built per-character voice pool block (panel-built)
+//   slot:             number         — current slot index (0-based)
+//   totalSlots:       number         — total slots in this round
+//   member:           {id, prompt}   — current speaker member object
+//   prev:             string         — pre-built Previous: content (panel-built)
+//   arcLog:           string[]       — narrative arc entries (BL-144)
+//   recentMoves:      string[]       — posture types for REGISTER BREAK guard (BL-145)
+//   roundSoFarText:   string         — pre-built ROUND SO FAR transcript (panel-built)
+//   panelStateBlocks: string         — concatenated panel-specific state blocks BEFORE member.prompt
+//                                       (e.g., food, marmite, hypo, lie, your-state, intensity)
+//   panelMemberBlocks:string         — panel-specific blocks AFTER member.prompt
+//                                       (e.g., iceBreak, roundNote, mechanics, arcInstructions)
+//
+// RETURN: string — the full system prompt.
+//
+// BEHAVIOUR:
+//   - TURN_RULES placed first.
+//   - TOPIC-DISMISSAL injected for non-anchor turns; suppressed for anchor opener and closer.
+//   - ANCHOR_OPENER MODE block injected at slot 0 when member is the anchor.
+//   - ANCHOR_CLOSER MODE block injected at the final slot when member is the anchor,
+//     with the pre-built ROUND SO FAR transcript embedded.
+//   - panelStateBlocks injected between (anchor/dismissal section) and member.prompt.
+//   - member.prompt injected verbatim.
+//   - voicePoolBlock injected after member.prompt when provided.
+//   - panelMemberBlocks injected after voicePoolBlock.
+//   - Previous: block appended when slot > 0 AND prev is non-empty.
+//   - NARRATIVE ARC SO FAR appended when arcLog non-empty.
+//   - REGISTER BREAK guard appended when last 3 recentMoves are identical.
+//
+// Backwards-compatible with Golf's pre-extraction inline assembly (byte-identical output
+// for byte-identical inputs).
+function buildSystemPrompt(ctx) {
+  if (!ctx || typeof ctx !== 'object') {
+    throw new Error('buildSystemPrompt: ctx object required');
+  }
+  const {
+    turnRules,
+    topicDismissal,
+    anchorId,
+    voicePoolBlock,
+    slot,
+    totalSlots,
+    member,
+    prev,
+    arcLog,
+    recentMoves,
+    roundSoFarText,
+    panelStateBlocks,
+    panelMemberBlocks,
+  } = ctx;
+
+  if (typeof turnRules !== 'string') throw new Error('buildSystemPrompt: turnRules string required');
+  if (!member || typeof member.prompt !== 'string') throw new Error('buildSystemPrompt: member.prompt required');
+
+  const isAnchorOpener = (slot === 0 && member.id === anchorId);
+  const isAnchorCloser = (typeof totalSlots === 'number' && slot === totalSlots - 1 && member.id === anchorId);
+  const isAnchorTurn = isAnchorOpener || isAnchorCloser;
+
+  const dismissalSection = (isAnchorTurn || !topicDismissal) ? '' : (topicDismissal + '\n\n');
+
+  const anchorOpenerBlock = isAnchorOpener
+    ? '\n\nANCHOR_OPENER MODE:\nYou are opening this round. Set the room. Establish the frame for the question — your specific lens on what was asked. You will also have the last word at the close of the round.\n'
+    : '';
+
+  const anchorCloserBlock = isAnchorCloser
+    ? `\n\nANCHOR_CLOSER MODE:\nYou are closing this round. You have heard every panellist speak. Reflect on what just transpired — top and tail the bullshit, in your voice, your register. Your closer is the round's final word.\n\nROUND SO FAR:\n${roundSoFarText || ''}\n`
+    : '';
+
+  const previousBlock = (typeof slot === 'number' && slot > 0) ? `\n\nPrevious:\n${prev || ''}` : '';
+  const narrativeArcBlock = (Array.isArray(arcLog) && arcLog.length > 0) ? `\n\nNARRATIVE ARC SO FAR:\n${arcLog.join('\n')}` : '';
+
+  const lastThree = Array.isArray(recentMoves) ? recentMoves.slice(-3) : [];
+  const guardFires = lastThree.length >= 3 && lastThree.every(t => t === lastThree[0]);
+  const breakRegisterBlock = guardFires
+    ? `\n\nREGISTER BREAK: The last three contributions have all been ${lastThree[0]}. Arrive from a completely different angle. Change your posture.`
+    : '';
+
+  return turnRules + '\n\n'
+    + dismissalSection
+    + anchorOpenerBlock
+    + anchorCloserBlock
+    + (panelStateBlocks || '')
+    + member.prompt
+    + (voicePoolBlock || '')
+    + (panelMemberBlocks || '')
+    + previousBlock
+    + narrativeArcBlock
+    + breakRegisterBlock;
+}
+
+const _PanelDiscussEngineExports = { selectSlots, buildSystemPrompt };
 
 // Browser: expose as global so per-panel IIFEs can call PanelDiscussEngine.selectSlots(...)
 if (typeof window !== 'undefined') window.PanelDiscussEngine = _PanelDiscussEngineExports;

@@ -15461,37 +15461,36 @@ Tangent-prone characters are exempt — they are the ones being dismissed, not t
         ? IdiomEngine.buildIdiomBlock(member.id, GOLF_IDIOM_PROFILES[member.id])
         : '';
 
-      // Arc state guard — if last 3 characters share the same posture register, break it
-      const _lastThree = recentMoves.slice(-3);
-      const _guardFires = _lastThree.length >= 3 && _lastThree.every(t => t === _lastThree[0]);
-      const _breakRegisterBlock = _guardFires
-        ? `\n\nREGISTER BREAK: The last three contributions have all been ${_lastThree[0]}. Arrive from a completely different angle. Change your posture.`
-        : '';
-
       const gfIaType = IntellectualAttempts.detect(panelInput);
-      // BL-167 — Anchor opener / closer modes
-      const isAnchorOpener = (i === 0 && member.id === anchorId);
-      const isAnchorCloser = (i === ORDER.length - 1 && member.id === anchorId);
-      const anchorOpenerBlock = isAnchorOpener
-        ? `\n\nANCHOR_OPENER MODE:\nYou are opening this round. Set the room. Establish the frame for the question — your specific lens on what was asked. You will also have the last word at the close of the round.\n`
-        : '';
-      const roundSoFar = isAnchorCloser
-        ? responses.map((r, idx) => { const mm = MEMBERS.find(mm => mm.id === ORDER[idx]); return mm ? `${mm.name}: ${r}` : r; }).join('\n\n')
-        : '';
-      const anchorCloserBlock = isAnchorCloser
-        ? `\n\nANCHOR_CLOSER MODE:\nYou are closing this round. You have heard every panellist speak. Reflect on what just transpired — top and tail the bullshit, in your voice, your register. Your closer is the round's final word.\n\nROUND SO FAR:\n${roundSoFar}\n`
-        : '';
-      // Suppress TOPIC-DISMISSAL for anchor turns (different prompt mode — anchor doesn't dismiss, anchor frames or closes)
-      const dismissalSection = (isAnchorOpener || isAnchorCloser) ? '' : (GOLF_TOPIC_DISMISSAL + '\n\n');
-      // BL-172 v1.1 — Faldo voice pool: pick concrete items in code, inject as one-shot override
+
+      // BL-172 v1.1 — Faldo voice pool: pick concrete items in code, inject as one-shot override.
+      // Stays panel-side for now (Slice 2 of BL-162 will absorb into a VoicePoolSelector engine module).
       const faldoVoicePoolBlock = (member.id === 'faldo')
         ? `\n\nFALDO VOICE POOL — THIS TURN ONLY, OVERRIDES ANY GENERAL POOL INSTRUCTIONS IN YOUR PROMPT:\nWhen this turn calls for one of your reference pools, use ONLY the items listed below. Do not substitute. Do not default to a previously-named example (Ginsters / A12 / "slightly warm" / cheese and pickle are NOT defaults — they are options no more salient than any other). The named items for THIS turn ARE the variation.\n\nIF a GENERAL FOOD reference fits the moment → use: "${_faldoPick(FALDO_VOICE_POOLS.food)}"\n\nIF a GARAGE-PASTY anecdote fits → use the triple:\n  • brand: "${_faldoPick(FALDO_VOICE_POOLS.pastyBrand)}"\n  • thermal description: "${_faldoPick(FALDO_VOICE_POOLS.pastyThermal)}"\n  • garage location: "${_faldoPick(FALDO_VOICE_POOLS.pastyGarage)}"\n  Use these three together. Do not fall back to "a Ginsters, slightly warm, near the A1" — that is one combination out of thousands, and not the one for this turn.\n\nIF a CAR reference fits → use: "${_faldoPick(FALDO_VOICE_POOLS.cars)}"\nIF an ENTERTAINMENT / 70s–80s reference fits → use: "${_faldoPick(FALDO_VOICE_POOLS.entertainment)}"\n\nNot every turn needs all these — use only those that fit naturally, and only one per turn (one food OR one garage-pasty triple OR one car OR one entertainment ref). When you use one, use the specified item(s). Do not pluralise the pool — one named item per turn.\n`
         : '';
-      const gfBaseSystem = TURN_RULES + '\n\n' + dismissalSection + anchorOpenerBlock + anchorCloserBlock + gfIntensityBlock + gfYourState + tourCardBlock + roeIntroBlock + golfNameBlock + gfFoodBlock + gfMarmiteBlock + gfHypoBlock + gfPremBlock + gfLieBlock + gfIdiomBlock + member.prompt + faldoVoicePoolBlock + _iceBreakBlock(member.id) + roundNote + mechanics + arcInstructions + (i > 0
-        ? `\n\nPrevious:\n${prev}`
-        : '')
-        + (arcLog.length > 0 ? `\n\nNARRATIVE ARC SO FAR:\n${arcLog.join('\n')}` : '')
-        + _breakRegisterBlock;
+
+      // BL-162 Slice 1 — prompt assembly delegated to shared PanelDiscussEngine.
+      // Engine handles: TURN_RULES priority, TOPIC-DISMISSAL conditional, anchor opener/closer blocks
+      // (with ROUND SO FAR), Previous: block, NARRATIVE ARC SO FAR, REGISTER BREAK guard.
+      // Panel passes panel-specific state blocks (food/lie/intensity/etc.) as opaque strings.
+      const _roundSoFarText = (i === ORDER.length - 1 && member.id === anchorId)
+        ? responses.map((r, idx) => { const mm = MEMBERS.find(mm => mm.id === ORDER[idx]); return mm ? `${mm.name}: ${r}` : r; }).join('\n\n')
+        : '';
+      const gfBaseSystem = PanelDiscussEngine.buildSystemPrompt({
+        turnRules: TURN_RULES,
+        topicDismissal: GOLF_TOPIC_DISMISSAL,
+        anchorId,
+        voicePoolBlock: faldoVoicePoolBlock,
+        slot: i,
+        totalSlots: ORDER.length,
+        member,
+        prev,
+        arcLog,
+        recentMoves,
+        roundSoFarText: _roundSoFarText,
+        panelStateBlocks: gfIntensityBlock + gfYourState + tourCardBlock + roeIntroBlock + golfNameBlock + gfFoodBlock + gfMarmiteBlock + gfHypoBlock + gfPremBlock + gfLieBlock + gfIdiomBlock,
+        panelMemberBlocks: _iceBreakBlock(member.id) + roundNote + mechanics + arcInstructions,
+      });
       const system = gfIaType
         ? IntellectualAttempts.inject('golf', member.id, gfBaseSystem, gfIaType)
         : gfBaseSystem;

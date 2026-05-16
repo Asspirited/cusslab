@@ -4036,7 +4036,7 @@ function makeSteps(ctx) {
     [/^a racing panel discussion is triggered$/, () => {
       const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
       const racingStart = html.indexOf('const Racing = ');
-      const iife = html.slice(racingStart, racingStart + 20000);
+      const iife = html.slice(racingStart, racingStart + 60000);
       ctx._racingIife = iife;
     }],
 
@@ -7225,13 +7225,11 @@ function makeSteps(ctx) {
     }],
 
     [/^the Golf system prompt for the first character does not include "([^"]+)"$/, (text) => {
-      const iife = ctx._golfIife || '';
-      const discussStart = iife.indexOf('async function discuss()');
-      if (discussStart < 0) throw new Error('Golf discuss() not found in Golf IIFE');
-      const discussBlock = iife.slice(discussStart, discussStart + 30000);
-      // Arc block must be conditional — guarded by arcLog.length > 0 or i > 0
-      if (!discussBlock.includes('arcLog.length'))
-        throw new Error(`"${text}" block is not conditional — first character would receive it`);
+      // Post-BL-162 Slice 1: arc-block conditional is in the engine, not Golf.
+      // Verify the engine source guards arcLog with a length check.
+      const engineSrc = fs.readFileSync(path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js'), 'utf8');
+      if (!engineSrc.includes('arcLog.length'))
+        throw new Error(`"${text}" block is not conditional — engine missing arcLog length guard`);
     }],
 
     [/^the Golf system prompt for subsequent characters includes "([^"]+)"$/, (text) => {
@@ -7286,30 +7284,31 @@ function makeSteps(ctx) {
     }],
 
     [/^the Golf discuss function checks recentMoves for three consecutive same-register moves$/, () => {
+      // Post-BL-162 Slice 1: REGISTER BREAK guard moved into engine.buildSystemPrompt.
+      // Verify Golf passes recentMoves to the engine AND engine has the slice check.
       const iife = ctx._golfIife || '';
       const discussStart = iife.indexOf('async function discuss()');
       if (discussStart < 0) throw new Error('Golf discuss() not found');
       const discussBlock = iife.slice(discussStart, discussStart + 30000);
-      if (!discussBlock.includes('recentMoves.slice(-3)'))
-        throw new Error('Golf discuss() does not check last 3 recentMoves');
+      if (!discussBlock.includes('recentMoves'))
+        throw new Error('Golf discuss() does not reference recentMoves');
+      const engineSrc = fs.readFileSync(path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js'), 'utf8');
+      if (!engineSrc.includes('recentMoves.slice(-3)') && !engineSrc.includes('recentMoves.slice( -3 )'))
+        throw new Error('Engine does not check last 3 recentMoves');
     }],
 
     [/^the Golf system prompt construction includes a break-register block$/, () => {
-      const iife = ctx._golfIife || '';
-      const discussStart = iife.indexOf('async function discuss()');
-      if (discussStart < 0) throw new Error('Golf discuss() not found');
-      const discussBlock = iife.slice(discussStart, discussStart + 30000);
-      if (!discussBlock.includes('REGISTER BREAK') && !discussBlock.includes('_breakRegisterBlock'))
-        throw new Error('Golf discuss() does not include break-register block in system prompt');
+      // Post-BL-162 Slice 1: REGISTER BREAK block built by engine.
+      const engineSrc = fs.readFileSync(path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js'), 'utf8');
+      if (!engineSrc.includes('REGISTER BREAK'))
+        throw new Error('Engine does not include REGISTER BREAK block in system prompt construction');
     }],
 
     [/^the Golf break-register block is guarded by a recentMoves length check$/, () => {
-      const iife = ctx._golfIife || '';
-      const discussStart = iife.indexOf('async function discuss()');
-      if (discussStart < 0) throw new Error('Golf discuss() not found');
-      const discussBlock = iife.slice(discussStart, discussStart + 30000);
-      if (!discussBlock.includes('_lastThree.length >= 3') && !discussBlock.includes('recentMoves.length'))
-        throw new Error('Golf break-register block is not guarded by a length check');
+      // Post-BL-162 Slice 1: length-check guard in engine.
+      const engineSrc = fs.readFileSync(path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js'), 'utf8');
+      if (!/lastThree\.length >= 3|recentMoves[^\n]*length/.test(engineSrc))
+        throw new Error('Engine break-register block is not guarded by a length check');
     }],
 
     // ── Golf Adventure WatchBack (specs/golf-adventure-watchback.feature) ────────
@@ -10429,11 +10428,11 @@ function makeSteps(ctx) {
     }],
 
     [/^the Golf anchor opener prompt does not contain the TOPIC-DISMISSAL block$/, () => {
-      const iife = ctx._golfIife || '';
-      const openerStart = iife.indexOf('ANCHOR_OPENER MODE');
-      if (openerStart < 0) return; // BL-167 not yet shipped — vacuous pass until then
-      // Slice up to the closing backtick of the template literal (just the prompt text)
-      const remainder = iife.slice(openerStart);
+      // Post-BL-162 Slice 1: anchor opener block lives in the engine.
+      const engineSrc = fs.readFileSync(path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js'), 'utf8');
+      const openerStart = engineSrc.indexOf('ANCHOR_OPENER MODE');
+      if (openerStart < 0) throw new Error('ANCHOR_OPENER MODE block not found in engine');
+      const remainder = engineSrc.slice(openerStart);
       const endRel = remainder.indexOf('`');
       const openerBlock = endRel > 0 ? remainder.slice(0, endRel) : remainder.slice(0, 500);
       if (openerBlock.includes('TOPIC-DISMISSAL'))
@@ -10441,11 +10440,11 @@ function makeSteps(ctx) {
     }],
 
     [/^the Golf anchor closer prompt does not contain the TOPIC-DISMISSAL block$/, () => {
-      const iife = ctx._golfIife || '';
-      const closerStart = iife.indexOf('ANCHOR_CLOSER MODE');
-      if (closerStart < 0) return; // BL-167 not yet shipped — vacuous pass until then
-      // Slice up to the closing backtick of the template literal (just the prompt text)
-      const remainder = iife.slice(closerStart);
+      // Post-BL-162 Slice 1: anchor closer block lives in the engine.
+      const engineSrc = fs.readFileSync(path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js'), 'utf8');
+      const closerStart = engineSrc.indexOf('ANCHOR_CLOSER MODE');
+      if (closerStart < 0) throw new Error('ANCHOR_CLOSER MODE block not found in engine');
+      const remainder = engineSrc.slice(closerStart);
       const endRel = remainder.indexOf('`');
       const closerBlock = endRel > 0 ? remainder.slice(0, endRel) : remainder.slice(0, 1200);
       if (closerBlock.includes('TOPIC-DISMISSAL'))
@@ -10481,25 +10480,28 @@ function makeSteps(ctx) {
     }],
 
     [/^the Golf discuss function includes an "([^"]+)" prompt block$/, (label) => {
-      const iife = ctx._golfIife || '';
-      if (iife.indexOf(label) < 0)
-        throw new Error(`Golf discuss function does not include "${label}" block`);
+      // Post-BL-162 Slice 1: anchor blocks live in engine, not Golf inline.
+      // Check engine source for the block label.
+      const engineSrc = fs.readFileSync(path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js'), 'utf8');
+      if (engineSrc.indexOf(label) < 0)
+        throw new Error(`Engine does not include "${label}" block`);
     }],
 
     [/^the ANCHOR_CLOSER block contains "([^"]+)"$/, (text) => {
-      const iife = ctx._golfIife || '';
-      const start = iife.indexOf('ANCHOR_CLOSER MODE');
-      if (start < 0) throw new Error('ANCHOR_CLOSER MODE block not found');
-      const block = iife.slice(start, start + 1200);
+      const engineSrc = fs.readFileSync(path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js'), 'utf8');
+      const start = engineSrc.indexOf('ANCHOR_CLOSER MODE');
+      if (start < 0) throw new Error('ANCHOR_CLOSER MODE block not found in engine');
+      const block = engineSrc.slice(start, start + 1200);
       if (!block.includes(text))
         throw new Error(`ANCHOR_CLOSER block does not contain "${text}"`);
     }],
 
     [/^the ANCHOR_OPENER block does not contain "([^"]+)"$/, (text) => {
-      const iife = ctx._golfIife || '';
-      const start = iife.indexOf('ANCHOR_OPENER MODE');
-      if (start < 0) throw new Error('ANCHOR_OPENER MODE block not found');
-      const block = iife.slice(start, start + 500);
+      const engineSrc = fs.readFileSync(path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js'), 'utf8');
+      // Match the template literal opener (single-quoted), not comment mentions
+      const m = engineSrc.match(/'(\\n\\nANCHOR_OPENER MODE[^']*)'/);
+      if (!m) throw new Error('ANCHOR_OPENER MODE template literal not found in engine');
+      const block = m[1];
       if (block.includes(text))
         throw new Error(`ANCHOR_OPENER block should not contain "${text}" but does`);
     }],
@@ -10618,6 +10620,202 @@ function makeSteps(ctx) {
       // Use word-boundary match to avoid false positives on substrings
       const re = new RegExp(`\\b${sym.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\$&')}\\b`);
       if (re.test(src)) throw new Error(`${relPath} references "${sym}" but should not`);
+    }],
+
+    // ── BL-162 Slice 1 — buildSystemPrompt (specs/bl-162-slice-1-build-system-prompt.feature) ─────
+
+    [/^buildSystemPrompt with minimal valid input returns a non-empty string$/, () => {
+      const enginePath = path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js');
+      delete require.cache[require.resolve(enginePath)];
+      const engine = require(enginePath);
+      const out = engine.buildSystemPrompt({
+        turnRules: 'RULES',
+        member: { id: 'x', prompt: 'You are X.' },
+        slot: 0,
+        totalSlots: 3,
+      });
+      if (typeof out !== 'string' || out.length === 0) throw new Error('buildSystemPrompt returned empty/non-string');
+    }],
+
+    [/^buildSystemPrompt output starts with the supplied turnRules string$/, () => {
+      const enginePath = path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js');
+      delete require.cache[require.resolve(enginePath)];
+      const engine = require(enginePath);
+      const out = engine.buildSystemPrompt({
+        turnRules: 'UNIQUE_RULES_STRING_42',
+        member: { id: 'x', prompt: 'x' },
+        slot: 1,
+        totalSlots: 3,
+      });
+      if (!out.startsWith('UNIQUE_RULES_STRING_42')) throw new Error(`Output does not start with turnRules: ${out.slice(0, 100)}`);
+    }],
+
+    [/^buildSystemPrompt for a non-anchor member with topicDismissal set contains the topicDismissal string$/, () => {
+      const enginePath = path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js');
+      delete require.cache[require.resolve(enginePath)];
+      const engine = require(enginePath);
+      const out = engine.buildSystemPrompt({
+        turnRules: 'R',
+        topicDismissal: 'TOPIC_DISMISSAL_BLOCK_UNIQUE',
+        anchorId: 'A',
+        member: { id: 'b', prompt: 'x' },
+        slot: 1,
+        totalSlots: 3,
+      });
+      if (!out.includes('TOPIC_DISMISSAL_BLOCK_UNIQUE'))
+        throw new Error('topicDismissal not present in non-anchor output');
+    }],
+
+    [/^buildSystemPrompt for slot 0 anchor member with topicDismissal set does not contain the topicDismissal string$/, () => {
+      const enginePath = path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js');
+      delete require.cache[require.resolve(enginePath)];
+      const engine = require(enginePath);
+      const out = engine.buildSystemPrompt({
+        turnRules: 'R',
+        topicDismissal: 'TOPIC_DISMISSAL_BLOCK_UNIQUE',
+        anchorId: 'A',
+        member: { id: 'A', prompt: 'x' },
+        slot: 0,
+        totalSlots: 3,
+      });
+      if (out.includes('TOPIC_DISMISSAL_BLOCK_UNIQUE'))
+        throw new Error('topicDismissal present in anchor opener output');
+    }],
+
+    [/^buildSystemPrompt for the final slot anchor member with topicDismissal set does not contain the topicDismissal string$/, () => {
+      const enginePath = path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js');
+      delete require.cache[require.resolve(enginePath)];
+      const engine = require(enginePath);
+      const out = engine.buildSystemPrompt({
+        turnRules: 'R',
+        topicDismissal: 'TOPIC_DISMISSAL_BLOCK_UNIQUE',
+        anchorId: 'A',
+        member: { id: 'A', prompt: 'x' },
+        slot: 2,
+        totalSlots: 3,
+      });
+      if (out.includes('TOPIC_DISMISSAL_BLOCK_UNIQUE'))
+        throw new Error('topicDismissal present in anchor closer output');
+    }],
+
+    [/^buildSystemPrompt for slot 0 anchor member contains "ANCHOR_OPENER MODE"$/, () => {
+      const enginePath = path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js');
+      delete require.cache[require.resolve(enginePath)];
+      const engine = require(enginePath);
+      const out = engine.buildSystemPrompt({
+        turnRules: 'R',
+        anchorId: 'A',
+        member: { id: 'A', prompt: 'x' },
+        slot: 0,
+        totalSlots: 3,
+      });
+      if (!out.includes('ANCHOR_OPENER MODE'))
+        throw new Error('ANCHOR_OPENER MODE missing from slot-0 anchor output');
+    }],
+
+    [/^buildSystemPrompt for the final slot anchor member contains "ANCHOR_CLOSER MODE" and "ROUND SO FAR"$/, () => {
+      const enginePath = path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js');
+      delete require.cache[require.resolve(enginePath)];
+      const engine = require(enginePath);
+      const out = engine.buildSystemPrompt({
+        turnRules: 'R',
+        anchorId: 'A',
+        member: { id: 'A', prompt: 'x' },
+        slot: 2,
+        totalSlots: 3,
+        roundSoFarText: 'b: hi\nc: yes',
+      });
+      if (!out.includes('ANCHOR_CLOSER MODE') || !out.includes('ROUND SO FAR'))
+        throw new Error('ANCHOR_CLOSER MODE or ROUND SO FAR missing from final-slot anchor output');
+    }],
+
+    [/^buildSystemPrompt for slot 1 with non-empty prev contains a "Previous:" block$/, () => {
+      const enginePath = path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js');
+      delete require.cache[require.resolve(enginePath)];
+      const engine = require(enginePath);
+      const out = engine.buildSystemPrompt({
+        turnRules: 'R',
+        member: { id: 'b', prompt: 'x' },
+        slot: 1,
+        totalSlots: 3,
+        prev: 'A: "hello"',
+      });
+      if (!out.includes('Previous:'))
+        throw new Error('Previous: block missing for slot 1 with prev');
+    }],
+
+    [/^buildSystemPrompt for slot 0 does not contain a "Previous:" block$/, () => {
+      const enginePath = path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js');
+      delete require.cache[require.resolve(enginePath)];
+      const engine = require(enginePath);
+      const out = engine.buildSystemPrompt({
+        turnRules: 'R',
+        member: { id: 'A', prompt: 'x' },
+        slot: 0,
+        totalSlots: 3,
+        prev: 'something',
+      });
+      if (out.includes('Previous:'))
+        throw new Error('Previous: block present at slot 0');
+    }],
+
+    [/^buildSystemPrompt with non-empty arcLog contains "NARRATIVE ARC SO FAR"$/, () => {
+      const enginePath = path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js');
+      delete require.cache[require.resolve(enginePath)];
+      const engine = require(enginePath);
+      const out = engine.buildSystemPrompt({
+        turnRules: 'R',
+        member: { id: 'A', prompt: 'x' },
+        slot: 0,
+        totalSlots: 3,
+        arcLog: ['A: opens', 'B: responds'],
+      });
+      if (!out.includes('NARRATIVE ARC SO FAR'))
+        throw new Error('NARRATIVE ARC SO FAR missing with non-empty arcLog');
+    }],
+
+    [/^buildSystemPrompt with panelStateBlocks set contains the panelStateBlocks string$/, () => {
+      const enginePath = path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js');
+      delete require.cache[require.resolve(enginePath)];
+      const engine = require(enginePath);
+      const out = engine.buildSystemPrompt({
+        turnRules: 'R',
+        member: { id: 'A', prompt: 'x' },
+        slot: 0,
+        totalSlots: 3,
+        panelStateBlocks: 'PANEL_STATE_BLOCKS_UNIQUE_777',
+      });
+      if (!out.includes('PANEL_STATE_BLOCKS_UNIQUE_777'))
+        throw new Error('panelStateBlocks string not present in output');
+    }],
+
+    [/^buildSystemPrompt with voicePoolBlock set contains the voicePoolBlock string$/, () => {
+      const enginePath = path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js');
+      delete require.cache[require.resolve(enginePath)];
+      const engine = require(enginePath);
+      const out = engine.buildSystemPrompt({
+        turnRules: 'R',
+        member: { id: 'A', prompt: 'x' },
+        slot: 1,
+        totalSlots: 3,
+        voicePoolBlock: 'VOICE_POOL_BLOCK_UNIQUE_555',
+      });
+      if (!out.includes('VOICE_POOL_BLOCK_UNIQUE_555'))
+        throw new Error('voicePoolBlock string not present in output');
+    }],
+
+    [/^buildSystemPrompt with no voicePoolBlock omits any "VOICE POOL" injection from the engine$/, () => {
+      const enginePath = path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js');
+      delete require.cache[require.resolve(enginePath)];
+      const engine = require(enginePath);
+      const out = engine.buildSystemPrompt({
+        turnRules: 'R',
+        member: { id: 'X', prompt: 'x' },
+        slot: 1,
+        totalSlots: 3,
+      });
+      if (out.includes('VOICE POOL'))
+        throw new Error('VOICE POOL appeared in engine output despite no voicePoolBlock supplied');
     }],
 
     // ── BL-174 — IdiomEngine (specs/bl-174-idiom-invention.feature) ──────────
