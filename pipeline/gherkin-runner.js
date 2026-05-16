@@ -10328,6 +10328,124 @@ function makeSteps(ctx) {
         throw new Error(`Model "${model}" not found in insult-periodic-table.html`);
     }],
 
+    // ── BL-168 — Topic-dismissal moves (specs/bl-168-topic-dismissal-moves.feature) ─────
+
+    [/^the Golf non-anchor system prompt contains a "TOPIC-DISMISSAL" block$/, () => {
+      const iife = ctx._golfIife || '';
+      if (iife.indexOf('TOPIC-DISMISSAL') < 0)
+        throw new Error('Golf system prompt does not contain TOPIC-DISMISSAL block');
+    }],
+
+    [/^the Golf TOPIC-DISMISSAL block instructs the model to recognise when the previous speaker drifted from the user's question$/, () => {
+      const iife = ctx._golfIife || '';
+      const start = iife.indexOf('TOPIC-DISMISSAL');
+      if (start < 0) throw new Error('TOPIC-DISMISSAL block missing');
+      const block = iife.slice(start, start + 4000);
+      if (!/drift/i.test(block) || !/previous speaker|prior speaker|last speaker/i.test(block))
+        throw new Error('TOPIC-DISMISSAL block does not instruct on drift recognition');
+    }],
+
+    [/^the Golf TOPIC-DISMISSAL block instructs the model to apply a dismissal only when drift is recognised$/, () => {
+      const iife = ctx._golfIife || '';
+      const start = iife.indexOf('TOPIC-DISMISSAL');
+      if (start < 0) throw new Error('TOPIC-DISMISSAL block missing');
+      const block = iife.slice(start, start + 4000);
+      if (!/only when|only if|if (?:they |the previous |their )?(?:drift|drifted)/i.test(block))
+        throw new Error('TOPIC-DISMISSAL block does not condition dismissal on drift detection');
+    }],
+
+    [/^the Golf TOPIC-DISMISSAL block instructs the model to return to the user's original question after the dismissal$/, () => {
+      const iife = ctx._golfIife || '';
+      const start = iife.indexOf('TOPIC-DISMISSAL');
+      if (start < 0) throw new Error('TOPIC-DISMISSAL block missing');
+      const block = iife.slice(start, start + 4000);
+      if (!/return to/i.test(block) || !/(?:user.s|original|actual) question/i.test(block))
+        throw new Error('TOPIC-DISMISSAL block does not instruct return to the user question');
+    }],
+
+    [/^the Golf TOPIC-DISMISSAL block forbids extending the drifted topic past the dismissal beat$/, () => {
+      const iife = ctx._golfIife || '';
+      const start = iife.indexOf('TOPIC-DISMISSAL');
+      if (start < 0) throw new Error('TOPIC-DISMISSAL block missing');
+      const block = iife.slice(start, start + 4000);
+      if (!/do not extend|never extend|not extend|do not adopt|do not stay in|forbid|never stay/i.test(block))
+        throw new Error('TOPIC-DISMISSAL block does not forbid extending the drifted topic');
+    }],
+
+    [/^the Golf TOPIC-DISMISSAL block ties "([^"]+)" temperature to "([^"]+)" flavour$/, (temp, flavour) => {
+      const iife = ctx._golfIife || '';
+      const start = iife.indexOf('TOPIC-DISMISSAL');
+      if (start < 0) throw new Error('TOPIC-DISMISSAL block missing');
+      const block = iife.slice(start, start + 4000);
+      const escape = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const re = new RegExp(`${escape(temp)}[^\\n]*${escape(flavour)}|${escape(flavour)}[^\\n]*${escape(temp)}`, 'i');
+      if (!re.test(block))
+        throw new Error(`TOPIC-DISMISSAL block does not tie "${temp}" temperature to "${flavour}" flavour`);
+    }],
+
+    [/^the Golf TOPIC-DISMISSAL block contains the polite-but-funny example "([^"]+)"$/, (text) => {
+      const iife = ctx._golfIife || '';
+      const start = iife.indexOf('TOPIC-DISMISSAL');
+      if (start < 0) throw new Error('TOPIC-DISMISSAL block missing');
+      const block = iife.slice(start, start + 4000);
+      if (!block.includes(text))
+        throw new Error(`TOPIC-DISMISSAL block missing polite-but-funny example "${text}"`);
+    }],
+
+    [/^the Golf TOPIC-DISMISSAL block contains the cold-dismissal example "([^"]+)"$/, (text) => {
+      const iife = ctx._golfIife || '';
+      const start = iife.indexOf('TOPIC-DISMISSAL');
+      if (start < 0) throw new Error('TOPIC-DISMISSAL block missing');
+      const block = iife.slice(start, start + 4000);
+      if (!block.includes(text))
+        throw new Error(`TOPIC-DISMISSAL block missing cold-dismissal example "${text}"`);
+    }],
+
+    [/^the Golf TOPIC-DISMISSAL block contains the piss-take example "([^"]+)"$/, (text) => {
+      const iife = ctx._golfIife || '';
+      const start = iife.indexOf('TOPIC-DISMISSAL');
+      if (start < 0) throw new Error('TOPIC-DISMISSAL block missing');
+      const block = iife.slice(start, start + 4000);
+      if (!block.includes(text))
+        throw new Error(`TOPIC-DISMISSAL block missing piss-take example "${text}"`);
+    }],
+
+    [/^the Golf TOPIC-DISMISSAL block names tangent-prone characters whose responses do not lead with a dismissal$/, () => {
+      const iife = ctx._golfIife || '';
+      const start = iife.indexOf('TOPIC-DISMISSAL');
+      if (start < 0) throw new Error('TOPIC-DISMISSAL block missing');
+      const block = iife.slice(start, start + 4000);
+      if (!/tangent-prone|exempt|do not lead with|never lead with/i.test(block))
+        throw new Error('TOPIC-DISMISSAL block does not name tangent-prone characters');
+    }],
+
+    [/^the Golf TOPIC-DISMISSAL block exemption list includes the character "([^"]+)"$/, (charName) => {
+      const iife = ctx._golfIife || '';
+      const start = iife.indexOf('TOPIC-DISMISSAL');
+      if (start < 0) throw new Error('TOPIC-DISMISSAL block missing');
+      const block = iife.slice(start, start + 4000);
+      if (!block.toLowerCase().includes(charName.toLowerCase()))
+        throw new Error(`TOPIC-DISMISSAL exemption list does not include "${charName}"`);
+    }],
+
+    [/^the Golf anchor opener prompt does not contain the TOPIC-DISMISSAL block$/, () => {
+      const iife = ctx._golfIife || '';
+      const openerStart = iife.indexOf('ANCHOR_OPENER');
+      if (openerStart < 0) return; // BL-167 not yet shipped — vacuous pass until then
+      const openerBlock = iife.slice(openerStart, openerStart + 3000);
+      if (openerBlock.includes('TOPIC-DISMISSAL'))
+        throw new Error('Anchor opener prompt should not contain TOPIC-DISMISSAL block');
+    }],
+
+    [/^the Golf anchor closer prompt does not contain the TOPIC-DISMISSAL block$/, () => {
+      const iife = ctx._golfIife || '';
+      const closerStart = iife.indexOf('ANCHOR_CLOSER');
+      if (closerStart < 0) return; // BL-167 not yet shipped — vacuous pass until then
+      const closerBlock = iife.slice(closerStart, closerStart + 3000);
+      if (closerBlock.includes('TOPIC-DISMISSAL'))
+        throw new Error('Anchor closer prompt should not contain TOPIC-DISMISSAL block');
+    }],
+
   ];
 }
 

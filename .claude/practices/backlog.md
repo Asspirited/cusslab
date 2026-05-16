@@ -1653,7 +1653,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Feature: panel-interaction
 - Epic: Panel Interaction Model
 - CD3: UBV=8 TC=6 RR=4 → CoD=18, Dur=2, **CD3=9.0**
-- Status: OPEN — raised 2026-03-28
+- Status: OPEN — raised 2026-03-28; **Gherkin approved 2026-05-16 (11 scenarios, full text in session transcript / next retro)**; implementation deferred behind BL-167 (panel needs healthier order first); register options trimmed to four (endorsement | quiet_disagreement | silence_noted | deflation); eligibility narrowed to mutual-knowledge pairs only (matrix M7 non-neutral OR explicit known-wound lore)
 
 ---
 
@@ -1667,7 +1667,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Feature: panel-interaction
 - Epic: Panel Interaction Model
 - CD3: UBV=7 TC=6 RR=4 → CoD=17, Dur=2, **CD3=8.5**
-- Status: OPEN — raised 2026-03-28
+- Status: **SUPERSEDED 2026-05-16 by BL-167** — anchor + trigger-weighted middle model collapses Tier 1/2/3 framework into a simpler "anchor opens & closes, randomised interior" shape that delivers the same structural goal (frame → complicate → land). Original three-tier prompt instruction not needed.
 
 ---
 
@@ -1691,3 +1691,112 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
   - **Window:** First session with decision loop active on Golf panel
 - Status: OPEN — raised 2026-03-28
 
+
+---
+
+### BL-166 — Darts panel + Eric Bristow (SS crossover character)
+
+- Cusslab has golf, football, boardroom, Long Room. No darts panel yet. Eric Bristow
+  as anchor character opens the darts panel. Rod raised Bristow as a shared character
+  between Survival School (SS-097) and Cusslab — same character file, different products.
+- Bristow register: five-time World Champion, brash, Cockney, absolutely certain,
+  wrong domain. Everything is a checkout. The commentary engine applies darts methodology
+  to any sport/domain with total conviction. "You need to hit double top under pressure,
+  son." Applied to a football match. Applied to a golf chip. Applied to a survival situation.
+- Initial darts panel cast hypothesis: Bristow (anchor) + Phil Taylor (cold, methodical,
+  does not share Bristow's personality) + Sid Waddell (commentary tier, supernatural
+  hyperbole as a first language) + Bobby George (Happy Bobby, sequins, the opposite of
+  tactical). Rod to validate cast and provide memories.
+- Cross-product: Bristow character file built once at /home/rodent/survival-school/docs/
+  characters/eric-bristow.md, referenced in both products. Same verbal register, different
+  domain application (darts commentary in Cusslab, fish-out-of-water survival in SS).
+- Feature: darts
+- Epic: New Panel — Darts
+- CD3: UBV=7 TC=4 RR=3 → CoD=14, Dur=3, **CD3=4.7**
+- Status: OPEN — raised 2026-03-28
+
+---
+
+### BL-167 — Panel speaker order: trigger-weighted randomisation per round
+
+- All panels currently use a deterministic speaker order — same characters in the same slots every round. Symptoms: pre-baked reactions land on rails (Butch's "I taught you that" always after Faldo); the same hobbyhorse surfaces in the same slot every round (Faldo → Ginsters first → everyone responds inside that frame); texture is predictable and the panel reads as a queue, not a room.
+- Fix: per-round speaker selection that randomises WHICH characters speak and IN WHAT ORDER, weighted by who is most likely to be triggered by the previous comment.
+- **Trigger score** for candidate speaker B given previous speaker A's turn T. Positive and negative components contribute equally — both can fire B.
+  - **Negative pulls:**
+    - `+w1` if T contains a trigger-word match against B's wound vocabulary (GOLF_WOUNDS or panel equivalent)
+    - `+w2` if B holds an outstanding debt against A (debtLedger.owed)
+    - `+w3` if B's current relationshipState temperature toward A is hostile (`simmering`/`hot`)
+    - `+w4` if A's posture type just contradicted B's posture/domain (BL-143/144/145 recentMoves)
+  - **Positive pulls (equal weight; engine does NOT verify accuracy — misunderstood-but-eager is a feature):**
+    - `+w5` if T overlaps with B's enthusiasm primer (per-character keyword/topic list — "philosophy" for Skinner, "the work" for Butch, media-strategy lingo for Partridge, anything for Tufnell)
+    - `+w6` if B's current relationshipState temperature toward A is warm (`warm`/`reverent`)
+    - `+w7` if T contains a topic B claims as their territory (real expertise or imagined — accuracy irrelevant; the voice handles the misunderstanding via P9 `enthusiastic_confabulation`)
+  - Positive and negative scores accumulate — a character with warm temperature toward A whose wound A just hit is BOTH eager and triggered; the trigger system just picks them, the voice surfaces which lens dominates.
+  - Floor probability `pmin` so cold/disengaged candidates remain occasionally selectable — otherwise "most triggered" becomes a new deterministic pattern.
+- **Anchor model (supersedes BL-165 tier framework):** each panel has one fixed **anchor** character who **opens** every round (sets the room) and **closes** every round (top-and-tails what just transpired). Anchor opener prompt ≠ anchor closer prompt — opener primes, closer reflects on the round just witnessed. Closer slot is the biggest comedy lever in the round (the anchor has heard everything before speaking again).
+- **Slot structure per round:**
+  - Slot 1: ANCHOR (fixed per panel — opener mode)
+  - Slots 2..N-1: trigger-weighted random selection from non-anchor cast (N is panel-configurable; not every character fires every round)
+  - Slot N: ANCHOR (same character — closer mode)
+- **Anchor identities (settled 2026-05-16):**
+  - Golf (19th Hole) → **Murray**
+  - Boardroom → **Harold** (Pint of Harold)
+  - Football → **Souness** (Ron stays as mid-round artillery)
+  - Comedy Room → **Gervais**
+  - Phil's-opoly (IDEA, panel not yet shipped) → **Tufnell** — closer slot delivers the named "Tuffers Version of Events" mechanic on whatever the philosophers just said
+  - Darts (BL-166, not yet shipped) → **Mardle** (Bristow moves to mid-round chaos role, retains SS crossover)
+  - Long Room → Blofeld (existing host)
+  - Final Furlong → Alan Brazil (existing host)
+  - Crucible Corner → Jimmy White (existing host)
+  - Spit Shelter → Eminem (existing anchor)
+- **Interacts with:** BL-165 SUPERSEDED — closing BL-165 in favour of this anchor model; BL-163 (glance eligibility computed against whoever actually spoke this round, especially relevant when anchor closes with full round context); WL-149 (anchor not being the perma-first speaker dilutes always-Faldo-Ginsters adoption); WL-131 (opener bleeding will lose the slot context that anchors it).
+- **Lands before BL-163** — gives the glance design a healthier panel to land in.
+- Open Three Amigos questions: trigger score weights (w1–w7) and `pmin`; remaining anchor identities (Football, Comedy Room, Phil's-opoly); whether anchor identity can vary across sessions (host rotation, like real TV) — out of scope for v1.
+- Feature: panel-interaction
+- Epic: Panel Interaction Model
+- CD3: UBV=9 TC=7 RR=4 → CoD=20, Dur=2, **CD3=10.0**
+- Status: OPEN — raised 2026-05-16; Three Amigos complete; **Gherkin approved 2026-05-16 (12 scenarios, full text in session transcript / next retro)**; outside-in design next; BL-165 closed as superseded; **deferred behind BL-168 (Rod 2026-05-16 — wants pure-prompt dismissal layer shipped first for live testing)**
+
+---
+
+### BL-168 — Topic-dismissal moves: peers call out off-topic tangents
+
+- When the previous speaker drifts off the user's question (Faldo's Ginsters, Tufnell's puppy analogy, Partridge's media strategy), the next speaker may lead their response with a flavoured dismissal of the drift before returning to the actual question. Stops the rest of the panel adopting one character's hobbyhorse — the prompt-layer fix to WL-149.
+- **Three dismissal flavours**, selected by the speaker's current relationshipState temperature toward the drifter:
+  - **Polite-but-funny** (warm / amused): "yeah, more luke warm ginsters Nick, great...........anyway as we were saying"
+  - **Cold dismissal** (cool / neutral / exasperated): "No not like Ginsters Nick"
+  - **Piss-take** (hostile / amused-superior / recently insulted): "yeah, exactly, like a fucking warm ginsters Nick you stupid one-exampled idiot"
+- **Not every character dismisses.** Tangent-prone characters (Faldo, Sebastian, Partridge, Tufnell, MacGowan likely) are the ones being dismissed — they don't lead with dismissals themselves. Dismissal is a PEER move fired by closers / authority / piss-takers (Souness, Roy, Boyle, Diogenes, Big Ron when serious, Cox, Henni, etc.).
+- **v1 (this BL — pure prompt, no engine):** add TOPIC-DISMISSAL block to the system-prompt assembly for non-anchor characters. Trusts the model to detect drift from the user question and select flavour from existing RelationshipState.temperature. Same prompt block + per-character exemption list. No new data layer, no new code paths. Roughly: one Edit to `index.html:14996–15033` plus the dismissers/dismissed list inline.
+- **v2 (future BL):** proper drift-detection signal, per-character dismissal flavour profile attribute, frequency tuning, recent-mood-shift modulation.
+- **Composes with:** BL-167 (the dismisser is whichever character was selected by slot order); BL-163 (response-body dismissal is the visible payload; `reacts_to.register` may carry the flavour as metadata for UI thread indicator); WL-149 (this is the prompt-layer fix Rod called for).
+- Feature: panel-interaction
+- Epic: Panel Interaction Model
+- CD3: UBV=9 TC=8 RR=3 → CoD=20, Dur=1, **CD3=20.0**
+- Status: OPEN — raised 2026-05-16; Three Amigos complete in conversation; Gherkin next; **Rod wants this shipped before BL-167 Slice 1 for live testing**
+
+---
+
+### BL-169 — Profani-saurus: shared character-authentic profanity dictionary
+
+- Cross-product structured dictionary defining each character's authentic swear vocabulary, conditions of use, register types, and timing. Lives in `/home/rodent/leanspirited-standards/standards/profani-saurus.md` (canonical, like character-schema.md). Pushed to `github.com/Asspirited/leanspirited-standards`. Referenced by Cusslab, Survival School, Fallacy Finder.
+- **Why now:** Cusslab is a profanity-themed product. Souness, Boyle, Diogenes, Roy Keane, Bristow, Big Ron etc. all have distinct swearing patterns in their canonical voice. Currently the model improvises profanity per character — sometimes anachronistic (Diogenes wouldn't say "twat"), sometimes off-register (Murray rarely swears at all, Faldo swears differently from Souness). A structured dictionary ties character voice to authentic vocabulary.
+- **Per-character schema (proposed — new schema attribute, likely P11 or M10):**
+  - `swears` — array of words/phrases this character uses
+  - `conditions` — when they fire (wound activated / temperature hostile / dismissal / closer slot / never)
+  - `register` — mild / strong / scatological / sexual / blasphemous / British-class-marker / regional-dialect / character-archaism
+  - `timing` — opener / mid-response / climax / closer / dismissal-beat
+  - `never_says` — explicit blocklist for that character (e.g., Murray never says the c-word; Diogenes never uses modern profanity)
+  - `escalation_curve` — does intensity rise with round number? (Souness: yes. Murray: no.)
+- **Composition with other BLs:**
+  - BL-168 dismissal flavours: piss-take register draws from profani-saurus for character-authentic savagery
+  - BL-163 deflation register: same draw
+  - BL-167 anchor closer (Souness, Harold): closer prompt can reference profani-saurus for the top-and-tail beat
+  - Character-schema.md gains a new attribute layer (P9-P10 already cover lie + shadow; this is P11 or a new "Profanity Profile" section)
+- **v1 scope:** dictionary file + schema attribute definition + populate for ~6 highest-profanity Cusslab characters (Souness, Roy Keane, Boyle, Bristow, Diogenes, Big Ron). Validation rule in pipeline that any character flagged as a "swearer" has the attribute populated.
+- **v2:** populate all characters in the estate; prompt-side integration so BL-168 dismissal block references `${swearsFor(member.id, 'piss-take')}`.
+- **Cross-product coordination:** Profani-saurus changes require BOTH Cusslab and Survival School pipelines to stay green. Treat as standards-repo change with downstream impact.
+- Feature: platform / character-schema
+- Epic: Panel Interaction Model (related) / Character Schema (primary)
+- CD3: UBV=8 TC=6 RR=4 → CoD=18, Dur=2, **CD3=9.0**
+- Status: OPEN — raised 2026-05-16; Three Amigos needed (especially the schema attribute placement and the v1 character list)

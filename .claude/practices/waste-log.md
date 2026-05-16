@@ -17,6 +17,19 @@
 | WL-131 | Character dullness — "X is right/wrong" openers, "I've watched this back" bleeding | Medium | Three Amigos needed before touching TURN_RULES |
 | WL-136 | UI audit: IIFE return objects not checked — exports can go missing silently | High | Add pipeline check: verify each global wrapper's IIFE target is in return statement |
 | WL-147 | backlog-report.js: `Status[:\s]+` regex matches "status text" in descriptions, falsely marking items OPEN | Low | Tighten regex to `^\s*[-*]\s*Status:` in multiline mode |
+| WL-149 | Panel topic adoption — when one character locks onto a specific topic (Faldo → Ginsters), the others mirror it instead of pursuing their own angle | Medium | BL-163 `reacts_to` design must encode "glance, then pivot, do not adopt"; separate pool rotation fix may be needed for Faldo |
+
+---
+
+### WL-149
+**Item:** Panel topic adoption — Faldo Ginsters monomania bleeds across the 19th hole panel
+**Symptom:** When Faldo locks onto a specific pool item (named instance: Ginsters), the rest of the panel stops pursuing their own angles and responds inside Faldo's topic frame. Result: flat, monomaniacal texture. The panel becomes a single-topic loop instead of competing voices. Distinct from WL-131 (opener phrases bleeding) — this is topic-level not phrase-level adoption.
+**Root cause (provisional):** Sequential multi-agent harmonisation — later characters read prior turns in context and conforming pressure flattens them to the same subject. Compounds with character-side pool weighting (Faldo's Ginsters entry may also be over-rotated — separate issue, may need its own WL after investigation).
+**Session:** 2026-05-16
+**Time lost:** Unknown — pattern caught by Rod in product testing; degrades every run where it triggers
+**Cost impact:** Medium — panel quality flat whenever it fires
+**Tags:** `#panel-harmonisation` `#register-collapse` `#topic-adoption` `#19th-hole` `#rod-caught`
+**Status:** Open — BL-163 `reacts_to` prompt design must enforce "glance, then pivot, never adopt"; pool monomania remains as a possible second WL once investigated
 
 ---
 
