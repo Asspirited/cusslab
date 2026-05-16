@@ -1809,7 +1809,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Feature: platform / character-schema
 - Epic: Panel Interaction Model (related) / Character Schema (primary)
 - CD3: UBV=8 TC=6 RR=4 → CoD=18, Dur=2, **CD3=9.0**
-- Status: OPEN — raised 2026-05-16; Three Amigos needed (especially the schema attribute placement and the v1 character list)
+- Status: OPEN — raised 2026-05-16; **canonical content shipped 2026-05-16 to `leanspirited-standards/standards/profani-saurus.md` (commit 4d73c62 in Asspirited/leanspirited-standards)** with 9 character profiles (Souness, Roy Keane, Boyle, Bristow, Diogenes, Big Ron, Murray, Harold, Faldo), 5 generative compound templates, 5-purpose register criteria, and engine-trigger mapping. Implementation deferred behind BL-162 — the engine absorbs voice/profanity selection via shared `VoicePoolSelector` (consumes this file). Schema attribute placement still TBD when BL-162 reaches that slice.
 
 ---
 

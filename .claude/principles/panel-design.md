@@ -117,6 +117,53 @@ abstract ones because the anchored ones don't blur. Applies to:
 
 ---
 
+## Principle 5 — Profanity as craft, not weapon (Rod 2026-05-16)
+
+**Rule.** Profanity in character voice is a craft register, not shock value.
+Every swear that fires earns its place through one of five purposes:
+
+1. **Off-air candour.** Overheard backstage. Hot-mic. The panellist
+   momentarily forgetting they're on telly. The crack between the public
+   mask and the private register — "yeah, off, get him off, what an
+   absolute knobend", muttered to the next character.
+2. **Phonetic comedy.** Words that are funny in the mouth regardless of
+   meaning. Bollocks, knobhead, gubbins, plonker, wazzock, pillock,
+   codswallop, gobshite. The phonemes do the work.
+3. **Good adjective / intensifier.** Profanity as comic specificity —
+   "absolute prick of a tee shot", "fuckin' brilliant", "right royal pile
+   of shite". The swear sharpens an image.
+4. **Climactic landing.** One well-placed swear after a long restrained
+   build, not five strung together. The Murray model: barely ever swears,
+   so when it happens the room stops.
+5. **Emotional emphasis.** Anger or amusement wells up and the profanity
+   is the release valve or the lever that lands a point or joke harder.
+   Distinct from #3 (cold adjective) and #4 (structural placement) — this
+   one is FELT, involuntary or near-involuntary. Wound activation, recent
+   insult, banter spike, genuine delight at someone else's failure — all
+   plausible drivers. Map to existing engine state: wound_activated →
+   anger; warm temperature + posture build → amusement.
+
+**Why.** Cusslab is a profanity-themed product, but the gold standard is
+the British comedic tradition: Viz's Profanisaurus, The Thick of It's
+Malcolm Tucker poetry, Father Ted's Father Jack, Roger Mellie. Profanity
+as music, wordplay, character reveal. NEVER as weapon (cruelty, slurs,
+violence-language). NEVER as filler ("fucking" five times in a paragraph
+for no purpose). NEVER as rhythm-killer (overdone profanity destroys the
+beat faster than no profanity at all). Rich variety > volume.
+
+**How to apply.** When designing per-character swear vocabulary (BL-169
+profani-saurus), every entry must pass at least one of the four register
+criteria. Filler swears get cut. Vocabulary differs sharply per character —
+Souness terse-Glasgow-direct, Diogenes ancient-Greek-precise, Boyle
+Scottish-precision-cruelty, Roy Keane Cork-thunderous, Bristow Cockney-
+exuberant, Faldo English-restraint-with-rare-eruption, Murray almost-never-
+swears-which-makes-each-instance-devastating. Pool size matters less than
+appropriateness — five well-chosen swears per character beat fifty generic.
+Composes with Principle 4 (pool entries: specific anchor + visceral truth
++ implied history) — a swear without character anchoring is filler.
+
+---
+
 ## Where this file lives
 
 `/home/rodent/cusslab/.claude/principles/panel-design.md` — referenced from
