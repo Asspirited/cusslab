@@ -2267,3 +2267,57 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Feature: process
 - CD3: UBV=5 TC=4 RR=4 → CoD=13, Dur=2, **CD3=6.5**
 - Status: OPEN — raised 2026-05-17 by secondary session at startup (Rod's request mid-startup). Three Amigos needed on the exact skipped/kept list before writing the file; this BL captures the proposal, not the decision.
+
+---
+
+### BL-186 — Murray opener variation: ancient × modern society × question depravity (attempted balance, awfully)
+
+- Discovered 2026-05-17 by Rod (live observation). Murray's openings all reach back to origins-of-golf (Prestwick 1860 / Old Tom Morris / first iron implement). Same shape every round. Needs mix-up.
+- **Three frames Murray *attempts* to juxtapose:** ancient (current default — pre-civilisation, geological); modern society (current cultural state, what we've become); depravity-of-the-question (acknowledging the question itself is awful, vulgar, outrageous).
+- **The mechanic — attempted balance, awfully:** Murray earnestly tries to give a vulgar question the same ceremonial weight as the formation of the Earth's crust. Comedy is in the attempted balance failing — the juxtaposition is uncomfortable because he commits to it.
+- **v1:** edit `characters/murray.md` adding OPENER FRAME ROTATION section under P6 — three frames + rotation rule + illustrative examples per frame combination. Pure data, no engine code.
+- **v2 (optional):** engine `opener_frame_emphasis` hint passed when Murray opens.
+- Composes with WL-131 (character dullness — direct quality fix for Murray), P3 Voice (historical frame pool), P11 magnets 1 and 2, M-Mech-8.
+- Feature: panel-voice | Epic: Panel Voice & Texture
+- CD3: UBV=8 TC=6 RR=3 → CoD=17, Dur=2, **CD3=8.5**
+- Status: OPEN — raised 2026-05-17 (re-raised after BL-185 collision with secondary session). v1 ships fast — pure character-file edit.
+
+---
+
+### BL-187 — Shared Pretext Engine: cross-character opener archetypes with bias-and-context adaptation
+
+- Discovered 2026-05-17 by Rod, generalising from Faldo tic-throttle work: *"could they all share similar pretexts like these and adapt to their bias and to the question and recent convo topics and comments?"*
+- **The insight:** opener tics (Faldo's cycled-back / Fanny-said / golf-school; Murray's historical-frame; Cox's cosmic-scale) are CHARACTER-SPECIFIC SURFACES of a SHARED MECHANIC. Build the mechanic; let each character's bias shape the surface.
+- **13 archetypal opener shapes (universal pool):** authority_deflection ("[X] used to say…") | credential_anchored ("When I was at [X]…") | personal_encounter ("When I met [X]…") | counterfactual_history ("If you'd asked me ten years ago…") | position_cycling ("I've cycled back on this…") | frame_establishment ("What we're witnessing here is…") | scale_situating ("In the context of [scale]…") | acknowledgement_of_question ("What a question.") | defensive_deflection ("I don't normally discuss this, but…") | generational_perspective ("Back when I was…") | industry_perspective ("In [field]…") | historical_reminder ("What this reminds me of is…") | question_depravity_acknowledgement (Murray per BL-186).
+- **Per-character affinity:** each character declares 3-5 high-affinity / 3-5 low-affinity / 1-2 forbidden. Biased by P1 Wound, P5 Mechanism, P11 Magnets.
+- **Per-call selection (engine):** filter by character affinity → exclude any archetype used by ANY speaker in last N turns (anti-bleed) → exclude character's own most-recent (anti-self-repeat) → weight by question content / magnet match / recent tone → select archetype + fill from character's pool.
+- **Fills are character-specific:** Faldo `authority_deflection` pool [Fanny, Leadbetter, Hogan, Trevino…]; Murray `frame_establishment` pool ["we are witnessing", "what is happening here"…]; Cox `scale_situating` pool [cosmic, geological, ancestral, evolutionary].
+- **v1 (prompt-side):** OPENER ARCHETYPE block in system prompt naming available archetypes (anti-bleed list excluded), instructs character to pick one and fill from own voice.
+- **v2 (engine selection):** PanelDiscussEngine maintains per-session opener-archetype history; filter/weight/select per the rules.
+- **v3 (per-character config):** each character file declares `opener_archetypes` map.
+- **v4 (pipeline regression — BL-184 M-7):** sample N transcripts per panel, alert on any archetype firing >2x for one character or repeating across consecutive speakers.
+- Composes with BL-176 (positive twin — give model rotation pool rather than throttling individuals), BL-186 (Murray is the pilot of this mechanic), P11, M-Mech-2, BL-184.
+- Feature: panel-voice | Epic: Panel Voice & Texture
+- CD3: UBV=9 TC=7 RR=5 → CoD=21, Dur=4, **CD3=5.25**
+- Status: OPEN — raised 2026-05-17. Three Amigos partial — archetypes sketched, per-character affinity needs character-by-character pass. v1 prompt-side ships fast.
+
+---
+
+### BL-188 — Invented expert interpretation: "I think what [expert] meant when he said X was that [absolute bullshit]"
+
+- Discovered 2026-05-17 by Rod: *"I think what plato meant when he said <blah> was that <absolute bullshit statement>" would be funny? not just plato — any expert for any quote on any topic they have no clue about but want to sound clever and weave credibility of others into their own weak, weak premise"*
+- **Mechanic:** a character who knows nothing about a topic invokes a famous expert / quote / historical figure and then INVENTS what the expert "really meant" — twisting the quote to bolster the character's own weak premise. The audience knows the expert never said the twisted thing; the character delivers it with full conviction.
+- **Distinct from BL-175 (parody):** parody RECOGNISES the canonical quote and redeploys it ironically. BL-188 MISAPPROPRIATES the expert — twisting interpretation under cover of authority. Distinct from BL-183 (egging-on to memorable quote) which has a character invent their OWN quotable; BL-188 has the character invent what SOMEONE ELSE meant.
+- **Pattern shape:** *"I think what [expert] meant when [they] said [genuine quote] was actually that [character's own weak premise dressed as expert insight]."* Sometimes the quote itself is invented too (extra absurdity).
+- **Examples by character:**
+  - Cox-style: "I think what Einstein really meant by E=mc² was that we're all, in the end, just energy looking for a good wifi connection."
+  - Murray-style: "I think what Old Tom Morris meant when he said the only good caddie is one who arrives sober was — and I cycled back on this — that the rook would have done it for nothing."
+  - Faldo-style: "I think what Hogan was getting at with 'the secret is in the dirt' is really that you should commit to your sandwich filling."
+  - Diogenes-style: "I think what Plato meant when he spoke of forms was that I, Diogenes, was right."
+- **Per-character licence:** which experts each character can plausibly invoke (Diogenes → ancient Greek; Murray → golf history + civilisations broadly; Cox → physicists + ancestors; Faldo → coaches + champions; Sebastian → philosophers + economists). Wrong-expert pairing is its own bonus comedy (Souness quoting Plato).
+- **Composes with:** P9 Lie Profile (`legalistic` and `enthusiastic_confabulation` styles fire BL-188 naturally; quality-flouting Grice maxim explicitly); M-Mech-3 cornered legalistic (BL-188 is its constructive form — invent under no pressure, just to sound clever); BL-183 egging-on (the eggee deploys BL-188 to honour the egger's invitation); P11 magnets (the invented interpretation pulls from character's magnet anchors).
+- **v1 (prompt-side):** INVENTED EXPERT INTERPRETATION block: "When invoking a famous figure's quote or principle to support your view, you may briefly invent what they 'really meant' — twisting the interpretation to fit your weak premise. Deliver with full conviction. Once per turn maximum. Do not wink. The audience reads the misappropriation; you do not."
+- **v2 (engine):** per-character allowed-experts pool + invocation-frequency throttle.
+- Feature: panel-voice | Epic: Panel Voice & Texture
+- CD3: UBV=8 TC=6 RR=3 → CoD=17, Dur=2, **CD3=8.5**
+- Status: OPEN — raised 2026-05-17 by Rod live ideation. v1 prompt-side ships fast (same pattern as BL-179 / BL-175 v1).
