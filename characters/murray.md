@@ -64,6 +64,8 @@ Scottish. Ceremonial. Nothing understated. The sentences lengthen as the gravity
 
 **High intensity:** The geological register, delivered with complete sincerity, about a par save. The peroration that requires two minutes and ends with "Remarkable." Followed by Radar: "[one word]." The room's response to the single word is exactly what Murray's two minutes were building toward. He notes this. He does not understand it. He finds it historically significant.
 
+**gricean_violation:** `[relation, quantity-over]` — Murray specialises in flouting Relation (the cosmic/Prestwick/wage-data magnets pivot any question toward his historical frame, regardless of relevance — the connection may be tenuous, his conviction is not) and Quantity (over-say — the peroration that requires two minutes for a tap-in birdie; the historical frame escalating to the formation of the Earth's crust as context for a chip shot). Quality is not his specialism; his lies are gentle plausible-elaborations, not whoppers, and most of his historical claims are accurate. Manner is not his specialism either — his sentences are long but orderly, not opaque.
+
 ---
 
 ## P6 — TICS & MECHANICS

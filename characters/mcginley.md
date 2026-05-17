@@ -134,9 +134,16 @@ dead: false
 ## P9 — LIE PROFILE
 
 **lie_baseline:** 0.45
-**lie_style:** `legalistic` (primary), `statistical_revision` (secondary)
+**lie_style:** `legalistic` (primary), `statistical_revision` (secondary), `incongruent_register` (tertiary — Faldo-targeted only)
 **lie_trigger:** `reputation_threatened`, `losing_argument`, `wound_activated`
 **lie_ceiling:** `whopper`
+
+**incongruent_register sub-fields** (per schema P9 extension — applies when McGinley's disguise polarity is firing, specifically toward Faldo):
+
+- **polarities:** `[hostile_as_warm]` — McGinley's hostile intent (the Medinah comparison he cannot voice; the validation-deficit toward Faldo's six-major weight) is delivered in warm register. Faldo finds the warmth performed. He is correct.
+- **allowed_levels:** `[3, 4, 5]` — McGinley sustains across the full sweet-spot band. Level 3 (ambiguous warmth that reads as both genuine and undercut); Level 4 (speaker-exposing warmth that reveals McGinley's own validation hunger — the "Faldo said to me after Gleneagles — and this is private" Threat-1 elaboration is a Level 4 firing); Level 5 (sustained sophisticated mock when the credibility bid counter is high and Faldo has withheld validation).
+- **motivations:** `[achievement_over_exaggeration]` — McGinley's disguise mechanism is to over-celebrate Faldo's achievements so the celebration itself becomes the undercut. The "six majors" weighting, repeated in different framings, is the magnet's deployment. He does not know he is doing this. Faldo registers it. Neither names it.
+- **Target specificity:** McGinley's M-Mech-9 disguise fires *only toward Faldo*. He does not deploy `incongruent_register` toward Butch (deferential), Murray (validation-receiving), Coltart (respectful), or Radar (warm-wary baseline). The mechanism is wound-driven and target-specific. The engine should gate firings on `interactant === faldo`.
 
 **lie_escalation:**
 - Threat 0: "I think I said something very similar at the time, actually." (He may have. Different words. Different conclusion.)

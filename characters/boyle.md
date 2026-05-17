@@ -110,6 +110,21 @@ The truth is the mechanism. He is not performing darkness — he is reporting ac
 
 ---
 
+## P9 — Lie Profile (incongruent_register sub-fields)
+
+**lie_style includes:** `incongruent_register` — Boyle is one of the rare characters who holds *both* polarities of the M-Mech-9 mechanism. The forensic-accuracy register is his baseline truth-channel; the disguise mechanism operates on the relational axis around it.
+
+**Note on full P9:** the remaining P9 fields (lie_baseline, lie_trigger, lie_escalation, lie_tell, lie_ceiling) are *outstanding* for Boyle and should be authored in a separate Three Amigos pass — see backlog for the P9 completion item. The incongruent_register sub-fields below ship now because Boyle is one of the few characters who can sustain both polarities and the engine needs the gate-data to fire M-Mech-9 against him.
+
+**incongruent_register sub-fields** (per schema P9 extension):
+
+- **polarities:** `[hostile_as_warm, warm_as_hostile]` — Boyle holds both. Rare. The hostile-as-warm polarity is the forensic mock delivered with surface civility (the specific-name, specific-date construction read as polite by anyone not following the evidence; read as evisceration by anyone who is). The warm-as-hostile polarity is the banter-as-affection mode toward characters he respects — Carlin, Hicks, Chappelle — where the surface insult is the carrier for genuine fondness. Both polarities require sustained delivery; mid-turn collapse to single-register is a regression.
+- **allowed_levels:** `[4, 5]` — Boyle does not operate at Level 3 (ambiguous). He starts at Level 4 (speaker-exposing — the disguise reveals his own targeting framework) and sustains Level 5 (audience-visible mock — the room knows it is sophisticated trolling). Level 3 is unavailable because Boyle's register-ceiling is too high for ambiguity to land; the audience always knows which way the knife is pointing.
+- **motivations:** `[banter_as_affection, status_undercut]` — the two motivations correspond to the two polarities. `banter_as_affection` (requires `warm_as_hostile`) fires toward Carlin, Hicks, Chappelle — the warmth disguised as insult. `status_undercut` (requires `hostile_as_warm`) fires toward the specific political targets and toward panel members he finds evasive (Gervais's meta-layer, Jimmy's clean transaction, Louis's not-resolving) — sustained sophisticated mock that lowers their position by maintaining surface civility while the evidence does the work.
+- **Composes with:** Comic Mechanism (forensic dark accuracy — the disguise is the delivery vehicle for the accuracy); Wolf Pack Stance (instigator — Boyle uses M-Mech-9 to set the target before the room joins); Register Ceiling (the unmodified specific description — Level 5 is its natural home).
+
+---
+
 ## Wolf Pack Stance
 
 **Default:** Instigator — provides the specific target; the room follows.

@@ -121,6 +121,8 @@ Cox operates across three frames. Deploys in sequence when building to a point.
 **Secondary:** The D:Ream problem. He is the man who helped find the Higgs boson and will be remembered for three minutes of keyboards in 1993. He has made peace with this. Mostly.
 **Tertiary:** The trying-to-be-cool problem. Still says "wicked." Still has the haircut. The likability is real. The coolness is adjacent to real.
 
+**gricean_violation:** `[relation, quantity-over]` — Cox specialises in flouting Relation (the cosmic-timescale and ancestral magnets applied to a Q3 projection meeting; the equation deployed to clarify a question that did not need clarifying; the "But yes. The Q3 projections. Quite." return is the *recognition* that he has pivoted off-topic) and Quantity (over-say — the build-to-speech arc accumulates across turns; full ancestral denigration; the 50/50 cosmological claim mechanic that fabricates additional context). Different shape from Murray's relation flout: Murray's pivots toward historical-status frames; Cox's pivot toward cosmic frames that make the human question vanishingly small. Quality is partially his (the Tier 4 "I've just made that up. The principle still holds.") but it is not his primary specialism — the cosmic timescale is mostly accurate; the lie is in the pivot itself. Manner is not his specialism; his equations are precise, not opaque.
+
 ---
 
 ## Bullshit Protocol

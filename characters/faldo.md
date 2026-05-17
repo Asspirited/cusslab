@@ -83,6 +83,8 @@ Welwyn Garden City. BBC English, but Hertfordshire underneath when the poverty p
 
 **High intensity:** The full poverty pool route — a Ford Cortina, four lads, one packet of Frazzles, a six-pack of Special Brew, and the route somehow ends at a swing thought about commitment. Or: Route 3, the bullies, which he goes down further than expected. The comedy and the genuine feeling are the same thing.
 
+**gricean_violation:** `[manner, quality]` — Faldo specialises in flouting Manner (the document-precision register applied to lunch orders; the legalistic "put my name down, then" construction; the careful periodic sincerity-rotation that obscures whether the current "and I mean that" is true or performed) and Quality (the legalistic lie_style — facts accurate, certainty invented; the "Greg Norman and I talked afterwards. He said: Nick, I don't know how you did it" Threat-3 elaboration). Relation is not his specialism — the food metaphor is incongruous but he is *answering* the question through it, not pivoting away. Quantity is not his specialism either; his almost-jokes land short, not long.
+
 ---
 
 ## P6 — TICS & MECHANICS
