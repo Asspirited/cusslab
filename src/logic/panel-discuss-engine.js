@@ -249,6 +249,15 @@ function buildSystemPrompt(ctx) {
     ? '\n\nTOPIC MAGNETS:\nYour character file lists topic magnets in section P11 — subjects your mind returns to regardless of what is being asked. When the question allows, let one or two of your magnets surface this turn per their declared surface_form: chosen_examples (use a magnet anchor item as your illustrative example), connecting_tissue (thread an anchor between your opener and closer), unprompted_reference (surface a magnet anchor even when no prompt cue exists), or over_determined_answer (the magnet IS the answer — the M-Mech-8 case).\n\nNever name your magnets explicitly. Do not say "I have an interest in X." Do not lecture about the topic — surface anchor items naturally, as if the connection were obvious. If another panellist names your magnet, follow your declared acknowledgement_rule: never (deny outright or stay silent), denies_when_called_out (active denial in your voice), if_directly_asked (admit only under direct pressure, frame as authority not fixation). The magnet must surface, not be declared. Across rounds, vary which magnet fires — do not surface the same magnet two turns in a row unless its strength is obsessive.\n'
     : '';
 
+  // BL-180 v1 — Hanging-in-the-air. Non-anchor non-interjection turns only.
+  // Allows the current speaker to deliberately not engage with the previous turn —
+  // the audience reads the absence; the silence IS the comedy. Four firing conditions:
+  // discomfort, rhetorical, cruelty, insanity/tumbleweed. Per Rod live observation
+  // 2026-05-17. v1 prompt-side; per-character permission (can_leave_hanging) deferred to v2.
+  const hangModeBlock = (ctx.hangModeEnabled && !isAnchorTurn && typeof slot === 'number' && slot > 0)
+    ? '\n\nHANGING-IN-THE-AIR MODE:\nIf the previous turn was (a) cruel and engaging would legitimise it, (b) rhetorical and answering would miss the point, (c) too uncomfortable to address (someone said something embarrassing about someone present), or (d) so unhinged that engagement is impossible — you may choose NOT to engage with it. Four reactions are available:\n  - PIVOT: change subject entirely without referencing what was just said. "Anyway, what about [new topic]."\n  - REDIRECT: gently steer back to a relevant point without engaging the content. "Going back to the question itself for a moment…"\n  - TUMBLEWEED: a single beat — one short sentence acknowledging nothing happened that needs an answer. "[Pause.]" or "Right. Moving on."\n  - AUDIBLE PAUSE: register the discomfort briefly, then continue as if nothing was said. "I — yes. [Continues on own topic.]"\nUse rarely — at most once per panel session. Default is to engage. The hang must FEEL deliberate: never wink, never explain why you are not engaging. The audience must read the choice. Some characters cannot do this (too direct, too earnest, too oblivious) — if your character would always answer, do not deploy.\n'
+    : '';
+
   // BL-188 v1 — Invented Expert Interpretation. Non-anchor non-interjection turns only.
   // Per Rod live observation 2026-05-17: characters who know nothing about a topic invoke
   // a famous expert and INVENT what the expert "really meant" to bolster their own weak
@@ -278,6 +287,7 @@ function buildSystemPrompt(ctx) {
     + profanityBlock
     + reverentAbsurdityBlock
     + topicMagnetsBlock
+    + hangModeBlock
     + inventedExpertBlock
     + (panelStateBlocks || '')
     + member.prompt
