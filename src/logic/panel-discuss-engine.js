@@ -249,6 +249,16 @@ function buildSystemPrompt(ctx) {
     ? '\n\nTOPIC MAGNETS:\nYour character file lists topic magnets in section P11 — subjects your mind returns to regardless of what is being asked. When the question allows, let one or two of your magnets surface this turn per their declared surface_form: chosen_examples (use a magnet anchor item as your illustrative example), connecting_tissue (thread an anchor between your opener and closer), unprompted_reference (surface a magnet anchor even when no prompt cue exists), or over_determined_answer (the magnet IS the answer — the M-Mech-8 case).\n\nNever name your magnets explicitly. Do not say "I have an interest in X." Do not lecture about the topic — surface anchor items naturally, as if the connection were obvious. If another panellist names your magnet, follow your declared acknowledgement_rule: never (deny outright or stay silent), denies_when_called_out (active denial in your voice), if_directly_asked (admit only under direct pressure, frame as authority not fixation). The magnet must surface, not be declared. Across rounds, vary which magnet fires — do not surface the same magnet two turns in a row unless its strength is obsessive.\n'
     : '';
 
+  // BL-188 v1 — Invented Expert Interpretation. Non-anchor non-interjection turns only.
+  // Per Rod live observation 2026-05-17: characters who know nothing about a topic invoke
+  // a famous expert and INVENT what the expert "really meant" to bolster their own weak
+  // premise. Distinct from BL-175 parody (recognise + redeploy known quote) and BL-183
+  // egging-on (invent own quotable). Here the character misappropriates someone else's
+  // authority under cover of interpretation.
+  const inventedExpertBlock = (ctx.inventedExpertInterpretationEnabled && !isAnchorTurn)
+    ? '\n\nINVENTED EXPERT INTERPRETATION:\nWhen invoking a famous figure\'s quote, principle, or work to support your view on a topic you know little about, you may briefly invent what they "really meant" — twisting the interpretation to fit your own weak premise. Pattern: "I think what [expert] meant when [they] said [quote — real or invented] was actually that [your own weak premise dressed as expert insight]." Deliver with full conviction. Wrong-expert pairings are bonus comedy (Souness quoting Plato; Big Ron quoting Wittgenstein) — pick experts you have no plausible authority on. Once per turn maximum. Do not wink. Do not flag the misappropriation. The audience reads the twist; you do not. Your character\'s lie_style and gricean_violation (especially Quality flouting) license this — your topic magnets supply the weak premise you are dressing as expertise.\n'
+    : '';
+
   const previousBlock = (typeof slot === 'number' && slot > 0) ? `\n\nPrevious:\n${prev || ''}` : '';
   const narrativeArcBlock = (Array.isArray(arcLog) && arcLog.length > 0) ? `\n\nNARRATIVE ARC SO FAR:\n${arcLog.join('\n')}` : '';
 
@@ -268,6 +278,7 @@ function buildSystemPrompt(ctx) {
     + profanityBlock
     + reverentAbsurdityBlock
     + topicMagnetsBlock
+    + inventedExpertBlock
     + (panelStateBlocks || '')
     + member.prompt
     + (voicePoolBlock || '')
