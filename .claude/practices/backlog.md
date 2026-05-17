@@ -1809,7 +1809,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Feature: platform / character-schema
 - Epic: Panel Interaction Model (related) / Character Schema (primary)
 - CD3: UBV=8 TC=6 RR=4 → CoD=18, Dur=2, **CD3=9.0**
-- Status: OPEN — raised 2026-05-16; **canonical content shipped 2026-05-16 to `leanspirited-standards/standards/profani-saurus.md` (commit 4d73c62 in Asspirited/leanspirited-standards)** with 9 character profiles (Souness, Roy Keane, Boyle, Bristow, Diogenes, Big Ron, Murray, Harold, Faldo), 5 generative compound templates, 5-purpose register criteria, and engine-trigger mapping. Implementation deferred behind BL-162 — the engine absorbs voice/profanity selection via shared `VoicePoolSelector` (consumes this file). Schema attribute placement still TBD when BL-162 reaches that slice.
+- Status: OPEN — raised 2026-05-16; **canonical content shipped 2026-05-16 to `leanspirited-standards/standards/profani-saurus.md` (commit 4d73c62)** with 9 character profiles + 5 generative compound templates + 5-purpose criteria + engine-trigger mapping. **v1 engine integration SHIPPED 2026-05-17** — `profanityEnabled` flag + PROFANITY REGISTER block in `buildSystemPrompt`. Block instructs the 5 purposes, character-authentic register, never-weapon never-filler rule, and references canonical profani-saurus file. v2 (per-character profile data loaded by engine, swears picked + injected one-shot per turn like BL-172 voice pools) follows. Schema attribute placement still TBD when v2 lands.
 
 ---
 

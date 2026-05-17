@@ -225,6 +225,14 @@ function buildSystemPrompt(ctx) {
     ? '\n\nCROSS-CHARACTER PARODY:\nWhen another panellist\'s signature line or aphorism is the obvious tool for landing your point, you may briefly redeploy it ironically — addressed at a third target, not at the originator. Example: Faldo deploying Bruce Lee\'s "be like water" against Radar — "Yeah, be like water, Radar, maybe try drinking it instead of whisky." The audience knows the canonical line; the target catches the parody mid-sentence. Once per response at most. After the parody beat, return to your own angle. The point is room comedy from a three-character interaction, not impression or unmotivated quotation.\n'
     : '';
 
+  // BL-169 — Profani-saurus engine integration. Universal (no slot suppression — anchor profiles
+  // often call for character-authentic swearing; suppression would break Souness / Roy Keane / Harold voices).
+  // Per Principle 5: profanity as craft, five purposes, never weapon. Full canonical register in
+  // leanspirited-standards/standards/profani-saurus.md.
+  const profanityBlock = ctx.profanityEnabled
+    ? '\n\nPROFANITY REGISTER:\nProfanity in your voice is craft, not shock value. Every swear you fire must earn its place through one of five purposes: off-air (overheard backstage, mask-slip, hot-mic); phonetic (funny-in-the-mouth words — bollocks, knobhead, gubbins, plonker); intensifier (comic-specific adjective — "absolute prick of a tee shot"); climax (one well-placed swear after restraint — the Murray model, rare = devastating); emotional-emphasis (anger or amusement wells up and the swear is the release valve, often near-involuntary).\n\nUse your character\'s own register — Souness terse Glasgow, Boyle surgical dark, Murray almost-never, Harold gentle scaffold, Roy Keane Cork-thunderous, Bristow Cockney-exuberant, Diogenes ancient-Greek-precise. Rich variety over volume — five well-chosen swears beat fifty generic. Never weapon (no slurs, no violence-language). Never filler (no five-fucks-per-paragraph). Never rhythm-killer (overdone profanity destroys the beat). The full canonical register and per-character vocabulary lives in leanspirited-standards/standards/profani-saurus.md.\n'
+    : '';
+
   const previousBlock = (typeof slot === 'number' && slot > 0) ? `\n\nPrevious:\n${prev || ''}` : '';
   const narrativeArcBlock = (Array.isArray(arcLog) && arcLog.length > 0) ? `\n\nNARRATIVE ARC SO FAR:\n${arcLog.join('\n')}` : '';
 
@@ -241,6 +249,7 @@ function buildSystemPrompt(ctx) {
     + anchorInterjectionBlock
     + crossCharacterQuestionsBlock
     + crossCharacterParodyBlock
+    + profanityBlock
     + (panelStateBlocks || '')
     + member.prompt
     + (voicePoolBlock || '')

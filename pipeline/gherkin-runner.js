@@ -11206,6 +11206,54 @@ function makeSteps(ctx) {
         throw new Error('CROSS-CHARACTER PARODY leaked when flag absent');
     }],
 
+    // ── BL-169 — Profani-saurus engine integration (specs/bl-169-profanity-register.feature) ─────
+
+    [/^buildSystemPrompt with profanityEnabled true contains "PROFANITY REGISTER"$/, () => {
+      const enginePath = path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js');
+      delete require.cache[require.resolve(enginePath)];
+      const engine = require(enginePath);
+      const out = engine.buildSystemPrompt({
+        turnRules: 'R',
+        member: { id: 'X', prompt: 'x' },
+        slot: 1,
+        totalSlots: 3,
+        profanityEnabled: true,
+      });
+      if (!out.includes('PROFANITY REGISTER'))
+        throw new Error('PROFANITY REGISTER block missing when flag true');
+    }],
+
+    [/^the PROFANITY block in engine source includes "([^"]+)" and "([^"]+)"$/, (a, b) => {
+      const engineSrc = fs.readFileSync(path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js'), 'utf8');
+      const m = engineSrc.match(/'(\\n\\nPROFANITY REGISTER:(?:\\.|[^'\\])*)'/);
+      if (!m) throw new Error('PROFANITY REGISTER template not found');
+      const lower = m[1].toLowerCase();
+      if (!lower.includes(a.toLowerCase())) throw new Error(`PROFANITY block missing "${a}"`);
+      if (!lower.includes(b.toLowerCase())) throw new Error(`PROFANITY block missing "${b}"`);
+    }],
+
+    [/^the PROFANITY block in engine source includes "([^"]+)"$/, (a) => {
+      const engineSrc = fs.readFileSync(path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js'), 'utf8');
+      const m = engineSrc.match(/'(\\n\\nPROFANITY REGISTER:(?:\\.|[^'\\])*)'/);
+      if (!m) throw new Error('PROFANITY REGISTER template not found');
+      if (!m[1].toLowerCase().includes(a.toLowerCase()))
+        throw new Error(`PROFANITY block missing "${a}"`);
+    }],
+
+    [/^buildSystemPrompt without profanityEnabled does not contain "PROFANITY REGISTER"$/, () => {
+      const enginePath = path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js');
+      delete require.cache[require.resolve(enginePath)];
+      const engine = require(enginePath);
+      const out = engine.buildSystemPrompt({
+        turnRules: 'R',
+        member: { id: 'X', prompt: 'x' },
+        slot: 1,
+        totalSlots: 3,
+      });
+      if (out.includes('PROFANITY REGISTER'))
+        throw new Error('PROFANITY REGISTER leaked when flag absent');
+    }],
+
     // ── BL-174 — IdiomEngine (specs/bl-174-idiom-invention.feature) ──────────
 
     [/^"([^"]+)" buildIdiomBlock returns empty string for an unknown character id$/, (relPath) => {
