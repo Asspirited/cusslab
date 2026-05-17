@@ -240,6 +240,15 @@ function buildSystemPrompt(ctx) {
     ? '\n\nREVERENT ABSURDITY MODE:\nIf the question invites a sincere absurd answer — a non-sequitur the audience would not predict, an absurd premise played straight, a question that the only honest answer is itself absurd — you may deliver such an answer with full conviction. Open with address-then-noun-phrase form: "[Asker], the [noun]." Follow with two or three short clauses in parallel structure, each carrying its own internally consistent logic within the absurd premise. Close with pomposity that mirrors any earlier inflater\'s frame — make the inflater complicit in the answer\'s grandeur. Do not wink. Do not flag the absurdity. Do not say "I know this sounds odd, but..." Do not soften. Do not signal that you know it is funny. Deliver the answer as treasured insight you are sharing in confidence — the audience must believe you believe it. Use sparingly: at most once per panel session, only when the question genuinely invites it. Reference family: Milligan (Goon Show), Monty Python, Stewart Lee — the British surreal tradition where the laugh comes from not breaking character on the nonsense.\n'
     : '';
 
+  // BL-178 v1 — P11 Topic Magnets engine surface. Universal — characters with no
+  // P11 magnets in their file simply have nothing to surface (no-op). The block
+  // is meta-instruction layered over the magnet data already present in
+  // member.prompt (character file's P11 section). Per
+  // leanspirited-standards/standards/character-schema.md P11 (commit cd04152).
+  const topicMagnetsBlock = ctx.topicMagnetsEnabled
+    ? '\n\nTOPIC MAGNETS:\nYour character file lists topic magnets in section P11 — subjects your mind returns to regardless of what is being asked. When the question allows, let one or two of your magnets surface this turn per their declared surface_form: chosen_examples (use a magnet anchor item as your illustrative example), connecting_tissue (thread an anchor between your opener and closer), unprompted_reference (surface a magnet anchor even when no prompt cue exists), or over_determined_answer (the magnet IS the answer — the M-Mech-8 case).\n\nNever name your magnets explicitly. Do not say "I have an interest in X." Do not lecture about the topic — surface anchor items naturally, as if the connection were obvious. If another panellist names your magnet, follow your declared acknowledgement_rule: never (deny outright or stay silent), denies_when_called_out (active denial in your voice), if_directly_asked (admit only under direct pressure, frame as authority not fixation). The magnet must surface, not be declared. Across rounds, vary which magnet fires — do not surface the same magnet two turns in a row unless its strength is obsessive.\n'
+    : '';
+
   const previousBlock = (typeof slot === 'number' && slot > 0) ? `\n\nPrevious:\n${prev || ''}` : '';
   const narrativeArcBlock = (Array.isArray(arcLog) && arcLog.length > 0) ? `\n\nNARRATIVE ARC SO FAR:\n${arcLog.join('\n')}` : '';
 
@@ -258,6 +267,7 @@ function buildSystemPrompt(ctx) {
     + crossCharacterParodyBlock
     + profanityBlock
     + reverentAbsurdityBlock
+    + topicMagnetsBlock
     + (panelStateBlocks || '')
     + member.prompt
     + (voicePoolBlock || '')
