@@ -12,6 +12,45 @@ Do not skip steps. Do not reorder. Do not start work until the sequence is compl
 
 ---
 
+## Experimental-Project Workflow Exemption (Rod 2026-05-17)
+
+Cusslab is an experimental product — texture (comedy, voice quality) is what's
+being tested, and texture cannot be specified up-front in Gherkin. Rod's
+explicit authorisation:
+
+> *"all our change on this project is experimental so as long as we don't
+> technically break and keep shipping regularly my feedback is all we
+> need :) so change, test, push, commit to live constantly all our changes here"*
+
+**Relaxed:** the strict WoW Gherkin-gate ("write scenario, output text,
+WAITING FOR ROD'S APPROVAL, STOP" before any code) is dropped for product-
+experiment surface area on Cusslab. Three Amigos happen in-conversation;
+when Rod gives direction (approval language, "ship it", "deliver", "go"),
+proceed to code without a separate Gherkin sign-off step.
+
+**Still required (non-negotiable):**
+- Pipeline green (`bash .claude/scripts/pipeline-report.sh`) before every commit.
+- Commit + push to live (`git push origin main`) after every change — Rod
+  tests in live product; unpushed work is invisible.
+- Auth canary OK before any work (see `.claude/practices/auth-ops.md`).
+- All BL/WL tracking continues; session startup/insession/closedown protocols
+  continue; waste log entries on every failure.
+- For Worker changes specifically: `CLOUDFLARE_API_TOKEN=... npx wrangler deploy`
+  (see auth-ops). For non-Worker product changes: `git push origin main` is the
+  deploy.
+
+**Default back to full WoW for:**
+- Architectural changes (new engines, schema redesigns, infrastructure)
+- Auth / secrets / Worker config
+- Anything cross-product (changes to leanspirited-standards)
+- Anything Rod explicitly asks Gherkin for
+
+Scope: Cusslab only. Other LeanSpirited projects (YGW, RIA, Fallacy Finder,
+Universal Harmonix, Survival School) retain the full WoW Gherkin gate unless
+Rod separately authorises the same exemption.
+
+---
+
 ## Backlog — Auto-Capture Rule (MANDATORY)
 
 Whenever a scope enhancement, tech debt fix, bug, or idea surfaces — in conversation, in code review, in pipeline output — add it to `.claude/practices/backlog.md` immediately. Do not wait until session end. Do not batch them up.
