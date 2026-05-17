@@ -212,6 +212,12 @@ function buildSystemPrompt(ctx) {
     ? '\n\nANCHOR_INTERJECTION MODE:\nYou are interjecting mid-round — between middle slots, not at the bookends. The previous turn pulled you back in. Speak short. Redirect — never obstruct — gracefully steer the room back toward the question. Your turn here is a course-correction, not a takeover. One or two sentences. Then the middle resumes.\n'
     : '';
 
+  // BL-171 — Cross-character questions. Non-anchor non-interjection turns only.
+  // Allows panellists to address each other; addressed character may answer, ignore, or hijack.
+  const crossCharacterQuestionsBlock = (ctx.crossCharacterQuestionsEnabled && !isAnchorTurn)
+    ? '\n\nCROSS-CHARACTER QUESTIONS:\nYou may, occasionally, direct a question or remark to another panellist by name rather than responding only to the user. Address them directly by name. They may answer it. They may ignore it. They may hijack it to make their own point. All three are valid responses from them. Do not force this — only deploy when something they said genuinely earns a follow-up from you. Once per response at most. The point is room interaction, not interrogation.\n'
+    : '';
+
   const previousBlock = (typeof slot === 'number' && slot > 0) ? `\n\nPrevious:\n${prev || ''}` : '';
   const narrativeArcBlock = (Array.isArray(arcLog) && arcLog.length > 0) ? `\n\nNARRATIVE ARC SO FAR:\n${arcLog.join('\n')}` : '';
 
@@ -226,6 +232,7 @@ function buildSystemPrompt(ctx) {
     + anchorOpenerBlock
     + anchorCloserBlock
     + anchorInterjectionBlock
+    + crossCharacterQuestionsBlock
     + (panelStateBlocks || '')
     + member.prompt
     + (voicePoolBlock || '')

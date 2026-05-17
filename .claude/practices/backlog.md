@@ -1890,6 +1890,21 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 
 ---
 
+### BL-171 — Cross-character questions
+
+- Discovered 2026-05-16 by Rod after live test of BL-167 Slice 1.1: panellists should be able to direct questions to each other, not only respond to the user. Addressed character may answer, may ignore, may hijack to make their own point.
+- **v1 (shipped 2026-05-17):** engine-side prompt block.
+  - `PanelDiscussEngine.buildSystemPrompt` extended with `crossCharacterQuestionsEnabled: boolean` input. When true and not an anchor turn / interjection, emits CROSS-CHARACTER QUESTIONS block.
+  - Block instructs: address by name; addressed character may answer/ignore/hijack (all three valid); deploy only when something earned a follow-up; once per response max.
+- **v2 (future):** selection-engine boost — addressed character gets higher score in trigger weighting, making them likely up next. Requires Slice 2 trigger-score integration to read the question target from the previous turn's content.
+- **Composes with:** BL-167 (suppressed for anchor opener/closer), BL-170 (suppressed for interjection turns), BL-168 (parallel non-anchor instruction layer), BL-167 Slice 2 (v2 boost feeds trigger score).
+- Feature: panel-interaction
+- Epic: Panel Interaction Model
+- CD3: UBV=7 TC=5 RR=3 → CoD=15, Dur=2, **CD3=7.5**
+- Status: **v1 ENGINE SHIPPED 2026-05-17** — `crossCharacterQuestionsEnabled` flag + block in buildSystemPrompt. Panel wiring (Golf passes `crossCharacterQuestionsEnabled: true`) follows; selection-engine boost v2 follows.
+
+---
+
 ### BL-175 — Cross-character catchphrase parody (piss-take appropriation)
 
 - Discovered 2026-05-16 by Rod after Bruce-to-Phil's-opoly move. Mechanic: a character can deploy ANOTHER character's signature line/aphorism IRONICALLY, redirected at a THIRD party. The parody appropriation IS the joke — taking a sincere line out of context, repurposing for piss-take.

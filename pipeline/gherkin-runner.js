@@ -11011,6 +11011,103 @@ function makeSteps(ctx) {
         throw new Error(`ANCHOR_INTERJECTION block should not include "${sym}" but does`);
     }],
 
+    // ── BL-171 — Cross-character questions (specs/bl-171-cross-character-questions.feature) ─────
+
+    [/^buildSystemPrompt with crossCharacterQuestionsEnabled true contains "CROSS-CHARACTER QUESTIONS"$/, () => {
+      const enginePath = path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js');
+      delete require.cache[require.resolve(enginePath)];
+      const engine = require(enginePath);
+      const out = engine.buildSystemPrompt({
+        turnRules: 'R',
+        member: { id: 'X', prompt: 'x' },
+        slot: 1,
+        totalSlots: 3,
+        crossCharacterQuestionsEnabled: true,
+      });
+      if (!out.includes('CROSS-CHARACTER QUESTIONS'))
+        throw new Error('CROSS-CHARACTER QUESTIONS block missing when flag true');
+    }],
+
+    [/^buildSystemPrompt for slot 0 anchor member with crossCharacterQuestionsEnabled true does not contain "CROSS-CHARACTER QUESTIONS"$/, () => {
+      const enginePath = path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js');
+      delete require.cache[require.resolve(enginePath)];
+      const engine = require(enginePath);
+      const out = engine.buildSystemPrompt({
+        turnRules: 'R',
+        anchorId: 'A',
+        member: { id: 'A', prompt: 'x' },
+        slot: 0,
+        totalSlots: 3,
+        crossCharacterQuestionsEnabled: true,
+      });
+      if (out.includes('CROSS-CHARACTER QUESTIONS'))
+        throw new Error('CROSS-CHARACTER QUESTIONS leaked into anchor opener');
+    }],
+
+    [/^buildSystemPrompt for final slot anchor member with crossCharacterQuestionsEnabled true does not contain "CROSS-CHARACTER QUESTIONS"$/, () => {
+      const enginePath = path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js');
+      delete require.cache[require.resolve(enginePath)];
+      const engine = require(enginePath);
+      const out = engine.buildSystemPrompt({
+        turnRules: 'R',
+        anchorId: 'A',
+        member: { id: 'A', prompt: 'x' },
+        slot: 2,
+        totalSlots: 3,
+        crossCharacterQuestionsEnabled: true,
+      });
+      if (out.includes('CROSS-CHARACTER QUESTIONS'))
+        throw new Error('CROSS-CHARACTER QUESTIONS leaked into anchor closer');
+    }],
+
+    [/^buildSystemPrompt with interjectionMode true and crossCharacterQuestionsEnabled true does not contain "CROSS-CHARACTER QUESTIONS"$/, () => {
+      const enginePath = path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js');
+      delete require.cache[require.resolve(enginePath)];
+      const engine = require(enginePath);
+      const out = engine.buildSystemPrompt({
+        turnRules: 'R',
+        anchorId: 'A',
+        member: { id: 'A', prompt: 'x' },
+        slot: 2,
+        totalSlots: 5,
+        interjectionMode: true,
+        crossCharacterQuestionsEnabled: true,
+      });
+      if (out.includes('CROSS-CHARACTER QUESTIONS'))
+        throw new Error('CROSS-CHARACTER QUESTIONS leaked into interjection turn');
+    }],
+
+    [/^the CROSS-CHARACTER QUESTIONS block in engine source includes "([^"]+)" and "([^"]+)"$/, (a, b) => {
+      const engineSrc = fs.readFileSync(path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js'), 'utf8');
+      const m = engineSrc.match(/'(\\n\\nCROSS-CHARACTER QUESTIONS:[^']*)'/);
+      if (!m) throw new Error('CROSS-CHARACTER QUESTIONS template not found');
+      const lower = m[1].toLowerCase();
+      if (!lower.includes(a.toLowerCase())) throw new Error(`block missing "${a}"`);
+      if (!lower.includes(b.toLowerCase())) throw new Error(`block missing "${b}"`);
+    }],
+
+    [/^the CROSS-CHARACTER QUESTIONS block in engine source includes "([^"]+)"$/, (a) => {
+      const engineSrc = fs.readFileSync(path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js'), 'utf8');
+      const m = engineSrc.match(/'(\\n\\nCROSS-CHARACTER QUESTIONS:[^']*)'/);
+      if (!m) throw new Error('CROSS-CHARACTER QUESTIONS template not found');
+      if (!m[1].toLowerCase().includes(a.toLowerCase()))
+        throw new Error(`block missing "${a}"`);
+    }],
+
+    [/^buildSystemPrompt without crossCharacterQuestionsEnabled does not contain "CROSS-CHARACTER QUESTIONS"$/, () => {
+      const enginePath = path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js');
+      delete require.cache[require.resolve(enginePath)];
+      const engine = require(enginePath);
+      const out = engine.buildSystemPrompt({
+        turnRules: 'R',
+        member: { id: 'X', prompt: 'x' },
+        slot: 1,
+        totalSlots: 3,
+      });
+      if (out.includes('CROSS-CHARACTER QUESTIONS'))
+        throw new Error('CROSS-CHARACTER QUESTIONS leaked when flag absent');
+    }],
+
     // ── BL-174 — IdiomEngine (specs/bl-174-idiom-invention.feature) ──────────
 
     [/^"([^"]+)" buildIdiomBlock returns empty string for an unknown character id$/, (relPath) => {
