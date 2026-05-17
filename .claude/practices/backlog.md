@@ -1922,3 +1922,38 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Epic: Panel Interaction Model
 - CD3: UBV=8 TC=6 RR=3 → CoD=17, Dur=3, **CD3=5.7**
 - Status: **v1 ENGINE SHIPPED 2026-05-17** — `parodyEnabled` flag + CROSS-CHARACTER PARODY block in buildSystemPrompt. Block instructs deploying another character's signature line ironically at a third target; addressed character may catch the parody; once per response max; return to own angle after the beat. Suppressed for anchor opener/closer/interjection. Faldo-Bruce-Radar example baked into the block text. v2 (engine selector with per-character `catchphrases` + `parodyLicense` matrix + concrete phrase injection) follows; panel wiring (Golf passes `parodyEnabled: true`) follows.
+
+---
+
+### BL-176 — Repetism dial-back: signature-move displacement enforcement + cross-character tic contamination
+
+- Discovered 2026-05-17 by Rod during 19th Hole watershed analysis. Two related output-quality failures, both diagnosable as Lever 4 / M-Mech-2 violations (see `leanspirited-standards/standards/panel-voice-principles.md` Lever 4, commit `6fddb26`).
+- **Failure 1 — default-tic firing (intra-character).** A character's named signature move (Alliss's "What. A. Statement.", Faldo's "Now.", etc.) fires by cadence or turn position rather than because relevance-adds-weight or incongruity-displaces-context. Result: the tic stops being recognised as the character — it becomes filler the audience tunes out. Working example of failure: Output 1 in 2026-05-17 watershed (Alliss closing two paragraphs of inflation with "What. A. Statement." as default cadence rather than as earned punctuation).
+- **Failure 2 — cross-character tic bleeding (inter-character).** Multiple characters reach for the same signature phrase across the panel. Rod 2026-05-17: *"'What. A. Statement.' is overused by all characters, need to dial that back along with a few other repetisms."* Adjacent to WL-131 (opener bleeding) but at the *named-tic* layer rather than the opener layer. Adjacent to BL-175 (parody) which is the *constructive* use of cross-character phrase awareness; this BL is the *unwanted* mirror of BL-175.
+- **Why it matters:** every default-fire dulls every future fire of the same tic. The asset depreciates with each unearned use. Cross-character bleeding compounds the cost — the tic becomes panel-generic rather than character-specific, which collapses Lever 0 (the reactive model: characters stop sounding like themselves).
+- **Other repetisms TBD — Rod to enumerate.** Initial list pending: "What. A. Statement." confirmed. Additional repetisms to be named in BL update.
+- **v0 (immediate, no code) — audit pass:**
+  - Grep all character files in `characters/` for `signature_phrases`, `tics`, `opener`, `closer`, `mannerisms.closers` fields.
+  - Produce overlap matrix: phrase × characters-using-it. Any phrase appearing in 2+ characters is contamination candidate.
+  - Sample N recent panel transcripts (Golf, Boardroom, Football preferred) and tally signature-phrase fires per character per turn. Flag any character whose tic-rate exceeds threshold (proposed: 1 in 4 turns).
+  - Output: `/notes/2026-05-17-repetism-audit.md` with overlap matrix + fire-rate table + recommended re-attribution / removal list.
+- **v1 (prompt-side, ship-fast) — per-character licensing:**
+  - Each character file gains `signature_moves` array with two fields per move: `phrase` (the verbatim tic) and `license` (`exclusive` | `shared-with: [chars]`).
+  - System prompt gains an EARNED-TIC gate block: "Your signature moves (X, Y) fire only when the line preceding them either earned the emphasis (relevance) or jars in a way that re-frames what just happened (incongruity). Never fire on cadence alone. If neither condition holds, omit the move."
+  - Cross-character bleed prevented by listing each character's exclusive moves and forbidding others from using them (handled inversely by BL-175 parody: if the deploying character is licensed to parody, the appropriation fires through that mechanism instead — never as default).
+- **v2 (engine, BL-162 absorption) — fire-gate scoring:**
+  - PanelDiscussEngine carries a per-turn `tic_gate` evaluator. Inputs: previous slot's content, current character's `signature_moves`, recent transcript window. Output: `{phrase, allowed: bool, reason: relevance|incongruity|denied}`.
+  - When gate denies, system prompt explicitly suppresses that character's tics for the turn.
+  - Per-turn fire log written to session telemetry — enables pipeline-side regression check ("no signature-phrase fired more than N times across 20 sampled responses").
+- **v3 (pipeline check) — regression guard:**
+  - New pipeline check: `signature-move-audit.js` runs against last K transcripts. Asserts (a) no tic exceeds per-character fire-rate threshold, (b) no exclusive tic appears in another character's mouth. Fail → pipeline RED.
+- **Composes with:**
+  - Lever 4 M-Mech-2 — this BL is the engineering of that principle.
+  - BL-175 (parody) — exclusive licensing here makes parody appropriation more potent because the canonical owner is unambiguous.
+  - WL-131 (opener bleeding) — same family, different layer; v0 audit should sweep openers too.
+  - BL-167 Slice 2 (trigger-weighted selection) — when a character's tics are gated off this turn, their score in the next slot should rise (they have material being saved).
+- **Risk:** over-gating dulls the character entirely. Signature moves earn their existence by firing *sometimes well-placed*. The gate must permit, not throttle by default. Calibration via v0 audit before code.
+- Feature: panel-voice
+- Epic: Panel Voice & Texture
+- CD3: UBV=8 TC=8 RR=5 → CoD=21, Dur=3, **CD3=7.0**
+- Status: OPEN — raised 2026-05-17 (watershed session). Three Amigos needed before any code: agree what "earned" looks like in detectable terms, agree threshold for per-character fire rate, agree audit method (transcript sampling vs live capture). v0 audit can run independently and is recommended first move. Other repetisms list pending from Rod.
