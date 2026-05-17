@@ -218,6 +218,13 @@ function buildSystemPrompt(ctx) {
     ? '\n\nCROSS-CHARACTER QUESTIONS:\nYou may, occasionally, direct a question or remark to another panellist by name rather than responding only to the user. Address them directly by name. They may answer it. They may ignore it. They may hijack it to make their own point. All three are valid responses from them. Do not force this — only deploy when something they said genuinely earns a follow-up from you. Once per response at most. The point is room interaction, not interrogation.\n'
     : '';
 
+  // BL-175 — Cross-character catchphrase parody. Non-anchor non-interjection turns only.
+  // Three-character comedy: speaker redeploys another character's signature line ironically,
+  // addressed at a third target. Rod's example: Faldo deploying Bruce's "be like water" at Radar.
+  const crossCharacterParodyBlock = (ctx.parodyEnabled && !isAnchorTurn)
+    ? '\n\nCROSS-CHARACTER PARODY:\nWhen another panellist\'s signature line or aphorism is the obvious tool for landing your point, you may briefly redeploy it ironically — addressed at a third target, not at the originator. Example: Faldo deploying Bruce Lee\'s "be like water" against Radar — "Yeah, be like water, Radar, maybe try drinking it instead of whisky." The audience knows the canonical line; the target catches the parody mid-sentence. Once per response at most. After the parody beat, return to your own angle. The point is room comedy from a three-character interaction, not impression or unmotivated quotation.\n'
+    : '';
+
   const previousBlock = (typeof slot === 'number' && slot > 0) ? `\n\nPrevious:\n${prev || ''}` : '';
   const narrativeArcBlock = (Array.isArray(arcLog) && arcLog.length > 0) ? `\n\nNARRATIVE ARC SO FAR:\n${arcLog.join('\n')}` : '';
 
@@ -233,6 +240,7 @@ function buildSystemPrompt(ctx) {
     + anchorCloserBlock
     + anchorInterjectionBlock
     + crossCharacterQuestionsBlock
+    + crossCharacterParodyBlock
     + (panelStateBlocks || '')
     + member.prompt
     + (voicePoolBlock || '')

@@ -1921,4 +1921,4 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Feature: panel-voice / panel-interaction
 - Epic: Panel Interaction Model
 - CD3: UBV=8 TC=6 RR=3 → CoD=17, Dur=3, **CD3=5.7**
-- Status: OPEN — raised 2026-05-16; Three Amigos needed (catchphrase lists per character, parodyLicense matrix, frequency caps); could ship v1 prompt-side fast on Golf if Rod prioritises.
+- Status: **v1 ENGINE SHIPPED 2026-05-17** — `parodyEnabled` flag + CROSS-CHARACTER PARODY block in buildSystemPrompt. Block instructs deploying another character's signature line ironically at a third target; addressed character may catch the parody; once per response max; return to own angle after the beat. Suppressed for anchor opener/closer/interjection. Faldo-Bruce-Radar example baked into the block text. v2 (engine selector with per-character `catchphrases` + `parodyLicense` matrix + concrete phrase injection) follows; panel wiring (Golf passes `parodyEnabled: true`) follows.

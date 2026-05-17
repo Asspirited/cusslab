@@ -11108,6 +11108,104 @@ function makeSteps(ctx) {
         throw new Error('CROSS-CHARACTER QUESTIONS leaked when flag absent');
     }],
 
+    // ── BL-175 — Cross-character catchphrase parody (specs/bl-175-cross-character-parody.feature) ─────
+
+    [/^buildSystemPrompt with parodyEnabled true contains "CROSS-CHARACTER PARODY"$/, () => {
+      const enginePath = path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js');
+      delete require.cache[require.resolve(enginePath)];
+      const engine = require(enginePath);
+      const out = engine.buildSystemPrompt({
+        turnRules: 'R',
+        member: { id: 'X', prompt: 'x' },
+        slot: 1,
+        totalSlots: 3,
+        parodyEnabled: true,
+      });
+      if (!out.includes('CROSS-CHARACTER PARODY'))
+        throw new Error('CROSS-CHARACTER PARODY block missing when flag true');
+    }],
+
+    [/^buildSystemPrompt for slot 0 anchor member with parodyEnabled true does not contain "CROSS-CHARACTER PARODY"$/, () => {
+      const enginePath = path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js');
+      delete require.cache[require.resolve(enginePath)];
+      const engine = require(enginePath);
+      const out = engine.buildSystemPrompt({
+        turnRules: 'R',
+        anchorId: 'A',
+        member: { id: 'A', prompt: 'x' },
+        slot: 0,
+        totalSlots: 3,
+        parodyEnabled: true,
+      });
+      if (out.includes('CROSS-CHARACTER PARODY'))
+        throw new Error('CROSS-CHARACTER PARODY leaked into anchor opener');
+    }],
+
+    [/^buildSystemPrompt for final slot anchor member with parodyEnabled true does not contain "CROSS-CHARACTER PARODY"$/, () => {
+      const enginePath = path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js');
+      delete require.cache[require.resolve(enginePath)];
+      const engine = require(enginePath);
+      const out = engine.buildSystemPrompt({
+        turnRules: 'R',
+        anchorId: 'A',
+        member: { id: 'A', prompt: 'x' },
+        slot: 2,
+        totalSlots: 3,
+        parodyEnabled: true,
+      });
+      if (out.includes('CROSS-CHARACTER PARODY'))
+        throw new Error('CROSS-CHARACTER PARODY leaked into anchor closer');
+    }],
+
+    [/^buildSystemPrompt with interjectionMode true and parodyEnabled true does not contain "CROSS-CHARACTER PARODY"$/, () => {
+      const enginePath = path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js');
+      delete require.cache[require.resolve(enginePath)];
+      const engine = require(enginePath);
+      const out = engine.buildSystemPrompt({
+        turnRules: 'R',
+        anchorId: 'A',
+        member: { id: 'A', prompt: 'x' },
+        slot: 2,
+        totalSlots: 5,
+        interjectionMode: true,
+        parodyEnabled: true,
+      });
+      if (out.includes('CROSS-CHARACTER PARODY'))
+        throw new Error('CROSS-CHARACTER PARODY leaked into interjection turn');
+    }],
+
+    [/^the CROSS-CHARACTER PARODY block in engine source includes "([^"]+)" and "([^"]+)"$/, (a, b) => {
+      const engineSrc = fs.readFileSync(path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js'), 'utf8');
+      // Handle escaped quotes (\') inside the single-quoted string literal.
+      const m = engineSrc.match(/'(\\n\\nCROSS-CHARACTER PARODY:(?:\\.|[^'\\])*)'/);
+      if (!m) throw new Error('CROSS-CHARACTER PARODY template not found');
+      const lower = m[1].toLowerCase();
+      if (!lower.includes(a.toLowerCase())) throw new Error(`block missing "${a}"`);
+      if (!lower.includes(b.toLowerCase())) throw new Error(`block missing "${b}"`);
+    }],
+
+    [/^the CROSS-CHARACTER PARODY block in engine source includes "([^"]+)"$/, (a) => {
+      const engineSrc = fs.readFileSync(path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js'), 'utf8');
+      const m = engineSrc.match(/'(\\n\\nCROSS-CHARACTER PARODY:(?:\\.|[^'\\])*)'/);
+      if (!m) throw new Error('CROSS-CHARACTER PARODY template not found');
+      if (!m[1].toLowerCase().includes(a.toLowerCase()))
+        throw new Error(`block missing "${a}"`);
+    }],
+
+    [/^buildSystemPrompt without parodyEnabled does not contain "CROSS-CHARACTER PARODY"$/, () => {
+      const enginePath = path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js');
+      delete require.cache[require.resolve(enginePath)];
+      const engine = require(enginePath);
+      const out = engine.buildSystemPrompt({
+        turnRules: 'R',
+        member: { id: 'X', prompt: 'x' },
+        slot: 1,
+        totalSlots: 3,
+      });
+      if (out.includes('CROSS-CHARACTER PARODY'))
+        throw new Error('CROSS-CHARACTER PARODY leaked when flag absent');
+    }],
+
     // ── BL-174 — IdiomEngine (specs/bl-174-idiom-invention.feature) ──────────
 
     [/^"([^"]+)" buildIdiomBlock returns empty string for an unknown character id$/, (relPath) => {
