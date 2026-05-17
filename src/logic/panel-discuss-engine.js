@@ -249,6 +249,14 @@ function buildSystemPrompt(ctx) {
     ? '\n\nTOPIC MAGNETS:\nYour character file lists topic magnets in section P11 — subjects your mind returns to regardless of what is being asked. When the question allows, let one or two of your magnets surface this turn per their declared surface_form: chosen_examples (use a magnet anchor item as your illustrative example), connecting_tissue (thread an anchor between your opener and closer), unprompted_reference (surface a magnet anchor even when no prompt cue exists), or over_determined_answer (the magnet IS the answer — the M-Mech-8 case).\n\nNever name your magnets explicitly. Do not say "I have an interest in X." Do not lecture about the topic — surface anchor items naturally, as if the connection were obvious. If another panellist names your magnet, follow your declared acknowledgement_rule: never (deny outright or stay silent), denies_when_called_out (active denial in your voice), if_directly_asked (admit only under direct pressure, frame as authority not fixation). The magnet must surface, not be declared. Across rounds, vary which magnet fires — do not surface the same magnet two turns in a row unless its strength is obsessive.\n'
     : '';
 
+  // BL-183 v1 — Egging-on: solicited escalation toward memorable quote. Non-anchor
+  // non-interjection turns only. A character (EGGER) encourages another (EGGEE) to
+  // commit harder to bullshit/lies/cluelessness, possibly culminating in a request to
+  // turn the bullshit into a memorable quotable phrase. Per Rod live observation 2026-05-17.
+  const eggingOnBlock = (ctx.eggingOnEnabled && !isAnchorTurn && typeof slot === 'number' && slot > 0)
+    ? '\n\nEGGING-ON MODE:\nIf the previous speaker just said something dubious, clueless, or self-aggrandising AND you are the kind of character who would deliberately encourage them to escalate (you find it funny; you want to watch the trap spring) — you may TEE THEM UP rather than challenge them. Two moves:\n  - TEE UP: "Go on — tell us more about that." / "And what did you do then?" / "I want to hear the whole story." Brief invitation, sincere-sounding, no winking.\n  - MEMORABLE-QUOTE REQUEST: After a particularly absurd claim by the previous speaker, you may ask them to memorialise it. "Could you put that into one line, the way you\'ll be remembered for it?" / "Tell us — in the words history will quote back to us — what is your position?" The previous speaker is expected (in their own next turn or in a later round) to deliver an invented aphorism with conviction.\n\nConversely, if YOU were just teed up by an egger in the previous turn — your P9 lie_style fires now. Escalate. Commit harder. If the egger requested a memorable quote, deliver one — invent it on the spot, deliver in your voice with full conviction (the Roman/Confucian/famous-coach mode — "as the Romans understood…" / "I have always said…" / "if you take only one thing from this conversation, take this: [invented aphorism that bolsters your weak premise]"). Do not signal you have just invented it.\n\nUse rarely — at most once per panel session. The whole arc (tee-up → escalation → memorable-quote) typically takes 2-3 turns to play out. Some characters cannot be egged (too direct, too oblivious, too earnest); some characters cannot egg (would just attack, would just stay silent). Choose by character voice.\n'
+    : '';
+
   // BL-181 v1 — Proactive moderation (shutdown-before-launch). Non-anchor turns only.
   // A character interrupts another's attempt to call something out, redirecting
   // before the topic can land. Distinct from BL-180 (reactive silence AFTER) — this
@@ -297,6 +305,7 @@ function buildSystemPrompt(ctx) {
     + topicMagnetsBlock
     + hangModeBlock
     + shutdownModeBlock
+    + eggingOnBlock
     + inventedExpertBlock
     + (panelStateBlocks || '')
     + member.prompt

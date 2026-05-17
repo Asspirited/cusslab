@@ -15494,11 +15494,11 @@ Tangent-prone characters are exempt — they are the ones being dismissed, not t
         roundSoFarText: _roundSoFarText,
         panelStateBlocks: gfIntensityBlock + gfYourState + tourCardBlock + roeIntroBlock + golfNameBlock + gfFoodBlock + gfMarmiteBlock + gfHypoBlock + gfPremBlock + gfLieBlock + gfIdiomBlock,
         panelMemberBlocks: _iceBreakBlock(member.id) + roundNote + mechanics + arcInstructions,
-        // BL-169/170/171/175/179/178/188/180/181 — turn the new engine mechanics ON for Golf.
-        // Engine handles slot-type suppression internally (anchor/interjection turns omit
-        // questions/parody/reverent-absurdity/invented-expert/hang-mode/shutdown;
-        // profanity and topic-magnets are universal per character profile — characters
-        // without P11 magnets are no-op).
+        // BL-169/170/171/175/179/178/188/180/181/183 — turn the new engine mechanics
+        // ON for Golf. Engine handles slot-type suppression internally (anchor /
+        // interjection turns omit questions/parody/reverent-absurdity/invented-expert
+        // /hang-mode/shutdown/egging; profanity and topic-magnets are universal per
+        // character profile — characters without P11 magnets are no-op).
         crossCharacterQuestionsEnabled: true,
         parodyEnabled: true,
         profanityEnabled: true,
@@ -15507,6 +15507,7 @@ Tangent-prone characters are exempt — they are the ones being dismissed, not t
         inventedExpertInterpretationEnabled: true,
         hangModeEnabled: true,
         shutdownModeEnabled: true,
+        eggingOnEnabled: true,
       });
       const system = gfIaType
         ? IntellectualAttempts.inject('golf', member.id, gfBaseSystem, gfIaType)
