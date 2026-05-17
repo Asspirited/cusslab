@@ -2056,3 +2056,76 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Epic: Panel Voice & Texture
 - CD3: UBV=9 TC=6 RR=4 → CoD=19, Dur=2, **CD3=9.5**
 - Status: OPEN — raised 2026-05-17. Three Amigos done in chat (watershed analysis is the design conversation). Gherkin gate next. Order dependency: ships *after* BL-178 v0 (Murray P11 data) lands so the engine can connect the block to actual character magnets — otherwise the block has no anchor items to reference and degrades to abstract instruction.
+
+---
+
+### BL-180 — Hanging-in-the-air: deliberate non-response as panel mechanic
+
+- Discovered 2026-05-17 by Rod. New panel mechanic: a statement deliberately goes unaddressed; the audience reads the absence; the silence IS the comedy.
+- **Four firing conditions:**
+  - **(a) Discomfort** — previous turn was too uncomfortable to address (someone said something embarrassing about someone present)
+  - **(b) Rhetorical** — previous turn was rhetorical; answering misses the point
+  - **(c) Cruelty** — previous turn was cruel; engaging would legitimise it (panel collectively refuses)
+  - **(d) Insanity / tumbleweed** — previous turn was so unhinged engagement is impossible
+- **Reaction options for the slot after a hang-trigger:**
+  - `pivot_to_new_topic` — next speaker changes subject without referencing prior
+  - `brief_redirect` — next speaker gently steers ("anyway...") without engaging the content
+  - `tumbleweed_marker` — literal absence rendered as `[...]` / `[silence]` / beat indicator in output
+  - `audible_pause_then_continue` — explicit pause, then continuation as if nothing was said
+- **Per-character permission:** not every character can refuse-to-respond. Per-character config (likely P9 extension or new P12):
+  - `can_leave_hanging` — boolean, default false (most characters answer everything)
+  - `hang_triggers[]` — which of (a)–(d) this character honours
+  - `hang_reactions[]` — which reaction options this character uses
+- **Examples in cast:** Souness will always respond (cannot leave hanging — too direct). Roy may withhold (cruelty/insanity triggers). Cox would respond with anthropological neutrality (failure mode — cannot hang). Mystic might just stare (insanity → tumbleweed). Henni may pivot (rhetorical → brief redirect). Murray cannot leave hanging — ceremonial frame requires engagement.
+- **Composes with:**
+  - Lever 4 M-Mech-2 (signature displacement — pivot can fire signature move at displacement moment)
+  - M-Mech-3 (cornered legalistic — speaker who said the cruel/uncomfortable thing gets cornered by the silence)
+  - M-Mech-9 (incongruent register — performative niceness covering the panel's discomfort is a hostile-as-warm L3-L4 deployment)
+  - BL-176 (turn-shape collapse audit) — this BL is the *opposite* of turn-shape collapse; deliberate elision vs accidental sag
+  - Proposed Lever 5 Panel Temperature — HOSTILE panels more likely to leave cruelty hanging; WARM panels more likely to pivot gently. The hang mechanic *moves* the temperature dial toward HOSTILE for one round.
+- **Engine implication:** PanelDiscussEngine needs a `hangDetected` per-turn signal that the panel slot logic reads. If hang detected, the next slot fires under hang-reaction mode rather than normal response mode. New `hangModeEnabled` flag in buildSystemPrompt + HANG MODE block instructing the chosen reaction option.
+- **Risk:** over-firing turns the panel into Larry David parody. Under-firing wastes the mechanic. Initial target: at most one hang per panel session, only when conditions (a)–(d) genuinely hold.
+- **v1 (prompt-side):** Add HANG MODE block. Hang trigger detection is heuristic (look for character speaking with high lie-escalation just fired, or response with cruelty markers). The chosen reaction is per-character.
+- **v2 (engine):** Hang-trigger detection becomes a scored evaluator. Heuristic refinement based on live observation.
+- **v3 (pipeline regression):** sample for hang fires across last N transcripts; verify reactions match character permissions; verify hang triggers are genuine (not arbitrary silences).
+- Feature: panel-interaction
+- Epic: Panel Interaction Model
+- CD3: UBV=8 TC=5 RR=3 → CoD=16, Dur=3, **CD3=5.3**
+- Status: OPEN — raised 2026-05-17 (watershed session — Rod live ideation). Three Amigos partial (mechanic shape sketched here); Gherkin needed; per-character permission table needs Three Amigos. v1 is small (one flag + one prompt block + reaction-mode dispatcher) like other recent v1 ships.
+
+---
+
+### BL-181 — Proactive moderation: shutdown-before-launch
+
+- Discovered 2026-05-17 by Rod, immediately after BL-180. A character goes to call something out; another character interrupts to *shut it down before the topic launches* and moves on. The shutdown is for someone's benefit — speaker's, target's, panel's, or broadcast's.
+- **Distinct from BL-180:** BL-180 is *reactive silence after* a statement; BL-181 is *active interruption before* the statement can fully land. Different timing, different mechanic.
+- **Four firing motivations:**
+  - **(a) Taste / broadcast standards** — "this can't be discussed on a golf broadcast"
+  - **(b) Madness control** — "this is unhinged and doesn't belong here, move on"
+  - **(c) Self-protection** — interrupter has their own reason to suppress (cover for themselves)
+  - **(d) Target protection** — interrupter is sparing the target embarrassment (often gentle)
+- **Mechanic shape:** the would-be-caller-out starts a sentence ("Faldo, about your..."), the interrupter cuts in with a redirect ("Anyway, what about the leaderboard"). The interrupted sentence is *visible but unfinished* — the audience knows what was about to be said.
+- **Per-character permission (Three Amigos required):**
+  - HIGH (regularly moderates): Henni (presenter role), Murray (ceremonial frame), Sebastian (power), McGinley (protects Faldo specifically)
+  - MEDIUM: Cox (only blocks obvious garbage), Faldo (only when topic is about him), Big Ron (instinctive "we're here for the golf")
+  - LOW (rarely or never moderates): Souness (engages or storms out), Boyle (would let things run for sport), Roy (attacks or silence — not moderation), Mystic (lost in own world)
+- **Engine implication:** PanelDiscussEngine needs:
+  - Per-turn pre-check: is the previous speaker's emerging content a "shutdown candidate" by topic markers (taste-flagged subjects, madness markers, lie-escalation in someone whose wounds are about to be aired)?
+  - Per-character `shutdown_capability` config (HIGH / MEDIUM / LOW + which motivations allowed)
+  - New SHUTDOWN MODE prompt block when fires: "[Previous speaker] was about to address [topic]. You are stopping that line of conversation, briefly and decisively. Cover with a redirect to [neutral subject]. Reason: [taste / madness / self-protection / target-protection]. Do not explain at length — the redirect is the whole move."
+  - Optional: the unfinished sentence from the would-be caller-out renders in transcript as `"Faldo, about your—"` (em-dash truncation) so the audience sees the interrupt structurally.
+- **Composes with:**
+  - BL-180 (hanging-in-the-air) — sibling mechanic, opposite timing. Together they form the "panel non-engagement" mechanism family.
+  - M-Mech-3 (cornered legalistic) — shutdown can be deployed as legalistic dismissal ("we don't have time today")
+  - M-Mech-9 (incongruent register, hostile-as-warm) — shutdown delivered as warm support can be MORE hostile than direct dismissal; "let's not embarrass [target]" can be the cover for a power play
+  - BL-167 anchor mechanics — when anchor does the shutdown, more authority weight
+  - BL-170 anchor mid-round interjection — close cousin but anchor-only and not specifically shutdown-shaped
+  - Proposed Lever 5 Panel Temperature — shutdowns are typically HOSTILE-coloured (suppression) but can be WARM-coloured (protection). Polarity matters for audience reading.
+- **Risk:** over-firing makes the panel feel censored / scripted; under-firing wastes the mechanic when it genuinely fits. Initial target: hand-tuned per panel, possibly more frequent in Comedy Room (taste-conscious) than 19th Hole (which leaves more things hanging).
+- **v1 (prompt-side):** Add SHUTDOWN MODE block. Trigger detection heuristic: previous turn started a topic in the panel's `shutdown_topics[]` config, OR previous turn's lie-escalation just triggered wound activation. The chosen reaction is per-character.
+- **v2 (engine):** Scored evaluator; per-character moderator dispatch; transcript em-dash truncation for the unfinished line.
+- **v3 (pipeline regression):** verify shutdown fires only for valid triggers; verify per-character capability respected; verify unfinished line renders correctly.
+- Feature: panel-interaction
+- Epic: Panel Interaction Model
+- CD3: UBV=8 TC=5 RR=3 → CoD=16, Dur=3, **CD3=5.3**
+- Status: OPEN — raised 2026-05-17 (watershed session — Rod live ideation). Three Amigos partial; Gherkin needed; per-character permission table needs Three Amigos. v1 small (one flag + one prompt block + transcript truncation) — same ship-fast pattern as other v1s.
