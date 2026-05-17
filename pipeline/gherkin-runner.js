@@ -10893,6 +10893,124 @@ function makeSteps(ctx) {
         throw new Error(`Golf IIFE still defines "${sym}"`);
     }],
 
+    // ── BL-170 — Anchor mid-round interjection (specs/bl-170-anchor-interjection.feature) ─────
+
+    [/^shouldAnchorInterject with minimal valid input returns a boolean$/, () => {
+      const enginePath = path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js');
+      delete require.cache[require.resolve(enginePath)];
+      const engine = require(enginePath);
+      const out = engine.shouldAnchorInterject({});
+      if (typeof out !== 'boolean')
+        throw new Error(`shouldAnchorInterject did not return boolean, got ${typeof out}`);
+    }],
+
+    [/^shouldAnchorInterject called 500 times with no boosts fires fewer than 200 times$/, () => {
+      const enginePath = path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js');
+      delete require.cache[require.resolve(enginePath)];
+      const engine = require(enginePath);
+      let fires = 0;
+      for (let i = 0; i < 500; i++) {
+        if (engine.shouldAnchorInterject({})) fires++;
+      }
+      if (fires >= 200)
+        throw new Error(`Expected fewer than 200 fires in 500 calls at baseline; got ${fires}`);
+    }],
+
+    [/^shouldAnchorInterject called 50 times with woundActivated true fires more than 25 times$/, () => {
+      const enginePath = path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js');
+      delete require.cache[require.resolve(enginePath)];
+      const engine = require(enginePath);
+      let fires = 0;
+      for (let i = 0; i < 50; i++) {
+        if (engine.shouldAnchorInterject({ woundActivated: true })) fires++;
+      }
+      if (fires <= 25)
+        throw new Error(`Expected > 25 fires in 50 calls with woundActivated; got ${fires}`);
+    }],
+
+    [/^shouldAnchorInterject called 200 times with three identical recentMoves fires more than the same-config baseline$/, () => {
+      const enginePath = path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js');
+      delete require.cache[require.resolve(enginePath)];
+      const engine = require(enginePath);
+      let firesGuarded = 0;
+      let firesBaseline = 0;
+      for (let i = 0; i < 200; i++) {
+        if (engine.shouldAnchorInterject({ recentMoves: ['analytical', 'analytical', 'analytical'] })) firesGuarded++;
+        if (engine.shouldAnchorInterject({ recentMoves: ['analytical', 'narrative', 'challenge'] })) firesBaseline++;
+      }
+      if (firesGuarded <= firesBaseline)
+        throw new Error(`Expected sustained-same-posture (${firesGuarded}) > mixed-posture baseline (${firesBaseline})`);
+    }],
+
+    [/^buildSystemPrompt for an anchor turn with interjectionMode true contains "ANCHOR_INTERJECTION MODE"$/, () => {
+      const enginePath = path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js');
+      delete require.cache[require.resolve(enginePath)];
+      const engine = require(enginePath);
+      const out = engine.buildSystemPrompt({
+        turnRules: 'R',
+        anchorId: 'A',
+        member: { id: 'A', prompt: 'x' },
+        slot: 2,
+        totalSlots: 5,
+        interjectionMode: true,
+      });
+      if (!out.includes('ANCHOR_INTERJECTION MODE'))
+        throw new Error('ANCHOR_INTERJECTION MODE missing when interjectionMode true');
+    }],
+
+    [/^the ANCHOR_INTERJECTION block in the engine source does not duplicate the ANCHOR_OPENER or ANCHOR_CLOSER template$/, () => {
+      const engineSrc = fs.readFileSync(path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js'), 'utf8');
+      // Extract each block's template text and verify they're distinct
+      const interjectionMatch = engineSrc.match(/'(\\n\\nANCHOR_INTERJECTION MODE[^']*)'/);
+      const openerMatch = engineSrc.match(/'(\\n\\nANCHOR_OPENER MODE[^']*)'/);
+      if (!interjectionMatch) throw new Error('ANCHOR_INTERJECTION template literal not found in engine');
+      if (!openerMatch) throw new Error('ANCHOR_OPENER template literal not found in engine');
+      if (interjectionMatch[1] === openerMatch[1])
+        throw new Error('ANCHOR_INTERJECTION text duplicates ANCHOR_OPENER');
+      // ANCHOR_CLOSER is backtick template; check engine contains "ANCHOR_CLOSER MODE" and the interjection text differs from any closer text
+      const closerStart = engineSrc.indexOf('ANCHOR_CLOSER MODE');
+      if (closerStart < 0) throw new Error('ANCHOR_CLOSER MODE not found in engine');
+      // Quick sanity: the interjection text doesn't contain ROUND SO FAR (closer's signature)
+      if (interjectionMatch[1].includes('ROUND SO FAR'))
+        throw new Error('ANCHOR_INTERJECTION text includes ROUND SO FAR (closer-only marker)');
+    }],
+
+    [/^buildSystemPrompt with interjectionMode true and topicDismissal set does not contain the topicDismissal string$/, () => {
+      const enginePath = path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js');
+      delete require.cache[require.resolve(enginePath)];
+      const engine = require(enginePath);
+      const out = engine.buildSystemPrompt({
+        turnRules: 'R',
+        topicDismissal: 'TOPIC_DISMISSAL_UNIQUE_INTERJ',
+        anchorId: 'A',
+        member: { id: 'A', prompt: 'x' },
+        slot: 2,
+        totalSlots: 5,
+        interjectionMode: true,
+      });
+      if (out.includes('TOPIC_DISMISSAL_UNIQUE_INTERJ'))
+        throw new Error('TOPIC-DISMISSAL present in interjection mode');
+    }],
+
+    [/^the ANCHOR_INTERJECTION block in the engine source includes "([^"]+)" and "([^"]+)"$/, (a, b) => {
+      const engineSrc = fs.readFileSync(path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js'), 'utf8');
+      const m = engineSrc.match(/'(\\n\\nANCHOR_INTERJECTION MODE[^']*)'/);
+      if (!m) throw new Error('ANCHOR_INTERJECTION template not found');
+      const lower = m[1].toLowerCase();
+      if (!lower.includes(a.toLowerCase())) throw new Error(`ANCHOR_INTERJECTION block missing "${a}"`);
+      if (!lower.includes(b.toLowerCase())) throw new Error(`ANCHOR_INTERJECTION block missing "${b}"`);
+    }],
+
+    [/^the ANCHOR_INTERJECTION block in the engine source does not include "([^"]+)"$/, (sym) => {
+      const engineSrc = fs.readFileSync(path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js'), 'utf8');
+      const m = engineSrc.match(/'(\\n\\nANCHOR_INTERJECTION MODE[^']*)'/);
+      if (!m) throw new Error('ANCHOR_INTERJECTION template not found');
+      // Word-boundary match so "block" doesn't accidentally hit "blockade" etc.
+      const re = new RegExp(`\\b${sym.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\$&')}\\b`);
+      if (re.test(m[1]))
+        throw new Error(`ANCHOR_INTERJECTION block should not include "${sym}" but does`);
+    }],
+
     // ── BL-174 — IdiomEngine (specs/bl-174-idiom-invention.feature) ──────────
 
     [/^"([^"]+)" buildIdiomBlock returns empty string for an unknown character id$/, (relPath) => {

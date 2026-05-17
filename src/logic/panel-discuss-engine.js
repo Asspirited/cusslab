@@ -193,7 +193,8 @@ function buildSystemPrompt(ctx) {
 
   const isAnchorOpener = (slot === 0 && member.id === anchorId);
   const isAnchorCloser = (typeof totalSlots === 'number' && slot === totalSlots - 1 && member.id === anchorId);
-  const isAnchorTurn = isAnchorOpener || isAnchorCloser;
+  const isInterjection = !!ctx.interjectionMode;  // BL-170 — anchor mid-round interjection
+  const isAnchorTurn = isAnchorOpener || isAnchorCloser || isInterjection;
 
   const dismissalSection = (isAnchorTurn || !topicDismissal) ? '' : (topicDismissal + '\n\n');
 
@@ -203,6 +204,12 @@ function buildSystemPrompt(ctx) {
 
   const anchorCloserBlock = isAnchorCloser
     ? `\n\nANCHOR_CLOSER MODE:\nYou are closing this round. You have heard every panellist speak. Reflect on what just transpired — top and tail the bullshit, in your voice, your register. Your closer is the round's final word.\n\nROUND SO FAR:\n${roundSoFarText || ''}\n`
+    : '';
+
+  // BL-170 — Anchor mid-round interjection. Short course-correction between middle slots.
+  // Never used as opener/closer (those are separate modes). Distinct text from both.
+  const anchorInterjectionBlock = isInterjection
+    ? '\n\nANCHOR_INTERJECTION MODE:\nYou are interjecting mid-round — between middle slots, not at the bookends. The previous turn pulled you back in. Speak short. Redirect — never obstruct — gracefully steer the room back toward the question. Your turn here is a course-correction, not a takeover. One or two sentences. Then the middle resumes.\n'
     : '';
 
   const previousBlock = (typeof slot === 'number' && slot > 0) ? `\n\nPrevious:\n${prev || ''}` : '';
@@ -218,6 +225,7 @@ function buildSystemPrompt(ctx) {
     + dismissalSection
     + anchorOpenerBlock
     + anchorCloserBlock
+    + anchorInterjectionBlock
     + (panelStateBlocks || '')
     + member.prompt
     + (voicePoolBlock || '')
@@ -225,6 +233,34 @@ function buildSystemPrompt(ctx) {
     + previousBlock
     + narrativeArcBlock
     + breakRegisterBlock;
+}
+
+// shouldAnchorInterject — decision whether to insert an anchor turn between middle slots (BL-170).
+//
+// INPUT (ctx):
+//   woundActivated: boolean (opt)  — was the previous middle speaker's wound activated this round?
+//   recentMoves:    string[] (opt) — posture history; sustained same-posture boosts the rate
+//   baseRate:       number (opt)   — default 0.10 (~10% interjection per slot in absence of boosts)
+//
+// RETURN: boolean — true if the anchor should interject before the next middle slot.
+//
+// BEHAVIOUR:
+//   - Base rate ~10% per call (no boosts).
+//   - woundActivated true → rate floored at 0.75 (anchor almost always interjects on wound moments).
+//   - last 3 recentMoves identical → rate floored at 0.45 (sustained register drift triggers steering).
+//   - Final rate is max(baseRate, applicable boosts).
+function shouldAnchorInterject(ctx) {
+  const {
+    woundActivated = false,
+    recentMoves = [],
+    baseRate = 0.10,
+  } = ctx || {};
+  let rate = (typeof baseRate === 'number' && baseRate >= 0 && baseRate <= 1) ? baseRate : 0.10;
+  if (woundActivated) rate = Math.max(rate, 0.75);
+  const last3 = Array.isArray(recentMoves) ? recentMoves.slice(-3) : [];
+  const guardFires = last3.length >= 3 && last3.every(m => m === last3[0]);
+  if (guardFires) rate = Math.max(rate, 0.45);
+  return Math.random() < rate;
 }
 
 // selectVoicePoolPicks — randomly picks one item per pool key (BL-162 Slice 2).
@@ -256,7 +292,7 @@ function selectVoicePoolPicks(pools) {
   return picks;
 }
 
-const _PanelDiscussEngineExports = { selectSlots, buildSystemPrompt, selectVoicePoolPicks };
+const _PanelDiscussEngineExports = { selectSlots, buildSystemPrompt, selectVoicePoolPicks, shouldAnchorInterject };
 
 // Browser: expose as global so per-panel IIFEs can call PanelDiscussEngine.selectSlots(...)
 if (typeof window !== 'undefined') window.PanelDiscussEngine = _PanelDiscussEngineExports;

@@ -1873,6 +1873,23 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 
 ---
 
+### BL-170 — Anchor mid-round interjection
+
+- Discovered 2026-05-16 by Rod after live test of BL-167 Slice 1.1: anchor should not be confined to start and end of round; should also be able to interject mid-round for course correction. Composes cleanly with BL-167 anchor mechanic and BL-162 engine.
+- **v1 (shipped 2026-05-17):** engine decides, panel inserts.
+  - `PanelDiscussEngine.shouldAnchorInterject(ctx)` returns boolean. Inputs: `woundActivated`, `recentMoves`, `baseRate`. Defaults: baseRate=0.10, wound-activation boosts to 0.75, sustained-same-posture (3+ identical recentMoves) boosts to 0.45. Final rate = max(baseRate, applicable boosts).
+  - `PanelDiscussEngine.buildSystemPrompt` extended with `interjectionMode: boolean` input. When true, emits ANCHOR_INTERJECTION MODE block (distinct from opener/closer text). Suppresses TOPIC-DISMISSAL just like opener/closer modes.
+  - Block instructs short redirecting steering, course-correction not takeover, one or two sentences.
+- **v1.1 (follow-on):** Golf `discuss()` wires `shouldAnchorInterject` between middle slots. When true, run an extra anchor turn with `interjectionMode: true` before continuing.
+- **v2:** rollout to other panels via the engine (per Principle 1, one site of change).
+- **Composes with:** BL-167 (anchor mechanic), BL-162 (engine — both `shouldAnchorInterject` and the `interjectionMode` block live in `PanelDiscussEngine`), BL-168 (TOPIC-DISMISSAL suppressed for interjection turns), BL-145 (REGISTER BREAK guard pattern — same sustained-posture signal informs both mechanics).
+- Feature: panel-interaction
+- Epic: Panel Interaction Model
+- CD3: UBV=7 TC=5 RR=3 → CoD=15, Dur=2, **CD3=7.5**
+- Status: **v1 ENGINE SHIPPED 2026-05-17** — `shouldAnchorInterject` + `interjectionMode` in buildSystemPrompt. v1.1 (Golf wiring) pending. v2 (other panels) follows.
+
+---
+
 ### BL-175 — Cross-character catchphrase parody (piss-take appropriation)
 
 - Discovered 2026-05-16 by Rod after Bruce-to-Phil's-opoly move. Mechanic: a character can deploy ANOTHER character's signature line/aphorism IRONICALLY, redirected at a THIRD party. The parody appropriation IS the joke — taking a sincere line out of context, repurposing for piss-take.
