@@ -15494,12 +15494,13 @@ Tangent-prone characters are exempt — they are the ones being dismissed, not t
         roundSoFarText: _roundSoFarText,
         panelStateBlocks: gfIntensityBlock + gfYourState + tourCardBlock + roeIntroBlock + golfNameBlock + gfFoodBlock + gfMarmiteBlock + gfHypoBlock + gfPremBlock + gfLieBlock + gfIdiomBlock,
         panelMemberBlocks: _iceBreakBlock(member.id) + roundNote + mechanics + arcInstructions,
-        // BL-169/170/171/175 — turn the new engine mechanics ON for Golf.
+        // BL-169/170/171/175/179 — turn the new engine mechanics ON for Golf.
         // Engine handles slot-type suppression internally (anchor/interjection turns omit
-        // questions/parody; profanity is universal per character profile).
+        // questions/parody/reverent-absurdity; profanity is universal per character profile).
         crossCharacterQuestionsEnabled: true,
         parodyEnabled: true,
         profanityEnabled: true,
+        reverentAbsurdityEnabled: true,
       });
       const system = gfIaType
         ? IntellectualAttempts.inject('golf', member.id, gfBaseSystem, gfIaType)

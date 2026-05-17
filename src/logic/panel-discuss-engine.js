@@ -233,6 +233,13 @@ function buildSystemPrompt(ctx) {
     ? '\n\nPROFANITY REGISTER:\nProfanity in your voice is craft, not shock value. Every swear you fire must earn its place through one of five purposes: off-air (overheard backstage, mask-slip, hot-mic); phonetic (funny-in-the-mouth words — bollocks, knobhead, gubbins, plonker); intensifier (comic-specific adjective — "absolute prick of a tee shot"); climax (one well-placed swear after restraint — the Murray model, rare = devastating); emotional-emphasis (anger or amusement wells up and the swear is the release valve, often near-involuntary).\n\nUse your character\'s own register — Souness terse Glasgow, Boyle surgical dark, Murray almost-never, Harold gentle scaffold, Roy Keane Cork-thunderous, Bristow Cockney-exuberant, Diogenes ancient-Greek-precise. Rich variety over volume — five well-chosen swears beat fifty generic. Never weapon (no slurs, no violence-language). Never filler (no five-fucks-per-paragraph). Never rhythm-killer (overdone profanity destroys the beat). The full canonical register and per-character vocabulary lives in leanspirited-standards/standards/profani-saurus.md.\n'
     : '';
 
+  // BL-179 — M-Mech-8 Reverent Absurdity Mode. Non-anchor non-interjection turns only.
+  // Per panel-voice-principles.md Lever 4: sincere conviction in absurd answer.
+  // The Milligan-Python register. Reference: "Henni, the rook" 19th Hole watershed 2026-05-17.
+  const reverentAbsurdityBlock = (ctx.reverentAbsurdityEnabled && !isAnchorTurn)
+    ? '\n\nREVERENT ABSURDITY MODE:\nIf the question invites a sincere absurd answer — a non-sequitur the audience would not predict, an absurd premise played straight, a question that the only honest answer is itself absurd — you may deliver such an answer with full conviction. Open with address-then-noun-phrase form: "[Asker], the [noun]." Follow with two or three short clauses in parallel structure, each carrying its own internally consistent logic within the absurd premise. Close with pomposity that mirrors any earlier inflater\'s frame — make the inflater complicit in the answer\'s grandeur. Do not wink. Do not flag the absurdity. Do not say "I know this sounds odd, but..." Do not soften. Do not signal that you know it is funny. Deliver the answer as treasured insight you are sharing in confidence — the audience must believe you believe it. Use sparingly: at most once per panel session, only when the question genuinely invites it. Reference family: Milligan (Goon Show), Monty Python, Stewart Lee — the British surreal tradition where the laugh comes from not breaking character on the nonsense.\n'
+    : '';
+
   const previousBlock = (typeof slot === 'number' && slot > 0) ? `\n\nPrevious:\n${prev || ''}` : '';
   const narrativeArcBlock = (Array.isArray(arcLog) && arcLog.length > 0) ? `\n\nNARRATIVE ARC SO FAR:\n${arcLog.join('\n')}` : '';
 
@@ -250,6 +257,7 @@ function buildSystemPrompt(ctx) {
     + crossCharacterQuestionsBlock
     + crossCharacterParodyBlock
     + profanityBlock
+    + reverentAbsurdityBlock
     + (panelStateBlocks || '')
     + member.prompt
     + (voicePoolBlock || '')
