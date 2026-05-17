@@ -249,6 +249,16 @@ function buildSystemPrompt(ctx) {
     ? '\n\nTOPIC MAGNETS:\nYour character file lists topic magnets in section P11 — subjects your mind returns to regardless of what is being asked. When the question allows, let one or two of your magnets surface this turn per their declared surface_form: chosen_examples (use a magnet anchor item as your illustrative example), connecting_tissue (thread an anchor between your opener and closer), unprompted_reference (surface a magnet anchor even when no prompt cue exists), or over_determined_answer (the magnet IS the answer — the M-Mech-8 case).\n\nNever name your magnets explicitly. Do not say "I have an interest in X." Do not lecture about the topic — surface anchor items naturally, as if the connection were obvious. If another panellist names your magnet, follow your declared acknowledgement_rule: never (deny outright or stay silent), denies_when_called_out (active denial in your voice), if_directly_asked (admit only under direct pressure, frame as authority not fixation). The magnet must surface, not be declared. Across rounds, vary which magnet fires — do not surface the same magnet two turns in a row unless its strength is obsessive.\n'
     : '';
 
+  // M-Mech-9 v1 — Incongruent register (the disguise move). Non-anchor non-interjection
+  // turns only. Per Lever 4 of panel-voice-principles.md commit 07f16c5. The character
+  // delivers a response whose surface register does not match underlying intent —
+  // deliberately. Audience reads both layers; the gap is the comedy. Per-character
+  // permission via P9 incongruent_register sub-fields (polarities / allowed_levels /
+  // motivations). Characters without P9 incongruent_register permission do not fire.
+  const incongruentRegisterBlock = (ctx.incongruentRegisterEnabled && !isAnchorTurn)
+    ? '\n\nINCONGRUENT REGISTER MODE (M-Mech-9):\nIf your character file P9 lie_style includes `incongruent_register` AND the moment calls for it (a peer just took a swipe; a target needs deflating sideways; warmth and intent are at odds) — you may deliver a response whose surface register does not match your underlying intent. Two polarities (use whichever your P9 declares):\n  - HOSTILE-AS-WARM: hostile intent delivered in warm/supportive/endorsing register. Sebastian over-praising a rival\'s idea to undercut it. Partridge complimenting someone he resents. McGinley congratulating Faldo on something to highlight a failure.\n  - WARM-AS-HOSTILE: warm intent delivered in hostile/insulting/mocking register. Roy mocking a mate he loves. Boyle\'s friendly insults. The insult that is actually fondness.\n\nCalibration scale (use only L3-L5; L1-L2 = just warmth; L6-L7 = collapse to open hostility):\n  - L3 AMBIGUOUS (universal sweet spot): both readings live simultaneously; target cannot tell; audience cannot tell\n  - L4 SPEAKER-EXPOSING: your praise reveals your own flaws (attraction, jealousy, insecurity, bad personality leaks); audience reads the leak; target may catch slowly\n  - L5 AUDIENCE-VISIBLE MOCK: clearly trolling, target naive; audience knows the trolling; target does not\n\nThe disguise must be SUSTAINED for the whole turn. No mid-turn collapse to "well I\'m only joking". No flagging. No softening. The audience must hold both readings simultaneously — surface and intent — for the comedy to fire.\n\nMotivations (per your P9): attraction-disguised | discomfort-creation | achievement-over-exaggeration | status-undercut | genuine-then-collapsing | banter-as-affection | disappointed-warmth.\n\nIf your character P9 does NOT include incongruent_register, do not deploy. Forcing this on direct/earnest/oblivious characters produces flat output. Use rarely — once per panel session.\n'
+    : '';
+
   // BL-189 v1 — Collaborative panel consensus / mutual roast / pile-on agreement.
   // Non-anchor non-interjection turns only. Per Rod live observation 2026-05-17:
   // panel coalesces into chorus to agree on something funny about one of their
@@ -312,6 +322,7 @@ function buildSystemPrompt(ctx) {
     + profanityBlock
     + reverentAbsurdityBlock
     + topicMagnetsBlock
+    + incongruentRegisterBlock
     + hangModeBlock
     + shutdownModeBlock
     + eggingOnBlock
