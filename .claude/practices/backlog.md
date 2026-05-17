@@ -2242,3 +2242,23 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Epic: Measurement & Regression
 - CD3: UBV=7 TC=4 RR=8 → CoD=19, Dur=4, **CD3=4.75**
 - Status: OPEN — raised 2026-05-17 from research-borrow. v1 (M-1 + M-3 + M-5) ships independently. v2/v3 depend on Track B engine surfaces. Three Amigos partial — measurement targets agreed in research analysis; calibration thresholds need tuning per panel.
+
+### BL-185 — Shorter startup sequence for secondary (parallel) Claude Code sessions
+
+- Discovered 2026-05-17: when Rod runs a second Claude Code session in parallel with a primary session (per `notes/2026-05-17-parallel-session-brief.md`), the full `.claude/session-startup.md` sequence is overkill. Most of it (live bug check ask, ideas board promotion, retro findings, principles/practices reference scan, project-separation reminder, backlog top 3 agreement) is owned by the primary session and should not be re-run by the secondary. The secondary just needs: auth canary, pipeline green, shared-session-state read, parallel-brief read, and a track assignment.
+- **The problem:** secondary session burns ~10 minutes of context running steps that the primary owns this session — duplicates work, risks divergent decisions (e.g. promoting an idea the primary is mid-conversation about), inflates context before any real work starts.
+- **Proposed artefact:** `.claude/session-startup-secondary.md` — minimal sequence:
+  1. Character schema pre-flight (`leanspirited-standards/standards/character-schema.md`) — still mandatory if any character work is in scope
+  2. Auth canary (curl Worker, expect 200) — non-negotiable
+  3. Pipeline-report.sh GREEN — non-negotiable
+  4. Read `.claude/shared-session-state.md` — primary's last close
+  5. Read most recent `notes/YYYY-MM-DD-parallel-session-brief.md` if present (or whichever file the primary nominates as the handoff)
+  6. Read any new `notes/` files dated today (primary may have written tracks/briefs mid-session)
+  7. `git status` + `git log -10` to see what primary has already shipped since the brief was written
+  8. Report ready + wait for track assignment from primary or Rod
+- **Explicitly skipped vs full startup:** Downloads pre-flight cat (primary owns Claude.ai sync), notes-directory promote/archive (primary owns), live bug ask (primary will hear from Rod), ideas board review (primary owns), backlog top-3 agreement (primary owns), retro findings recap (assume primary already loaded), principles/practices reference scan (load on demand only).
+- **Trigger to use secondary startup:** when Rod opens the session with language like "second session", "parallel session", "secondary", "prepare to receive instructions from primary", or names an explicit track ("pick up Track A"). Otherwise default to full startup.
+- **MEMORY.md update needed alongside this:** the HARD STOP block currently says "read `.claude/session-startup.md` IN FULL" for Cusslab — add a one-line carve-out: "if Rod signals secondary session, read `.claude/session-startup-secondary.md` instead."
+- Feature: process
+- CD3: UBV=5 TC=4 RR=4 → CoD=13, Dur=2, **CD3=6.5**
+- Status: OPEN — raised 2026-05-17 by secondary session at startup (Rod's request mid-startup). Three Amigos needed on the exact skipped/kept list before writing the file; this BL captures the proposal, not the decision.
