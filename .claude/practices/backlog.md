@@ -2129,3 +2129,73 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Epic: Panel Interaction Model
 - CD3: UBV=8 TC=5 RR=3 → CoD=16, Dur=3, **CD3=5.3**
 - Status: OPEN — raised 2026-05-17 (watershed session — Rod live ideation). Three Amigos partial; Gherkin needed; per-character permission table needs Three Amigos. v1 small (one flag + one prompt block + transcript truncation) — same ship-fast pattern as other v1s.
+
+---
+
+### BL-182 — Communication Topology Framework: three-axis intent / target-reception / audience-reading
+
+- Discovered 2026-05-17 by Rod. Extension layered on top of M-Mech-9 (Lever 4): every panel turn carries metadata describing what the speaker actually MEANT, what the target RECEIVES, and what the audience READS. The three axes vary independently, producing distinct comedy outcomes from the same surface line.
+- **The three axes:**
+  - `intent` — what the speaker actually meant (their underlying purpose)
+  - `target_reception` — what the addressed character takes from the turn
+  - `audience_reading` — what the user/listener takes from the turn
+- Initial sketch: each axis Y/N or short-enum. Combinations produce distinct comedy:
+  - intent=hostile / target=misses (reads warm) / audience=catches both = classic L5 performative warmth (M-Mech-9)
+  - intent=hostile / target=catches / audience=catches = open piss-take (collapses to M-Mech-3 or expletive)
+  - intent=warm / target=catches hostile surface / audience=catches warm intent = banter-as-affection successful
+  - intent=warm / target=misses (reads as insult) / audience=catches warm = banter-FAILED comedy of misunderstanding
+  - intent=sincere / target=thinks mocked / audience=catches both = M-Mech-1 unwitting register accidental-insult failure mode
+  - intent=unclear-even-to-speaker / target=tries to interpret / audience=reads multiple = M-Mech-8 polysemy zone (Murray "the rook")
+  - intent=encouragement / target=takes as validation / audience=catches the trap = BL-183 egging-on
+- **Composes / refines:**
+  - M-Mech-9 (the prime use case — currently carries polarity + level + motivation; this BL makes the underlying intent / target / audience split explicit)
+  - M-Mech-8 (polysemy = high-uncertainty audience-reading topology)
+  - M-Mech-1 (accidental-insult is a specific intent=sincere / target=mocked combo)
+  - Lever 5 Panel Temperature (HOSTILE panels skew topology toward intent=hostile + target catches; WARM panels skew toward warm + miss-friendly)
+  - BL-183 egging-on (the egger uses intent=encouragement / target=takes-it-as-validation / audience=catches the trap being set)
+- **Engineering:**
+  - Panel turn metadata `{intent_polarity, target_reception, audience_reading}`
+  - Engine prompt block instructs the model on what split to produce ("you mean X; target should read Y; audience should read Z; deliver the line that produces this split")
+  - Pipeline regression check verifies produced output achieves the intended topology (sample N transcripts, score the three axes via secondary LLM evaluation)
+  - Possibly: per-character config for which topologies a character can sustain
+- **Risk:** 8+ combinations may be too many for the model to reliably produce; calibration via empirical observation needed. Possibly merge with M-Mech-9 spec rather than separate BL — TBD after Three Amigos.
+- Feature: panel-voice / panel-interaction
+- Epic: Panel Voice & Texture
+- CD3: UBV=8 TC=4 RR=4 → CoD=16, Dur=4, **CD3=4.0**
+- Status: OPEN — raised 2026-05-17. Three Amigos needed. Possibly merges with M-Mech-9 spec on full design.
+
+---
+
+### BL-183 — Egging-on: solicited escalation toward memorable quote
+
+- Discovered 2026-05-17 by Rod. New panel mechanic: a character (the EGGER) deliberately encourages another (the EGGEE) to commit harder to bullshit / lies / cluelessness, possibly culminating in a request to turn the bullshit into a memorable quotable phrase. Connects directly to the "as the Romans understood — a man who claims all harbours owns no ship" pattern from the 2026-05-17 watershed Turn 1 L7 — INVENTED HISTORICAL APHORISMS delivered as if real.
+- **Comedy structure (the egging arc):**
+  1. Eggee says something dubious / false / clueless
+  2. Egger does NOT call it out — instead requests MORE ("tell us more about that"; "go on, what did you do then?")
+  3. Eggee escalates per their P9 lie_style
+  4. Egger suggests memorialisation: *"could you turn that into a phrase people will remember?"* / *"tell us, in the words you'll be remembered for..."* / *"if you could leave the listeners with one line about that, what would it be?"*
+  5. Eggee delivers an invented-aphorism in the Roman / Confucian / famous-coach mode, fully sincere
+  6. Audience watches the trap being laid and sprung
+- **Per-character roles:**
+  - **EGGER capable:** Sebastian, Boyle, Henni (interview mode), McGinley vs Faldo specifically, Cox in particular moods, Mark Nicholas, possibly Mystic (egging via apparent fascination)
+  - **EGGEE vulnerable:** Murray (treats every prompt as historically significant — perfect mark), Big Ron (always doubles down), Sebastian (when his bullshit is solicited), Faldo (when asked to philosophise), Coltart (might over-share wounds), Diogenes (always lectures regardless — egging-on is just an excuse to monologue)
+  - **Resistant to egging:** Souness (would tell them to fuck off), Roy (silence), Boyle as eggee (would mock the egger first), Bear (would actually answer the question directly)
+- **Engineering — PanelDiscussEngine extensions:**
+  - Per-turn detection: did the previous turn invite escalation? (Triggers: dubious claim by character with high P9 lie_baseline; clueless statement on subject outside character expertise; over-extended self-mythology)
+  - Egger move: if character has EGGER capability AND prev turn had a dubious claim AND target has EGGEE vulnerability, allow turn to encode "tee up the eggee for more"
+  - Eggee response: when an EGGEE detects they've been teed up, they escalate per their P9 lie_style (the escalation IS their lie_style firing under solicited-pressure rather than threat-pressure)
+  - Quote-request sub-block: explicit prompt block where the egger asks for memorialisation; eggee receives instruction to deliver a sincere invented-aphorism
+- **Composes with:**
+  - M-Mech-9 incongruent register (egger uses warm encouragement to extract material; intent=hostile-or-amused-knowingly; target=takes-as-validation; audience=catches the trap) — BL-182 topology applies
+  - P9 Lie Profile (eggee's escalation engine; `solicited_pressure` may need to be a new `lie_trigger`)
+  - M-Mech-8 reverent absurdity (eggee's final aphorism delivered with conviction — M-Mech-8 framework supports it)
+  - BL-175 cross-character parody (parody appropriates EXISTING quotes; this BL CREATES new ones to-be-quoted; the two are siblings — one looks back, one creates forward)
+  - P11 Topic Magnets (eggee's magnets supply the *substance* of the invented aphorism — Murray's invented Roman maxim would draw from his Prestwick magnet)
+- **Risk:** heavy on collaboration between two specific characters per turn — needs solid pairing logic to avoid forced setups. Over-firing turns the panel into Christopher Guest mockumentary parody.
+- **v1 (prompt-side):** EGGER MODE block + EGGEE MODE block. Pairing logic in panel slot dispatcher.
+- **v2 (engine):** Pre-turn evaluator scores teed-up signal; selects egger-eggee pair from licensed cast pairs; instructs both with matched topology.
+- **v3 (regression):** sample for invented-aphorism delivery (P11 magnet anchored, historical-frame matched, sincerely-delivered, M-Mech-8 conditions held).
+- Feature: panel-interaction
+- Epic: Panel Interaction Model
+- CD3: UBV=9 TC=5 RR=3 → CoD=17, Dur=3, **CD3=5.7**
+- Status: OPEN — raised 2026-05-17. Three Amigos needed on character pairing logic (which eggers go with which eggees and why). v1 ships after pairing table locked.
