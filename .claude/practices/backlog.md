@@ -2199,3 +2199,46 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Epic: Panel Interaction Model
 - CD3: UBV=9 TC=5 RR=3 → CoD=17, Dur=3, **CD3=5.7**
 - Status: OPEN — raised 2026-05-17. Three Amigos needed on character pairing logic (which eggers go with which eggees and why). v1 ships after pairing table locked.
+
+---
+
+### BL-184 — Panel voice measurement instrumentation suite
+
+- Discovered 2026-05-17 via comparative-analysis research (`notes/2026-05-17-comparative-analysis.md`). The highest-impact gap identified: our model is theory-rich, instrumentation-poor — inverse of mainstream multi-agent LLM research (instrumentation-rich, character-poor). Neither extreme is healthy.
+- **The problem:** every quality claim relies on Rod's read. Multiple specific claims in our standards are documented but never measured:
+  - Lever 1: "across 20 calls, no flavour entry appears more than 3 times" — unmeasured
+  - P11: magnet surface-rate vs declared `magnetic_strength` — regression check documented in schema, not implemented
+  - M-Mech-9: calibration-band drift (L3 character drifting to L6 under pressure) — unmeasured
+  - Lever 3: `reacts_to` coverage rate (≥50% from turn 2) — claimed, unmeasured
+  - BL-176 v3: cross-character magnet collision audit — designed, not running
+  - Disagreement-productivity index (does the panel stay L3-L5 or drift to L6+ or to consensus?) — no metric
+- **Reference benchmarks (worth borrowing pattern from):**
+  - Multi-Agent Comedy Club (arXiv 2602.14770) — A/B with rubric scoring; discussion-enabled wins 75.6% with Δ Craft/Clarity 0.440
+  - MultiAgentBench (arXiv 2503.01935) — collaboration/competition with milestone KPIs
+  - AgentVerse / CAMEL — token-duplication metrics (53% / 86% respectively)
+  - General MAS failure-mode taxonomy: ~79% of failures = spec + coordination
+- **Proposed measurement suite (six instruments):**
+  - **M-1 Flavour repetition rate** — sample N=20 calls per character per panel, count flavour entries; alert if any appears >3 times. Owns Lever 1 regression check.
+  - **M-2 Magnet surface-rate** — sample N transcripts per character, count magnet anchor-item appearances vs declared `magnetic_strength` expectation; alert on under-fire (magnet absent) and over-fire (magnet >2x expected). Owns P11 regression check.
+  - **M-3 reacts_to coverage** — sample N transcripts per panel, count turns with `reacts_to` populated from turn 2 onward; alert if <50%. Owns Lever 3 regression check.
+  - **M-4 Mechanism calibration drift** — sample N M-Mech-9 firings per character, score (via secondary LLM judge) the calibration level achieved against `allowed_levels` declared. Alert on drift outside band.
+  - **M-5 Cross-character magnet collision** — across all character files, detect any magnet topic appearing verbatim in more than one character's `magnets[]`. Alert on collision. Owns BL-176 / WL-131 separation.
+  - **M-6 Disagreement-productivity index** — sample N panel sessions, score (via secondary LLM judge) whether the panel stayed L3-L5 incongruence, drifted to L6+ open hostility, or drifted to consensus (failure mode). Composite metric.
+- **Engineering — three artefacts:**
+  - **Pipeline scripts:** `pipeline/measurement/{flavour-rate,magnet-surface,reacts-coverage,mech-calibration,magnet-collision,disagreement-index}.js`. Each runs against last K transcripts (sampled from Worker logs or session captures) and outputs PASS/FAIL + numeric measure.
+  - **Transcript capture:** sample-and-store mechanism for live session transcripts so the measurement scripts have data. New `HC_TRANSCRIPT_LOG` localStorage or Worker-side sample store, retaining last K.
+  - **Secondary LLM judge:** the calibration drift and disagreement-index scripts need a small Anthropic API call per sample to score subjective dimensions. Budget per audit run TBD; possibly cached against transcript hash to avoid re-scoring.
+- **Phased delivery:**
+  - **v1:** M-1 (flavour repetition) + M-3 (reacts_to coverage) + M-5 (magnet collision) — pure transcript-analysis scripts, no LLM judge needed, no transcript-capture infra needed beyond what already exists in HCSession (per BL-018).
+  - **v2:** M-2 (magnet surface-rate) — needs transcript capture; depends on BL-178 v1 (TOPIC MAGNETS engine surface) so character magnets are observable in prompt → output mapping.
+  - **v3:** M-4 (calibration drift) + M-6 (disagreement-productivity) — needs secondary LLM judge; depends on BL-181 v1 (M-Mech-9 engine block) and BL-178 v1 so the mechanisms are firing observably.
+- **Composes with:**
+  - BL-176 v3 (already has M-5 collision check designed as part of repetism audit)
+  - BL-178 v3 (P11 regression check designed in schema)
+  - BL-179 v3 (reverent-absurdity audit designed in BL-179 entry)
+  - All future Lever 4 mechanism BLs (each should ship its own measurement instrument)
+- **Counter-argument worth noting:** single-judge evaluation (Rod) has been working well — his feedback drives ship cadence under the experimental workflow exemption. Adding measurement could over-instrument and slow ship. Counter: measurement protects against unmeasured drift between Rod's sessions; he cannot watch every panel run.
+- Feature: process / panel-voice
+- Epic: Measurement & Regression
+- CD3: UBV=7 TC=4 RR=8 → CoD=19, Dur=4, **CD3=4.75**
+- Status: OPEN — raised 2026-05-17 from research-borrow. v1 (M-1 + M-3 + M-5) ships independently. v2/v3 depend on Track B engine surfaces. Three Amigos partial — measurement targets agreed in research analysis; calibration thresholds need tuning per panel.
