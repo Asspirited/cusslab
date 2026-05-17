@@ -249,6 +249,14 @@ function buildSystemPrompt(ctx) {
     ? '\n\nTOPIC MAGNETS:\nYour character file lists topic magnets in section P11 — subjects your mind returns to regardless of what is being asked. When the question allows, let one or two of your magnets surface this turn per their declared surface_form: chosen_examples (use a magnet anchor item as your illustrative example), connecting_tissue (thread an anchor between your opener and closer), unprompted_reference (surface a magnet anchor even when no prompt cue exists), or over_determined_answer (the magnet IS the answer — the M-Mech-8 case).\n\nNever name your magnets explicitly. Do not say "I have an interest in X." Do not lecture about the topic — surface anchor items naturally, as if the connection were obvious. If another panellist names your magnet, follow your declared acknowledgement_rule: never (deny outright or stay silent), denies_when_called_out (active denial in your voice), if_directly_asked (admit only under direct pressure, frame as authority not fixation). The magnet must surface, not be declared. Across rounds, vary which magnet fires — do not surface the same magnet two turns in a row unless its strength is obsessive.\n'
     : '';
 
+  // BL-181 v1 — Proactive moderation (shutdown-before-launch). Non-anchor turns only.
+  // A character interrupts another's attempt to call something out, redirecting
+  // before the topic can land. Distinct from BL-180 (reactive silence AFTER) — this
+  // is active interruption BEFORE. Per Rod live observation 2026-05-17.
+  const shutdownModeBlock = (ctx.shutdownModeEnabled && !isAnchorTurn && typeof slot === 'number' && slot > 0)
+    ? '\n\nPROACTIVE MODERATION (SHUTDOWN MODE):\nIf the previous turn started a line of conversation that genuinely should not unfold here — because it offends taste / broadcast convention, because it is unhinged territory that does not belong on this panel, because someone needs protecting (the speaker themselves, the target, the panel), or simply because the topic is going somewhere ugly — you may interrupt to redirect, BEFORE the line lands. Four motivations:\n  - TASTE: "Anyway — let\'s not go there today."\n  - MADNESS CONTROL: "Right. Moving on. [New topic.]"\n  - SELF-PROTECTION: "Yes — well — what\'s happening on the leaderboard?"\n  - TARGET PROTECTION: "Let\'s leave [Target] alone on this one and look at [Topic]."\nThe redirect is brief and decisive — one or two sentences max. Do not explain at length why you are shutting down; the redirect IS the move. Some characters have authority to do this (presenter, anchor, status-high members); others do not. If your character would never moderate, do not deploy. Use sparingly — over-firing makes the panel feel censored. At most once per panel session.\n'
+    : '';
+
   // BL-180 v1 — Hanging-in-the-air. Non-anchor non-interjection turns only.
   // Allows the current speaker to deliberately not engage with the previous turn —
   // the audience reads the absence; the silence IS the comedy. Four firing conditions:
@@ -288,6 +296,7 @@ function buildSystemPrompt(ctx) {
     + reverentAbsurdityBlock
     + topicMagnetsBlock
     + hangModeBlock
+    + shutdownModeBlock
     + inventedExpertBlock
     + (panelStateBlocks || '')
     + member.prompt
