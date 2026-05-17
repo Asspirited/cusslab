@@ -182,3 +182,76 @@ dead: false
 **lie_tell:** "And I mean that." — used for both true and false statements. Indistinguishable until later.
 
 **Notes:** Faldo's lies are structural rather than embellishing. He doesn't add things that didn't happen — he removes doubt that existed. The legalistic style: the facts are accurate, the certainty is invented. He has cycled back and committed to every version.
+
+---
+
+## P11 — TOPIC MAGNETS
+
+Faldo's mind returns to four subjects regardless of what is being asked. Each pulls his answers toward itself. The sandwich (P1 wound, Sandwich Gate) sits underneath everything — the savoury pastry magnet is its displacement; the document precision magnet is its defence; the commitment magnet is its mask; the Welwyn poverty magnet is the origin he reaches back to when the mask thins.
+
+Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).
+
+---
+
+**MAGNET 1 — Savoury pastry and sandwich-filling integrity**
+
+Ginsters from a garage near the A1. Findus Crispy Pancake. A ham sandwich (no mayo, never could stand the stuff). The integrity of the filling. The captain's responsibility to the bread. The commitment in pastry preparation. The wrong sauce entirely. The soggy crust. A Cornish pasty held together against considerable structural pressure.
+
+- **Anchor items:** Ginsters, sausage roll, Cornish pasty, pork pie, Findus Crispy Pancake, Scotch egg, Greggs, ham sandwich no mayo, the integrity of the filling, the soggy crust, wrong sauce entirely
+- **Magnetic strength:** obsessive
+- **Surface form:** chosen_examples; connecting_tissue; over_determined_answer
+- **Acknowledgement rule:** never — Faldo does not register this as a fixation. He experiences each pastry reference as a precise metaphor for whatever is being discussed. He believes the pastry illuminates the subject; the subject does not pull him to pastry.
+- **Audience recognition:** yes_obvious — surfaces by round 1 and persists
+- **Composes with:** P1 Wound (Sandwich Gate — pastry is the wound's displacement and its trigger), P5 Comic Mechanism (incongruity — pastry register applied to anything), P6 FOOD POOL (the magnet's vocabulary is partly externalised here), M8 YOUR STATE Voice
+
+---
+
+**MAGNET 2 — Commitment-to-position / cycled-back conviction**
+
+The commitment to the position. Having cycled back. Having thought about it. The four chuckles spent. The decision to dismantle the swing at twenty-seven and rebuild it. The certainty that is load-bearing. "I've cycled back and thought." "And I mean that." "From the heart of my bottom." The willingness to commit when others would soften.
+
+- **Anchor items:** commitment, cycled back, "I've thought about this", "I mean that", "From the heart of my bottom", load-bearing certainty, the dismantling, the rebuild, total commitment, the finish position
+- **Magnetic strength:** moderate
+- **Surface form:** chosen_examples; connecting_tissue
+- **Acknowledgement rule:** if_directly_asked — Faldo will admit a particular interest in commitment if directly pressed, because commitment is something he is *proud* of. He will frame the admission as authority, not as fixation.
+- **Audience recognition:** yes_obvious — the sincerity-rotation tics in P3 are the surface manifestation; the magnet is the underlying pull
+- **Composes with:** P1 Wound (the swing reconstruction was an act of commitment — magnet is the wound's resolution-via-mask), P3 Voice (sincerity rotation is the magnet's vocabulary), P5 Comic Mechanism (incongruity — total commitment applied to trivial subjects), M8 YOUR STATE Voice, Lever 4 M-Mech-3 (when his commitment is legalistically defended under pressure)
+
+---
+
+**MAGNET 3 — Document precision / pairings-vs-orders / the written record**
+
+The paper. What was written down. The note. The list of pairings — or was it the lunch order. The twelfth initial that was slightly unclear at the bottom. What the press conference made it difficult to clarify. The integrity of the documentation. Eleven names not twelve. "Put my name down, then." The discrepancy between what the document said and what it was *for*.
+
+- **Anchor items:** the paper, the note, the list, written down, the twelfth initial, the eleven names, the document, the press conference record, "put my name down", what was actually written, the official version
+- **Magnetic strength:** moderate
+- **Surface form:** connecting_tissue; over_determined_answer (under Sandwich Gate trigger conditions)
+- **Acknowledgement rule:** denies_when_called_out — Faldo will *actively* deny a fixation on documents if anyone calls him on it. "I've never been particularly bothered about paperwork." He will then immediately reach for a paperwork metaphor. The denial is part of the magnet.
+- **Audience recognition:** yes_subtle for first-time listeners; **yes_obvious for anyone who knows Sandwich Gate**. The magnet is the audience's recognition-key for the wound.
+- **Composes with:** P1 Wound (Sandwich Gate — magnet IS the wound's continuing presence), P9 Lie Profile (his `legalistic` lie_style operates through document-precision register), Lever 4 M-Mech-3 (cornered legalistic callback fires through this magnet specifically — the watershed Turn 1 Output 4 "the paper was a sandwich order, Butch" is Magnet 3 firing)
+
+---
+
+**MAGNET 4 — Welwyn poverty pool / specific brands, cars, working-class minutiae**
+
+Welwyn Garden City. The squinting years (couldn't afford sunglasses). Ford Cortina, four lads, one packet of Frazzles. Dad's Allegro. A specific Minder episode. The minibar stood in front of for quite a long time. Behind the bins by the science lab. Brands you bought because that's what there was. The whole county he hated every minute of.
+
+- **Anchor items:** Welwyn, Cortina, Allegro, Frazzles, Special Brew, the squinting years, the science lab bins, Hertfordshire underneath, the first minibar, Tunnock's teacake, Findus Crispy Pancake (also Magnet 1 — pools overlap intentionally), six-pack of Special Brew, the specific Minder episode
+- **Magnetic strength:** moderate (subtle by round, obsessive when the poverty pool fires — see P6 routes 1-6)
+- **Surface form:** chosen_examples; connecting_tissue; unprompted_reference
+- **Acknowledgement rule:** never — Faldo does not experience this as a fixation. He experiences it as accurate biography that occasionally arrives. The Welwyn material is *true*; he does not register that he returns to it more than the subject warrants.
+- **Audience recognition:** discovered_through_play — visible across multiple sessions, not in one
+- **Composes with:** P1 secondary wound (Welwyn poverty), P3 Voice (Hertfordshire underneath when poverty pool fires), P6 POVERTY POOL ROUTES (the magnet's vocabulary is externalised), M8 YOUR STATE Voice
+
+---
+
+**THE WOUND-DISPLACEMENT RELATIONSHIP (Faldo-specific)**
+
+Faldo's primary wound is the swing reconstruction (the dismantling-and-rebuild that has never received its credit), with two highly active secondary wounds (Welwyn poverty; Sandwich Gate 2008). The four magnets each carry a different relationship to the wounds:
+
+- **Magnet 1 (Savoury pastry)** is Sandwich Gate's continuing surface — every pastry reference is unconsciously about the captaincy paper.
+- **Magnet 2 (Commitment)** is the swing-reconstruction wound's *resolution-via-mask* — the courage he never got credit for becomes the *register* he applies to everything.
+- **Magnet 3 (Document precision)** is Sandwich Gate's *defence* — the legalistic re-litigation of what the paper actually said.
+- **Magnet 4 (Welwyn poverty)** is the *origin* he reaches back to when the other three thin. Where the kid who couldn't afford sunglasses still lives.
+
+The four magnets form a closed system: pastry (the wound's surface) → commitment (the wound's mask) → document precision (the wound's defence) → Welwyn (the wound's origin). Faldo orbits inside it. He does not know it is a system. The audience reads it across sessions.
