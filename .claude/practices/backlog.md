@@ -1931,7 +1931,13 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - **Failure 1 — default-tic firing (intra-character).** A character's named signature move (Alliss's "What. A. Statement.", Faldo's "Now.", etc.) fires by cadence or turn position rather than because relevance-adds-weight or incongruity-displaces-context. Result: the tic stops being recognised as the character — it becomes filler the audience tunes out. Working example of failure: Output 1 in 2026-05-17 watershed (Alliss closing two paragraphs of inflation with "What. A. Statement." as default cadence rather than as earned punctuation).
 - **Failure 2 — cross-character tic bleeding (inter-character).** Multiple characters reach for the same signature phrase across the panel. Rod 2026-05-17: *"'What. A. Statement.' is overused by all characters, need to dial that back along with a few other repetisms."* Adjacent to WL-131 (opener bleeding) but at the *named-tic* layer rather than the opener layer. Adjacent to BL-175 (parody) which is the *constructive* use of cross-character phrase awareness; this BL is the *unwanted* mirror of BL-175.
 - **Why it matters:** every default-fire dulls every future fire of the same tic. The asset depreciates with each unearned use. Cross-character bleeding compounds the cost — the tic becomes panel-generic rather than character-specific, which collapses Lever 0 (the reactive model: characters stop sounding like themselves).
-- **Other repetisms TBD — Rod to enumerate.** Initial list pending: "What. A. Statement." confirmed. Additional repetisms to be named in BL update.
+- **Named repetisms (growing list — Rod-observed):**
+  - "What. A. Statement." — overused by all characters (Rod 2026-05-17)
+  - "We should mark this" — appears at opener position across multiple 19th Hole runs (suspected bleed — confirm in v0 audit)
+  - "Valderrama '97" — Faldo flavour bank over-rotating on this specific Ryder Cup wound (Rod 2026-05-17). Dial back via flavour-rotation tightening on Faldo's `places` or `years` bank, or add Valderrama '97 to `never_touch` for N calls after each use.
+  - Further additions to be appended as Rod observes them in live use.
+- **Adjacent failure mode — turn-shape collapse (Rod 2026-05-17).** Opener lands strong; middle sags; closer trails into reactive engagement with another character's nonsense. The character has a strong opening move but no escalation structure to sustain through to a strong close. Possibly its own WL item (TBD) but symptomatic of the same overall voice-debt as repetisms — the character runs out of *their own* material partway through and falls back on either tics (default-fire) or reaction-to-others (Lever 0 reactive-model over-firing). v0 audit should sample for this — score each turn opener / middle / closer separately and flag turns where middle/closer quality drops below opener.
+- **Composes with proposed P11 (Topic Magnets)** — hidden character fixations (see character-schema.md draft entry, 2026-05-17 session) supply the *connecting tissue* a character can use mid-turn instead of defaulting to a tic or reacting to others. Magnets give the character somewhere to go in the middle of a turn that is still *them*. Repetism dial-back and topic-magnet engineering are two sides of the same outcome: less generic-character bleed, more character-specific texture.
 - **v0 (immediate, no code) — audit pass:**
   - Grep all character files in `characters/` for `signature_phrases`, `tics`, `opener`, `closer`, `mannerisms.closers` fields.
   - Produce overlap matrix: phrase × characters-using-it. Any phrase appearing in 2+ characters is contamination candidate.
@@ -1956,4 +1962,97 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Feature: panel-voice
 - Epic: Panel Voice & Texture
 - CD3: UBV=8 TC=8 RR=5 → CoD=21, Dur=3, **CD3=7.0**
-- Status: OPEN — raised 2026-05-17 (watershed session). Three Amigos needed before any code: agree what "earned" looks like in detectable terms, agree threshold for per-character fire rate, agree audit method (transcript sampling vs live capture). v0 audit can run independently and is recommended first move. Other repetisms list pending from Rod.
+- Status: OPEN — raised 2026-05-17 (watershed session). Three Amigos needed before any code: agree what "earned" looks like in detectable terms, agree threshold for per-character fire rate, agree audit method (transcript sampling vs live capture). v0 audit can run independently and is recommended first move. Named-repetisms list grows in the block above as Rod observes new ones in live use.
+
+---
+
+### BL-177 — P11 `acknowledgement_rule = if_directly_asked` reconsideration
+
+- Discovered 2026-05-17 in P11 design session. Rod parked the question for future reassessment after observing live use.
+- **Current state:** P11 schema (committed `cd04152` to leanspirited-standards) defines three options for `acknowledgement_rule`: `never` | `denies_when_called_out` | `if_directly_asked`. The schema notes `if_directly_asked` is the weakest of the three and should be used sparingly. Rod's instinct: may not be worth keeping in the enum at all — but not enough evidence yet to drop.
+- **What to watch for in live use (the signal that would resolve this):**
+  - Any character with `acknowledgement_rule = if_directly_asked` who is *actually* directly asked about a magnet, and whose confirmation moment lands either as funny (keep the rule) or as flat (drop the rule).
+  - Whether any character is being *forced* into the rule for narrative reasons (e.g. Murray's Prestwick obsession would be fun to have him confirm under pressure) vs the rule being a default cop-out.
+  - Cross-character: do panel members ever directly ask each other about magnets? If never, the rule is decorative — drop. If yes, the rule is load-bearing — keep.
+- **Reassessment trigger:** revisit after BL-178 ships and at least one character with `if_directly_asked` magnet has been in live play across 10+ sessions. Or sooner if Rod observes the rule firing/failing to fire in a memorable way.
+- **Possible outcomes:**
+  - Keep as-is (rule earns its place)
+  - Drop entirely (rule is decorative; collapse to `never` + `denies_when_called_out` only)
+  - Rename / refactor (rule needs a different condition — e.g. `if_panel_member_asks` distinct from `if_user_asks`)
+  - Add a fourth option discovered through play
+- Feature: panel-voice
+- Epic: Panel Voice & Texture
+- CD3: UBV=2 TC=1 RR=2 → CoD=5, Dur=1, **CD3=5.0**
+- Status: OPEN — raised 2026-05-17. **Parked for future reassessment** — Rod explicitly asked to log so a future scan flags it. Do not work this BL until live-use evidence accumulates. Pure design-evaluation item.
+
+---
+
+### BL-178 — P11 Topic Magnets pilot: Murray data + engine prompt surface
+
+- Discovered 2026-05-17 watershed session. P11 schema landed in `leanspirited-standards/standards/character-schema.md` commit `cd04152`. This BL ships the first character implementation AND the engine surface to use it.
+- **v0 (data) — Murray magnets ship to character file:**
+  - Three magnets per worked example in schema doc: corvids and the blackbird family (moderate / chosen_examples + over_determined_answer / never / discovered_through_play); Prestwick and pre-1900 golf history (obsessive / chosen_examples + connecting_tissue + unprompted_reference / if_directly_asked / yes_obvious); Victorian wage data (moderate / connecting_tissue + over_determined_answer / never / yes_subtle).
+  - Each magnet ships with full anchor_items array (≥6 entries per schema).
+  - Validation checklist (schema P11 entries) must pass.
+- **v1 (engine prompt surface):**
+  - `PanelDiscussEngine.buildSystemPrompt` extended with `topicMagnetsEnabled: boolean`.
+  - When true and character has P11 magnets, emits **TOPIC MAGNETS** block in system prompt:
+    - Lists this character's magnets for this turn (1–2 sampled per call by surface_form rotation).
+    - For each: topic + 2–3 anchor items + surface_form instruction.
+    - Block instruction: *"Your mind keeps returning to these. Surface them naturally — as chosen examples, as the tissue between your opener and closer, as the answer itself when it pulls — but never name them explicitly. Deny the fixation if the panel calls you on it (unless your rule allows confession)."*
+  - Anti-instruction: *"Do not lecture about the magnet. Do not announce 'I'm interested in X.' The magnet must surface, not be declared."*
+  - Suppressed for anchor opener/closer/interjection turns (those have their own register).
+- **v2 (engine selector logic):** PanelDiscussEngine selects which magnets to surface per turn based on (a) `magnetic_strength` rotation cadence, (b) BL-167 Slice 2 trigger-score state, (c) anti-repeat check against previous turn (don't surface the same magnet twice in a row).
+- **v3 (regression check):** pipeline check `magnet-presence.js` verifies across last N transcripts that each character's magnets appear at expected frequency, no magnet shared verbatim across characters, no magnet named explicitly. Fail → pipeline RED. Composes with BL-176 v3 pipeline check.
+- **v4 (Faldo + Cox pilot expansion):** add P11 magnets to Faldo and Cox character files following Murray's pattern. Faldo magnets candidates: savoury pastry (Ginsters as obsessive anchor), commitment-to-position, document precision. Cox magnets candidates: cosmic timescale, "and in that context" framing, narrative inevitability. Three Amigos per character.
+- **Composes with:**
+  - P11 schema (the data definition)
+  - M-Mech-8 (Lever 4) — magnets are the answer-generator; M-Mech-8 frames; BL-179 ships the frame
+  - BL-162 / PanelDiscussEngine (where the prompt construction lives)
+  - BL-167 Slice 2 (trigger scoring feeds magnet selection v2)
+  - BL-176 (audit verifies magnet behaviour as part of repetism dial-back)
+  - BL-175 (parody) — characters can parody another's magnet's anchor item as a deliberate piss-take (e.g. someone deploys "the rook" against Murray ironically)
+- **Why ship v0+v1 together:** schema without data is theory; data without engine surface is decoration. v0+v1 prove the round-trip from schema → data → prompt → output.
+- Feature: panel-voice
+- Epic: Panel Voice & Texture
+- CD3: UBV=9 TC=7 RR=5 → CoD=21, Dur=3, **CD3=7.0**
+- Status: OPEN — raised 2026-05-17. Three Amigos partially done (Murray's magnets in worked example were sketched in chat); Gherkin needed before any code. v0 data work may proceed independently as it is pure character-file content addition (subject to P11 validation checklist).
+
+---
+
+### BL-179 — M-Mech-8 Reverent Absurdity: prompt-side mode block
+
+- Discovered 2026-05-17 watershed session. M-Mech-8 (Reverent absurdity / Milligan-Python register) added to Lever 4 of panel-voice-principles, commit `22d5bab`. This BL ships the engine-side affordance — the prompt block that conditions the model to deliver M-Mech-8 when conditions hold.
+- **v1 (prompt-side):**
+  - `PanelDiscussEngine.buildSystemPrompt` extended with `reverentAbsurdityEnabled: boolean`.
+  - When true, emits **REVERENT ABSURDITY MODE** block in system prompt:
+    - *"If the question is a non-sequitur, absurd premise, or invites a sincere absurd answer, you may deliver such an answer with full conviction. Pick the answer that pulls from your topic magnets (P11). Open with address-then-noun-phrase ('Henni, the rook'). Justify with three short clauses in parallel structure, each carrying internally consistent logic within the absurd premise. Close with pomposity that mirrors any earlier inflater's frame."*
+  - Anti-instruction: *"Do not wink. Do not flag the absurdity. Do not soften with 'I know this sounds odd, but…'. Do not signal that you know it is funny. Treat the answer as treasured insight you are sharing in confidence."*
+  - Composes with M-Mech-2 (the closing pomposity is a signature move at displacement moment — earns its fire).
+  - Suppressed for anchor opener/closer/interjection (those have their own register).
+  - Suppressed if character has no P11 magnets (cannot generate connectable absurd answers).
+- **v2 (engine selection logic):** engine evaluates per-turn whether REVERENT ABSURDITY conditions hold:
+  - Prompt-absurdity heuristic: question contains pattern markers (replace X with Y, dangerous animal, dead celebrity, swap X for Y, what if X were Y).
+  - Character has at least one P11 magnet connectable to question subject (semantic match against anchor_items).
+  - Not an opener/closer/interjection turn.
+  - If conditions hold, sets `reverentAbsurdityEnabled: true` for that turn's character.
+- **v3 (regression check):** pipeline check `reverent-absurdity-audit.js` samples for M-Mech-8 firing patterns across last N transcripts:
+  - Asserts opener follows address-then-noun-phrase form on flagged turns.
+  - Asserts no winking / flagging / softening language present.
+  - Asserts justification has three clauses in parallel structure.
+  - Asserts answer references at least one P11 anchor item from the character's magnets.
+  - Pass = the watershed mechanism is firing reliably; fail = engineering regression.
+- **Calibration:** v2 selection logic must under-fire by default — M-Mech-8 every turn becomes Goon Show parody (see Lever 4 calibration risk note). Initial target: at most one M-Mech-8 fire per panel session.
+- **Composes with:**
+  - P11 (magnets are the answer-generator; without P11 data the block cannot connect to character voice)
+  - BL-178 (depends on P11 data being present on the character)
+  - M-Mech-8 Lever 4 spec
+  - BL-167 (anchor turn suppression)
+  - BL-168 (TOPIC-DISMISSAL coexists in non-anchor turns)
+  - BL-175 (parody coexists as different mode — parody and reverent absurdity are mutually exclusive per turn)
+  - BL-170 (interjection suppression)
+- **Ship-fast pattern:** v1 is small (one flag + one prompt block + suppression rules), like BL-168 / BL-175 v1 / BL-170 v1 ships. Single session feasible after Gherkin gate.
+- Feature: panel-voice
+- Epic: Panel Voice & Texture
+- CD3: UBV=9 TC=6 RR=4 → CoD=19, Dur=2, **CD3=9.5**
+- Status: OPEN — raised 2026-05-17. Three Amigos done in chat (watershed analysis is the design conversation). Gherkin gate next. Order dependency: ships *after* BL-178 v0 (Murray P11 data) lands so the engine can connect the block to actual character magnets — otherwise the block has no anchor items to reference and degrades to abstract instruction.
