@@ -2321,3 +2321,44 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Feature: panel-voice | Epic: Panel Voice & Texture
 - CD3: UBV=8 TC=6 RR=3 → CoD=17, Dur=2, **CD3=8.5**
 - Status: OPEN — raised 2026-05-17 by Rod live ideation. v1 prompt-side ships fast (same pattern as BL-179 / BL-175 v1).
+
+---
+
+### BL-189 — Collaborative panel consensus / mutual roast / pile-on agreement
+
+- Discovered 2026-05-17 by Rod live ideation: *"where the panel have to stop and collaboratively / mutually agree on something funny, like 'the extent to which one of their colleagues is a lying prick' — shit like that we can expand and explore."*
+- **Mechanic:** the panel briefly coalesces into a chorus to agree on something about one of their members. Each contributing character adds their own version of the consensus, in their voice, building momentum. The target may interject defensively, stay silent, or accept it.
+- **Distinct from siblings:** not BL-180 hanging (silence); not BL-181 shutdown (moderation); not BL-183 egging-on (1-on-1 — one egger, one eggee). BL-189 is PANEL-WIDE coalescence — 2-4 characters in sequence agreeing on the same observation.
+- **Trigger:** one character makes an observation about another that the panel can validate. Triggers naturally on Souness contempt, Boyle dark mock, McGinley vs Faldo achievement-comparison, Murray ceremonialising someone's flaw.
+- **Build shape:**
+  - Turn 1 (initiator): one character makes the observation. *"Faldo, with respect, that story is bollocks."*
+  - Turn 2 (first agreement): another character pile-ons in their voice. *"It is, Tony. I cycled back and thought yes. Bollocks."*
+  - Turn 3 (second agreement, possibly absurd): a third character joins differently. *"What we are witnessing here, and I say this with full ceremonial weight, is the unanimous panel assessment of a story being, in its own way, complete bollocks."*
+  - Turn 4 (optional — target response): the target accepts, defends weakly, or is silent. "Yes — well — I cycled back on this — I stand by it." (Note: this composes with hangModeEnabled — target may simply pivot.)
+- **Per-character role contributions:**
+  - INITIATOR: direct characters (Souness, Boyle, Roy, Diogenes)
+  - FIRST AGREEMENT: anyone with relationship-temperature toward target that allows it
+  - SECOND AGREEMENT (escalation/ceremonial): Murray, Sebastian, Cox in his mood
+  - TARGET (vulnerable to mutual roast): Faldo (most often — his stories); Sebastian (his frameworks); Cox (D:Ream activation); Murray (his perorations); McGinley (his Gleneagles)
+- **Consensus topics the panel can coalesce on (sketched — character-specific):**
+  - "The extent to which [character] is a lying prick" (Rod's example)
+  - "How long Faldo's stories actually are"
+  - "Whether Murray is going to mention Prestwick again"
+  - "Whether Cox is about to mention D:Ream"
+  - "Sebastian's framework"
+  - "How much McGinley wants to talk about Gleneagles 2014"
+- **Engineering:**
+  - **v1 (prompt-side):** PANEL CONSENSUS MODE block. When previous turn made an observation about another character that lands, the next 1-2 speakers may add to it instead of pivoting to their own angle. The block instructs: "if the previous speaker made an observation about [Target] that the panel can validate from their own experience, you may add your version of the same observation in your voice, building consensus rather than challenging or changing topic. Brief — one or two sentences. Do not repeat the previous speaker's exact wording; bring your own register to the same conclusion."
+  - **v2 (engine):** detect observation-about-character signal in previous turn (entity recognition); set consensus mode for next N slots; cap at 3 consecutive agreements before forcing topic change.
+  - **v3 (engine target-response):** when consensus is firing, target gets boosted score in the slot AFTER the consensus chain to respond.
+- **Composes with:**
+  - BL-180 (target may hang — silent response after pile-on)
+  - BL-181 (target may shutdown — "let's move on")
+  - BL-167 anchor mechanics (anchor may close the consensus chain by summarising)
+  - M-Mech-3 cornered legalistic (target's defence is M-Mech-3 firing)
+  - M-Mech-9 incongruent register (some pile-on contributions can be hostile-as-warm — "no offense intended, Faldo, but it is bollocks")
+- **Risk:** over-firing turns the panel into bully-the-target. Calibration: not every observation triggers consensus — only the genuinely-recognisable ones (target's known patterns). One consensus arc per session max.
+- Feature: panel-interaction
+- Epic: Panel Interaction Model
+- CD3: UBV=9 TC=6 RR=4 → CoD=19, Dur=3, **CD3=6.3**
+- Status: OPEN — raised 2026-05-17 by Rod live ideation. v1 prompt-side ships fast (same pattern as BL-180/181/183). Three Amigos partial — consensus-topic table and per-character role assignments need a pass.
