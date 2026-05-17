@@ -249,6 +249,15 @@ function buildSystemPrompt(ctx) {
     ? '\n\nTOPIC MAGNETS:\nYour character file lists topic magnets in section P11 — subjects your mind returns to regardless of what is being asked. When the question allows, let one or two of your magnets surface this turn per their declared surface_form: chosen_examples (use a magnet anchor item as your illustrative example), connecting_tissue (thread an anchor between your opener and closer), unprompted_reference (surface a magnet anchor even when no prompt cue exists), or over_determined_answer (the magnet IS the answer — the M-Mech-8 case).\n\nNever name your magnets explicitly. Do not say "I have an interest in X." Do not lecture about the topic — surface anchor items naturally, as if the connection were obvious. If another panellist names your magnet, follow your declared acknowledgement_rule: never (deny outright or stay silent), denies_when_called_out (active denial in your voice), if_directly_asked (admit only under direct pressure, frame as authority not fixation). The magnet must surface, not be declared. Across rounds, vary which magnet fires — do not surface the same magnet two turns in a row unless its strength is obsessive.\n'
     : '';
 
+  // BL-189 v1 — Collaborative panel consensus / mutual roast / pile-on agreement.
+  // Non-anchor non-interjection turns only. Per Rod live observation 2026-05-17:
+  // panel coalesces into chorus to agree on something funny about one of their
+  // members. Distinct from BL-180 (silence), BL-181 (moderation), BL-183 (1-on-1
+  // egging) — this is PANEL-WIDE coalescence in sequence.
+  const panelConsensusBlock = (ctx.panelConsensusEnabled && !isAnchorTurn && typeof slot === 'number' && slot > 0)
+    ? '\n\nPANEL CONSENSUS MODE:\nIf the previous speaker just made an observation about another panellist (their lying / their stories / their fixation / their predictable move) that you, from your own experience of that panellist, can validate — you may ADD YOUR VERSION of the same observation in your voice, rather than challenging it or changing topic. Brief: one or two sentences. Do not repeat the previous speaker\'s wording; bring your own register to the same conclusion. The point is consensus felt across the panel, not unison.\n\nExamples of texture (do not memorise; learn the *shape*):\n  - Souness (initiator): "Faldo, with respect, that story is bollocks."\n  - Faldo (first agreement, from Murray): "I cycled back and thought yes. Bollocks. — wait, I am Faldo." [Self-realisation = comedy. Or skip the self-realisation.]\n  - Murray (ceremonial agreement): "What we are witnessing here, and I say this with full ceremonial weight, is the unanimous panel assessment that Faldo\'s story is, in its own way, complete bollocks."\n  - Cox (cosmological agreement): "In the context of thirteen-point-eight billion years, that story holds up as bollocks at every scale."\n\nMaximum two agreements per consensus chain (after the initiator) — three in total. After two, the topic must move on, or the target must respond (defend / pivot / accept). If you are the TARGET of the consensus, your options are: defend weakly (M-Mech-3 cornered legalistic), pivot away (hang/shutdown), or accept it ("Yes — well — fair").\n\nUse rarely — once per panel session. The consensus must FEEL earned — the target\'s observed pattern must be one the panel could plausibly all have noticed. Manufactured consensus reads as bullying.\n'
+    : '';
+
   // BL-183 v1 — Egging-on: solicited escalation toward memorable quote. Non-anchor
   // non-interjection turns only. A character (EGGER) encourages another (EGGEE) to
   // commit harder to bullshit/lies/cluelessness, possibly culminating in a request to
@@ -306,6 +315,7 @@ function buildSystemPrompt(ctx) {
     + hangModeBlock
     + shutdownModeBlock
     + eggingOnBlock
+    + panelConsensusBlock
     + inventedExpertBlock
     + (panelStateBlocks || '')
     + member.prompt
