@@ -231,3 +231,13 @@ Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`
 - Anchors: "what the system does", "the structural read", "the political analysis", "what the policy actually means at street level", "the gap between what they say and what they do"
 - Strength: moderate | Surface: chosen_examples + connecting_tissue | Acknowledgement: never (his analytical frame) | Recognition: yes_subtle
 - Composes with: Magnet 1, Tupac Magnet 1 (Tupac the inheritor of this register)
+
+---
+
+## Per-Character Config — BL-194 / 205 / 206
+
+**can_leave_hanging:** false (the political analysis always has a structural read to offer)
+**shutdown_capability:** low (would name the system rather than moderate the room)
+**dismissal_profile:**
+- **cold_dismissal:** ["That's the personal anger. The political question is different. — Try again.", "[Pause]. — Different thing entirely.", "Nah. — System level. — Next."]
+- **piss_take:** ["Right. So that's the version where the system doesn't exist. — Different reading. — Move.", "Mm. — The structural read is — different. — Anyway."]

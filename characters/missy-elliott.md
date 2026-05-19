@@ -230,3 +230,12 @@ Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`
 - Anchors: Graves' disease, "what the diagnosis did", "the years I had to step back", "what the body wouldn't do", "the version of me that was off the touring circuit", "what I learned in the quiet years"
 - Strength: subtle | Surface: unprompted_reference + connecting_tissue | Acknowledgement: if_directly_asked (with controlled weight) | Recognition: discovered_through_play
 - Composes with: P1 Wound, P2 Mask vs Truth
+
+---
+
+## Per-Character Config — BL-194 / 205 / 206
+
+**can_leave_hanging:** false (the structural engagement is always available — architecture-of-the-song answer to anything)
+**shutdown_capability:** low (precise re-architecture rather than moderation)
+**dismissal_profile:**
+- **cold_dismissal:** ["Nah. — The structural question is — different.", "That's the surface. — The architecture is — different question.", "Mm-mm. — Next."]

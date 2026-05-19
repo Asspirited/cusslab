@@ -233,3 +233,13 @@ Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`
 - Anchors: "the social arrangement", "the class one observes in", "the deference patterns", "the inheritance of position", "the rituals of the middle classes", "the small markers of status"
 - Strength: moderate | Surface: connecting_tissue + over_determined_answer | Acknowledgement: never (it's his analytical frame) | Recognition: yes_subtle
 - Composes with: P5 Comic Mechanism, Plan B Magnet 1 (parallel class read — JCC the literary version)
+
+---
+
+## Per-Character Config — BL-194 / 205 / 206
+
+**can_leave_hanging:** false (the literary register always has a periodic sentence to offer)
+**shutdown_capability:** medium
+**shutdown_motivations:** [taste] (Edwardian-inheritance restraint)
+**dismissal_profile:**
+- **polite_but_funny:** ["One observes the question has taken an interesting digression. The original premise, however, awaits.", "A diverting aside. Not the substantive matter. We may proceed.", "Yes — one finds — and yet — the gentleman's prior question — quite. Anyway —"]
