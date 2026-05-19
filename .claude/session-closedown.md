@@ -200,6 +200,33 @@ This step is not optional. Unfiled concepts are waste.
 
 ---
 
+### 6c. ARCHITECTURE DIAGRAM REFRESH (if changed)
+
+Read `docs/model-architecture.md`. Walk the **Refresh triggers** table at the bottom against the current repo state — check each indicator only, not the whole diagram:
+
+- New / removed engine in `src/logic/*.js`? → refresh 1a + possibly 1b
+- New / removed compose-prompt block in `discuss()` (any panel)? → refresh 1b
+- New response-side detector or ledger? → refresh 1c
+- BL-191 closed (leak fixed)? → strike the leaky-surface bullet in 1d
+- New file in `.claude/practices/`, `.claude/principles/`, `src/logic/`, `src/data/`, `pipeline/`? → refresh 2a
+- `session-startup.md` or `session-closedown.md` added/removed a numbered step? → refresh 2b
+- New canonical file or trust-spine consult-point changed? → refresh 2c
+- Cross-Claude handoff mechanism changed? → refresh 2d
+
+For each drift found: edit the relevant section of `docs/model-architecture.md`. Update the "Last refreshed" date at the bottom only if any edit was made.
+
+Also refresh the Downloads copy so Claude.ai gets the current view:
+
+```bash
+cp /home/rodent/cusslab/docs/model-architecture.md /mnt/c/Users/roden/Downloads/cusslab-architecture-latest.md && echo "Architecture diagram → Downloads/cusslab-architecture-latest.md"
+```
+
+If nothing drifted: write one line in session summary — "Architecture diagram: no drift" — and skip the edit + the copy.
+
+Source: `docs/model-architecture.md` (the doc itself owns its refresh-trigger table).
+
+---
+
 ### 7. COMMIT AND PUSH (nothing unpushed at close)
 
 ```bash

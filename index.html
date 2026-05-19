@@ -11796,6 +11796,14 @@ CLOWN PORN PROTOCOL: The specific name of the MP who voted for [specific policy]
 
   const BASE_ORDER = ['george', 'cook', 'oscar', 'hicks', 'jimmy', 'adams', 'blyton', 'cox', 'bruce', 'chappelle', 'pryor', 'louisk', 'jefferies', 'gervais', 'boyle'];
 
+  // BL-193 Tier 1 — per-panel mechanic data consts (Golf pattern).
+  // COMEDY_ROOM_ENTHUSIASM is above (used by TriggerScoreEngine);
+  // COMEDY_MAGNETS / COMEDY_IDIOM_PROFILES are empty defaults — characters
+  // have no P11 magnets / P9 idiom modes authored yet.
+  const COMEDY_TOPIC_DISMISSAL = '';
+  const COMEDY_MAGNETS         = {};
+  const COMEDY_IDIOM_PROFILES  = {};
+
   async function present() {
     const input = (document.getElementById('cr-input')?.value || '').trim();
     if (!input) { UI.toast('Give them something. Anything.', 'warn'); return; }
@@ -11850,9 +11858,48 @@ CLOWN PORN PROTOCOL: The specific name of the MP who voted for [specific policy]
       const crHypoBlock = FoodWeather.hypoBlock(member.id, hypoPool, null, responses, crAliases);
 
       const crIaType = IntellectualAttempts.detect(input);
-      const crBaseSystem = TURN_RULES + '\n\n' + crFoodBlock + crMarmiteBlock + crHypoBlock + member.prompt + _iceBreakBlock(member.id) + roundNote + crMechanics + (i > 0
-        ? `\n\nPrevious:\n${prev}`
-        : '');
+      // BL-193 Tier 1 — prompt assembly delegated to shared PanelDiscussEngine.
+      // Gervais is the configured anchor (slot 0 + slot N when present in ORDER).
+      const crIdiomBlock = (typeof IdiomEngine !== 'undefined' && IdiomEngine.buildIdiomBlock)
+        ? IdiomEngine.buildIdiomBlock(member.id, COMEDY_IDIOM_PROFILES[member.id])
+        : '';
+      const crMagnetBlock = COMEDY_MAGNETS[member.id]
+        ? `\n\nYOUR TOPIC MAGNETS THIS TURN (P11 — subjects your mind keeps returning to; surface naturally per their declared surface_form, never name as fixation unless your acknowledgement rule allows):\n        ${COMEDY_MAGNETS[member.id]}\n`
+        : '';
+      const crBaseSystem = PanelDiscussEngine.buildSystemPrompt({
+        turnRules: TURN_RULES,
+        topicDismissal: COMEDY_TOPIC_DISMISSAL,
+        anchorId: 'gervais',
+        voicePoolBlock: '',
+        slot: i,
+        totalSlots: ORDER.length,
+        member,
+        prev,
+        arcLog: [],
+        recentMoves: [],
+        roundSoFarText: '',
+        panelStateBlocks: crFoodBlock + crMarmiteBlock + crHypoBlock + crIdiomBlock + crMagnetBlock,
+        panelMemberBlocks: _iceBreakBlock(member.id) + roundNote + crMechanics,
+        // BL-193 Tier 1 — all 15 engine mechanics enabled. Engine handles
+        // slot-type suppression internally.
+        crossCharacterQuestionsEnabled: true,
+        parodyEnabled: true,
+        profanityEnabled: true,
+        reverentAbsurdityEnabled: true,
+        topicMagnetsEnabled: true,
+        inventedExpertInterpretationEnabled: true,
+        hangModeEnabled: true,
+        shutdownModeEnabled: true,
+        eggingOnEnabled: true,
+        panelConsensusEnabled: true,
+        incongruentRegisterEnabled: true,
+        crossCharacterReferencesEnabled: true,
+        idiomInventionEnabled: true,
+        // Lever 5 v0 — panel temperature per panel-voice-principles.md.
+        // ComedyRoom: { intent: +0.4, congruence: -0.3 } — Boyle/Hicks register,
+        // high-intent / low-congruence (M-3 finding — comedy thrives on the gap).
+        panelTemperature: { intent: 0.4, congruence: -0.3 },
+      });
       const system = crIaType
         ? IntellectualAttempts.inject('comedyroom', member.id, crBaseSystem, crIaType)
         : crBaseSystem;
@@ -13266,6 +13313,15 @@ You layer. You do not extend for the sake of it — but if a standards failure i
 
   const FootballWoundDetector = makeWoundDetector(FOOTBALL_WOUNDS);
 
+  // BL-193 Tier 1 — per-panel mechanic data consts (Golf pattern).
+  // FOOTBALL_ENTHUSIASM is above (used by TriggerScoreEngine);
+  // FOOTBALL_MAGNETS / FOOTBALL_IDIOM_PROFILES are empty defaults — characters
+  // have no P11 magnets / P9 idiom modes authored yet. Ronglish for Big Ron
+  // is a future BL-192 candidate addition once that ships.
+  const FOOTBALL_TOPIC_DISMISSAL = '';
+  const FOOTBALL_MAGNETS         = {};
+  const FOOTBALL_IDIOM_PROFILES  = {};
+
   const FOOTBALL_NAMEMAP = {
     souness:   ['souness', 'graeme', 'graemsie'],
     micah:     ['micah', 'richards', 'micah richards'],
@@ -13470,9 +13526,48 @@ You layer. You do not extend for the sake of it — but if a standards failure i
       const fbAtmo = fbAtmoRaw ? JSON.parse(fbAtmoRaw) : PANEL_SCHEMAS.NORMAL;
       const fbAtmoSchema = fbAtmo.schema || 'NORMAL';
       const roundNote = `\n\nSession atmosphere: schema=${fbAtmoSchema} tension=${fbAtmo.tension ?? 20} hostility=${fbAtmo.hostility ?? 20} chaos=${fbAtmo.chaos ?? 30} bathos=${fbAtmo.bathos ?? 20} premonition=${fbAtmo.premonition ?? 20} bleed=${fbAtmo.bleed ?? 20}. Calibrate accordingly.`;
-      const fbBaseSystem = TURN_RULES + '\n\n' + fbIntensityBlock + fbYourState + fbNameBlock + fbFoodBlock + fbMarmiteBlock + fbHypoBlock + fbPremBlock + fbLieBlock + member.prompt + _iceBreakBlock(member.id) + roundNote + mechanics + fbArcInstructions + (i > 0
-        ? `\n\nPrevious:\n${prev}`
-        : '');
+      // BL-193 Tier 1 — prompt assembly delegated to shared PanelDiscussEngine.
+      // Souness is the configured anchor (slot 0 + slot N when present).
+      const fbIdiomBlock = (typeof IdiomEngine !== 'undefined' && IdiomEngine.buildIdiomBlock)
+        ? IdiomEngine.buildIdiomBlock(member.id, FOOTBALL_IDIOM_PROFILES[member.id])
+        : '';
+      const fbMagnetBlock = FOOTBALL_MAGNETS[member.id]
+        ? `\n\nYOUR TOPIC MAGNETS THIS TURN (P11 — subjects your mind keeps returning to; surface naturally per their declared surface_form, never name as fixation unless your acknowledgement rule allows):\n        ${FOOTBALL_MAGNETS[member.id]}\n`
+        : '';
+      const fbBaseSystem = PanelDiscussEngine.buildSystemPrompt({
+        turnRules: TURN_RULES,
+        topicDismissal: FOOTBALL_TOPIC_DISMISSAL,
+        anchorId: 'souness',
+        voicePoolBlock: '',
+        slot: i,
+        totalSlots: ORDER.length,
+        member,
+        prev,
+        arcLog: [],
+        recentMoves: [],
+        roundSoFarText: '',
+        panelStateBlocks: fbIntensityBlock + fbYourState + fbNameBlock + fbFoodBlock + fbMarmiteBlock + fbHypoBlock + fbPremBlock + fbLieBlock + fbIdiomBlock + fbMagnetBlock,
+        panelMemberBlocks: _iceBreakBlock(member.id) + roundNote + mechanics + fbArcInstructions,
+        // BL-193 Tier 1 — all 15 engine mechanics enabled. Engine handles
+        // slot-type suppression internally.
+        crossCharacterQuestionsEnabled: true,
+        parodyEnabled: true,
+        profanityEnabled: true,
+        reverentAbsurdityEnabled: true,
+        topicMagnetsEnabled: true,
+        inventedExpertInterpretationEnabled: true,
+        hangModeEnabled: true,
+        shutdownModeEnabled: true,
+        eggingOnEnabled: true,
+        panelConsensusEnabled: true,
+        incongruentRegisterEnabled: true,
+        crossCharacterReferencesEnabled: true,
+        idiomInventionEnabled: true,
+        // Lever 5 v0 — panel temperature per panel-voice-principles.md.
+        // Football: { intent: -0.6, congruence: 0.0 } — Souness anchor (mirror
+        // of Golf's hostile-leaning panel temperament; M-3 finding).
+        panelTemperature: { intent: -0.6, congruence: 0.0 },
+      });
       const system = fbIaType
         ? IntellectualAttempts.inject('football', member.id, fbBaseSystem, fbIaType)
         : fbBaseSystem;
@@ -16165,6 +16260,15 @@ OPENER VARIETY — rotate naturally:
     tesla:    ['wardenclyffe', 'morgan', 'funding', 'edison', 'credit', 'legacy', 'wireless', 'earring', 'pearl'],
   };
 
+  // BL-193 Tier 1 — per-panel mechanic data consts (Golf pattern).
+  // Empty defaults: SC characters have no P11 magnets / P9 idiom modes / enthusiasm
+  // profiles authored yet. Structure is in place; data lands when characters are
+  // authored to the P-field schema.
+  const SC_TOPIC_DISMISSAL = '';
+  const SC_MAGNETS         = {};
+  const SC_ENTHUSIASM      = {};
+  const SC_IDIOM_PROFILES  = {};
+
   const SC_VOICE_FMT = {
     feynman:  (nn, cs) => {
       if (!nn.length && !cs.woundActivated) return '';
@@ -16266,9 +16370,50 @@ OPENER VARIETY — rotate naturally:
       const scAtmo = scAtmoRaw ? JSON.parse(scAtmoRaw) : PANEL_SCHEMAS.NORMAL;
       const scAtmoSchema = scAtmo.schema || 'NORMAL';
       const roundNote = `\n\nSession atmosphere: schema=${scAtmoSchema} tension=${scAtmo.tension ?? 20} hostility=${scAtmo.hostility ?? 20} chaos=${scAtmo.chaos ?? 30} bathos=${scAtmo.bathos ?? 20} premonition=${scAtmo.premonition ?? 20} bleed=${scAtmo.bleed ?? 20}. Calibrate accordingly.`;
-      const scBaseSystem = TURN_RULES + '\n\n' + scIntensityBlock + scYourState + scFoodBlock + scMarmiteBlock + scHypoBlock + scLieBlock + member.prompt + roundNote + mechanics + (i > 0
-        ? `\n\nPrevious:\n${prev}`
-        : '');
+      // BL-193 Tier 1 — prompt assembly delegated to shared PanelDiscussEngine.
+      // SounessCat has no fixed anchor (ORDER is randomly shuffled per round);
+      // anchorId stays null so the engine emits no anchor-opener/closer blocks.
+      const scIdiomBlock = (typeof IdiomEngine !== 'undefined' && IdiomEngine.buildIdiomBlock)
+        ? IdiomEngine.buildIdiomBlock(member.id, SC_IDIOM_PROFILES[member.id])
+        : '';
+      const scMagnetBlock = SC_MAGNETS[member.id]
+        ? `\n\nYOUR TOPIC MAGNETS THIS TURN (P11 — subjects your mind keeps returning to; surface naturally per their declared surface_form, never name as fixation unless your acknowledgement rule allows):\n        ${SC_MAGNETS[member.id]}\n`
+        : '';
+      const scBaseSystem = PanelDiscussEngine.buildSystemPrompt({
+        turnRules: TURN_RULES,
+        topicDismissal: SC_TOPIC_DISMISSAL,
+        anchorId: null,
+        voicePoolBlock: '',
+        slot: i,
+        totalSlots: ORDER.length,
+        member,
+        prev,
+        arcLog: [],
+        recentMoves: [],
+        roundSoFarText: '',
+        panelStateBlocks: scIntensityBlock + scYourState + scFoodBlock + scMarmiteBlock + scHypoBlock + scLieBlock + scIdiomBlock + scMagnetBlock,
+        panelMemberBlocks: roundNote + mechanics,
+        // BL-193 Tier 1 — all 15 engine mechanics enabled. Engine handles
+        // slot-type suppression internally.
+        crossCharacterQuestionsEnabled: true,
+        parodyEnabled: true,
+        profanityEnabled: true,
+        reverentAbsurdityEnabled: true,
+        topicMagnetsEnabled: true,
+        inventedExpertInterpretationEnabled: true,
+        hangModeEnabled: true,
+        shutdownModeEnabled: true,
+        eggingOnEnabled: true,
+        panelConsensusEnabled: true,
+        incongruentRegisterEnabled: true,
+        crossCharacterReferencesEnabled: true,
+        idiomInventionEnabled: true,
+        // Lever 5 v0 — panel temperature per panel-voice-principles.md.
+        // SounessCat: { intent: -0.4, congruence: -0.2 } — Souness/cat foil,
+        // slightly hostile, low congruence (the cat does not agree with Souness;
+        // the panel does not agree with the cat).
+        panelTemperature: { intent: -0.4, congruence: -0.2 },
+      });
       const system = scIaType
         ? IntellectualAttempts.inject('souness-cat', member.id, scBaseSystem, scIaType)
         : scBaseSystem;
@@ -18401,6 +18546,14 @@ Never say "Be water, my friend." It has been said. Once was correct.`,
     },
   };
 
+  // BL-193 Tier 1 — per-panel mechanic data consts (Golf pattern).
+  // CRICKET_ENTHUSIASM is above (used by TriggerScoreEngine);
+  // CRICKET_MAGNETS / CRICKET_IDIOM_PROFILES are empty defaults — characters
+  // have no P11 magnets / P9 idiom modes authored yet.
+  const CRICKET_TOPIC_DISMISSAL = '';
+  const CRICKET_MAGNETS         = {};
+  const CRICKET_IDIOM_PROFILES  = {};
+
   const TURN_RULES = `RULE 1 — TURN LENGTH:
 A turn can be one word, a fragment, one sentence, or two sentences. Two sentences is the maximum. Length is earned only by being directly challenged, provoked, or given the floor. Default: shortest response that lands.
 
@@ -18619,8 +18772,49 @@ Never name the move.`;
       const lrPremBlock = _lrPremCtx ? PremonitionEngine.buildBlock(member.id, _lrPremCtx.ledger, LR_PREM_CONFIG) : '';
       const lrLieBlock  = LieEngine.buildBlock(member.id, LR_LIE_PROFILES, lrLieState, _woundLive);
       const lrNameBlock = lrName ? `\nThe question was brought by ${lrName}. Address ${lrName} by name at least once in your response.\n` : '';
-      const lrBaseSystem = TURN_RULES + '\n\n' + lrIntensityBlock + lrYourState + lrNameBlock + lrFoodBlock + lrMarmiteBlock + lrHypoBlock + lrPremBlock + lrLieBlock + mechanicBlock + member.prompt + _iceBreakBlock(member.id) + roundNote + lrAtmoNote
-        + (i > 0 ? `\n\nPrevious:\n${prev}` : '');
+      // BL-193 Tier 1 — prompt assembly delegated to shared PanelDiscussEngine.
+      // Blofeld is the configured anchor — engine emits anchor blocks only when
+      // Blofeld actually appears at slot 0 / slot N of the picked subset.
+      const lrIdiomBlock = (typeof IdiomEngine !== 'undefined' && IdiomEngine.buildIdiomBlock)
+        ? IdiomEngine.buildIdiomBlock(member.id, CRICKET_IDIOM_PROFILES[member.id])
+        : '';
+      const lrMagnetBlock = CRICKET_MAGNETS[member.id]
+        ? `\n\nYOUR TOPIC MAGNETS THIS TURN (P11 — subjects your mind keeps returning to; surface naturally per their declared surface_form, never name as fixation unless your acknowledgement rule allows):\n        ${CRICKET_MAGNETS[member.id]}\n`
+        : '';
+      const lrBaseSystem = PanelDiscussEngine.buildSystemPrompt({
+        turnRules: TURN_RULES,
+        topicDismissal: CRICKET_TOPIC_DISMISSAL,
+        anchorId: 'blofeld',
+        voicePoolBlock: '',
+        slot: i,
+        totalSlots: ORDER.length,
+        member,
+        prev,
+        arcLog: [],
+        recentMoves: [],
+        roundSoFarText: '',
+        panelStateBlocks: lrIntensityBlock + lrYourState + lrNameBlock + lrFoodBlock + lrMarmiteBlock + lrHypoBlock + lrPremBlock + lrLieBlock + mechanicBlock + lrIdiomBlock + lrMagnetBlock,
+        panelMemberBlocks: _iceBreakBlock(member.id) + roundNote + lrAtmoNote,
+        // BL-193 Tier 1 — all 15 engine mechanics enabled. Engine handles
+        // slot-type suppression internally.
+        crossCharacterQuestionsEnabled: true,
+        parodyEnabled: true,
+        profanityEnabled: true,
+        reverentAbsurdityEnabled: true,
+        topicMagnetsEnabled: true,
+        inventedExpertInterpretationEnabled: true,
+        hangModeEnabled: true,
+        shutdownModeEnabled: true,
+        eggingOnEnabled: true,
+        panelConsensusEnabled: true,
+        incongruentRegisterEnabled: true,
+        crossCharacterReferencesEnabled: true,
+        idiomInventionEnabled: true,
+        // Lever 5 v0 — panel temperature per panel-voice-principles.md.
+        // LongRoom: { intent: +0.3, congruence: 0.0 } — Blofeld warmth, Long Room
+        // cordiality (M-3 finding default).
+        panelTemperature: { intent: 0.3, congruence: 0.0 },
+      });
       const system = lrIaType
         ? IntellectualAttempts.inject('cricket', member.id, lrBaseSystem, lrIaType)
         : lrBaseSystem;
@@ -18950,6 +19144,14 @@ TURN LENGTH: Extended. He has a story. The story has a horse, a race, a moment o
     RECORD_TIME:      'Record-breaking time',
   };
 
+  // BL-193 Tier 1 — per-panel mechanic data consts (Golf pattern).
+  // RACING_ENTHUSIASM exists above (used by TriggerScoreEngine when wired);
+  // RACING_MAGNETS / RACING_IDIOM_PROFILES are empty defaults — characters
+  // have no P11 magnets / P9 idiom modes authored yet.
+  const RACING_TOPIC_DISMISSAL = '';
+  const RACING_MAGNETS         = {};
+  const RACING_IDIOM_PROFILES  = {};
+
   const TURN_RULES = `RULE 1 — TURN LENGTH:
 A turn can be one word, a fragment, one sentence, or two sentences. One sentence is the default. Two sentences is the maximum. Brazil as host may take slightly more to introduce or redirect.
 
@@ -19027,8 +19229,48 @@ McCririck died July 2019. O'Sullevan died October 2015. Both are present in this
       })();
 
       const nameBlock = hrName ? `\nThe question was brought by ${hrName}. ${i === 0 ? `Address ${hrName} by name as you introduce the topic.` : ''}\n` : '';
-      const system = TURN_RULES + '\n\n' + nameBlock + member.prompt
-        + (i > 0 ? `\n\nPrevious:\n${prev}` : '');
+      // BL-193 Tier 1 — prompt assembly delegated to shared PanelDiscussEngine.
+      // Brazil is the fixed anchor (slot 0 only — Racing does not anchor-close).
+      const racingIdiomBlock = (typeof IdiomEngine !== 'undefined' && IdiomEngine.buildIdiomBlock)
+        ? IdiomEngine.buildIdiomBlock(member.id, RACING_IDIOM_PROFILES[member.id])
+        : '';
+      const racingMagnetBlock = RACING_MAGNETS[member.id]
+        ? `\n\nYOUR TOPIC MAGNETS THIS TURN (P11 — subjects your mind keeps returning to; surface naturally per their declared surface_form, never name as fixation unless your acknowledgement rule allows):\n        ${RACING_MAGNETS[member.id]}\n`
+        : '';
+      const system = PanelDiscussEngine.buildSystemPrompt({
+        turnRules: TURN_RULES,
+        topicDismissal: RACING_TOPIC_DISMISSAL,
+        anchorId: 'brazil',
+        voicePoolBlock: '',
+        slot: i,
+        totalSlots: ORDER.length,
+        member,
+        prev,
+        arcLog: [],
+        recentMoves: [],
+        roundSoFarText: '',
+        panelStateBlocks: nameBlock + racingIdiomBlock + racingMagnetBlock,
+        panelMemberBlocks: '',
+        // BL-193 Tier 1 — all 15 engine mechanics enabled. Engine handles
+        // slot-type suppression internally.
+        crossCharacterQuestionsEnabled: true,
+        parodyEnabled: true,
+        profanityEnabled: true,
+        reverentAbsurdityEnabled: true,
+        topicMagnetsEnabled: true,
+        inventedExpertInterpretationEnabled: true,
+        hangModeEnabled: true,
+        shutdownModeEnabled: true,
+        eggingOnEnabled: true,
+        panelConsensusEnabled: true,
+        incongruentRegisterEnabled: true,
+        crossCharacterReferencesEnabled: true,
+        idiomInventionEnabled: true,
+        // Lever 5 v0 — panel temperature per panel-voice-principles.md.
+        // Racing: { intent: +0.2, congruence: 0.0 } — Brazil anchor warmth,
+        // affectionate panel temperament (M-3 proposal).
+        panelTemperature: { intent: 0.2, congruence: 0.0 },
+      });
 
       const prompt = i === 0
         ? `Topic: "${input}"\n\nYou are the host. Introduce this to the panel. 2 sentences.`

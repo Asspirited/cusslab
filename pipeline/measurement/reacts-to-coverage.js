@@ -105,18 +105,22 @@ function lineNumberFor(text, idx) {
   return line;
 }
 
-// Identify the nearest enclosing IIFE module — finds the most recent
-// `const ModuleName = (() => {` declaration above the given index. Returns
-// the module name, or '(top-level)' if none found.
+// Identify the enclosing IIFE module — finds every `const Name = (() => {`
+// declaration before the given index, then picks the one whose body actually
+// contains the index (matching brace must close AFTER idx). Returns the
+// innermost such module's name. Skips inner helper IIFEs (e.g.
+// `const ORDER = (() => { ... })()`) whose body closes before the index.
 function enclosingPanelName(text, idx) {
-  const slice = text.slice(0, idx);
-  const re = /\bconst\s+([A-Z][A-Za-z0-9_]*)\s*=\s*\(\(\)\s*=>/g;
+  const re = /\bconst\s+([A-Z][A-Za-z0-9_]*)\s*=\s*\(\(\)\s*=>\s*\{/g;
   let m;
-  let last = null;
-  while ((m = re.exec(slice)) !== null) {
-    last = m[1];
+  let innermostMatch = null;
+  while ((m = re.exec(text)) !== null && m.index < idx) {
+    const openIdx  = text.indexOf('{', m.index);
+    const closeIdx = findMatchingBrace(text, openIdx);
+    if (closeIdx === -1 || closeIdx <= idx) continue;  // body doesn't actually contain idx
+    innermostMatch = m[1];  // last match whose body contains idx wins (innermost)
   }
-  return last || '(top-level)';
+  return innermostMatch || '(top-level)';
 }
 
 // Extract literal boolean value for a top-level flag inside a ctx object
