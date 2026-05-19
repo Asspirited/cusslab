@@ -2909,6 +2909,14 @@ After backfill, `mech-calibration-drift.js` should report 17 declarations and 0 
 
 **Composes with:** M-4 (validates each backfill), BL-184 (the M-4 instrument exists), BL-209 Lever 5 bias scoring (the bias table reads polarity per character — uncovered characters get no bias).
 
+**Status:** **DONE 2026-05-19** — shipped in 4 batches:
+- Batch 1 (bb7cbf7): Chappelle + Pratchett + Austen
+- Batch 2 (37acdbe): Sun Tzu + Blofeld + Steve Davis
+- Batch 3 (5fa0c62): Botham + Henni + Eminem
+- Batch 4 (82187dc): Bruce Lee + Kendrick + Skepta + Tupac + Phil Taylor
+
+Plus Dougherty correctly excluded after M-4 v1 false-positive fix (500ac79) — his file declares "CANNOT FIRE" explicitly. Final count: 16/16 formal declarations, 0 lie_style-only, 0 issues. Polarity coverage: hostile_as_warm 10, warm_as_hostile 4, both 2. Bands: [3,4]=7, [3,4,5]=5, [4,5]=4. Top motivation: status_undercut (11/16). M-4 PASS confirmed.
+
 
 ---
 
