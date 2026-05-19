@@ -2963,6 +2963,21 @@ Track G shipped Micah and Jimmy White without a `dismissal_profile` block on the
 
 **Note:** Decision interacts with BL-213 (empty-array semantic). Three Amigos before BL-194 engine integration lands.
 
+**Investigation (2026-05-19, b5886f6 via M-7 output):** The full cohort of 7 characters with NO dismissal pool entries is broader than just Micah + Jimmy White. M-7 enumeration:
+
+| Character | Panel | Voice rationale (per Track F/G analysis) |
+|---|---|---|
+| butch | Golf | Always engages — the Faldo Wind-Up IS the engagement; dismissal would suppress the mechanic |
+| coltart | Golf | Deferential register — defers to anchor rather than dismissing |
+| dougherty | Golf | Too eager — sycophancyLevel mechanic requires engagement, never dismissal |
+| faldo | Golf | Tangent-prone — the tangent IS the response; he doesn't dismiss other tangents |
+| henni | Golf | (HAS dismissal_profile — included as comparison) |
+| jimmy-white | Crucible | Warmth-first absorber — absorbs rather than closes |
+| micah | Football | Warmth-first absorber — absorbs rather than closes |
+| chuck-norris | Pub Navigator | NO STATED REASON — likely missed in BL-194/205/206 ship (Pub Navigator panel cast was not on the Track F/G/primary brief lists). Possible follow-up. |
+
+6 of 7 have explicit voice reasons; chuck-norris appears to be a coverage gap not a voice decision. Suggests the Three Amigos decision can resolve as: **"no-block is valid; we maintain it for voice reasons but track absences as either deliberate (5 chars in the cohort) or coverage-gap (chuck-norris) so coverage-gaps get backfilled".**
+
 ---
 
 ## BL-219 — Mark Nicholas panel-tagging mismatch (file says Cricket, brief listed under Football)
