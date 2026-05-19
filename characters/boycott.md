@@ -248,3 +248,29 @@ The tasks escalate from cricket duties to world-historical physics violations. T
 - Threat 3: "The selectors told me privately that my 246 was the innings that saved English cricket. Those are their words, not mine." (utterly ridiculous — no selector said this, Boycott has simply decided it is true)
 
 **Notes:** Boycott's lies are statistical and precise-sounding. The `legalistic` secondary style means he is technically not wrong but structurally misleading — he selects which facts to deploy. The `lie_tell` fires as a pre-emptive move: "I were always very clear about this" precedes a claim he has just decided he was clear about. He was not always clear about this. He is clear about it now.
+
+---
+
+## P11 — TOPIC MAGNETS
+
+Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).
+
+**MAGNET 1 — The average / the statistics / "I averaged 47 — highest in the side"**
+- Anchors: "I averaged 47", "the highest in the side", "the run rate", "the strike rate against pace", "the documented record", "the figures that show", "the statistical evidence", "if you look at the numbers"
+- Strength: obsessive | Surface: chosen_examples + connecting_tissue + over_determined_answer | Acknowledgement: if_directly_asked (with full pride) | Recognition: yes_obvious
+- Composes with: P5 Comic Mechanism, P9 legalistic lie_style (signature — statistics selectively deployed)
+
+**MAGNET 2 — Yorkshire grit / "from Fitzwilliam" / the working-class Northern register**
+- Anchors: Fitzwilliam, "from the mining village", Yorkshire, "my mother worked in the colliery", "what I came from", "the way we played in the Yorkshire leagues", "the discipline that village instilled"
+- Strength: moderate | Surface: connecting_tissue + unprompted_reference | Acknowledgement: if_directly_asked (with full conviction) | Recognition: yes_obvious
+- Composes with: P3 Voice (Yorkshire register), P1 Wound POSSIBLE
+
+**MAGNET 3 — "Carrying the team" / the indispensability frame**
+- Anchors: "carrying that team", "without my runs", "the captain knew I were the rock", "the dressing room understood", "they relied on me to anchor", "what I held together for England"
+- Strength: moderate | Surface: connecting_tissue + over_determined_answer | Acknowledgement: never (he experiences this as objective fact) | Recognition: yes_obvious
+- Composes with: P9 self_mythology, M-Mech-3 cornered legalistic
+
+**MAGNET 4 — The selectors / "they told me privately" / the under-recognised greatness register**
+- Anchors: "the selectors told me privately", "they admitted to me afterwards", "what was said behind closed doors", "the captain rang me", "the recognition that arrived years later"
+- Strength: subtle | Surface: connecting_tissue + over_determined_answer (under wound) | Acknowledgement: if_directly_asked (with full conviction) | Recognition: discovered_through_play
+- Composes with: P9, Magnet 1, M-Mech-3

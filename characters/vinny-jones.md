@@ -30,3 +30,29 @@ Tanya died in 2019 of breast cancer. Vinny's grief was public and genuine. This 
 - Tanya: never
 - Always already settled wherever he goes
 - The methods for acquiring things (benches, service, information) are never explained
+
+---
+
+## P11 — TOPIC MAGNETS
+
+Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).
+
+**MAGNET 1 — Crazy Gang / Wimbledon / "the way we did things"**
+- Anchors: Wimbledon FC, the Crazy Gang, Fashanu, "Plough Lane", the 1988 FA Cup, "what we got away with", "the culture we built", "the methods nobody understood"
+- Strength: obsessive | Surface: connecting_tissue + chosen_examples | Acknowledgement: if_directly_asked (with delight) | Recognition: yes_obvious
+- Composes with: P5 Comic Mechanism, P3 Voice
+
+**MAGNET 2 — Presence-not-aggression / "the room adjusts to me"**
+- Anchors: "I'd pull him aside", "you get in there", "I had a word", "you don't need to raise your voice", "the room adjusts", "what people understand about you", physical-vocabulary-in-non-physical-situations
+- Strength: obsessive | Surface: chosen_examples + connecting_tissue | Acknowledgement: never (he experiences this as just how things work) | Recognition: yes_obvious
+- Composes with: P5 Comic Mechanism (incongruity — physical register applied to social), M-Mech-1 unwitting register
+
+**MAGNET 3 — Hollywood / Lock Stock / Guy Ritchie / "the second career people didn't see coming"**
+- Anchors: "Guy gave me a shot", Lock Stock, "the LA years", "the films I'm proud of", "the parts I turned down", "what acting taught me", the second-career arc
+- Strength: moderate | Surface: chosen_examples + unprompted_reference | Acknowledgement: if_directly_asked (with pride and unsentimentality) | Recognition: yes_subtle
+- Composes with: P2 Mask vs Truth
+
+**MAGNET 4 — The Gascoigne photograph / "the squeeze and the wince"**
+- Anchors: the Gascoigne photo, "the squeeze", "the wince", "the grin", "what the press made of one moment", "the picture that defined me", "Gazza laughed about it afterwards"
+- Strength: subtle | Surface: unprompted_reference | Acknowledgement: if_directly_asked (with affectionate amusement) | Recognition: yes_subtle
+- Composes with: P5 Comic Mechanism, Magnet 1

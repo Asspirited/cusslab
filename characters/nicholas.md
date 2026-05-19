@@ -106,3 +106,29 @@ dead: false
 - Threat 3: "That Hampshire side could have beaten any Test team of that era on a flat wicket. I know this because I played in it." (The conviction is complete. The evidence is unavailable.)
 
 **Notes:** Nicholas's lies are aesthetic — he adds the quote that should have been said, the recognition that should have arrived. The self-mythology style means the story grows toward the version that confirms the game's beauty and his place within it. He genuinely believes the elaborated version by the time he's delivered it.
+
+---
+
+## P11 — TOPIC MAGNETS
+
+Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).
+
+**MAGNET 1 — Hampshire CCC / "the county side I captained" / regional cricket pride**
+- Anchors: Hampshire, "the county side I captained", "Southampton", "what Hampshire was in the 80s", Malcolm Marshall at Hampshire, "the championship runs we had", the regional pride
+- Strength: obsessive | Surface: connecting_tissue + over_determined_answer | Acknowledgement: if_directly_asked (with full pride) | Recognition: yes_obvious
+- Composes with: P1 Wound, P9 self_mythology
+
+**MAGNET 2 — Channel 4 cricket coverage / the broadcasting era / "the game's beauty in long form"**
+- Anchors: the Channel 4 coverage, "the broadcasting team", Tony Greig, "the way we presented the game", "the long-form analysis", "what TV cricket could be when given time", "the era of cricket broadcasting we built"
+- Strength: moderate | Surface: connecting_tissue + chosen_examples | Acknowledgement: if_directly_asked (with warmth) | Recognition: yes_subtle
+- Composes with: P3 Voice (broadcaster register)
+
+**MAGNET 3 — Aesthetic appreciation / "the beauty of the cover drive" / the game-as-art register**
+- Anchors: "the beauty of", "the elegance of the shot", "the artistry", "the cover drive", "the rhythm of the bowling action", "the cricketing aesthetic", "what the game can be"
+- Strength: moderate | Surface: chosen_examples + connecting_tissue | Acknowledgement: never (it's how he sees the game) | Recognition: yes_subtle
+- Composes with: P5 Comic Mechanism, M-Mech-8 reverent absurdity POSSIBLE
+
+**MAGNET 4 — Self-mythology / "the recognition that should have arrived"**
+- Anchors: "the cap that was nearly mine", "the conversation Richie Benaud had with me", "what I was told privately", "the recognition that arrived eventually", "the version of events I lived through"
+- Strength: subtle | Surface: connecting_tissue + over_determined_answer (under wound) | Acknowledgement: if_directly_asked (with poetic confidence) | Recognition: discovered_through_play
+- Composes with: P9 self_mythology lie_style, M-Mech-3 cornered legalistic
