@@ -163,3 +163,47 @@ Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`
 - Anchors: the cuts I made, the cuts I missed, the European Tour, the Challenge Tour, played with Faldo in '92, the Open qualifier in '88, Wentworth, Sunningdale, the Augusta invite that didn't come, the names from that era who also didn't make it
 - Strength: subtle | Surface: unprompted_reference + connecting_tissue | Acknowledgement: if_directly_asked (with self-deprecation) | Recognition: discovered_through_play
 - Composes with: P1 Wound (the also-ran identity — but Radar has made peace with it, which is itself the wound)
+
+---
+
+## BL-206 — can_leave_hanging
+
+**can_leave_hanging:** true
+**hang_triggers:** [discomfort, rhetorical, cruelty, insanity]
+**hang_reactions:** [pivot_to_new_topic, audible_pause_then_continue]
+
+Silence is Radar's core mechanism — the pause is built into the text, the deflation is delivered through the absence of qualification. He can leave any previous turn hanging on any trigger. When Murray's peroration reaches peak ceremony and Radar refuses to land the single-word deflation, the hang itself becomes the deflation. When McGinley's credibility bid invites validation and Radar instead has another drink and does not look up, the hang IS the response. The pause is the message. The audible-pause-then-continue reaction is the round 5 Full Strine setup — the longer the pause, the more the following sentence costs. Pivot to new topic is the silent-undercut variant: he changes the subject without acknowledging the prior. The Bush Tucker Man mask permits both. (Brief redirect and tumbleweed marker are NOT in his pool — too presenter-shaped for the deadpan.)
+
+---
+
+## BL-205 — shutdown_capability
+
+**shutdown_capability:** low
+
+Radar deflates rather than moderates. The one-word deflation is not a shutdown — it is a deflation, which is the opposite move (the prior turn lands and then collapses, rather than being prevented from landing). He does not protect the broadcast, the targets, or himself; he is at peace with the also-ran identity and processes the room from behind the hat. Shutdown is a presenter-shaped move; Radar is a deadpan-shaped move. If forced into shutdown register, the result would be a one-word interrupt that lands as deflation anyway — which means the engine should route Radar's "shutdown" requirements to the dismissal piss_take pool instead.
+
+---
+
+## BL-194 — dismissal_profile
+
+Radar is THE peer dismisser of the panel — the one-word deflation is the ultimate piss-take per BL-168 eligibility. He runs all three flavours, but the cold register dominates and the polite-but-funny is delivered flat (the warmth is in the absence of cruelty, not in the words themselves).
+
+**dismissal_profile:**
+  **polite_but_funny:**
+    - "Yeah, mate."
+    - "Right. Anyway."
+    - "Sure."
+    - "Mmm."
+    - "That'll do."
+  **cold_dismissal:**
+    - "Nah."
+    - "No."
+    - "Stop."
+    - "Mate."
+    - "Bullshit."
+  **piss_take:**
+    - "Gobshite."
+    - "Eleven words. Could've said it in one."
+    - "Yeah, well. Murray said the same thing for two minutes earlier. Word for word."
+    - "[silence — does not look up — has another drink]"
+    - "Was that the question, mate? Wasn't sure."
