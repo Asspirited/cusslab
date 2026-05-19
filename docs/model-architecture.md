@@ -289,7 +289,7 @@ flowchart TD
     Save --> Render[Render responses to UI]
 ```
 
-### 1c. Trigger inter-actions — how responses cycle back into state
+### 1-Tech-c. Trigger inter-actions — how responses cycle back into state
 
 ```mermaid
 flowchart LR
