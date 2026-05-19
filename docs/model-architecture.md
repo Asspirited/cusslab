@@ -456,10 +456,11 @@ At session close, refresh sections that have drifted. Drift indicators:
 
 | Section | Refresh when |
 |---|---|
-| 1a domain model | new engine added/removed in `src/logic/*.js`; new state aggregate introduced |
-| 1b process flow | `discuss()` per-panel build-prompt order changes; new compose-prompt block added/removed |
-| 1c trigger inter-actions | new response-side detector added (e.g. a new ledger); existing detector removed |
-| 1d invariants | leak surface fixed (BL-191 closes — strike the leaky-surface bullet); per-round reset semantics change |
+| 1a-1f room model (user language) | a new in-turn mechanic is named (something like "panel consensus" is added to ubiquitous language); a new carry-forward state is introduced; Rod-favourite-moments list changes |
+| 1-Tech-a domain model | new engine added/removed in `src/logic/*.js`; new state aggregate introduced |
+| 1-Tech-b process flow | `discuss()` per-panel build-prompt order changes; new compose-prompt block added/removed |
+| 1-Tech-c trigger inter-actions | new response-side detector added (e.g. a new ledger); existing detector removed |
+| 1-Tech-d invariants | leak surface fixed (BL-191 closes — strike the leaky-surface bullet); per-round reset semantics change |
 | 2a file map | new file in `.claude/practices/`, `.claude/principles/`, `src/logic/`, `src/data/`, `pipeline/`; new top-level dir |
 | 2b session lifecycle | `session-startup.md` or `session-closedown.md` adds/removes a numbered step |
 | 2c trust spine | new canonical file (e.g. new standards/ doc); a consult point changes file |
