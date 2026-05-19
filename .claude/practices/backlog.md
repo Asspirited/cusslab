@@ -2407,3 +2407,170 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - **CD3:** UBV=6 TC=6 RR=8 → CoD=20, Dur=4, **CD3=5.0**
 - **Hypothesis:** [process / quality — no product hypothesis; this is engine quality]
 - **Status:** OPEN — needs Three Amigos
+
+### BL-192 — Ronglish Overdrive mode (Ron Atkinson — agreed activation, density + misappropriation maxed)
+- **What it is:** an agreed activation mode that pushes Ron Atkinson's Ronglish vocabulary into deliberate overuse, misuse, and misappropriate use — beyond his normal P15 intensity arc. The library already exists in full at `characters/ron-atkinson.md` P4 (anchors, actions, defenders/midfield, attackers, qualifiers, signature constructions, the "I'll tell you what..." full-sentence form).
+- **Why this is comedy gold (per Rod's signature-displacement principle):** Ronglish lands hardest when it fires on relevance-adds-weight OR incongruity-displaces-context. Overdrive cranks both knobs — *every* clause carries Ronglish, applied to whatever the panel is on (corporate strategy, cosmology, literary criticism, cricket) regardless of fit. The misappropriation is the joke. Composes with M-Mech-1 "unwitting register" already noted in Ron's M2 magnet.
+- **Three modes the overdrive activates simultaneously:**
+  1. **Maximum density** — every clause carries a Ronglish noun or phrase ("the way the big fella's gone past him there, the full-back's not in the wide awake club, the tackle's come in in instalments, so he's knocked it early doors to the front stick, little eyebrows and bang, goodnight Marbella")
+  2. **Misappropriation** — Ronglish vocabulary applied to non-football subjects with complete sincerity. Cosmology becomes "the universe doing its shopping early doors." Literary deconstruction becomes "the author's given the protagonist the full eyebrows." Boardroom strategy becomes "Sebastian's been put in instalments."
+  3. **Bastardisation** — Ron remixes his own phrases incorrectly, with full conviction. "Corridor of early eyebrows." "Spotter's badge in the wide awake instalments." "Hollywood pass to the wrong end of Marbella." The internal grammar of Ronglish collapses on itself; Ron does not notice.
+- **Trigger — Three Amigos pending:**
+  1. Directive form (composes with BL-190's `>include` parser): `>ronglish` for that round only. Possibly `>ronglish max` for full overdrive vs `>ronglish` for moderate.
+  2. OR per-character mode (composes with BL-151 Per-character mode selector — would be one option of Ron's mode dropdown)
+  3. OR atmospheric schema (panel-wide "RONGLISH_OVERDRIVE" feels wrong — only Ron has Ronglish, so character-scoped is right)
+  - Recommend: directive (consistency with BL-190's pattern) AND optionally surface as one of Ron's BL-151 modes when that lands.
+- **Other panellists react as the room would:**
+  - Neville: forensic frustration — "what does that even MEAN, Ron?" — he wants the clips
+  - Souness: contempt — "soft" — but the contempt is itself becoming Ronglish-shaped
+  - Micah: enthusiasm — every Ronglish phrase is BRILLIANT to him; he attempts to use one badly
+  - Carragher: amused — uses the Desailly reference obliquely; Ron pre-empts with Three Degrees
+  - These reactions are character-authentic, not new content — already in their P-fields.
+- **Scope guardrails:**
+  - Overdrive lasts one round only (matches BL-190 persistence default)
+  - Ron's wound register ("Whatever happened to forgiveness?" / the gantry-loss subtext) does NOT escalate just because Ronglish density does — wound surfacing stays on its own intensity arc to keep the pathos protected
+  - Ron does not break the fourth wall — he is not aware Ronglish is being overused; the absurdity is sincere
+- **Three Amigos questions (settle before Gherkin):**
+  1. Trigger syntax — `>ronglish` alone vs `>ronglish max` / `>ronglish overdrive` levels?
+  2. Composition with BL-190 directive parser — same handle-map style, or distinct?
+  3. Should bastardisation be opt-in (a separate sub-flag) or always part of overdrive?
+  4. Wound-protection — confirm wound stays out of overdrive escalation
+  5. Cross-panel: does `>ronglish` work only when Ron is present in the panel? (Currently Ron is in Football only — but BL-190's `>include` could put him anywhere.)
+- **Gherkin gate:** required before code. Standard Cusslab WoW.
+- **Composes with:** BL-190 (>include directive — parser infrastructure), BL-151 (per-character mode selector — Ron's mode dropdown), BL-191 (engine generalisation — clean substitution-slot pattern for character-mode-driven prompt blocks).
+- **Feature:** panel-interaction
+- **CD3:** UBV=8 TC=4 RR=4 → CoD=16, Dur=2, **CD3=8.0**
+- **Status:** OPEN — needs Three Amigos
+
+### BL-193 — Tier 1: Migrate 5 remaining panels to PanelDiscussEngine.buildSystemPrompt (M-3 finding)
+- **Finding (M-3 audit, surfaced 2026-05-19):** only Golf wires `PanelDiscussEngine.buildSystemPrompt`. Five panels still build prompts inline, leaving 15 engine mechanics unwired across them — every BL-167/168/169/171/173/174/175/178/179/180/181/183/188/189 that shipped "v1 wired on Golf" left a "remaining: other panels' wiring" note. This BL completes that rollout in one slice.
+- **Scope — five panels to migrate:**
+  | Panel | index.html line | panelTemperature |
+  |---|---|---|
+  | ComedyRoom | 11272 | `{ intent: +0.4, congruence: -0.3 }` (Lever 5 high-intent-low-congruence — Boyle/Hicks register) |
+  | Football | 12744 | `{ intent: -0.6, congruence: 0.0 }` (mirrors Golf — Souness anchor) |
+  | LongRoom | 17910 | `{ intent: +0.3, congruence: 0.0 }` (Lever 5 default warm) |
+  | Racing (Final Furlong) | 18728 | `{ intent: +0.2, congruence: 0.0 }` (proposed — Brazil anchor warmth) |
+  | SounessCat | 15971 | TBD (Three Amigos) — propose `{ intent: -0.4, congruence: -0.2 }` (Souness/cat-as-foil, slightly hostile, low congruence) |
+- **Per-panel work (Golf is the template at index.html line 15509):**
+  - (a) Replace inline `${block1 + block2 + ...}` prompt construction with `PanelDiscussEngine.buildSystemPrompt({...})` call
+  - (b) Map existing panel-specific blocks into `panelStateBlocks` (concatenated string — food/intensity/yourState/marmite/hypo/lie/premonition/etc.) and `panelMemberBlocks` (iceBreak/roundNote/mechanics/arcInstructions)
+  - (c) Define per-panel `<PANEL>_TOPIC_DISMISSAL`, `<PANEL>_MAGNETS`, `<PANEL>_ENTHUSIASM`, `<PANEL>_IDIOM_PROFILES` consts where missing (Golf has the canonical shapes)
+  - (d) Wire all 15 engine flags: `crossCharacterQuestionsEnabled`, `parodyEnabled`, `profanityEnabled`, `reverentAbsurdityEnabled`, `topicMagnetsEnabled`, `inventedExpertInterpretationEnabled`, `hangModeEnabled`, `shutdownModeEnabled`, `eggingOnEnabled`, `panelConsensusEnabled`, `incongruentRegisterEnabled`, `crossCharacterReferencesEnabled`, `idiomInventionEnabled`, `topicDismissal` (string), `panelTemperature` (object)
+  - (e) Re-run M-3 audit (`pipeline/measurement/reacts-to-coverage.js`) — should show 6/6 panels wired
+- **Why this is high CD3:** unlocks 15 mechanics × 5 panels = 75 mechanic instances that currently lie dormant. ComedyRoom alone gains panel-consensus, reverent-absurdity, idiom-invention, cross-character-parody (the Hicks/Boyle/Chappelle/Carlin register multiplies). Future engine mechanics land in ONE engine, not six places. Removes the per-panel drift class of waste.
+- **Blocks downstream work:**
+  - BL-190 (`>include the don`) — depends on every host panel calling buildSystemPrompt, otherwise Alliss can't take a uniform turn
+  - BL-191 (engine generalisation / PANEL_EXEMPLARS slots) — depends on uniform buildSystemPrompt wiring; without BL-193, the exemplar substitution would only affect Golf
+  - BL-192 (Ronglish Overdrive — Ron is in Football) — Football must call buildSystemPrompt for the directive's prompt block to inject
+- **Tier separation from other Claude session:** other session is on Tier 2 (engine cleanup of a different surface). Tier 1 (this BL) is the per-panel migration in `index.html`. Coordinate: I touch index.html only; other session stays off it. Auto-sync handles repo-level state.
+- **Migration order (per-panel slice — commit after each, each is one commit):**
+  1. SounessCat (smallest panel; lowest blast radius)
+  2. Racing (Final Furlong — 4-of-6 rotating cast, simpler than Football)
+  3. LongRoom (cricket — Blofeld anchor, established)
+  4. Football (anchor + 4 panellists)
+  5. ComedyRoom (largest cast — last; benefit of pattern hardening through 1-4)
+  - After each: run pipeline (green required), commit, push, then next.
+  - If any panel migration fails M-3 audit: stop, root-cause, fix, only then continue.
+- **Three Amigos questions (pending):**
+  1. SounessCat panelTemperature confirmation (proposing `{ intent: -0.4, congruence: -0.2 }`)
+  2. Should the per-panel `<PANEL>_MAGNETS` / `<PANEL>_ENTHUSIASM` / `<PANEL>_IDIOM_PROFILES` consts be empty-defaulted for panels whose characters have no P11/P9 entries yet, or should we pause and author P-field data first?
+  3. Migration order — accept the proposed order (SounessCat → Racing → LongRoom → Football → ComedyRoom), or different?
+  4. Per-panel Gherkin coverage — one feature file per panel (5 files), or one shared file with scenario-per-panel?
+- **Gherkin gate:** required before code. Scenarios assert (per panel): (a) PanelDiscussEngine.buildSystemPrompt is called with expected ctx shape; (b) all 15 flags pass true; (c) panelTemperature matches table; (d) no inline prompt-string-concat present; (e) M-3 audit reports panel as wired.
+- **Feature:** panel-interaction
+- **CD3:** UBV=9 TC=7 RR=9 → CoD=25, Dur=5, **CD3=5.0**
+- **Composes with:** all BL-16x/17x/18x mechanics with deferred "remaining panels" notes. On close, those notes can be struck.
+- **Status:** OPEN — needs Three Amigos + Gherkin
+
+---
+
+### BL-194 — Topic-dismissal: per-character flavour profile
+
+**Story:** As a panellist with a relationship history, I want my dismissal of another's tangent to sound like *me* (polite-but-funny / cold / piss-take per my temperature toward them), so that the dismissal lands as character not as generic moderation.
+
+**AC (Gherkin):**
+- Given Souness's relationship temperature toward Faldo is `simmering` and Faldo has just opened a Ginsters tangent
+- When the panel slot dispatcher selects Souness's dismissal flavour
+- Then Souness's dismissal fires in the `piss-take` register from his `dismissal_profile.piss_take` pool
+
+Each character with `dismissal_profile` config (warm-flavour / cold-flavour / piss-take pool entries) gets variant dismissals; pool draws prevent repetition across a session.
+
+- Epic: Topic-dismissal (BL-168 v1 shipped)
+- Feature: panel-voice
+- CD3: UBV=7 TC=5 RR=3 → CoD=15, Dur=2, **CD3=7.5**
+- Composes with: BL-168 (v1 the dismissal block exists; v2 is the per-character voice), BL-176 (repetism dial-back — flavour profile prevents dismissal-bleed)
+- Status: OPEN — raised 2026-05-19 from BL-168 v2 reframing
+
+---
+
+### BL-195 — Topic-dismissal: drift-detection signal (engine-side)
+
+**Story:** As the engine, I want to detect when the previous speaker has drifted off the user's question (rather than relying on the model to notice), so that TOPIC-DISMISSAL fires on the right turns reliably.
+
+**AC (Gherkin):**
+- Given the previous turn's content is scored against the user's original question and arc topic
+- When drift score exceeds threshold T
+- Then the next slot is flagged `dismissTrigger: true` and the dismissal block fires
+
+Drift score = lexical-overlap inverse with question keywords + topic-magnet-firing rate of the previous speaker + recent-arc-tag mismatch.
+
+- Epic: Topic-dismissal (BL-168 v1 shipped)
+- Feature: panel-voice (engine)
+- CD3: UBV=6 TC=4 RR=3 → CoD=13, Dur=3, **CD3=4.3**
+- Composes with: BL-168 v1, BL-194 (this BL feeds the flavour selector)
+- Status: OPEN — raised 2026-05-19 from BL-168 v2 reframing. Lower priority than BL-194 — model discretion currently fires the block in roughly-right places; tightening is incremental gain
+
+---
+
+### BL-196 — Character voice-pool selection: canonical per-character pool schema + `VoicePoolSelector` engine module
+
+**Story:** As an engineer building any character's voice pool, I want a shared `VoicePoolSelector` module that picks per-character pool items declaratively (not the Faldo-only hard-coded selector), so that adding a new pool-driven character is a data change not a code change.
+
+**AC (Gherkin):**
+- Given a character file declares `voice_pools` (named pools with entries)
+- When PanelDiscussEngine builds the system prompt for that character's turn
+- Then `VoicePoolSelector.pick(character.id, pool.name, pool.entries)` returns one entry, injected as a one-shot
+- And the Faldo-specific hardcoded selector is removed (single site of pool selection)
+
+- Epic: Character voice mechanics (BL-172 v1 tactical-Faldo shipped, WL-150 closed)
+- Feature: panel-voice (engine)
+- CD3: UBV=8 TC=6 RR=6 → CoD=20, Dur=3, **CD3=6.7**
+- Composes with: BL-162 (lives inside the shared engine), BL-178 (magnet selection mirrors this pattern), BL-174 (idiom selection mirrors this pattern)
+- Status: OPEN — raised 2026-05-19 from BL-172 v2 reframing. v2 is what was always intended; v1 was tactical exception per WL-150.
+
+---
+
+### BL-197 — Profani-saurus: per-character swear profile loaded by engine, injected one-shot per turn
+
+**Story:** As Souness/Boyle/Roy/Diogenes/Bristow/Big Ron/Harold/Murray, I want the engine to inject specific swears from my own character-authentic profile each turn (not a generic instruction to "use my register"), so that my profanity lands as *me* without depending on the model recalling my register correctly.
+
+**AC (Gherkin):**
+- Given Souness's character file has `swears` array, `register: terse-Glasgow`, `purpose: [climax, emotional-emphasis]`
+- When Souness's turn fires under conditions matching his `conditions` (wound_activated)
+- Then the engine selects one of his `swears` entries respecting `never_says`, injects as `USE THIS SWEAR ONCE THIS TURN: "fanny"` in the system prompt
+- And `profanityEnabled` instruction block changes from generic to per-character-data-driven
+
+- Epic: Profani-saurus (BL-169 v1 generic block shipped + bravery boost)
+- Feature: panel-voice (engine + character data)
+- CD3: UBV=8 TC=6 RR=4 → CoD=18, Dur=3, **CD3=6.0**
+- Composes with: BL-196 (uses the same VoicePoolSelector pattern), BL-178 v2 (magnet rotation pattern parallel), character files (`swears` field per character — most missing)
+- Status: OPEN — raised 2026-05-19 from BL-169 v2 reframing
+
+---
+
+### BL-198 — Cross-character references: `reacts_to` output schema field + UI thread indicator
+
+**Story:** As a Cusslab user watching a panel, I want to see when one panellist is reacting specifically to another (with a subtle visual thread between their turns), so that I can follow the conversation graph rather than reading parallel monologues.
+
+**AC (Gherkin):**
+- Given Faldo's turn 3 references something McGinley said in turn 1 with `register: deflation`
+- When the panel response is rendered
+- Then Faldo's turn shows a subtle indicator (thin left-border accent in McGinley's colour, or `↳ re: McGinley` tag) marking the reference
+- And the `reacts_to` field is present in the JSON response schema (`{target, register}`)
+
+- Epic: Cross-character references (BL-163 v1 prompt-instruction shipped)
+- Feature: panel-interaction (schema + UI)
+- CD3: UBV=6 TC=4 RR=3 → CoD=13, Dur=3, **CD3=4.3**
+- Composes with: BL-163 v1, schema validator in pipeline (additional check), `reacts_to.register` enum (endorsement / quiet_disagreement / silence_noted / deflation per Gherkin 2026-05-16)
+- Status: OPEN — raised 2026-05-19 from BL-163 v1b reframing. Lower CD3 because the prompt-side already produces the *behaviour*; this BL adds *visibility* — pure observability win, no new behaviour.
