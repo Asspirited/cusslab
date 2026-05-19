@@ -2822,6 +2822,8 @@ Track F flagged that the piss_take pool added to Cox leans heavily on existing P
 
 **Note:** Data-only review (no new code path) — no Gherkin needed.
 
+**Status:** **DONE 2026-05-19** — 3 of 4 piss_take entries replaced (grain-of-sand, ancestors-around-fire, tardigrade). Those phrasings live as full setpieces elsewhere in cox.md (L130, L140, L149) — duplicating them in the dismissal pool was the recycling risk. New entries (entropic-cost, Bayesian-update, non-falsifiable) are Cox-native register but not riffs on existing setpieces. The paramecium line retained (single-instance, not a duplicate elsewhere).
+
 ---
 
 ## BL-212 — Normalise dismissal_profile entry surface form (string vs stage-direction)
@@ -2838,6 +2840,8 @@ Radar's piss_take pool includes a literal `[silence — does not look up — has
 3. All other 90 character files spot-audited for stage-direction entries in dismissal pools.
 
 **Note:** Schema clarification — Three Amigos gate fires (impacts engine behaviour at BL-194 integration).
+
+**Status:** **DONE 2026-05-19** — Decision: dismissal entries are speakable strings only. Bracketed stage directions MAY prefix/suffix speakable content (Alliss `"[sigh] [chuckle] Quite extraordinary..."` — allowed) but cannot stand alone (Radar `"[silence — does not look up — has another drink]"` — disallowed; non-response mechanic belongs in HANG MODE per BL-206, which Radar already has). Radar entry replaced with `"One word, mate. Don't make me find it."` Audit: only `alliss.md` had bracketed prefix (acceptable); only `radar.md` had pure stage-direction (fixed). Schema integration deferred to BL-217 (P12/P13/P14 spec add — needs Three Amigos).
 
 ---
 
@@ -2904,4 +2908,29 @@ After backfill, `mech-calibration-drift.js` should report 17 declarations and 0 
 **Note:** Data-only work, no new code path. Three character casts touched (cricket, comedy, quntum-leeks, golf, snooker, darts, spit-shelter) — can parallelise via cast-keyed sub-batches like the BL-194/205/206 ship.
 
 **Composes with:** M-4 (validates each backfill), BL-184 (the M-4 instrument exists), BL-209 Lever 5 bias scoring (the bias table reads polarity per character — uncovered characters get no bias).
+
+
+---
+
+## BL-217 — Add P12/P13/P14 to character schema (HANG MODE / SHUTDOWN / DISMISSAL)
+
+**Raised by:** BL-212 fix, 2026-05-19
+**Epic:** Character schema completeness
+**CD3:** Medium (per-character config is being shipped into 90 character files but the schema spec for those fields doesn't exist in leanspirited-standards — drift risk)
+
+The character schema in `leanspirited-standards/standards/character-schema.md` currently ends at P11. The per-character config fields shipping under BL-194/205/206 (HANG MODE `can_leave_hanging`, SHUTDOWN `shutdown_capability`/`shutdown_motivations`, DISMISSAL `dismissal_profile`) are being added inline in character files without a corresponding schema entry. This means:
+- New character authors have no canonical spec to follow (current pattern: copy-paste from neighbours)
+- Validation has no schema anchor (M-4-equivalent validator for these fields would have to infer rules)
+- The BL-212 stage-direction rule decided 2026-05-19 (entries are speakable strings only; bracketed stage directions may prefix/suffix but cannot stand alone — non-response mechanics belong in HANG MODE not DISMISSAL) has no permanent home
+
+**Done when:**
+1. Schema gains `### P12. HANG MODE` (can_leave_hanging, hang_triggers, hang_reactions enum)
+2. Schema gains `### P13. SHUTDOWN CAPABILITY` (shutdown_capability enum, shutdown_motivations enum)
+3. Schema gains `### P14. DISMISSAL PROFILE` (polite_but_funny / cold_dismissal / piss_take pools, with the BL-212 speakable-string rule)
+4. Schema gets a worked example like P11 does for Murray
+5. New M-7 validator scaffolded (or BL raised) for P12/P13/P14 structural validation against the schema
+
+**Note:** Three Amigos required before writing — the enums and rules need Rod's input. Don't author solo.
+
+**Composes with:** BL-194/205/206 (already-shipped fields), BL-212 (the speakable-string rule lives here durably), BL-216 (parallel schema-driven backfill effort for P9 incongruent_register sub-fields).
 

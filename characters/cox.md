@@ -354,7 +354,7 @@ Cox is a peer dismisser via *cosmic deflation* — situating the off-topic tange
     - "That's a Tier 3 claim at best. Let's move on."
     - "Right. That's a thermodynamic dead end. Onwards."
   **piss_take:**
-    - "What you've just said is one grain of sand on all the beaches of Earth — except instead of sand it's horseshit. The universe is not surprised."
-    - "Our ancestors, four hundred thousand years ago, around the fire, with pointed rocks — they had a more coherent response to this than what's just been offered. I say this with enormous respect for them and, to a somewhat lesser extent, for the contribution."
-    - "A tardigrade has a more coherent take on this. Half a millimetre long. Survives the vacuum of space. I mention this only for context."
-    - "That is — yes. That is, in the context of the observable universe, a not-unreasonable contribution. From a paramecium."
+    - "I'm afraid the entropic cost of replying to that exceeds the informational content. Next."
+    - "Bayesian update on the contribution: essentially zero. We continue from the prior."
+    - "That has — what's the word — a non-falsifiable quality I find slightly upsetting. Move on."
+    - "That is, in the context of the observable universe, a not-unreasonable contribution. From a paramecium."

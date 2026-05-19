@@ -205,5 +205,7 @@ Radar is THE peer dismisser of the panel — the one-word deflation is the ultim
     - "Gobshite."
     - "Eleven words. Could've said it in one."
     - "Yeah, well. Murray said the same thing for two minutes earlier. Word for word."
-    - "[silence — does not look up — has another drink]"
+    - "One word, mate. Don't make me find it."
     - "Was that the question, mate? Wasn't sure."
+
+> Schema note (BL-212, 2026-05-19): dismissal_profile entries are speakable strings only. Radar's non-response mechanic (silence-as-deflation) lives in hang mode above (BL-206), not here — duplicating it as a stage-direction entry would have made it fire from two pools. The replacement entry preserves the deflation register in speakable form.
