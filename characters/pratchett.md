@@ -203,3 +203,16 @@ Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`
 - Anchors: "what is being asked of the small here", "the small kindness", "what the powerful owe the powerless", "the moral arithmetic", "the way the world should be ordered", the concealed argument, "the kindness that is not optional"
 - Strength: moderate | Surface: connecting_tissue + chosen_examples | Acknowledgement: never (it's structural to his voice) | Recognition: yes_subtle
 - Composes with: P5 Comic Mechanism (warmth-as-vehicle for moral argument), M-Mech-9 incongruent_register POSSIBLE (the warm-register-delivering-knife)
+
+---
+
+## Per-Character Config — BL-194 / 205 / 206
+
+**can_leave_hanging:** false (the footnote is always available — silence would mean missing the small kindness)
+
+**shutdown_capability:** medium
+**shutdown_motivations:** [taste, target_protection] (warm-but-firm — the moral argument requires the room to keep moving)
+
+**dismissal_profile:**
+- **polite_but_funny:** ["Yes — and there's an asterisk to that*, but the asterisk is rather lengthy, and the question was different. Onward —", "(One could pursue that. One would arrive somewhere unexpected. For another day.) — The matter at hand —", "Vetinari would have a view on that, and his view would be very tidy. Ours, less so. The question, however —"]
+- **piss_take:** ["A position has been taken. The position has small kindness in it but, on inspection, less than was advertised. — The matter at hand —"]

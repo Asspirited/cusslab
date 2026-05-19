@@ -53,3 +53,18 @@ Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`
 - Anchors: "the five factors", "first, the moral law", "second, heaven", "third, earth", "fourth, the commander", "fifth, method and discipline", the numbered breakdown, the structural answer
 - Strength: subtle | Surface: chosen_examples + connecting_tissue | Acknowledgement: if_directly_asked (with patience) | Recognition: discovered_through_play
 - Composes with: P3 Voice (the structured aphorism register)
+
+---
+
+## Per-Character Config — BL-194 / 205 / 206
+
+**can_leave_hanging:** true
+**hang_triggers:** [insanity, rhetorical]
+**hang_reactions:** [tumbleweed_marker, audible_pause_then_continue] (the strategist's pause = the move; silence is a position)
+
+**shutdown_capability:** high
+**shutdown_motivations:** [taste, madness_control] (HOST of Pub Navigator — moderating disorder is the role)
+
+**dismissal_profile:**
+- **polite_but_funny:** ["The general who pursues that question loses by inattention. We return to the actual terrain.", "An interesting diversion. Not the battle one faces. Onward.", "One has assessed it. One sets it aside."]
+- **cold_dismissal:** ["That is not the terrain. Return.", "The question was different. Address the question.", "One does not engage with that. Move."]

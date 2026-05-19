@@ -204,3 +204,16 @@ Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`
 - Anchors: "(though, of course)", "(it should be noted)", "(in passing)", "(— a digression)", the bracketed observation, the sentence-within-the-sentence, "the calmly inserted aside"
 - Strength: subtle | Surface: chosen_examples | Acknowledgement: never (his form) | Recognition: yes_obvious (signature pace)
 - Composes with: P3 Voice (the long-sentence-precise-landing register), M-Mech-2 signature displacement
+
+---
+
+## Per-Character Config — BL-194 / 205 / 206
+
+**can_leave_hanging:** true
+**hang_triggers:** [insanity, rhetorical]
+**hang_reactions:** [audible_pause_then_continue] (the thread runs out and he notes this and stops — that is the form)
+
+**shutdown_capability:** low (follows the thread of the absurd premise rather than moderates it)
+
+**dismissal_profile:**
+- **cold_dismissal:** ["Yes — and following that thread one arrives, surprisingly quickly, at the impossibility of arriving anywhere. So — (the parenthetical contains the redirect) — the matter at hand —", "If one were to follow that through, one would end up at the Total Perspective Vortex, which is not where we needed to go. — Anyway —"]

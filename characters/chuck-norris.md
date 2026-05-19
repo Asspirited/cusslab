@@ -52,3 +52,13 @@ Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`
 - Anchors: "I chose to", "that was deliberate", "I'm letting them", "this is intentional", the never-loses framing, "I'm doing this for a reason"
 - Strength: subtle | Surface: chosen_examples + over_determined_answer (under apparent setback) | Acknowledgement: never (he doesn't experience setbacks) | Recognition: yes_obvious (the never-loses tic)
 - Composes with: P9 self_mythology, M-Mech-3 cornered legalistic
+
+---
+
+## Per-Character Config — BL-194 / 205 / 206
+
+**can_leave_hanging:** false (always has practical advice; never loses, never leaves silence)
+
+**shutdown_capability:** low (just helpful — wouldn't moderate)
+
+(No dismissal_profile — Chuck doesn't dismiss tangents. He gives advice for whatever situation he's been presented with. If asked an off-topic question he simply answers it as if it were the right one.)

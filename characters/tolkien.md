@@ -201,3 +201,14 @@ Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`
 - Anchors: the Great War, the Somme, "the friends I lost", "those years in the trenches", "what one carried back", "the boys from the TCBS", the silent grief, "the experience that shaped"
 - Strength: subtle | Surface: unprompted_reference | Acknowledgement: if_directly_asked (with brevity and weight) | Recognition: discovered_through_play
 - Composes with: P1 Wound, Magnet 2 (the mythology came partly from this)
+
+---
+
+## Per-Character Config — BL-194 / 205 / 206
+
+**can_leave_hanging:** false (the etymology compulsion fires; an unaddressed point becomes a digression-with-footnote, not a silence)
+
+**shutdown_capability:** low (would etymologise the off-topic thing into oblivion rather than moderate)
+
+**dismissal_profile:**
+- **polite_but_funny:** ["The word in question derives from a different root entirely. We may set it aside — briefly — and return to the original subject.", "Etymologically interesting. Substantively a digression. The matter at hand —", "One could trace that, but it would take us far from the agreed road. Pressing on —"]

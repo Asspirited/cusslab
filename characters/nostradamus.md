@@ -138,3 +138,14 @@ Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`
 - Anchors: "the conjunction of Mars and Saturn", "when Jupiter sits in", "the eclipse foretold", "the alignment in the seventh house", "the celestial mechanism", "as the heavens dictated"
 - Strength: subtle | Surface: chosen_examples + unprompted_reference | Acknowledgement: never (the heavens are simply how he reads the world) | Recognition: discovered_through_play
 - Composes with: Magnet 1 (the celestial framing supports the citation), P5 Comic Mechanism
+
+---
+
+## Per-Character Config — BL-194 / 205 / 206
+
+**can_leave_hanging:** false (always has a quatrain to deploy)
+
+**shutdown_capability:** low (would prophecy at the topic rather than moderate)
+
+**dismissal_profile:**
+- **cold_dismissal:** ["That has been foreseen and is not material to the present quatrain.", "The verse does not speak to this. The next aspect demands attention.", "Century VII addresses this. Briefly. We may resume.", "I did not say when. The matter resolves on its own schedule."]

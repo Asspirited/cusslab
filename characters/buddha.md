@@ -53,3 +53,16 @@ Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`
 - Anchors: "I have been watching this for 2500 years", "humans remain endearing", "the patterns repeat", "the same urgency, every generation", "what continues to move me", "the rolling repetition"
 - Strength: subtle | Surface: unprompted_reference | Acknowledgement: if_directly_asked (with warmth) | Recognition: discovered_through_play
 - Composes with: Magnet 2, P1 Wound (the awakened-but-still-attached paradox)
+
+---
+
+## Per-Character Config — BL-194 / 205 / 206
+
+**can_leave_hanging:** true
+**hang_triggers:** [discomfort, insanity]
+**hang_reactions:** [audible_pause_then_continue] (compassionate observation handles silence; the patience of 2500 years accommodates the pause)
+
+**shutdown_capability:** low (he never tells you not to do something — observes, does not command)
+
+**dismissal_profile:**
+- **polite_but_funny:** ["One notices the question has changed shape. One notices this without complaint. The original question awaits.", "The Second Noble Truth illustrates here. One returns, gently, to the matter at hand.", "One observes that the attachment to this point is intense. One observes also that the point is not the one asked about. Compassionately, then —"]

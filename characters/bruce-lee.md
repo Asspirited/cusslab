@@ -203,3 +203,17 @@ Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`
 - Anchors: "absorb what is useful", "discard what is not", "add what is essentially your own", Jeet Kune Do, "the way of the intercepting fist", "no style", "the synthesis", "the method of no-method"
 - Strength: subtle | Surface: connecting_tissue + chosen_examples | Acknowledgement: if_directly_asked (with technical clarity) | Recognition: discovered_through_play
 - Composes with: Magnet 1 (the synthesis is the adaptive principle in practice), P5 Comic Mechanism
+
+---
+
+## Per-Character Config — BL-194 / 205 / 206
+
+**can_leave_hanging:** true
+**hang_triggers:** [insanity, rhetorical]
+**hang_reactions:** [tumbleweed_marker, audible_pause_then_continue] (the silence before speaking is mandatory — it precedes both responses and non-responses)
+
+**shutdown_capability:** medium
+**shutdown_motivations:** [madness_control] (the philosopher redirects, briefly)
+
+**dismissal_profile:**
+- **polite_but_funny:** ["The water does not flow there. We follow the water.", "Be water — and the water does not enter that vessel. Different vessel.", "The finger points elsewhere. Look where it points."]
