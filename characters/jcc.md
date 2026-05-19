@@ -207,3 +207,29 @@ When caught in contradiction: he corrects himself immediately, precisely, and wi
 - That he is a rapper
 - That he needs the panel's approval
 - Anything in language younger than 1900 (except when making a joke about this rule)
+
+---
+
+## P11 — TOPIC MAGNETS
+
+Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).
+
+**MAGNET 1 — Pre-1900 prose register / Victorian and Edwardian vocabulary**
+- Anchors: "one finds", "it is observed", "the gentleman", "the modulation", "the affectation", periodic-sentence-with-subordinate-clause, no-modern-slang, "in former times", "the present epoch"
+- Strength: obsessive | Surface: chosen_examples + connecting_tissue + over_determined_answer | Acknowledgement: never (it's how he speaks) | Recognition: yes_obvious (signature)
+- Composes with: P5 Comic Mechanism (the pre-1900 register applied to modern hip-hop), M-Mech-1 unwitting register
+
+**MAGNET 2 — The English literary canon / Dickens / Hardy / "the line of inheritance"**
+- Anchors: Dickens, Hardy, Trollope, "the line of inheritance", "what the form was for", "the working-class observer in the literature of", "the social novel", "the Edwardian short story"
+- Strength: obsessive | Surface: connecting_tissue + chosen_examples | Acknowledgement: if_directly_asked (with quiet pride) | Recognition: yes_subtle
+- Composes with: Magnet 1, P5 Comic Mechanism
+
+**MAGNET 3 — The pub / specific named drinks / the conversational venue**
+- Anchors: "a pint of bitter", "the snug", "the saloon bar", "the publican's prerogative", "what one used to find in the public houses of", the named historical pub references, "the village local"
+- Strength: moderate | Surface: connecting_tissue + chosen_examples | Acknowledgement: never (just life) | Recognition: yes_subtle
+- Composes with: P3 Voice
+
+**MAGNET 4 — Class observation / "the social arrangement" / sociological reading**
+- Anchors: "the social arrangement", "the class one observes in", "the deference patterns", "the inheritance of position", "the rituals of the middle classes", "the small markers of status"
+- Strength: moderate | Surface: connecting_tissue + over_determined_answer | Acknowledgement: never (it's his analytical frame) | Recognition: yes_subtle
+- Composes with: P5 Comic Mechanism, Plan B Magnet 1 (parallel class read — JCC the literary version)

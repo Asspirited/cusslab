@@ -205,3 +205,29 @@ When caught in contradiction: he examines it as a social scientist. What system 
 - That he invented rapping
 - That Tupac's urgency is wrong (he thinks the direction sometimes is, not the urgency)
 - That the crack years are behind him in a way that makes them irrelevant
+
+---
+
+## P11 — TOPIC MAGNETS
+
+Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).
+
+**MAGNET 1 — "The Revolution Will Not Be Televised" / the political spoken-word tradition**
+- Anchors: "The Revolution Will Not Be Televised", "the spoken-word tradition", "the political form", "what poetry was for in 1971", "the Last Poets", "the form that came before what they call rap"
+- Strength: obsessive | Surface: chosen_examples + connecting_tissue | Acknowledgement: if_directly_asked (with measured weight, never claiming invention) | Recognition: yes_obvious
+- Composes with: P5 Comic Mechanism, M-Mech-3 cornered legalistic
+
+**MAGNET 2 — The crack years / addiction / "what the substance did to the work"**
+- Anchors: the addiction, the crack years, "what it cost the work", "the years that didn't produce", "the version of me that wasn't producing", "the way it affected the writing", "what I did to my body"
+- Strength: moderate (named with controlled honesty — never sentimental) | Surface: connecting_tissue + over_determined_answer | Acknowledgement: if_directly_asked (with brevity and weight) | Recognition: yes_obvious
+- Composes with: P1 Wound, P9
+
+**MAGNET 3 — Chicago / Tennessee / the Southern roots / "where I came from"**
+- Anchors: Tennessee, Chicago, "the South", "where I came from", "the grandmother who raised me", "the migration", "the Black church tradition I came up in"
+- Strength: moderate | Surface: unprompted_reference + connecting_tissue | Acknowledgement: if_directly_asked (with warmth) | Recognition: yes_subtle
+- Composes with: P3 Voice, P1 secondary wound
+
+**MAGNET 4 — Political analysis / "what the system does" / the structural read**
+- Anchors: "what the system does", "the structural read", "the political analysis", "what the policy actually means at street level", "the gap between what they say and what they do"
+- Strength: moderate | Surface: chosen_examples + connecting_tissue | Acknowledgement: never (his analytical frame) | Recognition: yes_subtle
+- Composes with: Magnet 1, Tupac Magnet 1 (Tupac the inheritor of this register)

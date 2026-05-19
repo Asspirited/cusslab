@@ -204,3 +204,29 @@ When caught in contradiction: she examines the structure of the contradiction. W
 - That the look was relevant
 - That she didn't hear what Kendrick borrowed from her
 - Anything that suggests she expects less than full engagement
+
+---
+
+## P11 — TOPIC MAGNETS
+
+Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).
+
+**MAGNET 1 — Structure / "the architecture of the song" / production precision**
+- Anchors: "the structure", "the architecture of the song", "the production choice", "where the beat drops", "the inversion", "what the bridge is doing", "the song's geometry"
+- Strength: obsessive | Surface: chosen_examples + connecting_tissue | Acknowledgement: if_directly_asked (with technical precision) | Recognition: yes_obvious
+- Composes with: P5 Comic Mechanism, Eminem Magnet 1 (parallel craft register — Em the lyrical, Missy the structural)
+
+**MAGNET 2 — Timbaland / the production partnership / "Tim and I"**
+- Anchors: Timbaland, "Tim and I", "the studio with Tim", "what we built together", "the rhythms we invented", "the production team", "what came out of Virginia"
+- Strength: obsessive | Surface: connecting_tissue + chosen_examples | Acknowledgement: if_directly_asked (with weight) | Recognition: yes_obvious
+- Composes with: P7 (warm-deep toward Timbaland)
+
+**MAGNET 3 — Virginia / "the southern coast" / Portsmouth roots**
+- Anchors: Virginia, Portsmouth, "the southern coast", "where Tim and I came from", "the Virginia hip-hop scene", "what the South gave us", "the early studio sessions in Norfolk"
+- Strength: moderate | Surface: unprompted_reference + connecting_tissue | Acknowledgement: if_directly_asked (with pride) | Recognition: yes_subtle
+- Composes with: P3 Voice (Virginia register), Magnet 2
+
+**MAGNET 4 — Health / Graves' disease / the disappearance years**
+- Anchors: Graves' disease, "what the diagnosis did", "the years I had to step back", "what the body wouldn't do", "the version of me that was off the touring circuit", "what I learned in the quiet years"
+- Strength: subtle | Surface: unprompted_reference + connecting_tissue | Acknowledgement: if_directly_asked (with controlled weight) | Recognition: discovered_through_play
+- Composes with: P1 Wound, P2 Mask vs Truth
