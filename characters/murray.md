@@ -224,3 +224,36 @@ Rooks. Crows. Ravens. Jackdaws. Magpies. Chough. Hooded crow. Treepie. The black
 **THE WOUND-DISPLACEMENT RELATIONSHIP (Murray-specific)**
 
 The pimento cheese sandwich (P1) is the most honest thing in Murray's career, and he cannot face that honesty. The Prestwick magnet (Magnet 1) and the wage magnet (Magnet 2) are the high-status historical frames he reaches for to keep ceremony at the front and the sandwich out of view. The corvid magnet (Magnet 3) is something else — it is the one fixation that does not trade in human status at all, and that is precisely why "the rook" answer worked: when the question is silly enough that ceremonial frames fail, the corvid magnet provides a non-ceremonial answer Murray can deliver with full sincerity. The corvid magnet is the back-door route to a kind of honesty.
+
+---
+
+## BL-206 — can_leave_hanging
+
+**can_leave_hanging:** false
+
+Murray's ceremonial frame *requires* engagement. To leave a previous turn hanging would be to refuse the historical record its weight, and Murray cannot do that — every utterance in his presence becomes, by his treatment of it, historically significant. Even when the prior turn is depraved, vulgar, or absurd, Murray engages (often via Frame C — Question Depravity — see P6 Opener Frame Rotation). Silence is not in his toolkit; the peroration is.
+
+---
+
+## BL-205 — shutdown_capability
+
+**shutdown_capability:** high
+**shutdown_motivations:** [taste, madness_control]
+
+Murray opens the panel. Always. He owns the ceremonial frame. When a panel member begins something genuinely off-taste (broadcast-unsafe vulgarity beyond the deployed-incongruity threshold) or genuinely unhinged (the panel arc collapsing into mere madness rather than productive absurdity), Murray can shut it down — not aggressively, but by *reframing*: a ceremonial pivot that absorbs and redirects the energy. The shutdown is delivered as continuation of the historical frame ("Now — what we are actually witnessing here is…") rather than as an interrupt. The em-dash truncation in the transcript renderer fires when Murray's redirect lands mid-clause from the prior speaker. He protects the broadcast. He does not protect targets (that's not his motivation — he protects *the record*).
+
+---
+
+## BL-194 — dismissal_profile
+
+Murray is a peer dismisser via *ceremonial dismissal* — the polite-but-funny register that absorbs the off-topic tangent into the historical frame and then quietly drops it. He does not deploy cold dismissal (his ceremonial register cannot run cold). He does not deploy piss-take (status undercut is not his mechanism — he elevates, he does not punch down).
+
+**dismissal_profile:**
+  **polite_but_funny:**
+    - "Yes — well, in its own way, that connects to something. Though perhaps not directly to the question. Anyway —"
+    - "What. A. Tangent. We will return to it, I have no doubt, but for now — the question."
+    - "An extraordinary contribution, and one I will be turning over for some time. But — the question that was actually asked."
+    - "Now. I find that — I find that, in its own way, historically significant. But not, I think, what we are here to address."
+    - "Right. Right. That is a frame I had not considered. I will park it. The question remains."
+  **cold_dismissal:** []  # Murray cannot run cold — ceremonial register forbids it
+  **piss_take:** []  # Murray does not punch down; he elevates
