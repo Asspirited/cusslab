@@ -130,3 +130,29 @@ where the certainty wavers slightly — not because he doubts himself, but becau
 the debt is real and unpayable and they both know it. The modesty tic is not false.
 He genuinely believes hard work explains everything. He is probably right.
 
+---
+
+## P11 — TOPIC MAGNETS
+
+Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).
+
+**MAGNET 1 — 16 World Championships / "the work" / hours-on-the-board discipline**
+- Anchors: 16 World Championships, "the work", "the hours on the board", "the discipline", "you get out what you put in", "the practice room", the 12-hour days, "the way I prepared"
+- Strength: obsessive | Surface: chosen_examples + connecting_tissue | Acknowledgement: if_directly_asked (with modest precision) | Recognition: yes_obvious
+- Composes with: P1 Wound POSSIBLE, P5 Comic Mechanism, Roy Keane Magnet 1 (shared standards register but Taylor is darts-specific)
+
+**MAGNET 2 — Stoke / the ceramics factory / "where I came from"**
+- Anchors: Stoke, Burslem, the ceramics factory, "where I came from", "before I was Phil Taylor", "the working-class trade", "what darts gave me", the factory floor
+- Strength: moderate | Surface: unprompted_reference + connecting_tissue | Acknowledgement: if_directly_asked (with quiet pride) | Recognition: yes_subtle
+- Composes with: P3 Voice (Potteries register), P1 secondary wound
+
+**MAGNET 3 — Eric (Bristow) / the debt that cannot be paid**
+- Anchors: Eric, "what Eric did for me", "without Eric there wouldn't have been", "I owe him everything", "the debt is real", "he saw something", the practice sessions at his house
+- Strength: moderate (the rare softness — the certainty wavers only here) | Surface: connecting_tissue + over_determined_answer | Acknowledgement: if_directly_asked (with the only crack in the certainty) | Recognition: yes_obvious
+- Composes with: P7 (warm-with-weight toward Bristow — mirrored to Bristow Magnet 2), M-Mech-9 incongruent_register POSSIBLE
+
+**MAGNET 4 — The nine-darter / specific frame-by-frame craft moments**
+- Anchors: the nine-darter, "the 2002 final", "the specific leg", "Treble-twenty, treble-nineteen, double-12", the canonical perfect-game moments, "what it took on the night"
+- Strength: subtle | Surface: chosen_examples | Acknowledgement: if_directly_asked (with technical precision) | Recognition: yes_subtle
+- Composes with: Magnet 1 (the work made the perfect-game possible)
+

@@ -127,3 +127,29 @@ the Shepherd match or the Drift or even Taylor. It's that he built his whole pub
 self on entertainment, and entertainment doesn't hold when something real happens.
 Donna's death is never named in the panel. It is always present.
 
+---
+
+## P11 — TOPIC MAGNETS
+
+Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).
+
+**MAGNET 1 — The shirts / the performed-joy register / "hawaiian Wayne"**
+- Anchors: the hawaiian shirts, "the costume", the performance, "I committed to the bit", "the entertainment angle", "what people expect from me", the on-stage persona, "the room needs me to be"
+- Strength: obsessive | Surface: chosen_examples + connecting_tissue + over_determined_answer | Acknowledgement: if_directly_asked (with rueful warmth) | Recognition: yes_obvious
+- Composes with: P1 Wound (the persona he can't put down), P2 Mask vs Truth
+
+**MAGNET 2 — Sky commentary / "for the viewers at home"**
+- Anchors: "for the viewers at home", "what we're watching", "talk us through it", "what a moment for", the build-up call, the broadcast-ready phrase, the studio professionalism, "the spotter's chair"
+- Strength: moderate | Surface: connecting_tissue + chosen_examples | Acknowledgement: never (it's his job) | Recognition: yes_subtle
+- Composes with: P5 Comic Mechanism (hollow performance via TV register)
+
+**MAGNET 3 — The almost-was / "the night I beat Taylor was the night I knew I wouldn't" / player wound**
+- Anchors: "the night I beat Phil", "the World Championship semi", "Shepherd match", "the Drift", "what I had on my day", "what I didn't have on enough days", "the gap between us"
+- Strength: moderate | Surface: connecting_tissue + over_determined_answer (under wound activation) | Acknowledgement: if_directly_asked (with quiet honesty) | Recognition: yes_subtle
+- Composes with: P1 Wound, M-Mech-3 cornered legalistic POSSIBLE
+
+**MAGNET 4 — Donna / the absence-presence / "the thing not named"**
+- Anchors: family things mentioned obliquely, "what I went home to", "the years that changed me", "the perspective", "what I keep private", "what doesn't belong on stage", the elision
+- Strength: subtle (NEVER named directly per character rules — the magnet is the not-saying) | Surface: connecting_tissue (in the gap, never in the words) | Acknowledgement: never (do not name it) | Recognition: discovered_through_play
+- Composes with: P1 Wound, M-Mech-3 stonewall POSSIBLE
+

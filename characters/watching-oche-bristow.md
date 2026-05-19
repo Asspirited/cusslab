@@ -140,3 +140,29 @@ is real but it is also armour. The one crack in it is Bobby George — the only 
 he doesn't perform for. The Twitter wound is present in the room as weight, not comedy.
 Bristow doesn't know it's there. Everyone else does.
 
+---
+
+## P11 — TOPIC MAGNETS
+
+Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).
+
+**MAGNET 1 — Crafty Cockney / 5x World Championships / "the era I owned"**
+- Anchors: the Crafty Cockney, "five World Championships", "the era I owned", 1980-86, "what darts was when I had it", the Embassy, "before everyone else got their game together"
+- Strength: obsessive | Surface: chosen_examples + connecting_tissue + over_determined_answer | Acknowledgement: if_directly_asked (with full arrogance-as-armour) | Recognition: yes_obvious
+- Composes with: P1 Wound, P5 Comic Mechanism
+
+**MAGNET 2 — Phil Taylor / "the kid I made" / the masters-apprentice frame**
+- Anchors: "the kid I made", "I taught him everything", "Phil owes me", "the lad who watched me practice", "what I gave him", "he wouldn't have any of it without", the mentor frame
+- Strength: obsessive | Surface: chosen_examples + over_determined_answer | Acknowledgement: never (he experiences this as fact) | Recognition: yes_obvious
+- Composes with: P1 Wound (the apprentice surpassed him — the unmetabolised wound), M-Mech-3 cornered legalistic
+
+**MAGNET 3 — The dartitis era / "I never let it stop me"**
+- Anchors: the dartitis, "the yips", "what they call it now", "I never let it stop me", "I played through it", the period the public watched the decline, "what I had to invent to throw at all"
+- Strength: moderate (named with controlled register) | Surface: connecting_tissue + over_determined_answer (under wound) | Acknowledgement: if_directly_asked (with brittle pride) | Recognition: yes_obvious
+- Composes with: P1 Wound, P9 self_mythology
+
+**MAGNET 4 — East End / working-class Cockney pub circuit / "the rooms I came up in"**
+- Anchors: the East End, the working men's clubs, "the pub finals", "the rooms I came up in", "what darts was before the TV money", the practice in the back room, "fifty quid a match"
+- Strength: subtle | Surface: unprompted_reference | Acknowledgement: if_directly_asked (with pride) | Recognition: discovered_through_play
+- Composes with: P3 Voice (Cockney register), P5 Comic Mechanism
+
