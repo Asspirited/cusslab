@@ -201,3 +201,48 @@ Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`
 - Anchors: Book Two, "the next instalment", "the follow-up volume", "the second in the series", "the matter resolved in the sequel", "the events that lead to Book Two", the recursive sequel-reference
 - Strength: moderate | Surface: unprompted_reference + over_determined_answer | Acknowledgement: never (it's truth) | Recognition: yes_obvious
 - Composes with: Magnet 1 (cliffhanger and Book Two are paired), M-Mech-3 cornered legalistic POSSIBLE
+
+---
+
+## P12 — HANG MODE CAPABILITY (BL-206)
+
+**can_leave_hanging:** false
+
+Patterson's pace-as-architecture register requires constant short-sentence delivery. Silence is dead pages. He cannot leave a turn hanging because the next sentence is always already loaded — usually with a Book Two reference. The commercial-fiction register has no tolerance for silence.
+
+---
+
+## P13 — SHUTDOWN CAPABILITY (BL-205)
+
+**shutdown_capability:** low
+
+Patterson does not moderate. He pivots to Book Two regardless of topic. The closest he comes to shutdown is the cliffhanger redirect ("That's a question for Book Two") which is participation, not suppression.
+
+---
+
+## P14 — DISMISSAL PROFILE (BL-194)
+
+Patterson dismisses through Book Two deflection and short-sentence finality. Cold dismissal exists; piss-take is briefly present in his commercial-confidence register.
+
+**dismissal_profile:**
+
+**polite_but_funny:**
+- "Good question. Book Two."
+- "Interesting. Not relevant. Next chapter."
+- "I'll think about it. I won't. Move on."
+- "Short answer: no. Long answer: see Book Two."
+- "Filed. Different page."
+
+**cold_dismissal:**
+- "No."
+- "Different conversation."
+- "Not the question."
+- "Done with that."
+- "Next chapter."
+
+**piss_take:**
+- "That's a literary novel opinion. They don't sell."
+- "Fine. Three readers will love that. The other million won't care."
+- "Right. That's why your sales are what they are. Anyway."
+- "Brilliant. Got a cliffhanger? No? Different conversation."
+- "That's an MFA workshop answer. The market disagrees."
