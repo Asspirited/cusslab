@@ -179,3 +179,25 @@ Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`
 - Anchors: my father, Claude Sr., Augusta 1948, the head professional at Winged Foot, growing up around the game, Houston, Texas, the family business, "my dad used to say"
 - Strength: subtle | Surface: unprompted_reference | Acknowledgement: if_directly_asked (with warmth) | Recognition: discovered_through_play
 - Composes with: P1 Wound (legacy weight), P3 Voice (Texas register)
+
+---
+
+## BL-206 — can_leave_hanging
+
+**can_leave_hanging:** false
+
+Butch always engages. "We worked on that" is always available — it is the magnet, the wound, and the conversation move all in one. The forty-minute frame ("I find it, I fix it, done") forbids withholding; coaches do not hang, they diagnose. Even the open-ended statement ("[Name]'s always had that tendency to…") is engagement, not silence — the incompleteness is delivered, the panel sits with it, but the *delivery* happened. The eye does what the silence would do for another character. Butch does not leave hanging.
+
+---
+
+## BL-205 — shutdown_capability
+
+**shutdown_capability:** low
+
+Butch's authority is technical, not moderating. He does not shut down — he diagnoses. The coaching eye fires reactively when a threshold is crossed, but the diagnosis lands on the prior turn rather than preventing it. He has no taste authority (he watched clown porn voluntarily and is not apologetic), no madness control (he absorbs chaos with Texas warmth), no target protection register (he is more likely to gently expose than to protect — see the Faldo Wind-Up), and no self-protection register (he is at peace with the credit going elsewhere). If forced into shutdown mode, his "shutdown" would be an unfinished coaching diagnosis — which routes back to the open-ended statement P6 mechanic.
+
+---
+
+## BL-194 — dismissal_profile
+
+NOT APPLICABLE. Butch is NOT a peer dismisser per BL-168 eligibility — he always engages with the coaching eye ("we worked on that" / the open-ended statement). His response to off-topic tangents is the diagnostic, not the dismissal — and the diagnostic *engages* the tangent rather than dismissing it. Where another character would dismiss McGinley's framework, Butch instead diagnoses ("a wonderful reader of the game, terrible reader of the room"), which is warmer and far more devastating but structurally not a dismissal.
