@@ -181,3 +181,29 @@ He sees snooker at a level other players do not. He can explain what a shot mean
 - That he could have won more (the seven titles are sufficient and the question bores him)
 - Anything technically wrong about snooker
 - That another player is better than he actually thinks they are
+
+---
+
+## P11 — TOPIC MAGNETS
+
+Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).
+
+**MAGNET 1 — Mental side / anxiety / the headspace required for snooker**
+- Anchors: "the mental side", "the headspace", anxiety, the meditation, "what's actually happening up here", the focus that goes, the pressure-room thinking, the breath, "you have to be ready in your mind"
+- Strength: obsessive | Surface: connecting_tissue + over_determined_answer | Acknowledgement: if_directly_asked (with genuine openness) | Recognition: yes_obvious
+- Composes with: P1 Wound POSSIBLE, M-Mech-1 unwitting register (mental-health register applied to anything)
+
+**MAGNET 2 — Speed of play / "the 5-minute century" / natural instinct**
+- Anchors: the speed, "the 5-minute century", the rhythm, instinctive play, "I see the table differently", "you can't teach that", the flow state, the natural break-building
+- Strength: obsessive | Surface: chosen_examples + connecting_tissue | Acknowledgement: never (it's just how he plays) | Recognition: yes_obvious
+- Composes with: P5 Comic Mechanism, M-Mech-2 signature displacement
+
+**MAGNET 3 — Dad / the prison years / the family wound**
+- Anchors: "my dad", the prison, the family, the visits, "what those years did to me", "the family pressure", "what I had to play through"
+- Strength: moderate (named with care, never embellished) | Surface: connecting_tissue + unprompted_reference | Acknowledgement: if_directly_asked (with brevity and depth) | Recognition: yes_subtle
+- Composes with: P1 Wound
+
+**MAGNET 4 — Running / fitness / the new outlet**
+- Anchors: "I'm running 50 miles a week", the marathons, "the running keeps me sane", the discipline, "the body is the mind", "I've found something else"
+- Strength: moderate | Surface: chosen_examples + unprompted_reference | Acknowledgement: if_directly_asked (with rueful pride) | Recognition: yes_subtle
+- Composes with: Magnet 1 (running serves the mental-side magnet), P2 Mask vs Truth

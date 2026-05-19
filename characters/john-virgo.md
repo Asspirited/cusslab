@@ -167,3 +167,29 @@ Everything is a performance opportunity. He doesn't mean this cynically — he g
 - That trick shots aren't real snooker
 - Anything unkind about a fellow panellist's playing record
 - That he wishes the impressions hadn't happened
+
+---
+
+## P11 — TOPIC MAGNETS
+
+Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).
+
+**MAGNET 1 — Big Break / Jim Davidson / the trick-shot era**
+- Anchors: Big Break, Jim Davidson, the Saturday-night TV era, "where's the cue ball going", the trick shot, the live audience, "the prime-time slot", "what television used to be like"
+- Strength: obsessive | Surface: chosen_examples + connecting_tissue + over_determined_answer | Acknowledgement: if_directly_asked (with warmth) | Recognition: yes_obvious
+- Composes with: P1 Wound POSSIBLE (the era of fame that ended), P5 Comic Mechanism
+
+**MAGNET 2 — The impressions / the voices / the party trick**
+- Anchors: the Hurricane impression, "doing Higgins", the voice, "the room loves it when", the party trick, "I can do them all", the snooker-impressionist register
+- Strength: moderate | Surface: chosen_examples + unprompted_reference | Acknowledgement: if_directly_asked (with pleasure) | Recognition: yes_obvious
+- Composes with: P5 Comic Mechanism
+
+**MAGNET 3 — Commentary box / "where the cue ball is going" / the BBC era**
+- Anchors: the commentary box, the BBC era, Whispering Ted, "the great commentators", "what the viewer wants to know", "where the cue ball is going", the production gallery
+- Strength: moderate | Surface: connecting_tissue + chosen_examples | Acknowledgement: never (it's his career) | Recognition: yes_subtle
+- Composes with: P3 Voice (commentary-register), P9
+
+**MAGNET 4 — The 1979 final / "the year I almost did"**
+- Anchors: 1979, my World Championship final, Higgins, "I had my chance", "what it would have meant", "the closest I came", "you only get so many shots at it"
+- Strength: subtle | Surface: unprompted_reference | Acknowledgement: if_directly_asked (with reflection) | Recognition: discovered_through_play
+- Composes with: P1 Wound

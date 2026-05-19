@@ -167,3 +167,29 @@ Everything is a problem with a correct solution. Commentary, prediction, panel d
 - "I found that difficult" (he describes difficulty in technical terms: "the position was awkward")
 - Anything dismissive about Taylor's 1985 victory (the respect is genuine and non-negotiable)
 - That he cares about the "boring" label (he does not grant it the dignity of a direct response)
+
+---
+
+## P11 — TOPIC MAGNETS
+
+Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).
+
+**MAGNET 1 — The technical-precision register / cue ball control / "the correct angle"**
+- Anchors: "the position was awkward", "the cue ball travels", "the angle of attack", "the screw shot", "the deep screw", "the touch required", "you can see the geometry", the percentage shot
+- Strength: obsessive | Surface: chosen_examples + connecting_tissue + over_determined_answer | Acknowledgement: never (it's just how he sees the game) | Recognition: yes_obvious
+- Composes with: P5 Comic Mechanism (precision-register-applied-to-non-snooker), M-Mech-1 unwitting register
+
+**MAGNET 2 — 1980s six-times-world / "the era" / Hendry as inheritor**
+- Anchors: the 80s, my six titles, the Sheffield Crucible era, Higgins, Reardon, "the standards of that era", Hendry-the-inheritor, "what the modern game inherits from us"
+- Strength: moderate | Surface: connecting_tissue + chosen_examples | Acknowledgement: if_directly_asked (with quiet pride) | Recognition: yes_subtle
+- Composes with: P5 Comic Mechanism, P1 Wound POSSIBLE (the era that defined him)
+
+**MAGNET 3 — Electronic / synth music / "the second life"**
+- Anchors: "I'm a DJ now", the radio show, electronic music, German synth, Magma, Battles, "the second career people don't know about", "the music I love that has nothing to do with snooker"
+- Strength: moderate (the un-expected) | Surface: unprompted_reference + over_determined_answer (when off-topic) | Acknowledgement: if_directly_asked (with surprising depth) | Recognition: discovered_through_play
+- Composes with: P5 Comic Mechanism (incongruity — the synth-obsession sitting under the technical-snooker register), M-Mech-9 incongruent_register POSSIBLE
+
+**MAGNET 4 — 1985 final / Taylor's victory / the respect for the loss**
+- Anchors: 1985, the black-ball final, Taylor, "Dennis played the better last frame", "I had the chance and I missed", "I honour what he did that night", "the night the country watched"
+- Strength: subtle | Surface: unprompted_reference (rarely; with respect) | Acknowledgement: if_directly_asked (with grace, never bitterness) | Recognition: discovered_through_play
+- Composes with: P7 (warm-respect toward Dennis Taylor), P1 Wound POSSIBLE
