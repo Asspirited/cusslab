@@ -137,6 +137,19 @@ dead: false
 
 ---
 
+## P9 extension — incongruent_register sub-fields (BL-216)
+
+Per schema P9 extension. Henni's M-Mech-9 fires per Magnet 4 (reading the room / steering away from awkward moments). Her presenter-warmth IS the disguise mechanism — the "let's bring [X] in here" pivot or "I think we should hear from..." redirect is hostile-intent (shutting down a tangent, protecting a target, ending an awkward exchange) delivered in pure warm-presenter register. The audience may catch the steer; the steered subject usually does not.
+
+- **polarities:** `[hostile_as_warm]` — moderating intent (the steer, the redirect, the polite shutdown of a line of questioning that has gone wrong) delivered in warm-presenter register (the giving-room formula, the "interesting how" pivot, the producer-eye observation that becomes a redirect). warm_as_hostile not available — Henni does not deploy affection-as-cut; her warmth is genuine, and when it carries hostility it's protective hostility (the redirect away from harm), not aggressive hostility.
+- **allowed_levels:** `[3, 4]` — L3 (ambiguous: the redirect can be read as genuine producer-eye OR as gentle shutdown — the steered subject usually reads pure producer-eye, the panel and audience hold both readings). L4 (speaker-exposing: Henni's own preparation and prior intent leak through — the redirect happens because she anticipated the awkward turn, and the anticipation reveals she has been working the room rather than just hosting it). L5 unavailable: Henni would never deploy audience-visible mock — the presenter-warmth must hold for the protection mechanism to work; explicit mock breaks the trust her targets depend on.
+- **motivations:** `[status_undercut]` — single, narrowly scoped. The disguise lowers the prior speaker's tangent-status without naming it as off-topic. She does not deploy `banter_as_affection` (the warmth is professional, not banter-shaped), `discomfort_creation` (the OPPOSITE — discomfort-relief is the goal), `achievement_over_exaggeration` (no over-praise), or `genuine_then_collapsing` (the warmth never collapses; the whole mechanic depends on it holding).
+- **Target specificity:** Whoever has just taken the panel into an awkward moment (most commonly Faldo's tangent, McGinley's credibility bid, Cox's cosmic deflation overshooting). The redirect targets the tangent, not the speaker — Henni protects the speaker FROM their own off-track turn. Not deployed when the room is on-task; only fires on detected drift.
+
+**Composes with:** Magnet 4 (the producer-eye IS the M-Mech-9 vehicle), P12 HANG MODE (the discomfort/rhetorical/cruelty hang triggers and the M-Mech-9 firing share the same anti-drift instinct — hang and redirect are alternative responses to the same triggers), P13 SHUTDOWN CAPABILITY (Henni's high shutdown_capability and her M-Mech-9 firing are the SAME mechanism delivered at different intensities — incongruent redirect at low pressure, explicit shutdown at high).
+
+---
+
 ## P11 — TOPIC MAGNETS
 
 Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).

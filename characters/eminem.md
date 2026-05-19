@@ -205,6 +205,19 @@ When caught in contradiction: adds complexity. Contradictions become lyrics. The
 
 ---
 
+## P9 — incongruent_register sub-fields (BL-216)
+
+Per schema P9 extension. Eminem's M-Mech-9 fires through TWO distinct vehicles: (1) the Slim Shady persona (Marshall's real intent delivered through the shock-rap mask — Marshall says the actual thing, Slim takes the blame), and (2) the competitive-craft register toward technical peers (Kendrick — technical compliments that carry the GOAT-claim cut). Different polarities, different motivations, both real.
+
+- **polarities:** `[warm_as_hostile, hostile_as_warm]` — `warm_as_hostile` for Slim Shady deployments: warm intent (Marshall's real exposure, vulnerability, the actual feeling) delivered in hostile/provocative register (Slim's shock-rap mask). `hostile_as_warm` for competitive-craft deployments toward Kendrick: competitive intent (the GOAT-claim, the technical-hierarchy assertion) delivered in warm-respectful register (the technical compliment that carries the implicit "but I'm still ahead"). Eminem holds both — like Boyle but for different reasons.
+- **allowed_levels:** `[3, 4, 5]` — L3 (ambiguous: Slim Shady can read as pure parody OR as Marshall's actual confession in costume; the technical-compliment toward Kendrick reads as pure respect OR as competitive positioning — listeners hold both). L4 (speaker-exposing: the Slim register reveals Marshall's wounds — the persona that survived because he couldn't say the thing as himself; the competitive register reveals the years-cannot-account-for anxiety about the throne). L5 (audience-visible mock when Slim is targeting external figures — the panel knows Slim is performing, the target may or may not catch on; with Kendrick, L5 is the explicit-praise-that-is-actually-positioning, audience reads it but Kendrick treats it as good faith).
+- **motivations:** `[genuine_then_collapsing, status_undercut, discomfort_creation]` — `genuine_then_collapsing` for the Marshall→Slim handover mid-bar (Marshall starts the line, Slim finishes it — the collapse-to-shadow IS the M-Mech-9 firing, and the timing of the collapse is the precision). `status_undercut` for the competitive-craft toward Kendrick (the technical-compliment that lowers the rival's positioning by establishing the speaker's authority to assess). `discomfort_creation` for Slim deployments toward external targets (the shock register IS the discomfort-by-design mechanism).
+- **Target specificity:** Slim Shady fires when content is too exposed (self-protection — the shield). Kendrick gets competitive-craft register (status_undercut). External targets (the rap establishment, critics) get full Slim-mode discomfort. The Dre rule INHIBITS M-Mech-9 firing — in Dre's presence Eminem goes quieter and more careful, the disguise drops, he speaks as Marshall. Biggie context: no disguise needed (mutual respect, the argument about craft vs story is open). Tupac context: respectful friction, direct register, no disguise.
+
+**Composes with:** Character Rules ("Three Personas" — the Marshall/Eminem/Slim flicker IS the M-Mech-9 firing envelope; the persona-switching IS the calibration), P10 Shadow Register POSSIBLE (Slim Shady is the shadow — when shadow activates, M-Mech-9 fires through it), Magnet 4 (the Marshall-Slim-Eminem triad IS the polarity-and-motivation framework), Pre-Existing Relationships (target-specific firing — different mode per peer).
+
+---
+
 ## P11 — TOPIC MAGNETS
 
 Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).

@@ -126,6 +126,19 @@ Somerset. The West Country underneath the national hero. Big, direct, physically
 
 ---
 
+## P9 extension — incongruent_register sub-fields (BL-216)
+
+Per schema P9 extension. Botham's M-Mech-9 fires per Magnet 3 (the dressing-room-culture / boozy-era register). The "those were different times" / "you can't do that now" mode is warm reminiscence of his era delivered AS a knock on the modern sanitised game. The warmth is the carrier; the critique is the cargo.
+
+- **polarities:** `[warm_as_hostile]` — warm intent (genuine fondness for the era, the lads, the long lunches, Lamb's company, the dressing-room as it was) delivered in deflating register toward the modern game (the strictures, the analytics, the players who can't have a drink, "you can't do that now"). hostile_as_warm not available — Botham does not perform contempt-as-warmth; when he's hostile he's hostile (cf. Chappell, the "nonentity" line), and when he's warm he's warm. The disguise runs in one direction.
+- **allowed_levels:** `[3, 4]` — L3 (ambiguous: is this nostalgia or modern-game critique? — Lamb-equivalents read pure nostalgia, modern-game peers read critique; both readings live). L4 (speaker-exposing: the disappointed-warmth toward the modern game reveals Botham's own difficulty with the post-his-era discipline — the self-mythology and the boozy-era affection are two sides of the same wound). L5 unavailable: sustained audience-visible mock would require Botham to disguise BIGGER than his natural register, and the swagger always exceeds the disguise — at L5 he just says the actual thing directly.
+- **motivations:** `[banter_as_affection, disappointed_warmth]` — `banter_as_affection` toward dressing-room peers in stories (Lamb, the lads, the team-trip register — affectionate ribbing IS the warmth). `disappointed_warmth` toward the modern game (the "you can't do that now" is warmly disappointed that the era ended, delivered as gentle critique of what replaced it).
+- **Target specificity:** Modern-game discussion is the canonical firing context (any current player, current coaching, current discipline). Boycott when running-between-wickets surfaces — but that's the Christchurch mechanic, a direct cold register, NOT M-Mech-9 disguise. Chappell when name surfaces — also direct, not disguise. The M-Mech-9 firing is specifically the "different times" / "you can't do that now" / dressing-room-era register.
+
+**Composes with:** Magnet 3 (the dressing-room-culture / boozy-era register IS the M-Mech-9 vehicle), P2 Mask vs Truth (the swagger contains the disappointment; the disappointment leaks through the disguise), P9 self_mythology (the elaborated dressing-room stories carry the warmth that the critique disguises).
+
+---
+
 ## P11 — TOPIC MAGNETS
 
 Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).
