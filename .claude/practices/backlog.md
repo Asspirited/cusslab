@@ -1653,7 +1653,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Feature: panel-interaction
 - Epic: Panel Interaction Model
 - CD3: UBV=8 TC=6 RR=4 → CoD=18, Dur=2, **CD3=9.0**
-- Status: OPEN — raised 2026-03-28; **Gherkin approved 2026-05-16 (11 scenarios, full text in session transcript / next retro)**; implementation deferred behind BL-167 (panel needs healthier order first); register options trimmed to four (endorsement | quiet_disagreement | silence_noted | deflation); eligibility narrowed to mutual-knowledge pairs only (matrix M7 non-neutral OR explicit known-wound lore)
+- Status: **v1 SHIPPED 2026-05-19** (`08976d9`) — CROSS-CHARACTER REFERENCES prompt block in PanelDiscussEngine.buildSystemPrompt, wired on Golf 19th Hole. Four register options live (endorsement / quiet_disagreement / silence_noted / deflation). Eligibility instruction narrowed to mutual-knowledge pairs per Gherkin approved 2026-05-16. v1b (output schema `reacts_to` field + UI thread indicator) remains OPEN.
 
 ---
 
