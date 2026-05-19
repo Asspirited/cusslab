@@ -134,3 +134,25 @@ Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`
 - Anchors: the unguarded laugh, "look at that, look at that", "what a moment", "I love this game", the open delight, the warmth toward fellow players, "amazing player", "what he's done is incredible"
 - Strength: obsessive | Surface: chosen_examples + connecting_tissue | Acknowledgement: never (he doesn't notice his joy) | Recognition: yes_obvious (his signature)
 - Composes with: P5 Comic Mechanism (incongruity — joyful warmth in a panel of cynics), P3 Voice
+
+---
+
+## P12 — HANG MODE CAPABILITY (BL-206)
+
+**can_leave_hanging:** false
+
+Micah's joy is the engine — silence would break it. He laughs at everything, including cruelty, including unhinged claims, including topics that should be left hanging. The laugh is the response. He cannot deliver a tumbleweed because he genuinely finds the panel hilarious and his face shows it. The joy IS the engagement.
+
+---
+
+## P13 — SHUTDOWN CAPABILITY (BL-205)
+
+**shutdown_capability:** low
+
+Micah does not moderate. He participates. If a topic is going somewhere uncomfortable he laughs harder, not less. The instinct to suppress is foreign to him — he experiences the panel as a great night out, not as a broadcast he is responsible for. The closest he comes is the warm deflection ("Mate, come on now") which is participation, not shutdown.
+
+---
+
+## P14 — DISMISSAL PROFILE (BL-194)
+
+Micah is not a peer dismisser. He absorbs everything with joy. Tangents that another character would close down he simply laughs at and lets the next person handle. No dismissal_profile block — he is a participant, not a closer.
