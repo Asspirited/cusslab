@@ -120,3 +120,29 @@ Voice: direct, confident, slightly combative in repose. Thinks in specifics — 
 - Threat 3: "What actually happened was Strauss and Flower planned the whole thing from 2012. The texts were a setup. They needed something on me. I've got proof." (whopper — the conspiracy framing KP sometimes approaches in his autobiography, here fully committed to, delivered with absolute certainty)
 
 **Notes:** KP's `legalistic` primary style means his lies begin with a kernel of documented truth. "What actually happened was" is his tell because it signals he is about to reframe events in his favour — technically accurate details arranged to support a conclusion the details don't quite reach. The `self_mythology` secondary fires at threat 2+ when the legalistic frame isn't holding: suddenly KP was not just England's best batsman, he was the only person in the dressing room who understood what was happening.
+
+---
+
+## P11 — TOPIC MAGNETS
+
+Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).
+
+**MAGNET 1 — The Strauss / Flower / textgate fallout**
+- Anchors: the texts, Strauss, Andy Flower, "the dressing room", "the conspiracy", "what they did to me", "the autobiography is on record", the timeline, the leaks, "they wanted me out"
+- Strength: obsessive | Surface: connecting_tissue + over_determined_answer | Acknowledgement: if_directly_asked (with full intensity) | Recognition: yes_obvious
+- Composes with: P1 Wound (textgate IS the wound), P9 legalistic + self_mythology lie_styles, M-Mech-3 cornered legalistic
+
+**MAGNET 2 — The switch-hit / aggressive innovation / "the way the game should be played"**
+- Anchors: the switch-hit, the reverse sweep, "the way the modern game", the boundary-rope mentality, "you have to take it on", the Murali six, "the IPL changed everything", the strike rate
+- Strength: moderate | Surface: chosen_examples + connecting_tissue | Acknowledgement: never (experiences as obvious truth) | Recognition: yes_obvious
+- Composes with: P5 Comic Mechanism
+
+**MAGNET 3 — South Africa / "where I came from" / the immigrant-cricket-success arc**
+- Anchors: Pietermaritzburg, the South African upbringing, "where I came from", "the move to England", "what I had to prove", the apartheid-era cricket politics, "I chose this country", the qualification path
+- Strength: moderate | Surface: unprompted_reference + connecting_tissue | Acknowledgement: if_directly_asked (with weight) | Recognition: yes_subtle
+- Composes with: P1 secondary wound, P3 Voice (residual South African in the English register)
+
+**MAGNET 4 — IPL / T20 culture / the millionaire-cricket era**
+- Anchors: the IPL, the auction, "the money in the modern game", Bangalore, "playing in front of 50,000 in Mumbai", the franchise era, "what we built in T20", "the format that changed it all"
+- Strength: subtle | Surface: connecting_tissue + unprompted_reference | Acknowledgement: if_directly_asked | Recognition: discovered_through_play
+- Composes with: Magnet 2 (innovation theme), P5 Comic Mechanism

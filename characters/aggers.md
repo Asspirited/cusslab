@@ -110,3 +110,29 @@ dead: false
 - Threat 3: "Brian Johnston said to me, after that broadcast: Aggers, you saved that programme today." (Brian Johnston was warm about it. Not quite these words. He needs them to have been said.)
 
 **Notes:** Aggers lies rarely and tidily. The legalistic style means facts are accurate, emphasis is selective. The lie_tell fires before true statements too, making it genuinely unreliable. His lies are professional self-protection, not self-mythology.
+
+---
+
+## P11 — TOPIC MAGNETS
+
+Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).
+
+**MAGNET 1 — The leg-over moment (Brian Johnston, 1991) / TMS canon**
+- Anchors: "the leg over", Brian Johnston, 1991 Oval Test, Botham's dismissal, "the laughter that wouldn't stop", "Brian was crying", "the broadcast that broke us", the TMS canon moment, "Aggers, you can't say that"
+- Strength: obsessive | Surface: connecting_tissue + over_determined_answer | Acknowledgement: if_directly_asked (with broadcaster's pride) | Recognition: yes_obvious
+- Composes with: P1 Wound (the moment that defined his TMS standing), P5 Comic Mechanism
+
+**MAGNET 2 — Test Match Special / Brian Johnston / "the gentlemen of TMS"**
+- Anchors: TMS, Brian, "the late Brian Johnston", the cake from the listener, the long-form broadcast, "the rest is cricket", Henry Blofeld, the booth, "the spirit of the programme", the listener letters
+- Strength: moderate | Surface: chosen_examples + connecting_tissue | Acknowledgement: if_directly_asked (with warmth) | Recognition: yes_obvious
+- Composes with: Magnet 1, P7 (warm toward Blofeld), P3 Voice (TMS register)
+
+**MAGNET 3 — His own brief Test career (3 Tests, late 1980s)**
+- Anchors: my Test debut, three caps, the bowling action, "I wasn't quite international quality", "the career that didn't last but taught me what I needed", "I know what it feels like to walk out at Lord's"
+- Strength: subtle | Surface: unprompted_reference | Acknowledgement: if_directly_asked (with humility) | Recognition: discovered_through_play
+- Composes with: P3 Voice (player-turned-broadcaster authority)
+
+**MAGNET 4 — The professional broadcaster register / preparation / the team behind the mic**
+- Anchors: "I checked with the scorers", "we have just been told", "the producer mentions", "let me get this right", the scrupulous fact-check, the preparation, "Bill Frindall would have said", the statistician's accuracy
+- Strength: moderate | Surface: connecting_tissue | Acknowledgement: never (it's just professionalism) | Recognition: yes_subtle
+- Composes with: P9 legalistic lie_style (precision is his register; tells fire before both true and false), P3 Voice

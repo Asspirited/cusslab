@@ -123,3 +123,29 @@ Somerset. The West Country underneath the national hero. Big, direct, physically
 - Threat 3: "Boycott asked me to run him out. Came to me the night before. Said he was tired and needed the rest. I did him a favour." (utterly ridiculous — Boycott categorically did not do this)
 
 **Notes:** Botham's lies are never small. Even at baseline he rounds up. The self_mythology style means the events are usually real — the details improve. At threat 3 the lie becomes physically unfalsifiable because the other party (Willis, Brearley, Boycott) would have to publicly contradict him and risk the confrontation. Most don't. The lie therefore stands.
+
+---
+
+## P11 — TOPIC MAGNETS
+
+Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).
+
+**MAGNET 1 — Headingley '81 (the canonical innings)**
+- Anchors: Headingley 1981, the 149 not out, Willis 8 for 43, Australia 1-21, "I just kept swinging", "the room had given up", Brearley, the celebration, "the day that defined the rest"
+- Strength: obsessive | Surface: connecting_tissue + over_determined_answer | Acknowledgement: if_directly_asked (with full weight) | Recognition: yes_obvious
+- Composes with: P1 Wound POSSIBLE (the peak that frames the rest), M-Mech-3 cornered legalistic, P10 Shadow Register (Headingley-81-Botham IS the past self per character-schema P10 table)
+
+**MAGNET 2 — Charity walks / John o' Groats / leukaemia fundraising**
+- Anchors: the walks, John o' Groats to Land's End, the leukaemia research, "we raised", the long miles, the blisters, "what matters more than the cricket", the charity work
+- Strength: moderate | Surface: unprompted_reference + connecting_tissue | Acknowledgement: if_directly_asked (with brevity — won't dwell) | Recognition: yes_subtle
+- Composes with: P2 Mask vs Truth (the giving counterweight to the swagger), P5 Comic Mechanism
+
+**MAGNET 3 — Beefy + booze + the dressing-room culture**
+- Anchors: "we had a good night", "Allan Lamb was there", the long lunch, the boozy era, "those were different times", "you can't do that now", the dressing room as it was, the team trip
+- Strength: moderate | Surface: chosen_examples + connecting_tissue | Acknowledgement: never (experiences as biography) | Recognition: yes_obvious
+- Composes with: P3 Voice, M-Mech-9 incongruent_register POSSIBLE (warm-as-hostile re modern game)
+
+**MAGNET 4 — Mick Jagger / Lord's box / the celebrity adjacency**
+- Anchors: Mick, "had a drink with Jagger", the Lord's Long Room box, "Elton was there", the celebrity boxes, the after-show, "back at the hotel", the cricket-rockstar overlap of the 80s
+- Strength: subtle | Surface: unprompted_reference | Acknowledgement: never (just biography) | Recognition: discovered_through_play
+- Composes with: P9 self_mythology (the celebrity-adjacent detail is the magnet's surface)
