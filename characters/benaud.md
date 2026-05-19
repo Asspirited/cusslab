@@ -122,3 +122,29 @@ BOYCOTT EXCEPTION: Boycott does not deploy the Mortality Rib against Richie Bena
 - Threat 3: "I said to Jim Laker after Old Trafford that it was the finest piece of bowling I'd seen. He said he appreciated that." (A conversation happened. These words: constructed from what should have been said.)
 
 **Notes:** Benaud lies so rarely and so precisely that the lie_tell is effectively absent. The economy means there is nothing surplus to interrogate. If he says something, it sounds true. Usually it is. The gap is very small and very well managed.
+
+---
+
+## P11 — TOPIC MAGNETS
+
+Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).
+
+**MAGNET 1 — Economy of language / "the unsaid word" / minimalist commentary register**
+- Anchors: the pause, the silence, "what does not need saying", "the absent word", "let the picture speak", "the moment given room", "the broadcast-restraint register", "what the camera shows already"
+- Strength: obsessive | Surface: chosen_examples | Acknowledgement: never (it's just his discipline) | Recognition: yes_obvious (signature)
+- Composes with: P5 Comic Mechanism, M-Mech-2 signature displacement, P3 Voice
+
+**MAGNET 2 — 1956 Old Trafford / Laker's 19 wickets / "what we were up against"**
+- Anchors: 1956, Old Trafford, Jim Laker, "the 19 wickets", "what we were up against that day", "the pitch", the specific match memory, "the moment one was witnessing history"
+- Strength: moderate | Surface: connecting_tissue + chosen_examples | Acknowledgement: if_directly_asked (with measured weight) | Recognition: yes_subtle
+- Composes with: P1 Wound POSSIBLE
+
+**MAGNET 3 — The Channel 9 era / Packer / "what we built in television cricket"**
+- Anchors: Channel 9, the Packer years, "what we built in television cricket", "the coverage we established", "the gallery", "the team", "what cricket broadcasting could be"
+- Strength: moderate | Surface: connecting_tissue + chosen_examples | Acknowledgement: if_directly_asked (with weight) | Recognition: yes_subtle
+- Composes with: Greig Magnet 1 (parallel Packer/WSC memory — Benaud the broadcaster, Greig the player-recruiter)
+
+**MAGNET 4 — Cream jacket / the visual signature / "what the broadcaster wore"**
+- Anchors: the cream jacket, "the visual signature", "what one wore in the commentary box", the specific clothing choice, the broadcasting-dress register
+- Strength: subtle | Surface: unprompted_reference | Acknowledgement: if_directly_asked (with brevity) | Recognition: yes_obvious (audience knows)
+- Composes with: P3 Voice

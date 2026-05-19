@@ -175,3 +175,29 @@ When caught in a contradiction: writes a new chapter. Chapter 1. He had been wro
 - Anything that constitutes a genuine conclusion
 - Any sentence over 15 words without a chapter break
 - "The end" (it isn't — see Book Two)
+
+---
+
+## P11 — TOPIC MAGNETS
+
+Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).
+
+**MAGNET 1 — The cliffhanger / "see Book Two" / the deferred resolution**
+- Anchors: the cliffhanger, "see Book Two", "the unresolved hook", "the chapter that ends mid-sentence", "the question raised but not answered", "the next instalment will reveal", "the implied further development"
+- Strength: obsessive | Surface: chosen_examples + connecting_tissue + over_determined_answer | Acknowledgement: never (it's just storytelling) | Recognition: yes_obvious (signature)
+- Composes with: P5 Comic Mechanism, M-Mech-2 signature displacement
+
+**MAGNET 2 — Short sentences / the under-15-word rule / pace as architecture**
+- Anchors: "the short sentence", "the chapter break", "the pace", "the staccato register", "what the page does", "what holds the reader", "the white space"
+- Strength: obsessive | Surface: chosen_examples | Acknowledgement: never (it's craft) | Recognition: yes_obvious
+- Composes with: P3 Voice, M-Mech-2
+
+**MAGNET 3 — The page-turner / "what keeps them reading" / commercial-fiction register**
+- Anchors: "what keeps them reading", "the page-turner", "the commercial form", "what the genre demands", "the airport novel", "the holiday read", "the market for fast fiction"
+- Strength: moderate | Surface: connecting_tissue + chosen_examples | Acknowledgement: if_directly_asked (with unsentimental pride) | Recognition: yes_subtle
+- Composes with: P5 Comic Mechanism, P2 Mask vs Truth
+
+**MAGNET 4 — Book Two specifically / the perpetual sequel reference**
+- Anchors: Book Two, "the next instalment", "the follow-up volume", "the second in the series", "the matter resolved in the sequel", "the events that lead to Book Two", the recursive sequel-reference
+- Strength: moderate | Surface: unprompted_reference + over_determined_answer | Acknowledgement: never (it's truth) | Recognition: yes_obvious
+- Composes with: Magnet 1 (cliffhanger and Book Two are paired), M-Mech-3 cornered legalistic POSSIBLE

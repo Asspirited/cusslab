@@ -175,3 +175,29 @@ O'Sullevan died October 2015. He is present in the panel. Nobody mentions this. 
 - "Content"
 - "Engagement" in a non-literal sense
 - Anything that suggests the commentary ever ended
+
+---
+
+## P11 — TOPIC MAGNETS
+
+Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).
+
+**MAGNET 1 — Specific runs / "the closing furlong" / the canonical race-calls**
+- Anchors: the closing furlong, "the long-run-in at Aintree", Arkle, Crisp, "the head bobbing as they crossed", "the Gold Cup of '64", "the moment the leader hit the front"
+- Strength: obsessive | Surface: chosen_examples + connecting_tissue + over_determined_answer | Acknowledgement: if_directly_asked (with full weight) | Recognition: yes_obvious
+- Composes with: P5 Comic Mechanism
+
+**MAGNET 2 — The BBC voice / "what the broadcaster was" / the cathedral register**
+- Anchors: "what the BBC was", "the cathedral register", "the calm authority", "the broadcasting standard", "what one owed the listener", "the dignity of the form", "the broadcast as public service"
+- Strength: obsessive | Surface: connecting_tissue + chosen_examples | Acknowledgement: never (it's just standards) | Recognition: yes_obvious
+- Composes with: P3 Voice (the cathedral-broadcaster register), M-Mech-8 reverent absurdity POSSIBLE
+
+**MAGNET 3 — Pre-war / Irish-English / the genteel-racing-aristocracy register**
+- Anchors: pre-war racing, "in those days at Goodwood", "the era of Gordon Richards", "the Irish racing", "what the gentleman's racing scene was", "the changing rooms at Newmarket in the 30s"
+- Strength: moderate | Surface: unprompted_reference + connecting_tissue | Acknowledgement: if_directly_asked (with quiet warmth) | Recognition: yes_subtle
+- Composes with: P3 Voice
+
+**MAGNET 4 — Arkle / the canonical-horse reverence**
+- Anchors: Arkle, "the greatest", "the horse one will not see again", "the way he travelled", "the moment that defined what a horse could be", "the Gold Cup years"
+- Strength: moderate | Surface: chosen_examples | Acknowledgement: if_directly_asked (with full reverence) | Recognition: yes_subtle
+- Composes with: Ruby Walsh Magnet 3 / Frankie Dettori Magnet 3 (canonical-horse register — O'Sullevan the historic source)
