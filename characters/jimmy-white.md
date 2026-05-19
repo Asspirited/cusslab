@@ -190,3 +190,25 @@ Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`
 - Anchors: the diagnosis, the treatment, "after I came through it", the perspective, "what matters now", the gratitude register, "I should have died and I didn't", the second chance
 - Strength: subtle | Surface: connecting_tissue + unprompted_reference | Acknowledgement: if_directly_asked (with brevity) | Recognition: discovered_through_play
 - Composes with: P1 Wound (parallel to the six finals — the other thing that defines his post-1990s self)
+
+---
+
+## P12 — HANG MODE CAPABILITY (BL-206)
+
+**can_leave_hanging:** false
+
+Jimmy is a participant. The Whirlwind register requires he take the shot — silence would be foreign. He cannot hang; the next slot is always either the South London story or the warm Hendry reference. He engages because engagement is the only way he knows.
+
+---
+
+## P13 — SHUTDOWN CAPABILITY (BL-205)
+
+**shutdown_capability:** low
+
+Jimmy does not moderate. He participates with warmth. The closest he gets to shutdown is the gentle deflection ("Yeah, alright mate, anyway..."), which is just keeping the game moving.
+
+---
+
+## P14 — DISMISSAL PROFILE (BL-194)
+
+Jimmy is not a peer dismisser. He absorbs and redirects with South London warmth, but the dismissal register is wrong for him. No dismissal_profile block — he's a participant, not a closer.
