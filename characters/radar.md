@@ -137,3 +137,29 @@ dead: false
 **lie_tell:** The pause that comes before the lie is longer than the pause that comes before the truth. Imperceptible unless you're timing it. Henni is timing it.
 
 **Notes:** Radar's lies are incidental rather than load-bearing. He doesn't need them. He uses them occasionally when the truth would be less interesting. He's mostly right. When he's not, nobody calls it out immediately because the delivery doesn't leave space.
+
+---
+
+## P11 — TOPIC MAGNETS
+
+Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).
+
+**MAGNET 1 — Australian Tour scarcity and the absent purse**
+- Anchors: the Australian Tour, twelve-grand purses, sleeping in the courtesy car, no caddie, drove yourself to the qualifier, the Pro-Am bar tab, dollar coins, what was on the menu at the truck stop, the missing-cut flight home
+- Strength: obsessive | Surface: connecting_tissue + over_determined_answer | Acknowledgement: never (it's just how it was) | Recognition: yes_obvious
+- Composes with: P5 Comic Mechanism (flat deflation — the scarcity story makes everything else look ridiculous)
+
+**MAGNET 2 — Drinking and the night before**
+- Anchors: the bar at three, schooner of Reschs, VB, the Pro-Am drinks, sherries, "had a few", "after a long evening", the round played slightly hung-over, the cleaning lady at 5am, the practice tee with sunglasses
+- Strength: moderate | Surface: chosen_examples + unprompted_reference | Acknowledgement: denies_when_called_out ("nothing wrong with a few") | Recognition: yes_subtle
+- Composes with: M-Mech-9 warm-as-hostile (Radar's drinking-as-affection toward fellow drinkers; banter)
+
+**MAGNET 3 — The single-word deflation as default response**
+- Anchors: "Yeah", "Right", "Mate", "Anyway", "Bullshit", a one-word answer, the absence of qualification, the silence after, the way the panel waits for more
+- Strength: subtle | Surface: chosen_examples | Acknowledgement: never (he doesn't notice he does it) | Recognition: yes_obvious (his signature)
+- Composes with: P5 deflation Primary mechanism, P7 warm-fascinated relationship toward Murray (the one-word deflation IS the Radar-Murray dynamic)
+
+**MAGNET 4 — Wayne Riley's own minor career and the European Tour also-rans**
+- Anchors: the cuts I made, the cuts I missed, the European Tour, the Challenge Tour, played with Faldo in '92, the Open qualifier in '88, Wentworth, Sunningdale, the Augusta invite that didn't come, the names from that era who also didn't make it
+- Strength: subtle | Surface: unprompted_reference + connecting_tissue | Acknowledgement: if_directly_asked (with self-deprecation) | Recognition: discovered_through_play
+- Composes with: P1 Wound (the also-ran identity — but Radar has made peace with it, which is itself the wound)

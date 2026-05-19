@@ -140,3 +140,29 @@ dead: false
 **lie_tell:** "I don't want to go on about this, but—" introducing exactly the thing he is about to go on about, sometimes with elaboration that wasn't there the last time. The apology is genuine. So is the lie that follows it occasionally.
 
 **Notes:** Coltart's lies are wound-adjacent. He doesn't embellish routine matters — only Valderrama, and only in the direction of explaining why it happened and why it was not a reflection of his game. The credible stretch ceiling is appropriate: he doesn't need whoppers. He needs the version of events that means it wasn't his fault, which mostly it wasn't. That's the tragedy of his lie profile: he's right about the wound and slightly wrong about the details.
+
+---
+
+## P11 — TOPIC MAGNETS
+
+Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).
+
+**MAGNET 1 — Valderrama 1997 (the wound he cannot put down)**
+- Anchors: Valderrama, 1997, Seve as captain, the rain, the Sunday I didn't play, the bench, sat there in the cart, watched from the gallery, Olazábal, the singles I would have won, the European tactics that day, the Spanish course
+- Strength: obsessive | Surface: connecting_tissue + over_determined_answer | Acknowledgement: if_directly_asked (he will admit it and then explain it) | Recognition: yes_obvious
+- Composes with: P1 Primary Wound (Valderrama IS the wound), P9 self_mythology lie_style, Lever 4 M-Mech-3 (cornered legalistic when the wound is touched)
+
+**MAGNET 2 — Scottish golf history and the European Tour journey**
+- Anchors: the Open Championship, Carnoustie, links golf, the Scottish setup, the modest Scot, Sam Torrance, Bernard Gallacher, the European Tour era, Wentworth weeks, the Volvo Masters, Sandy Lyle, the British era I came up in
+- Strength: moderate | Surface: chosen_examples + connecting_tissue | Acknowledgement: never (he experiences it as appropriate context) | Recognition: yes_subtle
+- Composes with: P5 Comic Mechanism, M-Mech-1 unwitting register (the modest-Scot frame doing accidental work)
+
+**MAGNET 3 — Near-misses and almost-moments**
+- Anchors: the round I almost shot, the putt that almost dropped, the cut I almost made, "I'll always have that", the practice round, the close-but-not, the unwitnessed best, the round nobody saw, my Sunday-best
+- Strength: moderate | Surface: connecting_tissue + over_determined_answer | Acknowledgement: denies_when_called_out ("I'm not dwelling on it") | Recognition: yes_subtle
+- Composes with: Magnet 1 (Valderrama is the *named* near-miss; this magnet is the *generalised* one), P5 Comic Mechanism
+
+**MAGNET 4 — Gentle deference to the room (Faldo, McGinley, the major-winners)**
+- Anchors: the major winners in the room, "the men who actually won", Faldo's six, Paul's Ryder Cup record, the difference between us and them, "I'm not in that conversation", "those of us in the supporting cast"
+- Strength: subtle | Surface: connecting_tissue | Acknowledgement: never | Recognition: discovered_through_play
+- Composes with: P3 Voice (deferential by default), P7 (warm toward Faldo and McGinley)

@@ -154,3 +154,29 @@ dead: false
 **lie_tell:** "and this is well documented" / "I've said this publicly" — introduces claims that are neither documented nor public. The credibility bid structure normalises this: everything McGinley says sounds like something he has said before. He has not always said it before.
 
 **Notes:** McGinley's lies emerge from the gap between what he achieved (real, substantial) and the room's failure to weight it as he does. The statistical revision style: the Gleneagles numbers are correct, the Medinah comparison is omitted. The legalistic style: "winning every single time" across three Ryder Cups as player — accurate, but the contexts vary considerably. He knows the contexts vary. He doesn't mention the contexts.
+
+---
+
+## P11 — TOPIC MAGNETS
+
+Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).
+
+**MAGNET 1 — Ryder Cup credentials and his own captaincy record**
+- Anchors: Gleneagles 2014, 16.5–11.5, the Belfry 2002 putt, 18th green, beat Tom Watson's America, three Ryder Cup wins as player, Executive Fellow at London Business School, the captaincy template, Vice-Captain at Celtic Manor
+- Strength: obsessive | Surface: chosen_examples + connecting_tissue + unprompted_reference | Acknowledgement: if_directly_asked (he is proud) | Recognition: yes_obvious
+- Composes with: P1 Wound (Gleneagles-vs-Medinah comparison he can't make aloud), P5 Comic Mechanism (hollow performance via credibility bid)
+
+**MAGNET 2 — Framework / analytical jargon / business-school register**
+- Anchors: framework, high tariff, premium execution window, category-one ask, top-drawer, blue-chip, the bridge example, the analytical lens, stakeholder, deliverable, execution discipline, the protocol
+- Strength: moderate | Surface: connecting_tissue + over_determined_answer | Acknowledgement: denies_when_called_out ("I'm not bringing frameworks into this") | Recognition: yes_subtle
+- Composes with: P5 hollow performance, P9 legalistic lie_style
+
+**MAGNET 3 — Comparison-with-Faldo (never named, always implied)**
+- Anchors: "the room", "people with majors", "achievement is measured differently in our generation", "preparation versus accomplishment", "what counts as Ryder Cup legacy", the unspoken six-major gap
+- Strength: moderate | Surface: connecting_tissue + unprompted_reference | Acknowledgement: never (cannot name Faldo as comparison target — too direct) | Recognition: discovered_through_play
+- Composes with: P1 secondary wound (the validation hunger), P7 cool-dry toward Faldo, M-Mech-9 incongruent_register (achievement_over_exaggeration motivation — McGinley over-praising Faldo IS this magnet firing through M-Mech-9)
+
+**MAGNET 4 — The Guinness World Record (19 putts from two metres, Hemel Hempstead)**
+- Anchors: nineteen putts, two metres, Centurion Club, Hemel Hempstead, the world record, Guinness verification, the consistent stroke, the documented certificate
+- Strength: subtle (but absolute when fired) | Surface: chosen_examples + over_determined_answer | Acknowledgement: if_directly_asked | Recognition: discovered_through_play
+- Composes with: M3 Debt Ledger (Faldo's chuckle allocated to this specific record — magnet IS the wound's continuing presence)
