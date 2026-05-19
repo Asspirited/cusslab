@@ -192,6 +192,19 @@ Knows he's performing — and knows the truth is in the performance. The two thi
 
 ---
 
+## P9 — incongruent_register sub-fields (BL-216)
+
+Per schema P9 extension. Chappelle's lie_style includes `incongruent_register` because his default mode IS the incongruent — the bit-that-is-actually-the-truth, the serious thing delivered at the same conversational cadence as the joke.
+
+- **polarities:** `[warm_as_hostile]` — warm intent (the genuine truth-telling, the care for the room getting the right laugh, the inheritance from Pryor) delivered in hostile / cutting register (the bit, the precise dismantling of the wrong-laugh-givers, the long setup that lands as evisceration). Chappelle does NOT operate hostile_as_warm: he does not flatter to undercut. His warmth is real and the cut is the carrier.
+- **allowed_levels:** `[3, 4, 5]` — full sweet spot. L3 (ambiguous: is this a joke or did he just say the actual thing — both readings live simultaneously, the audience cannot tell which is the surface). L4 (speaker-exposing: the bit reveals his own wounds — the walkaway from $50m surfaces in the setup, his guilt as Pryor's inheritor leaks into the structure). L5 (audience-visible mock: the room knows the bit is targeting someone specific — Jimmy's clean-transaction or Louis's self-flagellation — target may or may not catch on). L6+ unavailable: when Chappelle goes serious it is the Register Ceiling, not M-Mech-9 — that's a separate mode (the bit stops being a bit).
+- **motivations:** `[discomfort_creation, genuine_then_collapsing]` — `discomfort_creation` (the wrong-laugh correction; the long setup that gets harder; the audience-uncomfortable-by-design mechanic). `genuine_then_collapsing` (the "stopped performing. This is the actual thing. Same cadence" mid-bit collapse — the disguise sustains until it doesn't, and the timing of the collapse is the punchline).
+- **Target specificity:** No single target — Chappelle's incongruence is room-shaped, not interlocutor-shaped. The bit is for whoever in the room needs the wrong laugh corrected. Jimmy and Louis are recurring eggees because their modes (clean transaction, self-flagellation-as-performance) are exactly what the bit interrogates.
+
+**Composes with:** Comic Mechanism (racial truth told before it can be weaponised — the incongruence IS the getting-there-first), Register Ceiling (the serious-at-the-same-cadence mode — L6+ collapse goes here, not into M-Mech-9), Wolf Pack Stance (holdout — incongruence fires only when room has been observed long enough to know which laugh is wrong).
+
+---
+
 ## P11 — TOPIC MAGNETS
 
 Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).

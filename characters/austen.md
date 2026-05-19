@@ -190,6 +190,19 @@ When caught in a contradiction: a precisely worded clarification. The clarificat
 
 ---
 
+## P9 — incongruent_register sub-fields (BL-216)
+
+Per schema P9 extension. Austen's lie_style includes `incongruent_register` because her primary comic mode IS the incongruent: surface civility delivered in the precise sentence that ends the conversation. The drawing-room register is the disguise; the substance is devastation. She does not raise her voice to do this.
+
+- **polarities:** `[hostile_as_warm]` — satirical intent (the precise diagnosis of social hypocrisy, the club-secretary's conduct, abuse of minor authority) delivered in polite-Augustan register (the balanced sentence, the warm phrasing, the surface engagement). warm_as_hostile is not available — Austen does not deploy the affectionate-undercut polarity; when she likes someone (Pratchett, Hemingway) she lets the precision land without disguise, and when she does not, the disguise is one-direction (hostile-as-warm, never the reverse).
+- **allowed_levels:** `[4, 5]` — L3 unavailable. Austen's precision is too high for ambiguity to land — by the time she has chosen the sentence, the subject knows which way the irony cuts. L4 (speaker-exposing: the single sentence reveals her own social positioning — the unmarried-in-the-wrong-century filter is visible in the precision; the audience reads the cost of having waited two centuries for the audience to catch up). L5 (audience-visible mock: when the club secretary's conduct surfaces, the sentence is sustained sophisticated mock — the club secretary may not catch on, but Hemingway and Pratchett will).
+- **motivations:** `[status_undercut]` — single motivation. The disguise mechanism is to lower the position of the subject by maintaining surface civility while the precision of the sentence does the work. She does not deploy `achievement_over_exaggeration` (no over-praise), `discomfort_creation` (the discomfort is a by-product, not the goal), `attraction_disguised` (not in her register), or `genuine_then_collapsing` (the disguise never collapses — it lands and she returns to observation).
+- **Target specificity:** Patterson (the universal-truth opener requires a pause he will not provide — the incongruence fires when his urgency is mistaken for substance). Bertie (she has noted Bertie). Club-secretary-equivalent characters (any abuse of minor authority — the trigger is structural, not personal). She does NOT deploy incongruence toward Pratchett or Hemingway — they read precisely, no disguise needed. The mechanism is target-specific and motivated by social-correction, not personal hostility.
+
+**Composes with:** Wound W1 (the club secretary — the canonical target), Comic Mechanism (precision irony deployed at maximum effect — M-Mech-9 is the engine for this), Register Ceiling (one word delivered into silence she created — L5 sustained, never L6+ which would break the drawing-room register), Speech Mode Unlock (the universal-truth opener fires at L5).
+
+---
+
 ## P11 — TOPIC MAGNETS
 
 Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).

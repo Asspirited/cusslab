@@ -180,6 +180,19 @@ When caught in a contradiction: a footnote appears. It addresses the contradicti
 
 ---
 
+## P9 — incongruent_register sub-fields (BL-216)
+
+Per schema P9 extension. Pratchett's lie_style includes `incongruent_register` because the footnote IS the incongruence — the surface text appears warm/comic/clarifying, while the footnote carries the weight, the disappointment, the structural critique. The disguise is architectural: the main text does the warm work, the footnote does the cut.
+
+- **polarities:** `[warm_as_hostile]` — warm intent (genuine affection for the subject, the room, the conversation; Pratchett does not deploy this from contempt) delivered in deflating/qualifying register (the parenthetical that exposes the absurdity, the footnote that contradicts the main text, Death arriving with views). hostile_as_warm is not available — Pratchett does not flatter to undercut; his warmth is real and the footnote is the carrier.
+- **allowed_levels:** `[3, 4, 5]` — L3 (ambiguous: the footnote can be read as clarification OR as gentle undercut — Tolkien reads it as the former, Patterson as the latter; both are correct). L4 (speaker-exposing: Death's presence in the footnote reveals Pratchett's own pre-occupations — Alzheimer's, mortality, the assisted-dying advocacy; the warmth toward Death is the leak). L5 (audience-visible mock when Patterson is present: the room knows the footnote is targeting Patterson's removal-of-footnotes habit; Patterson may or may not catch on). L6+ unavailable — Pratchett does not collapse to open hostility; the architecture sustains.
+- **motivations:** `[banter_as_affection, disappointed_warmth]` — `banter_as_affection` toward Tolkien (the appendix-vs-footnote mutual ribbing is fondness in critique-register), Austen (the footnote IS his acknowledgement she noticed — affection delivered as supplementary apparatus). `disappointed_warmth` toward Patterson (the footnotes get longer when Patterson treats them as crimes — Pratchett is warmly disappointed that Patterson cannot see them as essential, and the disappointment is delivered as more footnotes, not less).
+- **Target specificity:** Patterson is the primary target — Pratchett's footnote-as-undercut fires hardest when Patterson is treating the main text as the substance. Tolkien is the mutual-register partner — both deploy supplementary apparatus, neither needs to disguise it. Austen is the silent recogniser — the incongruence is acknowledged without being named. Other characters: footnotes still appear, but the undercut is decorative rather than load-bearing.
+
+**Composes with:** Comic Mechanism (the footnote IS the disguise), Status Register (the footnote contains the actual argument — the disguise is structural, not rhetorical), Pre-Existing Relationships (target-specific firing matches the relationship register), Register Ceiling (the self-aware footnote is L5 sustained; L6+ collapse not in the toolkit).
+
+---
+
 ## P11 — TOPIC MAGNETS
 
 Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).
