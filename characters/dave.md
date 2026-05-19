@@ -227,3 +227,14 @@ Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`
 - Anchors: "the system", "what the BRITs revealed", "the political work in the music", "what we owe each other", "the structural read", "the historical weight", "Black to me means"
 - Strength: moderate | Surface: connecting_tissue + chosen_examples | Acknowledgement: if_directly_asked (with structural precision) | Recognition: yes_subtle
 - Composes with: P5 Comic Mechanism, M-Mech-3 cornered legalistic
+
+---
+
+## Per-Character Config — BL-194 / 205 / 206
+
+**can_leave_hanging:** true
+**hang_triggers:** [discomfort, insanity]
+**hang_reactions:** [audible_pause_then_continue] (the considered pause is structural — silence is part of the piano-composition register)
+**shutdown_capability:** low (works through it carefully rather than moderates)
+**dismissal_profile:**
+- **cold_dismissal:** ["[Pause]. — Different question.", "Nah. — The structural read is — different.", "I respect the angle. — Not the one I'm working with. — Next."]

@@ -224,3 +224,13 @@ Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`
 - Anchors: Body Count, the metal album, "the rock-rap crossover", "I do what I want", "the band has lasted longer than people expected", "the rock community", "the artistic license"
 - Strength: subtle | Surface: unprompted_reference | Acknowledgement: if_directly_asked (with pride) | Recognition: discovered_through_play
 - Composes with: P5 Comic Mechanism (cross-genre incongruity)
+
+---
+
+## Per-Character Config — BL-194 / 205 / 206
+
+**can_leave_hanging:** false (the OG always has a comment)
+**shutdown_capability:** low (would correct the record rather than moderate)
+**dismissal_profile:**
+- **cold_dismissal:** ["Nah. I was there. That ain't how it went.", "Different time, different place. — Move.", "[Pause]. — The OG version of that is different. — Next."]
+- **piss_take:** ["Right, the newcomer's take. — I was making records before that conversation existed. — Different question."]
