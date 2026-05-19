@@ -12,47 +12,59 @@ Feature: Cross-panel character include directive (BL-190 v1 — The Don)
 
   # ── Parser ─────────────────────────────────────────────────────────────────
 
+  @claude
   Scenario: Bare directive parses as anchor with handle the don
     Then parsing ">include the don" yields handle "the don" and mode "anchor"
 
+  @claude
   Scenario: Explicit anchor suffix parses as anchor
     Then parsing ">include the don anchor" yields handle "the don" and mode "anchor"
 
+  @claude
   Scenario: Explicit panel suffix parses as panel slot
     Then parsing ">include the don panel" yields handle "the don" and mode "panel"
 
+  @claude
   Scenario: Parser is case-insensitive on the directive prefix
     Then parsing ">INCLUDE THE DON" yields handle "the don" and mode "anchor"
 
+  @claude
   Scenario: Parser strips the directive from the question before model send
     Then a question "What is the worst club in the bag? >include the don" sent to a panel produces a model input that does not contain ">include the don"
 
+  @claude
   Scenario: Question without a directive parses as no include
     Then parsing "What is the worst club in the bag?" yields no include directive
 
+  @claude
   Scenario: Malformed suffix parses as no include directive
     Then parsing ">include the don sideways" yields no include directive
 
   # ── Handle map ─────────────────────────────────────────────────────────────
 
+  @claude
   Scenario: The handle map registers the don as Alliss
     Then the include handle map resolves "the don" to character id "alliss"
 
+  @claude
   Scenario: Unknown handle resolves to null
     Then the include handle map resolves "tiger" to null
 
   # ── Anchor mode effect ────────────────────────────────────────────────────
 
+  @claude
   Scenario: Anchor mode places Alliss at the anchor opener slot for that round
     Given the Football panel is the host panel
     When a question is asked with directive ">include the don"
     Then Alliss appears at slot 0 in the round MEMBERS order
 
+  @claude
   Scenario: Anchor mode places Alliss at the anchor closer slot for that round
     Given the Football panel is the host panel
     When a question is asked with directive ">include the don"
     Then Alliss appears at the final slot in the round MEMBERS order
 
+  @claude
   Scenario: Anchor mode displaces the host panel's existing anchor for that round
     Given the Football panel is the host panel with anchor "souness"
     When a question is asked with directive ">include the don anchor"
@@ -60,11 +72,13 @@ Feature: Cross-panel character include directive (BL-190 v1 — The Don)
 
   # ── Panel mode effect ─────────────────────────────────────────────────────
 
+  @claude
   Scenario: Panel mode places Alliss in a non-anchor slot for that round
     Given the Football panel is the host panel with anchor "souness"
     When a question is asked with directive ">include the don panel"
     Then Alliss appears in the round MEMBERS order but not at slot 0 or the final slot
 
+  @claude
   Scenario: Panel mode keeps the host panel's existing anchor in place
     Given the Football panel is the host panel with anchor "souness"
     When a question is asked with directive ">include the don panel"
@@ -72,6 +86,7 @@ Feature: Cross-panel character include directive (BL-190 v1 — The Don)
 
   # ── Persistence ───────────────────────────────────────────────────────────
 
+  @claude
   Scenario: The include effect lasts one question only
     Given the Football panel ran a round with directive ">include the don"
     When the next question is asked without an include directive
@@ -80,16 +95,19 @@ Feature: Cross-panel character include directive (BL-190 v1 — The Don)
 
   # ── Cross-panel ───────────────────────────────────────────────────────────
 
+  @claude
   Scenario: Include works in the Football panel
     Given the Football panel is the host panel
     When a question is asked with directive ">include the don"
     Then Alliss appears in that round's MEMBERS order
 
+  @claude
   Scenario: Include works in the Cricket panel
     Given the LongRoom panel is the host panel
     When a question is asked with directive ">include the don"
     Then Alliss appears in that round's MEMBERS order
 
+  @claude
   Scenario: Include works in the Boardroom panel
     Given the Boardroom panel is the host panel
     When a question is asked with directive ">include the don"
@@ -97,9 +115,11 @@ Feature: Cross-panel character include directive (BL-190 v1 — The Don)
 
   # ── Voice and exemplars ──────────────────────────────────────────────────
 
+  @claude
   Scenario: Alliss uses his own character-file voice
     Then the Alliss prompt sent to the model is sourced from "characters/alliss.md"
 
+  @claude
   Scenario: Guest Alliss inherits the host panel's exemplars not Golf's
     Given the Football panel is the host panel
     When a question is asked with directive ">include the don"
@@ -108,12 +128,14 @@ Feature: Cross-panel character include directive (BL-190 v1 — The Don)
 
   # ── Privacy gate ──────────────────────────────────────────────────────────
 
+  @claude
   Scenario: Include trigger requires the Alliss test flag
     Given localStorage "hc_allow_alliss_test" is unset
     When a question is asked with directive ">include the don"
     Then Alliss does not appear in that round's MEMBERS order
     And the host panel's normal MEMBERS order is used unchanged
 
+  @claude
   Scenario: Include trigger fires when the Alliss test flag is set
     Given localStorage "hc_allow_alliss_test" is "1"
     When a question is asked with directive ">include the don"
