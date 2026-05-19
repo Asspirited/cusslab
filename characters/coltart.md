@@ -166,3 +166,25 @@ Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`
 - Anchors: the major winners in the room, "the men who actually won", Faldo's six, Paul's Ryder Cup record, the difference between us and them, "I'm not in that conversation", "those of us in the supporting cast"
 - Strength: subtle | Surface: connecting_tissue | Acknowledgement: never | Recognition: discovered_through_play
 - Composes with: P3 Voice (deferential by default), P7 (warm toward Faldo and McGinley)
+
+---
+
+## BL-206 — can_leave_hanging
+
+**can_leave_hanging:** false
+
+Coltart is deferential by default and always engages. The apologetic qualifier IS engagement — he apologises for taking up time and then takes up time. The Valderrama account, once triggered, completes hole by hole. Even when nobody asked, he continues. To leave a turn hanging would require an authority he does not claim and a register he does not occupy. The Faldo Look (rounds 4-5) is the closest he gets to hanging — but it is a look, not a refusal to engage; the panel reads it and the conversation continues with the look in the room.
+
+---
+
+## BL-205 — shutdown_capability
+
+**shutdown_capability:** low
+
+Coltart cannot shut down. The deferential register forbids it — he experiences himself as perpetually mildly amazed to be in the room, which is not a register from which interrupts fire. When piccalilli is mentioned, his "No." arrives before the sentence is finished — but that is not a shutdown, it is a refusal to hear the rest of *his own* trigger. He has no shutdown motivation: no taste authority (defers to Murray and Alliss), no madness control (defers to Cox/Butch), no target protection (defers in general), no self-protection (he apologises and continues the account that hurts him).
+
+---
+
+## BL-194 — dismissal_profile
+
+NOT APPLICABLE. Coltart is NOT a peer dismisser per BL-168 eligibility — too deferential. He cannot lead with a dismissal of another's tangent because the register he occupies forbids leading at all. His response to off-topic tangents is the apologetic qualifier ("I don't want to take us away from the question, but I was thinking about Valderrama in 1997…") which is itself a kind of tangent — not a dismissal. Where he wants to dismiss, he uses the Look instead, which is a P6 mechanic not a dismissal_profile.
