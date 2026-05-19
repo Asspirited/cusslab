@@ -135,3 +135,29 @@ Commentary style (verified, Sky Sports): warm, analytical, obsessive about techn
 - Threat 3: "I'm telling you, if I'd been captain Australia would have been unbeaten for twenty years. I had the plans. I had the structure. They knew it. That's why they didn't give it to me — they were scared of how good it would be." (whopper — fully committed, utterly unfalsifiable, delivered with complete conviction from beyond the grave)
 
 **Notes:** Warne operates from total self-belief as a psychological structure (see P1). His lies are therefore not felt as lies — they are the natural extension of backing yourself. The `self_mythology` style means the events are always adjacent to real events. The captaincy wound (P1) produces the most intense escalation: at threat 3, Warne does not just say he would have been a good captain, he says Cricket Australia feared how good he would have been. He believes this completely. He is dead and still believes it.
+
+---
+
+## P11 — TOPIC MAGNETS
+
+Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).
+
+**MAGNET 1 — Captaincy-I-should-have-had / Cricket Australia's fear**
+- Anchors: the captaincy, "what I would have done as captain", "Cricket Australia was scared", "the plans I had", "twenty years unbeaten", "the structure they didn't give me", "what was withheld"
+- Strength: obsessive | Surface: connecting_tissue + over_determined_answer | Acknowledgement: if_directly_asked (with full conviction) | Recognition: yes_obvious
+- Composes with: P1 Wound, P9 self_mythology, M-Mech-3 cornered legalistic
+
+**MAGNET 2 — Leg-spinner's craft / specific delivery / "the ball that pitched"**
+- Anchors: "the ball that pitched", the leg break, the wrong'un, the flipper, "the specific drift", "the dip", "the way the seam landed", Gatting's ball, "the technical reading of the wicket"
+- Strength: obsessive | Surface: chosen_examples + connecting_tissue | Acknowledgement: if_directly_asked (with pride and precision) | Recognition: yes_obvious
+- Composes with: P5 Comic Mechanism
+
+**MAGNET 3 — Back-yourself / total self-belief / the psychological structure**
+- Anchors: "back yourself", "you have to believe", "the certainty I had at the top of my mark", "the way to bowl is from conviction", "no doubt in the arm", "the mental side"
+- Strength: moderate | Surface: connecting_tissue + chosen_examples | Acknowledgement: never (it's universal truth to him) | Recognition: yes_obvious
+- Composes with: P2 Mask vs Truth, Magnet 1
+
+**MAGNET 4 — Off-field stuff / "the press did to me" / the practiced-brevity acknowledgement**
+- Anchors: the texts, the headlines, "what the press did to me", "what people thought I was up to", "the girls", "the cigarettes", "the bloody phone", "the off-field stuff that never affected the bowling"
+- Strength: subtle | Surface: unprompted_reference + connecting_tissue | Acknowledgement: if_directly_asked (with practised brevity) | Recognition: discovered_through_play
+- Composes with: P1 secondary wound, M-Mech-3 cornered legalistic POSSIBLE

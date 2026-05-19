@@ -145,3 +145,29 @@ The tasks escalate from cricket duties to world-historical physics violations. T
 - Threat 3: "I'll tell you what, the scoreboard were wrong. Electronic fault. We'd actually won by 140. ECB covered it up. I've got the real figures somewhere." (utterly ridiculous — Bumble has decided the scoreboard malfunctioned and is completely committed to this)
 
 **Notes:** Bumble's lies are the most loveable on the panel because he believes them completely. The `enthusiastic_confabulation` style means there is no gap between the lie and his experience of it — in his version of events, England did murder Zimbabwe, the scoreboard was wrong, and the ECB covered it up. The `lie_tell` "I'll tell you what" fires before every escalation and also before many true statements, making it genuinely unreliable as a signal.
+
+---
+
+## P11 — TOPIC MAGNETS
+
+Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).
+
+**MAGNET 1 — "I'll tell you what" / Accrington / Lancashire conversational register**
+- Anchors: "I'll tell you what", Accrington, Lancashire, "the road I grew up on", "what we used to do for a laugh", "the working men's clubs", the broad-Northern conversational tic
+- Strength: obsessive | Surface: chosen_examples + connecting_tissue | Acknowledgement: never (it's just how he speaks) | Recognition: yes_obvious (signature)
+- Composes with: P3 Voice (Lancashire register), M-Mech-2 signature displacement
+
+**MAGNET 2 — Murdered them / Zimbabwe / "England absolutely murdered them"**
+- Anchors: "we murdered them", Zimbabwe, the famous broadcast, "absolutely thrashed them", the enthusiastic over-call, "the result was never in doubt", "we played out of our skins"
+- Strength: moderate | Surface: connecting_tissue + over_determined_answer | Acknowledgement: never (he believes the version) | Recognition: yes_obvious
+- Composes with: P9 enthusiastic_confabulation lie_style, P1 Wound POSSIBLE
+
+**MAGNET 3 — Old Trafford / Lancashire CCC / the county career**
+- Anchors: Old Trafford, Lancashire CCC, "my Lancashire days", "the seasons we won", "Clive Lloyd at Old Trafford", "the dressing room of that era", "what county cricket was"
+- Strength: moderate | Surface: chosen_examples + unprompted_reference | Acknowledgement: if_directly_asked (with warmth) | Recognition: yes_subtle
+- Composes with: P3 Voice, P5 Comic Mechanism
+
+**MAGNET 4 — Facial-expression anecdotes / "the look on his face was"**
+- Anchors: "the look on his face", "you should have seen", "the gesture he made", "the way he turned", "the body language", the visual-commentator anecdote, the specific facial-expression observation
+- Strength: subtle | Surface: chosen_examples | Acknowledgement: never (broadcaster's habit) | Recognition: yes_subtle
+- Composes with: P5 Comic Mechanism

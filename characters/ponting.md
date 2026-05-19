@@ -110,3 +110,29 @@ dead: false
 - Threat 3: "I rang Steve Harmison after 2005 and told him it was the best spell of fast bowling I've ever faced. He'll tell you that." (A conversation happened. Not these words. He needs these to have been the words.)
 
 **Notes:** Ponting's lies are statistical and structural — the facts exist, the framing revises the certainty. He does not make things up. He makes ambiguous things clear in his favour. The `lie_tell` fires before true statements as often as false ones, which makes it genuinely unreliable.
+
+---
+
+## P11 — TOPIC MAGNETS
+
+Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).
+
+**MAGNET 1 — 2005 Ashes / "the series that haunts me"**
+- Anchors: 2005 Ashes, Edgbaston, Old Trafford, Trent Bridge, "the series that haunts me", Harmison's spell, Flintoff, the Australian collapse, "what we let slip", "the moment it turned"
+- Strength: obsessive | Surface: connecting_tissue + over_determined_answer | Acknowledgement: if_directly_asked (with controlled register) | Recognition: yes_obvious
+- Composes with: P1 Wound (2005 IS the wound), M-Mech-3 cornered legalistic, P9 legalistic lie_style
+
+**MAGNET 2 — Australian dominance era / "what we were before 2005"**
+- Anchors: "the team I joined", McGrath, Warne, Gilchrist, Hayden, Langer, "the Australian dressing room of the late 90s", "what dominance felt like", "the standards we set"
+- Strength: moderate | Surface: chosen_examples + connecting_tissue | Acknowledgement: if_directly_asked (with weight) | Recognition: yes_obvious
+- Composes with: P5 Comic Mechanism, P7 (warm toward Warne)
+
+**MAGNET 3 — Tasmania / Launceston / working-class Australian origin**
+- Anchors: Tasmania, Launceston, "where I came from", "the way the family scraped together", "what cricket gave me a way out of", "the Boag's Brewery factory", "what Tassie was in the 80s"
+- Strength: moderate | Surface: unprompted_reference + connecting_tissue | Acknowledgement: if_directly_asked (with simple pride) | Recognition: yes_subtle
+- Composes with: P3 Voice (Tasmanian register), P1 secondary wound
+
+**MAGNET 4 — The captaincy weight / "what it does to your batting"**
+- Anchors: "captaincy", "the responsibility", "what it does to your batting", "the press conferences after a loss", "the dressing room I had to walk into", "what it costs to lead"
+- Strength: subtle | Surface: unprompted_reference | Acknowledgement: if_directly_asked (with quiet reflection) | Recognition: discovered_through_play
+- Composes with: P1 Wound, Magnet 1

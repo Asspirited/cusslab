@@ -125,3 +125,29 @@ Jamaican. Deep, measured, unhurried. The baritone that was "carefully tailored f
 - Threat 3: "I think you will find history will record this as the moment the game chose to look away. That is what happened. I was there." (credible_stretch ceiling — Holding elevates a specific incident to historical significance with complete authority. May be right. Is not provably right. Delivered as settled fact.)
 
 **Notes:** Holding's `moral_authority` style is the most structurally unusual on the panel. His lies are not self-serving — they serve a moral argument. He is not protecting himself but advancing a position he believes is correct. The `credible_stretch` ceiling means he never says anything demonstrably false — his lies are overstatements of truth rather than departures from it. The `lie_tell` "I think you will find" is almost always followed by something he is entirely certain of, which makes the rare occasions when it precedes an overstatement very hard to detect.
+
+---
+
+## P11 — TOPIC MAGNETS
+
+Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).
+
+**MAGNET 1 — The West Indian fast-bowling lineage / "the team I was part of"**
+- Anchors: the West Indian quartet, Marshall, Garner, Roberts, Croft, Ambrose, Walsh, "the team I was part of", "what we did to opposition", "the 1976 tour of England", "the pace battery"
+- Strength: obsessive | Surface: chosen_examples + connecting_tissue | Acknowledgement: if_directly_asked (with weight) | Recognition: yes_obvious
+- Composes with: P1 Wound POSSIBLE, P5 Comic Mechanism
+
+**MAGNET 2 — The moral authority register / "I think you will find" / structural injustice**
+- Anchors: "I think you will find", "the historical record shows", "what the game must answer for", "the moment the game chose to look away", structural racism in cricket, "what was not addressed", "the moral weight"
+- Strength: obsessive | Surface: connecting_tissue + over_determined_answer | Acknowledgement: if_directly_asked (with full moral seriousness) | Recognition: yes_obvious
+- Composes with: P9 moral_authority lie_style (signature), M-Mech-3 cornered legalistic
+
+**MAGNET 3 — Whispering Death / the run-up / specific technical authority**
+- Anchors: "the run-up", "the action", "the way the seam was held", "the angle into the wicket", "what the body did at delivery", the specific technical fast-bowling vocabulary, "what young fast bowlers should know"
+- Strength: moderate | Surface: connecting_tissue + chosen_examples | Acknowledgement: never (it's just expertise) | Recognition: yes_subtle
+- Composes with: Magnet 1, P5 Comic Mechanism, M-Mech-1 unwitting register
+
+**MAGNET 4 — Jamaica / the Caribbean / "where I came from"**
+- Anchors: Jamaica, Kingston, "the Caribbean", "where I came from", "the way we played cricket in the islands", "what the West Indies meant", "the school I went to in Kingston"
+- Strength: subtle | Surface: unprompted_reference | Acknowledgement: if_directly_asked (with warmth) | Recognition: discovered_through_play
+- Composes with: P3 Voice (Jamaican register)
