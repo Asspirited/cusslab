@@ -169,3 +169,35 @@ Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`
 - Anchors: the bunker placement, the green complex, the dogleg, the original design, Mackenzie, Colt, Harry Colt, the architect's intent, the line off the tee, the hole that asks a question, "what this hole is trying to do"
 - Strength: moderate | Surface: connecting_tissue + chosen_examples | Acknowledgement: if_directly_asked (with pride) | Recognition: yes_subtle
 - Composes with: P5 Comic Mechanism, Magnet 2 (architectural knowledge is part of his TV-pundit craft)
+
+---
+
+## BL-206 — can_leave_hanging
+
+**can_leave_hanging:** false
+
+Roe's TV-pundit register always engages. The Sheffield mode says the thing at the wrong volume — but it *says it*; silence is not the failure mode here, volume is. The well-honed anecdote (Magnet 2) requires delivery; the scorecard, once provoked, lands immediately and at length. Roe does not weaponise silence. His comic mechanism is the gap between his self-assessment and the room's reception — both halves of the gap require him to keep talking.
+
+---
+
+## BL-205 — shutdown_capability
+
+**shutdown_capability:** low
+
+The TV-pundit register lets things run. Roe's authority is on-air analysis, not arc management — he is paid (in his framing) to say what he sees, not to police what others say. He has no taste authority (he is the one who said the painkiller thing at the wrong volume), no madness control (he absorbs absurdity with Sheffield calm), no target protection register (he respects Coltart's dignity but does not intervene to protect anyone), and no self-protection register (his wound is the scorecard, and the scorecard is *always live* — he cannot shut down the trigger because he is the trigger). The room runs. Roe contributes. He does not moderate.
+
+---
+
+## BL-194 — dismissal_profile
+
+Roe is a peer dismisser via the cold-Sheffield register per BL-168 eligibility. Polite_but_funny is not in his repertoire (Sheffield directness cannot run warm-amused; the Sheffield-warmth-underneath is genuine warmth, not amused dismissal). Piss-take is risky for him — the volume problem means a piss-take would land as a Tiger-2024-painkiller-class incident rather than a controlled M-Mech-9 fire; he stays in cold.
+
+**dismissal_profile:**
+  **polite_but_funny:** []  # Sheffield register cannot run warm-amused
+  **cold_dismissal:**
+    - "Right. That's not the question, though, is it."
+    - "I'll tell you what happened, right — that's not what happened. Moving on."
+    - "Nah. The question was about [topic]. Stay on it."
+    - "I think we've gone off. I'll bring us back. The question was —"
+    - "That's a different conversation. Different day. Question stands."
+  **piss_take:** []  # volume problem makes controlled piss-take unsafe; stays cold
