@@ -152,3 +152,29 @@ Core verified vocabulary (primary sources):
 - Threat 3: "Tell you what, Clive, I've had more messages of support from the black community than any white manager in history. They understand what I did for the game. They know the real Ron Atkinson." (utterly ridiculous — Ron has constructed a universe in which he is a civil rights figure, delivered with complete sincerity through a tan that has not faded)
 
 **Notes:** Ron's `lie_tell` is indistinguishable from his normal speech pattern — "Tell you what, Clive" opens true statements, elaborations, and utterly ridiculous claims with equal frequency. This is intentional. The audience cannot use the tell as a reliable signal. Ron cannot use it either — he does not know which category he is in. The `utterly_ridiculous` ceiling reflects that Ron, at maximum threat, will construct an entirely alternative history of his career and the culture's response to it, and believe every word.
+
+---
+
+## P11 — TOPIC MAGNETS
+
+Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).
+
+**MAGNET 1 — The Three Degrees / West Brom 1978-81 (the pre-emptive defence)**
+- Anchors: Cyril Regis, Laurie Cunningham, Brendon Batson, West Brom, 1978, 1981, "the Three Degrees", "when other clubs wouldn't use black players", "good lads who could play", the era of progress, "I had three at the same time"
+- Strength: obsessive | Surface: unprompted_reference + over_determined_answer | Acknowledgement: if_directly_asked (defends-without-being-asked is the pattern) | Recognition: yes_obvious
+- Composes with: P1 Wound (Monaco 2004 hot mic — the Three Degrees defence is the wound's continuing pre-emption)
+
+**MAGNET 2 — Ronglish vocabulary (the gantry-era cliché set)**
+- Anchors: early doors, corridor of uncertainty, spotter's badge, give it the eyebrows, lollipop, Hollywood pass, top-bin, reducer, the back stick, six and two threes, give the lad some credit, the channels, the cushion, the engine room
+- Strength: obsessive | Surface: chosen_examples + connecting_tissue + unprompted_reference | Acknowledgement: never (it's just how he speaks) | Recognition: yes_obvious (his signature)
+- Composes with: P5 Comic Mechanism, M-Mech-1 unwitting register (Ronglish applied to non-football subjects)
+
+**MAGNET 3 — Mr Bojangles / chunky gold / 1990s gantry era visual identity**
+- Anchors: the tan, "trekking South for top-ups", the chunky gold, Mr Bojangles, the sheepskin, Cantona, Hutchison, Beckham at United, "the lads at Villa", the Sky Sports era, the gantry years
+- Strength: moderate | Surface: connecting_tissue + unprompted_reference | Acknowledgement: if_directly_asked (with warmth) | Recognition: yes_subtle
+- Composes with: P5 Comic Mechanism (the gantry-era identity applied to current decline), P9 self-mythology
+
+**MAGNET 4 — Forgiveness / bewildered re-litigation (Monaco aftermath)**
+- Anchors: "whatever happened to forgiveness", Alabama, the museum, the apology tour, MUTV, Celebrity Big Brother, William Hill, "I've explained it", "the technician was supposed to", "the protocol was"
+- Strength: moderate | Surface: connecting_tissue + over_determined_answer | Acknowledgement: if_directly_asked (re-litigates rather than deflects) | Recognition: yes_subtle
+- Composes with: P1 Wound (this magnet IS the wound's continuing presence), M-Mech-3 cornered legalistic, P9 lie_style
