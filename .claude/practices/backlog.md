@@ -2574,3 +2574,119 @@ Drift score = lexical-overlap inverse with question keywords + topic-magnet-firi
 - CD3: UBV=6 TC=4 RR=3 → CoD=13, Dur=3, **CD3=4.3**
 - Composes with: BL-163 v1, schema validator in pipeline (additional check), `reacts_to.register` enum (endorsement / quiet_disagreement / silence_noted / deflation per Gherkin 2026-05-16)
 - Status: OPEN — raised 2026-05-19 from BL-163 v1b reframing. Lower CD3 because the prompt-side already produces the *behaviour*; this BL adds *visibility* — pure observability win, no new behaviour.
+
+---
+
+### BL-199 — Invented expert interpretation: per-character allowed-experts pool + frequency throttle
+
+**Story:** As Diogenes I should only invoke ancient Greek thinkers; as Cox only physicists and ancestors; as Faldo only coaches and champions. As an engineer I want each character to declare an `allowed_experts[]` pool so the model can't put modern philosophy in Souness's mouth (unless that's the comedy — also configurable).
+
+**AC (Gherkin):**
+- Given Diogenes's character file has `allowed_experts: [plato, socrates, aristotle, alexander, ancient_greek_general]`
+- When Diogenes's turn fires under invented-expert-interpretation mode
+- Then the engine selects one expert from Diogenes's pool, injects as `INVOKE THIS EXPERT THIS TURN: Plato`, ensuring no Wittgenstein/Einstein
+- And the throttle `max_invocations_per_session: 2` is honoured per character
+
+Wrong-expert pairings (Souness quoting Plato) become a *deliberate* opt-in via `wrong_expert_license: true` in the character's config.
+
+- Epic: Invented expert interpretation (BL-188 v1 prompt block shipped)
+- Feature: panel-voice (engine + character data)
+- CD3: UBV=7 TC=5 RR=4 → CoD=16, Dur=3, **CD3=5.3**
+- Composes with: BL-188 v1, BL-196 VoicePoolSelector pattern (the expert pool selection reuses it)
+- Status: OPEN — raised 2026-05-19 from BL-188 v2 reframing
+
+---
+
+### BL-200 — Murray opener: engine `opener_frame_emphasis` hint
+
+**Story:** As an engineer I want the engine to bias which of Murray's three opener frames (ancient / modern-society / question-depravity) fires this round, so that the rotation doesn't depend on the model's memory and we hit the "all three across a 5-round session" rule reliably.
+
+**AC (Gherkin):**
+- Given Murray is opening round 2 and round 1's opener used `[ancient, depravity]`
+- When the engine builds Murray's opener ctx
+- Then `opener_frame_emphasis: 'modern_society'` is passed
+- And the system prompt instructs Murray to lead with the modern-society frame this opener
+
+Rotation rule: cycle through frames so each fires at least once across 5 rounds; never repeat the same combination consecutively.
+
+- Epic: Murray opener variation (BL-186 v1 character-file rotation shipped)
+- Feature: panel-voice (engine)
+- CD3: UBV=6 TC=4 RR=3 → CoD=13, Dur=2, **CD3=6.5**
+- Composes with: BL-186 v1, BL-167 anchor mechanic (Murray IS the anchor; opener is his slot)
+- Status: OPEN — raised 2026-05-19 from BL-186 v2 reframing. Likely only worth doing if live observation shows model is failing the rotation rule
+
+---
+
+### BL-201 — Character idiom invention: per-character config + engine selection
+
+**Story:** As a character with a declared idiom register (Faldo: misquoted-food-idioms; Souness: bastardised-with-swear; Diogenes: invented-ancient-proverbs) I want the engine to pick one idiom mode per turn from my declared `idiom_modes` array, so my idioms fire in my register reliably and at my declared cadence.
+
+**AC (Gherkin):**
+- Given Faldo's character file declares `idiom_modes: [misquote, invent], idiom_frequency: every_3_turns, idiom_source_pool: food_proverbs`
+- When Faldo's turn fires at slot 4 of round 2 (matches 3-turn cadence)
+- Then the engine selects either `misquote` or `invent` mode, picks a seed idiom from `food_proverbs`, injects as `THIS TURN DEPLOY IDIOM: [mode] in register: [register]`
+- And characters without `idiom_modes` config receive no IDIOM block
+
+- Epic: Character idiom invention (BL-174 v1 universal block shipped)
+- Feature: panel-voice (engine + character data)
+- CD3: UBV=8 TC=5 RR=4 → CoD=17, Dur=3, **CD3=5.7**
+- Composes with: BL-174 v1, BL-196 VoicePoolSelector pattern, BL-197 profani-saurus (bastardise mode draws from `swears`), BL-178 P11 magnets (invent mode draws idiom subject from magnets)
+- Status: OPEN — raised 2026-05-19 from BL-174 v2 reframing
+
+---
+
+### BL-202 — P11 Topic Magnets: engine selector + per-panel MAGNETS injection helper
+
+**Story:** As an engineer migrating each non-Golf panel to PanelDiscussEngine I want a generic `MagnetBlockBuilder` that takes a panel's MAGNETS map and a character id and emits the per-turn magnet block, so I don't reimplement the Golf-side `gfMagnetBlock` per panel.
+
+**AC (Gherkin):**
+- Given a panel declares `LONG_ROOM_MAGNETS = { blofeld: '...', botham: '...', ... }`
+- When LongRoom's `buildSystemPrompt` ctx is constructed for Blofeld's turn
+- Then `MagnetBlockBuilder.buildBlock(blofeld, LONG_ROOM_MAGNETS)` returns the formatted magnet block matching Golf's gfMagnetBlock shape
+- And the engine selects 1-2 magnets per turn per character's declared `magnetic_strength` rotation
+
+- Epic: P11 Topic Magnets (BL-178 v0 90-character data + v1 Golf-side injection shipped)
+- Feature: panel-voice (engine helper)
+- CD3: UBV=8 TC=7 RR=5 → CoD=20, Dur=3, **CD3=6.7**
+- Composes with: BL-193 TIER 1 panel migration (each panel needs this helper to wire its MAGNETS map), BL-196 VoicePoolSelector pattern (parallel selection mechanic)
+- Status: OPEN — raised 2026-05-19 from BL-178 v2 reframing
+
+---
+
+### BL-203 — Panel consensus: engine observation-about-character detection + chain cap
+
+**Story:** As an engineer I want the engine to detect when the previous turn made an observation about a specific named panellist (using entity recognition against the cast list) so that PANEL CONSENSUS MODE fires on the right turns, capped at 3 in a chain, with the target getting a boosted score in the slot after.
+
+**AC (Gherkin):**
+- Given Souness's previous turn said "Faldo, that story is bollocks" (entity = `faldo`, polarity = negative)
+- When the next slot is selected
+- Then `consensus_chain_active: { target: faldo, length: 1 }` is set in panel state
+- And the next 1-2 selected speakers receive `consensusActive: true` ctx, are instructed to ADD their version
+- And after slot 3 in chain, `faldo` is boosted in selection score for the response slot
+- And the chain is capped at 3 — slot 4 forces topic change
+
+- Epic: Panel consensus / mutual roast (BL-189 v1 prompt block shipped)
+- Feature: panel-interaction (engine)
+- CD3: UBV=8 TC=6 RR=4 → CoD=18, Dur=4, **CD3=4.5**
+- Composes with: BL-189 v1, BL-167 selectSlots scoring (this BL adds a new score-boost input), BL-180/181 (target may hang/shutdown after chain)
+- Status: OPEN — raised 2026-05-19 from BL-189 v2 reframing
+
+---
+
+### BL-204 — Egging-on: engine egger-eggee pairing selector + per-character role config
+
+**Story:** As a panel I want the engine to recognise when a teed-up moment is happening (eggee just made a dubious claim AND the next slot is an egger) so that EGGING-ON MODE fires deliberately rather than at model whim, with a per-character `egger_capable` / `eggee_vulnerable` config gating who can play which role.
+
+**AC (Gherkin):**
+- Given Murray (eggee_vulnerable: true) has just made an over-historicising claim
+- And Sebastian (egger_capable: true) is the next selected speaker
+- When the engine evaluates per-turn egging conditions
+- Then Sebastian receives `eggingActive: true, target: murray, mode: tee_up`
+- And after a tee-up arc, the engine may fire a memorable-quote-request slot to Murray with `quote_request_target: true`
+- And characters declared `egger_capable: false` (Souness, Roy, Bear) never receive eggingActive
+
+- Epic: Egging-on (BL-183 v1 prompt block shipped)
+- Feature: panel-interaction (engine + character data)
+- CD3: UBV=7 TC=5 RR=4 → CoD=16, Dur=4, **CD3=4.0**
+- Composes with: BL-183 v1, BL-188 invented expert (eggee may invoke expert under egging pressure), BL-189 panel consensus (mutually exclusive — egging is 1-on-1)
+- Status: OPEN — raised 2026-05-19 from BL-183 v2 reframing
