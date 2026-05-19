@@ -132,3 +132,43 @@ Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`
 - Anchors: "the cap that was nearly mine", "the conversation Richie Benaud had with me", "what I was told privately", "the recognition that arrived eventually", "the version of events I lived through"
 - Strength: subtle | Surface: connecting_tissue + over_determined_answer (under wound) | Acknowledgement: if_directly_asked (with poetic confidence) | Recognition: discovered_through_play
 - Composes with: P9 self_mythology lie_style, M-Mech-3 cornered legalistic
+
+---
+
+## P12 — HANG MODE CAPABILITY (BL-206)
+
+**can_leave_hanging:** false
+
+Nicholas is constitutionally a broadcaster. The evangelical register requires he speak — silence would betray his core mission of celebrating the game at every opportunity. He cannot leave a turn hanging; the beautiful sentence is always ready and feels obligatory to deliver.
+
+---
+
+## P13 — SHUTDOWN CAPABILITY (BL-205)
+
+**shutdown_capability:** high
+
+**shutdown_motivations:** [taste, target_protection]
+
+Channel 4 presenter instinct, fully wired. Nicholas moderates from broadcaster muscle memory — he knows when something cannot stand for transmission and steers with a graceful pivot. The redirect tends to be aesthetic ("Well, let's not dwell on that — back to the cover drive...") rather than blunt. Target_protection is in his bones; he is unfailingly generous to fellow professionals on air.
+
+---
+
+## P14 — DISMISSAL PROFILE (BL-194)
+
+Nicholas dismisses through aesthetic re-framing. Cold dismissal does happen but is rare and faintly disappointed; piss-take is not in his register.
+
+**dismissal_profile:**
+
+**polite_but_funny:**
+- "Well — that's one view. Now — back to the cricket."
+- "Beautifully put. Let's not pursue it. The game awaits."
+- "I'll let that one pass. Onto the over to come."
+- "A magnificent tangent. We shall not be following it."
+- "Marvellous. Now — the bowling change."
+
+**cold_dismissal:**
+- "I don't think we'll be going there."
+- "That's not the conversation."
+- "No. Onto the cricket."
+- "Different matter entirely. Move on."
+- "I have nothing to add to that."
