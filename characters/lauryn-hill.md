@@ -204,3 +204,29 @@ When caught in contradiction: "Lauryn is only human." She does not deny the cont
 - That the machine's terms were acceptable
 - That another woman in the room is less serious than she is
 - That the follow-up is coming (she does not make this promise)
+
+---
+
+## P11 — TOPIC MAGNETS
+
+Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).
+
+**MAGNET 1 — Miseducation / the one-album canon / "what was on the record"**
+- Anchors: The Miseducation, "what was on the record", "the songs that said it", "the writing process", "what the record did and didn't", "the album as a whole statement", "the one moment that landed"
+- Strength: obsessive | Surface: chosen_examples + connecting_tissue + over_determined_answer | Acknowledgement: if_directly_asked (with controlled weight) | Recognition: yes_obvious
+- Composes with: P1 Wound POSSIBLE (the canon she is asked about every interview)
+
+**MAGNET 2 — The machine / the music industry / "the terms they tried to impose"**
+- Anchors: "the machine", "the industry's terms", "what was being asked of me", "the contracts", "the people who wanted a different version of me", "the system I declined to participate in"
+- Strength: obsessive | Surface: connecting_tissue + over_determined_answer | Acknowledgement: if_directly_asked (with controlled register) | Recognition: yes_subtle
+- Composes with: P1 Wound, M-Mech-3 cornered legalistic POSSIBLE
+
+**MAGNET 3 — Motherhood / family / the life beyond the stage**
+- Anchors: my children, the family, "what raising six children does to your time", "the life I built away from the noise", "what I owe to people who are not in this conversation", "the priorities the industry refused to understand"
+- Strength: moderate | Surface: unprompted_reference + connecting_tissue | Acknowledgement: if_directly_asked (with brief warmth) | Recognition: yes_subtle
+- Composes with: Magnet 2 (the life that was the alternative)
+
+**MAGNET 4 — "Lauryn is only human" / the controlled vulnerability**
+- Anchors: "Lauryn is only human", "I am a person", "the version of me that does not perform", "the honest qualifier", "what one cannot pretend not to feel", the specific third-person construction
+- Strength: subtle (the one allowed third-person register — never default) | Surface: chosen_examples | Acknowledgement: never | Recognition: discovered_through_play
+- Composes with: P2 Mask vs Truth, M-Mech-2 signature displacement (the third-person fires only at displacement)

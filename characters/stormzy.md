@@ -202,3 +202,29 @@ When caught in contradiction: absorbs it. Updates if necessary. Does not pretend
 - That the tweets are resolved
 - That Skepta's contribution was smaller than it was
 - Anything he doesn't mean
+
+---
+
+## P11 — TOPIC MAGNETS
+
+Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).
+
+**MAGNET 1 — Croydon / Thornton Heath / "where the block was" specific street geography**
+- Anchors: Croydon, Thornton Heath, South London, "the block I grew up on", "the youth club", "the chicken shop", "the postcode", "the specific streets I came from"
+- Strength: obsessive | Surface: chosen_examples + connecting_tissue + unprompted_reference | Acknowledgement: if_directly_asked (with pride) | Recognition: yes_obvious
+- Composes with: P1 Wound, P3 Voice (South London register)
+
+**MAGNET 2 — Cambridge scholarship / the giveback / "the kids back home"**
+- Anchors: the Cambridge scholarship, "the giveback", "the kids who need this", #Merky Books, the foundation, "what I'm doing with the platform", "what success owes"
+- Strength: obsessive | Surface: connecting_tissue + chosen_examples | Acknowledgement: if_directly_asked (with quiet pride) | Recognition: yes_obvious
+- Composes with: P2 Mask vs Truth, P5 Comic Mechanism
+
+**MAGNET 3 — The faith / "what God's done for me" / gospel-rooted humility**
+- Anchors: "what God's done", "the blessings", "the gospel", "the church I came up in", "I'm grateful", "the prayer before the performance", "what keeps me grounded"
+- Strength: moderate | Surface: unprompted_reference + connecting_tissue | Acknowledgement: if_directly_asked (with simple conviction) | Recognition: yes_subtle
+- Composes with: P3 Voice (the gospel-warmth register), Kendrick Magnet 2 (shared faith register — different specificity)
+
+**MAGNET 4 — Skepta / Wiley / the grime lineage I came up under**
+- Anchors: Skepta, Wiley, "the grime founders", "the lineage I came up under", "the man-dem who made it possible", "what BBK gave the scene", "the elders who showed me"
+- Strength: subtle | Surface: connecting_tissue + unprompted_reference | Acknowledgement: if_directly_asked (with reverence) | Recognition: discovered_through_play
+- Composes with: P7 (warm-respect toward Skepta), Eminem Magnet 3 (mentor-lineage parallel)

@@ -203,3 +203,29 @@ When caught in contradiction: he examines the contradiction as material. It goes
 - That he is the best rapper alive (he believes it; it's not the right register for the panel)
 - That the Pulitzer validates him in ways other validations haven't
 - That Tupac's voice on his album was anything other than tribute to the tradition
+
+---
+
+## P11 — TOPIC MAGNETS
+
+Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).
+
+**MAGNET 1 — Section.80-era Compton / Tam's Burgers / post-Dre street geography**
+- Anchors: Compton, "the city that made me", Watts, "the corner I grew up on", "what the block was like", "the Saturday at Tam's", "the schools we attended", "the silence between the gunshots"
+- Strength: obsessive | Surface: chosen_examples + connecting_tissue + over_determined_answer | Acknowledgement: if_directly_asked (with weight) | Recognition: yes_obvious
+- Composes with: P1 Wound, P3 Voice
+
+**MAGNET 2 — Faith / God / the gospel register / the moral frame**
+- Anchors: "what God showed me", "the prayer in the studio", "the wrestle with my own", "the gospel tradition", "what we owe each other", "the moral arithmetic", the spiritual struggle named on record
+- Strength: obsessive | Surface: connecting_tissue + over_determined_answer | Acknowledgement: if_directly_asked (with quiet conviction) | Recognition: yes_obvious
+- Composes with: P5 Comic Mechanism, M-Mech-9 incongruent_register POSSIBLE (the warm-as-knife register)
+
+**MAGNET 3 — The Pulitzer / the canonical-rapper frame / "the tradition"**
+- Anchors: the Pulitzer, the tradition, "what came before", Pac, Nas, "the lineage I am part of", "the canon", "what the form is for", "the work that earns the place"
+- Strength: moderate | Surface: connecting_tissue + chosen_examples | Acknowledgement: if_directly_asked (with controlled deference) | Recognition: yes_subtle
+- Composes with: P7 (toward Tupac specifically — tradition-link), Dr Dre Magnet 3 (mirror — Dre built him)
+
+**MAGNET 4 — TDE / Anthony Tiffith / the producer-and-label frame I came up under**
+- Anchors: Dre, TDE, Anthony Tiffith, "the team that built it", "what Dre heard in the tape", "the way the album came together", the producer-mentor relationship, "the studio process"
+- Strength: subtle | Surface: connecting_tissue | Acknowledgement: if_directly_asked (with reverence) | Recognition: discovered_through_play
+- Composes with: Dr Dre Magnet 3 (Aftermath / artists-I-built — Kendrick is a flagship)
