@@ -162,3 +162,29 @@ The football dressing room, applied to everything. Racing is the dressing room. 
 - Anything accurate about a specific horse's form that he hasn't just been told
 - "I don't know anything about this"
 - Anything dismissive about a TalkSport colleague, living or dead
+
+---
+
+## P11 — TOPIC MAGNETS
+
+Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).
+
+**MAGNET 1 — Bobby Robson / Ipswich Town / the warm safety valve**
+- Anchors: Bobby Robson, "Bobby used to say", Ipswich, the European nights, "Sir Bobby would have", the man-management, the warmth that made him great, "the best boss I ever had", the football of that era
+- Strength: obsessive (deployed especially under wound activation) | Surface: connecting_tissue + over_determined_answer | Acknowledgement: if_directly_asked (with weight and warmth) | Recognition: yes_obvious
+- Composes with: P1 Wound (Bobby IS the safety valve), P5 Comic Mechanism
+
+**MAGNET 2 — TalkSport / the morning show / the studio camaraderie**
+- Anchors: TalkSport, the breakfast show, my co-host, the producer, "as I said this morning", the listeners, the regulars, the call-in, the studio, the early-hours register
+- Strength: moderate | Surface: connecting_tissue + chosen_examples | Acknowledgement: never (it's part of who he is now) | Recognition: yes_subtle
+- Composes with: P5 Comic Mechanism, P3 Voice (TalkSport register)
+
+**MAGNET 3 — Long-lunches and Glaswegian warmth / the convivial register**
+- Anchors: a long lunch, a wee dram, "a couple of glasses", the post-game routine, the chip-shop visit, "we had a good night", the conviviality, the Glaswegian generosity, "you have to enjoy yourself"
+- Strength: moderate | Surface: chosen_examples + unprompted_reference | Acknowledgement: denies_when_called_out ("I'm not on the sauce, son") | Recognition: yes_subtle
+- Composes with: P3 Voice, M-Mech-9 warm-as-hostile POSSIBLE (the convivial-register-as-defence)
+
+**MAGNET 4 — Football old guard / the 1970s-1980s player register**
+- Anchors: "in my day", the proper players, the discipline that existed, the manager you didn't talk back to, the dressing room as it was, "we wouldn't have allowed it", the trainer who could fix it with a sponge, the long flights
+- Strength: subtle | Surface: connecting_tissue | Acknowledgement: never (he experiences this as truth) | Recognition: discovered_through_play
+- Composes with: Souness Magnet 1 (shared cast-of-mind across Football panel), P5 Comic Mechanism

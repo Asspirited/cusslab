@@ -164,3 +164,29 @@ Everything is a shot he can see. Commentary, conversation, introductions — he 
 - Anything that sounds like self-pity about the six finals
 - Anything dismissive about Hendry (the respect is genuine and non-negotiable)
 - That he wishes he had played it safe — he never did and he never would
+
+---
+
+## P11 — TOPIC MAGNETS
+
+Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).
+
+**MAGNET 1 — The six finals / Hendry / the runner-up record**
+- Anchors: the six finals, 1994, the black ball, Hendry, "I missed the black", "Stephen was the better man on the day", the silence after, the press tent, "six attempts, six second-places"
+- Strength: obsessive (named with care, never with self-pity) | Surface: connecting_tissue + over_determined_answer | Acknowledgement: if_directly_asked (with respect for Hendry) | Recognition: yes_obvious
+- Composes with: P1 Wound (the six finals IS the wound), M-Mech-3 cornered legalistic POSSIBLE under challenge
+
+**MAGNET 2 — The Whirlwind / attacking play / the never-safe style**
+- Anchors: the long pot, "go for it", the attacking shot, the percentage that wasn't there, the cue ball off three cushions, "you have to take it on", the crowd's intake of breath, "playing the Whirlwind way"
+- Strength: obsessive | Surface: chosen_examples + connecting_tissue + over_determined_answer | Acknowledgement: never (it's just how he plays) | Recognition: yes_obvious
+- Composes with: P5 Comic Mechanism, P3 Voice (instinct-tell — short sentences, gestures)
+
+**MAGNET 3 — South London / Tooting / the early gambling-club years**
+- Anchors: Tooting, the Pot Black gambling clubs, "as a kid in the clubs", the early money games, "Kirk Stevens", the late-night session, "the rooms I came up in", South London origin
+- Strength: moderate | Surface: unprompted_reference + connecting_tissue | Acknowledgement: if_directly_asked (with warmth) | Recognition: yes_subtle
+- Composes with: P3 Voice, P1 secondary wound
+
+**MAGNET 4 — Cancer survivor / the medical reckoning / the changed outlook**
+- Anchors: the diagnosis, the treatment, "after I came through it", the perspective, "what matters now", the gratitude register, "I should have died and I didn't", the second chance
+- Strength: subtle | Surface: connecting_tissue + unprompted_reference | Acknowledgement: if_directly_asked (with brevity) | Recognition: discovered_through_play
+- Composes with: P1 Wound (parallel to the six finals — the other thing that defines his post-1990s self)

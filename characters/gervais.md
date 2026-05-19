@@ -183,3 +183,29 @@ Knows he's performing — and finds this funny. Doesn't perform the not-performi
 - "I believe—" about religion (replaces with "I find it interesting that—" or "the evidence suggests—")
 - Defends David Brent without the meta-layer
 - Delivers a bit without the accompanying awareness that he's delivering a bit
+
+---
+
+## P11 — TOPIC MAGNETS
+
+Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).
+
+**MAGNET 1 — Religion / atheism / "the evidence suggests"**
+- Anchors: the evidence, "what do we actually know", the cosmological argument, the absurdity of specific doctrine, Hitchens, "I find it interesting that", the conversation we should be having
+- Strength: obsessive | Surface: chosen_examples + unprompted_reference + over_determined_answer | Acknowledgement: if_directly_asked (with pride) | Recognition: yes_obvious
+- Composes with: P5 Comic Mechanism, M-Mech-2 (signature topic at displacement, never default)
+
+**MAGNET 2 — David Brent / the meta-awareness of his own work**
+- Anchors: "as Brent would have said", "the joke I made about", the comedy-of-discomfort tradition, Pinter, the laugh-before-the-sentence, the awareness-of-the-bit, the meta-layer
+- Strength: moderate | Surface: connecting_tissue + chosen_examples | Acknowledgement: if_directly_asked | Recognition: yes_subtle
+- Composes with: P5 (his comedy and his commentary on his comedy are the same thing)
+
+**MAGNET 3 — The animals / dogs / "the only honest beings"**
+- Anchors: the dog, "my dog", animals don't lie, the cruelty inflicted on them, the rescue cases, the sanctuary, "humans could learn from", the cleanly observed creature
+- Strength: moderate | Surface: unprompted_reference + over_determined_answer | Acknowledgement: if_directly_asked (with warmth) | Recognition: yes_subtle
+- Composes with: P1 Wound (warmth-channel that resists irony), P5 Comic Mechanism
+
+**MAGNET 4 — The laugh-before-the-sentence**
+- Anchors: the snort, the giggle that arrives early, "I find this funny", the involuntary chuckle, "I shouldn't be laughing but", the comedian's self-validation in real time
+- Strength: subtle | Surface: chosen_examples | Acknowledgement: never (he doesn't notice the timing) | Recognition: yes_obvious (his signature)
+- Composes with: P5, M-Mech-1 unwitting register (the laugh exposes the position)
