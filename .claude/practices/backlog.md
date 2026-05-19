@@ -2942,6 +2942,8 @@ The character schema in `leanspirited-standards/standards/character-schema.md` c
 
 **Composes with:** BL-194/205/206 (already-shipped fields), BL-212 (the speakable-string rule lives here durably), BL-216 (parallel schema-driven backfill effort for P9 incongruent_register sub-fields).
 
+**Status:** **DRAFT shipped 2026-05-19 (leanspirited-standards bf1fb56)** — proposal sections P12 HANG MODE, P13 SHUTDOWN CAPABILITY, P14 DISMISSAL PROFILE added to `standards/character-schema.md` between P11 and Layer 4 Theoretical Profile. Marked DRAFT pending Three Amigos. Enums derived from observed usage across ~90 character files (can_leave_hanging true/false 35/55; hang_triggers 4 values; hang_reactions 4 values; shutdown_capability 3 values, 46/32/12 low/medium/high; shutdown_motivations 4 values). Codifies BL-212 (speakable-string rule) and BL-213 (empty-array = SKIP not FALLBACK) inline. Includes worked example (Henni), validation tests, anti-patterns, and proposes an M-7 structural validator as future scope. **Done-when items 1-4 satisfied; item 5 (M-7 scaffold) intentionally deferred — flagged as future scope inside the DRAFT pipeline-check note.** Ratification required to flip DRAFT → CANONICAL.
+
 
 ---
 
