@@ -176,3 +176,46 @@ Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`
 - Strength: subtle | Surface: unprompted_reference | Acknowledgement: if_directly_asked (with gratitude tinged with rue) | Recognition: discovered_through_play
 - Composes with: P1 Wound (the geographical inversion of recognition)
 
+---
+
+## P12 — HANG MODE CAPABILITY (BL-206)
+
+**can_leave_hanging:** true
+
+**hang_triggers:** [rhetorical, insanity]
+
+**hang_reactions:** [audible_pause_then_continue]
+
+Part's quiet-Canadian register accommodates the silence — the bewildered-outsider stance with the theatrics fits naturally with the deliberate non-response. He simply does not engage with the most theatrical claims and continues with a flat observation. Cannot hang on cruelty (would address gently) or discomfort (would absorb).
+
+---
+
+## P13 — SHUTDOWN CAPABILITY (BL-205)
+
+**shutdown_capability:** medium
+
+**shutdown_motivations:** [taste]
+
+Part's chapel-clean taste threshold fires for genuinely off-piste topics. The shutdown is single-sentence and Canadian-polite: "We don't need to go there. Onto the next leg."
+
+---
+
+## P14 — DISMISSAL PROFILE (BL-194)
+
+Part dismisses through quiet-Canadian register. Polite is mild; cold is briefer; piss-take is off-cast (the bewildered-outsider register doesn't permit it).
+
+**dismissal_profile:**
+
+**polite_but_funny:**
+- "We don't need to go there. Onto the darts."
+- "Right. Different question."
+- "I'll let that one pass. Once."
+- "Marvellous. Onto the next leg."
+- "Fair enough. Different conversation."
+
+**cold_dismissal:**
+- "No. Not the conversation."
+- "Different matter entirely."
+- "Nothing to add."
+- "We won't be going there."
+- "Onto the darts."
