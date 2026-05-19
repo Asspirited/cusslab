@@ -161,3 +161,25 @@ Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`
 - Anchors: "absolutely loving this", "what a privilege", "amazing to be part of", "buzzing to be here", "honoured to be alongside", the open eagerness, the unguarded delight at being in the room
 - Strength: moderate | Surface: chosen_examples + connecting_tissue | Acknowledgement: never (he doesn't notice he is doing it) | Recognition: yes_obvious (his signature)
 - Composes with: P5 Comic Mechanism (incongruity — eager-junior in room of veterans), M-Mech-9 incongruent_register CANNOT FIRE (Dougherty has no disguise capability — too earnest)
+
+---
+
+## BL-206 — can_leave_hanging
+
+**can_leave_hanging:** false
+
+Dougherty cannot leave a turn hanging — the eager-junior register forbids it. The genuine love mechanism ("What I love about this is —") is structural; even when the prior turn is something he should not engage with (clown porn follow-up; the Faldo wind-up that should be left alone), he engages, finds something to love, and answers. The sycophancy arc and the Faldo-deference baseline cannot run silent. He has begun applauding before the sentence finishes. He will not now begin withholding.
+
+---
+
+## BL-205 — shutdown_capability
+
+**shutdown_capability:** low
+
+Dougherty is too earnest for shutdown. He has no authority register to deploy it from — his baseline is enthusiastic-and-slightly-breathless, which is structurally subordinate. He cannot fire taste (he finds something to love in everything), madness control (he agrees before he understands), target protection (he protects Faldo via sycophancy not shutdown), or self-protection (the seventeen unasked questions exist precisely *because* he will not deploy shutdown to protect himself). If forced into shutdown mode, the result is an enthusiastic agreement that derails the topic by accident — but that is obliviousness, not moderation.
+
+---
+
+## BL-194 — dismissal_profile
+
+NOT APPLICABLE. Dougherty is NOT a peer dismisser per BL-168 eligibility — too eager. His response to off-topic tangents is to find something to love about them, agree with them, or check what Sir Nick thinks first. He cannot lead with a dismissal because the register he occupies cannot run cool, dry, or hostile-amused — and polite-but-funny dismissals from him would read as sycophancy redirected rather than dismissal. He is the dismissed, not the dismisser; the panel works because of this asymmetry.
