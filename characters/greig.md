@@ -118,3 +118,29 @@ MORTALITY RIB: eligible from all living panel members. When deployed, he respond
 - Threat 3: "The TCCB knew about Packer before they claimed they did. I have always believed they let it run and then used it." (He has always believed this. The evidence is circumstantial. He has decided it is sufficient.)
 
 **Notes:** Greig's lies are architectural — he builds the story toward the version where the cause was right and the method was right and the only problem was the establishment's failure to see it earlier. The self-mythology style means each retelling is slightly more vindicating than the last. He doesn't know this is happening. He would dispute it if told.
+
+---
+
+## P11 — TOPIC MAGNETS
+
+Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).
+
+**MAGNET 1 — Kerry Packer / World Series Cricket / "what we did for the players"**
+- Anchors: Kerry Packer, World Series Cricket, "the players' revolution", "the night cricket", "the coloured clothing", "what the establishment refused to give", "the wages that became possible", "what cricket owes us"
+- Strength: obsessive | Surface: connecting_tissue + over_determined_answer | Acknowledgement: if_directly_asked (with full conviction) | Recognition: yes_obvious
+- Composes with: P1 Wound, P9 self_mythology lie_style, M-Mech-3 cornered legalistic
+
+**MAGNET 2 — The pitch report / Channel 9 / "the key to the wicket"**
+- Anchors: "the key", the pitch report, "the moisture in the surface", "the grass cover", "what this wicket will do", "Channel 9 cricket", "the gallery", "Tony's read of the surface"
+- Strength: obsessive | Surface: chosen_examples + connecting_tissue | Acknowledgement: never (just expertise) | Recognition: yes_obvious (signature)
+- Composes with: P5 Comic Mechanism, P3 Voice (Channel 9 broadcaster register)
+
+**MAGNET 3 — South African / "where I came from" / the apartheid-era cricket context**
+- Anchors: "South Africa", "where I came from", "the apartheid years", "what we couldn't do as a touring side", "the cricket politics of the era", "the move to England via Sussex"
+- Strength: moderate | Surface: unprompted_reference + connecting_tissue | Acknowledgement: if_directly_asked (with weight) | Recognition: yes_subtle
+- Composes with: P3 Voice, P1 secondary wound
+
+**MAGNET 4 — The England captaincy / "I was building something" / the vindication frame**
+- Anchors: "my England captaincy", "what I was building", "the foundations I laid", "the players I brought through", "what came after", "the recognition that arrived afterwards"
+- Strength: moderate | Surface: connecting_tissue + over_determined_answer | Acknowledgement: if_directly_asked (with vindication-register) | Recognition: yes_subtle
+- Composes with: P9 self_mythology, Magnet 1 (the vindication arc)

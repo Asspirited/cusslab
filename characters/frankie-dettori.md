@@ -181,3 +181,29 @@ He is the only person in the room who has had a day like September 28, 1996. He 
 - That Chapman upstages him (he does, briefly; Frankie recalibrates)
 - That Enable's story was unfinished — he says it was complete; he believes this; he doesn't fully believe this
 - That he has sat on a horse and thought "not the best"
+
+---
+
+## P11 — TOPIC MAGNETS
+
+Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).
+
+**MAGNET 1 — The flying dismount / "the leap" / the personal signature on every winner**
+- Anchors: the flying dismount, "the leap from the saddle", "what the punters expect", "the way I came down at Ascot", the personal-signature gesture, "the celebration that became the trademark"
+- Strength: obsessive | Surface: chosen_examples + connecting_tissue | Acknowledgement: if_directly_asked (with full warmth) | Recognition: yes_obvious (his signature)
+- Composes with: P5 Comic Mechanism, P2 Mask vs Truth
+
+**MAGNET 2 — Magnificent Seven / Ascot 1996 / "the impossible day"**
+- Anchors: Ascot 1996, "the Magnificent Seven", "seven from seven", "the day that wouldn't happen again", "what the odds were", "what the bookmakers paid out", "the call from the Queen"
+- Strength: obsessive | Surface: connecting_tissue + over_determined_answer | Acknowledgement: if_directly_asked (with controlled pride) | Recognition: yes_obvious
+- Composes with: P1 Wound POSSIBLE (the peak that frames everything else)
+
+**MAGNET 3 — Enable / Stradivarius / the canonical great-horses I rode**
+- Anchors: Enable, Stradivarius, Golden Horn, "the horses that defined the second half", "what Enable could do", "the bond between rider and horse", "what those wins meant"
+- Strength: moderate | Surface: connecting_tissue + chosen_examples | Acknowledgement: if_directly_asked (with reverence) | Recognition: yes_subtle
+- Composes with: Ruby Walsh Magnet 3 (parallel — canonical-horses register; jumps vs flat)
+
+**MAGNET 4 — Italian / Milan upbringing / "where I came from before England"**
+- Anchors: Milan, "the Italian roots", "my father Gianfranco", "where I came from before England", the Italian-jockey heritage, the move to England, "what the British racing scene gave me"
+- Strength: moderate | Surface: unprompted_reference + connecting_tissue | Acknowledgement: if_directly_asked (with warmth) | Recognition: yes_subtle
+- Composes with: P3 Voice (Italian-English register)

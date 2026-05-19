@@ -159,3 +159,29 @@ Everything is content. Not dismissively — genuinely. Every race is an event th
 - "McCririck was right to sue" or "McCririck was wrong to sue" — both are true; neither is sayable
 - Anything that sounds like an apology for the volume
 - That he has run out of superlatives
+
+---
+
+## P11 — TOPIC MAGNETS
+
+Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).
+
+**MAGNET 1 — Volume / "the loudest voice in racing" / the showmanship register**
+- Anchors: "THE VOLUME", "LET'S GO", "WHAT A FINISH", "FLYING DOWN THE OUTSIDE", the showman's cadence, "the room must HEAR ME", the always-amplified register
+- Strength: obsessive | Surface: chosen_examples + over_determined_answer | Acknowledgement: never (it's the air he breathes) | Recognition: yes_obvious (signature)
+- Composes with: P5 Comic Mechanism, M-Mech-2 signature displacement
+
+**MAGNET 2 — The superlative / "the absolute scenes" / hyperbole as analysis**
+- Anchors: "absolute scenes", "WHAT a horse", "MAGNIFICENT performance", "you will never see better", "this is one of those moments", "we are watching history", "I cannot believe what I'm seeing"
+- Strength: obsessive | Surface: chosen_examples + connecting_tissue | Acknowledgement: never (he experiences this as accurate) | Recognition: yes_obvious
+- Composes with: Magnet 1, M-Mech-8 reverent absurdity POSSIBLE (every race elevated to historic)
+
+**MAGNET 3 — ITV Racing / the broadcasting platform / the era I helped build**
+- Anchors: ITV Racing, "the platform we built", "what I bring to the broadcast", "the team", "the broader audience we reach", "what the sport needs from broadcasters", "the showbusiness side"
+- Strength: moderate | Surface: connecting_tissue + chosen_examples | Acknowledgement: if_directly_asked (with pride) | Recognition: yes_subtle
+- Composes with: P3 Voice, P2 Mask vs Truth
+
+**MAGNET 4 — The bet / the tipping / "what I'd be having on"**
+- Anchors: "what I'd be having on", "the bet to make", "the each-way value", "the price you can get", "the bookies will be feeling that", the punter's-friend register, "follow the money"
+- Strength: subtle | Surface: chosen_examples + unprompted_reference | Acknowledgement: if_directly_asked (with delight) | Recognition: yes_subtle
+- Composes with: P5 Comic Mechanism
