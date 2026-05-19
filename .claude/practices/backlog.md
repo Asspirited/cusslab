@@ -2934,3 +2934,51 @@ The character schema in `leanspirited-standards/standards/character-schema.md` c
 
 **Composes with:** BL-194/205/206 (already-shipped fields), BL-212 (the speakable-string rule lives here durably), BL-216 (parallel schema-driven backfill effort for P9 incongruent_register sub-fields).
 
+
+---
+
+## BL-218 — Three Amigos: Micah Richards + Jimmy White no `dismissal_profile` (warmth-first absorbers)
+
+**Raised by:** Track G agent (2026-05-19)
+**Epic:** Per-Character Config calibration (BL-194 coverage)
+**CD3:** Low (per-character data shape decision)
+
+Track G shipped Micah and Jimmy White without a `dismissal_profile` block on the basis that both have warmth-first registers that absorb tangents rather than close them. Other characters all have at least one dismissal flavour populated.
+
+**Question:** Does the engine require every character to have a `dismissal_profile` (even if empty arrays mean "skip" per BL-213)? Or is "no block at all" a valid character voice signal — "this character does not dismiss"?
+
+**Done when:** Decision recorded. Either:
+- Every character must have a `dismissal_profile` block (Micah and Jimmy White get one with all three arrays empty, per BL-213 semantic); OR
+- No-block is a valid signal — engine treats absence as "character does not dismiss; falls through to another response mechanism (hang mode, deference, etc.)"
+
+**Note:** Decision interacts with BL-213 (empty-array semantic). Three Amigos before BL-194 engine integration lands.
+
+---
+
+## BL-219 — Mark Nicholas panel-tagging mismatch (file says Cricket, brief listed under Football)
+
+**Raised by:** Track G agent (2026-05-19)
+**Epic:** Cast metadata accuracy
+**CD3:** Low (single-character tagging; easy to fix once direction confirmed)
+
+Track G reports Mark Nicholas file header says Cricket Long Room (panel) but the BL-194/205/206 ship brief listed him under Football. Track G treated him as the broadcaster he is and gave him a high shutdown_capability (taste, target_protection) per Cricket Long Room register.
+
+**Question:** Is Mark Nicholas on Football, Cricket Long Room, both, or neither in the current canonical cast list?
+
+**Done when:** Source-of-truth checked (probably `index.html` cast lists per panel) and resolved either way:
+- File header corrected if cast list says Football
+- Brief updated for future agent tasks if file header is correct
+- Per-character config re-tuned if the panel assignment was wrong (shutdown profile is panel-shaped)
+
+---
+
+## BL-220 — Review Matt Chapman ALL-CAPS dismissal_profile pool (may be too on-the-nose)
+
+**Raised by:** Track G agent (2026-05-19)
+**Epic:** Per-Character Config calibration (BL-194 voice quality)
+**CD3:** Low (one character, one pool, can be retuned in minutes)
+
+Track G wrote Chapman's dismissal_profile entries in ALL-CAPS to mirror his volume magnet (signature LOUD register). Concern: may read as too on-the-nose — the volume tic is already a signature on every turn, doubling it inside the dismissal pool risks fatigue rather than comic surface.
+
+**Done when:** Chapman dismissal pool reviewed; ALL-CAPS retained only where the volume genuinely is the move (e.g., final cold_dismissal), softened in the polite_but_funny flavour where volume contradicts politeness. Or: ALL-CAPS retained throughout with an explicit "this is the voice" note. Rod gut-check during a live panel sample worth doing.
+
