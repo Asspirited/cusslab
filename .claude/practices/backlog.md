@@ -1653,7 +1653,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Feature: panel-interaction
 - Epic: Panel Interaction Model
 - CD3: UBV=8 TC=6 RR=4 → CoD=18, Dur=2, **CD3=9.0**
-- Status: **v1 SHIPPED 2026-05-19** (`08976d9`) — CROSS-CHARACTER REFERENCES prompt block in PanelDiscussEngine.buildSystemPrompt, wired on Golf 19th Hole. Four register options live (endorsement / quiet_disagreement / silence_noted / deflation). Eligibility instruction narrowed to mutual-knowledge pairs per Gherkin approved 2026-05-16. v1b (output schema `reacts_to` field + UI thread indicator) remains OPEN.
+- Status: **DONE 2026-05-19** — v1 prompt block + Golf wiring shipped (`08976d9`). Four register options live (endorsement / quiet_disagreement / silence_noted / deflation). Mutual-knowledge eligibility per Gherkin 2026-05-16. **Superseded for v1b (output schema `reacts_to` field + UI thread indicator) by BL-198.**
 
 ---
 
@@ -1773,7 +1773,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Feature: panel-interaction
 - Epic: Panel Interaction Model
 - CD3: UBV=9 TC=8 RR=3 → CoD=20, Dur=1, **CD3=20.0**
-- Status: **v1 SHIPPED** (TOPIC-DISMISSAL block in PanelDiscussEngine.buildSystemPrompt — exists as `topicDismissal` ctx parameter, suppressed for anchor turns per BL-167). Live on Golf 19th Hole via panel data injection. Three flavours (polite-but-funny / cold-dismissal / piss-take) selected model-side from relationshipState. v2 (proper drift-detection + per-character dismissal-flavour profile + frequency tuning) remains OPEN.
+- Status: **DONE 2026-05-19** — v1 TOPIC-DISMISSAL block shipped on Golf via `topicDismissal` ctx param + panel data injection. Three flavours (polite-but-funny / cold-dismissal / piss-take) selected model-side from relationshipState. **Superseded for v2 by BL-194 (per-character flavour profile) and BL-195 (drift-detection engine signal).**
 
 ---
 
@@ -1809,7 +1809,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Feature: platform / character-schema
 - Epic: Panel Interaction Model (related) / Character Schema (primary)
 - CD3: UBV=8 TC=6 RR=4 → CoD=18, Dur=2, **CD3=9.0**
-- Status: OPEN — raised 2026-05-16; **canonical content shipped 2026-05-16 to `leanspirited-standards/standards/profani-saurus.md` (commit 4d73c62)** with 9 character profiles + 5 generative compound templates + 5-purpose criteria + engine-trigger mapping. **v1 engine integration SHIPPED 2026-05-17** — `profanityEnabled` flag + PROFANITY REGISTER block in `buildSystemPrompt`. Block instructs the 5 purposes, character-authentic register, never-weapon never-filler rule, and references canonical profani-saurus file. v2 (per-character profile data loaded by engine, swears picked + injected one-shot per turn like BL-172 voice pools) follows. Schema attribute placement still TBD when v2 lands.
+- Status: **DONE 2026-05-19** — canonical profani-saurus shipped to leanspirited-standards (`4d73c62`); v1 engine integration shipped 2026-05-17 (PROFANITY REGISTER block with 5-purpose framework); bravery-boost ship 2026-05-19 (`9229218`). **Superseded for v2 (per-character profile data loaded + injected one-shot per turn) by BL-197.**
 
 ---
 
@@ -1824,7 +1824,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Feature: panel-interaction / voice
 - Epic: Panel Interaction Model
 - CD3: UBV=9 TC=8 RR=5 → CoD=22, Dur=2, **CD3=11.0**
-- Status: **v1 SHIPPED 2026-05-16 (Faldo-only, tactical); v2 OPEN — Three Amigos needed on per-character pool schema; depends on BL-162**
+- Status: **DONE 2026-05-19** — v1 tactical Faldo-only shipped 2026-05-16; WL-150 closed (selection logic absorbed into PanelDiscussEngine.selectVoicePoolPicks). **Superseded for v2 (canonical per-character pool schema + shared `VoicePoolSelector` engine module) by BL-196.**
 
 ---
 
@@ -1869,7 +1869,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Feature: panel-voice
 - Epic: Panel Voice & Texture
 - CD3: UBV=8 TC=5 RR=3 → CoD=16, Dur=2, **CD3=8.0**
-- Status: **v1 SHIPPED 2026-05-19** (`08976d9`) — IDIOM INVENTION prompt block in PanelDiscussEngine.buildSystemPrompt, wired on Golf 19th Hole. Three modes (misquote / bastardise / invent) instructed; once-per-turn cap; never-lampshade rule; composition with BL-169 profani-saurus and BL-188 invented-expert-interpretation noted. v2 (per-character `idiom_modes` / `idiom_frequency` / `idiom_register` / `idiom_source_pool` config + engine selection) remains OPEN.
+- Status: **DONE 2026-05-19** — v1 IDIOM INVENTION prompt block + Golf wiring shipped (`08976d9`). Three modes (misquote / bastardise / invent). **Superseded for v2 (per-character config + engine selection) by BL-201.**
 
 ---
 
@@ -1967,7 +1967,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Feature: panel-voice
 - Epic: Panel Voice & Texture
 - CD3: UBV=8 TC=8 RR=5 → CoD=21, Dur=3, **CD3=7.0**
-- Status: OPEN — raised 2026-05-17 (watershed session). Three Amigos needed before any code: agree what "earned" looks like in detectable terms, agree threshold for per-character fire rate, agree audit method (transcript sampling vs live capture). v0 audit can run independently and is recommended first move. Named-repetisms list grows in the block above as Rod observes new ones in live use.
+- Status: **DONE 2026-05-19** — significant value already shipped: M-1 flavour-repetition audit (`2f10699`) + M-5 magnet-collision audit (`48fae8e`) cover the v0 audit scope; Faldo per-character tic throttles shipped 2026-05-17 (`810f12c`) cover the specific named repetisms. **Engine-level signature-move displacement enforcement v2 not separately raised** — defer indefinitely unless live observation shows the throttles + audits aren't enough.
 
 ---
 
@@ -2060,7 +2060,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Feature: panel-voice
 - Epic: Panel Voice & Texture
 - CD3: UBV=9 TC=6 RR=4 → CoD=19, Dur=2, **CD3=9.5**
-- Status: OPEN — raised 2026-05-17. Three Amigos done in chat (watershed analysis is the design conversation). Gherkin gate next. Order dependency: ships *after* BL-178 v0 (Murray P11 data) lands so the engine can connect the block to actual character magnets — otherwise the block has no anchor items to reference and degrades to abstract instruction.
+- Status: **DONE 2026-05-19** — v1 REVERENT ABSURDITY MODE block + Golf wiring shipped 2026-05-17 (`5ac6c29`). Model-discretion firing on absurd questions; "Henni, the rook" pattern reproducible. **No v2 separately raised** — engine-side trigger detection deferred indefinitely; model discretion observed as sufficient. Reopen as new BL if live observation shows misfires.
 
 ---
 
@@ -2096,7 +2096,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Feature: panel-interaction
 - Epic: Panel Interaction Model
 - CD3: UBV=8 TC=5 RR=3 → CoD=16, Dur=3, **CD3=5.3**
-- Status: OPEN — raised 2026-05-17 (watershed session — Rod live ideation). Three Amigos partial (mechanic shape sketched here); Gherkin needed; per-character permission table needs Three Amigos. v1 is small (one flag + one prompt block + reaction-mode dispatcher) like other recent v1 ships.
+- Status: **DONE 2026-05-19** — v1 HANG MODE block + Golf wiring shipped 2026-05-17 (`913f973`). Four reaction options (pivot / redirect / tumbleweed / audible pause). **Superseded for v2 (per-character `can_leave_hanging` config + hang-trigger heuristic) by BL-206.**
 
 ---
 
@@ -2133,7 +2133,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Feature: panel-interaction
 - Epic: Panel Interaction Model
 - CD3: UBV=8 TC=5 RR=3 → CoD=16, Dur=3, **CD3=5.3**
-- Status: OPEN — raised 2026-05-17 (watershed session — Rod live ideation). Three Amigos partial; Gherkin needed; per-character permission table needs Three Amigos. v1 small (one flag + one prompt block + transcript truncation) — same ship-fast pattern as other v1s.
+- Status: **DONE 2026-05-19** — v1 SHUTDOWN MODE block + Golf wiring shipped 2026-05-17 (`19219bf`). Four motivations (taste / madness / self-protection / target-protection). **Superseded for v2 (per-character `shutdown_capability` config + transcript em-dash truncation in renderer) by BL-205.**
 
 ---
 
@@ -2203,7 +2203,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Feature: panel-interaction
 - Epic: Panel Interaction Model
 - CD3: UBV=9 TC=5 RR=3 → CoD=17, Dur=3, **CD3=5.7**
-- Status: OPEN — raised 2026-05-17. Three Amigos needed on character pairing logic (which eggers go with which eggees and why). v1 ships after pairing table locked.
+- Status: **DONE 2026-05-19** — v1 EGGING-ON MODE block + Golf wiring shipped 2026-05-17 (`a51143b`). Tee-up + memorable-quote-request moves. **Superseded for v2 (engine egger-eggee pairing selector + per-character role config) by BL-204.**
 
 ---
 
@@ -2280,7 +2280,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Composes with WL-131 (character dullness — direct quality fix for Murray), P3 Voice (historical frame pool), P11 magnets 1 and 2, M-Mech-8.
 - Feature: panel-voice | Epic: Panel Voice & Texture
 - CD3: UBV=8 TC=6 RR=3 → CoD=17, Dur=2, **CD3=8.5**
-- Status: OPEN — raised 2026-05-17 (re-raised after BL-185 collision with secondary session). v1 ships fast — pure character-file edit.
+- Status: **DONE 2026-05-19** — v1 OPENER FRAME ROTATION section shipped 2026-05-17 (`66492fc`) — three-frame attempted balance (ancient / modern society / question depravity) added to Murray P6. **Superseded for v2 (engine `opener_frame_emphasis` hint) by BL-200** (only worth shipping if live observation shows model failing rotation).
 
 ---
 
@@ -2320,7 +2320,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - **v2 (engine):** per-character allowed-experts pool + invocation-frequency throttle.
 - Feature: panel-voice | Epic: Panel Voice & Texture
 - CD3: UBV=8 TC=6 RR=3 → CoD=17, Dur=2, **CD3=8.5**
-- Status: OPEN — raised 2026-05-17 by Rod live ideation. v1 prompt-side ships fast (same pattern as BL-179 / BL-175 v1).
+- Status: **DONE 2026-05-19** — v1 INVENTED EXPERT INTERPRETATION block + Golf wiring shipped 2026-05-17 (`1e3f64c`). Wrong-expert pairings flagged as bonus comedy. **Superseded for v2 (per-character allowed-experts pool + frequency throttle) by BL-199.**
 
 ---
 
@@ -2361,7 +2361,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Feature: panel-interaction
 - Epic: Panel Interaction Model
 - CD3: UBV=9 TC=6 RR=4 → CoD=19, Dur=3, **CD3=6.3**
-- Status: OPEN — raised 2026-05-17 by Rod live ideation. v1 prompt-side ships fast (same pattern as BL-180/181/183). Three Amigos partial — consensus-topic table and per-character role assignments need a pass.
+- Status: **DONE 2026-05-19** — v1 PANEL CONSENSUS MODE block + Golf wiring shipped 2026-05-17 (`ce51345`). Max 3 in consensus chain. **Superseded for v2 (engine observation-about-character detection + chain cap + target-response slot boost) by BL-203.**
 
 ### BL-190 — `>include the don` cross-panel character include mechanic
 - **Trigger syntax** (parsed from any panel question input): `>include the don` → Peter Alliss as anchor (default). `>include the don anchor` → explicit anchor. `>include the don panel` → as panellist (non-anchor slot).
