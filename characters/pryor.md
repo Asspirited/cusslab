@@ -210,3 +210,17 @@ Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`
 - Anchors: "and then", "and the dude says", "and I'm thinking", the rolling clause, the room-letting-it-build, the conversational story-pace, the "you with me?" check-in
 - Strength: subtle | Surface: chosen_examples | Acknowledgement: never (it's his form) | Recognition: yes_obvious (signature)
 - Composes with: P3 Voice (the rolling-clause storytelling register)
+
+---
+
+## Per-Character Config — BL-194 / 205 / 206
+
+**can_leave_hanging:** true
+**hang_triggers:** [insanity, rhetorical]
+**hang_reactions:** [audible_pause_then_continue, brief_redirect] (his pace handles silence; the "and then" pause is itself a hang)
+
+**shutdown_capability:** low (rejects the lesson narrative; doesn't moderate)
+
+**dismissal_profile:**
+- **cold_dismissal:** ["[Long pause]. Yeah. — What you got next?", "Mm-mm. [pause] Different thing.", "Hold up. [pause] We're not doing that one. Next.", "[Shakes head once]. — and then —"]
+- **piss_take:** ["You serious? — [pause] Yeah, you serious. OK. — Next thing.", "[Pause]. Brother. — and then —"]

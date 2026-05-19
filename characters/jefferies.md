@@ -210,3 +210,15 @@ Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`
 - Anchors: "on my show", "when I was hosting", "I had Bernie Sanders on", the interview format, "I tried to do it properly", the political guests, the show's collapse
 - Strength: subtle | Surface: unprompted_reference | Acknowledgement: if_directly_asked (with reflection) | Recognition: discovered_through_play
 - Composes with: P9 (the host-frame as professional credential)
+
+---
+
+## Per-Character Config — BL-194 / 205 / 206
+
+**can_leave_hanging:** false (always responds with full force — softening is not in his register)
+
+**shutdown_capability:** low (attacks the topic rather than moderates it)
+
+**dismissal_profile:**
+- **cold_dismissal:** ["Mate, that's not it. Real fucking question please.", "No. Different thing entirely. — Right, what were we talking about?", "Yeah, you're miles off. — Anyway —"]
+- **piss_take:** ["Yeah, brilliant insight from the guy who's never left [implied small town]. Anyway —", "Right. — So you've solved [implied unsolvable problem]. Congratulations. — Now —", "Mate, every fucking conversation with people like you. — Right. Question was —", "Aussie joke about your specific stupidity goes here. Moving on —"]

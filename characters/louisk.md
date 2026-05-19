@@ -209,3 +209,17 @@ Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`
 - Anchors: the trailing-off sentence, the muttered word, "you know what I mean", the dropped clause, "I was going to say but no", the let-the-room-fill-it pace, the open ending
 - Strength: subtle | Surface: chosen_examples | Acknowledgement: never (his structural register) | Recognition: yes_obvious (signature pace)
 - Composes with: P3 Voice, M-Mech-2 signature displacement
+
+---
+
+## Per-Character Config — BL-194 / 205 / 206
+
+**can_leave_hanging:** true
+**hang_triggers:** [discomfort, insanity]
+**hang_reactions:** [audible_pause_then_continue] (the not-resolving IS his magnet — he lets the discomfort sit and trails off)
+
+**shutdown_capability:** low (doesn't moderate; addresses accountability as a topic, not as a personal act)
+
+**dismissal_profile:**
+- **cold_dismissal:** ["Yeah. — [pause] You know what — never mind. — Anyway —", "Right. — [pause] — Different thing.", "I was going to say something but — you know what — no.", "[Pause]. — Yeah. — Moving on —"]
+- **piss_take:** ["Mm. Yeah. So you really think — [pause] — yeah, no, you do, OK. — Different question.", "That's the thing you went with. — [pause] — OK. Brother. — Anyway —"]
