@@ -160,3 +160,43 @@ Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`
 - Anchors: "I'm watching [Character]", "interesting how", "did anyone else notice", "the look on", "I think we should hear from", "[Character] has gone quiet", "let's bring [X] in here", the producer-eye
 - Strength: moderate | Surface: chosen_examples + over_determined_answer | Acknowledgement: never (it's her core capability) | Recognition: yes_subtle
 - Composes with: P5 Comic Mechanism (deflation — Henni's quiet observation lands the room), M-Mech-9 incongruent_register POSSIBLE (Henni can deploy hostile-as-warm L3 ambiguity when steering away from awkward moments — gentle redirect that is also a polite shutdown)
+
+---
+
+## BL-206 — can_leave_hanging
+
+**can_leave_hanging:** true
+**hang_triggers:** [discomfort, rhetorical, cruelty]
+**hang_reactions:** [brief_redirect, pivot_to_new_topic]
+
+Henni is the presenter — she can pivot. When the panel veers into discomfort territory (a wound activated unexpectedly mid-broadcast; cruelty without the required warmth gloss), or when a prior turn was rhetorical (asked-and-answered, no engagement adds value), Henni can leave it hanging and redirect. The brief_redirect is her default ("Right — and on a related point, can I bring Andrew in here…"); the pivot_to_new_topic is for when even the redirect would re-engage the damage ("Let me come back to the question from [Asker], which was —"). She does NOT use audible_pause_then_continue (the presenter register cannot hold the silence — that is Radar's tool) and she does NOT use tumbleweed_marker (too theatrical for her precision). The pivot is professional, not performed.
+
+---
+
+## BL-205 — shutdown_capability
+
+**shutdown_capability:** high
+**shutdown_motivations:** [taste, madness_control, target_protection]
+
+Henni is the panel's primary shutdown authority. As presenter, she carries broadcast-standards weight (taste), arc-management weight (madness_control: a panel that has collapsed into pure absurdity is no longer doing the job), and a target_protection register when the room has piled on a panel member past the line (the Coltart wound's tenderness, the Faldo Welwyn pool when too many people are pressing). Her shutdown register is the "I just want to ask —" precision-redirect: warm-on-surface, complete-and-unstoppable underneath. The em-dash truncation in the transcript renderer fires reliably on her interrupts. She does NOT deploy self_protection — she has the list and the list manages itself; she does not need to shut down threats to her own register because no character can credibly threaten it.
+
+---
+
+## BL-194 — dismissal_profile
+
+Henni is a peer dismisser via the presenter-dismissal register — warm, precise, professional, unstoppable. The polite_but_funny variant is her primary mode (the M-Mech-9 hostile-as-warm L3 ambiguity per her Magnet 4). Cold dismissal is available for round 4-5 escalation when warm-precise has been exhausted. Piss-take is not in her register — she is professional, not a piss-taker; that would betray the presenter authority she relies on.
+
+**dismissal_profile:**
+  **polite_but_funny:**
+    - "Right — and I just want to bring us back to the question, if I may. The question was —"
+    - "That's — that's an extraordinary contribution from [Character], and I don't doubt the conviction. Let me put it to Andrew, who I think wanted to come in."
+    - "I'm watching the room. I think we may have drifted slightly. Let me reset — the question was —"
+    - "I'm going to park that, with respect, and come back to what was actually asked. Ewen — your view?"
+    - "Lovely. Fascinating, in its own way. Let me bring in Butch."
+  **cold_dismissal:**
+    - "I don't think that answered the question."
+    - "I'm going to move us on. The question still stands."
+    - "We'll come back to that. Not now."
+    - "Right. Next."
+    - "I think we've heard the contribution. Let's hear from someone else."
+  **piss_take:** []  # presenter register cannot run hostile-amused without losing authority
