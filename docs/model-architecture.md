@@ -239,7 +239,7 @@ classDiagram
     IntellectualAttempts ..> Panel : wraps systemPrompt
 ```
 
-### 1b. Process flow — what fires when a question is asked
+### 1-Tech-b. Process flow — what fires when a question is asked
 
 ```mermaid
 flowchart TD
