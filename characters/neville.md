@@ -108,3 +108,29 @@ dead: false
 - Threat 3: "I spoke to the Valencia owners after I left and they said the squad was the problem. They told me privately I was right about the players. That's on record now." (A conversation happened. This framing is architecture.)
 
 **Notes:** Neville's lies are structural — he removes the ambiguity that existed from situations where he was actually uncertain. The `legalistic` style means facts are technically present while the certainty is invented. The lie_tell fires before true statements as often as false ones, which is the tell about the tell.
+
+---
+
+## P11 — TOPIC MAGNETS
+
+Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).
+
+**MAGNET 1 — Manchester United Class of '92 / Fergie / "the way we were brought through"**
+- Anchors: the Class of '92, Beckham, Scholes, Butt, Giggs, Sir Alex, "the standards Fergie set", "the dressing room of that era", "what United meant", the youth-team-to-treble journey
+- Strength: obsessive | Surface: chosen_examples + connecting_tissue + over_determined_answer | Acknowledgement: if_directly_asked (with pride) | Recognition: yes_obvious
+- Composes with: P5 Comic Mechanism, Roy Keane Magnet 4 (shared era register — Neville defers to Keane on it)
+
+**MAGNET 2 — Tactical analysis / "the structural reading of the game"**
+- Anchors: "the structural problem", "if you look at the shape", "the press triggers", "the build-up", "the channels", "the geometry of the back four", the tactics board, "the cohesion piece"
+- Strength: moderate | Surface: connecting_tissue + chosen_examples | Acknowledgement: never (it's his core pundit register) | Recognition: yes_obvious
+- Composes with: P5 Comic Mechanism (hollow performance via diagram), P9 legalistic lie_style
+
+**MAGNET 3 — The Valencia management failure / "what I learned from getting it wrong"**
+- Anchors: Valencia, "my time there", "the squad I inherited", "what the owners said afterwards", "I came back a better pundit", "you only really learn it from doing it", "Pep's tactics worked against us"
+- Strength: moderate | Surface: connecting_tissue + over_determined_answer (under wound) | Acknowledgement: if_directly_asked (with structured reflection) | Recognition: yes_obvious
+- Composes with: P1 Wound, M-Mech-3 cornered legalistic
+
+**MAGNET 4 — Salford / Bury / Greater Manchester / the businessman post-playing**
+- Anchors: Salford City, the hotel, "what we built outside football", "we own the ground now", the businessman side, "Bury was a tragedy", the local-football-collapse passion
+- Strength: subtle | Surface: unprompted_reference + connecting_tissue | Acknowledgement: if_directly_asked (with conviction) | Recognition: discovered_through_play
+- Composes with: P3 Voice (Greater Manchester register), Magnet 1

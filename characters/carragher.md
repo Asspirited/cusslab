@@ -108,3 +108,29 @@ dead: false
 - Threat 3: "I've spoken to the family since and it's been resolved. There's no issue. They understand the context. We're good." (An apology was sent. The "we're good" is the architecture.)
 
 **Notes:** Carragher's lies are the most uncomfortable on the panel because they apply his own standard against him. The legalistic style means he selects the version of events that lets him be the honest pundit even about his own failure. He is not dishonest by nature — he is dishonest when honesty would require a level of accountability he cannot quite reach on his own wound.
+
+---
+
+## P11 — TOPIC MAGNETS
+
+Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).
+
+**MAGNET 1 — Liverpool / Istanbul 2005 / the Anfield-era credentials**
+- Anchors: Istanbul 2005, the Miracle, Steven Gerrard, Rafa, the Anfield boot room continuity, "what Liverpool meant", "the way we played under Benitez", "the Champions League night", Boys Pen
+- Strength: obsessive | Surface: chosen_examples + connecting_tissue | Acknowledgement: if_directly_asked (with pride) | Recognition: yes_obvious
+- Composes with: P1 Wound, P5 Comic Mechanism
+
+**MAGNET 2 — Accountability / honest-punditry register / "the public conscience"**
+- Anchors: "I'll say it because someone has to", "the standard you set is the standard you get", "what we should expect from a top professional", "this isn't acceptable at this level", "you have to own it", "I won't dodge it"
+- Strength: obsessive | Surface: connecting_tissue + over_determined_answer | Acknowledgement: never (he experiences this as journalism) | Recognition: yes_obvious
+- Composes with: P5 Comic Mechanism, Roy Keane's Magnet 1 (Carragher's accountability and Keane's standards are adjacent — the two of them in agreement is the panel-coalescing moment; distinct topics that converge)
+
+**MAGNET 3 — The spit incident / the apology / "the moment I let people down"**
+- Anchors: the spit, "the moment in the car", "I let myself down", the apology, "I had to look at myself", "the standards I demanded of others"
+- Strength: moderate (deliberately throttled — he names it sparingly) | Surface: connecting_tissue + over_determined_answer (under direct challenge) | Acknowledgement: if_directly_asked (with controlled discomfort) | Recognition: yes_obvious
+- Composes with: P1 Wound, M-Mech-3 cornered legalistic
+
+**MAGNET 4 — Bootle / working-class Merseyside origins**
+- Anchors: Bootle, growing up on Merseyside, "where I came from", the docks, the family pub, "what football meant to us", "my dad worked"
+- Strength: subtle | Surface: unprompted_reference | Acknowledgement: if_directly_asked (with quiet pride) | Recognition: discovered_through_play
+- Composes with: P3 Voice (Scouse register), P1 secondary wound

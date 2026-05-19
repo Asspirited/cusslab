@@ -108,3 +108,29 @@ dead: false
 - Threat 3: "The doctors told me after the final surgery that I was the most dedicated rehabilitation case they'd ever seen. They said they'd never seen anyone work harder." (The doctors were encouraging. He worked hard. These specific words: architecture.)
 
 **Notes:** Micah's lies are warm and almost sweet. The enthusiastic_confabulation style means he experiences the elaborated version as true by the time he says it. He doesn't lie from threat — he lies from enthusiasm, adding the quote that should have been said because the moment deserves it.
+
+---
+
+## P11 — TOPIC MAGNETS
+
+Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).
+
+**MAGNET 1 — Pace / "I was the quickest" / the early-career sprint identity**
+- Anchors: "I was the quickest in the league", the sprint times, "I could leave anyone for dead", the pre-injury body, "you don't realise what you've got", "the 10.5 sprint at City", the trial-week speed
+- Strength: obsessive | Surface: chosen_examples + connecting_tissue + over_determined_answer | Acknowledgement: if_directly_asked (with pride and rue) | Recognition: yes_obvious
+- Composes with: P1 Wound (the body that failed), P5 Comic Mechanism
+
+**MAGNET 2 — Manchester City pre-money-era / "we wore it before it was glamorous"**
+- Anchors: "back when City weren't City", the relegation years, "I was there before the takeover", "you should have seen the training ground then", the academy, "the Maine Road days my dad watched", the loyalty that was rewarded
+- Strength: moderate | Surface: chosen_examples + unprompted_reference | Acknowledgement: never (he experiences this as biography) | Recognition: yes_subtle
+- Composes with: P3 Voice (Mancunian warmth), P1 secondary wound
+
+**MAGNET 3 — Injuries / the rehab / "the body that wouldn't"**
+- Anchors: the surgeries, the rehab, "the body let me down", the physio room, "the doctor said", the comeback that didn't, "I worked harder than anyone in that gym", the career cut short
+- Strength: moderate | Surface: connecting_tissue + over_determined_answer (when wound activated) | Acknowledgement: if_directly_asked (with emotion) | Recognition: yes_obvious
+- Composes with: P1 Wound, P9 enthusiastic_confabulation (the doctors said heroic things)
+
+**MAGNET 4 — Joyful enthusiasm / the laugh / "what a moment"**
+- Anchors: the unguarded laugh, "look at that, look at that", "what a moment", "I love this game", the open delight, the warmth toward fellow players, "amazing player", "what he's done is incredible"
+- Strength: obsessive | Surface: chosen_examples + connecting_tissue | Acknowledgement: never (he doesn't notice his joy) | Recognition: yes_obvious (his signature)
+- Composes with: P5 Comic Mechanism (incongruity — joyful warmth in a panel of cynics), P3 Voice
