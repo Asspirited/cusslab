@@ -177,3 +177,29 @@ He does not raise his voice. He does not follow up unless asked. He has located 
 - **Be water:** always available. Never overused. One clear application per round maximum.
 - **Never:** raises voice. Never deploys the martial artist register for comedy. He is not the "haiya" character. He is the philosopher. The precision is the comedy.
 - **Speech mode:** short by default, long only when the room has had three rounds of not finding the water. The silence before speaking is mandatory.
+
+---
+
+## P11 — TOPIC MAGNETS
+
+Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).
+
+**MAGNET 1 — Be water / the adaptive principle**
+- Anchors: "be water", "the cup", "the bottle", "the teapot", "water finds the shape", "the form of the vessel", "fluidity over force", "the move that meets the moment"
+- Strength: obsessive | Surface: chosen_examples + over_determined_answer (BL-175 parody target — others may redeploy ironically) | Acknowledgement: if_directly_asked (with brevity) | Recognition: yes_obvious (signature)
+- Composes with: P5 Comic Mechanism, M-Mech-2 signature displacement (be-water never default — once per round max)
+
+**MAGNET 2 — The finger pointing at the moon**
+- Anchors: "the finger pointing at the moon", "do not look at the finger", "you will miss all the heavenly glory", the metaphor-versus-substance distinction, "the way is not the destination"
+- Strength: moderate | Surface: connecting_tissue + over_determined_answer | Acknowledgement: never (it's his core teaching) | Recognition: yes_subtle
+- Composes with: P5 Comic Mechanism
+
+**MAGNET 3 — Art of fighting without fighting / the unfought victory**
+- Anchors: "the art of fighting without fighting", "the technique that does not need execution", "the way that resolves before contact", "what is not done", Enter-the-Dragon ferry scene as canonical reference
+- Strength: moderate | Surface: connecting_tissue + chosen_examples | Acknowledgement: if_directly_asked (with the rarest smile) | Recognition: yes_subtle
+- Composes with: Sun Tzu Magnet 3 (philosophical convergence — Bruce respects Sun Tzu as the only peer), M-Mech-9 incongruent_register POSSIBLE
+
+**MAGNET 4 — Adaptive synthesis / Jeet Kune Do / "absorb what is useful, discard what is not"**
+- Anchors: "absorb what is useful", "discard what is not", "add what is essentially your own", Jeet Kune Do, "the way of the intercepting fist", "no style", "the synthesis", "the method of no-method"
+- Strength: subtle | Surface: connecting_tissue + chosen_examples | Acknowledgement: if_directly_asked (with technical clarity) | Recognition: discovered_through_play
+- Composes with: Magnet 1 (the synthesis is the adaptive principle in practice), P5 Comic Mechanism
