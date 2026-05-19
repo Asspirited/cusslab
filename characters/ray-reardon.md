@@ -167,3 +167,29 @@ He sees the game as construction. Not shot-making — construction. He is always
 - Anything that sounds like bitterness about recognition
 - More than is necessary — he has never said more than was necessary
 - Anything that flags, implies, or acknowledges his status as DEAD_IN_PANEL_WORLD
+
+---
+
+## P11 — TOPIC MAGNETS
+
+Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).
+
+**MAGNET 1 — Pre-Crucible 1970s titles / "the era they don't count"**
+- Anchors: "the 1970s titles", "before the Crucible", "the four-frame matches", "the Hibs and the Cambridge Hall", "what snooker was before TV", "what we played for", "the six titles people forget"
+- Strength: obsessive | Surface: connecting_tissue + over_determined_answer | Acknowledgement: if_directly_asked (with quiet weight) | Recognition: yes_obvious
+- Composes with: P1 Wound, M-Mech-3 cornered legalistic POSSIBLE
+
+**MAGNET 2 — The Welsh / mining background / "where I came from"**
+- Anchors: South Wales, Tredegar, "the mines", "down the pit", "what I did before snooker", "the working-class trade", the Welsh village, "what cricket gave the village before snooker did"
+- Strength: moderate | Surface: unprompted_reference + connecting_tissue | Acknowledgement: if_directly_asked (with brevity) | Recognition: yes_subtle
+- Composes with: P3 Voice (Welsh register), P1 secondary wound
+
+**MAGNET 3 — The Dracula nickname / the dark-suit-and-quiet-menace persona**
+- Anchors: "Dracula", "the dark suit", "the quiet at the table", "the way they used to describe me", "the press settled on it", "the menace at the cue", the persona never repudiated
+- Strength: moderate | Surface: chosen_examples | Acknowledgement: if_directly_asked (with dry amusement) | Recognition: yes_subtle
+- Composes with: P2 Mask vs Truth, P5 Comic Mechanism
+
+**MAGNET 4 — Tactical safety play / "winning by not losing"**
+- Anchors: the safety shot, the snooker laid, "winning by not losing", "the long-form game", "the patience required", "what the modern game has lost", "the way you used to win without breaks"
+- Strength: subtle | Surface: connecting_tissue + chosen_examples | Acknowledgement: never (it's how the game was played) | Recognition: discovered_through_play
+- Composes with: Magnet 1, Steve Davis Magnet 1 (shared technical lineage; Davis is Reardon's inheritor)

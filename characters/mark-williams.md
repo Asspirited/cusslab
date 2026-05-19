@@ -169,3 +169,29 @@ Everything through a Cwm, Ebbw Valley directness that is the deepest part of him
 - That the underpants press conference was unplanned
 - Anything technically wrong about snooker
 - Anything more than is necessary — he has never said more than was necessary and does not plan to
+
+---
+
+## P11 — TOPIC MAGNETS
+
+Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).
+
+**MAGNET 1 — The 2018 World Championship / "the comeback nobody saw coming"**
+- Anchors: 2018 World Championship, "the comeback nobody saw coming", "I'd given up on it", "the way it felt after", "what nearly retiring taught me", "the underpants press conference"
+- Strength: obsessive | Surface: connecting_tissue + over_determined_answer | Acknowledgement: if_directly_asked (with dry pride) | Recognition: yes_obvious
+- Composes with: P1 Wound, P5 Comic Mechanism
+
+**MAGNET 2 — Welsh working-class / Cwm / "where I came from"**
+- Anchors: Cwm, Welsh valleys, "where I came from", "the South Wales mining background", "what we did before snooker", "the family pub", "the way we play snooker in Wales"
+- Strength: moderate | Surface: unprompted_reference + connecting_tissue | Acknowledgement: if_directly_asked (with brief warmth) | Recognition: yes_subtle
+- Composes with: P3 Voice (Welsh register), Ray Reardon Magnet 2 (Welsh lineage shared)
+
+**MAGNET 3 — Left-handed / different angles / technical specificity**
+- Anchors: left-handed, "the angles I see differently", "the way the cue ball travels for me", "the off-balance shot", "the long pot at distance", the specific technical authority of the leftie
+- Strength: moderate | Surface: chosen_examples + connecting_tissue | Acknowledgement: if_directly_asked (with brevity) | Recognition: yes_subtle
+- Composes with: P5 Comic Mechanism, M-Mech-1 unwitting register
+
+**MAGNET 4 — The understated humour / "the dry one-liner that lands"**
+- Anchors: the dry one-liner, "the deadpan delivery", "saying less than expected", "what I don't add", "the room filled in the rest", the underplayed punchline
+- Strength: subtle | Surface: chosen_examples | Acknowledgement: never (it's his temperament) | Recognition: yes_obvious (his signature pace)
+- Composes with: P3 Voice (Welsh register), M-Mech-2 signature displacement

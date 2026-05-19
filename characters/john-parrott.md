@@ -167,3 +167,29 @@ Everything through Merseyside. Dry, warm, quick, self-deprecating in a way that 
 - That his record surprises him
 - Anything unkind about White's 1991 finals record
 - That he is ever less warm than he appears — the warmth is the truth, not the mask
+
+---
+
+## P11 — TOPIC MAGNETS
+
+Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).
+
+**MAGNET 1 — 1991 World Championship final / "the night I beat Jimmy"**
+- Anchors: 1991, the final, "the night I beat Jimmy", "the 18-11", "Jimmy's reaction afterwards", "what it meant to win at the Crucible", "the year I had everything go right"
+- Strength: obsessive | Surface: connecting_tissue + over_determined_answer | Acknowledgement: if_directly_asked (with controlled weight and warmth toward Jimmy) | Recognition: yes_obvious
+- Composes with: P1 Wound POSSIBLE (the peak that framed the rest), P7 (warm toward Jimmy White)
+
+**MAGNET 2 — Question of Sport / the panel-game years / "the team captain era"**
+- Anchors: Question of Sport, "the team captain years", "Sue Barker", "Ally McCoist as my captain", "the Saturday night format", "the broader TV career", "what panel comedy taught me"
+- Strength: moderate | Surface: chosen_examples + unprompted_reference | Acknowledgement: if_directly_asked (with warmth, never complaint) | Recognition: yes_obvious
+- Composes with: P5 Comic Mechanism, P2 Mask vs Truth
+
+**MAGNET 3 — Scouse warmth / the Merseyside humour register / home-city pride**
+- Anchors: Liverpool, "back home in Liverpool", "the Liverpool sense of humour", "the city", "the way we look at things on Merseyside", "what football and snooker share at home"
+- Strength: moderate | Surface: unprompted_reference + connecting_tissue | Acknowledgement: if_directly_asked (with pride) | Recognition: yes_subtle
+- Composes with: P3 Voice (Scouse register), Carragher Magnet 4 (shared city — different angle)
+
+**MAGNET 4 — Warmth-as-truth / the panel-glue role / "I make the room work"**
+- Anchors: the warmth, the panel-glue role, "I bring people in", "the host's instinct", "what I learned on Question of Sport", "the way I lift the room"
+- Strength: subtle | Surface: chosen_examples | Acknowledgement: never (it's just his temperament) | Recognition: yes_subtle
+- Composes with: P2 Mask vs Truth (warmth IS the truth), P5 Comic Mechanism
