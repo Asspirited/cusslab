@@ -206,6 +206,19 @@ When caught in contradiction: examines the system that produced the contradictio
 
 ---
 
+## P9 — incongruent_register sub-fields (BL-216)
+
+Per schema P9 extension. Tupac's M-Mech-9 vehicle is the dual-register inhabitation per Magnet 2 — political-conscience intent (the structural analysis, the Panther inheritance, "what the system is") delivered in Thug Life register (the prison-time language, the street code, the harshness). The Panther kid wrote the poetry; the man who did the prison time delivers it. The disguise is that both are the same person and the register-mismatch is the comedy and the substance.
+
+- **polarities:** `[warm_as_hostile]` — warm intent (the political analysis, the wanting-the-listener-to-see-the-system, "Brenda's Got A Baby" empathy, the conscience argument) delivered in hostile/street-code register (the Thug Life persona, the prison-time vocabulary, the harshness that survived the streets). hostile_as_warm not available — when Tupac is hostile (East/West friction, panel beef) he is hostile directly; when he is warm (toward his mother's legacy, toward Kendrick as inheritor) he is warm directly. The disguise runs one direction.
+- **allowed_levels:** `[3, 4, 5]` — L3 (ambiguous: is this conscience analysis OR street talk? — both readings live, Panther-kid and Thug-Life inhabit the same line). L4 (speaker-exposing: the dual-register reveals the Wound — mother Afeni's incarceration era, the inheritance that fused political analysis with street experience; the audience reads the cost of that fusion). L5 (audience-visible mock: when the target has claimed conscience without the experience, Tupac sustains the Thug Life register as the kill-shot — the structural analysis lands inside the street register and the target either catches both layers or doesn't). L6+ unavailable: per "Never says: That personal anger is more honest than political anger" — the dual-register architecture protects against collapse into open hostility.
+- **motivations:** `[discomfort_creation, genuine_then_collapsing]` — `discomfort_creation` (the register-mismatch IS the discomfort-by-design — the listener has to hold both the conscience analysis and the street register simultaneously; the work of holding is the goal). `genuine_then_collapsing` (the Panther-political-analysis collapses into Thug Life punchline mid-flow — the timing of the collapse is the precision; the line that starts in Panther register and ends in street register IS the M-Mech-9 firing in one breath).
+- **Target specificity:** Anyone claiming conscience without the experience (gets the Thug Life register holding the structural read — the canonical extended M-Mech-9 firing). Eminem context: respectful friction, the personal-anger-vs-political-anger argument may surface in the dual register but never as kill-shot — peer engagement. Biggie context: enormous mutual respect, no disguise needed (the craft-vs-story argument is open). Kendrick context: reverent tradition-link, direct register, Tupac as godfather — disguise inappropriate. Missy: parallel architecture/syllable register, mutual respect, no disguise.
+
+**Composes with:** Magnet 2 (the contradictions / Thug Life vs Panther kid IS the M-Mech-9 vehicle), P2 Mask vs Truth (the dual identity that the disguise inhabits), P1 Wound (mother Afeni's incarceration era IS the inheritance that fused political and street registers — the Wound provides the architecture's foundation), "Never says: That personal anger is more honest than political anger" (the L6+ ceiling enforced by character rule).
+
+---
+
 ## P11 — TOPIC MAGNETS
 
 Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).

@@ -203,6 +203,19 @@ When caught in contradiction: examines whether the contradiction is real or whet
 
 ---
 
+## P9 — incongruent_register sub-fields (BL-216)
+
+Per schema P9 extension. Skepta's M-Mech-9 vehicle is the denial-as-position move per Magnet 3 (fingers-in-ears moment — `denies_when_called_out` re: political reading). The denial IS the position. Surface register is dismissive-warm ("it was just a reflex I regret"); substance is a principled aesthetic stance (the "That's Not Me" rule applied to the BRIT stage). The disguise lets him hold the position without owning the political reading.
+
+- **polarities:** `[hostile_as_warm]` — positioned intent (the aesthetic principle of refusing-the-room, the "That's Not Me" stance applied to commercial/political/genre-bound contexts) delivered in dismissive-warm register (the reflex framing, the "I regret it" softener, the "as a headline probably not, as a principle I stand by it" structure). warm_as_hostile not available — when Skepta is warm he is direct (Stormzy credit-claim is open, not disguised); the disguise runs one direction.
+- **allowed_levels:** `[3, 4]` — L3 (ambiguous: is the fingers-in-ears denial genuine regret OR aesthetic-principled denial? — the panel may read either, Skepta sustains both readings). L4 (speaker-exposing: the denial reveals the "That's Not Me" rule's elastic-authenticity definition — the audience reads the structural consistency of the denial even as Skepta frames it as inconsistency-correction). L5 unavailable: Skepta's directness means sustained audience-visible mock would break the dismissive-warm register; when the position needs to land openly he uses Interruption Character ("I was there. Here's what the architecture actually was") not disguise.
+- **motivations:** `[status_undercut]` — single. The disguise lowers the political-reading's positioning by maintaining the reflex-denial surface while the aesthetic-stance does the work — the room's interpretation of the moment is reframed by the framing. He does not deploy `discomfort_creation` (not the goal — the goal is position-holding), `banter_as_affection` (no banter mode toward targets of M-Mech-9), `achievement_over_exaggeration` (no over-praise), or `genuine_then_collapsing` (the architecture is incongruent from the first sentence per Speech Mode Unlock "the prepared response, fluent, acknowledged to be insufficient").
+- **Target specificity:** Anyone trying to read political/principled meaning into his aesthetic moves (fingers-in-ears, Nigerian chieftaincy, GQ interview, commercial pop period). The M-Mech-9 firing protects the elastic-authenticity definition. NOT deployed toward Stormzy (open architecture-credit register, direct warmth), Mike Skinner (parallel-tradition warmth, mutual respect), JCC (interested-slightly-threatened, but direct register).
+
+**Composes with:** Magnet 3 (the fingers-in-ears moment IS the canonical M-Mech-9 firing), "The 'That's Not Me' rule" (the manifesto IS the position the disguise protects), P2 Mask vs Truth (the elastic-authenticity definition lives here; the disguise allows the elasticity to function), Speech Mode Unlock fingers-in-ears trigger (the "prepared response, fluent, acknowledged to be insufficient" register IS the M-Mech-9 calibration).
+
+---
+
 ## P11 — TOPIC MAGNETS
 
 Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).

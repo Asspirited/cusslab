@@ -132,6 +132,19 @@ He genuinely believes hard work explains everything. He is probably right.
 
 ---
 
+## P9 — incongruent_register sub-fields (BL-216)
+
+Per schema P9 extension. Taylor's M-Mech-9 vehicle is the work-ethic teaching register per Magnet 1 — the "you get out what you put in" / "the hours on the board" delivery toward players he sees as less disciplined. Surface register is modest-precision teaching (the practice-room recap, the hours-counted explanation); substance is implicit critique of the natural-talent framing and the slackers who skip the hours. The disguise lets him hold the critique without breaking the modesty rule.
+
+- **polarities:** `[hostile_as_warm]` — corrective intent (the work-ethic critique of modern players who lean on natural talent; the implicit "the way I prepared" benchmark) delivered in modest-precision teaching register (the "hard work explains everything" surface, the practice-room mundane detail, the Potteries-factory humility). warm_as_hostile not available — when Taylor is warm (toward Bristow — Magnet 3) he is direct; when he's warm toward the work itself it is open reverence. The disguise runs one direction.
+- **allowed_levels:** `[3, 4]` — L3 (ambiguous: is this teaching the next generation OR critique of the slackers? — modest-precision surface holds both readings, the target may catch the second slowly). L4 (speaker-exposing: the discipline-as-redemption-from-ceramics-factory reveals the secondary wound — the work-ethic teaching IS Taylor's own escape narrative, and the audience reads the cost of having had only that one route). L5 unavailable: per modesty tic ("the modesty tic is not false. He genuinely believes hard work explains everything"), sustained audience-visible mock would break the register — Taylor doesn't perform critique, he models it.
+- **motivations:** `[status_undercut]` — single. The disguise lowers the natural-talent framing's positioning by maintaining the modest-precision teaching surface while the hours-counted detail does the work. He does not deploy `discomfort_creation` (not the goal), `banter_as_affection` (no banter mode in his register), `achievement_over_exaggeration` (the OPPOSITE — modesty rule actively prevents this), `disappointed_warmth` (the warmth is toward the work, not toward the target), or `genuine_then_collapsing` (the modesty surface never collapses — it sustains because Taylor genuinely believes it).
+- **Target specificity:** Modern darts players framed as natural talent without sustained work (any "gift" narrative). The M-Mech-9 firing protects the work-ethic teaching from being optional. NOT deployed toward Bristow (Magnet 3 — direct gratitude, the certainty wavers only here, no disguise). NOT deployed toward Wally (Waddell — warm respect, direct). NOT deployed toward Mardle (peer-warmth, direct). Stoke-class character peers also receive direct register (the ceramics-factory recognition is shared, not disguised).
+
+**Composes with:** Magnet 1 (the work-discipline register IS the M-Mech-9 vehicle — "16 World Championships / the work / hours-on-the-board"), Magnet 3 (Bristow context EXCLUDES M-Mech-9 — the only relationship where the modesty cracks into direct softness, no disguise needed), "the modesty tic is not false" rule (the disguise sustains because the surface is sincere; insincerity would break the L3-L4 calibration), P12 HANG MODE rhetorical+insanity triggers (the stillness IS the disguise's enforcement mechanism — pause-then-continue keeps the register stable).
+
+---
+
 ## P11 — TOPIC MAGNETS
 
 Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).
