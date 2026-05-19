@@ -2978,6 +2978,28 @@ Track G reports Mark Nicholas file header says Cricket Long Room (panel) but the
 - Brief updated for future agent tasks if file header is correct
 - Per-character config re-tuned if the panel assignment was wrong (shutdown profile is panel-shaped)
 
+**Status:** **DONE 2026-05-19** — source-of-truth checked. `index.html` Long Room MEMBERS array (line ~18056+): boycott, bumble, holding, botham, gower, kp, blofeld, warne, tufnell, bruce. Mark Nicholas is NOT in this cast list. He is ALSO not in the Football panel cast. **Resolution: nicholas.md file header (Cricket Long Room) was the intended panel assignment but he is currently orphaned — not wired into ANY live panel cast.** Track G's brief had the wrong attribution (Football) but the underlying issue is wiring, not tagging. The per-character config Track G shipped for nicholas.md is therefore unused by any live panel today. Raised separately as BL-221 (orphan-character wiring decision — needs Rod input on whether to wire and which panel).
+
+---
+
+## BL-221 — Mark Nicholas orphan: character file exists but not wired into any panel
+
+**Raised by:** BL-219 investigation, 2026-05-19
+**Epic:** Cast wiring completeness
+**CD3:** Low (one orphan character; Rod-decision-bound)
+
+`characters/nicholas.md` is a complete character file (file header: "Cricket Long Room") with P11 magnets, P9 lie profile, full voice spec, AND a per-character config shipped by Track G under BL-194/205/206. However the canonical Long Room MEMBERS array in `index.html` (~line 18056+) does NOT include him: boycott, bumble, holding, botham, gower, kp, blofeld, warne, tufnell, bruce. He is also not in the Football MEMBERS array.
+
+**Question:** Wire him into Cricket Long Room (file header intent), wire him into Football (Track G brief intent), wire him into both, or archive the character?
+
+**Done when:** Decision made and acted on. Either:
+- Add nicholas to the Long Room MEMBERS array (canonical source-of-truth aligns with file header — the Track G per-character config becomes live)
+- Add nicholas to the Football MEMBERS array (Track G brief intent — but then the file header needs correcting and the shutdown profile may need re-tuning for football register)
+- Add to both (broadcaster-presence in multiple panels — needs MEMBERS array updates in both places)
+- Archive nicholas.md to `characters/_archive/` and remove the Track G per-character config as unused
+
+**Note:** Needs Rod input — this is a casting decision, not a tagging fix.
+
 ---
 
 ## BL-220 — Review Matt Chapman ALL-CAPS dismissal_profile pool (may be too on-the-nose)
