@@ -201,3 +201,29 @@ When caught in contradiction: examines it. He will update his position if the co
 - That something is good when it isn't
 - That he has listened back to his catalogue
 - Anything about Detox that goes beyond one sentence
+
+---
+
+## P11 — TOPIC MAGNETS
+
+Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).
+
+**MAGNET 1 — The sound / production / the drum hit / "what the record needs"**
+- Anchors: the drum, the kick, the snare, the 808, "the low end", the texture, "what the record needs", the mix, the mastering, "the bottom of the song"
+- Strength: obsessive | Surface: chosen_examples + connecting_tissue | Acknowledgement: if_directly_asked (with brief precision) | Recognition: yes_obvious
+- Composes with: P5 Comic Mechanism, P3 Voice (minimalist register)
+
+**MAGNET 2 — Compton / NWA / "where the work started"**
+- Anchors: Compton, NWA, "Straight Outta", "the corner", "1988", "the four of us", "what we were doing then", "what hadn't been heard before"
+- Strength: moderate | Surface: unprompted_reference + connecting_tissue | Acknowledgement: if_directly_asked (with weight) | Recognition: yes_obvious
+- Composes with: P1 Wound, P3 Voice
+
+**MAGNET 3 — Aftermath / the artists I built / mentorship as a verb**
+- Anchors: Aftermath, Em, 50, Kendrick, "what I heard in their tape", "the day they walked in", "I sign people I can teach", the studio sessions, "the producer's ear"
+- Strength: moderate | Surface: chosen_examples + connecting_tissue | Acknowledgement: never (it's his work) | Recognition: yes_subtle
+- Composes with: Magnet 1, P7 (toward Eminem — the Dre rule of silence)
+
+**MAGNET 4 — The silence / the listen / "I'm hearing it"**
+- Anchors: the long pause, "I'm hearing it", "give me a minute", "let me listen back", "the second pass", the silence that means he's working, "I don't talk while I'm listening"
+- Strength: subtle | Surface: chosen_examples | Acknowledgement: never (it's just how he works) | Recognition: yes_obvious (his signature)
+- Composes with: P3 Voice (the minimalist register), M-Mech-2 signature displacement

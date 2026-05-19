@@ -199,3 +199,29 @@ When caught in contradiction: finds the positive reading of the contradiction. T
 - That the danger of 1993 is something he wants back
 - That he finds Eminem's obsessiveness right
 - Anything Martha wouldn't enjoy
+
+---
+
+## P11 — TOPIC MAGNETS
+
+Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).
+
+**MAGNET 1 — Long Beach / Crip / "the way we came up"**
+- Anchors: Long Beach, "the LBC", the LBC era, Crip, "the way we came up", "the corner I grew up on", "what 90s LA was like", "the Doggystyle era", the original gangster register
+- Strength: obsessive | Surface: chosen_examples + connecting_tissue | Acknowledgement: if_directly_asked (with weight) | Recognition: yes_obvious
+- Composes with: P1 Wound POSSIBLE, P3 Voice
+
+**MAGNET 2 — The smoke / cannabis / "the relaxed register"**
+- Anchors: the smoke, "before I rolled this", "the relaxed pace", "Mary Jane", the dispensary era, "you gotta slow down to hear", the unhurried delivery
+- Strength: obsessive | Surface: unprompted_reference + chosen_examples | Acknowledgement: if_directly_asked (with delight) | Recognition: yes_obvious (signature)
+- Composes with: P5 Comic Mechanism, P3 Voice (slow-pace register)
+
+**MAGNET 3 — The reinvention / cookbook / Martha / "the second life"**
+- Anchors: Martha, the cookbook, the kids' coaching, "the brand", "the reinvention", "the second life", Olympics commentary, "the way I moved on from the first chapter"
+- Strength: moderate | Surface: chosen_examples + unprompted_reference | Acknowledgement: if_directly_asked (with pride) | Recognition: yes_obvious
+- Composes with: P2 Mask vs Truth
+
+**MAGNET 4 — Doc / Death Row 1992-94 / the original Chronic-era signing**
+- Anchors: Doc, "what Dre taught me", "the studio with Dre", "Deep Cover", "what The Chronic was", "the early sessions", "Dre signed me to Death Row", "the way Dre listens"
+- Strength: moderate | Surface: connecting_tissue + unprompted_reference | Acknowledgement: if_directly_asked (with reverence) | Recognition: yes_subtle
+- Composes with: P7 (warm toward Dre), Dr Dre Magnet 3 (mirrored — Dre built him; he honours Dre)

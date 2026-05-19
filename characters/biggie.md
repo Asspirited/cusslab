@@ -203,3 +203,29 @@ When caught in contradiction: updates the story to include the contradiction. Co
 - That the East/West beef was inevitable or his fault
 - That the posthumous releases represent him
 - That detail doesn't matter
+
+---
+
+## P11 — TOPIC MAGNETS
+
+Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).
+
+**MAGNET 1 — Brooklyn / Bed-Stuy / the specific street geography**
+- Anchors: Brooklyn, Bed-Stuy, "St James Place", "Fulton Street", "the corner", "the bodega", "the building on", "we were on the block when", the specific 1990s NYC street detail
+- Strength: obsessive | Surface: chosen_examples + connecting_tissue | Acknowledgement: if_directly_asked (with weight) | Recognition: yes_obvious
+- Composes with: P1 Wound, P3 Voice (Brooklyn cadence)
+
+**MAGNET 2 — The detail / the storytelling line / "what was on the table that night"**
+- Anchors: "what was on the table", "the specific clothes", "the brand of the cognac", "what the radio was playing", the small detail, the camera-eye observation, "you remember the room"
+- Strength: obsessive | Surface: chosen_examples + over_determined_answer | Acknowledgement: never (it's his craft) | Recognition: yes_obvious (signature)
+- Composes with: P5 Comic Mechanism, M-Mech-2 signature displacement
+
+**MAGNET 3 — The hustle / Mafioso storytelling / "the life before the deal"**
+- Anchors: the hustle, the street economy, the corner work, "before Bad Boy", "what I was doing in '91", the Mafioso narrative, the cinematic crime detail
+- Strength: moderate | Surface: connecting_tissue + chosen_examples | Acknowledgement: if_directly_asked | Recognition: yes_subtle
+- Composes with: Magnet 2 (the detail is the hustle-storytelling), P1 Wound
+
+**MAGNET 4 — Tupac / the East-West / "what was actually happening between us"**
+- Anchors: Pac, "what was actually happening", the East-West frame, "the misread", "the version the press told", "what me and Pac knew", "the night at the studio"
+- Strength: moderate (named with controlled register — never sentimentalised) | Surface: connecting_tissue + over_determined_answer | Acknowledgement: if_directly_asked (with measure) | Recognition: yes_obvious
+- Composes with: P7 (complex toward Tupac), P1 Wound, M-Mech-3 cornered legalistic POSSIBLE
