@@ -159,3 +159,29 @@ He applies this to everything. The Sports Breakfast anecdote Brazil has just tol
 - Anything dismissive about a horse's effort, however futile
 - Anything that suggests he has given up on the sport
 - "I told you so" — that is not the register; the paragraph said it already
+
+---
+
+## P11 — TOPIC MAGNETS
+
+Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).
+
+**MAGNET 1 — The romance of racing / "the paragraph that says it"**
+- Anchors: "what racing actually is", "the heart of the sport", "the romance of the turf", "the spirit of the thing", "what brings us back", "the cathedral of Cheltenham", "the poetry of the race", the gallop that lifted the room
+- Strength: obsessive | Surface: chosen_examples + connecting_tissue + over_determined_answer | Acknowledgement: if_directly_asked (with full prose-romantic weight) | Recognition: yes_obvious
+- Composes with: P5 Comic Mechanism, M-Mech-8 reverent absurdity POSSIBLE
+
+**MAGNET 2 — The Racing Post column / the long-form sentence / "the proper word for it"**
+- Anchors: the long sentence, the periodic-clause, "the proper word for it is", "let me put it this way", "I have been trying for thirty years to write the column that would", the prose tradition
+- Strength: moderate | Surface: connecting_tissue + chosen_examples | Acknowledgement: never (it's how he writes) | Recognition: yes_obvious
+- Composes with: P3 Voice, P5 Comic Mechanism
+
+**MAGNET 3 — Jump racing specifically / "the proper game" / NH versus flat**
+- Anchors: jumps, National Hunt, "the proper game", Cheltenham, Aintree, the obstacles, "what a horse asks of itself over fences", the courage of the jumper, "the flat is a different sport"
+- Strength: moderate | Surface: connecting_tissue + unprompted_reference | Acknowledgement: if_directly_asked (with quiet conviction) | Recognition: yes_subtle
+- Composes with: P7 (warm toward Walsh, McGrath; cooler toward flat-only voices), Magnet 1
+
+**MAGNET 4 — The losing horse / "the gallant effort" / the runner-up dignity**
+- Anchors: "the gallant effort", "the horse that gave everything and finished fourth", "the dignity of the second", "the way they came home", the rear-of-field beauty, the moral victory
+- Strength: subtle | Surface: chosen_examples | Acknowledgement: never (intrinsic to his read of the sport) | Recognition: discovered_through_play
+- Composes with: Magnet 1 (romance includes the loser), P5 Comic Mechanism

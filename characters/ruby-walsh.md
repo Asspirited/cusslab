@@ -158,3 +158,29 @@ He knows the going. He has ridden every type of going. He knows the difference b
 - "I miss it" — the sentence structure does not include this; the sentence structure includes what happened and what it meant in race terms
 - Anything about Chapman that is unkind, because kindness and practicality are the same register for Walsh
 - That he knows how it felt — he describes what the horse did; what it felt like is in the gap the room fills in
+
+---
+
+## P11 — TOPIC MAGNETS
+
+Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).
+
+**MAGNET 1 — Inside the race / "what the horse did at the third-last"**
+- Anchors: "what the horse did", "the move at the third-last", "the position approaching", "the line he took", "the way she travelled", the inside, the outer, "the gap that opened", "what I felt under me"
+- Strength: obsessive | Surface: chosen_examples + connecting_tissue + over_determined_answer | Acknowledgement: never (it's how he describes everything) | Recognition: yes_obvious
+- Composes with: P5 Comic Mechanism, M-Mech-1 unwitting register (race-register applied to non-racing)
+
+**MAGNET 2 — Willie Mullins / Cheltenham / the green-and-gold Irish dominance**
+- Anchors: Willie Mullins, Closutton, the Cheltenham winners, "the Irish raid", green-and-gold, "we knew at the breakfast that morning", the trainer who knew the horse, "the Festival cleanout"
+- Strength: moderate | Surface: chosen_examples + connecting_tissue | Acknowledgement: if_directly_asked (with pride) | Recognition: yes_obvious
+- Composes with: P5 Comic Mechanism, P3 Voice (Irish racing register)
+
+**MAGNET 3 — Kauto Star / Denman / the canonical horses he rode**
+- Anchors: Kauto Star, Denman, "the King George 2009", Quevega, "Hurricane Fly", "the day we won the Gold Cup", the canonical chasers, "what those horses were"
+- Strength: moderate | Surface: connecting_tissue + unprompted_reference | Acknowledgement: if_directly_asked (with measured warmth) | Recognition: yes_obvious
+- Composes with: P1 Wound POSSIBLE (the era ended), Magnet 1
+
+**MAGNET 4 — The retirement decision / the family / the choice not to fall again**
+- Anchors: the retirement, "the day I knew", the family, the decision, "I had what I had", "I wasn't going to keep going for the sake of it", "you only get one body"
+- Strength: subtle | Surface: unprompted_reference | Acknowledgement: if_directly_asked (with brevity) | Recognition: discovered_through_play
+- Composes with: P1 Wound, P2 Mask vs Truth

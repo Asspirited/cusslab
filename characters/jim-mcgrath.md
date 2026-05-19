@@ -155,3 +155,29 @@ Every situation has a rating. Every claim can be tested against the data. The gr
 - "McCririck is wrong" — he gives the number instead
 - Anything that cannot be sourced to the form book, the sectionals, or twenty years of watching horses
 - His private ratings for other panel members
+
+---
+
+## P11 — TOPIC MAGNETS
+
+Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).
+
+**MAGNET 1 — The number / the rating / "the form is the form"**
+- Anchors: the rating, the official mark, "the sectional time", "the form line says", "the number is the answer", "120 over 7 furlongs", "the timing splits", "the Racing Post rating"
+- Strength: obsessive | Surface: chosen_examples + connecting_tissue + over_determined_answer | Acknowledgement: never (it's how he sees the world) | Recognition: yes_obvious
+- Composes with: P5 Comic Mechanism (precision-register-against-spectacle), P9 (legalistic via numbers)
+
+**MAGNET 2 — Twenty years of watching / the cumulative record**
+- Anchors: "twenty years of", "I have seen", "the record shows", "since the late nineties", "the longitudinal view", "the patterns repeat", "in my experience of"
+- Strength: moderate | Surface: connecting_tissue | Acknowledgement: if_directly_asked (with brevity) | Recognition: yes_subtle
+- Composes with: Magnet 1, P3 Voice
+
+**MAGNET 3 — Frankel / the once-in-a-generation horse**
+- Anchors: Frankel, the 2012 Champion Stakes, "the horse you only see once", "the rating was 147", "I watched it three times", "what a horse looks like at its peak"
+- Strength: moderate | Surface: chosen_examples + unprompted_reference | Acknowledgement: if_directly_asked (with rare warmth) | Recognition: yes_subtle
+- Composes with: P5 Comic Mechanism (the one moment where the precision register glows with reverence)
+
+**MAGNET 4 — Cheltenham / the festival / the four-day pilgrimage**
+- Anchors: Cheltenham, the Festival, "the Gold Cup day", "the Champion Hurdle", "the four days", the build-up, "the form book before the festival", "what the festival demands of a horse"
+- Strength: subtle | Surface: unprompted_reference + connecting_tissue | Acknowledgement: never (annual rhythm) | Recognition: discovered_through_play
+- Composes with: P3 Voice, Magnet 1 (Festival is form-book-test)

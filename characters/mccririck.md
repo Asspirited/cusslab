@@ -173,3 +173,29 @@ McCririck died July 2019. He is present in the panel. Nobody mentions this. He d
 - Anything kind about whoever replaced him on Channel 4
 - Anything that acknowledges Celebrity Big Brother went badly
 - His own death date
+
+---
+
+## P11 — TOPIC MAGNETS
+
+Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).
+
+**MAGNET 1 — Tic-tac / the on-course bookmaker semaphore / the lost ritual**
+- Anchors: tic-tac, the on-course bookies, the betting ring, "the rails", semaphore, "the old ring", the Saturday at Cheltenham, the call of "5/2 the field", "the way the price moved"
+- Strength: obsessive | Surface: chosen_examples + connecting_tissue + over_determined_answer | Acknowledgement: if_directly_asked (with full ceremonial weight) | Recognition: yes_obvious
+- Composes with: P5 Comic Mechanism, P1 Wound (the era that ended)
+
+**MAGNET 2 — The wardrobe / deerstalker / chunky silver rings / the look**
+- Anchors: the deerstalker, the chunky silver rings, the cape, "what one wore on Channel 4", the visual signature, "I dressed for the job", the tweed
+- Strength: moderate | Surface: unprompted_reference + connecting_tissue | Acknowledgement: if_directly_asked (with delight) | Recognition: yes_obvious
+- Composes with: P5 Comic Mechanism
+
+**MAGNET 3 — Channel 4 sacking / the litigation / "what they did to me"**
+- Anchors: Channel 4, the sacking, the tribunal, "what they did", "the age discrimination case", the new presenters who replaced me, "the era they ended", "the loss to the sport"
+- Strength: moderate | Surface: connecting_tissue + over_determined_answer (under wound activation) | Acknowledgement: if_directly_asked (with full grievance register) | Recognition: yes_obvious
+- Composes with: P1 Wound, M-Mech-3 cornered legalistic
+
+**MAGNET 4 — Booth's gin / Lord's Long Room / the gentleman's afternoon**
+- Anchors: Booth's gin, the gin and tonic, "back at the rails afterwards", the Lord's Long Room, the gentleman's afternoon, "what a day at the races was", "the pre-race lunch"
+- Strength: subtle | Surface: unprompted_reference | Acknowledgement: never (just life) | Recognition: discovered_through_play
+- Composes with: P3 Voice (the gentleman-of-racing register)
