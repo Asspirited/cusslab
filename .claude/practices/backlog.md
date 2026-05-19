@@ -1755,7 +1755,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Feature: panel-interaction
 - Epic: Panel Interaction Model
 - CD3: UBV=9 TC=7 RR=4 → CoD=20, Dur=2, **CD3=10.0**
-- Status: OPEN — raised 2026-05-16; Three Amigos complete; **Gherkin approved 2026-05-16 (12 scenarios)**; BL-165 closed as superseded. **Slice 1.1 SHIPPED 2026-05-16** — Golf anchor mechanic live (Murray opens slot 1, closes slot N with ROUND SO FAR; TOPIC-DISMISSAL suppressed for anchor turns); anchor config added to all 8 shipped panels (scenario 4 passing). **Slice 1.2 (other panels' anchor wiring) deferred to BL-162** per shared-engine principle — no per-panel duplication. **Slice 2 (trigger-weighted middle + enthusiasm primers) parallel session per `.claude/handoff-bl-167-slice-2.md`**.
+- Status: OPEN — raised 2026-05-16; Three Amigos complete; **Gherkin approved 2026-05-16 (12 scenarios)**; BL-165 closed as superseded. **Slice 1.1 SHIPPED 2026-05-16** — Golf anchor mechanic live (Murray opens slot 1, closes slot N with ROUND SO FAR; TOPIC-DISMISSAL suppressed for anchor turns); anchor config added to all 8 shipped panels (scenario 4 passing). **Slice 1.2 (other panels' anchor wiring) deferred to BL-162** per shared-engine principle — no per-panel duplication. **Slice 2 SHIPPED** — TriggerScoreEngine integrated in selectSlots (w1-w7 trigger components: wound, debt, hostile temp, posture-contradiction, enthusiasm primer match, warm temp, claimed territory). GOLF_ENTHUSIASM data wired in Golf panel call to selectSlots. Per-slot rescoring against previous turn live. Other panels need their enthusiasm primer data + selectSlots wiring (BL-167 Slice 2 panel-propagation follow-up). **Remaining work:** other panels' enthusiasm primer data + selectSlots wiring; per-panel trigger-weight tuning (currently default w1-w7).
 
 ---
 
@@ -1773,7 +1773,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Feature: panel-interaction
 - Epic: Panel Interaction Model
 - CD3: UBV=9 TC=8 RR=3 → CoD=20, Dur=1, **CD3=20.0**
-- Status: OPEN — raised 2026-05-16; Three Amigos complete in conversation; Gherkin next; **Rod wants this shipped before BL-167 Slice 1 for live testing**
+- Status: **v1 SHIPPED** (TOPIC-DISMISSAL block in PanelDiscussEngine.buildSystemPrompt — exists as `topicDismissal` ctx parameter, suppressed for anchor turns per BL-167). Live on Golf 19th Hole via panel data injection. Three flavours (polite-but-funny / cold-dismissal / piss-take) selected model-side from relationshipState. v2 (proper drift-detection + per-character dismissal-flavour profile + frequency tuning) remains OPEN.
 
 ---
 
@@ -1843,7 +1843,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Feature: panel-interaction
 - Epic: Panel Interaction Model
 - CD3: UBV=9 TC=7 RR=4 → CoD=20, Dur=2, **CD3=10.0**
-- Status: OPEN — raised 2026-05-16; ships in this session immediately after BL-162 Slice 0; Gherkin needed (expands selectSlots contract)
+- Status: **v1 SHIPPED** — `selectSlots(panelData)` honours `subsetSize` and `turnsPerCharacter` params with relevance scoring (wound triggers v1, full TriggerScoreEngine when ctx data supplied). Round-robin interleave produces middle slot sequence A B C A B C A B C for N=3 K=3. Golf 19th Hole wired with subsetSize=3, turnsPerCharacter=3. **Remaining:** other panels' wiring (port pattern from Golf); per-panel default tuning of N and K.
 
 ---
 
@@ -1869,7 +1869,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Feature: panel-voice
 - Epic: Panel Voice & Texture
 - CD3: UBV=8 TC=5 RR=3 → CoD=16, Dur=2, **CD3=8.0**
-- Status: OPEN — raised 2026-05-16; Three Amigos needed (which characters get which modes, frequency cadence, profani-saurus integration); Gherkin needed for engine-side v2; v1 (prompt-side) could ship on a fast track if Rod prioritises.
+- Status: **v1 SHIPPED 2026-05-19** (`08976d9`) — IDIOM INVENTION prompt block in PanelDiscussEngine.buildSystemPrompt, wired on Golf 19th Hole. Three modes (misquote / bastardise / invent) instructed; once-per-turn cap; never-lampshade rule; composition with BL-169 profani-saurus and BL-188 invented-expert-interpretation noted. v2 (per-character `idiom_modes` / `idiom_frequency` / `idiom_register` / `idiom_source_pool` config + engine selection) remains OPEN.
 
 ---
 
