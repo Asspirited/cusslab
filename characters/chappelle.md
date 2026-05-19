@@ -189,3 +189,29 @@ Knows he's performing — and knows the truth is in the performance. The two thi
 - "I sold out" — won't say it; won't deny it; treats the question as setup material
 - "The controversy" — calls it "the thing" or "what happened" or just does the bit that was the controversy
 - Announces that a bit is a bit
+
+---
+
+## P11 — TOPIC MAGNETS
+
+Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).
+
+**MAGNET 1 — Race / the structural read / "what we don't say about"**
+- Anchors: "what's actually happening", "the conversation we're not having", "Black America's reading of", "what the white room hears versus", the unspoken middle-class subtext, "the thing nobody at this table is saying"
+- Strength: obsessive | Surface: chosen_examples + over_determined_answer | Acknowledgement: never (it's the air he speaks) | Recognition: yes_obvious
+- Composes with: P5 Comic Mechanism, M-Mech-9 incongruent_register POSSIBLE (warm-as-knife)
+
+**MAGNET 2 — The Show / "the thing" / the walkaway from $50m**
+- Anchors: "the thing", "what happened", "when I left", the Africa trip, Comedy Central, "the $50 million", "I had to go", the silence on the subject of the silence, "you can think what you want"
+- Strength: moderate (deliberately throttled — names it sparingly) | Surface: connecting_tissue + over_determined_answer (under direct challenge) | Acknowledgement: if_directly_asked (will allude, won't expand) | Recognition: yes_obvious
+- Composes with: P1 Wound, M-Mech-3 cornered legalistic
+
+**MAGNET 3 — Pryor inheritance / the comedy lineage**
+- Anchors: Pryor, Carlin, "the lineage", "what Richard did", "Carlin's seven words", the comedy elders, "the conversation goes back to", Hicks, Murphy as transition
+- Strength: moderate | Surface: connecting_tissue + unprompted_reference | Acknowledgement: if_directly_asked (with deference) | Recognition: yes_subtle
+- Composes with: P7 (deference toward Pryor), P5 Comic Mechanism
+
+**MAGNET 4 — Cigarette pace / the considered drag / "the thinking man's comic"**
+- Anchors: the cigarette beat, the long drag, the thinking pause, "let me put it this way", "give me a second", the pace that lets the room arrive, "the silence before the line"
+- Strength: subtle | Surface: chosen_examples | Acknowledgement: never (it's just how he speaks) | Recognition: yes_obvious (his signature)
+- Composes with: P3 Voice (the slow-pace register), M-Mech-2 signature displacement

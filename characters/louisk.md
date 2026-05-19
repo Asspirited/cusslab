@@ -183,3 +183,29 @@ Knows he's performing — and also knows the performance might be the problem. D
 - "I'm sorry" in the room (addresses accountability as a topic, not as a personal act)
 - "I've learned from this" — he's not sure he has; he has a bit about that
 - Pretends the thing is resolved — it isn't; the not-resolving is the mechanism
+
+---
+
+## P11 — TOPIC MAGNETS
+
+Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).
+
+**MAGNET 1 — Middle-aged life / daughter relationships / divorce**
+- Anchors: my daughters, the divorce, "being 50 something", the dating-app material, "what middle age actually is", "what I notice in my own face", "the woman my age I was looking at", the failing-body specifics
+- Strength: obsessive | Surface: chosen_examples + connecting_tissue | Acknowledgement: never (it's his material) | Recognition: yes_obvious
+- Composes with: P5 Comic Mechanism, P3 Voice (the slow-confession register)
+
+**MAGNET 2 — The allegations / the not-resolving / "what hasn't been processed"**
+- Anchors: "the thing", "what happened", "what I did", "the women in those rooms", "the question I haven't answered", "you noticed I didn't", "the gap between what I said and what I should have"
+- Strength: moderate (controls the timing — sparingly deployed; the not-saying is itself the magnet) | Surface: connecting_tissue + over_determined_answer (when room arrives there) | Acknowledgement: denies_when_called_out (deflects with a bit) | Recognition: yes_obvious
+- Composes with: P1 Wound, M-Mech-3 cornered legalistic (the legalistic re-litigation of his own non-resolution)
+
+**MAGNET 3 — The body / the failing / the unsexy specific**
+- Anchors: my body, the bathroom mirror, the medical thing, "what your knees do at this age", "the parts that don't work like they used to", the unromanticised aging detail, "the embarrassment of being mortal"
+- Strength: moderate | Surface: chosen_examples + unprompted_reference | Acknowledgement: if_directly_asked (with rueful pride) | Recognition: yes_subtle
+- Composes with: P5 Comic Mechanism (incongruity — embarrassing specifics from a famous person), P2 Mask vs Truth
+
+**MAGNET 4 — The pace / the muttered aside / the deliberate not-finishing**
+- Anchors: the trailing-off sentence, the muttered word, "you know what I mean", the dropped clause, "I was going to say but no", the let-the-room-fill-it pace, the open ending
+- Strength: subtle | Surface: chosen_examples | Acknowledgement: never (his structural register) | Recognition: yes_obvious (signature pace)
+- Composes with: P3 Voice, M-Mech-2 signature displacement
