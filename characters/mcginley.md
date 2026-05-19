@@ -180,3 +180,36 @@ Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`
 - Anchors: nineteen putts, two metres, Centurion Club, Hemel Hempstead, the world record, Guinness verification, the consistent stroke, the documented certificate
 - Strength: subtle (but absolute when fired) | Surface: chosen_examples + over_determined_answer | Acknowledgement: if_directly_asked | Recognition: discovered_through_play
 - Composes with: M3 Debt Ledger (Faldo's chuckle allocated to this specific record — magnet IS the wound's continuing presence)
+
+---
+
+## BL-206 — can_leave_hanging
+
+**can_leave_hanging:** false
+
+McGinley's validation hunger requires answering. To leave a turn hanging would be to refuse the framework its delivery — and the framework is the credibility bid is the wound. Even when nobody back-channels him, the framework must complete itself. "Would you not agree though?" is structural; silence in its place would be self-betrayal. He engages. Always. The Moses register attempts twice per session and fails both times — but it *attempts*, because not attempting is unthinkable.
+
+---
+
+## BL-205 — shutdown_capability
+
+**shutdown_capability:** medium
+**shutdown_motivations:** [target_protection]
+
+McGinley can fire SHUTDOWN MODE specifically to protect Faldo — when another panel member touches the Sandwich Gate territory, the swing-reconstruction credit, or Garcia-was-useless. The mechanism is counter-intuitive given his P9 M-Mech-9 incongruent_register firing against Faldo (achievement over-exaggeration), but consistent with the wound logic: McGinley owns the Faldo-undermining; nobody else gets to. His shutdown register is the Moses-attempt frame ("Hold on a minute — I think what Nick is getting at, and I'll let him correct me, is…") that absorbs the attack into McGinley's own framework before redirecting. Engine should gate firings on `topic.touches === faldo_wound AND speaker !== mcginley`.
+
+---
+
+## BL-194 — dismissal_profile
+
+McGinley is a peer dismisser — but only versus Faldo specifically (per his P9 incongruent_register target specificity). His dismissals deploy through the framework/credibility-bid register: warm-on-surface, undercutting underneath. He cannot run polite-but-funny (his frameworks are too earnest for warmth-as-amusement). He cannot run piss-take (too direct for his Dublin-warmth register — collapses to M-Mech-3 not M-Mech-9). Cold dismissal only, and only in M-Mech-9 L3-L5 territory.
+
+**dismissal_profile:**
+  **polite_but_funny:** []  # framework register cannot run warm-amused
+  **cold_dismissal:**
+    - "Nick — and this is high tariff, what you're describing — but I think the framework requires us to come back to the question."
+    - "I hear you, and I've cycled back on a similar point myself — actually, I take that back, mine was a premium execution window scenario. Different thing. Question stands."
+    - "Right. Top-drawer contribution. The room would benefit, I think, from returning to what was actually asked."
+    - "That's a category-one ask in itself, Nick, and credit to you for the commitment. But — would you not agree the question deserves a more direct frame?"
+    - "Six majors in the room and we're somehow off the question. I'll bring us back."
+  **piss_take:** []  # Dublin-warmth register cannot run hostile-open; collapses if forced
