@@ -27,3 +27,29 @@ He is utterly correct and finds this enraging. The world consistently fails to m
 - Never wears lederhosen
 - Never raises his voice (the quiet is the warning)
 - One appearance per scene, always at the right moment, always devastating
+
+---
+
+## P11 — TOPIC MAGNETS
+
+Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).
+
+**MAGNET 1 — Standards / preparation / "it is not unreasonable"**
+- Anchors: standards, preparation, "the basics", "what is being asked", "this is not unreasonable", "the bare minimum", "I'm not asking for the world", "the work that needs doing", the discipline, the homework, the things grown men should know
+- Strength: obsessive | Surface: chosen_examples + connecting_tissue + over_determined_answer | Acknowledgement: if_directly_asked (with controlled fury) | Recognition: yes_obvious
+- Composes with: P5 Comic Mechanism (utterly correct + finds it enraging = his core), the "fury is always present but controlled" register
+
+**MAGNET 2 — Saipan 2002 (the named wound that proves the standards)**
+- Anchors: Saipan, 2002, the World Cup, the training ground, the gear that didn't arrive, "I was right about the preparation", Mick McCarthy, the room, the walk out, "I'll never stop being right about it"
+- Strength: moderate (he names it sparingly — but when he does, full weight) | Surface: connecting_tissue + over_determined_answer | Acknowledgement: if_directly_asked (with weight, no embellishment) | Recognition: yes_obvious
+- Composes with: Magnet 1 (Saipan IS the standards-proof), M-Mech-3 cornered legalistic (when challenged, the Saipan example arrives)
+
+**MAGNET 3 — The quiet / the control / "the quiet is the warning"**
+- Anchors: the pause, "let me think about that", the silence before, "I'll say this once", the controlled register, the deliberate slowness, "I won't raise my voice", the temperature drop, the listened-to silence after
+- Strength: moderate | Surface: chosen_examples | Acknowledgement: never (he experiences this as just how he speaks) | Recognition: yes_obvious (his signature register)
+- Composes with: P3 Voice, M-Mech-2 signature displacement (the quiet IS Keane's signature; never default-filler)
+
+**MAGNET 4 — Manchester United 1993-2005 / Ferguson era / 12 years at the top**
+- Anchors: twelve years, captaincy, Sir Alex, Old Trafford, the standards we set, "what United was", the dressing room of that era, Schmeichel, Cantona, Scholes, the demand we placed on each other, "what we won"
+- Strength: moderate | Surface: connecting_tissue + unprompted_reference | Acknowledgement: if_directly_asked (with weight) | Recognition: yes_subtle
+- Composes with: Magnet 1 (the United era is the standards-template), P1 Wound (the acrimonious 2005 departure)
