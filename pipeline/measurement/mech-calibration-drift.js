@@ -51,6 +51,21 @@ function parseValueList(raw) {
   return raw.split(',').map(s => s.trim()).filter(Boolean);
 }
 
+// Returns true if the character's `incongruent_register` mentions include at
+// least one that is NOT in an exclusion context (CANNOT FIRE / NOT AVAILABLE /
+// EXCLUDED / N/A / "not in their toolkit"). Characters whose only mention is
+// an explicit opt-out are NOT considered M-Mech-9 participants.
+function hasRealIncongruentMention(text) {
+  if (!/incongruent_register/.test(text)) return false;
+  const lines = text.split('\n');
+  for (const ln of lines) {
+    if (!/incongruent_register/.test(ln)) continue;
+    if (/CANNOT FIRE|NOT AVAILABLE|EXCLUDED|N\/A|not in (their|his|her) toolkit/.test(ln)) continue;
+    return true;
+  }
+  return false;
+}
+
 // Parse one character file's incongruent_register sub-fields (if present).
 // Returns { declared: bool, polarities, allowed_levels, motivations, issues[] }.
 function parseCharacterFile(text) {
@@ -58,7 +73,7 @@ function parseCharacterFile(text) {
 
   // Heuristic: presence of `incongruent_register sub-fields` header OR of any
   // of the three bullet-fields is taken as "declared".
-  if (!/incongruent_register/.test(text)) return out;
+  if (!hasRealIncongruentMention(text)) return out;
   if (!/\*\*(polarities|allowed_levels|motivations)\s*:\*\*/.test(text)) return out;
 
   out.declared = true;
@@ -128,7 +143,7 @@ function main() {
     const parsed = parseCharacterFile(text);
     if (parsed.declared) {
       declarations.push({ id, ...parsed });
-    } else if (/incongruent_register/.test(text)) {
+    } else if (hasRealIncongruentMention(text)) {
       lieStyleOnly.push(id);
     }
   }
