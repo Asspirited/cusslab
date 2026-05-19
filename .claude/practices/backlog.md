@@ -2807,3 +2807,73 @@ Rotation rule: cycle through frames so each fires at least once across 5 rounds;
 - CD3: UBV=2 TC=2 RR=2 → CoD=6, Dur=1, **CD3=6.0**
 - Composes with: all BLs being closed (above)
 - Status: OPEN — raised 2026-05-19. Pure admin sweep. Ship after this batch is acknowledged.
+
+---
+
+## BL-211 — Review Cox dismissal_profile piss_take pool for recycling drift
+
+**Raised by:** Track F agent (2026-05-19)
+**Epic:** Per-Character Config (BL-194/205/206 family)
+**CD3:** Low–Medium (correctness of an already-shipped character config; not blocking)
+
+Track F flagged that the piss_take pool added to Cox leans heavily on existing P6 mechanics (tardigrade, ancestral-around-the-fire). Risk: dismissal flavour reads as recycled tic deployment rather than fresh dismissal material. May reduce comic surprise and increase repetisms (the very thing Rod flagged earlier this session re: "What.A.Statement" / Valderrama '97 overuse).
+
+**Done when:** Cox piss_take pool reviewed; entries that overlap existing P6 mechanics either replaced or explicitly marked as "anchor borrow OK". Decision documented in cox.md.
+
+**Note:** Data-only review (no new code path) — no Gherkin needed.
+
+---
+
+## BL-212 — Normalise dismissal_profile entry surface form (string vs stage-direction)
+
+**Raised by:** Track F agent (2026-05-19)
+**Epic:** Per-Character Config schema clarity
+**CD3:** Medium (engine integration depends on consistent input shape)
+
+Radar's piss_take pool includes a literal `[silence — does not look up — has another drink]` stage-direction entry. All other character dismissal entries to date are speakable strings. Engine integration (BL-194 selector) will need to decide whether stage directions are first-class (rendered as scene action) or must be converted to speakable form.
+
+**Done when:**
+1. Decision recorded in character-schema.md (either: dismissal entries are strings only — convert Radar's entry; OR stage directions allowed with explicit `[bracketed]` form — document semantic in schema).
+2. Radar entry conformed to chosen rule.
+3. All other 90 character files spot-audited for stage-direction entries in dismissal pools.
+
+**Note:** Schema clarification — Three Amigos gate fires (impacts engine behaviour at BL-194 integration).
+
+---
+
+## BL-213 — Engine: empty dismissal flavour array = "skip", not "fallback"
+
+**Raised by:** Track F agent (2026-05-19)
+**Epic:** Per-Character Config engine integration (BL-194)
+**CD3:** Medium (correctness of voice — wrong default could put words in McGinley's mouth he wouldn't say)
+
+McGinley character file deliberately has `polite_but_funny: []` and `piss_take: []` per Track F's voice analysis — these flavours don't fit his voice. Engine must treat empty arrays as "this character does NOT use this flavour", not "fall back to a default phrase pool". Otherwise McGinley will dismiss with phrases he wouldn't say.
+
+**Done when:** BL-194 selector implementation respects empty-array semantic; unit test covers McGinley case (request piss_take dismissal → return null / select different flavour, never fallback string).
+
+**Note:** Engine behaviour — Gherkin gate fires when BL-194 lands. Add scenario at that point.
+
+---
+
+## BL-214 — Three Amigos: Butch shutdown_capability low vs medium [target_protection for Faldo]
+
+**Raised by:** Track F agent (2026-05-19)
+**Epic:** Per-Character Config calibration
+**CD3:** Low (capability tuning, not voice-breaking)
+
+Track F set Butch shutdown_capability: low on the basis that the Faldo Wind-Up is attack, not protect. But P7 toward Faldo is structurally complex — Butch may shut things down to protect Faldo from a *different* attacker even while running his own wind-up. Worth Three Amigos review.
+
+**Done when:** Decision documented in butch.md with reasoning. Either: low (current — Faldo Wind-Up is attack, no protection instinct) OR medium [target_protection] (Butch protects Faldo from external attackers while running his own).
+
+---
+
+## BL-215 — Three Amigos: Alliss shutdown_capability medium [taste] vs low
+
+**Raised by:** Track F agent (2026-05-19)
+**Epic:** Per-Character Config calibration
+**CD3:** Low (capability tuning, dead character so impact bounded by Mortality Rib slot density)
+
+Track F set Alliss shutdown_capability: medium [taste] on era-appropriate-restraint reading. Could be argued lower — the dead-character / no-shadow profile arguably runs lower than McGinley. Worth Three Amigos review.
+
+**Done when:** Decision documented in alliss.md with reasoning. Either: medium [taste] (current — era restraint active) OR low (dead character, no active moderation instinct).
+
