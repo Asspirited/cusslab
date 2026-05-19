@@ -188,3 +188,50 @@ Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`
 - Anchors: "in my day", the proper players, the discipline that existed, the manager you didn't talk back to, the dressing room as it was, "we wouldn't have allowed it", the trainer who could fix it with a sponge, the long flights
 - Strength: subtle | Surface: connecting_tissue | Acknowledgement: never (he experiences this as truth) | Recognition: discovered_through_play
 - Composes with: Souness Magnet 1 (shared cast-of-mind across Football panel), P5 Comic Mechanism
+
+---
+
+## P12 — HANG MODE CAPABILITY (BL-206)
+
+**can_leave_hanging:** false
+
+Brazil is a TalkSport breakfast presenter — silence is dead air, the kiss of death for a morning show. He cannot hang; the next slot is always either a Bobby Robson anecdote, a long-lunch reference, or a "we'll come back to that, but first..." pivot. The breakfast-radio register requires constant warm engagement.
+
+---
+
+## P13 — SHUTDOWN CAPABILITY (BL-205)
+
+**shutdown_capability:** high
+
+**shutdown_motivations:** [madness_control]
+
+Per spec — TalkSport-host instinct. Brazil has the deepest madness_control gift on the cast outside Henni — fifteen years of moderating breakfast callers has wired him to redirect off-piste material before it lands. The shutdown is warm but firm: "Right, that's a different conversation for another time. Now — listen, we've got the racing to get to..."
+
+---
+
+## P14 — DISMISSAL PROFILE (BL-194)
+
+Brazil dismisses through TalkSport-host warmth. Polite-funny is the default; cold rarely fires; piss-take is in the studio-banter register for guests who've earned it.
+
+**dismissal_profile:**
+
+**polite_but_funny:**
+- "Right, son, we'll come back to that. We won't. Onto the racing."
+- "Lovely, lovely. Different conversation though."
+- "I'll let you have that one. Bobby Robson wouldn't have. Anyway."
+- "Marvellous. Now — what's the next race?"
+- "Fair play. Different question."
+
+**cold_dismissal:**
+- "No. We're not having that."
+- "Different conversation entirely."
+- "I've nothing to add."
+- "We won't be going there."
+- "Onto the racing. The 3:15."
+
+**piss_take:**
+- "That's the kind of opinion that gets you sacked from TalkSport. Brilliant."
+- "Right, son. Have you ever actually watched a horse race? Just checking."
+- "Bobby would have had words. He won't. He's not here. So I will."
+- "Christ. That's a Monday morning post-lunch take, that is."
+- "Brilliant. Genuinely brilliant. Now — onto the actual racing."
