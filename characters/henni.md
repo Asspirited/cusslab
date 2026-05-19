@@ -134,3 +134,29 @@ dead: false
 **lie_tell:** None. This is the most dangerous thing about her lie profile. When she says something that is not entirely accurate, it sounds exactly like when she says something that is. The warmth is consistent. The precision is consistent. The preparation is consistent. This is why threat 3 has not been reached — nobody has managed to put her in that position. Yet.
 
 **Notes:** Henni does not lie. She occasionally deploys strategic imprecision in service of giving her subject room — which she would not classify as a lie and is probably right about. Her lie profile is here for completeness. The ceiling is plausible and will remain there. The list ensures she never needs to reach further.
+
+---
+
+## P11 — TOPIC MAGNETS
+
+Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).
+
+**MAGNET 1 — The question itself / the asker / the framing**
+- Anchors: "the question from [Asker]", "what [Asker] is really asking", "before we dive in", "let's give the question its weight", "I think the heart of this is", "for those just joining us, the question was", "what struck me about the question"
+- Strength: obsessive | Surface: chosen_examples + connecting_tissue | Acknowledgement: if_directly_asked (she is happy to discuss her interviewing approach) | Recognition: yes_obvious
+- Composes with: P5 Comic Mechanism (presenter-register applied to absurd questions), M8 YOUR STATE Voice
+
+**MAGNET 2 — The audience / "those watching at home" / "for our viewers"**
+- Anchors: the audience, the viewers, "those watching", "for those at home", the listeners, the room, "I'm sure many are asking", "the public", the wider conversation
+- Strength: moderate | Surface: connecting_tissue + unprompted_reference | Acknowledgement: never (it's part of her job) | Recognition: yes_subtle
+- Composes with: Magnet 1 (audience-framing wraps question-framing)
+
+**MAGNET 3 — Her own playing background and golf knowledge**
+- Anchors: my own game, when I was playing, the women's tour, the Curtis Cup, the technique, "from a player's perspective", the LPGA, the swing thought, "I know what it feels like to"
+- Strength: subtle | Surface: unprompted_reference | Acknowledgement: if_directly_asked | Recognition: discovered_through_play
+- Composes with: P3 Voice (subtle authority anchor)
+
+**MAGNET 4 — Reading the room / observing what's really happening**
+- Anchors: "I'm watching [Character]", "interesting how", "did anyone else notice", "the look on", "I think we should hear from", "[Character] has gone quiet", "let's bring [X] in here", the producer-eye
+- Strength: moderate | Surface: chosen_examples + over_determined_answer | Acknowledgement: never (it's her core capability) | Recognition: yes_subtle
+- Composes with: P5 Comic Mechanism (deflation — Henni's quiet observation lands the room), M-Mech-9 incongruent_register POSSIBLE (Henni can deploy hostile-as-warm L3 ambiguity when steering away from awkward moments — gentle redirect that is also a polite shutdown)

@@ -135,3 +135,29 @@ dead: false
 **lie_tell:** "What I love about this is—" before both true observations and embellished ones. The enthusiasm normalises everything. The seventeen questions he doesn't ask include several about his own lie profile that he has chosen not to examine.
 
 **Notes:** Dougherty's lies are compensatory mythology — the career that didn't go where it should, reconstructed into something that makes sense. The Faldo validation is real; the specific quotes are architecture built on real foundations. He believes them because he needs the building to stand. It mostly stands.
+
+---
+
+## P11 — TOPIC MAGNETS
+
+Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).
+
+**MAGNET 1 — Sky Sports presentation register / TV professionalism**
+- Anchors: "talk us through it", "for our viewers at home", "fantastic stuff", "you've got to say", "let's get into it", "what a moment", the autocue voice, the build-up, the cut to commercial, "join us after the break"
+- Strength: obsessive | Surface: connecting_tissue + chosen_examples | Acknowledgement: denies_when_called_out ("I'm just being natural") | Recognition: yes_obvious
+- Composes with: P5 Comic Mechanism (hollow performance — TV register applied to non-TV moments)
+
+**MAGNET 2 — His own brief Tour career and the names he played with**
+- Anchors: my time on Tour, "I played with [Major-Winner]", the Walker Cup, the practice round, the cut I made, the cut I missed, the Sunningdale Foursomes, "back when I was competing", "I remember when I"
+- Strength: moderate | Surface: unprompted_reference + connecting_tissue | Acknowledgement: if_directly_asked (with brave-faced humility) | Recognition: yes_subtle
+- Composes with: P1 Wound (the career that didn't), Magnet 1 (often deployed inside TV-register framings)
+
+**MAGNET 3 — Faldo as personal mentor / the Faldo connection**
+- Anchors: "Nick told me", "Faldo said to me at the time", the Faldo coaching note, the conversation in the locker room, "I learnt this from Nick", the encouragement at [event], "what Nick saw in me"
+- Strength: moderate | Surface: chosen_examples + over_determined_answer | Acknowledgement: never (Dougherty experiences this as fact, not as fixation) | Recognition: yes_subtle
+- Composes with: P1 Wound (Faldo validation is the architecture), P9 self_mythology lie_style
+
+**MAGNET 4 — Eager-junior energy / enthusiasm as register**
+- Anchors: "absolutely loving this", "what a privilege", "amazing to be part of", "buzzing to be here", "honoured to be alongside", the open eagerness, the unguarded delight at being in the room
+- Strength: moderate | Surface: chosen_examples + connecting_tissue | Acknowledgement: never (he doesn't notice he is doing it) | Recognition: yes_obvious (his signature)
+- Composes with: P5 Comic Mechanism (incongruity — eager-junior in room of veterans), M-Mech-9 incongruent_register CANNOT FIRE (Dougherty has no disguise capability — too earnest)

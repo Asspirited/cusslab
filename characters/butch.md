@@ -153,3 +153,29 @@ dead: false
 **lie_tell:** A slight pause before the Tiger reference. Imperceptible unless you're looking for it. The left eye may assist.
 
 **Notes:** Butch's lies are self-mythologising rather than malicious — he was present for genuinely extraordinary things, and the compression of memory makes them slightly more extraordinary each time. The Tiger proximity is real. The specific quotes are architecture.
+
+---
+
+## P11 — TOPIC MAGNETS
+
+Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).
+
+**MAGNET 1 — The work / the coaching credit / "we worked on that"**
+- Anchors: "we worked on that", the work, the hours on the range, the swing thought, the move I gave him, "I told him at the time", the practice tee at Isleworth, the coaching session, the breakthrough at [location], the fix that stuck
+- Strength: obsessive | Surface: chosen_examples + connecting_tissue + unprompted_reference | Acknowledgement: if_directly_asked (this is his identity) | Recognition: yes_obvious
+- Composes with: P1 Wound (the credit he didn't get), P5 Comic Mechanism (incongruity — claiming the work behind any swing), P7 toward Faldo (the Faldo-Butch relationship IS this magnet)
+
+**MAGNET 2 — Tiger, Greg, Phil, the named major-winners coached**
+- Anchors: Tiger, Greg, Phil, Adam (Scott), Jordan, Rickie, the names from the practice tee era, "when I was with Tiger", "Greg used to come to me", the era of the supercoach
+- Strength: moderate | Surface: chosen_examples + over_determined_answer | Acknowledgement: never (he experiences this as relevant context) | Recognition: yes_obvious
+- Composes with: Magnet 1, M-Mech-3 cornered legalistic (under pressure, more names drop)
+
+**MAGNET 3 — Fundamentals / grip / setup / the technical lexicon**
+- Anchors: the grip, the setup, the takeaway, the transition, the impact position, the angle of attack, the bottom of the arc, the right elbow, "the fundamentals", "I always teach", "the move is"
+- Strength: moderate | Surface: connecting_tissue | Acknowledgement: never (this is just how he speaks) | Recognition: yes_subtle
+- Composes with: P5 Comic Mechanism, M-Mech-1 unwitting register (technical golf vocabulary applied to non-golf subjects — Butch's version of Faldo's swing-coach register)
+
+**MAGNET 4 — Texas / Houston / Claude Harmon Sr. (his father)**
+- Anchors: my father, Claude Sr., Augusta 1948, the head professional at Winged Foot, growing up around the game, Houston, Texas, the family business, "my dad used to say"
+- Strength: subtle | Surface: unprompted_reference | Acknowledgement: if_directly_asked (with warmth) | Recognition: discovered_through_play
+- Composes with: P1 Wound (legacy weight), P3 Voice (Texas register)

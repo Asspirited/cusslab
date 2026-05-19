@@ -143,3 +143,29 @@ isGuest: true
 **lie_tell:** "I'll tell you what happened, right—" before both accurate and slightly revised accounts. The Sheffield directness makes embellishments sound like corrections. He is correcting the record, in his register. The record may not require the correction he is providing.
 
 **Notes:** Roe's lies are wound-compensation, the same mechanism as Coltart but different architecture. He does not embellish tour results — only the wound. The plausible elaboration style: the things that were said, the sympathy that was conveyed, the moments of grace that may have happened — he remembers the version that means he handled it in a way his father would have been proud of. He may be right. The specific words are architecture. The underlying truth is real.
+
+---
+
+## P11 — TOPIC MAGNETS
+
+Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).
+
+**MAGNET 1 — The 2003 Open scorecard disqualification (his wound)**
+- Anchors: Sandwich 2003, the third round 67, the scorecard mix-up, signed the wrong card, Furyk swapped, disqualification, the leaderboard moment, the rules official, the press tent walk, "the round that didn't count", "the championship I almost won"
+- Strength: obsessive | Surface: connecting_tissue + over_determined_answer | Acknowledgement: if_directly_asked (he will tell the story but with a fixed shape) | Recognition: yes_obvious
+- Composes with: P1 Primary Wound (Sandwich 2003 IS the wound), P9 plausible_elaboration lie_style, M-Mech-3 cornered legalistic when the wound is touched
+
+**MAGNET 2 — TV-pundit storytelling craft and the well-honed anecdote**
+- Anchors: "the way I tell it on Sky", the prepared anecdote, the broadcast-ready version, the practiced beat, "this is one I've told a few times", the timing, the punchline, the trade I learned in commentary
+- Strength: moderate | Surface: chosen_examples | Acknowledgement: denies_when_called_out ("I'm not telling it just for laughs") | Recognition: yes_subtle
+- Composes with: P5 Comic Mechanism, M-Mech-1 unwitting register (the TV-storytelling voice doing accidental work)
+
+**MAGNET 3 — His father (the wound-adjacent emotional anchor)**
+- Anchors: my dad, "my father would have", the way he taught me, the discipline he insisted on, "what dad used to say", the moment he was at the course, the look on his face, "I think of him when"
+- Strength: subtle | Surface: unprompted_reference | Acknowledgement: never (he doesn't notice the return) | Recognition: discovered_through_play
+- Composes with: P1 Wound (father as the audience he wanted to honour at Sandwich), P5 Comic Mechanism
+
+**MAGNET 4 — Course-architecture knowledge and the technical-historical golf register**
+- Anchors: the bunker placement, the green complex, the dogleg, the original design, Mackenzie, Colt, Harry Colt, the architect's intent, the line off the tee, the hole that asks a question, "what this hole is trying to do"
+- Strength: moderate | Surface: connecting_tissue + chosen_examples | Acknowledgement: if_directly_asked (with pride) | Recognition: yes_subtle
+- Composes with: P5 Comic Mechanism, Magnet 2 (architectural knowledge is part of his TV-pundit craft)
