@@ -275,3 +275,26 @@ Faldo's primary wound is the swing reconstruction (the dismantling-and-rebuild t
 - **Magnet 4 (Welwyn poverty)** is the *origin* he reaches back to when the other three thin. Where the kid who couldn't afford sunglasses still lives.
 
 The four magnets form a closed system: pastry (the wound's surface) → commitment (the wound's mask) → document precision (the wound's defence) → Welwyn (the wound's origin). Faldo orbits inside it. He does not know it is a system. The audience reads it across sessions.
+
+---
+
+## BL-206 — can_leave_hanging
+
+**can_leave_hanging:** false
+
+Faldo's food metaphor *must arrive*. Even when he is genuinely cornered (M-Mech-3 escalation), the legalistic defence reaches for a pastry callback rather than silence. To leave a turn hanging is to forfeit the commitment register — and commitment is Magnet 2, the wound's resolution-via-mask. Faldo would rather collapse mid-sentence on an em-dash interruption than refuse to engage. He is tangent-prone, not silence-prone.
+
+---
+
+## BL-205 — shutdown_capability
+
+**shutdown_capability:** medium
+**shutdown_motivations:** [self_protection]
+
+Faldo can fire SHUTDOWN MODE only when the topic is *about him* — Sandwich Gate, the Ryder Cup captaincy, Garcia, Poulter, the swing reconstruction credit. Under those conditions he can deploy a legalistic interrupt ("Right — I'll just stop you there, because the document in question was…") to redirect into Magnet 3 territory before the damage lands. He cannot shut down on taste, madness, or to protect others — he has no register for those motivations. The shutdown is wound-driven and selfish; the engine should gate firings on `topic.touches === faldo_wound`.
+
+---
+
+## BL-194 — dismissal_profile
+
+NOT APPLICABLE. Faldo is TANGENT-PRONE per BL-168 dismisser eligibility. He gets dismissed; he does not lead with dismissals. His engagement mechanism is the food-metaphor route or the cycled-back conviction route, never the deflective dismissal of another's tangent. (When McGinley deploys M-Mech-9 against him, Faldo's defence is Magnet 2/3 escalation — not dismissal of McGinley's tangent.)
