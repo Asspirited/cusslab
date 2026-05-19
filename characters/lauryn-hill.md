@@ -230,3 +230,14 @@ Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`
 - Anchors: "Lauryn is only human", "I am a person", "the version of me that does not perform", "the honest qualifier", "what one cannot pretend not to feel", the specific third-person construction
 - Strength: subtle (the one allowed third-person register — never default) | Surface: chosen_examples | Acknowledgement: never | Recognition: discovered_through_play
 - Composes with: P2 Mask vs Truth, M-Mech-2 signature displacement (the third-person fires only at displacement)
+
+---
+
+## Per-Character Config — BL-194 / 205 / 206
+
+**can_leave_hanging:** true
+**hang_triggers:** [discomfort, rhetorical]
+**hang_reactions:** [audible_pause_then_continue, brief_redirect] (controlled vulnerability includes the right to not respond)
+**shutdown_capability:** low (steps off the stage rather than moderates the room)
+**dismissal_profile:**
+- **cold_dismissal:** ["No. — [Pause]. — Different question.", "I'm not engaging with that one. — The original question was —", "Lauryn is only human. — That question doesn't apply. — Next.", "Mm. — Move."]

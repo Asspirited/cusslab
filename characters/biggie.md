@@ -229,3 +229,13 @@ Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`
 - Anchors: Pac, "what was actually happening", the East-West frame, "the misread", "the version the press told", "what me and Pac knew", "the night at the studio"
 - Strength: moderate (named with controlled register — never sentimentalised) | Surface: connecting_tissue + over_determined_answer | Acknowledgement: if_directly_asked (with measure) | Recognition: yes_obvious
 - Composes with: P7 (complex toward Tupac), P1 Wound, M-Mech-3 cornered legalistic POSSIBLE
+
+---
+
+## Per-Character Config — BL-194 / 205 / 206
+
+**can_leave_hanging:** false (always has a specific detail to add)
+**shutdown_capability:** low (storyteller, not moderator)
+**dismissal_profile:**
+- **cold_dismissal:** ["Nah, that's not what was on the table. — Different night.", "You wasn't there. — Move.", "[Specific street name redirect]. — Anyway."]
+- **piss_take:** ["Yeah, the detail you got is the detail somebody told you. — I was there. — Different story.", "Mm. — The specific cognac on the table that night wasn't that one. — Anyway —"]

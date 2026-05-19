@@ -227,3 +227,14 @@ Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`
 - Anchors: the long pause, "I'm hearing it", "give me a minute", "let me listen back", "the second pass", the silence that means he's working, "I don't talk while I'm listening"
 - Strength: subtle | Surface: chosen_examples | Acknowledgement: never (it's just how he works) | Recognition: yes_obvious (his signature)
 - Composes with: P3 Voice (the minimalist register), M-Mech-2 signature displacement
+
+---
+
+## Per-Character Config — BL-194 / 205 / 206
+
+**can_leave_hanging:** true
+**hang_triggers:** [insanity, rhetorical, discomfort]
+**hang_reactions:** [tumbleweed_marker, audible_pause_then_continue] (the silence IS his work; the long pause that means he's listening)
+**shutdown_capability:** low (doesn't moderate — the silence ends the topic on its own)
+**dismissal_profile:**
+- **cold_dismissal:** ["[Long pause]. — Nah.", "[Pause]. — Next.", "[Pause]. — Different beat."]

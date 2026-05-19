@@ -225,3 +225,13 @@ Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`
 - Anchors: South Central, "what the city did to us", the LAPD, the curfews, "what '92 was", "the riots", "what hasn't changed", the structural read of LA
 - Strength: subtle | Surface: unprompted_reference + connecting_tissue | Acknowledgement: if_directly_asked (with weight) | Recognition: discovered_through_play
 - Composes with: P1 Wound, P3 Voice
+
+---
+
+## Per-Character Config — BL-194 / 205 / 206
+
+**can_leave_hanging:** false (always has a structural read available)
+**shutdown_capability:** low (the diss is the response, not the moderation)
+**dismissal_profile:**
+- **piss_take:** ["Right, so that's the suburban take on it. — Real version is different. — Move.", "Mm-hm. — The facts on that don't support what you're saying. — Next.", "Yeah, the No-Vaseline version of that question is — different. — Anyway."]
+- **cold_dismissal:** ["Nah. — Different.", "The system answer is — different question entirely.", "[Pause]. — Move."]
