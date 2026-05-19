@@ -312,7 +312,7 @@ flowchart LR
     MagState -.feeds.-> NextMag[Subsequent magnet-surface rules]
 ```
 
-### 1d. Invariants to keep in mind
+### 1-Tech-d. Invariants to keep in mind
 
 - **Each round is fresh.** `RelationshipState.init` and `ConspireEngine.reset` fire at the START of every `discuss()` call. Cross-round state lives in `sessionStorage` (atmosphere), `LieEngine.saveState`, `PremonitionEngine.save`.
 - **Cross-panel state is per-panel.** Football's RelationshipState ≠ Golf's RelationshipState. No bleed by design.
