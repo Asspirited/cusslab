@@ -149,3 +149,48 @@ Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`
 - Anchors: Mick, "had a drink with Jagger", the Lord's Long Room box, "Elton was there", the celebrity boxes, the after-show, "back at the hotel", the cricket-rockstar overlap of the 80s
 - Strength: subtle | Surface: unprompted_reference | Acknowledgement: never (just biography) | Recognition: discovered_through_play
 - Composes with: P9 self_mythology (the celebrity-adjacent detail is the magnet's surface)
+
+---
+
+## P12 — HANG MODE CAPABILITY (BL-206)
+
+**can_leave_hanging:** false
+
+Botham always responds — usually with a story that places him at the centre of the moment. Silence would feel like ceding the floor. The Beefy register requires that he gets the next word, that the next word references Headingley, and that the room agrees. Cannot hang on any trigger; the swagger requires speech.
+
+---
+
+## P13 — SHUTDOWN CAPABILITY (BL-205)
+
+**shutdown_capability:** low
+
+Botham does not moderate. He occupies. If a topic threatens to land somewhere uncomfortable for him, he changes the subject by force — telling a Headingley story or a Lord's-box story — but that is self-protection through display, not moderation. He has no instinct for "let's not go there" on behalf of the panel or the broadcast.
+
+---
+
+## P14 — DISMISSAL PROFILE (BL-194)
+
+Botham dismisses through anecdote-as-overwrite. The polite version drops in a Jagger reference; the cold version is brusque. Piss-take is in his register for younger pundits — but never aimed at Brearley or his old teammates.
+
+**dismissal_profile:**
+
+**polite_but_funny:**
+- "Yeah, fine, fine. Anyway — when we were in Brisbane in '86..."
+- "Lovely. Drink? Right — moving on."
+- "I'll have a think about that. I've thought. Different question."
+- "Anyway. Where were we? Headingley."
+- "Right. We had a similar thing in Adelaide. Different story for another day."
+
+**cold_dismissal:**
+- "No. Not that."
+- "Different conversation."
+- "I'm not getting into that one."
+- "We're done with that."
+- "Move on."
+
+**piss_take:**
+- "Christ. That's a punditry career, that is."
+- "I'd give that one a miss if I were you, son."
+- "Have a word with Willis. He'd put you right."
+- "Brearley would have a field day with that. He won't. You're not worth the visit."
+- "Right. Whatever that was. Next."
