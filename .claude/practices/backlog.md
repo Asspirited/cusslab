@@ -2690,3 +2690,120 @@ Rotation rule: cycle through frames so each fires at least once across 5 rounds;
 - CD3: UBV=7 TC=5 RR=4 → CoD=16, Dur=4, **CD3=4.0**
 - Composes with: BL-183 v1, BL-188 invented expert (eggee may invoke expert under egging pressure), BL-189 panel consensus (mutually exclusive — egging is 1-on-1)
 - Status: OPEN — raised 2026-05-19 from BL-183 v2 reframing
+
+---
+
+### BL-205 — SHUTDOWN MODE: per-character shutdown_capability + transcript em-dash truncation
+
+**Story:** As a viewer of a panel where someone gets shutdown mid-sentence, I want to *see* the unfinished sentence as `"Faldo, about your—"` (em-dash truncation) so the interrupt structure is visible — and as an engineer I want only characters with declared `shutdown_capability: high|medium|low` to fire shutdowns, so we don't get Souness politely shutting down Roy.
+
+**AC (Gherkin):**
+- Given Henni has `shutdown_capability: high` and Carragher starts a turn on a taste-flagged topic
+- When Henni's slot fires under SHUTDOWN MODE
+- Then Carragher's in-progress text renders as `"Carragher: [Faldo, about your—]"` (em-dash truncation in transcript renderer)
+- And Henni's redirect renders normally
+- Characters without `shutdown_capability` config never receive SHUTDOWN MODE block
+
+- Epic: Proactive moderation / shutdown (BL-181 v1 prompt block shipped)
+- Feature: panel-interaction (engine + character data + transcript renderer)
+- CD3: UBV=6 TC=4 RR=3 → CoD=13, Dur=3, **CD3=4.3**
+- Composes with: BL-181 v1, per-character `shutdown_capability` data (Three Amigos table needed), transcript renderer (likely UI/output layer change)
+- Status: OPEN — raised 2026-05-19 from BL-181 v2 reframing. Two ship targets in one story — could split further if transcript truncation proves bigger than expected.
+
+---
+
+### BL-206 — HANG MODE: per-character `can_leave_hanging` config + hang-trigger heuristic
+
+**Story:** As an engineer I want only characters with declared `can_leave_hanging: true` to receive HANG MODE block (not Souness — too direct, not Murray — ceremonial frame requires engagement), so the silence-response fires from characters whose voice supports it.
+
+**AC (Gherkin):**
+- Given Mystic has `can_leave_hanging: true, hang_triggers: [insanity, rhetorical]` and the previous turn was unhinged
+- When Mystic's slot fires
+- Then HANG MODE block is included in her ctx with `reaction: tumbleweed`
+- Given Souness has `can_leave_hanging: false`
+- When the same trigger fires
+- Then Souness gets the normal response block (no HANG MODE)
+
+- Epic: Hang mode (BL-180 v1 prompt block shipped)
+- Feature: panel-interaction (engine + character data)
+- CD3: UBV=6 TC=4 RR=3 → CoD=13, Dur=2, **CD3=6.5**
+- Composes with: BL-180 v1, per-character `can_leave_hanging` config (Three Amigos table — small)
+- Status: OPEN — raised 2026-05-19 from BL-180 v2 reframing
+
+---
+
+### BL-207 — BL-184: M-4 mechanism calibration drift script
+
+**Story:** As an engineer running the pipeline I want a script that samples N M-Mech-9 firings per character and scores (via secondary LLM judge) the calibration level achieved against `allowed_levels` declared, so we catch when McGinley starts drifting from L3-L5 sustained-disguise into L6+ open-hostility under sustained pressure.
+
+**AC (Gherkin):**
+- Given character P9 declares `incongruent_register.allowed_levels: [3, 4, 5]` for McGinley
+- And the script samples last N transcripts where M-Mech-9 fired in McGinley's slot
+- When the script runs `node pipeline/measurement/mech-calibration-drift.js`
+- Then a secondary LLM judge scores each fired turn (1-7 scale) and reports the distribution
+- And drift outside [3, 5] band by more than threshold flags the character
+- Exit 0 if all in-band; exit 1 if drift detected
+
+- Epic: BL-184 measurement suite (4 of 6 instruments shipped — M-1 + M-3 + M-5 + M-2)
+- Feature: process (pipeline)
+- CD3: UBV=5 TC=3 RR=5 → CoD=13, Dur=3, **CD3=4.3**
+- Composes with: M-Mech-9 (subject of measurement), transcript capture infrastructure (needs to exist — currently informal), secondary LLM judge (Anthropic API call per sample, cost notes in BL-184)
+- Status: OPEN — raised 2026-05-19 from BL-184 partial-shipped reframing
+
+---
+
+### BL-208 — BL-184: M-6 disagreement-productivity index script
+
+**Story:** As an engineer running the pipeline I want a script that samples N panel sessions and scores (via secondary LLM judge) whether each panel stayed in productive-disagreement territory (M-Mech-9 L3-L5 sustained, multiple competing voices) versus drifted to consensus (failure mode) or to open hostility (collapse), so we have a single composite metric for "is the panel doing what it's designed to do."
+
+**AC (Gherkin):**
+- Given a sample of last N completed Golf 19th Hole sessions (full panel runs)
+- When the script runs `node pipeline/measurement/disagreement-productivity.js`
+- Then each session is scored on three axes: % time in L3-L5 incongruence, count of competing voices per round, drift-to-consensus events
+- And a composite disagreement-productivity index (0.0-1.0) is reported per session and panel-averaged
+- Exit 0 if index >= threshold; exit 1 if drift detected
+- Output sortable by panel and date
+
+- Epic: BL-184 measurement suite (4 of 6 shipped)
+- Feature: process (pipeline)
+- CD3: UBV=6 TC=3 RR=5 → CoD=14, Dur=4, **CD3=3.5**
+- Composes with: BL-207 (uses same secondary LLM judge infrastructure), Lever 5 (temperature drift correlates with disagreement-productivity)
+- Status: OPEN — raised 2026-05-19 from BL-184 partial-shipped reframing. Lower priority than M-4 — broader composite measure but more expensive to run
+
+---
+
+### BL-209 — Lever 5: engine bias on mechanism scoring per the bias table
+
+**Story:** As an engineer I want the engine's per-turn mechanism scoring to be biased by the panel's current `panelTemperature` per the Lever 5 bias table, so that HOSTILE panels actually fire M-Mech-3 / M-Mech-5 more often and WARM panels actually fire M-Mech-6 / M-Mech-7 more often — not just the model being told the temperature.
+
+**AC (Gherkin):**
+- Given Golf 19th Hole has `panelTemperature: { intent: -0.6, congruence: 0.0 }` and the engine is computing fire probabilities for each Lever 4 mechanism this turn
+- When the engine applies the bias delta: `firing_rate(M-Mech-3) = base + (-0.6 × +0.3) = base - 0.18`
+- Wait — sign convention: HOSTILE-positive delta × HOSTILE-negative axis = lower rate. CORRECTION: HOSTILE-positive delta * HOSTILE-NEGATIVE axis. Sign of axis is HOSTILE = -1.0, so M-Mech-3 (HOSTILE +0.3) under intent=-0.6 → -0.6 × 0.3 = -0.18? That's the WRONG direction.
+- Verify sign convention from panel-voice-principles.md Lever 5 bias table before implementing
+- Given correct sign convention, applied per turn
+- Then M-Mech-3 fires more often in HOSTILE panels relative to baseline
+- And the discipline note in Lever 5 ("HOSTILE-positive delta means M-Mech-3 *likes* HOSTILE; multiply per-the-table") is honoured
+
+- Epic: Lever 5 — Panel Temperature (v0 descriptor block shipped, b2c1712)
+- Feature: panel-voice (engine — scoring layer)
+- CD3: UBV=8 TC=5 RR=4 → CoD=17, Dur=4, **CD3=4.25**
+- Composes with: Lever 5 standards (commit 2f6d7e2 — bias table is the spec), BL-167 selectSlots scoring (this is where the bias applies), each Lever 4 mechanism BL that has firing logic, BL-208 M-6 (calibration check for the bias actually working)
+- Status: OPEN — raised 2026-05-19 from Lever 5 v1 reframing. Highest-risk engineering of the v2 batch — touches every mechanism's firing rate. Recommend after Lever 5 v0 has been observed in live for several sessions to verify the descriptor-only ship is doing useful work and the bias-table values feel right before locking them in code.
+
+---
+
+### BL-210 — Close v1-complete BLs as Done — admin sweep
+
+**Story:** As anyone reading the backlog, I want BLs whose v1 has shipped and whose v2 has been raised as a separate BL to show Status: Done (not Open), so the CD3 list shows only stories that genuinely need work.
+
+**AC:**
+- Given the v2 reframing batch is complete (BL-194..209 raised covering v2s of BL-168/172/169/163/188/186/174/178/189/183/181/180/184/176/Lever 5)
+- When this admin sweep runs
+- Then the following BLs flip to `Status: Done` with a "Superseded by BL-NNN" cross-reference: BL-168, BL-172, BL-169, BL-163, BL-188, BL-186, BL-174, BL-189, BL-183, BL-181, BL-180, BL-179 (v1 fully delivered the story), BL-176 (covered by M-1/M-5 + Faldo throttles)
+- BLs that retain partial open scope keep status with a note: BL-178 (v0 90-character coverage complete + v1 Golf wired; v2 = BL-202), BL-184 (4 of 6 instruments shipped; v2 = BL-207 + BL-208)
+
+- Feature: process
+- CD3: UBV=2 TC=2 RR=2 → CoD=6, Dur=1, **CD3=6.0**
+- Composes with: all BLs being closed (above)
+- Status: OPEN — raised 2026-05-19. Pure admin sweep. Ship after this batch is acknowledged.
