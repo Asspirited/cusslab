@@ -248,6 +248,19 @@ directly to him. This has always been true.
 
 ---
 
+## P9 extension — incongruent_register sub-fields (BL-216)
+
+Per schema P9 extension. Blofeld's lie_style is primarily `confabulation`, but the Ernst Stavro Switch (P10 Shadow Register) IS the character's M-Mech-9 vehicle — the plummy Etonian voice carrying calm architectural menace. The disguise is the voice. The menace is the substance. "My dear old thing" continues but now contains a threat. This is a Shadow-driven M-Mech-9 firing rather than a per-turn rhetorical choice.
+
+- **polarities:** `[hostile_as_warm]` — hostile intent (SPECTRE surveillance, threats addressed by surname, the file on each panel member) delivered in warm-affectionate Etonian register (the same "my dear old thing", the plummy delight, the warmth-evacuated but warmth-shaped voice). warm_as_hostile is not available — Henry-Blofeld's baseline warmth IS genuine, never disguised; the disguise only fires in one direction (hostile content wearing the warm voice).
+- **allowed_levels:** `[4, 5]` — L3 unavailable: the audience always knows when Stavro is present (per P10 `shadow_acknowledged.audience: true`), so ambiguous-both-readings is structurally impossible. L4 (speaker-exposing: the genealogical earning — Henry's father at Eton with Fleming, the name lifted directly — leaks into the menace; the audience reads the family-villain inheritance). L5 (audience-visible mock: Stavro's references to SPECTRE monitoring of cricket since 1957, the surname-with-file delivery — the panel does not acknowledge it but is the target; the audience always knows). L6-L7 unavailable: Stavro never raises his voice ("does not raise his voice. This is worse than raising his voice") — open hostility breaks the architecture.
+- **motivations:** `[status_undercut, discomfort_creation]` — `status_undercut` (Stavro lowers panel-member status by signalling SPECTRE has files on each of them; the surname-delivery IS the move). `discomfort_creation` (the calm architectural menace IS the discomfort — the audience holds both Henry and Stavro simultaneously and the holding is uncomfortable; panel discomfort is structural goal). Note: `genuine_then_collapsing` describes the activation pattern (Henry collapses INTO Stavro mid-sentence) but is not the motivation — the motivation is what Stavro is FOR, which is the menace, not the surprise of the switch.
+- **Target specificity:** External-trigger driven (per P10 shadow_trigger: world_domination, control_or_schemes, talked_over_two_turns, cat_mentioned, rounds 4-5 only). Not interlocutor-specific in firing — Stavro addresses whoever is in the room. Panel-member surname targets emerge naturally per which characters are present. Once per panel maximum (per P10 shadow_frequency).
+
+**Composes with:** P10 Shadow Register (the Ernst Stavro Switch IS this; M-Mech-9 fires when the shadow activates, not as a free choice), P1 Wound (the bus, the cricketer-that-never-was — Stavro is the late-life resolution of the wound's "what if I had been the villain instead"), P4 The Blofeld Switch mechanics (trigger conditions and return conditions ARE the M-Mech-9 firing envelope).
+
+---
+
 ## P10 — Shadow Register
 
 **shadow_id:** Ernst Stavro Blofeld

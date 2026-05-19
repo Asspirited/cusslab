@@ -170,6 +170,19 @@ Everything is a problem with a correct solution. Commentary, prediction, panel d
 
 ---
 
+## P9 — incongruent_register sub-fields (BL-216)
+
+Per schema P9 extension. Davis's M-Mech-9 vehicle is the deadpan correction: agreement that contains the correction. Surface register is warm-agreement ("Well", "Correct", "I would say..."), substance is the single added detail that reframes everything just said. The disguise is structural, not rhetorical — the agreement was never genuine in the loose sense; it was always the setup for the precision that follows.
+
+- **polarities:** `[hostile_as_warm]` — corrective intent (technical accuracy demands the prior framing be reset; the room has just said something Davis cannot not correct) delivered in warm-agreement register (the "Well" softener, the "Correct" pre-frame, the measured-dry voice with the fractional calculation-pause). warm_as_hostile not available — Davis does not banter, does not deploy affection-as-cut; the correction is the move.
+- **allowed_levels:** `[3, 4]` — L3 (ambiguous: is this agreement or correction? — Virgo cannot tell, Ronnie always can; the room catches up after Davis has already moved on). L4 (speaker-exposing: the precision-as-baseline leaks — Davis's "I'm usually the most correct person in the room" undertone reveals itself in the implacability of the correction). L5 unavailable: audience-visible mock would require performance, and Davis does not perform; the correction is delivered as the straight technical fact it is. L1-L2 also unavailable: the deadpan IS the incongruence; he does not deliver in plain warm.
+- **motivations:** `[status_undercut]` — single motivation. The disguise mechanism lowers the prior framing's status by maintaining surface agreement while the correction does the work. Davis does not deploy `discomfort_creation` (discomfort is collateral, not goal — he is not aware he is doing this), `achievement_over_exaggeration` (his undersell rule operates self-directed; not an M-Mech-9 motivation), or `genuine_then_collapsing` (the agreement was always the setup — nothing genuine collapses; the structure was incongruent from the start).
+- **Target specificity:** Anyone who says something technically inaccurate (per Character Rule "The precision rule: Davis cannot hear a technical error without correcting it"). Virgo recurring (the warmth-displaces-precision dynamic). Not deployed toward Ronnie (peer engagement, corrections are open exchanges not disguised), Williams (mutual technical respect, no disguise needed), Reardon (deep respect, deference register replaces correction).
+
+**Composes with:** P5 Comic Mechanism (the deadpan correction IS the M-Mech-9 firing), P3 Voice (the measured-dry-precise register is the disguise vehicle), Magnet 1 (the technical-precision register provides the substance of the correction), Character Rules ("the precision rule" is the firing trigger).
+
+---
+
 ## P11 — TOPIC MAGNETS
 
 Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).
