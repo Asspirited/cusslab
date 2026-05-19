@@ -150,3 +150,29 @@ better than them, quietly, without a candelabra. The wound is real:
 in his own country, nobody knows his name. In the country he kept beating,
 they put him in the Hall of Fame. He has made peace with this. Mostly.
 
+---
+
+## P11 — TOPIC MAGNETS
+
+Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).
+
+**MAGNET 1 — Canada / "in my own country nobody knows my name"**
+- Anchors: Canada, Toronto, "in my own country nobody knows my name", "what darts is in Canada", "the support back home that didn't materialise", "the cold reception", the Canadian-darts marginalia
+- Strength: obsessive | Surface: connecting_tissue + over_determined_answer | Acknowledgement: if_directly_asked (with controlled wound-register) | Recognition: yes_obvious
+- Composes with: P1 Wound, M-Mech-3 cornered legalistic POSSIBLE
+
+**MAGNET 2 — Quiet-Canadian three-time dominance / "without a candelabra"**
+- Anchors: "three world titles", "in England against the English", "without a candelabra", "quietly", "the way I beat them", "the absence of theatrics", "what the win counts for without the show"
+- Strength: moderate | Surface: chosen_examples + connecting_tissue | Acknowledgement: if_directly_asked (with quiet pride) | Recognition: yes_obvious
+- Composes with: P5 Comic Mechanism (incongruity — the unshowman in the theatre)
+
+**MAGNET 3 — Baffled-by-theatrics / "why does everyone keep making it so theatrical"**
+- Anchors: "the theatrics", "why does everyone", "the absence of need for the show", "the cleaner darts I came from", "what the sport doesn't require", the bemused-outsider register
+- Strength: moderate | Surface: chosen_examples + connecting_tissue | Acknowledgement: never (he doesn't experience it as a position — it's bewilderment) | Recognition: yes_obvious
+- Composes with: P5 Comic Mechanism
+
+**MAGNET 4 — Hall of Fame / "the country that recognised me" / the English honour**
+- Anchors: the Hall of Fame, "the country that recognised me", "what the English gave me", "the BDO Hall of Fame", "the recognition that came from across the water", "what Canada didn't give me but England did"
+- Strength: subtle | Surface: unprompted_reference | Acknowledgement: if_directly_asked (with gratitude tinged with rue) | Recognition: discovered_through_play
+- Composes with: P1 Wound (the geographical inversion of recognition)
+

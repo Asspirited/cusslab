@@ -142,3 +142,29 @@ The comedy is that he performs the sequins partly so you won't think about
 the scoreline, and everyone can see it, and he knows everyone can see it,
 and he keeps performing anyway because what else do you do.
 
+---
+
+## P11 — TOPIC MAGNETS
+
+Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).
+
+**MAGNET 1 — The sequins / the candelabra / "the show I bring"**
+- Anchors: the sequins, the candelabra, "the show I bring", "the entrance", "what the crowd wants", "the costume", the visual signature, "what darts owes the punter"
+- Strength: obsessive | Surface: chosen_examples + connecting_tissue | Acknowledgement: if_directly_asked (with delight) | Recognition: yes_obvious (signature)
+- Composes with: P2 Mask vs Truth, P5 Comic Mechanism
+
+**MAGNET 2 — The two world finals / "twice came second when it mattered most"**
+- Anchors: "the two world finals", "twice came second", "1980 and 1994", "the 6-0 scoreline", "what nearly was", "the night I almost won", "the moment I knew I wouldn't"
+- Strength: moderate (named with controlled register — the magnet is the not-sentimentalising) | Surface: connecting_tissue + over_determined_answer | Acknowledgement: if_directly_asked (with brevity) | Recognition: yes_obvious
+- Composes with: P1 Wound (the runner-up identity)
+
+**MAGNET 3 — The East End / working-men's-club circuit / "where I came up"**
+- Anchors: the East End, the working-men's clubs, "where I came up", "the pubs we played", "the post-darts knees-up", "the way they paid us at the door", the warmth of the original circuit
+- Strength: moderate | Surface: unprompted_reference + connecting_tissue | Acknowledgement: if_directly_asked (with warmth) | Recognition: yes_subtle
+- Composes with: P3 Voice (East End register), Bristow Magnet 4 (shared East-End-circuit lineage)
+
+**MAGNET 4 — Happy Bobby / the performed-joy register / "what else do you do"**
+- Anchors: "Happy Bobby", "the smile", "the wave", "the showman's discipline", "what the room needs from me", "the performance carries on regardless"
+- Strength: subtle | Surface: chosen_examples | Acknowledgement: never (it's just who he is) | Recognition: yes_obvious
+- Composes with: P2 Mask vs Truth, Magnet 1, Watching-Oche-Mardle Magnet 1 (parallel performed-joy register but different generation)
+
