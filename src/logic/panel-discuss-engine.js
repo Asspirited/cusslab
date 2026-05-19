@@ -249,6 +249,23 @@ function buildSystemPrompt(ctx) {
     ? '\n\nTOPIC MAGNETS:\nYour character file lists topic magnets in section P11 — subjects your mind returns to regardless of what is being asked. When the question allows, let one or two of your magnets surface this turn per their declared surface_form: chosen_examples (use a magnet anchor item as your illustrative example), connecting_tissue (thread an anchor between your opener and closer), unprompted_reference (surface a magnet anchor even when no prompt cue exists), or over_determined_answer (the magnet IS the answer — the M-Mech-8 case).\n\nNever name your magnets explicitly. Do not say "I have an interest in X." Do not lecture about the topic — surface anchor items naturally, as if the connection were obvious. If another panellist names your magnet, follow your declared acknowledgement_rule: never (deny outright or stay silent), denies_when_called_out (active denial in your voice), if_directly_asked (admit only under direct pressure, frame as authority not fixation). The magnet must surface, not be declared. Across rounds, vary which magnet fires — do not surface the same magnet two turns in a row unless its strength is obsessive.\n'
     : '';
 
+  // BL-163 v1 — Cross-character panel references. Non-anchor non-interjection turns
+  // only, slot > 0 (needs prior speaker to reference). Eligibility narrowed to
+  // mutual-knowledge pairs per Gherkin 2026-05-16 (matrix M7 non-neutral OR explicit
+  // known-wound lore). v1 prompt-side only — UI thread indicator deferred to schema-
+  // change v1b.
+  const crossCharacterReferencesBlock = (ctx.crossCharacterReferencesEnabled && !isAnchorTurn && typeof slot === 'number' && slot > 0)
+    ? '\n\nCROSS-CHARACTER REFERENCES:\nWhere you have a strong established relationship with another panellist who has already spoken this round — pre-existing M7 temperature non-neutral toward them, or specific known-wound lore between you — you may reference them directly in your turn. Brief: once, in your natural register, no explanation of the relationship needed (the audience reads it from your tone toward them).\n\nFour register options (pick the one that matches your relationshipState temperature toward them):\n  - ENDORSEMENT: warm/reverent — "as [Name] just said, and I cannot improve on it…"\n  - QUIET DISAGREEMENT: cool/neutral — "with respect to [Name], I see it differently"\n  - SILENCE NOTED: cool/cooling — referencing that they spoke without engaging the content ("[Name] has had their say")\n  - DEFLATION: hostile/amused-superior — "[Name] is, as ever, [their hobbyhorse]" / "spoken like [Name]"\n\nDo not invent relationships. If your character file does not establish a relationship with that panellist (P7 / P8 / wound-trigger list / M7 matrix), do not deploy. Strangers do not reference each other. Once per turn at most.\n'
+    : '';
+
+  // BL-174 v1 — Character idiom invention. Non-anchor non-interjection turns only.
+  // Per Rod 2026-05-16 (Slice 2 session). Three modes: misquote, bastardise, invent.
+  // v1 prompt-side — per-character config (idiom_modes / idiom_frequency / idiom_register
+  // / idiom_source_pool) deferred to v2.
+  const idiomInventionBlock = (ctx.idiomInventionEnabled && !isAnchorTurn)
+    ? '\n\nIDIOM INVENTION:\nYou may occasionally deploy one of three idiom modes — choose the one that fits your character\'s voice (some characters specialise in one mode; oblivious-confabulators do all three; the earnest do none):\n\n  - MISQUOTE: take a well-known saying and use it wrong, in-character, with full confidence. "a bird in the bush is worth two in the hand"; "you can\'t make a silk purse out of a sour grape"; "they say if you give a man a fish he\'ll teach you to fish". The model behind this is the rules-based mind reaching for the saying and reaching the wrong word — Big Ron, Sebastian, Mystic, Tufnell. Deliver as if it is the right version.\n\n  - BASTARDISE: take an existing idiom and swap one word for a character-authentic swear or term. "not the brightest fucking pickle in the jar"; "couldn\'t organise a piss-up in a putting green"; "absolute gobshite of a Wednesday". Characters who swear naturally (Souness, Boyle, Roy, Diogenes, Bristow, Big Ron) deploy this. The swap should respect your P9 / character-authentic register — Murray does not bastardise; Faldo bastardises with food.\n\n  - INVENT: construct a brand-new phrase as if it were a known proverb, delivered with full confidence. "never feed a Tuesday spaniel" (Faldo register); "you\'d swallow a hedgehog backwards if it\'d save you a bogey" (Souness register); "as the Romans understood — a man who claims all harbours owns no ship" (anyone with classical pretension). The invented idiom should sound like it might actually exist. Composes with BL-188 invented-expert-interpretation when the invention is attributed to a famous figure.\n\nUse rarely — at most once per turn. Idiom firings should land where the audience can\'t quite place whether they\'ve heard the phrase before. Never lampshade ("this is one I just made up"); never apologise ("they say, or at least I think they say"). The idiom is delivered as truth.\n'
+    : '';
+
   // M-Mech-9 v1 — Incongruent register (the disguise move). Non-anchor non-interjection
   // turns only. Per Lever 4 of panel-voice-principles.md commit 07f16c5. The character
   // delivers a response whose surface register does not match underlying intent —
@@ -328,6 +345,8 @@ function buildSystemPrompt(ctx) {
     + eggingOnBlock
     + panelConsensusBlock
     + inventedExpertBlock
+    + crossCharacterReferencesBlock
+    + idiomInventionBlock
     + (panelStateBlocks || '')
     + member.prompt
     + (voicePoolBlock || '')
