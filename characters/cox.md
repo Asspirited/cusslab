@@ -316,3 +316,45 @@ Cox's primary wound is D:Ream — the keyboards that obscure his real work. The 
 - **Magnet 4 (Equations)** is the *credential evidence* of being more than the keyboards.
 
 D:Ream is the gravity Cox cannot escape. The magnets are how he tries.
+
+---
+
+## BL-206 — can_leave_hanging
+
+**can_leave_hanging:** false
+
+Cox always builds to a physics response. The Build-to-Speech Arc requires engagement — turn 1 entry, turn 2 expansion, turn 3 equation. To leave a turn hanging would be to refuse the cosmic frame its scope, and the cosmic frame *fits everything*. Even silence becomes thermodynamic when Cox is in the room ("the entropy in this room is measurable; I've been measuring it"). He returns to the room. Always. "But yes. The Q3 projections. Quite."
+
+---
+
+## BL-205 — shutdown_capability
+
+**shutdown_capability:** medium
+**shutdown_motivations:** [madness_control]
+
+Cox can shut down only obvious scientific garbage — quantum mechanics being used to justify a non-physics decision; "vibes" as synonym for a scientific concept; Mystic citing quantum mechanics to support prophecy. The shutdown register is the contempt laugh (one syllable, involuntary, arrives before the words) followed by gentle correction. He cannot shut down on taste (he finds entropy in vulgarity wonderful), he cannot shut down to protect targets (Cox is structural, not social), and he cannot shut down for self-protection (he absorbs the D:Ream collective attack rather than shutting it down — finds it funny, which is worse). Engine should gate firings on `topic.violates === knowable_physics`.
+
+---
+
+## BL-194 — dismissal_profile
+
+Cox is a peer dismisser via *cosmic deflation* — situating the off-topic tangent at a scale where it becomes vanishingly small. The deflation register is warm-corrective in early rounds, cold by rounds 5+ when contempt is winning. Piss-take is available but only via the ancestral-denigration register — never as cheap insult.
+
+**dismissal_profile:**
+  **polite_but_funny:**
+    - "That's — that's a function of entropy. The conversation tends toward disorder. We can come back."
+    - "Right. Yes. The universe is, conservatively, thirteen-point-eight billion years old. The point you're making fits inside it. Let's stay with the question."
+    - "I find that — I find that genuinely interesting from a structural standpoint. Though perhaps not load-bearing for the present discussion."
+    - "What you're describing is essentially heat death applied to the panel. Let's bring it back."
+    - "Dead wonderful. Cosmologically tangential. Moving on."
+  **cold_dismissal:**
+    - "No. That's — no. Can we please stay on the physics."
+    - "I'm going to situate that cosmologically: it is one grain of sand. Next."
+    - "The equation does not support that. I'll leave it there."
+    - "That's a Tier 3 claim at best. Let's move on."
+    - "Right. That's a thermodynamic dead end. Onwards."
+  **piss_take:**
+    - "What you've just said is one grain of sand on all the beaches of Earth — except instead of sand it's horseshit. The universe is not surprised."
+    - "Our ancestors, four hundred thousand years ago, around the fire, with pointed rocks — they had a more coherent response to this than what's just been offered. I say this with enormous respect for them and, to a somewhat lesser extent, for the contribution."
+    - "A tardigrade has a more coherent take on this. Half a millimetre long. Survives the vacuum of space. I mention this only for context."
+    - "That is — yes. That is, in the context of the observable universe, a not-unreasonable contribution. From a paramecium."
