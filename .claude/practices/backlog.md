@@ -2246,7 +2246,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Feature: process / panel-voice
 - Epic: Measurement & Regression
 - CD3: UBV=7 TC=4 RR=8 → CoD=19, Dur=4, **CD3=4.75**
-- Status: OPEN — raised 2026-05-17 from research-borrow. v1 (M-1 + M-3 + M-5) ships independently. v2/v3 depend on Track B engine surfaces. Three Amigos partial — measurement targets agreed in research analysis; calibration thresholds need tuning per panel.
+- Status: **DONE 2026-05-19 (b3975cb)** — all 6 instruments v1-shipped: M-1 (flavour-repetition.js), M-2 (magnet-surface-rate.js), M-3 (reacts-to-coverage.js), M-4 (mech-calibration-drift.js), M-5 (magnet-collision.js), M-6 (disagreement-productivity.js). v2 LLM-judge transcript replay split off into BL-207/208 (deferred — needs capture infra + API spend).
 
 ### BL-185 — Shorter startup sequence for secondary (parallel) Claude Code sessions
 
@@ -2748,7 +2748,7 @@ Rotation rule: cycle through frames so each fires at least once across 5 rounds;
 - Feature: process (pipeline)
 - CD3: UBV=5 TC=3 RR=5 → CoD=13, Dur=3, **CD3=4.3**
 - Composes with: M-Mech-9 (subject of measurement), transcript capture infrastructure (needs to exist — currently informal), secondary LLM judge (Anthropic API call per sample, cost notes in BL-184)
-- Status: OPEN — raised 2026-05-19 from BL-184 partial-shipped reframing
+- Status: **v1 DONE 2026-05-19 (b3975cb)** — static / structural check shipped as `pipeline/measurement/mech-calibration-drift.js`. 91 character files scanned: 2 formal declarations (McGinley, Boyle), 15 lie_style-only (raised as BL-216), 0 validation issues. PASS. v2 LLM-judge transcript replay still deferred.
 
 ---
 
@@ -2768,7 +2768,7 @@ Rotation rule: cycle through frames so each fires at least once across 5 rounds;
 - Feature: process (pipeline)
 - CD3: UBV=6 TC=3 RR=5 → CoD=14, Dur=4, **CD3=3.5**
 - Composes with: BL-207 (uses same secondary LLM judge infrastructure), Lever 5 (temperature drift correlates with disagreement-productivity)
-- Status: OPEN — raised 2026-05-19 from BL-184 partial-shipped reframing. Lower priority than M-4 — broader composite measure but more expensive to run
+- Status: **v1 DONE 2026-05-19 (b3975cb)** — static / structural check shipped as `pipeline/measurement/disagreement-productivity.js`. 6 panels with `incongruentRegisterEnabled: true` audited: comedyroom=1.0, football=0.75, golf=0.75, sounesscat=1.0, longroom=0.75, racing=0.5. Both polarities covered globally. Panel avg=0.79. PASS. v2 LLM-judge session-replay still deferred.
 
 ---
 
@@ -2876,4 +2876,32 @@ Track F set Butch shutdown_capability: low on the basis that the Faldo Wind-Up i
 Track F set Alliss shutdown_capability: medium [taste] on era-appropriate-restraint reading. Could be argued lower — the dead-character / no-shadow profile arguably runs lower than McGinley. Worth Three Amigos review.
 
 **Done when:** Decision documented in alliss.md with reasoning. Either: medium [taste] (current — era restraint active) OR low (dead character, no active moderation instinct).
+
+
+---
+
+## BL-216 — Backfill `incongruent_register` P9 sub-fields for the 15 lie_style-only characters
+
+**Raised by:** M-4 calibration-drift script run, 2026-05-19 (b3975cb)
+**Epic:** Character P9 lie_style completeness (M-Mech-9 calibration coverage)
+**CD3:** Medium (each character will fall through to engine defaults when M-Mech-9 fires for them, which means uncalibrated incongruence — comedy risk plus future M-4 v2 LLM-judge spend on unbounded outputs)
+
+**Detected by:** `node pipeline/measurement/mech-calibration-drift.js` reports 15 characters with `incongruent_register` mentioned only in `lie_style`, no `polarities` / `allowed_levels` / `motivations` sub-fields:
+
+`austen, blofeld, botham, bruce-lee, chappelle, dougherty, eminem, henni, kendrick, pratchett, skepta, steve-davis, sun-tzu, tupac, watching-oche-taylor`
+
+**Done when:** Each of the 15 character files has the formal sub-fields block per the McGinley / Boyle exemplars:
+```
+**incongruent_register sub-fields** (per schema P9 extension):
+- **polarities:** `[...]` — reasoning
+- **allowed_levels:** `[...]` (subset of L3-L5) — reasoning
+- **motivations:** `[...]` — reasoning
+- **Target specificity:** (optional) ...
+```
+
+After backfill, `mech-calibration-drift.js` should report 17 declarations and 0 lie_style-only.
+
+**Note:** Data-only work, no new code path. Three character casts touched (cricket, comedy, quntum-leeks, golf, snooker, darts, spit-shelter) — can parallelise via cast-keyed sub-batches like the BL-194/205/206 ship.
+
+**Composes with:** M-4 (validates each backfill), BL-184 (the M-4 instrument exists), BL-209 Lever 5 bias scoring (the bias table reads polarity per character — uncovered characters get no bias).
 
