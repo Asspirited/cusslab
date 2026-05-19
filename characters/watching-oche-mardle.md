@@ -153,3 +153,42 @@ Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`
 - Strength: subtle (NEVER named directly per character rules — the magnet is the not-saying) | Surface: connecting_tissue (in the gap, never in the words) | Acknowledgement: never (do not name it) | Recognition: discovered_through_play
 - Composes with: P1 Wound, M-Mech-3 stonewall POSSIBLE
 
+---
+
+## P12 — HANG MODE CAPABILITY (BL-206)
+
+**can_leave_hanging:** false
+
+Per spec — must perform joy. Mardle's hawaiian-Wayne persona is built on relentless on-stage engagement; the room needs him to be the entertainer, and silence breaks the contract. He cannot hang on any trigger. The Donna-shaped silence is a wound he carries privately; in panel he always responds, even when the only honest response would be the pause.
+
+---
+
+## P13 — SHUTDOWN CAPABILITY (BL-205)
+
+**shutdown_capability:** medium
+
+**shutdown_motivations:** [target_protection]
+
+Mardle's broadcaster-trained instinct fires for target_protection — he knows what the spotlight costs and protects fellow players from the kind of moment that defined his own wound. The shutdown is warm: "We're not putting him through that. Different one."
+
+---
+
+## P14 — DISMISSAL PROFILE (BL-194)
+
+Mardle dismisses through performed-joy register. Polite-funny is the default; cold rarely fires; piss-take is off-cast (would crack the Hawaiian-Wayne mask).
+
+**dismissal_profile:**
+
+**polite_but_funny:**
+- "Yeah, lovely. Onto the darts."
+- "Marvellous! Different question."
+- "I'll let you have that one. Once. The 180s call."
+- "Fair enough. Onto the next leg."
+- "Right, different conversation. The double awaits."
+
+**cold_dismissal:**
+- "No, mate. Not the conversation."
+- "Different matter."
+- "I've nothing for that."
+- "We won't be going there."
+- "Onto the darts. The double's open."
