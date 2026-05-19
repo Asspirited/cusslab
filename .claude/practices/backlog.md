@@ -2362,3 +2362,48 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Epic: Panel Interaction Model
 - CD3: UBV=9 TC=6 RR=4 → CoD=19, Dur=3, **CD3=6.3**
 - Status: OPEN — raised 2026-05-17 by Rod live ideation. v1 prompt-side ships fast (same pattern as BL-180/181/183). Three Amigos partial — consensus-topic table and per-character role assignments need a pass.
+
+### BL-190 — `>include the don` cross-panel character include mechanic
+- **Trigger syntax** (parsed from any panel question input): `>include the don` → Peter Alliss as anchor (default). `>include the don anchor` → explicit anchor. `>include the don panel` → as panellist (non-anchor slot).
+- **Parser** generalisable from day one: `>include <handle> [panel|anchor]`. v1 registers only `the don` → `alliss` in the handle map; future characters added by registering new handle → file pairs.
+- **Effect:** Alliss inserted into the panel's MEMBERS for that question only. As anchor: displaces existing anchor for that round (existing anchor drops into a panel slot). As panellist: takes a panellist slot (one existing panellist drops for that round). One question only — does not persist across rounds unless re-triggered.
+- **Depends on BL-191** for cross-panel voice cleanliness. Without the engine generalisation, importing Alliss into football would amplify the golf-pundit-register leak observed live this session.
+- **Three Amigos questions (pending — settle before Gherkin):**
+  1. Anchor displacement: does Alliss DISPLACE the existing anchor, or COEXIST as co-anchor (two openers / two closers)?
+  2. Persistence: confirm one question only. Or should `>include the don session` be a v2 suffix that holds him in until cleared?
+  3. Guest voice blend: pure character-file voice, OR blend with host panel's TURN_RULES mimic patterns?
+  4. Privacy gate: `characters/alliss.md` marked "⚠️ PRIVATE — Internal test only. Do not release without Simon Alliss sign-off." v1 behind Rod-only debug flag in localStorage, or open trigger in live?
+  5. Handle registry scope: v1 just The Don, or seed Tiger / Seve / Bruce Lee / others on day one?
+- **Gherkin gate:** required before code. Standard Cusslab WoW.
+- **Feature:** panel-interaction
+- **CD3:** UBV=8 TC=4 RR=5 → CoD=17, Dur=2, **CD3=8.5**
+- **Status:** OPEN — needs Three Amigos
+
+### BL-191 — `panel-discuss-engine.js` generalisation (per-panel exemplar slots)
+- **Problem:** `src/logic/panel-discuss-engine.js` is the shared turn-prompt composer used by every panel, but five of its meta-instruction blocks bake golf-pundit names and golf-flavoured worked examples directly into the prompt text. Every panel that enables these flags gets golf voices injected as the model's canonical exemplar — confirmed live 2026-05-19 (Rod: football pundits were adopting Faldo / Murray / McGinley register and idioms with their own interpreted use).
+- **Leaky blocks identified:**
+  - Line 225 — CROSS_CHARACTER_PARODY — "Faldo deploying Bruce Lee's 'be like water' against Radar"
+  - Line 240 — REVERENT_ABSURDITY — "Henni, the rook — 19th Hole watershed 2026-05-17"
+  - Line 266 — IDIOM_INVENTION — "(Faldo register)", "(Souness register)", "couldn't organise a piss-up in a putting green", "Murray does not bastardise; Faldo bastardises with food"
+  - Line 276 — INCONGRUENT_REGISTER — names McGinley, Faldo, Sebastian, Roy, Boyle
+  - Line 285 — PANEL_CONSENSUS — worked chain Souness → Faldo → Murray → Cox
+- **Design:**
+  - Each leaky block becomes a template with named exemplar slots: `{idiom_misquote_examples}`, `{idiom_bastardise_examples}`, `{idiom_invent_examples}`, `{consensus_chain_examples}`, `{parody_example}`, `{reverent_absurdity_reference}`, `{incongruent_register_examples}`.
+  - Each panel module declares `PANEL_EXEMPLARS` — per-block, per-mode, panel-flavoured examples drawn from that panel's own MEMBERS.
+    - Football: Souness / Micah / Neville / Carragher / Ron
+    - Cricket: Tufnell / Blofeld / others per `MODULE: Cricket`
+    - Darts: Bristow / Taylor / Lowe / Mardle / Part / George / Waddell
+    - Snooker: panel from `MODULE: Snooker`
+    - Hip-Hop: Eminem + rotating from `spit-shelter-data.js`
+    - Racing: Brazil + rotating from `final-furlong-data.js`
+    - Comedy: Hicks / Boyle / etc per Comedy Room
+    - Boardroom: Sebastian / Harold / Roy / Partridge / Cox / Mystic
+    - Golf: Faldo / Murray / McGinley / Dougherty / Henni / Radar — kept, **but only in Golf's config**
+  - Engine fills slots from `ctx.panelExemplars` at build time. Zero hardcoded character names left in the engine source after refactor.
+  - Guest character imported via BL-190 (`>include`) inherits the **host** panel's exemplars (room reasoning stays panel-flavoured) but its **own** character-file voice (so e.g. Alliss in Football sounds like Alliss, not Souness).
+- **Estimated scope:** 5 engine blocks templatised; 8-12 exemplar slots total across panels; one new `PANEL_EXEMPLARS` const per panel module (~9 panels).
+- **Gherkin gate:** required before code. Snapshot tests of generated prompts per panel to verify no golf names appear in non-Golf prompts.
+- **Feature:** panel-interaction
+- **CD3:** UBV=6 TC=6 RR=8 → CoD=20, Dur=4, **CD3=5.0**
+- **Hypothesis:** [process / quality — no product hypothesis; this is engine quality]
+- **Status:** OPEN — needs Three Amigos

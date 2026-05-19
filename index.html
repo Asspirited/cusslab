@@ -15539,6 +15539,9 @@ Tangent-prone characters are exempt — they are the ones being dismissed, not t
         incongruentRegisterEnabled: true,
         crossCharacterReferencesEnabled: true,
         idiomInventionEnabled: true,
+        // Lever 5 v0 — panel temperature per leanspirited-standards/panel-voice-principles.md
+        // (commit 2f6d7e2). 19th Hole default: intent -0.6 HOSTILE-leaning, congruence 0.0.
+        panelTemperature: { intent: -0.6, congruence: 0.0 },
       });
       const system = gfIaType
         ? IntellectualAttempts.inject('golf', member.id, gfBaseSystem, gfIaType)

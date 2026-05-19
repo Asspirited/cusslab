@@ -249,6 +249,24 @@ function buildSystemPrompt(ctx) {
     ? '\n\nTOPIC MAGNETS:\nYour character file lists topic magnets in section P11 — subjects your mind returns to regardless of what is being asked. When the question allows, let one or two of your magnets surface this turn per their declared surface_form: chosen_examples (use a magnet anchor item as your illustrative example), connecting_tissue (thread an anchor between your opener and closer), unprompted_reference (surface a magnet anchor even when no prompt cue exists), or over_determined_answer (the magnet IS the answer — the M-Mech-8 case).\n\nNever name your magnets explicitly. Do not say "I have an interest in X." Do not lecture about the topic — surface anchor items naturally, as if the connection were obvious. If another panellist names your magnet, follow your declared acknowledgement_rule: never (deny outright or stay silent), denies_when_called_out (active denial in your voice), if_directly_asked (admit only under direct pressure, frame as authority not fixation). The magnet must surface, not be declared. Across rounds, vary which magnet fires — do not surface the same magnet two turns in a row unless its strength is obsessive.\n'
     : '';
 
+  // Lever 5 v0 — Panel Temperature descriptor block. Per panel-voice-principles.md
+  // commit 2f6d7e2. v0 is descriptor-only — informs the model of current panel
+  // temperature on two axes (intent: HOSTILE -1.0 ↔ WARM +1.0; congruence: INCONGRUENT
+  // -1.0 ↔ CONGRUENT +1.0). v1 (engine-side mechanism scoring bias per the bias table)
+  // follows once calibration is observed in live.
+  const pt = ctx.panelTemperature;
+  const panelTemperatureBlock = (pt && (typeof pt.intent === 'number' || typeof pt.congruence === 'number'))
+    ? (() => {
+        const intent = (typeof pt.intent === 'number') ? pt.intent : 0;
+        const congruence = (typeof pt.congruence === 'number') ? pt.congruence : 0;
+        const intentLabel = intent < -0.4 ? 'HOSTILE-leaning' : intent > 0.4 ? 'WARM-leaning' : 'neutral';
+        const congLabel = congruence < -0.4 ? 'INCONGRUENT-leaning (performative warmth / banter-as-affection norm)'
+                        : congruence > 0.4 ? 'CONGRUENT (surface matches intent)'
+                        : 'neutral';
+        return `\n\nPANEL TEMPERATURE (Lever 5):\nThis panel currently runs at INTENT ${intent.toFixed(1)} (${intentLabel}) and CONGRUENCE ${congruence.toFixed(1)} (${congLabel}). Let this colour how your turn lands:\n  - HOSTILE-leaning intent + CONGRUENT surface = open hostility (Souness / Diogenes mode)\n  - HOSTILE-leaning intent + INCONGRUENT surface = performative warmth (Sebastian / Partridge / McGinley-vs-Faldo mode — M-Mech-9 hostile-as-warm)\n  - WARM-leaning intent + CONGRUENT surface = open warmth (Bear / Big Ron mode)\n  - WARM-leaning intent + INCONGRUENT surface = banter-as-affection (Roy / Boyle mode — M-Mech-9 warm-as-hostile)\nYour character may sit in any quadrant per their own P9 / temperament; the panel default biases the room but does not override character voice. Temperature drifts within session: wound activation pulls HOSTILE, shared laughter pulls WARM, M-Mech-9 firing pulls INCONGRUENT. Do not name the temperature; let it shape your delivery.\n`;
+      })()
+    : '';
+
   // BL-163 v1 — Cross-character panel references. Non-anchor non-interjection turns
   // only, slot > 0 (needs prior speaker to reference). Eligibility narrowed to
   // mutual-knowledge pairs per Gherkin 2026-05-16 (matrix M7 non-neutral OR explicit
@@ -339,6 +357,7 @@ function buildSystemPrompt(ctx) {
     + profanityBlock
     + reverentAbsurdityBlock
     + topicMagnetsBlock
+    + panelTemperatureBlock
     + incongruentRegisterBlock
     + hangModeBlock
     + shutdownModeBlock
