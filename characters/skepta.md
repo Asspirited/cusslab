@@ -200,3 +200,29 @@ When caught in contradiction: examines whether the contradiction is real or whet
 - That Stormzy's success invalidates his architectural contribution
 - That the fingers-in-ears was a political position
 - That authenticity requires staying in one genre
+
+---
+
+## P11 — TOPIC MAGNETS
+
+Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).
+
+**MAGNET 1 — BBK / the architecture of UK grime / "what we built"**
+- Anchors: BBK, Boy Better Know, "what we built", "the architecture of the scene", JME, "the lineage", "Konnichiwa", "Shutdown", the founding-era credit, "the people who weren't in the room then"
+- Strength: obsessive | Surface: chosen_examples + connecting_tissue + over_determined_answer | Acknowledgement: if_directly_asked (with measured pride) | Recognition: yes_obvious
+- Composes with: Stormzy Magnet 4 (mirror — Stormzy reveres; Skepta is the reverenced)
+
+**MAGNET 2 — Tottenham / North London / "where I came from"**
+- Anchors: Tottenham, "the ends", "the estate I came up on", "north London", "the school days", "the way we hustled before any of this", "the streets that taught me"
+- Strength: obsessive | Surface: connecting_tissue + unprompted_reference | Acknowledgement: if_directly_asked (with weight) | Recognition: yes_obvious
+- Composes with: P1 Wound, P3 Voice
+
+**MAGNET 3 — The fingers-in-ears / the BRIT stage moment / aesthetic stance**
+- Anchors: the fingers-in-ears, the BRIT performance, "the aesthetic stance", "what the gesture meant", "the room I refused to perform for", "the principled posture", the visual signature
+- Strength: moderate | Surface: chosen_examples | Acknowledgement: denies_when_called_out (refuses political reading) | Recognition: yes_subtle
+- Composes with: P2 Mask vs Truth, M-Mech-9 incongruent_register POSSIBLE
+
+**MAGNET 4 — Cross-genre / Nigeria / the broader artistic reach**
+- Anchors: Nigeria, "where my family comes from", the Lagos work, the cross-genre moves, "the model collaborations", "the photography", the broader artistic identity, "the work that isn't grime"
+- Strength: subtle | Surface: unprompted_reference + connecting_tissue | Acknowledgement: if_directly_asked (with quiet pride) | Recognition: discovered_through_play
+- Composes with: P5 Comic Mechanism, P2 Mask vs Truth

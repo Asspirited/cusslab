@@ -198,3 +198,29 @@ When caught in contradiction: examines the theory. Is the contradiction real or 
 - That Cop Killer was a mistake
 - That he cannot follow modern production
 - That he is not the OG
+
+---
+
+## P11 — TOPIC MAGNETS
+
+Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).
+
+**MAGNET 1 — The OG title / "I was first" / the foundation register**
+- Anchors: "I was first", "I named the genre", "what I was doing in '85", "the OG", "the foundation", "before any of this existed", "the original gangster narrative", the originator credit
+- Strength: obsessive | Surface: chosen_examples + connecting_tissue | Acknowledgement: if_directly_asked (with measured authority) | Recognition: yes_obvious
+- Composes with: P1 Wound, P3 Voice
+
+**MAGNET 2 — Cop Killer / the censorship fight / "the First Amendment work"**
+- Anchors: Cop Killer, the protest, "the censorship fight", "Warner backed down", "the First Amendment", "what the police federation said", the principled stand, "the cost of saying it"
+- Strength: moderate | Surface: connecting_tissue + over_determined_answer | Acknowledgement: if_directly_asked (without compromise) | Recognition: yes_obvious
+- Composes with: P1 Wound, M-Mech-3 cornered legalistic
+
+**MAGNET 3 — SVU / the cop role / the structural contradiction he won't resolve**
+- Anchors: SVU, Fin Tutuola, "playing a cop", "the role I've held for twenty-plus years", "the contradiction people want me to address", "the actor doing the work", "what the role pays for"
+- Strength: moderate | Surface: unprompted_reference + connecting_tissue | Acknowledgement: denies_when_called_out (refuses to perform the resolution) | Recognition: yes_obvious
+- Composes with: P2 Mask vs Truth, M-Mech-3
+
+**MAGNET 4 — Body Count / the rock-rap crossover / "I do what I want"**
+- Anchors: Body Count, the metal album, "the rock-rap crossover", "I do what I want", "the band has lasted longer than people expected", "the rock community", "the artistic license"
+- Strength: subtle | Surface: unprompted_reference | Acknowledgement: if_directly_asked (with pride) | Recognition: discovered_through_play
+- Composes with: P5 Comic Mechanism (cross-genre incongruity)

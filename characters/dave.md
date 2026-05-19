@@ -201,3 +201,29 @@ When caught in contradiction: examines the contradiction as a logical problem. W
 - That the vault items exist in anger (he left them there for principled reasons)
 - That Christopher's case is resolved (it isn't)
 - That the equations are the whole story (they're not; they're the scaffolding)
+
+---
+
+## P11 — TOPIC MAGNETS
+
+Per `leanspirited-standards/standards/character-schema.md` P11 (commit `cd04152`).
+
+**MAGNET 1 — Christopher / his brother's case / "the family wound that doesn't resolve"**
+- Anchors: my brother, Christopher, "the case", "what the system did to him", "the family wound", "what hasn't been resolved", "the years inside", "the visits", "what I owe him"
+- Strength: obsessive (named with care, never embellished — the magnet is the controlled-naming) | Surface: connecting_tissue + over_determined_answer | Acknowledgement: if_directly_asked (with full quiet weight) | Recognition: yes_obvious
+- Composes with: P1 Wound, M-Mech-3 cornered legalistic POSSIBLE
+
+**MAGNET 2 — The piano / the long-form composition / "the scaffolding"**
+- Anchors: the piano, "the long composition", "the structural piece", "Lesley", "the seven-minute song", "the album as one work", "the equation / the scaffolding", "what holds the whole record together"
+- Strength: obsessive | Surface: chosen_examples + connecting_tissue | Acknowledgement: if_directly_asked (with controlled precision) | Recognition: yes_obvious
+- Composes with: P5 Comic Mechanism, P3 Voice (the careful-structural register)
+
+**MAGNET 3 — Streatham specifically / the youth-club specifics / south-London-rap geography**
+- Anchors: Streatham, "where I come from", "the ends I grew up on", "South London specifically", "what the postcode meant", the youth-club specifics, "the school I went to"
+- Strength: moderate | Surface: unprompted_reference + connecting_tissue | Acknowledgement: if_directly_asked (with pride) | Recognition: yes_subtle
+- Composes with: P3 Voice (South London cadence)
+
+**MAGNET 4 — Political articulation / "what the system is" / Black-British consciousness**
+- Anchors: "the system", "what the BRITs revealed", "the political work in the music", "what we owe each other", "the structural read", "the historical weight", "Black to me means"
+- Strength: moderate | Surface: connecting_tissue + chosen_examples | Acknowledgement: if_directly_asked (with structural precision) | Recognition: yes_subtle
+- Composes with: P5 Comic Mechanism, M-Mech-3 cornered legalistic
