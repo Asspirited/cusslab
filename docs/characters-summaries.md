@@ -43,6 +43,53 @@ For full profiles, extended pools, and protocols: see the relevant characters-*.
 
 ---
 
+## Comedy Room — Skills Index (taxonomy v0.1)
+
+Per Skills Taxonomy v0.1 — canonical reference: `.claude/principles/skills-taxonomy.md`.
+Scope: Comedy Room cast only (Rod 2026-06-03 "Option 2"). Skills are character-level
+and travel cross-panel. Where a primary skill collides between characters, the
+shape-differentiator is noted; the anti-bleed rule (§4.7, §7.11) is pending Three
+Amigos ratification.
+
+| Character | Primary Skill | Archetype | Secondary Skills | Anti-Skills |
+|-----------|---------------|-----------|------------------|-------------|
+| Hicks the Humanist | Premise destruction | Provoker / Truth-bomber | Roast precision, Volume modulation, Confessional | Self-deprecation, Misdirection |
+| Curious George (Carlin) | Deconstruction | Deconstructor / Provoker | Compression, Expansion, Catchphrase deployment | Surrealism, Self-deprecation |
+| The Cook-King (Peter Cook) | Surrealism | Surrealist | Persona inhabitation, Misdirection, Premise destruction | Confessional, Self-deprecation |
+| Adams the Unparanoid Android | Expansion | Storyteller / Observer | Stillness, Story embedding, Observation density | Roast precision, Volume modulation |
+| Wildest of Oscars (Wilde) | Compression | Deconstructor / Confessor | Deconstruction, Roast precision, Confessional | Volume modulation, Expansion |
+| Slightly Squiffy Blyton | Persona inhabitation | Storyteller | Story embedding, Voice work, Misdirection | Roast precision, Anti-comedy |
+| Jimmy Carr | Misdirection | Roaster | Tag-stacking, Roast precision, Self-deprecation | Story embedding, Confessional |
+| Prof Cox | Time control | Storyteller / Truth-bomber | Expansion, Roast precision, Confessional | Compression, Anti-comedy |
+| Karl Pilkington | Observation density | Observer / Surrealist (accidental) | Premise destruction, Compression | Roast precision, Persona inhabitation |
+| Stephen Merchant | Expansion | Storyteller | Misdirection, Self-deprecation | Volume modulation, Catchphrase deployment |
+| Ricky Gervais (Round Head) | Catchphrase deployment | Roaster (laugh-cap) | Tag-stacking, Topical riffing, Volume modulation | Stillness, Surrealism |
+| Ali G | Persona inhabitation | Surrealist / Roaster | Misdirection, Voice work, Catchphrase deployment | Stillness, Confessional, Premise destruction |
+| Joan Rivers | Roast precision | Roaster | Tag-stacking, Misdirection, Self-deprecation | Surrealism, Anti-comedy, Stillness |
+| Sam Kinison | Catchphrase deployment | Provoker | Volume modulation, Tag-stacking, Compression | Stillness, Anti-comedy, Persona inhabitation |
+| Bill Burr | Volume modulation | Provoker | Self-deprecation, Topical riffing, Compression | Surrealism, Persona inhabitation, Stillness |
+| Mrs Merton | Misdirection | Roaster | Persona inhabitation, Time control, Tag-stacking | Volume modulation, Anti-comedy, Premise destruction |
+
+**Primary skill collisions (pending Three Amigos — see skills-taxonomy.md §7.11):**
+- **Misdirection** — Jimmy Carr (setup-punchline) vs Mrs Merton (sincere-question)
+- **Persona inhabitation** — Blyton (narrator) vs Ali G (interview subject)
+- **Catchphrase deployment** — Kinison (OH! scream-pivot) vs Gervais Round Head (the laugh)
+- **Expansion** — Adams (cosmic self-generated) vs Merchant (reactive Karl-premise build)
+
+Each collision pair has a structurally distinct shape; if §4.7 anti-bleed is ratified
+strictly, the enum splits or primaries remap. See in-file `Skills (provisional
+taxonomy v0.1)` section in each character file for the per-character mapping and
+the shape-differentiator note.
+
+**Archetype distribution check (panel-texture guard):** of 16 Comedy Room characters
+above, Roasters (5) and Provokers (3) dominate; Storytellers (4 including dual-archetype)
+and Deconstructors (2) supply variety; Observer (2), Surrealist (3), Truth-bomber
+(2), Confessor (2) round out coverage. No archetype is unrepresented. Per skills
+taxonomy §3, this is acceptable; pipeline panel-selection should still warn if any
+single panel ships with >3 Roasters or 0 Storytellers (texture flat-risk).
+
+---
+
 ## The 19th Hole — Football
 
 **Graeme Souness** — Nothing is hard enough. Nobody wants it enough. Modern football is soft. This extends to all topics. Occasionally profound. Thinks everyone in the room is soft. They probably are.
