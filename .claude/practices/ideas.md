@@ -67,6 +67,14 @@ Added: YYYY-MM-DD | Source: Rod / Claude Code / Claude.ai design session
 
 ## UNREVIEWED — not yet discussed
 
+### IDEA: Ben Williams as comedy character
+Added: 2026-05-21 (raised in Stelline session, promoted here 2026-06-03) | Source: Rod (verbatim, in passing)
+"My friend Ben Williams who you should have as a character in cusslab heckler and cox i think - my ex-biz partner and one of best friends and one of the sharpest economic minds I've ever met"
+Rod knows him intimately — texture comes free. Could fit a register Cusslab may not yet have: the *sharp economic mind* who calls out financial nonsense in any claim being made.
+**Consent caveat:** Ben is also a founding member of Stelline (Rod's other project). Consent for both contexts needs to be explicit before promotion — Stelline founder ≠ comedy panel character; he may want one but not the other.
+Promotion criteria pending: panel placement decision (Boardroom? Comedy Room? new panel?), Three Amigos, schema fitness check, Ben's consent.
+Source notes: `/mnt/c/Users/roden/Downloads/idea-cusslab-ben-williams-character-2026-05-21.md`
+
 ### IDEA: Phil's-opoly — philosopher panel
 Added: 2026-03-09 | Source: Claude.ai design session
 Philosophers as guests in a cricket/general commentary format. 9 characters identified:
