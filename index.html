@@ -2590,6 +2590,18 @@
       <button class="feedback-btn" onclick="panelRating(event,'pmc','🤣')" title="Brilliant">🤣</button>
     </div>
   </div>
+
+  <!-- Colemanballs Reference — The Patterns -->
+  <div style="margin-top:32px;border-top:1px solid var(--border);padding-top:20px;">
+    <div style="display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none;" onclick="PMC.togglePatterns()">
+      <span style="font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);">The Patterns — Colemanballs Taxonomy</span>
+      <span id="pmc-patterns-toggle" style="font-size:11px;color:var(--muted);">▶ show</span>
+    </div>
+    <div id="pmc-patterns-body" style="display:none;margin-top:16px;">
+      <div style="font-size:12px;color:var(--muted);margin-bottom:16px;line-height:1.6;">These are the structural patterns behind the panel's verbal mangling. The quotes are real. The patterns are the engine.</div>
+      <div id="pmc-patterns-grid" style="display:grid;gap:12px;"></div>
+    </div>
+  </div>
 </div>
 
 <!-- ============ THE 19TH HOLE (GOLF) ============ -->
@@ -14525,6 +14537,87 @@ const PMC_SUGGESTION_POOL = [
 
 // ── PMC cast data ─────────────────────────────────────────────────────────────
 
+// ── Colemanballs engine — BL-226 ─────────────────────────────────────────────
+// Authentic quote pools, classified by structural stupidity pattern.
+// Types: circular_tautology | self_cancelling | mixed_metaphor |
+//        obvious_as_revelation | self_contradiction | category_confusion |
+//        rooney_paradox | hollow_gravitas
+const PMC_COLEMANBALLS = {
+
+  keegan: [
+    { quote: "I came to Nantes two years ago and it's much the same today, except that it's completely different.", type: 'self_cancelling' },
+    { quote: "They're the second best team in the world, and there's no higher praise than that.", type: 'self_cancelling' },
+    { quote: "The tide is very much in our court now.", type: 'mixed_metaphor' },
+    { quote: "We managed to wrong a few rights.", type: 'self_cancelling' },
+    { quote: "Argentina won't be at Euro 2000 because they're from South America.", type: 'category_confusion' },
+    { quote: "Luis Figo is totally different to David Beckham, and vice versa.", type: 'self_cancelling' },
+    { quote: "Goalkeepers aren't born today until they're in their late twenties or thirties.", type: 'category_confusion' },
+    { quote: "He's using his arms too much — both of them.", type: 'circular_tautology' },
+    { quote: "The first ninety minutes are the most important.", type: 'obvious_as_revelation' },
+    { quote: "I'd say he's the best in the world at the moment. And there's no higher praise than that at the moment.", type: 'self_cancelling' },
+    { quote: "You can't do better than go away from home and get a draw.", type: 'self_cancelling' },
+    { quote: "We're in a no-win situation here. But we could still win it.", type: 'self_cancelling' },
+  ],
+
+  owen: [
+    { quote: "When they don't score, they hardly ever win.", type: 'obvious_as_revelation' },
+    { quote: "If they score more goals than the other team, they'll win.", type: 'circular_tautology' },
+    { quote: "Completely unstoppable, but the keeper's got to do better.", type: 'self_contradiction' },
+    { quote: "He's young but he's old enough to play.", type: 'circular_tautology' },
+    { quote: "That tackle was either a red card or it wasn't.", type: 'circular_tautology' },
+    { quote: "Good teams tend to win more games than bad teams.", type: 'obvious_as_revelation' },
+    { quote: "I think that was either a penalty or it wasn't — and I think it was.", type: 'circular_tautology' },
+    { quote: "He's fit. Or he isn't, in which case he might not be fit.", type: 'circular_tautology' },
+    { quote: "It's a difficult position to play. That's why it's difficult.", type: 'circular_tautology' },
+    { quote: "The manager needs to manage the situation. That's what managers are for.", type: 'obvious_as_revelation' },
+    { quote: "Whichever team scores last will probably win this.", type: 'obvious_as_revelation' },
+    { quote: "He's got pace. When he runs, he's quick.", type: 'circular_tautology' },
+  ],
+
+  inverdale: [
+    { quote: "I just wonder if her dad, like, gave her a slightly unfair deal and he only told her from a very early age that you are never going to be a looker, you are never going to be Sharapova, so you have to be the most dogged, determined fighter that anyone has ever seen. [of Marion Bartoli, Wimbledon 2013]", type: 'hollow_gravitas' },
+    { quote: "And here she is — the champion. A great, great champion. I may have expressed that slightly ham-fistedly.", type: 'hollow_gravitas' },
+    { quote: "I think what I was trying to convey, rather clumsily perhaps, was admiration.", type: 'hollow_gravitas' },
+    { quote: "Sport has the ability to unite the world in ways that nothing else can. Nothing else. Sport.", type: 'hollow_gravitas' },
+    { quote: "This is what the Olympics is about. The human spirit. The will to prevail. This is what it is about.", type: 'hollow_gravitas' },
+    { quote: "There's something about this occasion. Something I find genuinely hard to put into words. And yet here I am, doing so.", type: 'hollow_gravitas' },
+    { quote: "She doesn't have the typical physical attributes of a champion. But she has something more important. I can't quite say what that is.", type: 'hollow_gravitas' },
+    { quote: "The atmosphere here is electric. And I use that word advisedly. Having said that, I do use it quite a lot.", type: 'hollow_gravitas' },
+  ],
+
+  rooney: [
+    { quote: "Yeah look, both of those things can be true. Like at the same time, if that makes sense.", type: 'rooney_paradox' },
+    { quote: "He's a brilliant player him, and also... yeah. But also yeah.", type: 'rooney_paradox' },
+    { quote: "I think the team played well and also not as well as they could, but in the same way, similar.", type: 'rooney_paradox' },
+    { quote: "It's been difficult, yeah. But also good. Both of those.", type: 'rooney_paradox' },
+    { quote: "The tactics were right and also maybe not quite right — but both of those things are valid, in a way.", type: 'rooney_paradox' },
+    { quote: "He scored a goal. Which is — yeah. You want goals. But also it depends on the context. Similar.", type: 'rooney_paradox' },
+    { quote: "I think we were unlucky and also not unlucky. In the same way.", type: 'rooney_paradox' },
+    { quote: "The manager made the right call. Or the wrong one. Both of those can be true, in a way, if that makes sense.", type: 'rooney_paradox' },
+  ],
+
+  lineker: [
+    { quote: "And I've been here twenty-five years and I — well. Not that I'm keeping count. Anyway, England.", type: 'smooth_deflection' },
+    { quote: "Saturday nights have a particular — well. Not relevant. The game.", type: 'smooth_deflection' },
+    { quote: "The BBC have always — and this is something I feel strongly about — anyway. Back to you.", type: 'smooth_deflection' },
+    { quote: "I was going to say something about loyalty, but actually — the football. Yes.", type: 'smooth_deflection' },
+  ],
+
+};
+
+// Taxonomy reference for the learning section (BL-226)
+const PMC_COLEMANBALLS_TAXONOMY = [
+  { type: 'self_cancelling',      label: 'Self-Cancelling',      icon: '↩️', desc: 'The second clause destroys the first. The speaker does not notice.' },
+  { type: 'circular_tautology',   label: 'Circular Tautology',   icon: '🔄', desc: 'The conclusion is the premise restated. Presented as insight.' },
+  { type: 'mixed_metaphor',       label: 'Mixed Metaphor',        icon: '🌀', desc: 'Two incompatible domains collide. The resulting image is impossible.' },
+  { type: 'obvious_as_revelation',label: 'Obvious as Revelation', icon: '💡', desc: 'States what needs no stating with the weight of profound analysis.' },
+  { type: 'self_contradiction',   label: 'Self-Contradiction',    icon: '⚔️', desc: 'Directly contradicts itself within one sentence. Delivered without pause.' },
+  { type: 'category_confusion',   label: 'Category Confusion',    icon: '🗺️', desc: 'The wrong domain is applied. Geography, physics, or taxonomy fails.' },
+  { type: 'rooney_paradox',       label: "Rooney's Paradox",      icon: '🤔', desc: 'Agrees with both sides simultaneously. No resolution. Sincere throughout.' },
+  { type: 'hollow_gravitas',      label: 'Hollow Gravitas',       icon: '🎭', desc: 'Self-important preamble arrives at nothing. The speaker considers this the measured view.' },
+  { type: 'smooth_deflection',    label: 'Smooth Deflection',     icon: '📺', desc: 'The wound bleeds through mid-sentence then is recovered. The subject changes. No one mentions it.' },
+];
+
 const PMC_FISH_POOL = ['grylls','attenborough','ramsay','peterson'];
 
 const PMC_BASE_ORDER = ['lineker','keegan','rooney','owen','inverdale','micah'];
@@ -15035,6 +15128,11 @@ Fish characters apply their own domain to every football event. Not metaphor —
       const pmcLieBlock  = LieEngine.buildBlock(memberId, PMC_LIE_PROFILES, pmcLieState, pmcWoundLive);
       const pmcArcInstructions = ConspireEngine.getArcInstructions(memberId, pmcRelState, ORDER);
       const pmcNameBlock = userName ? `\nThe question was brought by ${userName}. Address ${userName} by name at least once.\n` : '';
+      const pmcCbPool = PMC_COLEMANBALLS[memberId];
+      const pmcCbBlock = pmcCbPool && pmcCbPool.length
+        ? `\nYOUR COLEMANBALLS POOL — rotate through these authentic patterns, one per turn:\n` +
+          pmcCbPool.map(e => `[${e.type}] "${e.quote}"`).join('\n') + '\n'
+        : '';
 
       const system = PanelDiscussEngine.buildSystemPrompt({
         turnRules: TURN_RULES,
@@ -15048,7 +15146,7 @@ Fish characters apply their own domain to every football event. Not metaphor —
         arcLog: [],
         recentMoves: [],
         roundSoFarText: '',
-        panelStateBlocks: pmcIntensityBlock + pmcYourState + pmcNameBlock + pmcLieBlock,
+        panelStateBlocks: pmcIntensityBlock + pmcYourState + pmcNameBlock + pmcLieBlock + pmcCbBlock,
         panelMemberBlocks: mechanics + pmcArcInstructions,
         crossCharacterQuestionsEnabled: true,
         parodyEnabled: true,
@@ -15108,12 +15206,43 @@ Fish characters apply their own domain to every football event. Not metaphor —
     if (body) { body.style.color = ''; body.style.fontStyle = ''; body.textContent = text || '…'; }
   }
 
+  function renderPatterns() {
+    const grid = document.getElementById('pmc-patterns-grid');
+    if (!grid || grid.dataset.rendered) return;
+    grid.innerHTML = PMC_COLEMANBALLS_TAXONOMY.map(t => {
+      const examples = Object.entries(PMC_COLEMANBALLS)
+        .flatMap(([char, pool]) => pool.filter(e => e.type === t.type).slice(0, 1).map(e => ({ char, quote: e.quote })));
+      const exHtml = examples.length
+        ? `<div style="margin-top:8px;font-size:12px;font-style:italic;color:#aaa;border-left:2px solid var(--border);padding-left:10px;">"${examples[0].quote.split('[')[0].trim()}"<span style="color:var(--muted);font-size:10px;"> — ${PMC_NAMEMAP[examples[0].char] || examples[0].char}</span></div>`
+        : '';
+      return `<div style="background:#111;border:1px solid var(--border);border-radius:8px;padding:12px;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+          <span style="font-size:18px;">${t.icon}</span>
+          <span style="font-size:13px;font-weight:700;color:var(--accent);">${t.label}</span>
+        </div>
+        <div style="font-size:12px;color:#bbb;line-height:1.5;">${t.desc}</div>
+        ${exHtml}
+      </div>`;
+    }).join('');
+    grid.dataset.rendered = '1';
+  }
+
+  function togglePatterns() {
+    const body = document.getElementById('pmc-patterns-body');
+    const toggle = document.getElementById('pmc-patterns-toggle');
+    if (!body) return;
+    const visible = body.style.display !== 'none';
+    body.style.display = visible ? 'none' : 'block';
+    if (toggle) toggle.textContent = visible ? '▶ show' : '▼ hide';
+    if (!visible) renderPatterns();
+  }
+
   function init() {
     _updateCount();
     refreshCards();
   }
 
-  return { toggleMember, refreshCards, discuss, init };
+  return { toggleMember, refreshCards, discuss, togglePatterns, init };
 })();
 
 document.addEventListener('DOMContentLoaded', () => PMC.init());

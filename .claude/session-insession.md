@@ -250,6 +250,13 @@ DDD CLEAN fires after BDD CLOSE — harvest new concepts into domain model.
    - Present the ranked list before committing to a work item
    - Source: Reinertsen — Product Development Flow (Cost of Delay, CD3)
 
+   BLOCKING RULE — fires whenever a low-CD3 item is the dependency for a higher-CD3 item:
+   - If item A (higher CD3) cannot start because item B (lower CD3) is its dependency → SHOUT immediately
+   - Say: "BL-NNN (CD3=X) is blocked by BL-MMM (CD3=Y). Doing BL-MMM first to unblock — confirm?"
+   - Do NOT silently skip to the next unblocked item without flagging the dependency
+   - Rod may choose to reorder, split scope, or accept the block — but he must see it
+   - Added: 2026-06-25 per Rod instruction
+
    LEAN CHECK:
    - Is this the highest-value thing we can do right now? (Combined CD3 triage confirms?)
    - What is the constraint today — is this on the critical path or adjacent to it?
