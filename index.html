@@ -2589,6 +2589,11 @@
       <button class="feedback-btn" onclick="panelRating(event,'pmc','😂')" title="Good">😂</button>
       <button class="feedback-btn" onclick="panelRating(event,'pmc','🤣')" title="Brilliant">🤣</button>
     </div>
+    <!-- BL-225 — contextual follow-ups -->
+    <div id="pmc-followups-section" style="display:none;margin-top:20px;border-top:1px solid var(--border);padding-top:16px;">
+      <div style="font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:10px;">What next? <span id="pmc-followups-generating" style="display:none;color:var(--accent);">generating...</span></div>
+      <div id="pmc-followups" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
+    </div>
   </div>
 
   <!-- Colemanballs Reference — The Patterns -->
@@ -15090,6 +15095,14 @@ Never name the move.
 RULE 5 — FISH DOMAIN RIDICULE:
 Fish characters apply their own domain to every football event. Not metaphor — they believe it is literally applicable and helpful. The gap is the comedy.
 
+RULE 7 — DIRECT ADDRESS TO THE QUESTIONER:
+Any character may, once per round, address the person who asked the question directly. This is optional — only fire it if something about the question deserves it. The direct address may:
+- Challenge their premise ("What are you actually asking?")
+- Question their integrity or competence ("Have you watched football before?")
+- Ask a clarifying question that puts them on the spot
+- Thank them, insincerely
+The questioner's name (if provided) should be used. This creates two-way dialogue. It is brief — one sentence, then the panel moves on.
+
 RULE 6 — DOUBLE DOWN vs CALL OUT (fires when a blunder precedes your turn):
 When the previous speaker produced a classified verbal blunder, you have two additional moves:
 
@@ -15201,6 +15214,11 @@ Neither move is compulsory — use it only if something in the previous turn gen
     LieEngine.saveState('pmc', pmcLieState);
     HCSession.logPanelRun('pmc', ORDER, responses.length);
     UI.setDisabled('pmc-btn', false);
+    // BL-225 — generate contextual follow-ups from the round
+    const panelExchanges = ORDER.map((id, idx) =>
+      `${PMC_MEMBERS[id]?.name || id}: "${responses[idx] || ''}"`
+    ).filter((_, idx) => responses[idx]);
+    generateFollowUps(input, panelExchanges);
   }
 
   function _placeholder(pid, m) {
@@ -15222,6 +15240,38 @@ Neither move is compulsory — use it only if something in the previous turn gen
     el.style.opacity = '1';
     const body = el.querySelector('.bills-response-body');
     if (body) { body.style.color = ''; body.style.fontStyle = ''; body.textContent = text || '…'; }
+  }
+
+  async function generateFollowUps(question, panelExchanges) {
+    const section  = document.getElementById('pmc-followups-section');
+    const tray     = document.getElementById('pmc-followups');
+    const spinning = document.getElementById('pmc-followups-generating');
+    if (!section || !tray) return;
+    section.style.display = 'block';
+    if (spinning) spinning.style.display = 'inline';
+    tray.innerHTML = '';
+
+    const convSummary = panelExchanges.slice(-6).join('\n').substring(0, 800);
+    const system = `You are a comedy writing assistant for a World Cup punditry panel. Generate exactly 3 follow-up question suggestions based on this panel exchange. Each is one punchy sentence. Return ONLY a JSON array: [{"text":"...","type":"challenge"},{"text":"...","type":"followup"},{"text":"...","type":"wild"}]
+- "challenge": directly challenges the user's premise, integrity, or the original question
+- "followup": builds on something specific a panellist just said
+- "wild": an unexpected absurd or cross-domain angle
+
+Keep each under 15 words. No preamble. JSON only.`;
+    const prompt = `Original question: "${question}"\n\nPanel exchange:\n${convSummary}`;
+
+    try {
+      const raw  = await API.call(system, prompt, 200, 'pmc/followups');
+      const json = raw.match(/\[[\s\S]*\]/)?.[0];
+      const cards = json ? JSON.parse(json) : [];
+      const icons = { challenge: '⚡', followup: '↩️', wild: '🌀' };
+      tray.innerHTML = cards.slice(0, 3).map(c =>
+        `<span class="chip" style="cursor:pointer;" onclick="document.getElementById('pmc-input').value=this.dataset.text;document.getElementById('pmc-input').focus();" data-text="${(c.text||'').replace(/"/g,'&quot;')}">${icons[c.type]||''} ${c.text}</span>`
+      ).join('');
+    } catch (_) {
+      tray.innerHTML = '<span style="font-size:11px;color:var(--muted);">Could not generate suggestions.</span>';
+    }
+    if (spinning) spinning.style.display = 'none';
   }
 
   function renderPatterns() {

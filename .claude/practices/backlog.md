@@ -3249,3 +3249,28 @@ Track G wrote Chapman's dismissal_profile entries in ALL-CAPS to mirror his volu
 - CD3: UBV=9 TC=7 RR=2 → CoD=18, Dur=6, **CD3=3.0**
 - Depends on: BL-222 shipped (PMC panel stable)
 - Status: OPEN — raised 2026-06-25. Three Amigos needed.
+
+---
+
+## BL-229 — Panel mechanic: interjection — characters cut across each other mid-turn
+
+**Raised:** 2026-06-25 | **By:** Rod ("potential gold")
+**Epic:** World Cup Cunditry
+**Feature:** sports-wcc
+
+**Story:** As a user watching the panel, I want characters to cut across each other mid-turn — interrupting before someone finishes — so that the panel feels like live television rather than a sequence of polished statements.
+
+**Rod's intent (2026-06-25):** "interjection" — minimal description; potential gold for panel realism and comedy. To be designed in Three Amigos.
+
+**Initial design questions (for Three Amigos):**
+- Which characters are natural interjectors? (Keegan, Keane, Micah — characters with high urgency/enthusiasm)
+- What triggers an interjection? (Disagreement with what's being said, wound touched, Keegan can't wait)
+- What happens to the interrupted turn? (Cut short with "—" mid-sentence, or does the interrupted character try to finish?)
+- How does interjection interact with the existing ConspireEngine and RelationshipState?
+- Is interjection a prompt injection mechanic, or does it change the discuss() loop structure (i.e. split one speaker's turn into two halves)?
+
+**Depends on:** BL-222 (PMC panel exists)
+**Related to:** BL-227 (double-down vs call-out), BL-225 (interactive)
+
+- CD3: UBV=9 TC=5 RR=4 → CoD=18, Dur=5, **CD3=3.6**
+- Status: OPEN — raised 2026-06-25. Three Amigos needed. Design question above must be answered before any code.
