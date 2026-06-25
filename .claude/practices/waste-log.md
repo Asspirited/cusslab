@@ -1956,3 +1956,15 @@ Status: CLOSED
 **Cost impact:** Low — data correct in backlog.md; misleading report only
 **Tags:** `#parser-bug` `#backlog-report` `#false-open` `#pipeline`
 **Status:** Open — fix: tighten status regex in pipeline/backlog-report.js to `^\s*[-*]\s*Status:` (multiline mode)
+
+---
+
+### WL-148
+**Item:** BL-222 PMC panel shipped without `_placeholder` and `_fill` — START THE DEBATE button produced no output
+**Symptom:** User clicked a suggestion card, clicked START THE DEBATE, nothing happened. Rod shared the broken panel with friends.
+**Root cause:** `_placeholder` and `_fill` are defined as private functions inside each panel's IIFE. PMC's `discuss()` called both without defining them in its own scope. Classic copy-paste gap — the functions exist in Football, Cricket, Golf IIFEs but were never added to PMC.
+**Session:** 2026-06-25
+**Time lost:** ~10 min (bug shipped, caught by Rod in production)
+**Cost impact:** Medium — Rod looked an idiot in front of friends
+**Tags:** `#rod-caught` `#iife-scope` `#pmc` `#missing-function` `#bl-222`
+**Status:** Closed — added `_placeholder` and `_fill` to PMC IIFE. Commit 8792ee1.

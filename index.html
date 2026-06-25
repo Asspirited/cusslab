@@ -2535,7 +2535,7 @@
 
   <!-- Cast picker -->
   <div id="pmc-picker-section" style="margin-bottom:20px;">
-    <div style="font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:10px;">Build your panel — pick 5–6 <span id="pmc-pick-count" style="color:var(--accent);">(5 selected)</span></div>
+    <div style="font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:10px;">Build your panel — pick 5–6 <span id="pmc-pick-count" style="color:var(--accent);">(6 selected)</span></div>
 
     <div style="font-size:11px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:6px;">Studio Regulars</div>
     <div class="chips-row" id="pmc-chips-regular">
@@ -2557,7 +2557,7 @@
 
     <div style="font-size:11px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:4px;margin-top:10px;">Fish Out of Water <span style="font-size:10px;text-transform:none;letter-spacing:0;">(select 1–2)</span></div>
     <div class="chips-row" id="pmc-chips-fish">
-      <span class="chip" data-pmc-id="grylls" data-pmc-fish="1" onclick="PMC.toggleMember(this)">🐍 Grylls</span>
+      <span class="chip selected" data-pmc-id="grylls" data-pmc-fish="1" onclick="PMC.toggleMember(this)">🐍 Grylls</span>
       <span class="chip" data-pmc-id="attenborough" data-pmc-fish="1" onclick="PMC.toggleMember(this)">🦁 Attenborough</span>
       <span class="chip" data-pmc-id="ramsay" data-pmc-fish="1" onclick="PMC.toggleMember(this)">👨‍🍳 Ramsay</span>
       <span class="chip" data-pmc-id="peterson" data-pmc-fish="1" onclick="PMC.toggleMember(this)">🦞 Peterson</span>
@@ -14495,6 +14495,16 @@ const PMC_SUGGESTION_POOL = [
   { cat:'contemporary', text:'Is the England squad the most talented or most anxiety-inducing in fifty years?' },
   { cat:'contemporary', text:'Name one current player who would have thrived in the 1990s. Name one who wouldn\'t have lasted ten minutes.' },
   { cat:'contemporary', text:'Modern football: better or worse? You have to pick one.' },
+  // match — explicit split questions (Rooney Paradox fuel)
+  { cat:'match', text:'Did the defence cost England that game, or did the attack not do enough? Pick a side.' },
+  { cat:'match', text:'A player went down holding his face. The replay shows nothing. The physio was on for four minutes. Analyse.' },
+  { cat:'match', text:'Rate the England defence out of ten. Then explain why your number is wrong.' },
+  // big — voice-of-tournament and what-does-it-take
+  { cat:'big', text:'What does it actually take to win the World Cup? Be specific.' },
+  { cat:'big', text:'Who has been the voice of this tournament — the broadcaster or analyst who defined it?' },
+  // contemporary — Bellingham Paradox bait and manager challenge
+  { cat:'contemporary', text:'Is Bellingham the best player England have ever produced, or is he still a very good player we\'re desperate to believe is a legend? Settle it.' },
+  { cat:'contemporary', text:'Name a current manager who actually knows what they\'re doing. One name. Take your time.' },
   // absurd
   { cat:'absurd', text:'If the goal is the goal and the goal is to score, is the goal itself the obstacle to reaching the goal?' },
   { cat:'absurd', text:'A defender goes down in the 89th minute. Would a decapitated snake skin have been more useful than a physio?' },
@@ -14506,6 +14516,11 @@ const PMC_SUGGESTION_POOL = [
   { cat:'absurd', text:'A player was seen at a nightclub at midnight and is now unfit to play. Is this technically multi-tasking?' },
   { cat:'absurd', text:'In nature, the strongest survive. In football, the most insured survive. Discuss.' },
   { cat:'absurd', text:'If you organised a football match using only the principles of a functioning kitchen, what would the formation be?' },
+  { cat:'absurd', text:'In the hierarchy of football — fan, analyst, manager, player — who is at the top, and why is it the analyst?' },
+  { cat:'absurd', text:'David Attenborough has been asked to narrate the England squad\'s journey. What does he observe?' },
+  { cat:'absurd', text:'A striker misses a penalty in the shootout. Clean your room. Discuss.' },
+  { cat:'absurd', text:'If this tournament were a meal, what course have we reached and is anyone full?' },
+  { cat:'absurd', text:'Nature selects the strongest. Football selects the most recently recovered from a hamstring. Is this progress?' },
 ];
 
 // ── PMC cast data ─────────────────────────────────────────────────────────────
