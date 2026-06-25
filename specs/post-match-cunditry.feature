@@ -336,12 +336,12 @@ Feature: Post Match Cunditry panel
 
     Scenario: WCC_BASE_ORDER contains the six regular cast members
       When PMC_BASE_ORDER is read from source
-      Then it contains "lineker"
-      And it contains "keegan"
-      And it contains "rooney"
-      And it contains "owen"
-      And it contains "inverdale"
-      And it contains "micah"
+      Then PMC_BASE_ORDER contains "lineker"
+      And PMC_BASE_ORDER contains "keegan"
+      And PMC_BASE_ORDER contains "rooney"
+      And PMC_BASE_ORDER contains "owen"
+      And PMC_BASE_ORDER contains "inverdale"
+      And PMC_BASE_ORDER contains "micah"
       And "lineker" is the first entry
 
     Scenario: Each regular cast member has a non-empty prompt
