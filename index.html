@@ -15072,6 +15072,27 @@ Fish characters apply their own domain to every football event. Not metaphor —
     UI.setDisabled('pmc-btn', false);
   }
 
+  function _placeholder(pid, m) {
+    return `<div class="bills-response-block" id="${pid}" style="background:${m.bg};border-left-color:${m.colour};opacity:0.6;">
+      <div class="bills-response-header">
+        <span style="font-size:28px;">${m.icon}</span>
+        <div>
+          <div class="bills-response-name" style="color:${m.colour};">${m.name}</div>
+          <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">Considering...</div>
+        </div>
+      </div>
+      <div class="bills-response-body" style="color:var(--muted);font-style:italic;"><span class="typing-dots">▋</span></div>
+    </div>`;
+  }
+
+  function _fill(pid, m, text) {
+    const el = document.getElementById(pid);
+    if (!el) return;
+    el.style.opacity = '1';
+    const body = el.querySelector('.bills-response-body');
+    if (body) { body.style.color = ''; body.style.fontStyle = ''; body.textContent = text || '…'; }
+  }
+
   function init() {
     _updateCount();
     refreshCards();
