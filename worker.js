@@ -13666,8 +13666,10 @@ const SURVIVAL_SCHOOL_WALL_WALKERS = `<!DOCTYPE html>
 
     /* ── Filter tabs ── */
     .filter-row { display:flex; gap:6px; margin:12px 16px 0; flex-wrap:wrap; }
-    .filter-btn { padding:5px 10px; font-size:9px; letter-spacing:1px; text-transform:uppercase; background:#2a2010; border:1px solid #3a2f1e; border-radius:4px; color:#8a7a50; cursor:pointer; }
+    .filter-btn { padding:8px 12px; font-size:10px; letter-spacing:1px; text-transform:uppercase; background:#2a2010; border:1px solid #3a2f1e; border-radius:4px; color:#8a7a50; cursor:pointer; min-height:40px; touch-action:manipulation; -webkit-appearance:none; appearance:none; }
     .filter-btn.active { border-color:#c4a060; color:#c4a060; }
+    .filter-btn:active, .filter-btn.pressed { background:#4a3a18 !important; border-color:#c4a060 !important; color:#e4d4a0 !important; transform:scale(0.97); }
+    .filter-btn:hover { background:#3a2a18; }
 
     /* ── Ask the Panel — collapsible category accordion ── */
     .ask-cat { margin-bottom:6px; background:#1a1510; border:1px solid #2a2010; border-radius:6px; overflow:hidden; }
@@ -17639,6 +17641,43 @@ for (var f = 0; f < filterBtns.length; f++) {
     renderCollection();
   };
 }
+
+// ── DEFENSIVE CHIP ACTIVATION (2026-04-23 bug fix — Rod live report) ──
+// Wilderment/Shredding/Ask chips appeared to not respond to taps on mobile
+// even though inline onclick was present and functions were defined.
+// Take over handling entirely: capture inline onclick string, remove it,
+// bind via addEventListener with visual feedback. Single-fire guaranteed.
+(function bindChipFallbacks() {
+  var chipSelectors = ['[onclick*="startWilderment"]', '[onclick*="startShredding"]', '[onclick*="askChip"]', '[onclick*="fetchWilderment"]', '[onclick*="wildermentMore"]'];
+  var chips = document.querySelectorAll(chipSelectors.join(','));
+  console.log('[chip fallback] binding ' + chips.length + ' chips');
+  for (var c = 0; c < chips.length; c++) {
+    (function(chip) {
+      // Capture + remove inline onclick to avoid double-fire
+      var onclickAttr = chip.getAttribute('onclick');
+      if (!onclickAttr) return;
+      chip.removeAttribute('onclick');
+      // Force type="button" for consistent behaviour
+      if (chip.tagName === 'BUTTON' && !chip.getAttribute('type')) chip.setAttribute('type', 'button');
+      // Visual feedback on press
+      chip.addEventListener('pointerdown', function() { chip.classList.add('pressed'); }, { passive: true });
+      chip.addEventListener('pointerup', function() { setTimeout(function(){ chip.classList.remove('pressed'); }, 180); }, { passive: true });
+      chip.addEventListener('pointercancel', function() { chip.classList.remove('pressed'); }, { passive: true });
+      chip.addEventListener('pointerleave', function() { chip.classList.remove('pressed'); }, { passive: true });
+      // Action on click
+      chip.addEventListener('click', function(ev) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        try {
+          (new Function('event', onclickAttr)).call(chip, ev);
+        } catch (err) {
+          console.error('[chip fallback] error firing onclick: ' + onclickAttr, err);
+          alert('Chip action failed: ' + err.message + '\\\\n(tell Rod — this is diagnostic)');
+        }
+      });
+    })(chips[c]);
+  }
+})();
 
 // ── SETUP & SYNC ─────────────────────────────────────────────────
 var myPlayer = localStorage.getItem('ww_player') || null;
