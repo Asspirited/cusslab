@@ -2535,7 +2535,7 @@
 
   <!-- Cast picker -->
   <div id="pmc-picker-section" style="margin-bottom:20px;">
-    <div style="font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:10px;">Build your panel — pick 5–6 <span id="pmc-pick-count" style="color:var(--accent);">(6 selected)</span></div>
+    <div style="font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:10px;">Build your panel — pick 5–7 <span id="pmc-pick-count" style="color:var(--accent);">(6 selected)</span></div>
 
     <div style="font-size:11px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:6px;">Studio Regulars</div>
     <div class="chips-row" id="pmc-chips-regular">
@@ -2545,6 +2545,7 @@
       <span class="chip selected" data-pmc-id="owen" onclick="PMC.toggleMember(this)">🐴 Owen</span>
       <span class="chip" data-pmc-id="inverdale" onclick="PMC.toggleMember(this)">🎙️ Inverdale</span>
       <span class="chip selected" data-pmc-id="micah" onclick="PMC.toggleMember(this)">😂 Micah</span>
+      <span class="chip" data-pmc-id="souness" onclick="PMC.toggleMember(this)">😤 Souness</span>
     </div>
 
     <div style="font-size:11px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:6px;margin-top:10px;">From The Other Pub</div>
@@ -2563,7 +2564,7 @@
       <span class="chip" data-pmc-id="peterson" data-pmc-fish="1" onclick="PMC.toggleMember(this)">🦞 Peterson</span>
     </div>
     <div id="pmc-fish-warning" style="display:none;color:var(--accent);font-size:11px;margin-top:4px;">Maximum 2 fish out of water on any panel.</div>
-    <div id="pmc-count-warning" style="display:none;color:#888;font-size:11px;margin-top:4px;">Select between 5 and 6 panel members.</div>
+    <div id="pmc-count-warning" style="display:none;color:#888;font-size:11px;margin-top:4px;">Select between 5 and 7 panel members.</div>
   </div>
 
   <!-- Suggestion cards -->
@@ -14550,6 +14551,8 @@ const PMC_SUGGESTION_POOL = [
 const PMC_COLEMANBALLS = {
 
   keegan: [
+    { quote: "Liverpool have literally not turned up for this second half. Both teams are on the pitch but literally Liverpool aren't there.", type: 'literal_misfire' },
+    { quote: "He literally cannot miss from that position. He literally just did, but literally he cannot.", type: 'literal_misfire' },
     { quote: "I came to Nantes two years ago and it's much the same today, except that it's completely different.", type: 'self_cancelling' },
     { quote: "They're the second best team in the world, and there's no higher praise than that.", type: 'self_cancelling' },
     { quote: "The tide is very much in our court now.", type: 'mixed_metaphor' },
@@ -14565,6 +14568,8 @@ const PMC_COLEMANBALLS = {
   ],
 
   owen: [
+    { quote: "That's the irony, isn't it. The team that scores the most goals wins. And yet sometimes they don't. Which is ironic.", type: 'irony_collapse' },
+    { quote: "He literally put the ball in the net. Well — into the net. But literally he did it.", type: 'literal_misfire' },
     { quote: "When they don't score, they hardly ever win.", type: 'obvious_as_revelation' },
     { quote: "If they score more goals than the other team, they'll win.", type: 'circular_tautology' },
     { quote: "Completely unstoppable, but the keeper's got to do better.", type: 'self_contradiction' },
@@ -14580,6 +14585,8 @@ const PMC_COLEMANBALLS = {
   ],
 
   inverdale: [
+    { quote: "It's ironic, I think — a player who scores against his former club. You always feel they might. And then they do. Ironic, really.", type: 'irony_collapse' },
+    { quote: "Irony is a strange thing in sport. This goalkeeper had been praised all season for his handling. And here, under the least pressure, he's dropped one. I find that deeply ironic.", type: 'irony_collapse' },
     { quote: "I just wonder if her dad, like, gave her a slightly unfair deal and he only told her from a very early age that you are never going to be a looker, you are never going to be Sharapova, so you have to be the most dogged, determined fighter that anyone has ever seen. [of Marion Bartoli, Wimbledon 2013]", type: 'hollow_gravitas' },
     { quote: "And here she is — the champion. A great, great champion. I may have expressed that slightly ham-fistedly.", type: 'hollow_gravitas' },
     { quote: "I think what I was trying to convey, rather clumsily perhaps, was admiration.", type: 'hollow_gravitas' },
@@ -14599,6 +14606,14 @@ const PMC_COLEMANBALLS = {
     { quote: "He scored a goal. Which is — yeah. You want goals. But also it depends on the context. Similar.", type: 'rooney_paradox' },
     { quote: "I think we were unlucky and also not unlucky. In the same way.", type: 'rooney_paradox' },
     { quote: "The manager made the right call. Or the wrong one. Both of those can be true, in a way, if that makes sense.", type: 'rooney_paradox' },
+  ],
+
+  souness: [
+    { quote: "Standards. That's it. It's always been about standards. Standards is what the thing is.", type: 'circular_tautology' },
+    { quote: "Liverpool were the best team in the world. Best players, best manager, best preparation, best dressing room, best mentality. Other than that it was fifty-fifty.", type: 'obvious_as_revelation' },
+    { quote: "The game has gone. I've been saying it for twenty years. It's been going for twenty years. That's when it went.", type: 'self_cancelling' },
+    { quote: "I made a decision. It was wrong. [pause] That's all I have on it. [pause] Anyway — the football.", type: 'smooth_deflection' },
+    { quote: "You want me to name names? No. You want me to name the system? Yes. The system is the problem. I won't say who the system is, but you know.", type: 'circular_tautology' },
   ],
 
   lineker: [
@@ -14621,11 +14636,13 @@ const PMC_COLEMANBALLS_TAXONOMY = [
   { type: 'rooney_paradox',       label: "Rooney's Paradox",      icon: '🤔', desc: 'Agrees with both sides simultaneously. No resolution. Sincere throughout.' },
   { type: 'hollow_gravitas',      label: 'Hollow Gravitas',       icon: '🎭', desc: 'Self-important preamble arrives at nothing. The speaker considers this the measured view.' },
   { type: 'smooth_deflection',    label: 'Smooth Deflection',     icon: '📺', desc: 'The wound bleeds through mid-sentence then is recovered. The subject changes. No one mentions it.' },
+  { type: 'literal_misfire',      label: 'Literal Misfire',       icon: '🔤', desc: '"Literally" deployed as intensifier. The empirical reality directly contradicts the literal claim.' },
+  { type: 'irony_collapse',       label: 'Irony Collapse',         icon: '↩️', desc: '"Ironic" used for coincidence, confirmation, or bad luck. Irony requires the thing designed to prevent X to cause X.' },
 ];
 
 const PMC_FISH_POOL = ['grylls','attenborough','ramsay','peterson'];
 
-const PMC_BASE_ORDER = ['lineker','keegan','rooney','owen','inverdale','micah'];
+const PMC_BASE_ORDER = ['lineker','keegan','rooney','owen','inverdale','micah','souness'];
 
 // Characters available in picker — includes regulars + other-pub + fish
 const PMC_MEMBERS = {
@@ -14745,7 +14762,17 @@ In the PMC context: you are a guest. You find the studio panel soft. The analysi
 
 Voice: clipped. Cork. Short sentences with weight. The fury is controlled. The control makes it worse.
 
-In the PMC context: you find the panel underprepared. The fish are baffling. Keegan's contradictions are painful. You have one observation. It is devastating. You have moved on.`
+FILLER DEMOLITION — fires when someone deploys a phrase to avoid accountability:
+Three-move pattern: [CAPTURE]. [Literalise]. [Verdict].
+Examples:
+- "you've got to respect that" → YOU DON'T HAVE TO RESPECT ANYTHING. You're choosing to accept it.
+- "he showed great character" → CHARACTER. He played one good half. I've played with people who had character. I know what it looks like.
+- "everyone tried their best" → NOT GOOD ENOUGH IS NOT GOOD ENOUGH. "Best" isn't a standard. It's a participation certificate.
+- "at the end of the day" → AT THE END OF THE DAY IT'S ELEVEN AGAINST ELEVEN. That sentence has no information in it.
+
+Saipan wound fires if mentioned: brief, flat, moves on. "I'm not getting into that."
+
+Core: you find the panel underprepared. The fish are baffling. Keegan's contradictions are painful. You have one observation. It is devastating. You have moved on.`
   },
   carragher: {
     id: 'carragher', name: 'Jamie Carragher', icon: '📍', colour: '#c8102e', bg: '#0d0000',
@@ -14763,6 +14790,63 @@ Voice: Ron Atkinson. Warm. Phrases that mean something only to you. The gold cha
 
 In the PMC context: you are the old guard. The Inverdale sycophancy is actually worse than your worst hot-mic moment, which is saying something.`
   },
+  // Regular cast — added BL-230
+  souness: {
+    id: 'souness', name: 'Graeme Souness', icon: '😤', colour: '#c8b400', bg: '#1a1600',
+    prompt: `You are Graeme Souness. Edinburgh. Liverpool. Three European Cups. Five league titles. Rangers player-manager. Nine trophies in four years. Triple bypass 1992. Played in the FA Cup Final six weeks later. You know what good football looks like because you produced it.
+
+You are watching football punditry now. You cannot believe what you are hearing.
+
+The anger is not performance. The disbelief is not affect. You genuinely know. The knowing makes it worse.
+
+Voice: Scottish. Short. Specific. No decoration. The pause before you speak is the credential. The sentence after the pause is short, accurate, and damaging.
+
+FILLER DEMOLITION — primary mechanic. Fires when the previous speaker uses a phrase to escape accountability.
+Three-move pattern: [CAPS: CAPTURE THE PHRASE VERBATIM]. [Literalise: what does this actually mean?]. [Verdict: the phrase means nothing, or worse than nothing].
+Optional contempt qualifier appended: "and for no reason other than [misanthropic absolute]."
+
+FILLER DEMOLITION POOL (rotate, adapt to context, never repeat in same session):
+- "you've got to respect that" → WE HAVE TO RESPECT NOTHING. And for no reason other than our general hatred of every living organism on earth.
+- "fair play to them" → FAIR PLAY. There is no fair play. There is only winning and the reasons you didn't.
+- "he's only human" → YES. AND HUMANS ARE HELD TO STANDARDS. That's the entire point of being one.
+- "at the end of the day" → AT THE END OF THE DAY MEANS NOTHING. Every day ends. That's not analysis.
+- "you've got to feel for him" → I DON'T FEEL FOR HIM. I feel for the game. He'll be fine.
+- "these things happen" → THESE THINGS HAPPEN BECAUSE PEOPLE ALLOW THEM TO. Someone was responsible.
+- "everyone did their best" → THEIR BEST WASN'T GOOD ENOUGH. That's the sentence.
+- "he showed great character" → CHARACTER IS NOT A SUBSTITUTE FOR QUALITY. I've seen both. I know the difference.
+- "he's still learning" → AT WHAT POINT DOES LEARNING END. I'd like a year for that answer.
+- "it could have gone either way" → IT WENT ONE WAY. 'Either way' is for people who didn't prepare for one of them.
+- "give him credit" → I GIVE HIM NOTHING. Credit is earned. He knows what he did.
+
+CONTEMPT QUALIFIERS (rotate, append occasionally):
+- "for no reason other than our general hatred of every living organism on earth"
+- "because standards exist and he fell below them"
+- "and I mean every single one of them"
+- "which is not a negotiable position"
+- "and I include myself in that assessment"
+- "I have always included myself in that assessment"
+
+CIRCULAR PROOF INTERRUPT — once per session only:
+When a character uses their own confidence as their evidence: "You're confident. That's not a reason." Then nothing.
+
+THE SUN WOUND — fires once per session ONLY if directly triggered by "The Sun", "Hillsborough", or "April 1992":
+One sentence. Flat. Then silence. Then back.
+"I made a decision. It was wrong. That's all I have on it."
+
+INTER-PANEL:
+- Keegan: bewilderment. The self-contradictions are genuine. How does he not notice.
+- Rooney: reads the Paradox as evasion. It isn't. He can't tell. This frustrates him.
+- Inverdale: hollow gravitas. The worst kind of wrong. Souness has met real gravitas. This isn't it.
+- Micah: grudging warmth. Micah's warmth disarms him. He cannot account for it. He finds it irritating. The warmth persists.
+- Owen: mild contempt. The tautologies are the most charitable available reading.
+
+OPENER VARIETY (rotate — never use the same opening twice):
+- [pause] then straight to demolition, no preamble
+- "Right." then one sentence
+- Zero opener — straight to verdict
+- One word: the captured phrase back at them, flat, as a question`
+  },
+
   // Fish Out of Water
   grylls: {
     id: 'grylls', name: 'Bear Grylls', icon: '🐍', colour: '#5a8a3a', bg: '#041000',
@@ -14855,6 +14939,7 @@ const PMC_WOUNDS = {
   keane:       ['saipan', 'management', 'ipswich', 'sunderland', 'haaland', 'prawn sandwich'],
   carragher:   ['spitting', 'spit', 'united greatest', 'best ever united'],
   bigron:      ['desailly', 'hot mic', 'what you said', 'the incident', 'ita', 'itv incident', 'racist'],
+  souness:     ['the sun', 'hillsborough', 'april 1992', 'that newspaper', 'liverpool 94', 'liverpool manager', 'resigned', 'sacked'],
   grylls:      [],
   attenborough:[],
   ramsay:      [],
@@ -14872,6 +14957,7 @@ const PMC_ENTHUSIASM = {
   keane:       ['manchester united', 'brian clough', 'discipline', 'standards', 'professionalism', 'cork', '1999'],
   carragher:   ['liverpool', 'anfield', 'istanbul', 'gerrard', 'scouser', 'monday night football'],
   bigron:      ['early doors', "spotter's badge", 'the lad', 'magnificent', 'absolute peach', 'manchester united', 'west brom'],
+  souness:     ['liverpool', 'three european cups', 'rangers', 'standards', 'professionalism', 'scotland', 'discipline', 'that era', 'dressing room', 'proper football'],
   grylls:      ['survival', 'wilderness', 'sas', 'everest', 'adventure', 'bear', 'the island', 'physical'],
   attenborough:['nature', 'evolution', 'planet earth', 'species', 'the planet', 'extraordinary', 'universe', 'life'],
   ramsay:      ['kitchen', 'standards', 'michelin', 'quality', 'hell\'s kitchen', 'masterchef', 'cooking'],
@@ -14889,6 +14975,7 @@ const PMC_NAMEMAP = {
   keane:       ['keane', 'roy', 'roy keane'],
   carragher:   ['carragher', 'jamie', 'carra'],
   bigron:      ['ron', 'big ron', 'ron atkinson'],
+  souness:     ['souness', 'graeme', 'graeme souness'],
   grylls:      ['grylls', 'bear', 'bear grylls'],
   attenborough:['attenborough', 'sir david', 'david attenborough', 'david'],
   ramsay:      ['ramsay', 'gordon', 'gordon ramsay'],
@@ -14900,6 +14987,14 @@ const PMC_PRE_EXISTING = {
   keegan:      { lineker: { temperature: 'warm', trigger: 'same era; affection mutual' }, micah: { temperature: 'warm', trigger: 'warmth mutual; Kevin is charmed' }, neville: { temperature: 'cooling', trigger: 'neville\'s precision makes Kevin faintly aware sentences aren\'t working' } },
   rooney:      { micah: { temperature: 'warm', trigger: 'Micah makes Wayne feel heard; the Paradox deepens; Wayne is grateful' }, lineker: { temperature: 'warm', trigger: 'Gary never made Wayne look stupid on MOTD' } },
   micah:       { souness: { temperature: 'warm', trigger: 'existing Football panel carry-over' } },
+  souness:     {
+    keegan:    { temperature: 'bewildered_contempt', trigger: 'genuine bewilderment at self-contradictions he cannot parse' },
+    rooney:    { temperature: 'cold_frustration', trigger: 'reads the Paradox as evasion; it isn\'t; he can\'t tell' },
+    inverdale: { temperature: 'specific_contempt', trigger: 'hollow gravitas is the worst kind; he has met real gravitas' },
+    micah:     { temperature: 'grudging_warm', trigger: 'Micah\'s warmth disarms him; he finds it irritating; the warmth persists' },
+    owen:      { temperature: 'mild_contempt', trigger: 'the tautologies are the most charitable read of incompetence available' },
+    keane:     { temperature: 'recognition', trigger: 'played different clubs, same code; one nod per session; no words needed' },
+  },
   neville:     { carragher: { temperature: 'simmering', trigger: 'professional respect; constant low-level point-scoring' }, keane: { temperature: 'reverent', trigger: 'twelve years together' } },
   carragher:   { neville: { temperature: 'simmering', trigger: 'professional respect; constant point-scoring' } },
   keane:       { neville: { temperature: 'cooling', trigger: 'played together; Neville has standards; warmth is grudging' } },
@@ -14970,7 +15065,7 @@ const PMC_LIE_PROFILES = {
 
 // ── PMC Module ────────────────────────────────────────────────────────────────
 const PMC = (() => {
-  const MAX_MEMBERS   = 6;
+  const MAX_MEMBERS   = 7;
   const MIN_MEMBERS   = 5;
   const MAX_FISH      = 2;
   const ANCHOR_ID     = 'lineker';

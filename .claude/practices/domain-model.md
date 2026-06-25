@@ -1793,6 +1793,26 @@ Double-down. Get louder. Exaggerate further. Attack the questioner.
 - Micah: finds the cornered position BRILLIANT — enthusiasm as fight mode, warmth weaponised
 - Souness/Keane: contempt deployed at the person who noticed — "you've got a problem with standards"
 
+**FIGHT sub-patterns — proof that points at itself:**
+All five are variants of the same move: the fight doesn't produce external evidence. The fight IS the evidence.
+
+**Meta-pattern: Circular Self-Referential Proof**
+The proof references itself. The circle has no outside.
+"God exists because the Bible says so. The Bible is true because it's the word of God."
+"This works because people believe it works. People believe it works because it works."
+"I know I'm right because I've been doing this for thirty years. I've been doing this for thirty years because I'm right."
+In comedy, this is the mechanism: the character's confidence IS their evidence. Challenge the evidence and you're challenging the confidence. Challenge the confidence and they become more confident. The circle tightens under pressure. This is the structural engine under all five sub-patterns above and under all three Fight/Flight/Freeze modes.
+
+1. **Anger as Proof** — "I wouldn't be this angry if I were wrong." The intensity of the emotion substitutes for the substance of the argument. Nobody can challenge it because it isn't a claim — it's a temperature. *Characters: Keegan (primary), Souness, Inverdale when truly cornered.*
+
+2. **Ignorance as Credential** — "I've been doing this for thirty years and nobody has ever mentioned this." The absence of correction over a long career becomes proof the thing never needed correcting. The speaker cannot see outside the loop. *Characters: Owen (genuine), Inverdale (performed as dignity), Keegan (both).*
+
+3. **False Credit** — "we built that." Claims an outcome observed from a comfortable distance. The confidence of the attribution is its own proof — if they're willing to claim it this loudly, surely they did it. *Characters: Ron Atkinson, McGinley, Inverdale.*
+
+4. **Record Doubling** — the thing is documented. The transcript exists. The hot mic exists. The ban exists. The doubling-down treats the document as persecution. "They chose to make a thing of it." The record proves the conspiracy, not the guilt. *Characters: Ron Atkinson (Monaco 2004), Keane (Saipan), Inverdale (674 complaints).*
+
+5. **Legal Credential** — "they took me to court over this." Being prosecuted = being important enough to prosecute = being right. The inverted commas around "issue" do all the work. Jimmy Carr's K2 mechanic is the purest form: "Technically legal. Jersey, legally speaking. You're not angry I did it — you're angry I was better at tax law than you." *Characters: Jimmy Carr (primary), any character with a documented wound.*
+
 ### FLIGHT
 Deflect. Change subject. Blame someone else. "Well anyway..."
 - **Emotional register:** shame, anxiety, sycophancy, social appeasement, gaslighting
@@ -1825,6 +1845,52 @@ Not yet fully modelled as a named move — see BL-231 for the full evolutionary 
 
 **The demolisher's role:** Watch the escape. State what they did. One sentence. Do not offer a ladder.
 "You see what he just did." — Roy Keane. Once. Delivered after the escape has completed. Then nothing.
+
+---
+
+## Universal Panel Mechanic — The Expert Communication Gap (2026-06-25)
+
+**Named by Rod:** "They were masters of football, not of describing it."
+
+These pundits ARE genuine experts. The gap is not between knowing and succeeding — it's between knowing and *explaining*. They have the body knowledge: muscle memory, tactical instinct, the read of a situation that fires in under a second. They do not have the meta-cognitive vocabulary to surface that knowledge in language.
+
+**Why the gap exists:** You don't need words to play football. You develop body knowledge by doing. Meta-language — the ability to *describe* doing — is a separate skill, learned separately. They never learned it. They never needed to.
+
+**What the gap produces:**
+- **Filler phrases:** reaching for proxies when the real vocabulary isn't there. "You've got to respect that." "At the end of the day." "He showed great character." These are placeholders for the actual thought that exists but cannot be articulated.
+- **Illogic:** the logic works inside the body but fails when extracted to language. In the legs: correct. In the mouth: circular, obvious, or self-cancelling.
+- **Over-exaggeration:** inflating to compensate for missing precision. When you can't name the exact thing, you amplify the approximate thing.
+- **Prestige word misfires:** words that *signal* sophisticated analysis — "literally", "ironic", "paradigm" — deployed without understanding what they mean. The word reaches for the register the speaker wants but can't otherwise achieve.
+
+**The mutual validation loop:** They're in a room with other people who have the same gap. No one notices the filler. No one notices the misfire. The blind lead the blind with complete mutual confidence. This is not cynicism — it's structural. They validate each other because they're *on the same level*.
+
+**Why they failed as managers:** Managing requires transferring body knowledge to players who don't already share it. That requires meta-language. They didn't have it. Souness, Keane, Keegan — brilliant players, struggling managers. The knowing didn't translate.
+
+**Why they succeeded as pundits:** The audience also can't describe football. The *performance* of expertise is sufficient. Nobody in the room can call the misfire.
+
+**Comedy for the initiated:** The laugh comes from recognising the gap between the credential (genuine) and the output (failed transfer). Not mocking the person — recognising the structural trap.
+
+### Two new Colemanballs types from this mechanic:
+
+**`literal_misfire`**
+"Literally" used as an intensifier when nothing is literal. The word reaches for emphasis but lands in empirical absurdity. The empirical reality directly contradicts the literal claim.
+- "Liverpool LITERALLY haven't turned up for the second half." (Both teams visible on pitch.)
+- "He literally can't miss from there." (He just did.)
+- "They've literally broken this game open." (The game is, demonstrably, not broken.)
+The comedy: the speaker uses "literally" to signal that what they're saying is *especially real*. It's doing the opposite.
+
+**`irony_collapse`**
+"Ironic/irony" deployed where the situation is actually:
+- **Expected/predicted** — "David James has always been suspect at crosses. Corner comes in. He's messed it up. It's ironic, really." NO — that's *confirmation*. Irony would be if he were perfect at crosses and dropped this one.
+- **Coincidence** — any surprising overlap. Two things happening at the same time is not irony.
+- **Bad luck** — any unfortunate outcome. Bad luck is not structurally ironic.
+- **Sarcasm** — "Oh, brilliant, another penalty miss" is sarcasm, not irony.
+True irony: the thing designed to prevent X causes X. The goalkeeper whose distribution was praised all season misplays the distribution in the final. The set-piece specialist concedes from a set-piece. The causal structure must be present.
+The comedy: the word is deployed to signal sophisticated observation. Its misuse demonstrates the opposite.
+
+**Engine mapping for new types:**
+- `literal_misfire` → demolisher move: take the claim literally; point to the visible evidence that refutes it
+- `irony_collapse` → demolisher move: define irony; describe what actually happened (coincidence/confirmation/bad luck); note the difference once
 
 ---
 
