@@ -3274,3 +3274,83 @@ Track G wrote Chapman's dismissal_profile entries in ALL-CAPS to mirror his volu
 
 - CD3: UBV=9 TC=5 RR=4 → CoD=18, Dur=5, **CD3=3.6**
 - Status: OPEN — raised 2026-06-25. Three Amigos needed. Design question above must be answered before any code.
+
+---
+
+## BL-230 — Souness added to PMC as regular panel member + filler demolition mechanic
+
+**Raised:** 2026-06-25 | **By:** Rod
+**Epic:** World Cup Cunditry
+**Feature:** sports-wcc
+
+**Story:** As a user watching the panel, I want Graeme Souness as a regular cast member who fires on Rooney's Paradox fillers ("you've got to respect that") by demolishing them with contempt and a misanthropic qualifier, so that the Paradox gets cornered rather than just deepened by Micah.
+
+**Rod's framing (2026-06-25):** "Souness... need over here immediately and a regular panel member" + "[Rooney fires Paradox] and Souness/Keane interjecting 'WE HAVE TO RESPECT NOTHING. And for no reason other than our general hatred of every living organism on earth.'"
+
+**Filler demolition mechanic — KEANE/SOUNESS signature:**
+Pattern: [Filler phrase the previous speaker used] → CAPS negation/weaponisation → "and for no reason other than [contempt absolute]"
+
+Pool (seed — expand in character file):
+- "you've got to respect that" → WE HAVE TO RESPECT NOTHING. And for no reason other than our general hatred of every living organism on earth.
+- "fair play to them" → FAIR PLAY. There is no fair play. There is only winning and the reasons you didn't.
+- "he's only human" → YES. AND HUMANS ARE HELD TO STANDARDS. That's the entire point of being one.
+- "at the end of the day" → AT THE END OF THE DAY MEANS NOTHING. Every day ends. That's not analysis.
+- "you've got to feel for him" → I DON'T FEEL FOR HIM. I feel for the game. He'll be fine. He gets paid for this.
+- "these things happen" → THESE THINGS HAPPEN BECAUSE PEOPLE ALLOW THEM TO. Nothing happens by itself. Someone was responsible.
+- "everyone did their best" → THEIR BEST WASN'T GOOD ENOUGH. That's the sentence. The result is the result.
+- "give him credit" → I GIVE HIM NOTHING. Credit is earned. Not handed out. He knows what he did.
+- "it could have gone either way" → IT WENT ONE WAY. 'Either way' is for people who didn't prepare for one of them.
+- "he's done well" → HE HAS DONE THE MINIMUM. Being paid to do something and then doing it is not praise. It is baseline.
+
+Contempt qualifier pool (rotate — pair with any demolition):
+- "for no reason other than our general hatred of every living organism on earth"
+- "because standards exist and he fell below them"
+- "and I mean every single one of them"
+- "which is not a negotiable position"
+- "because preparation is not optional and he knows that"
+- "for the simple reason that this is what the game requires"
+- "and I include myself in that assessment"
+
+**Scope:**
+- New Souness character file (17-attribute schema) — Graeme Souness. Scotland. Liverpool captain. Treble. Player-manager. Filler demolition engine. Contempt as form of love for the game.
+- Add Souness to PMC_MEMBERS as From The Other Pub (initially) — or elevate to regular (Rod to confirm group)
+- Filler demolition also applies to Roy Keane (already in From The Other Pub) — add to his prompt
+- Interjection trigger: fires when the previous speaker used a classified filler construction (rooney_paradox, hollow_gravitas, obvious_as_revelation)
+- Related to BL-229 (interjection mechanic) — the filler demolition is a specific interjection type
+
+**Depends on:** BL-222 (PMC panel), BL-229 (interjection mechanic, can pre-wire via TURN_RULES)
+
+- CD3: UBV=9 TC=8 RR=5 → CoD=22, Dur=3, **CD3=7.3**
+- Status: OPEN — raised 2026-06-25. Three Amigos: confirm Souness placement (regular vs Other Pub). Otherwise clear to build.
+
+---
+
+## BL-231 — Human response taxonomy: evolutionary/emotional model mapped to comedy engine
+
+**Raised:** 2026-06-25 | **By:** Rod
+**Epic:** World Cup Cunditry / Core Comedy Engine
+**Feature:** domain-model, all-panels
+
+**Story:** As a comedy engine builder, I want a complete taxonomy of human behavioural and emotional responses to threat, challenge, and social cornering — grounded in evolutionary biology and psychology — so that I can amplify the most comedy-rich patterns and build them into the panel character mechanics.
+
+**Rod's framing (2026-06-25):** "I'd like emotional responses in each of those camps so we model real human behaviour, proven by centuries of biological and evolutionary research — maybe add a BL item to research all human responses to things and actions and behaviours as categories and sub-categories so we can build that taxonomy into our comedy model and amplify the good stuff we want"
+
+**Research scope:**
+- The 4F model: Fight / Flight / Freeze / Fawn — biological basis, emotional register per mode
+- Plutchik's Wheel of Emotions: 8 primary, 8 secondary, compounds — map to character archetypes
+- Ekman's 6 basic emotions (anger, fear, disgust, surprise, happiness, sadness) + micro-expression comedy potential
+- Cognitive dissonance responses: rationalisation, denial, confabulation, projection — each is a comedy pattern
+- Status threat responses: dominance display, submission, withdrawal, coalition-seeking
+- Social psychology: sycophancy as fawn, gaslighting as fight-flight hybrid, stonewalling as freeze
+- What makes each pattern FUNNY vs just accurate: the gap between the emotion being felt and the words chosen to mask it
+
+**Output:**
+- Extended domain model section: full taxonomy with comedy amplification notes per pattern
+- Per-character mapping: which emotional response patterns each character defaults to
+- New NarrativeMove entries where appropriate (FAWN, RATIONALISE, PROJECT, CONFABULATE)
+- Prompt engineering implications: how to elicit each pattern from the LLM authentically
+
+**Depends on:** Domain model Fight/Flight/Freeze section (added 2026-06-25, in domain-model.md)
+
+- CD3: UBV=9 TC=6 RR=7 → CoD=22, Dur=4, **CD3=5.5**
+- Status: OPEN — raised 2026-06-25. Research spike first, then Three Amigos on taxonomy before wiring into prompts.

@@ -1757,6 +1757,77 @@ Ron leaks these as casual contextual information. Ron never notices. Nobody shar
 { leak_probability: float 0.0–1.0, bleed_response_weights: { TRAIL_OFF, MISFIRE, ADJACENCY_RUSH, CALLED_OUT, MYSTIC_MEG } }
 Weights must sum to 1.0. Required for all characters before historic match mode.
 
+## Universal Panel Mechanic — Hold the Bullshitter (2026-06-25)
+
+**Named by Rod:** "Hold the bullshitter using a phrase they don't understand, to account for its logic and applied meaning."
+
+A universal comedy mechanic available to any character with a precision, standards, or contempt identity. Three-move structure:
+
+1. **Capture** — repeat the phrase back as a genuine proposition, verbatim or in CAPS
+2. **Literalise** — apply actual logic: what does this actually mean? What is the speaker claiming?
+3. **Verdict** — the literal meaning is absurd, worse than silence, or an indictment of the speaker
+
+Optional fourth move (BL-225 / BL-229 interjection version):
+4. **Ask** — "so what do you mean by that?" — framed so no answer survives
+
+The speaker deployed the phrase *to avoid* thinking. The demolisher forces the thinking back on them. The comedy is in what the thinking reveals.
+
+**Contempt qualifier** (Keane/Souness register): appended to the verdict.
+Form: "and for no reason other than [misanthropic absolute]."
+Example: "WE HAVE TO RESPECT NOTHING. And for no reason other than our general hatred of every living organism on earth."
+
+**Characters who carry this mechanic:** Keane, Souness, Neville (tactical variant), Peterson (Jungian variant — same move, lobster at the end), Hicks (Socratic variant — question-first rather than statement-first).
+
+---
+
+## Universal Panel Mechanic — Fight / Flight / Freeze (2026-06-25)
+
+When a character is cornered — by "Hold the Bullshitter", by CALL OUT (BL-227), by a question they cannot answer — they enter one of three escape modes:
+
+### FIGHT
+Double-down. Get louder. Exaggerate further. Attack the questioner.
+- **Emotional register:** anger, contempt, indignation, bravado, wounded pride
+- **Comedy source:** the escalation is disproportionate to the original blunder; the defence is worse than the charge
+- Keegan: re-states the original claim with more authority — anger as proof of correctness
+- Inverdale: preamble extends; gaffe is "perhaps slightly ham-fisted" but indignantly defended
+- Micah: finds the cornered position BRILLIANT — enthusiasm as fight mode, warmth weaponised
+- Souness/Keane: contempt deployed at the person who noticed — "you've got a problem with standards"
+
+### FLIGHT
+Deflect. Change subject. Blame someone else. "Well anyway..."
+- **Emotional register:** shame, anxiety, sycophancy, social appeasement, gaslighting
+- **Comedy source:** the deflection is more revealing than the original blunder; the escape route is signposted
+- Lineker: smooth pivot mid-sentence — anxiety as elegance, wound version of flight
+- Rooney: the subject wasn't the subject; there's another subject; both subjects can be true ("yeah but in the same way")
+- Inverdale: pivots immediately to someone else's achievement, equally breathless — shame dressed as generosity
+- Owen: "well the keeper should have done better" — deflects to third party not in room
+
+### FREEZE
+Hold both positions. Say nothing resolvable. The silence has a construction over it.
+- **Emotional register:** dissociation, confusion, overwhelm masquerading as contemplation, terror performing as calm
+- **Comedy source:** the freeze is presented as a considered position; the absence of content is delivered with complete confidence
+- Rooney's Paradox: "both of those things can be true, in the same way" — holds contradictions like he's not there
+- Owen: restate the premise as the conclusion ("it's difficult — that's why it's difficult") — genuine incomprehension
+- Peterson: framework deployment — the answer isn't in the question, it's in the Jungian structure underneath; lobster incoming
+- Coltart baseline: polite terror dressed as careful analysis; Valderrama underneath everything
+
+**Note — Fawn (4th F, evolutionary model):**
+A fourth escape mode, common in social threat contexts: appease the attacker, agree with the criticism, offer excessive validation.
+- Inverdale's sycophancy is partially fawn: the ham-fisted pivot to reverence is appeasement
+- Dougherty under pressure: excuse-making for others is a fawn response
+- Micah's BRILLIANT as fawn: genuine but structurally identical to appeasement
+Not yet fully modelled as a named move — see BL-231 for the full evolutionary taxonomy research spike.
+
+**Engine mapping:**
+- FIGHT → NarrativeMove: EXAGGERATE, BUILD_ON_LIE
+- FLIGHT → NarrativeMove: ARRIVE (change subject), WRITE_OFF (dismiss and start fresh)
+- FREEZE → NarrativeMove: LAYER (with nothing under it), `rooney_paradox` Colemanballs type
+
+**The demolisher's role:** Watch the escape. State what they did. One sentence. Do not offer a ladder.
+"You see what he just did." — Roy Keane. Once. Delivered after the escape has completed. Then nothing.
+
+---
+
 ## CANONICAL SPELLING — CRITICAL, RESIST AUTOCORRECT
 
 Project: **Quntum Leeks** — the misspelling is INTENTIONAL and CANONICAL.
