@@ -35,14 +35,15 @@ Feature: Nav group restructuring — Comedy Room, Little Misadventure, Play, 19t
       | Ask Sun Tzu            |
       | Premise Interrogation  |
 
-  Scenario Outline: 19TH HOLE nav group contains only the four sports panels
+  Scenario Outline: 19TH HOLE nav group contains the sports panels
     Then "<tab>" should be in the 19TH HOLE nav group
     Examples:
-      | tab                |
-      | Post Match Cunditry |
-      | The 19th Hole      |
-      | Watching the Oche  |
-      | The Long Room      |
+      | tab                  |
+      | Post Match Cunditry  |
+      | World Cup Cunditry   |
+      | The 19th Hole        |
+      | Watching the Oche    |
+      | The Long Room        |
 
   Scenario Outline: PLAY nav group contains five items after Quntum Leeks moved
     Then "<tab>" should be in the PLAY nav group
