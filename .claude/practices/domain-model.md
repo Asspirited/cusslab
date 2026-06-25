@@ -1894,6 +1894,127 @@ The comedy: the word is deployed to signal sophisticated observation. Its misuse
 
 ---
 
+## Universal Panel Mechanic — Human Response Taxonomy (BL-231, 2026-06-25)
+
+**Comedy amplification key:** The funnier the pattern, the larger the gap between the emotion being FELT and the performance deployed to MASK it. The words chosen are not the emotion — they are the attempt to appear not to be feeling the emotion. That gap is the engine.
+
+---
+
+### The 4F Model — Biological Basis
+
+Evolved stress responses, hard-wired, fire before conscious thought. In a studio, when a pundit is cornered by "Hold the Bullshitter" or a CALL OUT, the 4F system engages. The language it produces is the comedy.
+
+| Mode | Biological trigger | Social disguise | Gap |
+|------|-------------------|-----------------|-----|
+| FIGHT | Threat to status, challenge to credibility | Authority, credentials, expertise, anger-as-proof | Anger is not a reason. Volume is not evidence. |
+| FLIGHT | Shame, exposure, loss of face | Generosity, subject change, praising the challenger | The praise is appeasement. The subject change is visible. |
+| FREEZE | Overwhelm, no viable response | Contemplation, balanced view, "both sides" | The emptiness is there. The construction over it is visible. |
+| FAWN | Social threat from dominant figure | Agreement, excessive validation, warmth | Micah's warmth is genuine; under threat it becomes structurally identical to fawn. |
+
+**Comedy amplification per mode:**
+- FIGHT: the character is angry. The anger claims to be analysis. It is not. The claim is the comedy.
+- FLIGHT: the character is ashamed. The shame claims to be generosity or insight. The wound bleeds through anyway.
+- FREEZE: the character has nothing. The nothing claims to be a considered position. The confidence of the delivery is the gap.
+- FAWN: the character is threatened. The threat produces validation. The validation is structurally indistinguishable from genuine warmth — until you notice when it fires.
+
+---
+
+### Plutchik's Wheel of Emotions — Comedy Mapping
+
+**Primary emotions (8):** Anger, Disgust, Sadness, Surprise, Fear, Trust, Anticipation, Joy.
+
+**PMC character primary registers:**
+
+| Character | Primary | Secondary | Comedy source |
+|-----------|---------|-----------|---------------|
+| Keegan | Joy + Anticipation | Anger (when challenged) | Optimism producing tautology; oscillation between joy and wounded pride is visible and fast |
+| Rooney | Trust + Sadness | Fear (of being wrong) | Trust that both positions are simultaneously true; genuine. Sadness would be the correct emotion at round 3 if it could surface. |
+| Owen | Anticipation + Trust | Surprise (at obvious outcomes) | Anticipation that produces tautology; genuine surprise when prediction confirms prediction |
+| Inverdale | Anticipation + Trust | Fear (of loss of status) | Trust in own authority; anticipation of gravity; fear in the preamble extension when something lands badly |
+| Micah | Joy + Trust | Anticipation | Pure joy + trust = love register; structurally warm; becomes fawn when threatened but he cannot see this |
+| Souness | Anger + Disgust | Contempt (compound: disgust + anger) | Sustained contempt is the register; the comic gap is that his expertise is genuine — the contempt is proportionate |
+| Keane | Disgust + Anger | Contempt | The control is the gap — the fury is visible through the short sentences; control makes it worse |
+| Lineker | Joy + Trust | Fear (wound-adjacent, BBC) | Warmth as professional tool; fear as wound that surfaces and is smoothly recovered |
+| Peterson | Trust + Anticipation | Surprise (lobster) | Trust in the framework; anticipation of revelation; surprise from the audience, not Peterson |
+
+**Compound emotions relevant to PMC:**
+- **Contempt** (Disgust + Anger): Souness's resting register. The most comedy-efficient compound — self-contained, needs no provocation.
+- **Submission** (Trust + Fear): Inverdale's wound mode — the ham-fisted pivot to sycophancy is submission dressed as generosity.
+- **Awe** (Fear + Surprise): Micah at round 3 when something goes genuinely wrong. He finds it BRILLIANT anyway. The awe is structurally indistinguishable from his normal warmth.
+- **Remorse** (Sadness + Disgust): Lineker's BBC wound register — quickly recovered; remorse is present for exactly one sentence, then professional mode.
+- **Optimism** (Anticipation + Joy): Keegan's opening register every turn; the tautology is the collapsed optimism.
+- **Disapproval** (Surprise + Sadness): Owen at his most honest; the "that's ironic really" misfire comes from here — genuine surprise at the expected outcome.
+
+---
+
+### Ekman's Six Basic Emotions — Micro-Expression Comedy
+
+Ekman identified six cross-cultural, biologically-grounded expressions that fire before conscious control can suppress them. They are: **Anger, Fear, Disgust, Surprise, Happiness, Sadness**.
+
+**Micro-expression comedy in panel format:**
+The character is not speaking in their primary register. Underneath, a different emotion fires. The text shows the official position; the micro-expression reveals the actual one.
+
+| Expression | Visible in PMC when | Comedy target |
+|------------|--------------------|----|
+| Anger (micro) | Inverdale defending Bartoli comment; Owen called wrong | Delivered through authority tone, not acknowledged as anger |
+| Fear (micro) | Keegan when 1996 is invoked; Lineker near the BBC wound | One beat before professional recovery; the beat is the comedy |
+| Disgust (micro) | Souness hearing any filler phrase; Keane hearing "everyone tried their best" | Disgust precedes the demolition; it's in the pause |
+| Surprise (micro) | Owen when his tautology is called a tautology; Keegan when a contradiction is identified | Genuine — neither man expected to be understood correctly |
+| Happiness (micro) | Micah at literally everything | The happiness is NOT micro; it's fully displayed; the comedy is that it doesn't modulate |
+| Sadness (micro) | Rooney in round 4 when both positions still haven't resolved | The Paradox has exhausted itself; sadness at the impasse is briefly visible |
+
+---
+
+### Cognitive Dissonance Responses — Comedy Patterns
+
+Cognitive dissonance: holding two incompatible beliefs simultaneously. Resolution strategies are all comedy-viable.
+
+| Strategy | Definition | Comedy form | PMC character |
+|---------|-----------|-------------|---------------|
+| **Rationalisation** | Construct post-hoc reason for position already held | The reason is constructed visibly in real time; the conclusion precedes it | Owen, Inverdale |
+| **Denial** | Refuse to acknowledge the contradiction exists | Contradiction is pointed out; character continues as if it wasn't | Keegan (primary) |
+| **Confabulation** | Genuinely remember the past as it should have been | Story grows toward the heroic version; speaker does not know this is happening | Keegan (secondary), Inverdale |
+| **Projection** | Attribute own failing to the person pointing it out | "You're the one who doesn't understand standards" | Souness when cornered |
+| **Compensation** | Double down on a different credential to distract | Horses (Owen), European Cups (Souness), 30-year career (Inverdale) | Multiple |
+| **Sublimation** | Channel the uncomfortable feeling into socially acceptable behaviour | Micah's BRILLIANT response to something genuinely terrible | Micah |
+
+**New NarrativeMoves from this taxonomy:**
+- **RATIONALISE**: construct the post-hoc reason, deliver as if it preceded the position
+- **PROJECT**: attribute own failing to the person who identified it; slight escalation
+- **CONFABULATE**: remember the past as it should have been; deliver with certainty; may contradict earlier statement
+- **COMPENSATE**: introduce a different, unrelated credential; use it to change the subject
+
+---
+
+### Status Threat Responses — Panel Dynamics
+
+When a character's status in the room is challenged (by a better argument, a wound being named, or a higher credential being invoked):
+
+| Response | Form | Comedy | Character |
+|---------|------|--------|---------|
+| **Dominance display** | Assert rank, credentials, volume | The rank is real but the assertion makes it look defensive | Souness, Keane, Inverdale |
+| **Submission** | Agree with challenger; offer excessive validation | The agreement is obviously motivated by the threat, not the argument | Inverdale (sycophancy mode) |
+| **Withdrawal** | Leave the topic; find a different subject | "Well anyway — the football" | Souness (Sun wound only), Lineker |
+| **Coalition-seeking** | Appeal to another panel member for validation | "And I think [character] will agree with me that..." | Keegan (primary), Owen |
+
+---
+
+### Comedy Amplification Rule
+
+All of the above generate comedy through the same mechanism:
+
+**The character is feeling X. They are saying Y. Y is supposed to prevent the room from knowing they're feeling X. The prevention fails. The gap between X and Y is the joke.**
+
+The amplification choices:
+1. **Widen the gap** — make Y even further from X. The more they insist they're not angry, the angrier they sound.
+2. **Name the gap** — Hold the Bullshitter mechanic: capture Y, literalise it, show what it reveals about X. Once named, cannot be unseen.
+3. **Escalate X while holding Y** — FIGHT sub-patterns: the defence produces more of what it's defending against. Confidence as evidence, anger as proof, credentials as shield.
+4. **Reverse the gap** — FAWN mode: character feels threat but produces warmth. The warmth is structurally visible as threat-response. Micah does this authentically (the warmth is real AND structurally identical to fawn).
+
+**The initiated audience laughs** because they recognise the gap. They have the meta-language the pundit lacks. The comedy is the distance between the body knowledge and the verbal performance of it.
+
+---
+
 ## CANONICAL SPELLING — CRITICAL, RESIST AUTOCORRECT
 
 Project: **Quntum Leeks** — the misspelling is INTENTIONAL and CANONICAL.
