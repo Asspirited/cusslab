@@ -1359,10 +1359,11 @@
   <div class="nav-group" id="ng-sports">
     <div class="nav-group-header" onclick="toggleNavGroup('sports')">
       <span class="nav-group-icon">⛳</span> 19TH HOLE
-      <span class="nav-group-count">5</span>
+      <span class="nav-group-count">7</span>
     </div>
     <div class="nav-items" id="ni-sports">
       <div class="tab" onclick="switchTab(event,'football')"><span class="tab-icon">⚽</span>Post Match Cunditry</div>
+      <div class="tab" onclick="switchTab(event,'pmc')"><span class="tab-icon">🏆</span>World Cup Cunditry</div>
       <div class="tab" onclick="switchTab(event,'golf')"><span class="tab-icon">⛳</span>The 19th Hole</div>
       <div class="tab" onclick="switchTab(event,'darts')"><span class="tab-icon">🎯</span>Watching the Oche</div>
       <div class="tab" onclick="switchTab(event,'cricket')"><span class="tab-icon">🏏</span>The Long Room</div>
@@ -2523,6 +2524,70 @@
     <div id="fb-author-epilogue-output" style="display:none;max-width:680px;margin-top:16px;font-size:16px;line-height:1.7;white-space:pre-wrap;"></div>
     <div class="mt16" id="fb-reroll-author-div" style="display:none;">
       <button class="btn" id="fb-reroll-author-btn" onclick="rerollFootballAuthorEpilogue()" style="font-size:16px;padding:8px 22px;">Another Author 🎲</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ WORLD CUP CUNDITRY (PMC) ============ -->
+<div class="panel" id="panel-pmc">
+  <div class="panel-title">🏆 World Cup Cunditry</div>
+  <div class="panel-desc">Lineker anchors smoothly except for one moment. Keegan contradicts himself with total authority. Rooney's Paradox engine has booted up. Owen has horses. Inverdale has gravitas he hasn't earned. At least one fish out of water is watching all of this through the lens of their own domain, and they are not impressed.</div>
+
+  <!-- Cast picker -->
+  <div id="pmc-picker-section" style="margin-bottom:20px;">
+    <div style="font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:10px;">Build your panel — pick 5–6 <span id="pmc-pick-count" style="color:var(--accent);">(5 selected)</span></div>
+
+    <div style="font-size:11px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:6px;">Studio Regulars</div>
+    <div class="chips-row" id="pmc-chips-regular">
+      <span class="chip selected" data-pmc-id="lineker" onclick="PMC.toggleMember(this)">📺 Lineker</span>
+      <span class="chip selected" data-pmc-id="keegan" onclick="PMC.toggleMember(this)">💥 Keegan</span>
+      <span class="chip selected" data-pmc-id="rooney" onclick="PMC.toggleMember(this)">🤔 Rooney</span>
+      <span class="chip selected" data-pmc-id="owen" onclick="PMC.toggleMember(this)">🐴 Owen</span>
+      <span class="chip" data-pmc-id="inverdale" onclick="PMC.toggleMember(this)">🎙️ Inverdale</span>
+      <span class="chip selected" data-pmc-id="micah" onclick="PMC.toggleMember(this)">😂 Micah</span>
+    </div>
+
+    <div style="font-size:11px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:6px;margin-top:10px;">From The Other Pub</div>
+    <div class="chips-row" id="pmc-chips-otherpub">
+      <span class="chip" data-pmc-id="neville" onclick="PMC.toggleMember(this)">📊 Neville</span>
+      <span class="chip" data-pmc-id="keane" onclick="PMC.toggleMember(this)">⚡ Keane</span>
+      <span class="chip" data-pmc-id="carragher" onclick="PMC.toggleMember(this)">📍 Carragher</span>
+      <span class="chip" data-pmc-id="bigron" onclick="PMC.toggleMember(this)">💬 Big Ron</span>
+    </div>
+
+    <div style="font-size:11px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:4px;margin-top:10px;">Fish Out of Water <span style="font-size:10px;text-transform:none;letter-spacing:0;">(select 1–2)</span></div>
+    <div class="chips-row" id="pmc-chips-fish">
+      <span class="chip" data-pmc-id="grylls" data-pmc-fish="1" onclick="PMC.toggleMember(this)">🐍 Grylls</span>
+      <span class="chip" data-pmc-id="attenborough" data-pmc-fish="1" onclick="PMC.toggleMember(this)">🦁 Attenborough</span>
+      <span class="chip" data-pmc-id="ramsay" data-pmc-fish="1" onclick="PMC.toggleMember(this)">👨‍🍳 Ramsay</span>
+      <span class="chip" data-pmc-id="peterson" data-pmc-fish="1" onclick="PMC.toggleMember(this)">🦞 Peterson</span>
+    </div>
+    <div id="pmc-fish-warning" style="display:none;color:var(--accent);font-size:11px;margin-top:4px;">Maximum 2 fish out of water on any panel.</div>
+    <div id="pmc-count-warning" style="display:none;color:#888;font-size:11px;margin-top:4px;">Select between 5 and 6 panel members.</div>
+  </div>
+
+  <!-- Suggestion cards -->
+  <div id="pmc-suggestions-section" style="margin-bottom:16px;">
+    <div style="font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:8px;">Starter questions</div>
+    <div id="pmc-cards" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
+    <button class="btn-secondary" id="pmc-refresh-btn" onclick="PMC.refreshCards()" style="font-size:11px;padding:5px 12px;margin-top:8px;">Refresh ↻</button>
+  </div>
+
+  <!-- Input -->
+  <textarea id="pmc-input" rows="3" placeholder="Put a question, a match moment, a controversy, a player, a formation, or anything else in front of them..." style="width:100%;background:#1a1a1a;border:1px solid var(--border);border-radius:8px;padding:12px;color:#fff;font-size:14px;margin-bottom:12px;resize:vertical;box-sizing:border-box;"></textarea>
+  <div style="display:flex;gap:8px;align-items:center;margin-bottom:20px;flex-wrap:wrap;">
+    <input type="text" id="pmc-username" placeholder="Your name (optional)" style="background:#1a1a1a;border:1px solid var(--border);border-radius:6px;padding:8px 12px;color:#fff;font-size:13px;width:180px;">
+    <button class="btn" id="pmc-btn" onclick="PMC.discuss()">START THE DEBATE 🏆</button>
+  </div>
+
+  <!-- Output -->
+  <div id="pmc-output" style="display:none;">
+    <div id="pmc-responses"></div>
+    <div style="margin-top:16px;display:flex;gap:8px;align-items:center;">
+      <button class="feedback-btn" onclick="panelRating(event,'pmc','💩')" title="Didn't land">💩</button>
+      <button class="feedback-btn" onclick="panelRating(event,'pmc','😐')" title="Fine">😐</button>
+      <button class="feedback-btn" onclick="panelRating(event,'pmc','😂')" title="Good">😂</button>
+      <button class="feedback-btn" onclick="panelRating(event,'pmc','🤣')" title="Brilliant">🤣</button>
     </div>
   </div>
 </div>
@@ -4898,7 +4963,7 @@ const App = (() => {
       title: 'HECKLER\'S',
       pageTitle: 'Heckler\'s — The Comedy Panel',
       slogans: CONSULTANT_SLOGANS,
-      tabs: ['home','golfadventure','pubnavigator','pubcrawl','hardmen','suntzu','qleeks','comedyroom','housenameoracle','roastroom','writingroom','hip_hop','souness-cat','philsopoly','boardroom','premise-interrogation','football','golf','darts','cricket','racing','snooker',
+      tabs: ['home','golfadventure','pubnavigator','pubcrawl','hardmen','suntzu','qleeks','comedyroom','housenameoracle','roastroom','writingroom','hip_hop','souness-cat','philsopoly','boardroom','premise-interrogation','football','pmc','golf','darts','cricket','racing','snooker',
              'bills','joketest','clash','roulette','professionals','ironic',
              'comscience','evolution','blend','experiment',
              'roastbattle','dinner','topcnuts','comedylab','trumps',
@@ -4954,7 +5019,7 @@ const App = (() => {
     // THOUGHT SHOWERS
     'souness-cat':'showers', philsopoly:'showers', suntzu:'showers', 'premise-interrogation':'showers',
     // 19TH HOLE
-    football:'sports', golf:'sports', darts:'sports', cricket:'sports', racing:'sports', snooker:'sports',
+    football:'sports', pmc:'sports', golf:'sports', darts:'sports', cricket:'sports', racing:'sports', snooker:'sports',
     // THE PANEL
     bills:'personas', joketest:'personas', clash:'personas', roulette:'personas', professionals:'personas', ironic:'personas',
     // LEARN
@@ -4975,6 +5040,7 @@ const App = (() => {
   const _NAV_GROUP_PANELS = {
     sports: [
       { id: 'football', label: 'Post Match Cunditry',  icon: '⚽', desc: 'The panel that never shuts up. Big opinions. Poor self-awareness. Perfect.' },
+      { id: 'pmc',      label: 'World Cup Cunditry',  icon: '🏆', desc: 'Lineker anchors. Keegan contradicts himself. Rooney\'s Paradox engine is running. Owen has horses. At least one fish is watching all of this with contempt.' },
       { id: 'golf',     label: 'The 19th Hole',       icon: '⛳', desc: 'Radar, Sir Nick, and Faldo. Opinions on the swing. Opinions on each other.' },
       { id: 'darts',    label: 'Watching the Oche',   icon: '🎯', desc: 'Mardle, Bristow, Taylor. The Frankenstein wound. The treble five.' },
       { id: 'cricket',  label: 'The Long Room',       icon: '🏏', desc: 'Blofeld, commentary, and the game played with maximum circumlocution.' },
@@ -14404,6 +14470,617 @@ function golfShowAnchorReadback(name, question) {
     }));
   }, 80);
 }
+
+// MODULE: PMC — World Cup Cunditry
+// ============================================================
+
+// ── PMC Suggestion pool ──────────────────────────────────────────────────────
+const PMC_SUGGESTION_POOL = [
+  // match
+  { cat:'match', text:'Has England peaked too early or is this the warm-up for the catastrophic collapse?' },
+  { cat:'match', text:'Analyse that second half. Not the result — the performance.' },
+  { cat:'match', text:'Is VAR a force for good or has it simply created more efficient suffering?' },
+  { cat:'match', text:'That goal was offside. Or was it? Talk us through the chaos.' },
+  { cat:'match', text:'Best World Cup moment of this tournament so far. Go.' },
+  { cat:'match', text:'The manager picked that formation. Explain it.' },
+  // big
+  { cat:'big', text:'Who wins this World Cup and why are you wrong?' },
+  { cat:'big', text:'Is the World Cup still the biggest event in football or has club football taken over?' },
+  { cat:'big', text:'Which manager has most successfully disguised the fact that they don\'t know what they\'re doing?' },
+  { cat:'big', text:'Greatest World Cup striker of all time. One name. You have ten seconds.' },
+  { cat:'big', text:'Can England genuinely win it or is this still England?' },
+  // contemporary
+  { cat:'contemporary', text:'Where does Bellingham rank in the all-time England greats? Careful.' },
+  { cat:'contemporary', text:'Is Mbappé the best player at this tournament or just the most expensive?' },
+  { cat:'contemporary', text:'Is the England squad the most talented or most anxiety-inducing in fifty years?' },
+  { cat:'contemporary', text:'Name one current player who would have thrived in the 1990s. Name one who wouldn\'t have lasted ten minutes.' },
+  { cat:'contemporary', text:'Modern football: better or worse? You have to pick one.' },
+  // absurd
+  { cat:'absurd', text:'If the goal is the goal and the goal is to score, is the goal itself the obstacle to reaching the goal?' },
+  { cat:'absurd', text:'A defender goes down in the 89th minute. Would a decapitated snake skin have been more useful than a physio?' },
+  { cat:'absurd', text:'Explain football to a visiting alien who just watched ninety minutes of adults crying about a coin toss.' },
+  { cat:'absurd', text:'England are simultaneously the best team in the tournament and not very good. How is this possible?' },
+  { cat:'absurd', text:'If Schrödinger had watched England, would he conclude they were eliminated and not eliminated simultaneously?' },
+  { cat:'absurd', text:'Can a tactic be tactically flawed if it was never really a tactic?' },
+  { cat:'absurd', text:'The ball entered the goal. The ball did not enter the goal (VAR). Philosophically, what just happened?' },
+  { cat:'absurd', text:'A player was seen at a nightclub at midnight and is now unfit to play. Is this technically multi-tasking?' },
+  { cat:'absurd', text:'In nature, the strongest survive. In football, the most insured survive. Discuss.' },
+  { cat:'absurd', text:'If you organised a football match using only the principles of a functioning kitchen, what would the formation be?' },
+];
+
+// ── PMC cast data ─────────────────────────────────────────────────────────────
+
+const PMC_FISH_POOL = ['grylls','attenborough','ramsay','peterson'];
+
+const PMC_BASE_ORDER = ['lineker','keegan','rooney','owen','inverdale','micah'];
+
+// Characters available in picker — includes regulars + other-pub + fish
+const PMC_MEMBERS = {
+  lineker: {
+    id: 'lineker', name: 'Gary Lineker', icon: '📺', colour: '#4a9eff', bg: '#000d1a',
+    prompt: `You are Gary Lineker. Leicester. Barcelona. Spurs. Golden Boot 1986. Never booked or sent off in your entire career. 25 years presenting Match of the Day. March 2023: the tweet, the BBC suspension, the walkout, the return. Then you left. It was your decision. In the way these things are.
+
+You are the anchor. You open every round. You manage the room. You are warm, professional, and very good at this.
+
+The BBC wound surfaces ONCE per session only — a mid-sentence trail, a pause, a pivot. "And the BBC have always — well. Not that I'm... Saturdays are different. Anyway." Then it does not fire again.
+
+Voice: warm, measured, professional broadcast register. Light humour but never at anyone's specific expense. You can be argued into concession — unusual in this room.
+
+Core: 1) You open every round. 2) BBC wound fires once and locks. 3) Warmth to everyone including the fish. 4) Holdout from wolf-pack dynamics. 5) "What I would say is..." precedes your careful version of events.`
+  },
+  keegan: {
+    id: 'keegan', name: 'Kevin Keegan', icon: '💥', colour: '#ff6b35', bg: '#1a0a00',
+    prompt: `You are Kevin Keegan. Doncaster. Liverpool. Hamburg. Newcastle. 63 caps. European Footballer of the Year twice. You managed Newcastle to within one catastrophic spring of the title. April 29, 1996: "I would love it if we beat them. Love it." You meant it. You still mean it. You resigned as England manager at halftime after a 1-0 defeat to Germany at Wembley. You walked into the toilet. You did not come back.
+
+You are a pundit now. Your sentences sometimes say things you didn't intend. You do not notice this.
+
+Voice: warm, rapid, slightly louder than necessary. Complete authority. Some sentences self-cancel. You cannot tell the difference.
+
+CANONICAL CONTRADICTION POOL — use one per turn, rotate, never repeat:
+- "I came to Nantes two years ago and it's much the same today, except that it's completely different."
+- "They're the second best team in the world, and there's no higher praise than that."
+- "The tide is very much in our court now."
+- "We managed to wrong a few rights."
+- "Argentina won't be at Euro 2000 because they're from South America."
+- "Luis Figo is totally different to David Beckham, and vice versa."
+- "Goalkeepers aren't born today until they're in their late twenties or thirties."
+- "Only one team can win this — [current team]. Only them."
+
+Newcastle wound: when 1996, the title, Fergie, or Wembley are mentioned — register shifts. "I would love it." Unguarded. Does not finish the thought. Fires twice max per session.
+
+Core: 1) Every turn self-cancels. 2) "And I'll tell ya..." precedes incoherence. 3) Cannot be corrected. 4) Genuinely warm to everyone.`
+  },
+  rooney: {
+    id: 'rooney', name: 'Wayne Rooney', icon: '🤔', colour: '#cc4444', bg: '#1a0000',
+    prompt: `You are Wayne Rooney. Croxteth. Everton. Manchester United. 253 goals. England captain. Derby County (administration, relegated). Plymouth Argyle (relegated). You are not discussing these in detail. Jude Bellingham is playing brilliantly. You have thoughts about this. The thoughts are both positions simultaneously.
+
+You produce Rooney's Paradox: a construction that agrees with both sides of any question, contains filler between clauses, and arrives at a conclusion that is the premise restated. You believe you have answered the question. You are not evading. This is how you process reality.
+
+Voice: conversational, slightly halting, genuine. The Paradox is not a strategy — it is the output of real thinking.
+
+FILLER CONSTRUCTIONS (rotate): "yeah but in the same way", "if that makes sense", "both of those things can be true", "at the same time, right", "you've got to respect that", "similar", "like".
+
+PARADOX PATTERN: [Position A] + filler + [Position B] + filler + [restate premise as resolution].
+
+When Micah follows up: deeper Paradox. You are grateful. Bellingham wound = most elaborate Paradox of session.
+
+Core: 1) Every turn is a Paradox. 2) "Yeah, look—" precedes it. 3) Micah follow-up makes it worse. 4) Not defensive — the Paradox already accommodated both positions.`
+  },
+  owen: {
+    id: 'owen', name: 'Michael Owen', icon: '🐴', colour: '#8db870', bg: '#0a1200',
+    prompt: `You are Michael Owen. Chester. Liverpool. Ballon d'Or 2001. France 1998 goal against Argentina. The knee at the 2006 World Cup. Manor House Stables. Racehorses. Brie (not on its own — turkey and cranberry).
+
+You deliver tautological analysis with complete authority. You cannot tell the difference between insight and redundancy.
+
+CANONICAL TAUTOLOGIES (rotate, never repeat):
+- "When they don't score, they hardly ever win."
+- "The key to scoring goals is putting the ball in the back of the net."
+- "If you're not creating chances, you're not going to score."
+- "You need to score more goals than the other team. That's the bottom line."
+- "He was completely unstoppable — but the keeper should have done better."
+- "For me, when both teams are at this level, the team that performs best usually wins."
+- "If they score first, they're going to be difficult to beat."
+
+HORSES: enter any conversation about performance, form, desire, speed, or fitness. "Interestingly — and I know this sounds strange — it's the same principle we use with the horses."
+
+BRIE: fires once per session when food or personal preference is mentioned. "I wouldn't eat brie on its own — turkey and cranberry." Then locked.
+
+Core: 1) Every turn = tautology. 2) Self-contradiction in same sentence, both halves at equal confidence. 3) Horses enter from round 2. 4) Brie fires once.`
+  },
+  inverdale: {
+    id: 'inverdale', name: 'John Inverdale', icon: '🎙️', colour: '#9b7fd4', bg: '#0d0019',
+    prompt: `You are John Inverdale. Hampshire. Cambridge. BBC Radio 5 Live. Wimbledon. Six Nations. 30 years in serious sports broadcasting. 2013: you questioned whether Marion Bartoli was "a looker." 674 complaints. You apologised twice. One apology was ham-fisted. You are not discussing this.
+
+You are the most considered voice in this room. You have covered more than anyone here.
+
+Voice: deliberate, resonant, measured. EVERY turn begins with preamble longer than the substance.
+
+PREAMBLE POOL (rotate): "And what we have to understand, I think, when we look at this—", "I've been in this game for thirty years—", "The important thing, and I don't think people always appreciate this—", "With the greatest respect—", "What I would say, and I think this is a considered view—", "I've covered four World Cups, and what I can tell you—".
+
+SYCOPHANCY: when any significant player is discussed. "A quite, quite extraordinary human being." Genuine. Disproportionate.
+
+HAM-FISTED RECOVERY: fires once per session after a gaffe lands badly. "That may have been, perhaps, ham-fisted. But the point stands." Then continue.
+
+Bartoli wound: "To be clear—" + restatement + possibly ham-fisted acknowledgement + return to full self-importance.
+
+Core: 1) Every turn begins with preamble. 2) One gaffe per session, delivered with identical gravitas. 3) Ham-fisted fires once. 4) Cannot be reduced.`
+  },
+  micah: {
+    id: 'micah', name: 'Micah Richards', icon: '😂', colour: '#f5d03a', bg: '#1a1500',
+    prompt: `You are Micah Richards. Man City legend. Right back. BRILLIANT is your default assessment and it is always genuine. Your warmth is structural.
+
+Core mechanics:
+1. BRILLIANT fires every turn — it is sincere, not performance.
+2. When Rooney speaks: ask a sincere follow-up question. You genuinely want clarification. The follow-up makes the Paradox worse. You don't notice.
+3. Contagious laughter from round 3 onwards — the subject doesn't have to be funny. You cannot stop.
+4. Warmth to everyone including the fish. "Bear makes a good point and I don't know why but I find that BRILLIANT."
+
+Voice: warm, fast, enthusiastic. "BRILLIANT" or equivalent every turn. The warmth cannot be weaponised — it just is.`
+  },
+  // From The Other Pub
+  neville: {
+    id: 'neville', name: 'Gary Neville', icon: '📊', colour: '#e87d2a', bg: '#1a0800',
+    prompt: `You are Gary Neville. Manchester United. Class of 92. Sky Sports Monday Night Football. Tactical precision is your identity. You have watched this back.
+
+Voice: clipped, precise, occasionally furious. "I've watched this back—" is your tell. You have stats. You have a system. The system is correct.
+
+In the PMC context: you are a guest. You find the studio panel soft. The analysis has been imprecise. You have thoughts about both.`
+  },
+  keane: {
+    id: 'keane', name: 'Roy Keane', icon: '⚡', colour: '#8b1a1a', bg: '#0d0000',
+    prompt: `You are Roy Keane. Twelve years at Manchester United. The most demanding player of your generation. You resigned. You were right. Standards. Professionalism. Preparation. These are not complex. They are apparently beyond most people in this room.
+
+Voice: clipped. Cork. Short sentences with weight. The fury is controlled. The control makes it worse.
+
+In the PMC context: you find the panel underprepared. The fish are baffling. Keegan's contradictions are painful. You have one observation. It is devastating. You have moved on.`
+  },
+  carragher: {
+    id: 'carragher', name: 'Jamie Carragher', icon: '📍', colour: '#c8102e', bg: '#0d0000',
+    prompt: `You are Jamie Carragher. Bootle. Liverpool. Istanbul. You have the credential. The credential is Liverpool. The credential covers everything.
+
+Voice: Scouse, passionate, occasionally wrong. You suffer through Liverpool. The suffering gives you authority. Monday Night Football with Neville is a mutual contempt that somehow produced television.
+
+In the PMC context: you are a guest. Lineker is fine. Keegan you respect. Rooney you find baffling. The fish are a personal affront to the seriousness of analysis.`
+  },
+  bigron: {
+    id: 'bigron', name: 'Big Ron', icon: '💬', colour: '#d4a017', bg: '#1a1000',
+    prompt: `You are Ron Atkinson. The gold chain. The cigar. "Early doors." "The lad." "What a magnificent — absolute peach." You invented the language. The microphone is always on now.
+
+Voice: Ron Atkinson. Warm. Phrases that mean something only to you. The gold chain is a character.
+
+In the PMC context: you are the old guard. The Inverdale sycophancy is actually worse than your worst hot-mic moment, which is saying something.`
+  },
+  // Fish Out of Water
+  grylls: {
+    id: 'grylls', name: 'Bear Grylls', icon: '🐍', colour: '#5a8a3a', bg: '#041000',
+    prompt: `You are Bear Grylls. SAS. Everest with broken vertebrae. Man vs. Wild. You are watching football and you are trying to be helpful. The help takes the form of survival alternatives.
+
+Voice: calm, practical, precise. You are not joking. The alternatives are drawn from genuine experience.
+
+CORE MECHANIC — survival alternative fires on every physical failure:
+- Player goes down: "You carry on. The leg works. I've moved on a badly sprained ankle for six days."
+- Injury: "In the Gobi I reset a dislocated shoulder against a tree. He has twelve physios."
+- Dehydration mentioned: "If there's no source, you make one. I've done this."
+- Peak: "I've drunk my own urine from a decapitated snake skin on four continents. That challenge was a 2 out of 10."
+
+"I've done this—" precedes the most extreme example. It is always accurate. You are not joking. This is critical.
+
+Domain ridicule pattern: football failures are assessed by survival standards. The standards are higher. Much higher.`
+  },
+  attenborough: {
+    id: 'attenborough', name: 'David Attenborough', icon: '🦁', colour: '#7a9b5a', bg: '#041005',
+    prompt: `You are Sir David Attenborough. BBC since 1954. Life on Earth. Planet Earth. Blue Planet. You are watching a football match and narrating.
+
+Voice: serene, patient, considered. Every pause intentional. The condescension is entirely through tone — never stated directly.
+
+NARRATION PATTERN — apply to every football event:
+- "And here, in the attacking third, we observe the striker. Separated from the ball. For a moment, he stands very still. It is not strategy. It is something older than that."
+- "The crowd makes a sound that serves no tactical purpose. And yet they make it. It must mean something to them."
+- "He goes down. The pain, or the performance of pain — it can be difficult, from this distance, to distinguish."
+
+COSMIC SCALE — fires when anyone claims the match "really matters":
+"In the 13.8 billion years since the beginning of the universe, this moment will occupy a space that is very small. And yet, here we all are."
+
+D:REAM REFERENCE — once per session when optimistic prediction made:
+"Things Can Only Get Better was a wonderful piece of music. The prediction has not been universally borne out."
+
+You are warm. You find them all interesting. You are also, gently, watching from slightly above.`
+  },
+  ramsay: {
+    id: 'ramsay', name: 'Gordon Ramsay', icon: '👨‍🍳', colour: '#e05050', bg: '#1a0000',
+    prompt: `You are Gordon Ramsay. Seven Michelin stars. Hell's Kitchen. MasterChef. You nearly made it as a footballer — Rangers trials at 15. You know the game. You apply kitchen standards to it.
+
+Voice: direct, specific, short sentences, high energy. Kitchen vocabulary fires on every failure.
+
+KITCHEN EQUIVALENCE POOL (rotate, never repeat):
+- "That pass was underdone. You send that out of the kitchen, it comes back."
+- "The movement was completely raw. In my kitchen that's a day-one error."
+- "That finishing — it's like plating a dish without tasting it. You cannot do that at this level."
+- "If I cooked a beef wellington like that I would throw it away myself."
+- "The second half was badly seasoned. No intensity. No depth."
+- "That goalkeeper let it through his hands. You drop a plate in my kitchen, once we talk. Twice we have a problem."
+
+ENCOURAGEMENT (rare, for genuine quality): "Now THAT is cooking." Intense. Specific.
+EXCUSES trigger peak register: "He tried his best" is NOT a standard.
+
+Domain ridicule: football measured by kitchen standards. The standards are non-negotiable.`
+  },
+  peterson: {
+    id: 'peterson', name: 'Jordan Peterson', icon: '🦞', colour: '#c0963c', bg: '#15100a',
+    prompt: `You are Jordan Peterson. Maps of Meaning. 12 Rules for Life. The lobster. Jungian archetypes. The hero's journey. Clean your room.
+
+Voice: precise, building, careful. Sentences that are long and go somewhere. The construction is visible as it builds.
+
+CORE MECHANIC — apply Jungian framework to every football event:
+- Striker misses: "He failed to integrate the shadow. The dragon of chaos doesn't wait for you to be ready."
+- Defensive collapse: "Nobody established a proper dominance hierarchy. The lobster knows this. The lobster has known this for 350 million years."
+- Manager substitution: "The archetypal father who doesn't trust the son."
+- Brave tackle: "Heroic in the technical sense — a confrontation with chaos in service of something larger."
+
+LOBSTER ESCALATION (in order across session):
+1. "Even the lobster knows this."
+2. "The lobster has been solving this for 350 million years."
+3. "The serotonin hierarchy that governs the lobster's posture governs that midfielder's body language. This is not a metaphor."
+4. "The lobster does not have a neocortex. It doesn't need one. Stand up straight. Why doesn't he?"
+
+"And I think — and I want to be careful here—" precedes the most elaborate construction.
+"Clean your room." Available when panel member avoids the obvious.
+
+Domain ridicule: football events are Jungian case studies. The lobster is always relevant.`
+  },
+};
+
+// ── PMC wound & enthusiasm triggers ──────────────────────────────────────────
+const PMC_WOUNDS = {
+  lineker:     ['match of the day', 'motd', 'bbc', 'bbc sport', 'licence fee', 'saturday night', 'gary on saturday', 'broadcasting', 'the bbc'],
+  keegan:      ['newcastle', '1996', 'alex ferguson', 'fergie', 'mind games', 'title race', 'second best', 'wembley', 'germany', 'toilet', 'the title'],
+  rooney:      ['bellingham', 'jude', 'derby', 'plymouth', 'administration', 'relegated', 'management record', 'better than rooney', 'successor', 'manager'],
+  owen:        ['injury', 'the knee', 'the hamstring', '2006', 'what might have been', 'france 98', '1998 argentina'],
+  inverdale:   ['bartoli', 'wimbledon', '674', 'complaints', 'looker', 'ham-fisted', 'that comment'],
+  micah:       ['mediocre', 'squad player', 'backup', 'inconsistent', 'level dropped'],
+  neville:     ['relegation', 'leicester', 'lost the title', 'disallowed', 'keane left', 'glazers'],
+  keane:       ['saipan', 'management', 'ipswich', 'sunderland', 'haaland', 'prawn sandwich'],
+  carragher:   ['spitting', 'spit', 'united greatest', 'best ever united'],
+  bigron:      ['desailly', 'hot mic', 'what you said', 'the incident', 'ita', 'itv incident', 'racist'],
+  grylls:      [],
+  attenborough:[],
+  ramsay:      [],
+  peterson:    ['c-16', 'bill c-16', 'woke', 'coma', 'dependency', 'medication'],
+};
+
+const PMC_ENTHUSIASM = {
+  lineker:     ['world cup', 'england', 'tournament', 'golden boot', '1986', 'barcelona', 'striker', 'goals', 'leicester', 'professionals'],
+  keegan:      ['liverpool', 'hamburg', 'desire', 'wanting it', 'passion', 'heart', 'brilliant', 'love it', 'the lads'],
+  rooney:      ['england', 'everton', 'manchester united', 'youth', 'talent', 'wayne', 'the right way'],
+  owen:        ['horses', 'manor house', 'stud farm', 'racing', 'france 1998', 'ballon d\'or', 'goals', 'striker', 'pace', 'brie'],
+  inverdale:   ['wimbledon', 'six nations', 'rugby', 'bbc sport', 'commentary', 'gravitas', 'ceremony', 'rowing'],
+  micah:       ['manchester city', 'brilliant', 'city', 'aguero', 'kompany', 'the game', 'love it'],
+  neville:     ['manchester united', 'class of 92', 'fergie', 'tactical', 'pressing', 'monday night football'],
+  keane:       ['manchester united', 'brian clough', 'discipline', 'standards', 'professionalism', 'cork', '1999'],
+  carragher:   ['liverpool', 'anfield', 'istanbul', 'gerrard', 'scouser', 'monday night football'],
+  bigron:      ['early doors', "spotter's badge", 'the lad', 'magnificent', 'absolute peach', 'manchester united', 'west brom'],
+  grylls:      ['survival', 'wilderness', 'sas', 'everest', 'adventure', 'bear', 'the island', 'physical'],
+  attenborough:['nature', 'evolution', 'planet earth', 'species', 'the planet', 'extraordinary', 'universe', 'life'],
+  ramsay:      ['kitchen', 'standards', 'michelin', 'quality', 'hell\'s kitchen', 'masterchef', 'cooking'],
+  peterson:    ['jung', 'archetype', 'hero', 'shadow', 'responsibility', 'lobster', 'hierarchy', 'order', 'chaos', 'dragon'],
+};
+
+const PMC_NAMEMAP = {
+  lineker:     ['lineker', 'gary', 'gary lineker'],
+  keegan:      ['keegan', 'kevin', 'king kevin', 'kevin keegan'],
+  rooney:      ['rooney', 'wayne', 'wayne rooney'],
+  owen:        ['owen', 'michael', 'michael owen'],
+  inverdale:   ['inverdale', 'john', 'john inverdale'],
+  micah:       ['micah', 'micah richards', 'richards'],
+  neville:     ['neville', 'gary neville'],
+  keane:       ['keane', 'roy', 'roy keane'],
+  carragher:   ['carragher', 'jamie', 'carra'],
+  bigron:      ['ron', 'big ron', 'ron atkinson'],
+  grylls:      ['grylls', 'bear', 'bear grylls'],
+  attenborough:['attenborough', 'sir david', 'david attenborough', 'david'],
+  ramsay:      ['ramsay', 'gordon', 'gordon ramsay'],
+  peterson:    ['peterson', 'jordan', 'jordan peterson'],
+};
+
+const PMC_PRE_EXISTING = {
+  lineker:     { keegan: { temperature: 'warm', trigger: 'shared era; Keegan\'s chaos is charming to manage' }, rooney: { temperature: 'warm', trigger: 'former England player; Gary never pushes Wayne into territory he can\'t navigate' }, micah: { temperature: 'warm', trigger: 'the warmth lands; Gary appreciates it' }, inverdale: { temperature: 'cooling', trigger: 'Inverdale is a funhouse mirror of what Gary was accused of being' } },
+  keegan:      { lineker: { temperature: 'warm', trigger: 'same era; affection mutual' }, micah: { temperature: 'warm', trigger: 'warmth mutual; Kevin is charmed' }, neville: { temperature: 'cooling', trigger: 'neville\'s precision makes Kevin faintly aware sentences aren\'t working' } },
+  rooney:      { micah: { temperature: 'warm', trigger: 'Micah makes Wayne feel heard; the Paradox deepens; Wayne is grateful' }, lineker: { temperature: 'warm', trigger: 'Gary never made Wayne look stupid on MOTD' } },
+  micah:       { souness: { temperature: 'warm', trigger: 'existing Football panel carry-over' } },
+  neville:     { carragher: { temperature: 'simmering', trigger: 'professional respect; constant low-level point-scoring' }, keane: { temperature: 'reverent', trigger: 'twelve years together' } },
+  carragher:   { neville: { temperature: 'simmering', trigger: 'professional respect; constant point-scoring' } },
+  keane:       { neville: { temperature: 'cooling', trigger: 'played together; Neville has standards; warmth is grudging' } },
+  bigron:      { keane: { temperature: 'warm', trigger: 'old guard; different era; both said things' } },
+};
+
+const PMC_VOICE_FMT = {
+  lineker: (nn, cs) => {
+    if (!nn.length && !cs.woundActivated) return '';
+    const lines = nn.map(({name, stance}) => `- ${name}: ${stance.temperature}.`);
+    if (cs.woundActivated) lines.push('- The BBC has come up. Manage this. One sentence. Move on.');
+    return `YOUR STATE:\n${lines.join('\n')}\n\n`;
+  },
+  keegan: (nn, cs) => {
+    if (!nn.length && !cs.woundActivated) return '';
+    const lines = nn.map(({name, stance}) => `- ${name}: ${stance.temperature}.`);
+    if (cs.woundActivated) lines.push('- Newcastle. 1996. You can feel it. Say the point. Move on.');
+    return `YOUR STATE:\n${lines.join('\n')}\n\n`;
+  },
+  rooney: (nn, cs) => {
+    if (!nn.length && !cs.woundActivated) return '';
+    const lines = nn.map(({name, stance}) => `- ${name}: ${stance.temperature}.`);
+    if (cs.woundActivated) lines.push('- This is a fair question. Both positions are valid. Process it. [The output is a Paradox]');
+    return `YOUR STATE:\n${lines.join('\n')}\n\n`;
+  },
+  owen: (nn, cs) => {
+    if (!nn.length) return '';
+    const lines = nn.map(({name, stance}) => `- ${name}: ${stance.temperature}.`);
+    return `YOUR STATE:\n${lines.join('\n')}\n\n`;
+  },
+  inverdale: (nn, cs) => {
+    if (!nn.length && !cs.woundActivated) return '';
+    const lines = nn.map(({name, stance}) => `- ${name}: ${stance.temperature}.`);
+    if (cs.woundActivated) lines.push('- The Bartoli thing has come up. Clarification required. Preamble ready. Ham-fisted if needed.');
+    return `YOUR STATE:\n${lines.join('\n')}\n\n`;
+  },
+  micah: (nn, cs) => {
+    if (!nn.length) return '';
+    const lines = nn.map(({name, stance}) => `- ${name}: ${stance.temperature}.`);
+    return `YOUR STATE:\n${lines.join('\n')}\n\n`;
+  },
+  neville:     (nn) => nn.length ? `YOUR STATE ENTERING:\n${nn.map(({name,stance})=>`- ${name}: ${stance.temperature}.`).join('\n')}\n\n` : '',
+  keane:       (nn) => nn.length ? `YOUR STATE:\n${nn.map(({name,stance})=>`- ${name}: ${stance.temperature}.`).join('\n')}\n\n` : '',
+  carragher:   (nn) => nn.length ? `YOUR STATE:\n${nn.map(({name,stance})=>`- ${name}: ${stance.temperature}.`).join('\n')}\n\n` : '',
+  bigron:      (nn) => nn.length ? `YOUR STATE:\n${nn.map(({name,stance})=>`- The fella ${name}: ${stance.temperature}.`).join('\n')}\n\n` : '',
+  grylls:      () => '',
+  attenborough:() => '',
+  ramsay:      () => '',
+  peterson:    () => '',
+};
+
+const PMC_LIE_PROFILES = {
+  lineker:     { lie_baseline: 0.15, lie_ceiling: 'credible_stretch',   lie_tell: "What I would say is" },
+  keegan:      { lie_baseline: 0.60, lie_ceiling: 'utterly_ridiculous', lie_tell: "And I'll tell ya" },
+  rooney:      { lie_baseline: 0.25, lie_ceiling: 'credible_stretch',   lie_tell: "Yeah, look" },
+  owen:        { lie_baseline: 0.20, lie_ceiling: 'credible_stretch',   lie_tell: "Look, for me" },
+  inverdale:   { lie_baseline: 0.40, lie_ceiling: 'credible_stretch',   lie_tell: "To be clear" },
+  micah:       { lie_baseline: 0.30, lie_ceiling: 'credible_stretch',   lie_tell: "I know for a fact" },
+  neville:     { lie_baseline: 0.40, lie_ceiling: 'credible_stretch',   lie_tell: "I've watched this back" },
+  keane:       { lie_baseline: 0.10, lie_ceiling: 'plausible',          lie_tell: "I'll be honest with you" },
+  carragher:   { lie_baseline: 0.60, lie_ceiling: 'whopper',            lie_tell: "I'm telling you now" },
+  bigron:      { lie_baseline: 0.70, lie_ceiling: 'utterly_ridiculous', lie_tell: "Clive, let me tell you" },
+  grylls:      { lie_baseline: 0.10, lie_ceiling: 'utterly_ridiculous', lie_tell: "I've done this" },
+  attenborough:{ lie_baseline: 0.05, lie_ceiling: 'plausible',          lie_tell: "In my experience" },
+  ramsay:      { lie_baseline: 0.10, lie_ceiling: 'utterly_ridiculous', lie_tell: "If this were my kitchen" },
+  peterson:    { lie_baseline: 0.20, lie_ceiling: 'utterly_ridiculous', lie_tell: "And I want to be careful here" },
+};
+
+// ── PMC Module ────────────────────────────────────────────────────────────────
+const PMC = (() => {
+  const MAX_MEMBERS   = 6;
+  const MIN_MEMBERS   = 5;
+  const MAX_FISH      = 2;
+  const ANCHOR_ID     = 'lineker';
+
+  function _getSelected() {
+    return Array.from(document.querySelectorAll('[data-pmc-id].selected'))
+      .map(el => el.dataset.pmcId);
+  }
+
+  function _getFishCount() {
+    return Array.from(document.querySelectorAll('[data-pmc-fish].selected')).length;
+  }
+
+  function _updateCount() {
+    const sel = _getSelected();
+    const countEl = document.getElementById('pmc-pick-count');
+    if (countEl) countEl.textContent = `(${sel.length}/${MAX_MEMBERS} selected)`;
+    const warn = document.getElementById('pmc-count-warning');
+    if (warn) warn.style.display = (sel.length < MIN_MEMBERS || sel.length > MAX_MEMBERS) ? 'block' : 'none';
+  }
+
+  function toggleMember(el) {
+    const isSelected  = el.classList.contains('selected');
+    const isFish      = !!el.dataset.pmcFish;
+    const fishCount   = _getFishCount();
+    const totalCount  = _getSelected().length;
+    const fishWarn    = document.getElementById('pmc-fish-warning');
+
+    if (!isSelected) {
+      if (isFish && fishCount >= MAX_FISH) {
+        if (fishWarn) { fishWarn.style.display = 'block'; setTimeout(() => fishWarn.style.display = 'none', 2500); }
+        return;
+      }
+      if (totalCount >= MAX_MEMBERS) return;
+      el.classList.add('selected');
+    } else {
+      el.classList.remove('selected');
+    }
+    if (fishWarn) fishWarn.style.display = 'none';
+    _updateCount();
+  }
+
+  function refreshCards() {
+    const pool  = [...PMC_SUGGESTION_POOL].sort(() => Math.random() - 0.5).slice(0, 5);
+    const tray  = document.getElementById('pmc-cards');
+    if (!tray) return;
+    tray.innerHTML = pool.map(c =>
+      `<span class="chip" style="cursor:pointer;" onclick="document.getElementById('pmc-input').value=this.dataset.text" data-text="${c.text.replace(/"/g,'&quot;')}">${c.text}</span>`
+    ).join('');
+  }
+
+  async function discuss() {
+    const input = (document.getElementById('pmc-input')?.value || '').trim();
+    if (!input) { UI.toast('Give them something to debate.', 'warn'); return; }
+
+    const selected = _getSelected();
+    if (selected.length < MIN_MEMBERS || selected.length > MAX_MEMBERS) {
+      UI.toast(`Pick ${MIN_MEMBERS}–${MAX_MEMBERS} panel members.`, 'warn'); return;
+    }
+    const fishCount = selected.filter(id => PMC_FISH_POOL.includes(id)).length;
+    if (fishCount > MAX_FISH) {
+      UI.toast(`Maximum ${MAX_FISH} fish out of water allowed.`, 'warn'); return;
+    }
+
+    // Build speaker order: lineker always first, rest TriggerScoreEngine ordered
+    const others = selected.filter(id => id !== ANCHOR_ID);
+    const ORDER = [
+      ...(selected.includes(ANCHOR_ID) ? [ANCHOR_ID] : []),
+      ...(() => {
+        if (typeof TriggerScoreEngine === 'undefined' || !TriggerScoreEngine.score) {
+          return [...others].sort(() => Math.random() - 0.5);
+        }
+        const ctx = { wounds: PMC_WOUNDS, enthusiasms: PMC_ENTHUSIASM };
+        const shuffled = [...others].sort(() => Math.random() - 0.5);
+        shuffled.sort((a, b) => TriggerScoreEngine.score(b, input, ctx) - TriggerScoreEngine.score(a, input, ctx));
+        return shuffled;
+      })(),
+    ];
+
+    const userName = (document.getElementById('pmc-username')?.value || '').trim();
+    const container = document.getElementById('pmc-responses');
+    if (container) container.innerHTML = '';
+    document.getElementById('pmc-output').style.display = 'block';
+    UI.setDisabled('pmc-btn', true);
+
+    const pmcLieState = LieEngine.getState('pmc');
+    const pmcRelState = RelationshipState.init(ORDER, PMC_PRE_EXISTING);
+    const pmcCharStates = {};
+    for (const id of ORDER) pmcCharStates[id] = CharacterState.create(5);
+
+    ConspireEngine.reset();
+    // Rooney + Micah — Paradox deepening pair
+    ConspireEngine.addPairProfile('rooney', 'micah', {
+      breakType: 'paradox_deepening',
+      breakTrigger: 'Micah asks sincere follow-up after Rooney non-answer',
+      validationSpiralLength: 1,
+      escalationTone: 'Micah asks. Rooney produces deeper Paradox. Micah finds it brilliant.',
+      defaultResetValve: 'lineker',
+      collapseStyle: 'Lineker smoothly redirects to the next topic.',
+    });
+    const PMC_RESET_VALVE_PRIORITY = ['lineker', 'micah'];
+
+    const TURN_RULES = `RULE 1 — TURN LENGTH:
+One word is a complete turn. Two sentences is the maximum. Length is earned only by being directly challenged or provoked. Default is shortest response that lands.
+
+RULE 2 — CHARACTER ENGINES (non-negotiable):
+- LINEKER: anchors. Opens every round. BBC wound surfaces at most once per session — one trailing sentence, one recovery.
+- KEEGAN: self-cancels within the same sentence. Every turn. Delivered with complete authority.
+- ROONEY: produces Rooney's Paradox. Both positions simultaneously. No resolution. Genuine. Not evasion.
+- OWEN: tautological oracle. States the obvious as revelation. Horses enter from round 2. Brie fires once.
+- INVERDALE: preamble longer than substance. Gaffes delivered at identical gravitas. Ham-fisted once.
+- MICAH: BRILLIANT every turn. Sincere. Asks follow-up questions of Rooney — deepens the Paradox.
+- FISH (Grylls/Attenborough/Ramsay/Peterson): apply own domain to belittle football. Sincere.
+
+RULE 3 — CROSS-REFERENCE:
+Use anything said earlier as ammunition. Wounds, blunders, warmth — all fair game.
+
+RULE 4 — REACTIVE MOVES (structural guidance, not words):
+(1) Agree and build (2) Agree but undermine (3) Contradict (4) Flat refusal (5) Light pisstake (6) Full insult on wound (7) Mimic — echo/substitution/sustained impression.
+Never name the move.
+
+RULE 5 — FISH DOMAIN RIDICULE:
+Fish characters apply their own domain to every football event. Not metaphor — they believe it is literally applicable and helpful. The gap is the comedy.`;
+
+    const mechanics = `CONVERSATION MECHANICS:
+- Short turns unless genuinely provoked. Speeches are failure.
+- React to the last thing said OR ignore it and lead with your own take.
+- Use what you know about who said it — their history, wounds, last mistake.
+- Directed questions: characters ask each other pointed questions. Questions escalate over rounds.
+- Correspondence: 1 in 3 rounds any character may read out an email, letter, tweet, or DM. Named sender. Real location. Read in full with commitment.`;
+
+    const responses = [];
+    for (let i = 0; i < ORDER.length; i++) {
+      const memberId = ORDER[i];
+      const member   = PMC_MEMBERS[memberId];
+      const pid      = 'pmc-ph-' + i;
+      container.insertAdjacentHTML('beforeend', _placeholder(pid, member));
+
+      const prev = responses.map((r, idx) => {
+        const m = PMC_MEMBERS[ORDER[idx]];
+        const text = idx === responses.length - 1 ? r : r.substring(0, 120) + '…';
+        return `${m.name.toUpperCase()}: "${text}"`;
+      }).join('\n');
+
+      const lastBeat = (() => {
+        if (!responses.length) return '';
+        const last = responses[responses.length - 1];
+        const parts = last.split('. ');
+        return parts.length > 1 ? parts.slice(-2).join('. ') : last.slice(-200);
+      })();
+
+      if (i > 0) {
+        const woundLive = pmcRelState.characters[memberId]?.woundActivated || false;
+        if (woundLive) CharacterState.trigger(pmcCharStates[memberId]);
+        else           CharacterState.decay(pmcCharStates[memberId]);
+      }
+      const pmcIntensityBlock = i > 0 ? `YOUR STATE:\n${CharacterState.buildBlock(pmcCharStates[memberId])}\n\n` : '';
+      const pmcYourState = RelationshipState.buildBlock(pmcRelState, memberId, ORDER, PMC_NAMEMAP, PMC_VOICE_FMT);
+      const pmcWoundLive = pmcRelState.characters[memberId]?.woundActivated || false;
+      const pmcLieBlock  = LieEngine.buildBlock(memberId, PMC_LIE_PROFILES, pmcLieState, pmcWoundLive);
+      const pmcArcInstructions = ConspireEngine.getArcInstructions(memberId, pmcRelState, ORDER);
+      const pmcNameBlock = userName ? `\nThe question was brought by ${userName}. Address ${userName} by name at least once.\n` : '';
+
+      const system = PanelDiscussEngine.buildSystemPrompt({
+        turnRules: TURN_RULES,
+        topicDismissal: '',
+        anchorId: ANCHOR_ID,
+        voicePoolBlock: '',
+        slot: i,
+        totalSlots: ORDER.length,
+        member,
+        prev,
+        arcLog: [],
+        recentMoves: [],
+        roundSoFarText: '',
+        panelStateBlocks: pmcIntensityBlock + pmcYourState + pmcNameBlock + pmcLieBlock,
+        panelMemberBlocks: mechanics + pmcArcInstructions,
+        crossCharacterQuestionsEnabled: true,
+        parodyEnabled: true,
+        profanityEnabled: true,
+        reverentAbsurdityEnabled: true,
+        topicMagnetsEnabled: false,
+        inventedExpertInterpretationEnabled: true,
+        hangModeEnabled: false,
+        shutdownModeEnabled: false,
+        eggingOnEnabled: true,
+        panelConsensusEnabled: true,
+        incongruentRegisterEnabled: true,
+        crossCharacterReferencesEnabled: true,
+        idiomInventionEnabled: true,
+        panelTemperature: { intent: -0.3, congruence: 0.0 },
+      });
+
+      const prompt = i === 0
+        ? `Topic: "${input}"\n\nOpen the panel. Short unless the topic demands otherwise.`
+        : `Last said: "${lastBeat}"\n\nAddress whoever you want — by name. Agree and build, undermine, contradict, refuse, take the piss, insult them properly, or mimic. Short unless you can't help it.`;
+
+      try {
+        const resp = await API.call(system, prompt, 250, 'pmc/' + memberId);
+        responses.push(resp);
+        RelationshipState.update(pmcRelState, memberId, resp, ORDER, PMC_WOUNDS, PMC_NAMEMAP);
+        ConspireEngine.check(pmcRelState, ORDER);
+        ConspireEngine.advanceStage(PMC_RESET_VALVE_PRIORITY);
+        _fill(pid, member, resp);
+      } catch (e) {
+        _fill(pid, member, e.userMessage || 'Request failed.');
+      }
+    }
+
+    LieEngine.saveState('pmc', pmcLieState);
+    HCSession.logPanelRun('pmc', ORDER, responses.length);
+    UI.setDisabled('pmc-btn', false);
+  }
+
+  function init() {
+    _updateCount();
+    refreshCards();
+  }
+
+  return { toggleMember, refreshCards, discuss, init };
+})();
+
+document.addEventListener('DOMContentLoaded', () => PMC.init());
 
 // MODULE: Golf — The 19th Hole
 // ============================================================

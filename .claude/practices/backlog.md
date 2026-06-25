@@ -3029,3 +3029,223 @@ Track G wrote Chapman's dismissal_profile entries in ALL-CAPS to mirror his volu
 
 **Done when:** Chapman dismissal pool reviewed; ALL-CAPS retained only where the volume genuinely is the move (e.g., final cold_dismissal), softened in the polite_but_funny flavour where volume contradicts politeness. Or: ALL-CAPS retained throughout with an explicit "this is the voice" note. Rod gut-check during a live panel sample worth doing.
 
+---
+
+## BL-222 — World Cup Cunditry: new sports panel with six characters + suggested questions
+
+**Raised:** 2026-06-25 | **By:** Rod + Claude Code Three Amigos
+**Epic:** World Cup Cunditry
+**Feature:** sports-wcc
+
+**Story:** As a user who wants post-match / tournament punditry roasted by the worst/best pundits on TV, I want a World Cup Cunditry panel so that I can ask any World Cup question and watch Gary Lineker, Kevin Keegan, Wayne Rooney, Michael Owen, John Inverdale, and Micah Richards destroy the answer.
+
+**Panel:** "World Cup Cunditry" — separate tab in the sports section, panel id `wcc`.
+
+**Cast (locked 2026-06-25):**
+- `lineker` — Gary Lineker. Anchor. Smooth professional. Wound = BBC firing (2023). Bleeds through occasionally.
+- `keegan` — Kevin Keegan. Circular self-contradictions stated with total authority. "I would love it." Self-cancelling metaphors. England manager 1999–2000 (resigned at halftime vs Germany at Wembley).
+- `rooney` — Wayne Rooney. Rooney's Paradox engine. Non-answers that acknowledge the question without answering it. "it's like a bit different...but yeah similar...in the same way..."
+- `owen` — Michael Owen. Tautological obviousness stated as tactical revelation. "When they don't score, they hardly ever win." Horses surface unexpectedly. Brie.
+- `inverdale` — John Inverdale. Hollow gravitas / oblivious gaffe machine. Self-important sycophant who thinks he is the classiest voice in the room. 674 Bartoli complaints. Rose-cunted live on air.
+- `micah` — Micah Richards. Warmth and enthusiasm as absolver of everything. The straight-man who makes Rooney worse by asking him sincere follow-up questions.
+
+**Input mechanic:** Free-text question input. Panel id `wcc`, input `wcc-input`, button `wcc-btn`.
+
+**Suggested questions:** Panel ships with a rotating set of suggested questions — mix of:
+- Topical World Cup prompts ("Was that penalty a dive?", "Should the manager have subbed him?")
+- Monty Python / Rod-esque absurdist stimuli ("If Spain were a type of bread, which one and does it affect their pressing game?", "Is the offside rule a government conspiracy?", "Why does England lose on penalties and is this God's punishment?", "If Rooney explained the Pythagorean theorem, would it still be a paradox?")
+- At least 6 suggestions, randomised or fixed pool.
+
+**Architecture:** Follows existing sports panel pattern (PanelDiscussEngine, TriggerScoreEngine, wounds/enthusiasm data, NAMEMAP, PRE_EXISTING relationships, VOICE_FMT per character). Character .md files in `characters/` for all six characters. `WCC_BASE_ORDER`, `WCC_WOUNDS`, `WCC_ENTHUSIASM`, `WCC_NAMEMAP`, `WCC_PRE_EXISTING`, `WCC_VOICE_FMT`, `WCC_MEMBERS` data consts.
+
+**Character file dependencies:** Six new character files:
+- `characters/lineker.md`
+- `characters/keegan-wcc.md` (distinguishes from existing app `keegan` coaching-method character)
+- `characters/rooney.md`
+- `characters/owen.md`
+- `characters/inverdale.md`
+- `characters/micah-wcc.md` (or extend existing micah.md if one exists)
+
+**AC:**
+- World Cup Cunditry tab appears in the sports section
+- Panel has text input, submit button, output container, responses container
+- `WCC_BASE_ORDER` contains all six characters; `lineker` is first
+- Each character has a non-empty prompt in `WCC_MEMBERS`
+- `WCC_WOUNDS` has entries for all six characters (non-empty arrays)
+- `WCC_ENTHUSIASM` has entries for all six characters (non-empty arrays)
+- `WCC_NAMEMAP` has entries for all six characters
+- Panel includes at least 6 suggested questions, including at least 2 absurdist prompts
+- Submitting a question triggers responses from the cast
+- `discuss()` function calls `TriggerScoreEngine` for speaker ordering
+
+- CD3: UBV=9 TC=9 RR=2 → CoD=20, Dur=7, **CD3=2.9**
+- Note: TC=9 because FIFA World Cup 2026 is live as of 2026-06-25
+- Status: OPEN — raised 2026-06-25. Three Amigos complete. Gherkin approval pending.
+
+---
+
+## BL-223 — Question stimulus research: what prompts produce the best panel output
+
+**Raised:** 2026-06-25 | **By:** Rod
+**Epic:** World Cup Cunditry
+**Feature:** sports-wcc
+
+**Story:** As someone building the panel, I want to understand which question types produce the funniest and most distinctive character output so that I can improve the suggested questions set and document "great questions to ask" per panel.
+
+**Context (Rod 2026-06-25):** "the app works best if you find the right questions to ask it — we need to explore that more after implementing our MVP"
+
+**Scope:** Research spike, not an implementation. Run 20–30 World Cup Cunditry prompts across all character registers. Classify by output quality. Identify patterns: which prompt types (factual, counterfactual, absurdist, personal, tactical, emotional) produce the richest character responses? Output: revised suggested-questions pool + patterns doc.
+
+**Done when:** 20+ prompts tested, patterns documented, suggested-questions pool in BL-222 updated with findings.
+
+- CD3: UBV=6 TC=4 RR=3 → CoD=13, Dur=2, **CD3=6.5**
+- Depends on: BL-222 shipped
+- Status: OPEN — raised 2026-06-25. Do after BL-222 v1 is live.
+
+---
+
+## BL-224 — World Cup Cunditry: live match context (pre / mid / post analysis on real games)
+
+**Raised:** 2026-06-25 | **By:** Rod
+**Epic:** World Cup Cunditry
+**Feature:** sports-wcc
+
+**Story:** As a user, I want the panel to be able to comment on today's actual World Cup games — upcoming fixtures, live scores, and post-match results — so that the cunditry is grounded in real matches rather than hypothetical prompts.
+
+**Rod's framing (2026-06-25):** "add a thing for the panel commenting on the days games and making predictions ahead of them, then analysing them afterwards — pre, mid and post game — means you having to hit websites for the latest game summary when people ask"
+
+**Mechanic:**
+- Worker fetches today's World Cup fixtures and results from a public football data source (e.g., football-data.org free tier, ESPN scores API, or similar)
+- Match context (teams, score, stage, key events) is injected into the discuss() prompt as a `MATCH CONTEXT` block when the user asks a question in match-aware mode
+- Three modes: **Pre-match** (fixture known, no result yet), **Live** (score + events), **Post-match** (full result + stats summary)
+- UI: "Today's Games" section on the panel showing today's fixtures. User clicks a match → match context loads → free-text input opens for questions about that match
+- Characters respond as themselves but informed by the real match data
+
+**Technical approach (to be agreed in Three Amigos):**
+- Worker adds a `/wcc-fixtures` endpoint that fetches and caches today's fixtures (1-hour cache; free API)
+- Client-side: fetchTodaysFixtures() calls the Worker endpoint, renders a fixture list
+- Match context injected as a structured block in the WCC system prompt alongside the user's question
+- No new API key required if using a free-tier data source
+
+**Depends on:** BL-222 (base panel shipped and working)
+**Three Amigos needed before implementation:** API source selection, caching strategy, UI fixture display design, how match context is injected per mode (pre/live/post).
+
+- CD3: UBV=9 TC=9 RR=4 → CoD=22, Dur=5, **CD3=4.4**
+- Note: TC=9 because World Cup 2026 is live now. This feature loses most of its value when the tournament ends.
+- Status: OPEN — raised 2026-06-25. Three Amigos needed. Do after BL-222 v1 is stable.
+
+---
+
+## BL-225 — PMC: interactive next-round — panel suggests follow-ups, challenges user, breaks into dialogue
+
+**Raised:** 2026-06-25 | **By:** Rod
+**Epic:** World Cup Cunditry
+**Feature:** sports-wcc
+
+**Story:** As a user, I want the panel to actively involve me after each round so that the conversation feels like a two-way exchange rather than a broadcast — the panel asks me things, challenges my question, or suggests what I should ask next.
+
+**Rod's framing (2026-06-25):** "a better Next Round where we use the context to suggest follow up questions the user might ask or challenge the user, their question, their integrity etc, or ask them to clarify something — make it much more interactive with the user and maybe break down into smaller conversations where the user is involved more"
+
+**Mechanic (to be designed in Three Amigos):**
+- After each round, the panel generates 2–3 contextual follow-up suggestions based on what was just discussed (not a fixed pool — generated from context)
+- At least one suggestion challenges the user's premise or integrity ("Are you seriously asking that?", "What do you actually think?")
+- At least one suggestion builds on the conversation ("Following on from what Keegan just said...")
+- Optional: a character may directly address the user mid-round, asking for clarification or taking issue with the question
+- Panel selector shows 2–3 options; user clicks one or types their own
+
+**Distinguishes from BL-222 static suggestion cards:** Static cards are pre-seeded prompts for a blank panel. This feature is contextual — generated from what the panel just said.
+
+**Three Amigos needed:** How suggestions are generated (separate AI call vs injected into the round), how many per round, whether characters can directly address the user in-round, how this changes the discuss() flow.
+
+- CD3: UBV=8 TC=6 RR=3 → CoD=17, Dur=4, **CD3=4.25**
+- Depends on: BL-222 shipped and stable, at least 2 sessions of live observation
+- Status: OPEN — raised 2026-06-25. Three Amigos needed. Do after BL-222 v1 and BL-223 (question stimulus research) both complete.
+
+---
+
+## BL-226 — Colemanballs engine: authentic quote pools + stupidity pattern classification
+
+**Raised:** 2026-06-25 | **By:** Rod
+**Epic:** World Cup Cunditry / Learning Section
+**Feature:** sports-wcc, learn
+
+**Story:** As a panel engine, I want each character to draw from a pool of authentic real-world blunders they (or their archetype) actually said, with each quote classified by its structural stupidity pattern, so that the panel's verbal mangling feels authentic rather than generic.
+
+**Rod's framing (2026-06-25):** "research loads of funny real sporting commentary quoting blunders — those that our characters said themselves — then explore the different constructs or stupidities within these phrases that drive them — classify that — use it in anger at the same time and add to the learning section later"
+
+**Scope:**
+- Per-character quote pools sourced from real Colemanballs (research already partially done in session — Keegan 16 quotes, Owen 12 quotes, Inverdale incidents)
+- Classification taxonomy: what type of verbal stupidity each quote represents
+  - `circular_tautology` — premise = conclusion (Owen: "when they don't score they hardly ever win")
+  - `self_cancelling` — second clause negates first (Keegan: "came to Nantes two years ago, much the same today, except completely different")
+  - `mixed_metaphor` — incompatible domains merged (Keegan: "the tide is very much in our court")
+  - `obvious_as_revelation` — states what needs no stating as if it's analysis (Owen: "whichever team scores more goals usually wins")
+  - `self_contradiction` — contradicts itself within one sentence (Owen: "completely unstoppable, but the keeper's got to do better")
+  - `category_confusion` — wrong domain applied (Keegan: "Argentina won't be at Euro 2000 — they're from South America")
+  - `rooney_paradox` — agrees with both sides without resolving (Rooney: "like a bit different... but yeah similar... in the same way")
+  - `hollow_gravitas` — self-important preamble to nothing (Inverdale pattern)
+- Classification drives: (a) engine knows what "type" of stupid the character naturally produces; (b) panel responses (BL-227) can be typed; (c) learning section content
+- Output: per-character `QUOTE_POOL` data structure in character files, classification attribute in schema
+
+**Depends on:** BL-222 (characters exist before quote pools are wired in)
+**Composes with:** BL-227 (double-down vs call-out uses classification), BL-225 (interactive next-round)
+
+- CD3: UBV=8 TC=7 RR=5 → CoD=20, Dur=3, **CD3=6.7**
+- Status: OPEN — raised 2026-06-25. Research spike first (extend existing Colemanballs research). Three Amigos on classification taxonomy before implementation.
+
+---
+
+## BL-227 — Panel mechanic: double-down vs call-out on verbal blunders
+
+**Raised:** 2026-06-25 | **By:** Rod
+**Epic:** World Cup Cunditry
+**Feature:** sports-wcc
+
+**Story:** As a user watching the panel, I want other characters to react to verbal blunders by either validating them with more bullshit OR cornering the speaker with perfect logic they can't escape — with the resulting tension either dissolving into laughter or not — so that blunders become panel events rather than isolated moments.
+
+**Rod's framing (2026-06-25):** "other characters can double down on the bullshit quote with other bullshit in support, OR pull them up with good logic that is impossible to refute and create some tension that maybe they can then try and laugh off — either successfully OR NOT"
+
+**Two mechanics:**
+1. **DOUBLE DOWN:** Another character endorses the blunder with equally nonsensical reasoning. Adds to the stupidity rather than challenging it. Keegan says something circular; Owen validates it with a tautology. The room gets more confused together.
+2. **CALL OUT:** A character identifies the specific logical failure and states it plainly. The blunderer cannot refute it. This creates tension — which the blunderer attempts to laugh off or redirect. Success is not guaranteed. The tension may linger.
+
+**Call-out requires:** character whose mechanism is Premise destruction (Hicks), Deconstruction (Carlin), or Direct factual correction (Neville, Keane). These characters have the tools to corner a blunderer.
+
+**Double-down requires:** character whose mechanism is Tautology (Owen), Circular contradiction (Keegan), or Hollow gravitas (Inverdale). These characters cannot tell it's wrong.
+
+**Engine change:** TURN_RULES extension — new reactive move option: "DOUBLE DOWN on the last blunder" / "CALL OUT the last blunder". Triggered when the previous turn contains a classified blunder pattern (from BL-226 QUOTE_POOL classification).
+
+**Three Amigos needed:** how the engine detects a blunder turn (heuristic vs classification), call-out success/failure probability, whether laughter-resolution is explicit or emergent from the character prompts.
+
+- CD3: UBV=9 TC=6 RR=4 → CoD=19, Dur=4, **CD3=4.75**
+- Depends on: BL-222 shipped, BL-226 classification complete
+- Status: OPEN — raised 2026-06-25. Three Amigos needed after BL-226 classification taxonomy agreed.
+
+
+---
+
+## BL-228 — "The Interview": panel interrogates the user
+
+**Raised:** 2026-06-25 | **By:** Rod
+**Epic:** World Cup Cunditry
+**Feature:** new-feature
+
+**Story:** As a user, I want to be interrogated by the panel rather than ask them questions — put in the dock, challenged on my opinions, my integrity, my football knowledge — so that the app becomes genuinely interactive rather than one-directional.
+
+**Rod's framing (2026-06-25):** "basically an interrogation where we get the user attacked and interrogated about something by our panels - much more user has to interact directly with them rather than ask questions"
+
+**Concept:**
+- User states a position ("I think England can win it") or submits a topic
+- Panel immediately turns on the user — questions their evidence, logic, bias, knowledge
+- User can respond (text input) and panel reacts to the response
+- Panel may gang up, split, side with the user, or escalate
+- Characters bring their own wound/mechanism to the interrogation (Peterson: archetypes; Ramsay: standards; Keane: professionalism)
+- Possible failure states: user capitulates / panel accept the user's position / chaos / user asks a question and gets interrogated harder
+
+**Relationship to BL-225 (interactive next-round):** BL-225 is about panel suggesting follow-ups to user questions. BL-228 is the full inversion — panel as interrogators, user as defendant. Related but different enough to warrant separate BL items.
+
+**Three Amigos needed:** turn structure (panel go first / user responds / panel reacts), how many rounds, what triggers success (panel satisfied) vs failure (panel not satisfied), whether this is a mode within existing panels or a new panel type.
+
+- CD3: UBV=9 TC=7 RR=2 → CoD=18, Dur=6, **CD3=3.0**
+- Depends on: BL-222 shipped (PMC panel stable)
+- Status: OPEN — raised 2026-06-25. Three Amigos needed.

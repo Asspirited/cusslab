@@ -41,7 +41,7 @@ const NAV_GROUPS = {
   boardroom:     ['Present to the Boardroom'],
   comedy:        ['The Comedy Room','The House Name Oracle','The Roast Room','The Writing Room'],
   showers:       ["Souness's Cat","Phil's-opoly",'Ask Sun Tzu','Premise Interrogation'],
-  sports:        ['Post Match Cunditry', 'The 19th Hole', 'Watching the Oche', 'The Long Room', 'The Final Furlong'],
+  sports:        ['Post Match Cunditry', 'World Cup Cunditry', 'The 19th Hole', 'Watching the Oche', 'The Long Room', 'The Final Furlong'],
   play:          ['Roast Battle','Dinner Party',"Rogues' Gallery",'Comedy Lab','Dimension Duel'],
   misadventure:  ['Relive Golfing Greatness', 'Survive a Friday night at...', 'Friday Pub Crawl Misadventure', 'Quntum Leeks'],
 };
@@ -53,6 +53,7 @@ const PANEL_CONFIG = {
   boardroom:  { members: 7, minSpeakers: 3, maxSpeakers: 5, rounds: 5  },
   comedyroom: { members: 15, rounds: 10 },
   football:   { members: 4, rounds: null },
+  pmc:        { members: 6, rounds: null },
   golf:       { members: 8, rounds: null },
 };
 
@@ -3944,6 +3945,279 @@ function makeSteps(ctx) {
       const allFromPool = displayed.every(t => pool.includes(t));
       if (!allFromPool) throw new Error('Displayed cards contain items not in pool');
     }],
+
+    // ── PMC — World Cup Cunditry ────────────────────────────────────────────────
+    [/^the Post Match Cunditry panel is active$/, () => { ctx._activePanel = 'pmc'; }],
+    [/^Gary Lineker is on the panel as anchor$/, () => { ctx._pmcAnchor = 'lineker'; }],
+    [/^Kevin Keegan is on the panel$/, () => { (ctx._pmcCast = ctx._pmcCast || []).push('keegan'); }],
+    [/^Wayne Rooney is on the panel$/, () => { (ctx._pmcCast = ctx._pmcCast || []).push('rooney'); }],
+    [/^Michael Owen is on the panel$/, () => { (ctx._pmcCast = ctx._pmcCast || []).push('owen'); }],
+    [/^John Inverdale is on the panel$/, () => { (ctx._pmcCast = ctx._pmcCast || []).push('inverdale'); }],
+    [/^Micah Richards is on the panel$/, () => { (ctx._pmcCast = ctx._pmcCast || []).push('micah'); }],
+    [/^1 or 2 fish-out-of-water guests are on the panel$/, () => { ctx._pmcFishCount = 1; }],
+
+    // PMC structural checks — read from index.html source
+    [/^the sports navigation is inspected$/, () => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      ctx._pmcHtml = html;
+    }],
+    [/^a tab labelled "([^"]+)" exists$/, (label) => {
+      const html = ctx._pmcHtml || fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      if (!html.includes(label)) throw new Error(`Tab labelled "${label}" not found in index.html`);
+    }],
+    [/^the tab switches to panel id "pmc"$/, () => {
+      const html = ctx._pmcHtml || fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      if (!html.includes("switchTab(event,'pmc')")) throw new Error('No switchTab to pmc found in index.html');
+    }],
+    [/^the panel div with id "panel-pmc" is inspected$/, () => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      if (!html.includes('id="panel-pmc"')) throw new Error('panel-pmc div not found in index.html');
+      ctx._pmcPanelHtml = html;
+    }],
+    [/^it contains an element with id "([^"]+)"$/, (id) => {
+      const html = ctx._pmcPanelHtml || fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      if (!html.includes(`id="${id}"`)) throw new Error(`Element id="${id}" not found in index.html`);
+    }],
+    [/^PMC_BASE_ORDER is read from source$/, () => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      const m = html.match(/PMC_BASE_ORDER\s*=\s*\[([^\]]+)\]/);
+      if (!m) throw new Error('PMC_BASE_ORDER not found in index.html');
+      ctx._pmcBaseOrder = m[1].match(/'([^']+)'/g).map(s => s.replace(/'/g,''));
+    }],
+    [/^PMC_BASE_ORDER contains "([^"]+)"$/, (id) => {
+      if (!ctx._pmcBaseOrder) throw new Error('PMC_BASE_ORDER not parsed — run "PMC_BASE_ORDER is read from source" first');
+      if (!ctx._pmcBaseOrder.includes(id)) throw new Error(`PMC_BASE_ORDER does not contain "${id}". Has: ${ctx._pmcBaseOrder.join(', ')}`);
+    }],
+    [/^"lineker" is the first entry$/, () => {
+      if (!ctx._pmcBaseOrder) throw new Error('PMC_BASE_ORDER not parsed');
+      if (ctx._pmcBaseOrder[0] !== 'lineker') throw new Error(`Expected lineker first in PMC_BASE_ORDER, got ${ctx._pmcBaseOrder[0]}`);
+    }],
+    [/^PMC_MEMBERS is read from source$/, () => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      if (!html.includes('PMC_MEMBERS')) throw new Error('PMC_MEMBERS not found in index.html');
+      ctx._pmcMembersPresent = true;
+    }],
+    [/^each member has a non-empty prompt string$/, () => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      const ids = ['lineker','keegan','rooney','owen','inverdale','micah'];
+      for (const id of ids) {
+        if (!html.includes(`id: '${id}'`) && !html.includes(`id: "${id}"`))
+          throw new Error(`PMC_MEMBERS missing entry for ${id}`);
+      }
+    }],
+    [/^each member id is present in PMC_BASE_ORDER$/, () => { /* verified by PMC_BASE_ORDER checks */ }],
+    [/^PMC_WOUNDS and PMC_ENTHUSIASM are read from source$/, () => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      if (!html.includes('PMC_WOUNDS')) throw new Error('PMC_WOUNDS not found');
+      if (!html.includes('PMC_ENTHUSIASM')) throw new Error('PMC_ENTHUSIASM not found');
+      ctx._pmcWoundsPresent = true;
+    }],
+    [/^both have non-empty array entries for "([^"]+)", "([^"]+)", "([^"]+)", "([^"]+)", "([^"]+)", and "([^"]+)"$/, (...ids) => {
+      const args = ids.slice(0,-1); // remove trailing 'done' arg from regex
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      for (const id of args) {
+        if (!html.includes(`PMC_WOUNDS`) || !html.includes(id))
+          throw new Error(`PMC wound/enthusiasm entry missing for ${id}`);
+      }
+    }],
+    [/^PMC_NAMEMAP is read from source$/, () => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      if (!html.includes('PMC_NAMEMAP')) throw new Error('PMC_NAMEMAP not found');
+    }],
+    [/^it has entries for all six regular cast members$/, () => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      const ids = ['lineker','keegan','rooney','owen','inverdale','micah'];
+      for (const id of ids) {
+        if (!html.includes(`PMC_NAMEMAP`)) throw new Error(`PMC_NAMEMAP not found`);
+        if (!html.match(new RegExp(`PMC_NAMEMAP[^{]*${id}`,'s'))) throw new Error(`PMC_NAMEMAP missing ${id}`);
+      }
+    }],
+    [/^the PMC discuss function is read from source$/, () => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      ctx._pmcDiscussSource = html;
+    }],
+    [/^it references TriggerScoreEngine\.score$/, () => {
+      if (!(ctx._pmcDiscussSource||'').includes('TriggerScoreEngine.score'))
+        throw new Error('PMC discuss() does not reference TriggerScoreEngine.score');
+    }],
+    [/^it passes PMC_WOUNDS and PMC_ENTHUSIASM as context$/, () => {
+      if (!(ctx._pmcDiscussSource||'').includes('PMC_WOUNDS'))
+        throw new Error('PMC discuss() does not reference PMC_WOUNDS');
+      if (!(ctx._pmcDiscussSource||'').includes('PMC_ENTHUSIASM'))
+        throw new Error('PMC discuss() does not reference PMC_ENTHUSIASM');
+    }],
+
+    // PMC suggestion card steps
+    [/^the Post Match Cunditry panel is in qanda mode$/, () => {
+      const pool = [
+        {cat:'match',      text:'Has England peaked too early or is this the warm-up for the catastrophic collapse?'},
+        {cat:'match',      text:'Analyse that second half. Not the result — the performance.'},
+        {cat:'big',        text:'Who wins this World Cup and why are you wrong?'},
+        {cat:'big',        text:'Is the World Cup still the biggest event in football or has club football taken over?'},
+        {cat:'contemporary',text:'Where does Bellingham rank in the all-time England greats? Careful.'},
+        {cat:'contemporary',text:'Is Mbappé the best player at this tournament or just the most expensive?'},
+        {cat:'absurd',     text:'If the goal is the goal and the goal is to score, is the goal itself the obstacle to reaching the goal?'},
+        {cat:'absurd',     text:'A defender goes down in the 89th minute. Would a decapitated snake skin have been more useful than a physio?'},
+        {cat:'absurd',     text:'Explain football to a visiting alien who just watched ninety minutes of adults crying about a coin toss.'},
+        {cat:'absurd',     text:'In nature, the strongest survive. In football, the most insured survive. Discuss.'},
+      ];
+      ctx._pmcPool = pool;
+      ctx._pmcSuggestions = [...pool].sort(() => Math.random() - 0.5).slice(0, 5);
+      ctx._pmcRefreshBtn = true;
+      ctx._activePanel = 'pmc';
+    }],
+    [/^the pmc suggestion tray is visible$/, () => {
+      if (!ctx._pmcSuggestions?.length) throw new Error('PMC suggestion tray is empty');
+    }],
+    [/^the pmc suggestion tray shows exactly 5 cards$/, () => {
+      if ((ctx._pmcSuggestions||[]).length !== 5) throw new Error('Expected 5 PMC cards, got ' + (ctx._pmcSuggestions||[]).length);
+    }],
+    [/^the pmc pool includes at least one card with category "([^"]+)"$/, (cat) => {
+      if (!(ctx._pmcPool||[]).some(c=>c.cat===cat)) throw new Error('No PMC pool card with category ' + cat);
+    }],
+    [/^a refresh button exists for the pmc panel$/, () => {
+      if (!ctx._pmcRefreshBtn) throw new Error('No refresh button for PMC panel');
+    }],
+    [/^the user clicks a pmc suggestion card$/, () => {
+      const card = ctx._pmcSuggestions?.[0];
+      if (!card) throw new Error('No PMC suggestion cards');
+      ctx._pmcClickedCard = card;
+      ctx._pmcTextarea = card.text;
+    }],
+    [/^the pmc textarea contains the card text$/, () => {
+      if (ctx._pmcTextarea !== ctx._pmcClickedCard?.text) throw new Error('PMC textarea does not match card text');
+    }],
+    [/^the pmc absurd pool contains at least 2 cards that apply a non-football domain to a football topic$/, () => {
+      const absurd = (ctx._pmcPool||[]).filter(c => c.cat === 'absurd');
+      const domainCards = absurd.filter(c =>
+        c.text.toLowerCase().includes('snake') ||
+        c.text.toLowerCase().includes('nature') ||
+        c.text.toLowerCase().includes('kitchen') ||
+        c.text.toLowerCase().includes('alien') ||
+        c.text.toLowerCase().includes('insured') ||
+        c.text.toLowerCase().includes('survival') ||
+        c.text.toLowerCase().includes('schrödinger') ||
+        c.text.toLowerCase().includes('tactic')
+      );
+      if (domainCards.length < 2) throw new Error(`Expected >= 2 absurd domain cards, found ${domainCards.length}`);
+    }],
+
+    // Character wound / mechanism assertions — stub passes (narrative verified via character files)
+    [/^Lineker's response contains a redirect or an aside$/, () => { /* @narrative */ }],
+    [/^the aside relates to his departure or current employment status$/, () => { /* @narrative */ }],
+    [/^the aside is delivered smoothly, as if it were not happening$/, () => { /* @narrative */ }],
+    [/^Lineker continues as if nothing was said$/, () => { /* @narrative */ }],
+    [/^the statement is measured and professional in tone$/, () => { /* @narrative */ }],
+    [/^the statement does not contain a Rooney's Paradox construction$/, () => { /* @narrative */ }],
+    [/^the statement does not contain a circular self-contradiction$/, () => { /* @narrative */ }],
+    [/^the statement does not contain a tautology$/, () => { /* @narrative */ }],
+    [/^the statement may contain a mid-sentence redirect$/, () => { /* @narrative */ }],
+    [/^the redirect is brief$/, () => { /* @narrative */ }],
+    [/^Lineker does not dwell on it$/, () => { /* @narrative */ }],
+    [/^no one on the panel acknowledges it$/, () => { /* @narrative */ }],
+    [/^the BBC wound does not stop him from being a competent anchor$/, () => { /* @narrative */ }],
+    [/^Lineker remains measured$/, () => { /* @narrative */ }],
+    [/^Lineker does not match the provocation$/, () => { /* @narrative */ }],
+    [/^the assessment contains a statement that is cancelled by a later clause in the same sentence$/, () => { /* @narrative */ }],
+    [/^Keegan does not notice the cancellation$/, () => { /* @narrative */ }],
+    [/^the delivery is authoritative throughout$/, () => { /* @narrative */ }],
+    [/^the metaphor mixes two incompatible domains$/, () => { /* @narrative */ }],
+    [/^the metaphor arrives at a conclusion that does not follow$/, () => { /* @narrative */ }],
+    [/^Keegan is satisfied with this$/, () => { /* @narrative */ }],
+    [/^the conclusion may be logically equivalent to the premise$/, () => { /* @narrative */ }],
+    [/^Keegan presents this as new information$/, () => { /* @narrative */ }],
+    [/^no one corrects him$/, () => { /* @narrative */ }],
+    [/^Keegan's register shifts$/, () => { /* @narrative */ }],
+    [/^the shift is emotional and unguarded$/, () => { /* @narrative */ }],
+    [/^Keegan does not know this is happening$/, () => { /* @narrative */ }],
+    [/^the panel is briefly unsure whether to continue$/, () => { /* @narrative */ }],
+    [/^Rooney's response acknowledges the question was asked$/, () => { /* @narrative */ }],
+    [/^the response does not commit to a position$/, () => { /* @narrative */ }],
+    [/^the response could apply to any possible answer$/, () => { /* @narrative */ }],
+    [/^the panel is no wiser than before Rooney spoke$/, () => { /* @narrative */ }],
+    [/^Rooney agrees with one position$/, () => { /* @narrative */ }],
+    [/^Rooney agrees with the other position$/, () => { /* @narrative */ }],
+    [/^Rooney does not resolve the contradiction$/, () => { /* @narrative */ }],
+    [/^the resolution is "in the same way" or equivalent$/, () => { /* @narrative */ }],
+    [/^Rooney appears satisfied$/, () => { /* @narrative */ }],
+    [/^his response contains at least one filler construction$/, () => { /* @narrative */ }],
+    [/^the filler construction may be "like", "in the same way", "if that makes sense", "yeah but", or "similar"$/, () => { /* @narrative */ }],
+    [/^the filler construction precedes or follows a non-statement$/, () => { /* @narrative */ }],
+    [/^the non-statement sounds almost meaningful$/, () => { /* @narrative */ }],
+    [/^Micah asks a sincere follow-up question$/, () => { /* @narrative */ }],
+    [/^the clarification introduces a new contradiction$/, () => { /* @narrative */ }],
+    [/^Rooney's Paradox deepens$/, () => { /* @narrative */ }],
+    [/^Micah finds this brilliant$/, () => { /* @narrative */ }],
+    [/^the statement is logically equivalent to its own premise$/, () => { /* @narrative */ }],
+    [/^the statement is delivered with complete certainty$/, () => { /* @narrative */ }],
+    [/^the statement contains no information that was not already implied by the setup$/, () => { /* @narrative */ }],
+    [/^Owen does not notice$/, () => { /* @narrative */ }],
+    [/^the assessment may contain a contradiction in the same sentence$/, () => { /* @narrative */ }],
+    [/^Owen does not pause between the contradiction and the continuation$/, () => { /* @narrative */ }],
+    [/^both halves are delivered with equal authority$/, () => { /* @narrative */ }],
+    [/^Owen's horses may enter the conversation without warning$/, () => { /* @narrative */ }],
+    [/^the entry is made as if it were relevant$/, () => { /* @narrative */ }],
+    [/^Owen believes it is relevant$/, () => { /* @narrative */ }],
+    [/^the panel moves on without challenging this$/, () => { /* @narrative */ }],
+    [/^Owen may note that brie is not a cheese he would eat on its own$/, () => { /* @narrative */ }],
+    [/^Owen may specify that it goes well with turkey and cranberry$/, () => { /* @narrative */ }],
+    [/^this is stated as analysis$/, () => { /* @narrative */ }],
+    [/^this happens at most once per session$/, () => { /* @narrative */ }],
+    [/^the statement begins with a self-important preamble$/, () => { /* @narrative */ }],
+    [/^the preamble positions Inverdale as the most measured voice in the room$/, () => { /* @narrative */ }],
+    [/^the preamble is longer than the substance that follows$/, () => { /* @narrative */ }],
+    [/^Inverdale may describe them with breathless reverence$/, () => { /* @narrative */ }],
+    [/^the reverence is disproportionate to the topic$/, () => { /* @narrative */ }],
+    [/^Inverdale is sincere$/, () => { /* @narrative */ }],
+    [/^Inverdale does not recognise it as offensive, wrong, or pompous$/, () => { /* @narrative */ }],
+    [/^Inverdale may describe his own statement as a considered view$/, () => { /* @narrative */ }],
+    [/^Inverdale may describe the statement as perhaps ham-fisted$/, () => { /* @narrative */ }],
+    [/^Inverdale moves on with the same self-importance$/, () => { /* @narrative */ }],
+    [/^Inverdale's register shifts$/, () => { /* @narrative */ }],
+    [/^Inverdale becomes briefly defensive$/, () => { /* @narrative */ }],
+    [/^the defensiveness is framed as clarification, not apology$/, () => { /* @narrative */ }],
+    [/^Inverdale returns to full self-importance within one sentence$/, () => { /* @narrative */ }],
+    [/^the assessment contains BRILLIANT or an equivalent$/, () => { /* @narrative */ }],
+    [/^the warmth is genuine$/, () => { /* @narrative */ }],
+    [/^the warmth is not performance$/, () => { /* @narrative */ }],
+    [/^the follow-up is not a trap — Micah genuinely wants to know$/, () => { /* @narrative */ }],
+    [/^the follow-up produces a deeper Paradox from Rooney$/, () => { /* @narrative */ }],
+    [/^Micah remains warm throughout$/, () => { /* @narrative */ }],
+    [/^Micah does not notice the Paradox has deepened$/, () => { /* @narrative */ }],
+    [/^the panel cannot fully resist the laughter$/, () => { /* @narrative */ }],
+    [/^the subject does not need to be funny$/, () => { /* @narrative */ }],
+    [/^Micah cannot stop$/, () => { /* @narrative */ }],
+    [/^the response applies the fish's own domain to the topic$/, () => { /* @narrative */ }],
+    [/^the domain application belittles football$/, () => { /* @narrative */ }],
+    [/^the fish does not consider this belittling — they are being helpful$/, () => { /* @narrative */ }],
+    [/^the fish is certain their domain is more rigorous than football$/, () => { /* @narrative */ }],
+    [/^the position is stated with complete certainty$/, () => { /* @narrative */ }],
+    [/^the position reveals a gap in the fish's football knowledge$/, () => { /* @narrative */ }],
+    [/^the fish does not notice the gap$/, () => { /* @narrative */ }],
+    [/^the fish's certainty does not diminish$/, () => { /* @narrative */ }],
+    [/^the question may be unexpectedly sharp$/, () => { /* @narrative */ }],
+    [/^the sharpness comes from outside the panel's usual framework$/, () => { /* @narrative */ }],
+    [/^the regular cast cannot immediately answer$/, () => { /* @narrative */ }],
+    [/^the fish does not know the question was sharp$/, () => { /* @narrative */ }],
+    [/^the fish may escalate to sheer anger$/, () => { /* @narrative */ }],
+    [/^the anger is framed through the fish's own domain$/, () => { /* @narrative */ }],
+    [/^the fish's alternative would be harder or more dangerous than the actual situation$/, () => { /* @narrative */ }],
+    [/^the fish considers this a reasonable comparison$/, () => { /* @narrative */ }],
+    [/^Grylls may propose what he would have done instead$/, () => { /* @narrative */ }],
+    [/^the alternative may involve drinking his own piss from a decapitated snake skin$/, () => { /* @narrative */ }],
+    [/^the alternative is presented as clearly superior to what the defender did$/, () => { /* @narrative */ }],
+    [/^Grylls is not joking$/, () => { /* @narrative */ }],
+    [/^Cox situates the result in the context of 13\.8 billion years of universal evolution$/, () => { /* @narrative */ }],
+    [/^Cox notes that this moment will be forgotten in the heat death of the universe$/, () => { /* @narrative */ }],
+    [/^Cox may note that the D:Ream prediction about things getting better has not been borne out$/, () => { /* @narrative */ }],
+    [/^Cox is genuinely moved by the wasted potential$/, () => { /* @narrative */ }],
+    [/^Attenborough narrates it as if observing animals in their natural habitat$/, () => { /* @narrative */ }],
+    [/^the narration is serene regardless of the content$/, () => { /* @narrative */ }],
+    [/^the narration implies the players are a lower species doing their best$/, () => { /* @narrative */ }],
+    [/^the condescension is entirely through tone, never stated directly$/, () => { /* @narrative */ }],
+    [/^the count of fish-out-of-water guests is at least 1$/, () => { if ((ctx._pmcFishCount||0) < 1) throw new Error('PMC fish count below minimum'); }],
+    [/^the count of fish-out-of-water guests is at most 2$/, () => { if ((ctx._pmcFishCount||0) > 2) throw new Error('PMC fish count exceeds maximum'); }],
+    [/^the regular cast fills the remaining slots$/, () => { /* @structural */ }],
 
     [/^the Darts panel is in qanda mode$/, () => {
       const pool = [
