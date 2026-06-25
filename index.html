@@ -15088,7 +15088,16 @@ RULE 4 — REACTIVE MOVES (structural guidance, not words):
 Never name the move.
 
 RULE 5 — FISH DOMAIN RIDICULE:
-Fish characters apply their own domain to every football event. Not metaphor — they believe it is literally applicable and helpful. The gap is the comedy.`;
+Fish characters apply their own domain to every football event. Not metaphor — they believe it is literally applicable and helpful. The gap is the comedy.
+
+RULE 6 — DOUBLE DOWN vs CALL OUT (fires when a blunder precedes your turn):
+When the previous speaker produced a classified verbal blunder, you have two additional moves:
+
+DOUBLE DOWN — validate the blunder with equally nonsensical reasoning. The room gets more confused together. This is YOUR move if you are: Owen (add a tautology), Keegan (add a circular contradiction), Inverdale (add preamble to nothing), Micah (find it BRILLIANT), Rooney (agree with both sides of the blunder and the correction simultaneously).
+
+CALL OUT — name the specific logical failure plainly. One sentence. The speaker cannot refute it. You do NOT ask them to. You state it. This creates tension — the blunderer may try to laugh it off or redirect. They may fail. Do not resolve the tension for them. This is YOUR move if you are: Neville ("I've watched this back and that doesn't hold"), Keane (one short Cork sentence that ends the matter), Carragher (credential-driven correction), Peterson (Jungian framework applied to the structural failure), Lineker (smooth, firm, once per session).
+
+Neither move is compulsory — use it only if something in the previous turn genuinely warrants it. If the previous turn was fine, ignore this rule.`;
 
     const mechanics = `CONVERSATION MECHANICS:
 - Short turns unless genuinely provoked. Speeches are failure.
@@ -15133,6 +15142,15 @@ Fish characters apply their own domain to every football event. Not metaphor —
         ? `\nYOUR COLEMANBALLS POOL — rotate through these authentic patterns, one per turn:\n` +
           pmcCbPool.map(e => `[${e.type}] "${e.quote}"`).join('\n') + '\n'
         : '';
+      // BL-227 — blunder context from previous speaker
+      const prevSpeakerId = i > 0 ? ORDER[i - 1] : null;
+      const prevPool = prevSpeakerId ? PMC_COLEMANBALLS[prevSpeakerId] : null;
+      const prevBlunderType = prevPool && prevPool.length
+        ? prevPool[Math.floor(Math.random() * prevPool.length)].type
+        : null;
+      const pmcBlunderBlock = prevBlunderType && prevSpeakerId
+        ? `\nBLUNDER CONTEXT — the previous speaker (${PMC_NAMEMAP[prevSpeakerId] || prevSpeakerId}) just produced a [${prevBlunderType}] blunder. RULE 6 applies: you may DOUBLE DOWN or CALL OUT. Choose based on your character.\n`
+        : '';
 
       const system = PanelDiscussEngine.buildSystemPrompt({
         turnRules: TURN_RULES,
@@ -15146,7 +15164,7 @@ Fish characters apply their own domain to every football event. Not metaphor —
         arcLog: [],
         recentMoves: [],
         roundSoFarText: '',
-        panelStateBlocks: pmcIntensityBlock + pmcYourState + pmcNameBlock + pmcLieBlock + pmcCbBlock,
+        panelStateBlocks: pmcIntensityBlock + pmcYourState + pmcNameBlock + pmcLieBlock + pmcCbBlock + pmcBlunderBlock,
         panelMemberBlocks: mechanics + pmcArcInstructions,
         crossCharacterQuestionsEnabled: true,
         parodyEnabled: true,
