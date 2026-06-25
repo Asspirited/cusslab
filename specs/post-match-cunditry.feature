@@ -322,9 +322,9 @@ Feature: Post Match Cunditry panel
 
   Rule: The panel tab and HTML structure are correctly registered
 
-    Scenario: Post Match Cunditry tab is registered in the sports section
+    Scenario: World Cup Cunditry tab is registered in the sports section
       When the sports navigation is inspected
-      Then a tab labelled "Post Match Cunditry" exists
+      Then a tab labelled "World Cup Cunditry" exists
       And the tab switches to panel id "pmc"
 
     Scenario: Panel HTML contains required input and output elements
