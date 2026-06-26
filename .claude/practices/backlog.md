@@ -3423,6 +3423,7 @@ Both are full characters in the Heckler & Cox cast universe. Built to the same 1
 **Team composition:**
 - User plays as team member (start here; captain mode later)
 - 4 AI teammates drawn from existing PMC cast + fish characters — Keegan, Rooney, Owen, Micah, Souness, Grylls, Attenborough, Ramsay, Peterson available. Team is configured per session.
+- **Brian Cox: CONFIRMED regular team member** — disdain and wonderment on overload. Answers every question through cosmological frame. Napkin comes out when wrong. D:Ream wound available. Build-to-speech arc applies: by round 3, has opinions about the scoring system and their thermodynamic implications. Both chips active simultaneously: wonder (at the physics of the question) + contempt (at the quality of his teammates' answers).
 - Teams of 5 total (user + 4 AI).
 - Opposing team: also AI-generated, also gets things wrong. Sometimes spectacularly.
 - Team confers before captain gives answer — quick conversation (the conferral IS the comedy).
@@ -3431,7 +3432,7 @@ Both are full characters in the Heckler & Cox cast universe. Built to the same 1
 
 | Round | Name (working) | BL | Mechanic |
 |-------|---------------|-----|---------|
-| 1 | Cheating Cunt or Not | BL-237 | Real events + bogus ones. Team argues. Host roasts the argument and the answer. |
+| 1 | Ok or Cheating Cunt? | BL-237 | Real events + bogus ones. Team argues. Host roasts the argument and the answer. |
 | 2 | What Happened Next | BL-238 | Bizarre real/invented sporting events. Progressive reveal or immediate. |
 | 3 | Name the [World Cup] Incident | BL-239 | 3-clue progressive reveal. Teams guess after each clue. |
 | 4 | Howzat? | BL-240 | How did the [person] die? 3-clue reveal. Deceased renamed. Host has full context for roasting. |
@@ -3447,7 +3448,7 @@ Both are full characters in the Heckler & Cox cast universe. Built to the same 1
 - BL-234: Simon Amstell character file
 - BL-235: Richard Ayoade character file
 - BL-236: Quiz engine architecture Three Amigos + core mechanics
-- BL-237: Round 1 — Cheating Cunt or Not
+- BL-237: Round 1 — Ok or Cheating Cunt?
 - BL-238: Round 2 — What Happened Next
 - BL-239: Round 3 — Name the Incident (3-clue)
 - BL-240: Round 4 — Howzat? (death/injury reveal)
