@@ -324,10 +324,11 @@ wiring a character into any panel. Character files may use narrative sections (P
 these, but these fields must be machine-readable and consistent.
 
 ```
-panel:         string   — "The Long Room" | "The 19th Hole" | "The Pub After The Match" | "Boardroom" | "Comedy Room"
-slot:          string   — "anchor" | "exotic" | "heat" | "precision" | "warmth" | "chaos"
-dead:          boolean  — true = Mortality Rib eligible; character operates as if present
-lie_baseline:  float    — 0.0–1.0 (from LieProfile — see below)
+panel:           string   — "The Long Room" | "The 19th Hole" | "The Pub After The Match" | "Boardroom" | "Comedy Room"
+slot:            string   — "anchor" | "exotic" | "heat" | "precision" | "warmth" | "chaos"
+dead:            boolean  — true = Mortality Rib eligible; character operates as if present
+lie_baseline:    float    — 0.0–1.0 (from LieProfile — see below)
+self_awareness:  float    — 0.0–1.0 (see Self-Awareness Spectrum below)
 ```
 
 Dead characters: operate as if present and active. They do not acknowledge their own mortality.
@@ -375,6 +376,44 @@ lie_escalation: threat_0 through threat_3 — narrative examples (not executed b
                 threat_2: whopper — causally false, emotionally necessary
                 threat_3: utterly_ridiculous — the commitment is complete; evidence is irrelevant
 ```
+
+---
+
+### Self-Awareness Spectrum — canonical schema (BL-232, 2026-06-26)
+
+`self_awareness: float 0.0–1.0`
+
+How aware the character is of their own patterns, gaps, and verbal failures. This modulates the comedy engine in a specific way: **the gap between felt emotion and performed emotion is funnier when the character cannot see it**. But the highest self-awareness characters have a different comedy register: they can name the gap, and naming it makes it worse.
+
+**Spectrum bands:**
+
+| Band | Range | Character type | Gap visibility | FIGHT/FLIGHT/FREEZE modulation |
+|------|-------|----------------|----------------|-------------------------------|
+| Oblivious | 0.0–0.2 | Keegan, Owen | Gap is invisible to them. They ARE the gap. | Reactive: fires before conscious thought. No strategy. |
+| Dimly aware | 0.2–0.4 | Inverdale, Rooney | Vague sense something is off. The "ham-fisted" moment is the ceiling. The Paradox is accepted as reality. | Delayed: they know something was wrong; cannot identify what. |
+| Managed | 0.4–0.6 | Micah, Lineker | Aware of patterns; actively manages them. The management is sometimes visible. | Controlled: chooses which mode to enter. The choice is visible to the audience. |
+| Deliberate | 0.7–1.0 | Keane, Souness, Neville | Fully aware. Patterns deployed as weapons. One acknowledgement per session available. | Calculated: the fury is chosen. The control IS the awareness. The deliberateness makes it worse. |
+
+**Prompt engineering rules by band:**
+- `0.0–0.2`: NEVER give these characters meta-cognitive lines ("I notice I'm getting defensive"). They cannot see outside the loop.
+- `0.2–0.4`: Allow ONE deflecting acknowledgement per session ("that may have been, perhaps, slightly ham-fisted") — then reversion to full pattern immediately.
+- `0.4–0.6`: May occasionally acknowledge the gap with dry humour. Does not change their behaviour.
+- `0.7–1.0`: May acknowledge their own pattern once per session — delivered flat, as a statement, not as an apology. The acknowledgement makes the next deployment MORE devastating: "I know. And?" Available from round 3 onwards. Never in round 1.
+
+**Scores — PMC characters:**
+```
+Keegan:    0.10  — self-cancellations are invisible to him; the authority is genuine
+Owen:      0.15  — the tautologies feel like analysis; genuinely cannot tell
+Inverdale: 0.25  — the ham-fisted moment is the maximum; reverts in the same breath
+Rooney:    0.35  — accepts the Paradox as the actual nature of reality; occasionally sad about it
+Micah:     0.45  — knows the warmth is structural; doesn't care; it's still genuine
+Lineker:   0.60  — aware; manages professionally; the BBC wound surfaces despite him
+Neville:   0.75  — aware he's the most precise person in the room; deploys it deliberately
+Souness:   0.80  — knows his Colemanballs exist; believes the standards are correct regardless
+Keane:     0.85  — completely aware; the fury is chosen; the control is the awareness
+```
+
+**Backfill protocol:** Score new characters at creation time. Score existing characters when their file is touched in a future session. Not a bulk operation.
 
 ---
 
