@@ -3080,7 +3080,7 @@ Track G wrote Chapman's dismissal_profile entries in ALL-CAPS to mirror his volu
 
 - CD3: UBV=9 TC=9 RR=2 → CoD=20, Dur=7, **CD3=2.9**
 - Note: TC=9 because FIFA World Cup 2026 is live as of 2026-06-25
-- Status: OPEN — raised 2026-06-25. Three Amigos complete. Gherkin approval pending.
+- Status: **CLOSED** — 2026-06-25. PMC panel shipped. Six characters + fish pool + suggestion cards + ConspireEngine + TriggerScoreEngine + Colemanballs engine + follow-ups. Pipeline GREEN. Commit 8b6ddad (initial) + 8792ee1 (IIFE fix).
 
 ---
 
@@ -3100,7 +3100,7 @@ Track G wrote Chapman's dismissal_profile entries in ALL-CAPS to mirror his volu
 
 - CD3: UBV=6 TC=4 RR=3 → CoD=13, Dur=2, **CD3=6.5**
 - Depends on: BL-222 shipped
-- Status: OPEN — raised 2026-06-25. Do after BL-222 v1 is live.
+- Status: **CLOSED** — 2026-06-25. PMC suggestion pool expanded 25→37 cards (12 new cards targeting character mechanics). Grylls pre-selected by default. wcc-question-principles.md created. Commit 4d343c4.
 
 ---
 
@@ -3159,7 +3159,7 @@ Track G wrote Chapman's dismissal_profile entries in ALL-CAPS to mirror his volu
 
 - CD3: UBV=8 TC=6 RR=3 → CoD=17, Dur=4, **CD3=4.25**
 - Depends on: BL-222 shipped and stable, at least 2 sessions of live observation
-- Status: OPEN — raised 2026-06-25. Three Amigos needed. Do after BL-222 v1 and BL-223 (question stimulus research) both complete.
+- Status: **CLOSED** — 2026-06-25. generateFollowUps() added: separate AI call after each round, 3 cards (challenge/followup/wild), JSON parse with fallback, rendered as chips. pmc-followups-section wired. Commit 9e3811a.
 
 ---
 
@@ -3191,7 +3191,7 @@ Track G wrote Chapman's dismissal_profile entries in ALL-CAPS to mirror his volu
 **Composes with:** BL-227 (double-down vs call-out uses classification), BL-225 (interactive next-round)
 
 - CD3: UBV=8 TC=7 RR=5 → CoD=20, Dur=3, **CD3=6.7**
-- Status: OPEN — raised 2026-06-25. Research spike first (extend existing Colemanballs research). Three Amigos on classification taxonomy before implementation.
+- Status: **CLOSED** — 2026-06-25. PMC_COLEMANBALLS data structure added (5 characters × 8-12 quotes each, all classified). PMC_COLEMANBALLS_TAXONOMY (9 entries, now 11 with literal_misfire + irony_collapse). Collapsible "The Patterns" reference UI. Commit 61c53ef.
 
 ---
 
@@ -3219,7 +3219,7 @@ Track G wrote Chapman's dismissal_profile entries in ALL-CAPS to mirror his volu
 
 - CD3: UBV=9 TC=6 RR=4 → CoD=19, Dur=4, **CD3=4.75**
 - Depends on: BL-222 shipped, BL-226 classification complete
-- Status: OPEN — raised 2026-06-25. Three Amigos needed after BL-226 classification taxonomy agreed.
+- Status: **CLOSED** — 2026-06-25. TURN_RULES RULE 6 added: per-turn blunder detection from PMC_COLEMANBALLS[prevSpeakerId], injected as pmcBlunderBlock. DOUBLE DOWN characters: Owen/Keegan/Inverdale/Micah/Rooney. CALL OUT: Neville/Keane/Carragher/Peterson/Lineker. Commit afe99fd.
 
 
 ---
@@ -3321,7 +3321,7 @@ Contempt qualifier pool (rotate — pair with any demolition):
 **Depends on:** BL-222 (PMC panel), BL-229 (interjection mechanic, can pre-wire via TURN_RULES)
 
 - CD3: UBV=9 TC=8 RR=5 → CoD=22, Dur=3, **CD3=7.3**
-- Status: OPEN — raised 2026-06-25. Three Amigos: confirm Souness placement (regular vs Other Pub). Otherwise clear to build.
+- Status: **CLOSED** — 2026-06-25. Souness confirmed regular by Rod. Chip added to Studio Regulars. Full PMC_MEMBERS prompt with 11-filler demolition pool, 6 contempt qualifiers, Circular Proof Interrupt, Sun wound. Keane prompt expanded. literal_misfire + irony_collapse added to PMC_COLEMANBALLS + taxonomy. Expert Communication Gap added to domain model. MAX_MEMBERS 6→7. Pipeline GREEN. Pushed 98179c1.
 
 ---
 
@@ -3353,4 +3353,53 @@ Contempt qualifier pool (rotate — pair with any demolition):
 **Depends on:** Domain model Fight/Flight/Freeze section (added 2026-06-25, in domain-model.md)
 
 - CD3: UBV=9 TC=6 RR=7 → CoD=22, Dur=4, **CD3=5.5**
-- Status: OPEN — raised 2026-06-25. Research spike first, then Three Amigos on taxonomy before wiring into prompts.
+- Status: **CLOSED** — 2026-06-26. Full taxonomy added to domain model: 4F biological basis, Plutchik's Wheel PMC mapping, Ekman's 6 micro-expression comedy, cognitive dissonance (rationalisation/denial/confabulation/projection/compensation/sublimation), status threat responses, comedy amplification rule. New NarrativeMoves: RATIONALISE, PROJECT, CONFABULATE, COMPENSATE. Commit 2965631.
+
+---
+
+## BL-232 — Character schema: self_awareness float attribute across all panels
+
+**Raised:** 2026-06-26 | **By:** Rod
+**Epic:** Core Comedy Engine
+**Feature:** platform, domain-model
+
+**Story:** As a comedy engine builder, I want every character to carry a `self_awareness` float (0.0–1.0) so that the engine can modulate comedy patterns correctly — low self-awareness characters produce the gap unconsciously, high self-awareness characters produce it deliberately.
+
+**Rod's framing (2026-06-26):** "should we add that as a base character trait for all our panel members / characters across the app"
+
+**Why the axis matters:**
+- `self_awareness: 0.0–0.3` (low): the gap between felt emotion and performed emotion is invisible to the character. They do not know they're doing it. Keegan, Owen. Comedy = structural trap they cannot see.
+- `self_awareness: 0.4–0.6` (medium): aware of the gap, choose to manage rather than expose. Lineker, Rooney. Comedy = controlled leak.
+- `self_awareness: 0.7–1.0` (high): knows exactly what they're doing. Chooses the FIGHT/FLIGHT/FREEZE response anyway because that's who they are. Keane, Souness. Comedy = the deliberate choice to be themselves.
+
+**Impact on engine:**
+- Low self-awareness: FIGHT response fires immediately, without strategic calculation. The anger IS the argument.
+- High self-awareness: FIGHT response is deployed as a tool. The character chose it. There is a pause before it fires.
+- Low: FLIGHT is invisible even to the character — they don't know they're deflecting.
+- High: FLIGHT is a calculated exit — they know they're leaving; they do it anyway; the decision is visible.
+
+**Prompt engineering implication:**
+Characters with low self-awareness should not be given lines like "I notice I'm getting defensive here" — that requires meta-cognition they don't have. Characters with high self-awareness can deploy their own patterns as weapons.
+
+**Scope:**
+1. Add `self_awareness: float 0.0–1.0` to CharacterMeta canonical schema in domain-model.md
+2. Score all PMC characters (immediate — we know them all)
+3. Score new characters going forward as part of character file creation
+4. Backfill other panels as those characters are touched in future sessions (not a bulk operation)
+5. Add to TURN_RULES: when a character's self_awareness > 0.7, they may acknowledge their own pattern once per session — the acknowledgement makes it more devastating, not less
+
+**Suggested scores (PMC):**
+- Keegan: 0.1 — genuinely cannot see the self-cancellations
+- Owen: 0.15 — genuinely believes the tautologies are analysis
+- Inverdale: 0.25 — some awareness (the "ham-fisted" acknowledgement proves it) but reverts immediately
+- Rooney: 0.35 — vaguely aware the Paradox doesn't resolve; accepts it as the nature of things
+- Lineker: 0.6 — aware; manages professionally; wound surfaces despite him
+- Micah: 0.45 — aware the warmth is structural; doesn't care; it's also genuine
+- Souness: 0.8 — very aware; knows his own Colemanballs exist; believes the standards are still correct
+- Keane: 0.85 — completely aware; the control IS the awareness; the fury is chosen
+- Neville: 0.75 — aware he's more precise than the room; deploys it deliberately
+
+**Depends on:** BL-231 (emotional taxonomy — self_awareness maps directly onto FIGHT/FLIGHT/FREEZE modulation)
+
+- CD3: UBV=8 TC=4 RR=6 → CoD=18, Dur=3 (schema + PMC scoring), **CD3=6.0**
+- Status: OPEN — raised 2026-06-26. Schema update + PMC scoring is small. Backfill of other panels is ongoing.
