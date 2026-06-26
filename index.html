@@ -3070,6 +3070,12 @@
     </div>
   </div>
 
+  <!-- Host display — shown during intro and round tail -->
+  <div id="qs-host-display" style="display:none;margin-bottom:20px;"></div>
+
+  <!-- Team strip — shown during question/conferral/result phases -->
+  <div id="qs-team-strip" style="display:none;gap:8px;margin-bottom:20px;flex-wrap:wrap;align-items:flex-start;"></div>
+
   <!-- Team selection phase -->
   <div id="qs-team-selection-phase">
     <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:2px;margin-bottom:4px;">Select your team</div>
@@ -21475,6 +21481,13 @@ RULE 10: rotate every construction, perpendicular angle, and formal observation.
       const el = _el(id);
       if (el) el.style.display = show.includes(id) ? '' : 'none';
     });
+    // Host view: intro / round-tail — show host display
+    const hostPhase = show.some(id => id === 'qs-intro' || id === 'qs-round-tail-phase');
+    const teamPhase = show.some(id => id === 'qs-question-phase' || id === 'qs-conferral-phase' || id === 'qs-result-phase');
+    const hostEl = _el('qs-host-display');
+    const teamEl = _el('qs-team-strip');
+    if (hostEl) hostEl.style.display = hostPhase ? '' : 'none';
+    if (teamEl) teamEl.style.display = teamPhase ? 'flex' : 'none';
   }
 
   function _addWaiting(containerId, charId, statusText) {
@@ -21512,6 +21525,78 @@ RULE 10: rotate every construction, perpendicular angle, and formal observation.
     if (u) u.textContent = S.score.user;
     if (a) a.textContent = S.score.ai;
     if (q) q.textContent = S.qNum > 0 ? `Q${S.qNum}` : 'Q0';
+  }
+
+  function _buildHostDisplay() {
+    const container = _el('qs-host-display');
+    if (!container) return;
+    const host = CHARS[S.hostId];
+    if (!host) return;
+    container.innerHTML = `
+      <div style="display:flex;align-items:center;gap:16px;background:${host.bg};border:2px solid ${host.colour};border-radius:10px;padding:16px 20px;">
+        <div style="font-size:40px;flex-shrink:0;">${host.icon}</div>
+        <div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:3px;color:${host.colour};">${host.name.toUpperCase()}</div>
+          <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:2px;">Host</div>
+        </div>
+      </div>`;
+  }
+
+  function _buildTeamStrip() {
+    const container = _el('qs-team-strip');
+    if (!container) return;
+    container.innerHTML = '';
+    const allIds = [...S.selectedTeam, S.captainId];
+    allIds.forEach(charId => {
+      const char = CHARS[charId];
+      if (!char) return;
+      const isCapt = charId === S.captainId;
+      const tile = document.createElement('div');
+      tile.id = `qs-tile-${charId}`;
+      tile.style.cssText = `
+        display:flex;align-items:center;gap:8px;
+        background:${char.bg};border:2px solid ${char.colour}55;border-radius:8px;
+        padding:8px 12px;transition:border-color 0.2s,opacity 0.2s;flex-shrink:0;`;
+      tile.innerHTML = `
+        <span style="font-size:20px;">${char.icon}</span>
+        <div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:1px;color:${char.colour};">${char.name.split(' ').pop().toUpperCase()}</div>
+          <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">${isCapt ? 'Captain' : 'Team'}</div>
+        </div>`;
+      container.appendChild(tile);
+    });
+  }
+
+  function _setTileState(charId, state) {
+    const tile = _el(`qs-tile-${charId}`);
+    if (!tile) return;
+    const char = CHARS[charId];
+    if (!char) return;
+    switch (state) {
+      case 'speaking':
+        tile.style.borderColor = char.colour;
+        tile.style.opacity = '1';
+        tile.style.boxShadow = `0 0 8px ${char.colour}66`;
+        break;
+      case 'done':
+        tile.style.borderColor = `${char.colour}55`;
+        tile.style.opacity = '0.65';
+        tile.style.boxShadow = '';
+        break;
+      case 'silent':
+        tile.style.borderColor = '#f59e0b';
+        tile.style.opacity = '0.8';
+        tile.style.boxShadow = '';
+        break;
+      default:
+        tile.style.borderColor = `${char.colour}55`;
+        tile.style.opacity = '1';
+        tile.style.boxShadow = '';
+    }
+  }
+
+  function _resetTileStates() {
+    [...S.selectedTeam, S.captainId].forEach(charId => _setTileState(charId, 'idle'));
   }
 
   function init() {
@@ -21576,6 +21661,8 @@ RULE 10: rotate every construction, perpendicular angle, and formal observation.
 
   async function confirmTeam() {
     if (S.selectedTeam.length !== 4) return;
+    _buildHostDisplay();
+    _buildTeamStrip();
     _showPhases('qs-intro');
     const host = CHARS[S.hostId];
     const captain = CHARS[S.captainId];
@@ -21605,6 +21692,7 @@ RULE 10: rotate every construction, perpendicular angle, and formal observation.
     S.captainText    = '';
     S.captainOverride = false;
     _updateScoreboard();
+    _resetTileStates();
     _showPhases('qs-question-phase');
 
     _el('qs-question-text').textContent = S.q.description;
@@ -21640,9 +21728,11 @@ RULE 10: rotate every construction, perpendicular angle, and formal observation.
       const maxTok  = inDomain ? 260 : 160;
       const pid     = _addWaiting('qs-conferral-container', memberId, 'Thinking…');
 
+      _setTileState(memberId, 'speaking');
       const silenceText = _checkSilence(memberId, inDomain);
       if (silenceText !== null) {
         _fillSlot(pid, memberId, silenceText, inDomain ? 'Expert blank' : '');
+        _setTileState(memberId, 'silent');
         ctx += `${char.name.toUpperCase()}: "[silent]"\n`;
         S.conferralLog.push({ charId: memberId, text: silenceText, isSilent: true, wasExpert: inDomain });
         if (_checkCaptainOverride(memberIdx)) { S.captainOverride = true; break; }
@@ -21656,6 +21746,7 @@ RULE 10: rotate every construction, perpendicular angle, and formal observation.
           maxTok, 'quiz/conferral'
         );
         _fillSlot(pid, memberId, text, '');
+        _setTileState(memberId, 'done');
         ctx += `${char.name.toUpperCase()}: "${text}"\n`;
         S.conferralLog.push({ charId: memberId, text });
 
@@ -21708,6 +21799,7 @@ RULE 10: rotate every construction, perpendicular angle, and formal observation.
 
   async function _runCaptain(ctx) {
     const cap = CHARS[S.captainId];
+    _setTileState(S.captainId, 'speaking');
     const pid = _addWaiting('qs-conferral-container', S.captainId, 'Captain deciding…');
     try {
       const silentMembers = S.conferralLog.filter(e => e.isSilent);
@@ -21723,9 +21815,11 @@ RULE 10: rotate every construction, perpendicular angle, and formal observation.
         420, 'quiz/captain'
       );
       _fillSlot(pid, S.captainId, text, 'Captain — final answer');
+      _setTileState(S.captainId, 'done');
       S.captainText = text;
     } catch(e) {
       _fillSlot(pid, S.captainId, '[The captain gestures at the orrery. The orrery is inconclusive. He gives the wrong answer anyway.]', 'Captain — final answer');
+      _setTileState(S.captainId, 'done');
       S.captainText = '[wrong answer, props involved]';
     }
     await _runHostRoast(ctx);
