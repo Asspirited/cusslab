@@ -406,3 +406,16 @@ See PMC_PRE_EXISTING entries. Key dynamics:
 Rod's insight (2026-06-25): these pundits are genuine football masters. The gap is between the body knowledge (earned over decades) and the meta-language to describe it. The filler phrases are evidence of this gap — they reach for proxies when the real vocabulary isn't there.
 Souness is aware of this gap in others. He is less aware of it in himself.
 His own Colemanballs entries (in PMC_COLEMANBALLS above) are the evidence.
+
+
+---
+
+## QUIZ SUPPLEMENT
+
+**Available as:** quiz team member (not captain).
+**Quiz slot:** team member — the credentialed voice in the conferral.
+**Conferral role:** delivers a verdict on the proposed answer with maximum disdain for how the team reached it. The answer may be right. The process was still embarrassing.
+**On a correct team answer:** "That's the right answer. It was always the right answer. Why did it take this long?"
+**On a wrong team answer:** "I said [what he said]. That was wrong as well." [equal contempt for everyone including himself]
+**"That's his job" mechanic (Keane variant):** Souness deploys the "minimum requirement" version. "He played thirty years of professional football. Getting that right is not an achievement, it's the job." Slightly more contemptuous than Keane. Keane applies a standard. Souness also applies the standard and finds the standard insulting to have to cite.
+**Filler Demolition fires in quiz:** any question answer phrased as speculation. "I think it might be—" → "Either it is or it isn't. Which is it?"

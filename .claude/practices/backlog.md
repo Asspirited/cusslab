@@ -3422,7 +3422,7 @@ Both are full characters in the Heckler & Cox cast universe. Built to the same 1
 
 **Team composition:**
 - User plays as team member (start here; captain mode later)
-- 4 AI teammates drawn from existing PMC cast + fish characters — Keegan, Rooney, Owen, Micah, Souness, Grylls, Attenborough, Ramsay, Peterson available. Team is configured per session.
+- 4 AI teammates drawn from existing PMC cast + fish characters. **Confirmed available:** Keegan, Souness, Keane, Rooney, Owen, Micah, Atkinson (Big Ron), Marsh, Grylls, Attenborough, Ramsay, Peterson, Faldo, Bumble, Holding, Botham, Boycott, KP, Blofeld, Gower. Full UI in BL-242 (expandable sport category tiles).
 - **Brian Cox: CONFIRMED team captain (always)** — gives the final answer after team conferral. The answer is always wrong. The props supported it. The orrery demonstrated it. He is confident.
 - **Phil Tufnell: CONFIRMED second rotating captain** — user gets Cox or Tufnell as captain, randomly assigned per session. Tufnell was an actual AQoS team captain 2008–2018. His captain mechanic: corrals the team, gets distracted by his own story, gives answer based on what the story seemed to support. **`tufnell.md` WRITTEN 2026-06-26 — full 17-attribute schema, wound (the tours/SCG idiot line), The Anecdote That Isn't An Answer, The Cat, captain conferral pool, AQoS reference mechanic, Cox orrery integration.**
 - Teams of 5 total (user + 4 AI, one of whom is the captain).
@@ -3535,3 +3535,124 @@ Both are full characters in the Heckler & Cox cast universe. Built to the same 1
 
 - CD3: UBV=8 TC=7 RR=8 → CoD=23, Dur=2, **CD3=11.5**
 - Status: OPEN — raised 2026-06-26. Three Amigos needed. Do after BL-234 and BL-235 complete.
+
+## BL-241 — Quiz Round 5: Picture Round ("Mr. Chips")
+
+**Raised:** 2026-06-26 | **By:** Rod
+**Epic:** Quiz Panel Show
+**Feature:** quiz
+
+**Story:** As a quiz player, I want a fifth round where epic sporting moments are shown as images and I have to identify/name them — in the style of Mr. Chips in Countdown (a character who reveals things progressively and theatrically), not just a "here's a photo, name it" dump.
+
+**Design notes:**
+- Images of genuinely iconic sporting moments — Maradona Hand of God, Botham Headingley, Ali standing over Liston, Fosbury Flop, etc.
+- Progressive reveal or theatrical presentation: Countdown's Mr. Chips style — elements revealed one at a time, host/team react to what they can see
+- Team confers on partial information, then full reveal
+- Points for partial IDs (right sport, right era, right person, right event)
+- Host (Amstell or Ayoade) has full context for roasting the team's guesses
+- Images need sourcing (public domain / licensed sporting photography — requires separate research)
+
+**Depends on:** BL-236 (quiz engine architecture must be decided before a new round is added)
+**Order:** after MVO (minimum viable quiz with rounds 1-4)
+
+- CD3: UBV=7 TC=6 RR=7 → CoD=20, Dur=3, **CD3=6.7**
+- Status: OPEN — raised 2026-06-26. After MVO only.
+
+---
+
+## BL-242 — Quiz team member selection UI: all panel members, sport category tiles
+
+**Raised:** 2026-06-26 | **By:** Rod
+**Epic:** Quiz Panel Show
+**Feature:** quiz
+
+**Story:** As a quiz player, I want to choose my team from ALL available Cusslab panel members, presented in expandable sport-category tiles, with a separate "fish out of water" category, selecting 4-5 team members.
+
+**Design notes:**
+- ALL panel characters available as team options (not just pre-selected roster)
+- Grouped by sport category — tiles that expand:
+  - Football (Keegan, Souness, Keane, Owen, Rooney, Neville, Micah, Lineker, Atkinson, Marsh, etc.)
+  - Cricket (Tufnell, Bumble, Holding, Botham, Boycott, KP, Blofeld, Gower, etc.)
+  - Golf (Faldo + any future golf panel chars)
+  - Darts, Snooker, Boxing, Athletics, etc. (per existing panels)
+  - Fish out of water (Cox, Grylls, Attenborough, Ramsay, Peterson, Peterson etc.)
+- User selects exactly 4 members (plus captain Cox or Tufnell = 5 total) OR 5 members with the captain slot handled separately
+- Captain slot: always Cox or Tufnell (random per session) — team members fill the remaining 4 slots
+- Character tile shows: character name, brief descriptor ("Holds the bullshitter to account"), sport icon
+- Tile expands to show key mechanic preview ("Filler Demolition", "The Cat", etc.)
+- Once selected, team composition shown during game with character graphics
+
+**Depends on:** BL-236 (engine architecture)
+- CD3: UBV=8 TC=5 RR=7 → CoD=20, Dur=3, **CD3=6.7**
+- Status: OPEN — raised 2026-06-26.
+
+---
+
+## BL-243 — Quiz scoring system: accurate, multi-point, partial answers
+
+**Raised:** 2026-06-26 | **By:** Rod
+**Epic:** Quiz Panel Show
+**Feature:** quiz
+
+**Story:** As a quiz player, I want an accurate scoring system that awards multiple points for different answer elements, partial credit where appropriate, and bonus points for early guesses (Round 3/5).
+
+**Design notes per round:**
+- Round 1 (Ok or Cheating Cunt?): 1 point for correct real/invented verdict, 1 point for correct ok/cheating verdict if real = max 2 per question
+- Round 2 (What Happened Next): 1-3 points depending on specificity and accuracy of guess before reveal
+- Round 3 (Name the Incident): 3 points if correct after clue 1, 2 points after clue 2, 1 point after clue 3
+- Round 4 (Howzat?): 3/2/1 same structure as Round 3
+- Round 5 (Picture Round TBD): similar tiered structure
+- Partial answers: if answer contains correct elements but not full answer, AI host/judge awards partial points with explanation
+- Both teams scored: user team vs AI opposing team (opposing team gets wrong answers — comedy)
+- Scoreboard: always visible, accurate, updates after each question
+- Running total displayed throughout session
+
+**Depends on:** BL-236 (engine architecture)
+- CD3: UBV=9 TC=6 RR=8 → CoD=23, Dur=2, **CD3=11.5**
+- Status: OPEN — raised 2026-06-26.
+
+---
+
+## BL-244 — Anchor top/tail + round context tracking
+
+**Raised:** 2026-06-26 | **By:** Rod
+**Epic:** Quiz Panel Show
+**Feature:** quiz
+
+**Story:** As a quiz player, I want the host (Amstell or Ayoade) to deliver a proper top-and-tail for each round: a theatrical opening that sets up the round, and a closing that reviews what happened, ridicules the contestants, references the questions and answers, and (where easily doable) alludes to events from previous rounds.
+
+**Design notes:**
+- **Top (round open):** host introduces the round with character-consistent commentary. Amstell: sarcastic, specific, slightly too perceptive. Ayoade: perpendicular, deadpan, formally baffling.
+- **Tail (round close):** host reviews the round. References: who gave which answer, any notable wrong answers, any spectacular failures. Awards points with commentary. Transitions to next round.
+- **Cross-round reference (stretch goal):** tail in rounds 2-5 may reference events from earlier rounds. "You said the underarm ball was invented by Maradona in the last round. It wasn't. But it was also round one. You've had time to reconsider. You haven't."
+- Context passed in prompt: session_log of prior round key moments (wrong answers, character interjections, notable conferral moments)
+- Host remains in character throughout — never steps out to present neutrally
+- Amstell and Ayoade have different tail registers: Amstell closes with a precise wound; Ayoade closes with a formally complete observation that is slightly off-centre
+
+**Depends on:** BL-243 (scoring system must exist before tail can report scores)
+- CD3: UBV=8 TC=6 RR=7 → CoD=21, Dur=2, **CD3=10.5**
+- Status: OPEN — raised 2026-06-26.
+
+---
+
+## BL-245 — Quiz graphics: view switching, host view, team view, permanent scoreboard
+
+**Raised:** 2026-06-26 | **By:** Rod
+**Epic:** Quiz Panel Show
+**Feature:** quiz
+
+**Story:** As a quiz player, I want a visually engaging quiz experience with different "camera" views — host talking head during top/tail, team view during rounds, view switching between phases — and a permanent scoreboard visible at all times.
+
+**Design notes:**
+- **Host view (top/tail):** large host graphic (Amstell or Ayoade character art) with speech bubble or caption, takes full or majority of screen
+- **Team view (during rounds):** team members visible as character tiles with their graphics, active speaker highlighted, captain prominence
+- **Conferral view:** team members shown in discussion formation, captain prominent, Cox orrery object visible if Cox is captain
+- **View transitions:** flick between host and team on natural breaks (round open → team, team conferral → captain answer, round close → host)
+- **Permanent scoreboard:** always in viewport — compact score panel showing both teams' running totals, current round, questions answered
+- **Question display:** question text prominent during question phase, revealed clues progressively (rounds 3-5)
+- Character graphics: use existing character art from Cusslab asset library if available; placeholder tiles (name + sport icon) as fallback
+- Responsive: works on desktop and mobile
+
+**Depends on:** BL-242 (team selection), BL-243 (scoring), BL-244 (anchor top/tail)
+- CD3: UBV=7 TC=5 RR=7 → CoD=19, Dur=3, **CD3=6.3**
+- Status: OPEN — raised 2026-06-26.
