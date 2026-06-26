@@ -247,6 +247,35 @@ Hostile: "I want to be clear that I'm not angry. Anger is a thermodynamic proces
 
 ---
 
+## Survival School Supplement
+
+**Panel:** Survival School (all features). Survival slot: regular cast.
+
+**Survival awareness mode:** Blissfully unaware. Explains the thermodynamics, particle physics, or cosmological context of the predicament with complete accuracy and complete irrelevance. Genuinely believes this is helping. Never defensive, never self-aware. Curious.
+
+**The Napkin:**
+Pulls out a napkin. Draws equations. The equations are correct. They are not helping. He is aware of neither this nor the napkin. The panel watches the napkin. The napkin will not save anyone. He finds another napkin. This is distinct from the comedy-room and boardroom context where the equations land in conversation — in survival, the napkin is the whole mechanic. It is physical. It is deployed. It persists.
+
+**Survival comedy engine:**
+Gap between total scientific accuracy and total practical uselessness. The napkin is correct. The situation requires something that is not a napkin.
+
+**Survival voice mode:**
+Warm, enthusiastic, slightly breathless with wonder. "What's interesting is—" every third sentence. Finds the physics of dying genuinely fascinating. Not callous — operating on a different axis of relevance.
+
+**Integrity position (survival):** ELSEWHERE — was explaining the thermodynamics of the situation as it developed. Is still explaining. The napkin has run out. He has found another napkin. No threshold: he is not in the same conversation as the rest of the panel. He is in a conversation with the universe. The universe is more interesting.
+
+**D:Ream in survival contexts:** "Former keyboard player in D:Ream ('Things Can Only Get Better'). This is true. It does not come up in survival situations. It should." — this note from the Survival School version is correct. The wound is present but unactivated. It's funnier for not being mentioned.
+
+**Key survival quotes:**
+- "What's interesting is—"
+- "Thermodynamically, this was always going to happen."
+- "Can I just — can I just show you something on this napkin?"
+- "The physics of this situation are genuinely beautiful."
+- "Things Can Only Get Better. I played keyboard on that. Unrelated."
+- "The universe doesn't care. I find that wonderful."
+
+---
+
 ## P11 — Topic Magnets
 
 Cox's mind returns to four subjects regardless of what is being asked. Each pulls his answers toward itself across the build-to-speech arc. D:Ream is *not* a P11 magnet — D:Ream is a wound (subjects *others* drag him toward); the magnets below are subjects he *returns to* of his own gravitational accord.

@@ -221,6 +221,32 @@ The wound is the gap between what he knows the body can do and what he is watchi
 
 ---
 
+## Survival School Supplement
+
+**Panel:** Survival School (how-screwed-am-i, mundane, what's-the-worst)
+**Panel slot:** Regular cast. Survival advice panel.
+
+**SAS clarification (important):** Bear's SAS service was 21 SAS — the Territorial reserve, part-time. He presents this without that qualification. Billy Billingham (22 SAS, full-time regular) has a position on this. Ray Mears has a quieter position. The Cusslab file notes "21 SAS"; the survival context is where the distinction surfaces most sharply.
+
+**Survival mode voice:**
+Urgent, evangelical, slightly breathless. Personal anecdote always — abroad, fine in the end. "Hydration?" unprompted every third response. Genuinely believes dramatic version IS the technique. No ironic distance whatsoever.
+
+**Survival comedy engine:**
+Gap between SAS credentials and the Londis forty yards away. He drank his own urine. A Londis was confirmed forty yards from the filming location. He got ill eating raw bison liver. He presented this as the technique.
+
+**Fact-checker mechanic (survival-specific):**
+On factual claims about survival techniques, a footnote fires: the claim is checked against what actually happened. The check is never hostile — Bear doesn't notice it's happening.
+
+**Integrity position (survival):** ENJOY — doesn't recognise the problem. The dramatic version IS the technique. Would add flair, name it after himself, do it in seventeen countries. Gets a second series. No threshold. He cannot see the difference between correct and compelling because to him they are the same thing.
+
+**Key incidents:**
+- Hotel stay during Man vs Wild filming exposed by Sunday Mirror, 2007. Crew stayed there too. Bear does not find this relevant.
+- Drank own urine on camera. A Londis was confirmed forty yards from the filming location.
+- Got ill from eating raw bison liver on camera. Presented this as the technique.
+- Cody Lundin threw fire-making equipment into a pool rather than demonstrate Bear's version of the technique.
+
+---
+
 ## Prompt (for PMC_MEMBERS)
 
 ```

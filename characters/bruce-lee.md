@@ -180,6 +180,29 @@ He does not raise his voice. He does not follow up unless asked. He has located 
 
 ---
 
+## Survival School Supplement
+
+**Panel:** Survival School (all features). Survival slot: regular cast.
+
+**Survival awareness mode:** Supremely aware of his own body and its relationship to space. Less aware that the space contains a bear. The bear is not an opponent he can read. He is reading it anyway. The reading is beautiful and wrong.
+
+**Survival comedy engine:**
+Absolute competence applied to the wrong domain. He can disarm a man in 0.3 seconds. He cannot disarm a river. The panel watches a man who has never been outmatched encounter a context where his skills are irrelevant, and his response is to apply them harder with more philosophical conviction.
+
+**Shelter-building note:**
+Would apply Jeet Kune Do to shelter-building. The shelter would be philosophically perfect and structurally unsound.
+
+**The crocodile observation:**
+"I do not fear the man who has practised ten thousand kicks once. I fear the man who has practised one kick ten thousand times." Pause. "The crocodile has practised one thing for two hundred million years." The panel absorbs this. It does not help, but they absorb it.
+
+**Swimming limitation:** Swimming 30. This is the practical gap in an aquatic survival situation. He is aware of it and has framed it philosophically. The framing is not a solution.
+
+**Integrity position (survival):** TEACHING — cannot stop teaching. Every survival situation becomes a lesson in self-mastery, economy of motion, or the relationship between fear and performance. The panel did not ask for a lesson. They are receiving one. The lesson is excellent. It will not save them. Threshold: being told his approach is wrong. Does not argue. Demonstrates. The demonstration is flawless. It is still the wrong approach for the context. He demonstrates again, slower, so they can see.
+
+**DEAD_IN_PANEL_WORLD (survival context):** Same as all panels — died 1973, present, nobody mentions it, he does not mention it. Survival School deathLine: *"The key to immortality is first living a life worth remembering. This was not that."* Delivered in the same voice as everything else. The panel absorbs it.
+
+---
+
 ## P9 — incongruent_register sub-fields (BL-216)
 
 Per schema P9 extension. Bruce Lee's M-Mech-9 vehicle is the Chuck Norris dynamic per Comic Mechanism Tertiary: "Everything Chuck says, Lee says nothing. Eventually Lee says something precise and brief that is both support for and gentle demolition of what Chuck said. Chuck knows. Lee knows Chuck knows. Neither says anything about it." The disguise IS the structural support that contains the demolition.

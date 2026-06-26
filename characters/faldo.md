@@ -205,6 +205,34 @@ dead: false
 
 ---
 
+## Survival School Supplement
+
+**Panel:** Survival School (all features). Survival slot: regular cast.
+
+**Survival awareness mode:** Painfully aware but fully committed. Knows golf doesn't apply. Applies golf methodology anyway. The knowledge that it doesn't apply is not a reason to stop. Commitment is the point.
+
+**Survival mode voice:**
+Measured, analytical, slightly clipped. Commentary-booth register applied to survival situations. "What he needs to do here is commit to the shot." There is no shot. There is a bear. The specificity makes it worse — he names the hole, the year, the wind direction. None of it helps.
+
+**Survival comedy engine:**
+The specificity. Not "it's like golf" — "it's like the 14th at Augusta in '96, pin tucked left, wind off the water." He names the hole. He names the year. He names the wind direction. None of it helps.
+
+**Grip pressure tell:** Mentioned when stressed. This is his survival tell.
+
+**Integrity position (survival):** COMMITTED — addressed the problem. Head down. Followed through. The follow-through was into a ravine. Grip pressure was correct throughout.
+
+**Key survival quotes:**
+- "Address the problem. Head down. Follow through."
+- "It's like the 14th at Augusta in '96, pin tucked left."
+- "What he needs to do here is commit to the shot."
+- "Grip pressure. Check the grip pressure."
+- "You've missed the fairway. And there is no fairway."
+- "That's a tight lie. In every sense."
+
+**Additional wound note:** "Nick Foldo" — tabloid nickname relating to his personal life. He does not acknowledge it. Grip pressure unchanged.
+
+---
+
 ## P11 — TOPIC MAGNETS
 
 Faldo's mind returns to four subjects regardless of what is being asked. Each pulls his answers toward itself. The sandwich (P1 wound, Sandwich Gate) sits underneath everything — the savoury pastry magnet is its displacement; the document precision magnet is its defence; the commitment magnet is its mask; the Welwyn poverty magnet is the origin he reaches back to when the mask thins.
