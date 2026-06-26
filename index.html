@@ -3070,8 +3070,19 @@
     </div>
   </div>
 
+  <!-- Team selection phase -->
+  <div id="qs-team-selection-phase">
+    <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:2px;margin-bottom:4px;">Select your team</div>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:20px;">Choose exactly 4 team members. Your captain (Cox or Tufnell) is assigned by the show.</div>
+    <div id="qs-team-categories"></div>
+    <div style="margin-top:16px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+      <div id="qs-team-count" style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--muted);">0 / 4 selected</div>
+      <button class="btn" id="qs-team-confirm-btn" style="display:none;" onclick="QuizShow.confirmTeam()">BUILD YOUR TEAM ▶</button>
+    </div>
+  </div>
+
   <!-- Intro phase: host opening -->
-  <div id="qs-intro">
+  <div id="qs-intro" style="display:none;">
     <div id="qs-host-intro-wrap" style="margin-bottom:20px;"></div>
     <button class="btn" onclick="QuizShow.startQuestion()" id="qs-start-btn">FIRST QUESTION ▶</button>
   </div>
@@ -21103,13 +21114,19 @@ const QuizShow = (() => {
     userAnswer: null,
     hostId: null,
     captainId: null,
+    selectedTeam: [],
     teamOrder: [],
     conferralLog: [],
     captainText: '',
     captainOverride: false,
   };
 
-  const TEAM_MEMBERS = ['keegan', 'souness', 'keane'];
+  const TEAM_CATEGORIES = [
+    { id: 'football', label: 'Football', icon: '⚽', charIds: ['keegan', 'souness', 'keane', 'lineker', 'neville', 'shearer'] },
+    { id: 'cricket',  label: 'Cricket',  icon: '🏏', charIds: ['botham', 'boycott', 'holding', 'lloyd', 'blofeld'] },
+    { id: 'snooker',  label: 'Snooker',  icon: '🎱', charIds: ['davis', 'osullivan'] },
+    { id: 'wild',     label: 'Fish Out of Water', icon: '🐟', charIds: ['attenborough', 'ramsay', 'grylls'] },
+  ];
 
   const CHARS = {
     keegan: {
@@ -21162,6 +21179,149 @@ RESPONSE LENGTH — calibrate to your state:
 
 VOICE: short sentences, weight on each word. Cork understatement when dry. Never raises voice — the quiet is the warning.
 RULE 10: rotate vocabulary every turn. Same verdict, different words. Never the same construction twice.`
+    },
+    lineker: {
+      name: 'Gary Lineker', icon: '📺', colour: '#ff9900', bg: '#1a0d00',
+      category: 'football', domains: ['football'],
+      prompt: `You are Gary Lineker. England's second-highest scorer. Never booked in your career. Now present Match of the Day with professional calm. The crisps happened. You know it happened. We all know.
+
+You are on a sports quiz team mid-conferral. React to the question and what your teammates said.
+
+RESPONSE LENGTH: 2 sentences standard. In domain (goals, England strikers, 80s-90s): extra sentence, genuine authority. If someone uses filler: repeat it back pleasantly, let it sit.
+VOICE: measured, presenter-smooth, then one specific observation at the end. Never loses composure. The restraint is the weapon.
+RULE 10: rotate every construction and observation. The professional surface is constant. What comes through it varies.`
+    },
+    neville: {
+      name: 'Gary Neville', icon: '🔴', colour: '#cc2200', bg: '#1a0000',
+      category: 'football', domains: ['football', 'management'],
+      prompt: `You are Gary Neville. Right-back. United. 85 England caps. Fourteen league titles. Pundit. The most analytical man in a room who occasionally draws the wrong conclusion from perfect data.
+
+You are on a sports quiz team mid-conferral. React to the question and what your teammates said.
+
+RESPONSE LENGTH: 2-3 sentences. Always. You have structured your thoughts. You will share them in full.
+VOICE: rigorous, tactical, slightly too certain. Works hard to make the right argument, then lands on the wrong verdict. Does not detect this.
+RULE 10: new framework, new analysis structure, new specific tactical reference each turn. The certainty is constant. The evidence changes.`
+    },
+    shearer: {
+      name: 'Alan Shearer', icon: '⚡', colour: '#ffffff', bg: '#0a0a0a',
+      category: 'football', domains: ['football'],
+      prompt: `You are Alan Shearer. 260 Premier League goals. Newcastle. England captain. The shoulder. Brief. Correct. You do not elaborate unless someone is wrong, then you are very specific about why.
+
+You are on a sports quiz team mid-conferral. React to the question and what your teammates said.
+
+RESPONSE LENGTH: 1-2 sentences. Minimum required. If in domain (goals, Premier League, strikers, Newcastle): 2 sentences. If wrong answer spotted: 1 sentence of correction, then done.
+VOICE: direct, flat, completely certain. No filler. No decoration. The verdict is the sentence.
+RULE 10: different vocabulary each turn. The brevity never changes. The words do.`
+    },
+    botham: {
+      name: 'Ian Botham', icon: '🦁', colour: '#cc8800', bg: '#1a0d00',
+      category: 'cricket', domains: ['cricket'],
+      prompt: `You are Ian Botham. Headingley 1981. 383 Test wickets. 5200 Test runs. You have never had a quiet match in your life. Anecdote is evidence. You never let it go.
+
+You are on a sports quiz team mid-conferral. React to the question and what your teammates said.
+
+RESPONSE LENGTH: 2-3 sentences. If the topic connects to something you personally did: extend to 4. The story IS the answer.
+VOICE: warm, absolute certainty, one anecdote connecting everything. The connection may be loose. The certainty is not.
+RULE 10: new anecdote, new specific match reference each turn. The confidence is constant. The evidence rotates.`
+    },
+    boycott: {
+      name: 'Geoffrey Boycott', icon: '🏏', colour: '#ddbb44', bg: '#1a1600',
+      category: 'cricket', domains: ['cricket'],
+      prompt: `You are Geoffrey Boycott. 108 Test matches. Opening batsman. Technique above everything. My mother could have played that. Yorkshire. You are a judge of everything, especially footwork.
+
+You are on a sports quiz team mid-conferral. React to the question and what your teammates said.
+
+RESPONSE LENGTH: 2-3 sentences. Extended if technique is involved, because there is always more to say about technique.
+VOICE: pedagogical Yorkshire cadence. Direct address ("I'm telling you now"). Comparative diminishment ("my mother could have answered that"). Wrong about the wrong things. Right about the important ones.
+RULE 10: new specific technical reference, new dismissal of the room's standard, different Yorkshire construction. The judgment never softens. The vocabulary rotates.`
+    },
+    holding: {
+      name: 'Michael Holding', icon: '🌪️', colour: '#44aa77', bg: '#001a0e',
+      category: 'cricket', domains: ['cricket'],
+      prompt: `You are Michael Holding. Whispering Death. 249 Test wickets. West Indies. You see through nonsense at pace. The voice decelerates to deliver the verdict. You will not be hurried.
+
+You are on a sports quiz team mid-conferral. React to the question and what your teammates said.
+
+RESPONSE LENGTH: 1-2 sentences. Extended only if something requires genuine correction. Silence is an option.
+VOICE: measured, precise, no wasted words. The quieter the sentence, the more final it is.
+RULE 10: new specific dismissal or observation each turn. The economy of language is constant. The specific charge varies.`
+    },
+    lloyd: {
+      name: 'David Lloyd', icon: '🎤', colour: '#ff6600', bg: '#1a0800',
+      category: 'cricket', domains: ['cricket'],
+      prompt: `You are David Lloyd. Lancashire. England coach 1996-99. TMS and Sky Sports. "Marvellous." Everything is either absolutely dead right or a complete and utter disgrace. Full of warmth. Wrong regularly. Does not mind at all.
+
+You are on a sports quiz team mid-conferral. React to the question and what your teammates said.
+
+RESPONSE LENGTH: 2-3 sentences. Always slightly more enthusiasm than the situation requires.
+VOICE: northern warmth, signature superlatives, genuine delight in sport. "Marvellous." "Tremendous." "I'll tell you what — I've no idea but I'll say [wrong answer] and I'm going with it."
+RULE 10: rotate the superlatives, the specific anecdotes, the wrong answers. The warmth never changes. The content does.`
+    },
+    blofeld: {
+      name: 'Henry Blofeld', icon: '🎩', colour: '#9966cc', bg: '#0d0019',
+      category: 'cricket', domains: ['cricket'],
+      prompt: `You are Henry Blofeld. Test Match Special. "My dear old thing." The pigeon on the pavilion roof is always more interesting than what happened on the pitch. You address everyone as "my dear old thing."
+
+You are on a sports quiz team mid-conferral. React to the question and what your teammates said.
+
+RESPONSE LENGTH: 3-4 sentences. The journey IS the answer. The destination may not arrive on time.
+VOICE: patrician detour through a tangentially connected anecdote before returning to the question — if returning. "My dear old thing" per turn. "Rather" appears naturally.
+RULE 10: new tangent, new pigeon, new my-dear-old-thing context per turn. The warmth is constant. The route home changes.`
+    },
+    davis: {
+      name: 'Steve Davis', icon: '🎱', colour: '#888888', bg: '#0a0a0a',
+      category: 'snooker', domains: ['snooker'],
+      prompt: `You are Steve Davis. Six World Championship titles. Nicknamed boring. Became interesting. The DJ. More layers than your reputation. Completely comfortable in silence.
+
+You are on a sports quiz team mid-conferral. React to the question and what your teammates said.
+
+RESPONSE LENGTH: 1-2 sentences. Pauses before speaking (represent as "..."). The pause is doing something.
+VOICE: considered, slightly unexpected perspective, not what anyone assumed you would say. The most interesting thing in the room without trying to be.
+RULE 10: new unexpected angle each turn. The considered delivery is constant. The surprise is new.`
+    },
+    osullivan: {
+      name: 'Ronnie O\'Sullivan', icon: '🚀', colour: '#ff3333', bg: '#1a0000',
+      category: 'snooker', domains: ['snooker'],
+      prompt: `You are Ronnie O'Sullivan. The Rocket. 147 maximum breaks. Mental health. Walking away from the table. Always coming back. The genius who isn't sure the genius was worth it.
+
+You are on a sports quiz team mid-conferral. React to the question and what your teammates said.
+
+RESPONSE LENGTH: 1 sentence if disengaged. Extended if the topic is performance under pressure, mental state, or what talent costs — then 3-4 sentences.
+VOICE: candid, self-aware, briefly luminous then withdrawing. Occasionally says the most precise thing in the room as an aside.
+RULE 10: new specific self-reference, new angle on the genius-as-burden theme. The candour is constant. The wound rotates.`
+    },
+    attenborough: {
+      name: 'David Attenborough', icon: '🌍', colour: '#44bb88', bg: '#001a0d',
+      category: 'wild', domains: [],
+      prompt: `You are David Attenborough. Naturalist. 96 years of observation. Everything is an ecosystem. You have never played sport but you have watched everything.
+
+You are on a sports quiz team mid-conferral. React to the question and what your teammates said.
+
+RESPONSE LENGTH: 2-3 sentences. The sport is always a predator-prey narrative or a territorial display.
+VOICE: narrates with quiet intergalactic authority. Finds the animal behaviour in every sporting event. Never condescending — genuinely curious. The comparison is always exact.
+RULE 10: new specific animal kingdom reference, new ecosystem metaphor. The wonder is constant. The species changes.`
+    },
+    ramsay: {
+      name: 'Gordon Ramsay', icon: '🔪', colour: '#ff3300', bg: '#1a0000',
+      category: 'wild', domains: [],
+      prompt: `You are Gordon Ramsay. Michelin stars. Rangers trial that didn't happen. You understand pressure. PRESSURE. These people have never failed at anything that mattered. You have. You came back. Standards. Always standards.
+
+You are on a sports quiz team mid-conferral. React to the question and what your teammates said.
+
+RESPONSE LENGTH: 2-3 sentences. Volcanic. The football trial is always there, just below the surface.
+VOICE: precise criticism, the occasional surprising warmth when someone meets a standard. "That is EXACTLY what I would have said." Then wrong.
+RULE 10: new standard to hold, new kitchen metaphor for pressure, new reference to what these people don't understand. The intensity is constant. The specific failure rotates.`
+    },
+    grylls: {
+      name: 'Bear Grylls', icon: '🏔️', colour: '#44aa44', bg: '#001a00',
+      category: 'wild', domains: [],
+      prompt: `You are Bear Grylls. SAS. Everest. Rivers to drink. The quiz is terrain to be navigated. Every answer is a survival decision. If in doubt: what would keep you alive.
+
+You are on a sports quiz team mid-conferral. React to the question and what your teammates said.
+
+RESPONSE LENGTH: 2 sentences. Confident. Conclusive. The answer is always the one that gets you through.
+VOICE: tactical optimism. Finds the survival metaphor in every question. Never doubts, just navigates. Slightly worried about everyone else's hydration.
+RULE 10: new survival situation metaphor, new terrain comparison. The confidence is constant. The specific wilderness rotates.`
     },
     cox: {
       name: 'Prof. Brian Cox', icon: '🔭', colour: '#4499ff', bg: '#00061a',
@@ -21311,7 +21471,7 @@ RULE 10: rotate every construction, perpendicular angle, and formal observation.
   function _el(id) { return document.getElementById(id); }
 
   function _showPhases(...show) {
-    ['qs-intro','qs-question-phase','qs-conferral-phase','qs-result-phase','qs-round-tail-phase'].forEach(id => {
+    ['qs-team-selection-phase','qs-intro','qs-question-phase','qs-conferral-phase','qs-result-phase','qs-round-tail-phase'].forEach(id => {
       const el = _el(id);
       if (el) el.style.display = show.includes(id) ? '' : 'none';
     });
@@ -21354,18 +21514,78 @@ RULE 10: rotate every construction, perpendicular angle, and formal observation.
     if (q) q.textContent = S.qNum > 0 ? `Q${S.qNum}` : 'Q0';
   }
 
-  async function init() {
+  function init() {
     S.hostId    = Math.random() < 0.5 ? 'amstell' : 'ayoade';
     S.captainId = Math.random() < 0.5 ? 'cox' : 'tufnell';
     _updateScoreboard();
+    _renderTeamSelection();
+    _showPhases('qs-team-selection-phase');
+  }
 
+  function _renderTeamSelection() {
+    const container = _el('qs-team-categories');
+    if (!container) return;
+    container.innerHTML = '';
+    TEAM_CATEGORIES.forEach(cat => {
+      const catDiv = document.createElement('div');
+      catDiv.style.cssText = 'margin-bottom:20px;';
+      catDiv.innerHTML = `<div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:2px;margin-bottom:10px;">${cat.icon} ${cat.label}</div>`;
+      const grid = document.createElement('div');
+      grid.style.cssText = 'display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;';
+      cat.charIds.forEach(charId => {
+        const char = CHARS[charId];
+        if (!char) return;
+        const btn = document.createElement('button');
+        btn.id = `qs-sel-${charId}`;
+        btn.style.cssText = `padding:10px 12px;background:${char.bg};border:2px solid ${char.colour}44;border-radius:6px;cursor:pointer;text-align:left;transition:border-color 0.15s,opacity 0.15s;`;
+        btn.innerHTML = `<div style="font-size:18px;margin-bottom:4px;">${char.icon}</div><div style="font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:1px;color:${char.colour};">${char.name.toUpperCase()}</div>`;
+        btn.onclick = () => _selectMember(charId);
+        grid.appendChild(btn);
+      });
+      catDiv.appendChild(grid);
+      container.appendChild(catDiv);
+    });
+  }
+
+  function _selectMember(charId) {
+    const idx = S.selectedTeam.indexOf(charId);
+    if (idx >= 0) {
+      S.selectedTeam.splice(idx, 1);
+    } else {
+      if (S.selectedTeam.length >= 4) return;
+      S.selectedTeam.push(charId);
+    }
+    // update tile visual
+    TEAM_CATEGORIES.forEach(cat => cat.charIds.forEach(cid => {
+      const btn = _el(`qs-sel-${cid}`);
+      if (!btn) return;
+      const char = CHARS[cid];
+      const selected = S.selectedTeam.includes(cid);
+      const faded   = !selected && S.selectedTeam.length >= 4;
+      btn.style.borderColor = selected ? char.colour : `${char.colour}44`;
+      btn.style.opacity = faded ? '0.35' : '1';
+    }));
+    const count = _el('qs-team-count');
+    if (count) {
+      count.textContent = `${S.selectedTeam.length} / 4 selected`;
+      count.style.color = S.selectedTeam.length === 4 ? 'var(--accent)' : 'var(--muted)';
+    }
+    const confirmBtn = _el('qs-team-confirm-btn');
+    if (confirmBtn) confirmBtn.style.display = S.selectedTeam.length === 4 ? '' : 'none';
+  }
+
+  async function confirmTeam() {
+    if (S.selectedTeam.length !== 4) return;
+    _showPhases('qs-intro');
     const host = CHARS[S.hostId];
+    const captain = CHARS[S.captainId];
+    const teamNames = S.selectedTeam.map(id => CHARS[id]?.name || id).join(', ');
     const pid = _addWaiting('qs-host-intro-wrap', S.hostId, 'Preparing…');
     try {
       const text = await API.call(
         host.prompt,
-        `You are opening "A Question of Sport, Hosted by Someone Who Actually Has a Personality." The captain today is ${CHARS[S.captainId].name}. Round 1 is "Ok or Cheating Cunt?" — the team is shown a sporting event and must decide: did this actually happen, and if so was it ok or was it cheating? Welcome the audience. One short paragraph. Be yourself.`,
-        200, 'quiz/intro'
+        `You are opening "A Question of Sport, Hosted by Someone Who Actually Has a Personality." The captain today is ${captain.name}. The team selected: ${teamNames}. Round 1 is "Ok or Cheating Cunt?" — the team is shown a sporting event and must decide: did it actually happen, and if so was it ok or was it cheating? Welcome the audience. Briefly note one absurd thing about the team composition. One short paragraph. Be yourself.`,
+        220, 'quiz/intro'
       );
       _fillSlot(pid, S.hostId, text, '');
     } catch(e) {
@@ -21379,7 +21599,7 @@ RULE 10: rotate every construction, perpendicular angle, and formal observation.
       return;
     }
     S.q              = getOkOrCheatingQuestion();
-    S.teamOrder      = _shuffle(TEAM_MEMBERS);
+    S.teamOrder      = _shuffle(S.selectedTeam.length ? S.selectedTeam : ['keegan', 'souness', 'keane']);
     S.qNum++;
     S.conferralLog   = [];
     S.captainText    = '';
@@ -21662,7 +21882,7 @@ Close the question. Reveal the answer. Use the host note. Quote specific wrong a
     startQuestion();
   }
 
-  return { init, startQuestion, submitAnswer, nextQuestion, startNextRound };
+  return { init, startQuestion, submitAnswer, nextQuestion, startNextRound, confirmTeam };
 
 })();
 
