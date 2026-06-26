@@ -3402,4 +3402,134 @@ Characters with low self-awareness should not be given lines like "I notice I'm 
 **Depends on:** BL-231 (emotional taxonomy — self_awareness maps directly onto FIGHT/FLIGHT/FREEZE modulation)
 
 - CD3: UBV=8 TC=4 RR=6 → CoD=18, Dur=3 (schema + PMC scoring), **CD3=6.0**
-- Status: OPEN — raised 2026-06-26. Schema update + PMC scoring is small. Backfill of other panels is ongoing.
+- Status: **CLOSED** — 2026-06-26. CharacterMeta schema updated, Self-Awareness Spectrum section added to domain model with bands + prompt engineering rules, TURN_RULES RULE 9 added with per-character PMC scores. Backfill of other panels ongoing. Commit 2ec7f67.
+
+---
+
+## BL-233 — EPIC: Quiz Panel Show — "A Question of Sport, Hosted by Someone Who Actually Has a Personality"
+
+**Raised:** 2026-06-26 | **By:** Rod
+**Epic:** Quiz Panel Show (parent item — not a work item)
+**Feature:** quiz
+
+**Concept:** Interactive quiz show in the Heckler & Cox universe. Format base: A Question of Sport. Host register: Never Mind the Buzzcocks (Amstell), Taskmaster (Greg Davies), Have I Got News for You. NOT the actual AQoS vibe — too warm, too kind, too quiet. The format serves the comedy; the sport is the excuse.
+
+**Two rotating host characters (full 17-attribute profiles, built as BL-234 and BL-235):**
+- **Simon Amstell** — acidic, personal, fast, goes directly for the wound. Specific knowledge deployed as a weapon. Contempt is surgical and visible. Crystal Maze version: maintains authority through precision and timing.
+- **Richard Ayoade** — deadpan slow-burn, apparently baffled, devastating in precision. Intelligence hidden under apparent confusion. Crystal Maze reference (2017–2019). Surreal non-sequiturs that somehow land. Treats contestants as a minor inconvenience to a philosophical problem.
+
+Both are full characters in the Heckler & Cox cast universe. Built to the same 17-attribute schema as Souness, Lineker, etc.
+
+**Team composition:**
+- User plays as team member (start here; captain mode later)
+- 4 AI teammates drawn from existing PMC cast + fish characters — Keegan, Rooney, Owen, Micah, Souness, Grylls, Attenborough, Ramsay, Peterson available. Team is configured per session.
+- Teams of 5 total (user + 4 AI).
+- Opposing team: also AI-generated, also gets things wrong. Sometimes spectacularly.
+- Team confers before captain gives answer — quick conversation (the conferral IS the comedy).
+
+**Rounds (individual BL items per round):**
+
+| Round | Name (working) | BL | Mechanic |
+|-------|---------------|-----|---------|
+| 1 | Cheating Cunt or Not | BL-237 | Real events + bogus ones. Team argues. Host roasts the argument and the answer. |
+| 2 | What Happened Next | BL-238 | Bizarre real/invented sporting events. Progressive reveal or immediate. |
+| 3 | Name the [World Cup] Incident | BL-239 | 3-clue progressive reveal. Teams guess after each clue. |
+| 4 | Howzat? | BL-240 | How did the [person] die? 3-clue reveal. Deceased renamed. Host has full context for roasting. |
+
+**Architecture Three Amigos needed (BL-236):**
+- How does team conferral work mechanically? Separate AI call per team member or one multi-character call?
+- How does the host's roasting inject into the flow? After each answer? After conferral? Both?
+- How does the opposing team's wrong answer generate? AI call or curated wrong-answer pool?
+- Host character selection UI — how does user pick Amstell vs Ayoade?
+- Round selection — fixed order or user picks?
+
+**Sub-items (in CD3 order once scored):**
+- BL-234: Simon Amstell character file
+- BL-235: Richard Ayoade character file
+- BL-236: Quiz engine architecture Three Amigos + core mechanics
+- BL-237: Round 1 — Cheating Cunt or Not
+- BL-238: Round 2 — What Happened Next
+- BL-239: Round 3 — Name the Incident (3-clue)
+- BL-240: Round 4 — Howzat? (death/injury reveal)
+
+- Epic container only — not a work item. Individual items above.
+- Status: OPEN — raised 2026-06-26. Start with BL-234 and BL-235 (character files are fast and unlock everything).
+
+---
+
+## BL-234 — Simon Amstell: full character file for Quiz Panel Show host
+
+**Raised:** 2026-06-26 | **By:** Rod
+**Epic:** Quiz Panel Show
+**Feature:** quiz
+
+**Story:** As the quiz engine, I want a full Simon Amstell character file (17-attribute schema) so that the quiz host has a complete wound profile, escalation shape, relationship map, and voice that generates authentic Amstell-register hosting.
+
+**Character brief:**
+- Born 1979, Brentwood, Essex. Jewish. Awkward teenager who found comedy as survival.
+- Never Mind the Buzzcocks host 2006–2009. Resigned because he felt too cruel. That awareness is the wound and the comedy simultaneously.
+- Retreat into meditation, veganism, spiritual seeking (his 2019 Netflix special "Carnage" — mock-documentary set in vegan future). Has genuinely looked for peace. Cannot find it. Goes back on television.
+- Guest presenter on other panel shows. Always the cleverest person in the room. Resents that this is obvious.
+- Voice: fast, specific, uses the subject's own words against them, pauses that last exactly one beat too long, apparent sincerity masking devastation.
+- Self-awareness: 0.95 — almost entirely aware. The one gap: he doesn't quite know how mean he actually is. He thinks he's being playful.
+- Wound: the moment he realised he'd made someone cry on television and felt bad AND good about it simultaneously.
+- Primary mechanic as host: **Specific Mockery** — uses the exact words the contestant just used to dismantle them. Never invents the charge. Always uses their own ammunition.
+- Secondary: **The Sincere Question** — asks something that sounds genuine, waits, then responds to whatever they say as if it confirmed his darkest suspicion.
+
+**Schema target:** Full 17 attributes. Panels: Quiz (primary anchor), Comedy Room (guest — can cross over).
+
+- CD3: UBV=9 TC=8 RR=3 → CoD=20, Dur=1, **CD3=20.0**
+- Depends on: BL-233 (epic definition)
+- Status: OPEN — raised 2026-06-26. Character file only — no code. Can start immediately.
+
+---
+
+## BL-235 — Richard Ayoade: full character file for Quiz Panel Show host
+
+**Raised:** 2026-06-26 | **By:** Rod
+**Epic:** Quiz Panel Show
+**Feature:** quiz
+
+**Story:** As the quiz engine, I want a full Richard Ayoade character file (17-attribute schema) so that the second rotating host has a complete profile distinct from Amstell — same authority, completely different register.
+
+**Character brief:**
+- Born 1977, Ipswich. Nigerian-Norwegian heritage. Cambridge (studied law, switched to performing arts).
+- IT Crowd (Moss) — the character so good people think he IS Moss. He is not. He finds this the most specific kind of exhausting.
+- Director: Submarine (2010), The Double (2013). Takes the work seriously. Has opinions about film that he will not share with you unless you specifically ask and possibly not even then.
+- Crystal Maze host 2017–2019: delivered chaos with serene precision. Never raised his voice. Never needed to.
+- Travel Man (Channel 4): him being a magnificently terrible travel companion. Finds tourism philosophically irritating. Goes anyway.
+- Voice: unhurried, precise, perpendicular to the expected response. Observes the proceedings from a slight remove, as if they are happening in a documentary he did not consent to appear in. Occasional very specific factual interjections that have nothing to do with the question.
+- Self-awareness: 0.92 — very high. Knows exactly what he's doing. The apparent confusion is precision.
+- Wound: being confused with Moss in public. Not angry about it. Something worse than angry. A patient, encyclopedic, bottomless disappointment.
+- Primary mechanic as host: **The Perpendicular Response** — responds to whatever the contestant says by engaging with a completely different, adjacent aspect. Not ignoring them — going somewhere slightly wrong that somehow lands more accurately.
+- Secondary: **The Factual Aside** — during any moment of contestant chaos, delivers one precise, relevant, tangential fact. Deadpan. Does not explain why he said it. Moves on.
+- Relationship to Amstell: they have met. There was a panel show. Both were slightly too precise for the room. Neither mentions it.
+
+**Schema target:** Full 17 attributes. Panels: Quiz (primary anchor), Comedy Room (guest).
+
+- CD3: UBV=9 TC=8 RR=3 → CoD=20, Dur=1, **CD3=20.0**
+- Depends on: BL-233 (epic definition)
+- Status: OPEN — raised 2026-06-26. Character file only — no code. Can start immediately.
+
+---
+
+## BL-236 — Quiz engine: architecture Three Amigos + core mechanics
+
+**Raised:** 2026-06-26 | **By:** Rod
+**Epic:** Quiz Panel Show
+**Feature:** quiz
+
+**Story:** As the quiz engine, I want all architecture decisions agreed before any code is written — team conferral mechanics, host injection, opposing team generation, round structure, host selection UI.
+
+**Three Amigos questions:**
+1. Team conferral: separate AI call per team member (5 calls) or one multi-character call returning all 4 AI voices? Multi-character is faster; per-character preserves individual voice.
+2. Host injection: does the host comment after conferral only, or also after the captain's answer, or continuously?
+3. Opposing team: AI-generated wrong answer (one call) or curated wrong-answer pool per question?
+4. Host selection: UI toggle before starting (pick Amstell or Ayoade), or random per session?
+5. Round order: fixed (1→2→3→4) or user picks?
+6. Question bank: where does it live? Hardcoded JS arrays (fast to ship), Worker endpoint (scalable), or generated per session by AI (slow but infinite)?
+
+**Depends on:** BL-234, BL-235 (hosts must exist before engine references them)
+
+- CD3: UBV=8 TC=7 RR=8 → CoD=23, Dur=2, **CD3=11.5**
+- Status: OPEN — raised 2026-06-26. Three Amigos needed. Do after BL-234 and BL-235 complete.
