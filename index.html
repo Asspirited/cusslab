@@ -1362,6 +1362,7 @@
       <span class="nav-group-count">8</span>
     </div>
     <div class="nav-items" id="ni-sports">
+      <div class="tab" onclick="switchTab(event,'quiz')"><span class="tab-icon">🏆</span>A Question of Sport</div>
       <div class="tab" onclick="switchTab(event,'football')"><span class="tab-icon">⚽</span>Post Match Cunditry</div>
       <div class="tab" onclick="switchTab(event,'pmc')"><span class="tab-icon">🏆</span>World Cup Cunditry</div>
       <div class="tab" onclick="switchTab(event,'golf')"><span class="tab-icon">⛳</span>The 19th Hole</div>
@@ -1369,7 +1370,6 @@
       <div class="tab" onclick="switchTab(event,'cricket')"><span class="tab-icon">🏏</span>The Long Room</div>
       <div class="tab" onclick="switchTab(event,'racing')"><span class="tab-icon">🏇</span>The Final Furlong</div>
       <div class="tab" onclick="switchTab(event,'snooker')"><span class="tab-icon">🎱</span>The Crucible Corner</div>
-      <div class="tab" onclick="switchTab(event,'quiz')"><span class="tab-icon">🏆</span>A Question of Sport</div>
     </div>
   </div>
 
@@ -21097,6 +21097,7 @@ const QuizShow = (() => {
     teamOrder: [],
     conferralLog: [],
     captainText: '',
+    captainOverride: false,
   };
 
   const TEAM_MEMBERS = ['keegan', 'souness', 'keane'];
@@ -21286,6 +21287,18 @@ RULE 10: rotate every construction, perpendicular angle, and formal observation.
     return null;
   }
 
+  // BL-247 — captain override mechanic
+  // Fires after each member's turn. Captain cuts conferral short.
+  // Higher probability if team is going in circles (multiple silents, longer conferral).
+  function _checkCaptainOverride(memberIdx) {
+    if (memberIdx < 1) return Math.random() < 0.02; // very rare pre-first-speaker
+    const silentCount = S.conferralLog.filter(e => e.isSilent).length;
+    let prob = 0.09;
+    if (silentCount >= 2) prob += 0.18; // fed up with silence
+    if (memberIdx >= 2)   prob += 0.04; // longer conferral = more wound up
+    return Math.random() < prob;
+  }
+
   function _el(id) { return document.getElementById(id); }
 
   function _showPhases(...show) {
@@ -21356,11 +21369,12 @@ RULE 10: rotate every construction, perpendicular angle, and formal observation.
       UI.toast('Question bank not loaded — check quiz-questions.js', 'error');
       return;
     }
-    S.q            = getOkOrCheatingQuestion();
-    S.teamOrder    = _shuffle(TEAM_MEMBERS);
+    S.q              = getOkOrCheatingQuestion();
+    S.teamOrder      = _shuffle(TEAM_MEMBERS);
     S.qNum++;
-    S.conferralLog = [];
-    S.captainText  = '';
+    S.conferralLog   = [];
+    S.captainText    = '';
+    S.captainOverride = false;
     _updateScoreboard();
     _showPhases('qs-question-phase');
 
@@ -21401,6 +21415,7 @@ RULE 10: rotate every construction, perpendicular angle, and formal observation.
         _fillSlot(pid, memberId, silenceText, inDomain ? 'Expert blank' : '');
         ctx += `${char.name.toUpperCase()}: "[silent]"\n`;
         S.conferralLog.push({ charId: memberId, text: silenceText, isSilent: true, wasExpert: inDomain });
+        if (_checkCaptainOverride(memberIdx)) { S.captainOverride = true; break; }
         continue;
       }
 
@@ -21423,6 +21438,15 @@ RULE 10: rotate every construction, perpendicular angle, and formal observation.
         ctx += `${char.name.toUpperCase()}: "[silent]"\n`;
         S.conferralLog.push({ charId: memberId, text: '[no comment]' });
       }
+
+      if (_checkCaptainOverride(memberIdx)) { S.captainOverride = true; break; }
+    }
+
+    if (S.captainOverride) {
+      const container = _el('qs-conferral-container');
+      if (container) container.insertAdjacentHTML('beforeend',
+        `<div style="text-align:center;font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:3px;color:var(--muted);padding:8px 0;border-top:1px solid var(--border);margin:8px 0;">— CAPTAIN CUTS IN —</div>`
+      );
     }
 
     await _runCaptain(ctx);
@@ -21460,9 +21484,12 @@ RULE 10: rotate every construction, perpendicular angle, and formal observation.
       const silentNote = silentMembers.length
         ? `\nSILENT MEMBERS: ${silentMembers.map(e => `${CHARS[e.charId]?.name || e.charId}${e.wasExpert ? ' (their domain — gave nothing)' : ''}`).join(', ')}. You may call them out or ignore them.`
         : '';
+      const overrideNote = S.captainOverride
+        ? `\nOVERRIDE: You cut the conferral short. You've heard enough — the team was going nowhere, someone said something idiotic, or you simply knew and couldn't wait. Lead with cutting them off ("I've heard enough" / "Right, that's enough" / similar). Then give your wrong answer with full confidence.`
+        : '';
       const text = await API.call(
         cap.prompt,
-        `QUESTION: "${S.q.description}"\n\nTeam said:\n${ctx}${silentNote}\n\nYou are the captain. The team has spoken. Choose your prop. Demonstrate. Give the final answer. The answer is wrong. Your confidence is complete.`,
+        `QUESTION: "${S.q.description}"\n\nTeam said:\n${ctx}${silentNote}${overrideNote}\n\nYou are the captain. The team has spoken${S.captainOverride ? ' — enough of them, anyway' : ''}. Choose your prop. Demonstrate. Give the final answer. The answer is wrong. Your confidence is complete.`,
         420, 'quiz/captain'
       );
       _fillSlot(pid, S.captainId, text, 'Captain — final answer');

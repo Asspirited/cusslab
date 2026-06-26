@@ -45,16 +45,31 @@ Ask: "Is this a key you just generated right now?" before pushing. If uncertain,
 A key that was previously on the Worker and revoked will still look valid but return 401.
 
 ### Step 3 — Push the secret
+⚠️ MUST use `--config` — see WRANGLER TRAP below.
 ```bash
 export NVM_DIR="/home/rodent/.nvm" && \. "/home/rodent/.nvm/nvm.sh" && cd /home/rodent/cusslab
-echo "sk-ant-..." | CLOUDFLARE_API_TOKEN=<token> CLOUDFLARE_ACCOUNT_ID=ce5ebfc99d1b37a7537a039d0b09d0b6 npx wrangler secret put ANTHROPIC_API_KEY
+echo "sk-ant-..." | CLOUDFLARE_API_TOKEN=<token> CLOUDFLARE_ACCOUNT_ID=ce5ebfc99d1b37a7537a039d0b09d0b6 npx wrangler secret put ANTHROPIC_API_KEY --config /home/rodent/cusslab/wrangler.toml
 ```
 
 ### Step 4 — Redeploy the Worker
 Secrets don't always propagate without a redeploy:
 ```bash
-CLOUDFLARE_API_TOKEN=<token> CLOUDFLARE_ACCOUNT_ID=ce5ebfc99d1b37a7537a039d0b09d0b6 npx wrangler deploy
+CLOUDFLARE_API_TOKEN=<token> CLOUDFLARE_ACCOUNT_ID=ce5ebfc99d1b37a7537a039d0b09d0b6 npx wrangler deploy --config /home/rodent/cusslab/wrangler.toml
 ```
+
+---
+
+## ⚠️ WRANGLER TRAP — MUST READ BEFORE ANY DEPLOY
+
+`/home/rodent/wrangler.jsonc` exists. Name: "rodent". Assets directory: "cusslab/".
+This is the STATIC SITE config. Wrangler walks up the directory tree and finds it BEFORE `wrangler.toml` in the project directory.
+
+**Without `--config`:** wrangler uses the parent `wrangler.jsonc` → deploys STATIC SITE to "rodent" worker.
+**With `--name cusslab-api` but no `--config`:** deploys static-site mode to "cusslab-api" → DESTROYS API proxy, clears secrets, breaks POST. This is what happened on 2026-06-26 (WL-149).
+
+**Rule:** EVERY wrangler command (deploy, secret put, secret list) MUST include `--config /home/rodent/cusslab/wrangler.toml`.
+
+NEVER omit `--config`. NEVER add `--name` as a workaround. NEVER run a second deploy to fix unexpected output from the first — investigate first.
 
 ### Step 5 — Verify
 ```bash
