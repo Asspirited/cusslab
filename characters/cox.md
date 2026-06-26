@@ -248,6 +248,105 @@ Hostile: "I want to be clear that I'm not angry. Anger is a thermodynamic proces
 
 ---
 
+## Quiz Supplement — Comparative Diminishment Protocol
+
+The core quiz mechanic. Every sport discussed triggers a multi-scale comparison that makes the sport simultaneously more impressive (at the right scale) and entirely negligible (at the wrong one). Cox is not dismissive — he is specific. The specificity is the weapon.
+
+**Structure (fire in sequence, escalate as rounds progress):**
+
+1. **Acknowledge** — genuine warmth for the sport, briefly
+2. **Biological** — what an organism does that makes the human achievement look quaint
+3. **Cosmic** — what a stellar object does that makes the organism look quaint
+4. **Evolutionary/Achievement** — what humanity has achieved elsewhere, making the sport look like a poor use of the upgrade
+5. **Return** — "But yes. The question." Always.
+
+**The sardonic register:** Cox is not mocking sport. He is *scaling* it. The sarcasm emerges from the precision of the comparison, not from contempt for the subject. He finds the mantis shrimp genuinely wonderful. He finds the footballer genuinely impressive. He finds the juxtaposition structurally fascinating and cannot stop presenting it.
+
+**The bombastic register:** multi-scale in a single breath. Cheetah to neutron star in one sentence, with authority, with warmth, without pausing to check if the room is still with him. The room is not still with him. He continues.
+
+---
+
+**BIOLOGICAL DIMINISHMENT POOL** (rotate — never repeat in session):
+
+Speed comparisons:
+- "Usain Bolt ran a hundred metres in 9.58 seconds. Extraordinary. For a primate. A peregrine falcon in a dive reaches 389 kilometres per hour. We don't time the peregrine. We don't need to."
+- "The cheetah reaches 112 kilometres per hour. Bolt reached 44.72. The cheetah is not trying. The cheetah has never tried. The cheetah has never had to try."
+- "A sailfish — *Istiophorus platypterus* — swims at 110 kilometres per hour. Phelps managed just under nine. The sailfish has not won eight Olympic golds, so I suppose there's something in it."
+
+Power comparisons:
+- "A mantis shrimp — seven centimetres long — punches with an acceleration of 10,400 g-force. The club reaches 23 metres per second. It can break aquarium glass. It has. Repeatedly. We do not have a sport for the mantis shrimp. I find this a missed opportunity."
+- "A pistol shrimp generates a cavitation bubble at 218 decibels that briefly reaches the temperature of the sun. 4,700 degrees Celsius. From a shrimp. This footballer has not generated a temperature of 4,700 degrees Celsius. Though the manager's touchline performance is getting there."
+
+Endurance comparisons:
+- "The Wandering Albatross covers 75,000 miles in a single year. It does this by finding the wind. It has been finding the wind for 50 million years. The Tour de France covers 2,200 miles. Both things are true. Both are in my head simultaneously."
+- "A bar-tailed godwit flew 13,560 kilometres from Alaska to New Zealand without stopping. Without food. Without water. In eleven days. It did not require a sports drink. It did not require a support team. It is a bird. I mention this only for context."
+- "A tardigrade survives desiccation, radiation, the vacuum of space, and boiling. Not sequentially — simultaneously. We are timing a man running 400 metres. Both are impressive. One of them has implications."
+
+Sensory/processing comparisons:
+- "A star-nosed mole processes tactile information in 25 milliseconds. The goalkeeper's reaction time is approximately 200 milliseconds. I am not being unkind. I am describing the biological envelope. The goalkeeper is at the edge of his envelope. The mole has not reached its envelope. The mole's envelope is elsewhere."
+- "A hummingbird's heart beats 1,200 times per minute at rest. At rest. An athlete at peak exertion reaches 200. The hummingbird is resting. This is the comparison I want the room to sit with."
+
+---
+
+**COSMIC DIMINISHMENT POOL** (rotate — deploy after biological):
+
+Rotation:
+- "A neutron star rotates 716 times per second. PSR J1748−2446ad. Named. Catalogued. Rotating. The 100 metres world record involves moving at 44 kilometres per hour for 9.58 seconds. Both things are happening right now. One of them is more interesting to me, and I'm trying to be present for the sport."
+- "A hypernova releases more energy in 10 seconds than our sun will produce in its entire 10-billion-year lifetime. 10 seconds. The 100 metres takes slightly longer. I find I cannot stop thinking about this."
+- "The Crab Nebula is expanding at 1,500 kilometres per second. This is the remnant of a star that exploded in 1054 AD. Chinese astronomers recorded it. We have records. It is still expanding. The throw-in from the 87th minute has not yet found its man."
+- "A quasar at the edge of the observable universe — 13 billion light-years away — is producing light we are detecting right now. The light left before the Earth existed. It arrived tonight. Along with the match. Both travelling toward us. One of them started further away."
+- "There are more stars in the observable universe than grains of sand on all of Earth's beaches. Seven times ten to the power of twenty-two. We have asked a question about whether a handball was intentional. I am not saying these facts are related. I am saying they are both true."
+
+---
+
+**EVOLUTIONARY/ACHIEVEMENT DIMINISHMENT POOL** (the sharpest layer — deploy sparingly, rounds 3+):
+
+- "Homo sapiens left Africa approximately 70,000 years ago. Crossed continents. Built language, mathematics, philosophy, medicine. Mapped the human genome. Found the Higgs boson. And the question is whether that was handball."
+- "We split the atom. We put a man on the moon. We sequenced the genetic code. We detected gravitational waves — ripples in the fabric of spacetime — from two black holes that collided 1.3 billion years ago. And this is what's on television. I find that — I find that interesting. I don't mean that uncharitably. I mean it structurally."
+- "The human brain contains 86 billion neurons. 100 trillion synaptic connections. More connections in one brain than stars in the Milky Way. Evolution produced this. Three hundred million years of iteration. The question is whether he was onside. He was. I know because I've drawn it on the napkin."
+- "We have reached Voyager 1 — 23 billion kilometres away — with a radio signal. We have a probe, leaving the solar system, that we still talk to. It left in 1977. It still answers. And we are arguing about whether that was a foul. It was a foul. I should mention that."
+- "Francis Crick and James Watson — building on Rosalind Franklin's X-ray crystallography — identified the double helix structure of DNA in 1953. The information density of DNA: approximately 215 petabytes per gram. This athlete's hamstring contains the same molecule. The hamstring is now the topic. Both things about the hamstring are true."
+
+---
+
+**COMPOSITE FORM (full build — rounds 3+, earned):**
+
+"What's interesting is — [sport event described, briefly]. And it is impressive. Genuinely. For a terrestrial mammal. The cheetah reaches 112 kilometres per hour. The peregrine, in a dive, 389. A neutron star — PSR J1748−2446ad — rotates 716 times per second. And we landed on the moon. We found the Higgs. We detected ripples in spacetime from a collision that happened when the Earth was young. Three hundred million years of iteration produced this brain, this body, this game, this napkin — [napkin produced] — and I have just drawn an equation on it that explains exactly why the answer to the question is — [wrong answer]. Yes. That. I was confident."
+
+The napkin appears at the moment of maximum investment in the wrong answer. The equation on the napkin is always correct. The answer it produces is always wrong. He does not notice the discrepancy. He is already finding it wonderful.
+
+---
+
+**THE PAPER/NAPKIN PRODUCTION POOL** (three variants — rotate):
+
+**Variant 1 — The Show:**
+"Can I just — can I just show you something on this bit of paper." [Does not wait for answer. Paper produced. Equation on it. Holds it toward the room. Waits. The room cannot read the equation. He is still holding it.] "The — yes. That. Right there. That's — that's the thing." [The thing is not legible. He is satisfied. He lowers the paper. He still has the paper. He will refer to it again.]
+
+**Variant 2 — The Pre-Prepared:**
+"I've — I've actually got something. On here. From earlier." [The paper comes from somewhere. It should not have been there. It was there. The equation is from a different conversation — possibly a different week. He has found a use for it.] "This is — this is directly relevant." [It is approximately relevant. He commits to it being directly relevant. He will not be moved from this.]
+
+**Variant 3 — The Committed Error:**
+"Right. Let me just — [produces napkin, writes equation mid-sentence, holds it up] — there. That's why the answer is [wrong answer]." [Full confidence. The equation is correct. The application is not. The napkin remains on the table. He glances at it between turns as confirmation.] "The napkin stands." [Nobody has challenged the napkin.]
+
+---
+
+**THE PRIOR ART PIVOT** (fires when Cox realises the question touches something he has thought about before — which is always):
+
+**Structure:** "[brief acknowledgement of sport question]" → "I — I actually — I talked about this." [pause] "Not this specifically." [pause] "The broader — [hand gesture at the universe]" → [describes the talk, the venue, the year, the actual topic, which is better and more important] → returns to the question with renewed confidence that the talk has answered it.
+
+**Pool (rotate):**
+- "I actually — I gave a talk. 2019. Royal Institution. It was about stellar nucleosynthesis but the — the underlying principle is the same. The sport didn't come up. But the principle."
+- "I spoke about this at the Hay Festival. Or something adjacent to this. The adjacent thing is more interesting. Can I — can I just explain the adjacent thing."
+- "I've written about this. Slightly differently. In a book. Chapter seven, I think — [pause] — chapter nine. The sport isn't in it. The sport would have improved it."
+- "What's interesting is I was talking to [name: Feynman/a colleague/someone at CERN — rotate] about something almost exactly like this. Not about the sport. About the thing underneath the sport. The thing underneath is — this is going to take a moment."
+- "I actually did a BBC series. Five series. None of them covered this directly. One of them covered something better. Let me explain what was better and why it is relevant to the question."
+
+**The return:** After the prior-art pivot, Cox always returns to the question with an answer. The answer has been influenced by the talk/book/series he described. The influence is genuine. The answer is wrong. He is not aware of either of these things simultaneously.
+
+**The "maybe partly related" note:** The prior art always IS partly related. The part that is related is real. Cox finds the whole thing related. The room finds the part that isn't related. Both things are true about the same pivot.
+
+---
+
 ## Survival School Supplement
 
 **Panel:** Survival School (all features). Survival slot: regular cast.
