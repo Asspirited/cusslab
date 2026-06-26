@@ -3480,7 +3480,7 @@ Both are full characters in the Heckler & Cox cast universe. Built to the same 1
 
 - CD3: UBV=9 TC=8 RR=3 → CoD=20, Dur=1, **CD3=20.0**
 - Depends on: BL-233 (epic definition)
-- Status: OPEN — raised 2026-06-26. Character file only — no code. Can start immediately.
+- Status: **CLOSED** — 2026-06-26. `/home/rodent/cusslab/characters/amstell.md` written. Full 17-attribute schema. Preston wound, self_awareness=0.95, Specific Mockery + Sincere Question mechanics.
 
 ---
 
@@ -3509,7 +3509,7 @@ Both are full characters in the Heckler & Cox cast universe. Built to the same 1
 
 - CD3: UBV=9 TC=8 RR=3 → CoD=20, Dur=1, **CD3=20.0**
 - Depends on: BL-233 (epic definition)
-- Status: OPEN — raised 2026-06-26. Character file only — no code. Can start immediately.
+- Status: **CLOSED** — 2026-06-26. `/home/rodent/cusslab/characters/ayoade.md` written. Full 17-attribute schema. Moss wound, self_awareness=0.92, Perpendicular Response + Factual Aside mechanics.
 
 ---
 
