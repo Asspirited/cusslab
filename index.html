@@ -3101,6 +3101,13 @@
     <button class="btn" id="qs-next-btn" style="display:none;" onclick="QuizShow.nextQuestion()">NEXT QUESTION ▶</button>
   </div>
 
+  <!-- Round tail phase: host review after all questions in the round -->
+  <div id="qs-round-tail-phase" style="display:none;margin-top:20px;">
+    <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:2px;margin-bottom:12px;">Round close</div>
+    <div id="qs-round-tail-content"></div>
+    <button class="btn" id="qs-next-round-btn" style="display:none;margin-top:16px;" onclick="QuizShow.startNextRound()">ROUND 2 ▶</button>
+  </div>
+
   <div style="display:flex;gap:8px;margin-top:20px;">
     <button class="feedback-btn" onclick="panelRating(event,'quiz','💩')" title="Didn't land">💩</button>
     <button class="feedback-btn" onclick="panelRating(event,'quiz','😐')" title="Fine">😐</button>
@@ -21090,6 +21097,8 @@ const QuizShow = (() => {
   const S = {
     score: { user: 0, ai: 0 },
     qNum: 0,
+    roundNum: 1,
+    roundLog: [],
     q: null,
     userAnswer: null,
     hostId: null,
@@ -21302,7 +21311,7 @@ RULE 10: rotate every construction, perpendicular angle, and formal observation.
   function _el(id) { return document.getElementById(id); }
 
   function _showPhases(...show) {
-    ['qs-intro','qs-question-phase','qs-conferral-phase','qs-result-phase'].forEach(id => {
+    ['qs-intro','qs-question-phase','qs-conferral-phase','qs-result-phase','qs-round-tail-phase'].forEach(id => {
       const el = _el(id);
       if (el) el.style.display = show.includes(id) ? '' : 'none';
     });
@@ -21404,7 +21413,8 @@ RULE 10: rotate every construction, perpendicular angle, and formal observation.
   async function _runConferral() {
     let ctx = `The question: "${S.q.description}"\n\nTeam conferral so far:\n`;
 
-    for (const memberId of S.teamOrder) {
+    for (let memberIdx = 0; memberIdx < S.teamOrder.length; memberIdx++) {
+      const memberId = S.teamOrder[memberIdx];
       const char    = CHARS[memberId];
       const inDomain = char.domains && char.domains.includes(S.q.sport);
       const maxTok  = inDomain ? 260 : 160;
@@ -21559,10 +21569,31 @@ Close the question. Reveal the answer. Use the host note. Quote specific wrong a
     return { userPoints, aiPoints, wasInvented: false, aiVerdict };
   }
 
+  function _logQuestion(score) {
+    const userLabel = { REAL_CHEATING: 'CHEATING CUNT', REAL_OK: 'OK — IT HAPPENED' }[S.userAnswer] || S.userAnswer;
+    const aiLabel   = { REAL_CHEATING: 'CHEATING CUNT', REAL_OK: 'OK — IT HAPPENED' }[score.aiVerdict] || score.aiVerdict;
+    const notable   = [];
+    if (score.wasInvented) notable.push('INVENTED — we made this up');
+    if (S.captainOverride) notable.push('Captain cut conferral short');
+    S.conferralLog.filter(e => e.isSilent && e.wasExpert).forEach(e => {
+      notable.push(`${CHARS[e.charId]?.name || e.charId} went blank on their own domain`);
+    });
+    S.roundLog.push({
+      qNum: S.qNum,
+      description: S.q.description,
+      userLabel, userPoints: score.userPoints,
+      aiLabel, aiPoints: score.aiPoints,
+      wasInvented: score.wasInvented,
+      captainText: S.captainText.slice(0, 120),
+      notable,
+    });
+  }
+
   function _applyScore({ userPoints, aiPoints, wasInvented, aiVerdict }) {
     S.score.user += userPoints;
     S.score.ai   += (aiPoints || 0);
     _updateScoreboard();
+    _logQuestion({ userPoints, aiPoints, wasInvented, aiVerdict });
     const el = _el('qs-points-awarded');
     if (el) {
       const aiLabel = { REAL_CHEATING: 'CHEATING CUNT', REAL_OK: 'OK' }[aiVerdict] || aiVerdict;
@@ -21576,15 +21607,62 @@ Close the question. Reveal the answer. Use the host note. Quote specific wrong a
         el.style.color = userPoints > 0 ? '#4ade80' : '#f87171';
       }
     }
-    _el('qs-next-btn').style.display = '';
+    const nextBtn = _el('qs-next-btn');
+    if (nextBtn) {
+      nextBtn.textContent = S.qNum >= 5 ? 'END OF ROUND ▶' : 'NEXT QUESTION ▶';
+      nextBtn.style.display = '';
+    }
   }
 
   function nextQuestion() {
     _el('qs-next-btn').style.display = 'none';
+    if (S.qNum >= 5) {
+      _runRoundTail();
+      return;
+    }
     startQuestion();
   }
 
-  return { init, startQuestion, submitAnswer, nextQuestion };
+  async function _runRoundTail() {
+    _showPhases('qs-round-tail-phase');
+    const host = CHARS[S.hostId];
+    const container = _el('qs-round-tail-content');
+    if (!container) return;
+    container.innerHTML = '';
+    const pid = _addWaiting('qs-round-tail-content', S.hostId, 'Closing round…');
+
+    const qSummary = S.roundLog.map(q => {
+      const correct  = q.userPoints > 0 ? 'CORRECT' : 'WRONG';
+      const notable  = q.notable.length ? ` [${q.notable.join('; ')}]` : '';
+      const cap      = q.captainText ? ` Captain said: "${q.captainText}"` : '';
+      return `Q${q.qNum}: "${q.description.slice(0, 90)}" — you said ${q.userLabel} (${correct})${cap}${notable}`;
+    }).join('\n');
+
+    const scoreStr = `Your team: ${S.score.user} pts · AI team: ${S.score.ai} pts`;
+
+    try {
+      const text = await API.call(
+        host.prompt,
+        `ROUND ${S.roundNum} CLOSE — "Ok or Cheating Cunt?"\n\nROUND SUMMARY:\n${qSummary}\n\n${scoreStr}\n\nYou are closing Round ${S.roundNum}. Review what just happened. Quote specific wrong answers. Mock the captain's worst moment. Reference any expert silences if they occurred. Reference the score. End with a transition to Round 2. One or two paragraphs. Be yourself.`,
+        520, 'quiz/round-tail'
+      );
+      _fillSlot(pid, S.hostId, text, '');
+    } catch(e) {
+      _fillSlot(pid, S.hostId, `Round ${S.roundNum} complete. ${scoreStr}.`, '');
+    }
+
+    const nextBtn = _el('qs-next-round-btn');
+    if (nextBtn) nextBtn.style.display = '';
+  }
+
+  function startNextRound() {
+    _el('qs-next-round-btn').style.display = 'none';
+    S.roundNum++;
+    S.roundLog = [];
+    startQuestion();
+  }
+
+  return { init, startQuestion, submitAnswer, nextQuestion, startNextRound };
 
 })();
 
