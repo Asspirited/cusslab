@@ -3423,8 +3423,9 @@ Both are full characters in the Heckler & Cox cast universe. Built to the same 1
 **Team composition:**
 - User plays as team member (start here; captain mode later)
 - 4 AI teammates drawn from existing PMC cast + fish characters — Keegan, Rooney, Owen, Micah, Souness, Grylls, Attenborough, Ramsay, Peterson available. Team is configured per session.
-- **Brian Cox: CONFIRMED regular team member** — disdain and wonderment on overload. Answers every question through cosmological frame. Napkin comes out when wrong. D:Ream wound available. Build-to-speech arc applies: by round 3, has opinions about the scoring system and their thermodynamic implications. Both chips active simultaneously: wonder (at the physics of the question) + contempt (at the quality of his teammates' answers).
-- Teams of 5 total (user + 4 AI).
+- **Brian Cox: CONFIRMED team captain (always)** — gives the final answer after team conferral. The answer is always wrong. The props supported it. The orrery demonstrated it. He is confident.
+- **Phil Tufnell: CONFIRMED second rotating captain** — user gets Cox or Tufnell as captain, randomly assigned per session. Tufnell was an actual AQoS team captain 2008–2018. His captain mechanic: corrals the team, gets distracted by his own story, gives answer based on what the story seemed to support. **`tufnell.md` WRITTEN 2026-06-26 — full 17-attribute schema, wound (the tours/SCG idiot line), The Anecdote That Isn't An Answer, The Cat, captain conferral pool, AQoS reference mechanic, Cox orrery integration.**
+- Teams of 5 total (user + 4 AI, one of whom is the captain).
 - Opposing team: also AI-generated, also gets things wrong. Sometimes spectacularly.
 - Team confers before captain gives answer — quick conversation (the conferral IS the comedy).
 
