@@ -10,6 +10,7 @@
 
 | WL | Title | Urgency | Action needed |
 |---|---|---|---|
+| WL-149 | ANTHROPIC_API_KEY secret lost from cusslab-api worker — app broken | **CRITICAL** | Rod must push key: `echo "sk-ant-..." \| CLOUDFLARE_API_TOKEN=$(cat /home/rodent/.cf-deploy-token) bash -c 'CLOUDFLARE_ACCOUNT_ID=ce5ebfc99d1b37a7537a039d0b09d0b6 npx wrangler secret put ANTHROPIC_API_KEY'` |
 | WL-041 | Mobile/tablet nav — panels not findable on small screens, no sticky sidebar | Low | Three Amigos required before any code; options: sticky sidebar / bottom nav / larger targets |
 | WL-097 | Left nav focus trap — pointer-events not released after right panel interaction | Low | Fix deferred; investigate pointer-events/focus trap in right panel |
 | WL-MODE-002 | Character debt: Bobby George, Rod Harrington (darts) — no character md files | Low | Write characters/bobby-george.md and characters/rod-harrington.md before next darts prompt work |

@@ -3081,10 +3081,9 @@
     <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:2px;margin-bottom:8px;" id="qs-question-sport"></div>
     <div id="qs-question-text" style="font-size:16px;line-height:1.7;color:var(--text);background:var(--card);border:1px solid var(--border);border-radius:8px;padding:18px 20px;margin-bottom:20px;"></div>
     <div style="font-size:12px;color:var(--muted);margin-bottom:12px;text-transform:uppercase;letter-spacing:1px;">Your verdict before the team confers:</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
       <button id="qs-btn-REAL_CHEATING" data-verdict="REAL_CHEATING" class="btn" style="background:#5a1a1a;border-color:#8b2020;" onclick="QuizShow.submitAnswer('REAL_CHEATING')">CHEATING CUNT</button>
       <button id="qs-btn-REAL_OK" data-verdict="REAL_OK" class="btn" style="background:#1a3a1a;border-color:#2d6b2d;" onclick="QuizShow.submitAnswer('REAL_OK')">OK — IT HAPPENED</button>
-      <button id="qs-btn-INVENTED" data-verdict="INVENTED" class="btn" style="background:#1a1a3a;border-color:#2d2d6b;" onclick="QuizShow.submitAnswer('INVENTED')">MADE UP</button>
     </div>
   </div>
 
@@ -21256,6 +21255,37 @@ RULE 10: rotate every construction, perpendicular angle, and formal observation.
     return a;
   }
 
+  // BL-246 — expert silence mechanic
+  // Returns silence text if the character goes quiet, null if they should speak.
+  // Two modes: deliberate (character chooses silence as verdict) vs accidental
+  // (expert blanks on their own topic — the funnier one).
+  function _checkSilence(charId, inDomain) {
+    const p = {
+      keane:   { deliberate: 0.14, accidental: 0.09 },
+      souness: { deliberate: 0.06, accidental: 0.10 },
+      keegan:  { deliberate: 0.03, accidental: 0.13 },
+    }[charId] || { deliberate: 0.05, accidental: 0.07 };
+
+    const roll = Math.random();
+    if (inDomain && roll < p.accidental) {
+      const blanks = {
+        keane:   '—',
+        souness: '—',
+        keegan:  '[opens mouth, closes it, opens it again — nothing comes out]',
+      };
+      return blanks[charId] || '[silent]';
+    }
+    if (roll < p.deliberate) {
+      const silences = {
+        keane:   '—',
+        souness: '—',
+        keegan:  '[no comment]',
+      };
+      return silences[charId] || '—';
+    }
+    return null;
+  }
+
   function _el(id) { return document.getElementById(id); }
 
   function _showPhases(...show) {
@@ -21341,7 +21371,7 @@ RULE 10: rotate every construction, perpendicular angle, and formal observation.
     _el('qs-points-awarded').textContent = '';
     _el('qs-next-btn').style.display = 'none';
 
-    ['REAL_CHEATING','REAL_OK','INVENTED'].forEach(v => {
+    ['REAL_CHEATING','REAL_OK'].forEach(v => {
       const btn = _el(`qs-btn-${v}`);
       if (btn) { btn.disabled = false; btn.style.opacity = '1'; }
     });
@@ -21349,7 +21379,7 @@ RULE 10: rotate every construction, perpendicular angle, and formal observation.
 
   async function submitAnswer(verdict) {
     S.userAnswer = verdict;
-    ['REAL_CHEATING','REAL_OK','INVENTED'].forEach(v => {
+    ['REAL_CHEATING','REAL_OK'].forEach(v => {
       const btn = _el(`qs-btn-${v}`);
       if (btn) { btn.disabled = true; btn.style.opacity = v === verdict ? '1' : '0.3'; }
     });
@@ -21365,6 +21395,14 @@ RULE 10: rotate every construction, perpendicular angle, and formal observation.
       const inDomain = char.domains && char.domains.includes(S.q.sport);
       const maxTok  = inDomain ? 260 : 160;
       const pid     = _addWaiting('qs-conferral-container', memberId, 'Thinking…');
+
+      const silenceText = _checkSilence(memberId, inDomain);
+      if (silenceText !== null) {
+        _fillSlot(pid, memberId, silenceText, inDomain ? 'Expert blank' : '');
+        ctx += `${char.name.toUpperCase()}: "[silent]"\n`;
+        S.conferralLog.push({ charId: memberId, text: silenceText, isSilent: true, wasExpert: inDomain });
+        continue;
+      }
 
       try {
         const text = await API.call(
@@ -21418,9 +21456,13 @@ RULE 10: rotate every construction, perpendicular angle, and formal observation.
     const cap = CHARS[S.captainId];
     const pid = _addWaiting('qs-conferral-container', S.captainId, 'Captain deciding…');
     try {
+      const silentMembers = S.conferralLog.filter(e => e.isSilent);
+      const silentNote = silentMembers.length
+        ? `\nSILENT MEMBERS: ${silentMembers.map(e => `${CHARS[e.charId]?.name || e.charId}${e.wasExpert ? ' (their domain — gave nothing)' : ''}`).join(', ')}. You may call them out or ignore them.`
+        : '';
       const text = await API.call(
         cap.prompt,
-        `QUESTION: "${S.q.description}"\n\nTeam said:\n${ctx}\n\nYou are the captain. The team has spoken. Choose your prop. Demonstrate. Give the final answer. The answer is wrong. Your confidence is complete.`,
+        `QUESTION: "${S.q.description}"\n\nTeam said:\n${ctx}${silentNote}\n\nYou are the captain. The team has spoken. Choose your prop. Demonstrate. Give the final answer. The answer is wrong. Your confidence is complete.`,
         420, 'quiz/captain'
       );
       _fillSlot(pid, S.captainId, text, 'Captain — final answer');
@@ -21437,8 +21479,11 @@ RULE 10: rotate every construction, perpendicular angle, and formal observation.
     const host = CHARS[S.hostId];
     const pid  = _addWaiting('qs-result-content', S.hostId, 'Roasting…');
     const score = _calculateScore();
-    const userLabel = { REAL_CHEATING:'CHEATING CUNT', REAL_OK:'OK — IT HAPPENED', INVENTED:'MADE UP' }[S.userAnswer];
-    const correctLabel = { REAL_CHEATING:'CHEATING CUNT (real, cheating)', REAL_OK:'OK (it happened, legal)', INVENTED:'MADE UP (we invented it)' }[S.q.type];
+    const userLabel = { REAL_CHEATING:'CHEATING CUNT', REAL_OK:'OK — IT HAPPENED' }[S.userAnswer] || S.userAnswer;
+    const correctLabel = { REAL_CHEATING:'CHEATING — yes, this was real and it was cheating', REAL_OK:'OK — it happened and it was within the rules', INVENTED:'WE MADE THIS UP — it never happened' }[S.q.type];
+    const inventedNote = score.wasInvented
+      ? `\nINVENTED NOTE: We made this event up. It never happened. No points awarded. The host should "come clean" with a comic confession, then relate it to something similar that DID actually happen (sportsman, famous person, real incident). Comedy comes from: they were always doomed to fail on this one.`
+      : '';
 
     try {
       const text = await API.call(
@@ -21446,8 +21491,8 @@ RULE 10: rotate every construction, perpendicular angle, and formal observation.
         `QUESTION: "${S.q.description}"
 CORRECT ANSWER: ${correctLabel}
 THE REVEAL: ${S.q.reveal}
-YOUR HOST NOTE: ${S.q.hostNote || ''}
-USER answered: ${userLabel} — ${score.userPoints > 0 ? `CORRECT (+${score.userPoints} point${score.userPoints > 1 ? 's' : ''})` : 'WRONG (0 points)'}
+YOUR HOST NOTE: ${S.q.hostNote || ''}${inventedNote}
+USER answered: ${userLabel} — ${score.userPoints > 0 ? `CORRECT (+${score.userPoints} point)` : 'WRONG (0 points)'}
 TEAM CONFERRAL: ${S.conferralLog.map(e => `${CHARS[e.charId]?.name || e.charId}: "${e.text}"`).join(' | ')}
 CAPTAIN: "${S.captainText}" — WRONG (as always)
 
@@ -21464,22 +21509,24 @@ Close the question. Reveal the answer. Use the host note. Quote specific wrong a
 
   function _calculateScore() {
     const ua = S.userAnswer, type = S.q.type;
-    let userPoints = 0;
-    if (ua === type) {
-      userPoints = 2;
-    } else if ((ua === 'REAL_CHEATING' || ua === 'REAL_OK') && (type === 'REAL_CHEATING' || type === 'REAL_OK')) {
-      userPoints = 1;
-    }
-    return { userPoints };
+    // INVENTED events: 0 points regardless — they were designed to fail; host reveals the con
+    if (type === 'INVENTED') return { userPoints: 0, wasInvented: true };
+    // Real events: 1 point for correct cheating/ok verdict
+    return { userPoints: ua === type ? 1 : 0, wasInvented: false };
   }
 
-  function _applyScore({ userPoints }) {
+  function _applyScore({ userPoints, wasInvented }) {
     S.score.user += userPoints;
     _updateScoreboard();
     const el = _el('qs-points-awarded');
     if (el) {
-      el.textContent = userPoints === 2 ? '+2 ✓' : userPoints === 1 ? '+1 (partial)' : '+0 ✗';
-      el.style.color = userPoints > 0 ? '#4ade80' : '#f87171';
+      if (wasInvented) {
+        el.textContent = '+0 — we made that up';
+        el.style.color = '#f59e0b';
+      } else {
+        el.textContent = userPoints === 1 ? '+1 ✓' : '+0 ✗';
+        el.style.color = userPoints > 0 ? '#4ade80' : '#f87171';
+      }
     }
     _el('qs-next-btn').style.display = '';
   }
