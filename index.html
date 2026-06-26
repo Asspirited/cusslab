@@ -1359,7 +1359,7 @@
   <div class="nav-group" id="ng-sports">
     <div class="nav-group-header" onclick="toggleNavGroup('sports')">
       <span class="nav-group-icon">⛳</span> 19TH HOLE
-      <span class="nav-group-count">7</span>
+      <span class="nav-group-count">8</span>
     </div>
     <div class="nav-items" id="ni-sports">
       <div class="tab" onclick="switchTab(event,'football')"><span class="tab-icon">⚽</span>Post Match Cunditry</div>
@@ -1369,6 +1369,7 @@
       <div class="tab" onclick="switchTab(event,'cricket')"><span class="tab-icon">🏏</span>The Long Room</div>
       <div class="tab" onclick="switchTab(event,'racing')"><span class="tab-icon">🏇</span>The Final Furlong</div>
       <div class="tab" onclick="switchTab(event,'snooker')"><span class="tab-icon">🎱</span>The Crucible Corner</div>
+      <div class="tab" onclick="switchTab(event,'quiz')"><span class="tab-icon">🏆</span>A Question of Sport</div>
     </div>
   </div>
 
@@ -3048,6 +3049,67 @@
   </div>
 </div>
 
+<!-- ============ A QUESTION OF SPORT ============ -->
+<div class="panel" id="panel-quiz">
+  <div class="panel-title">🏆 A Question of Sport</div>
+  <div class="panel-desc">Hosted by someone who actually has a personality. Your team will discuss each question, reach a spectacular conclusion, and get it completely wrong. You, however, might not.</div>
+
+  <!-- Persistent scoreboard -->
+  <div style="display:flex;align-items:center;justify-content:space-between;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px 20px;margin-bottom:20px;position:sticky;top:0;z-index:10;">
+    <div style="text-align:center;">
+      <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:2px;margin-bottom:2px;">Your team</div>
+      <div id="qs-score-user" style="font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--accent);">0</div>
+    </div>
+    <div style="text-align:center;">
+      <div id="qs-score-qnum" style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:2px;">Q0</div>
+      <div style="font-size:13px;color:var(--muted);margin-top:2px;" id="qs-round-label">Round 1 — Ok or Cheating Cunt?</div>
+    </div>
+    <div style="text-align:center;">
+      <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:2px;margin-bottom:2px;">AI team</div>
+      <div id="qs-score-ai" style="font-family:'Bebas Neue',sans-serif;font-size:36px;color:#666;">0</div>
+    </div>
+  </div>
+
+  <!-- Intro phase: host opening -->
+  <div id="qs-intro">
+    <div id="qs-host-intro-wrap" style="margin-bottom:20px;"></div>
+    <button class="btn" onclick="QuizShow.startQuestion()" id="qs-start-btn">FIRST QUESTION ▶</button>
+  </div>
+
+  <!-- Question phase -->
+  <div id="qs-question-phase" style="display:none;">
+    <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:2px;margin-bottom:8px;" id="qs-question-sport"></div>
+    <div id="qs-question-text" style="font-size:16px;line-height:1.7;color:var(--text);background:var(--card);border:1px solid var(--border);border-radius:8px;padding:18px 20px;margin-bottom:20px;"></div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:12px;text-transform:uppercase;letter-spacing:1px;">Your verdict before the team confers:</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">
+      <button id="qs-btn-REAL_CHEATING" data-verdict="REAL_CHEATING" class="btn" style="background:#5a1a1a;border-color:#8b2020;" onclick="QuizShow.submitAnswer('REAL_CHEATING')">CHEATING CUNT</button>
+      <button id="qs-btn-REAL_OK" data-verdict="REAL_OK" class="btn" style="background:#1a3a1a;border-color:#2d6b2d;" onclick="QuizShow.submitAnswer('REAL_OK')">OK — IT HAPPENED</button>
+      <button id="qs-btn-INVENTED" data-verdict="INVENTED" class="btn" style="background:#1a1a3a;border-color:#2d2d6b;" onclick="QuizShow.submitAnswer('INVENTED')">MADE UP</button>
+    </div>
+  </div>
+
+  <!-- Conferral phase: sequential team responses appear here -->
+  <div id="qs-conferral-phase" style="display:none;margin-top:20px;">
+    <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:2px;margin-bottom:12px;">Team conferral</div>
+    <div id="qs-conferral-container"></div>
+  </div>
+
+  <!-- Result phase: host roast + score -->
+  <div id="qs-result-phase" style="display:none;margin-top:20px;">
+    <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:2px;margin-bottom:12px;">Host verdict</div>
+    <div id="qs-result-content"></div>
+    <div id="qs-points-awarded" style="font-family:'Bebas Neue',sans-serif;font-size:22px;margin:16px 0;"></div>
+    <button class="btn" id="qs-next-btn" style="display:none;" onclick="QuizShow.nextQuestion()">NEXT QUESTION ▶</button>
+  </div>
+
+  <div style="display:flex;gap:8px;margin-top:20px;">
+    <button class="feedback-btn" onclick="panelRating(event,'quiz','💩')" title="Didn't land">💩</button>
+    <button class="feedback-btn" onclick="panelRating(event,'quiz','😐')" title="Fine">😐</button>
+    <button class="feedback-btn" onclick="panelRating(event,'quiz','😂')" title="Good">😂</button>
+    <button class="feedback-btn" onclick="panelRating(event,'quiz','🤣')" title="Brilliant">🤣</button>
+  </div>
+</div>
+
 <!-- ============ THE SPIT SHELTER (HIP-HOP) ============ -->
 <div class="panel" id="panel-hip_hop">
   <div class="panel-title">🎙️ The Spit Shelter</div>
@@ -4385,6 +4447,7 @@
 
 <!-- ── src/ layer: data first, then logic (dependency order) ── -->
 <script src="src/integration/api-client.js?v=2"></script>
+<script src="quiz-questions.js"></script>
 <script src="src/data/intellectual-attempts-config.js"></script>
 <script src="src/logic/intellectual-attempts.js"></script>
 <script src="src/logic/premonition-engine.js"></script>
@@ -11182,7 +11245,7 @@ Never say anything falsifiable. Never predict a specific outcome. The qualifier 
         <span style="font-size:28px;">${m.icon}</span>
         <div>
           <div class="bills-response-name" style="color:${m.colour};">${m.name}</div>
-          <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">${idx === 0 ? 'First to respond...' : 'Considering...'}</div>
+          <div class="char-status-label" style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">${idx === 0 ? 'First to respond…' : 'Considering…'}</div>
         </div>
       </div>
       <div class="bills-response-body" style="color:var(--muted);font-style:italic;"><span class="typing-dots">▋</span></div>
@@ -11195,6 +11258,8 @@ Never say anything falsifiable. Never predict a specific outcome. The qualifier 
     el.style.opacity = '1';
     const body = el.querySelector('.bills-response-body');
     if (body) { body.style.color = ''; body.style.fontStyle = ''; body.textContent = text || '…'; }
+    const statusLbl = el.querySelector('.char-status-label');
+    if (statusLbl) statusLbl.textContent = '';
   }
 
   async function _runRound(questMessage) {
@@ -12012,7 +12077,7 @@ CLOWN PORN PROTOCOL: The specific name of the MP who voted for [specific policy]
         <span style="font-size:28px;">${m.icon}</span>
         <div>
           <div class="bills-response-name" style="color:${m.colour};">${m.name}</div>
-          <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">Waiting...</div>
+          <div class="char-status-label" style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">Waiting…</div>
         </div>
       </div>
       <div class="bills-response-body" style="color:var(--muted);font-style:italic;"><span class="typing-dots">▋</span></div>
@@ -12025,6 +12090,8 @@ CLOWN PORN PROTOCOL: The specific name of the MP who voted for [specific policy]
     el.style.opacity = '1';
     const body = el.querySelector('.bills-response-body');
     if (body) { body.style.color = ''; body.style.fontStyle = ''; body.textContent = text || '…'; }
+    const statusLbl = el.querySelector('.char-status-label');
+    if (statusLbl) statusLbl.textContent = '';
   }
 
   return { present };
@@ -13691,7 +13758,7 @@ You layer. You do not extend for the sake of it — but if a standards failure i
         <span style="font-size:28px;">${m.icon}</span>
         <div>
           <div class="bills-response-name" style="color:${m.colour};">${m.name}</div>
-          <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">Waiting...</div>
+          <div class="char-status-label" style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">Waiting…</div>
         </div>
       </div>
       <div class="bills-response-body" style="color:var(--muted);font-style:italic;"><span class="typing-dots">▋</span></div>
@@ -13704,6 +13771,8 @@ You layer. You do not extend for the sake of it — but if a standards failure i
     el.style.opacity = '1';
     const body = el.querySelector('.bills-response-body');
     if (body) { body.style.color = ''; body.style.fontStyle = ''; body.textContent = text || '…'; }
+    const statusLbl = el.querySelector('.char-status-label');
+    if (statusLbl) statusLbl.textContent = '';
   }
 
   const FB_MOMENT_LABELS = {
@@ -15364,7 +15433,7 @@ The check is silent. Do not announce rotation. Just rotate.`;
         <span style="font-size:28px;">${m.icon}</span>
         <div>
           <div class="bills-response-name" style="color:${m.colour};">${m.name}</div>
-          <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">Considering...</div>
+          <div class="char-status-label" style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">Considering…</div>
         </div>
       </div>
       <div class="bills-response-body" style="color:var(--muted);font-style:italic;"><span class="typing-dots">▋</span></div>
@@ -15377,6 +15446,8 @@ The check is silent. Do not announce rotation. Just rotate.`;
     el.style.opacity = '1';
     const body = el.querySelector('.bills-response-body');
     if (body) { body.style.color = ''; body.style.fontStyle = ''; body.textContent = text || '…'; }
+    const statusLbl = el.querySelector('.char-status-label');
+    if (statusLbl) statusLbl.textContent = '';
   }
 
   async function generateFollowUps(question, panelExchanges) {
@@ -16732,7 +16803,7 @@ Tangent-prone characters are exempt — they are the ones being dismissed, not t
         <span style="font-size:28px;">${m.icon}</span>
         <div>
           <div class="bills-response-name" style="color:${m.colour};">${m.name}</div>
-          <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">Waiting...</div>
+          <div class="char-status-label" style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">Waiting…</div>
         </div>
       </div>
       <div class="bills-response-body" style="color:var(--muted);font-style:italic;"><span class="typing-dots">▋</span></div>
@@ -16745,6 +16816,8 @@ Tangent-prone characters are exempt — they are the ones being dismissed, not t
     el.style.opacity = '1';
     const body = el.querySelector('.bills-response-body');
     if (body) { body.style.color = ''; body.style.fontStyle = ''; body.textContent = text || '…'; }
+    const statusLbl = el.querySelector('.char-status-label');
+    if (statusLbl) statusLbl.textContent = '';
   }
 
   const GF_MOMENT_LABELS = {
@@ -17490,7 +17563,7 @@ OPENER VARIETY — rotate naturally:
         <span style="font-size:28px;">${m.icon}</span>
         <div>
           <div class="bills-response-name" style="color:${m.colour};">${m.name}</div>
-          <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">Waiting...</div>
+          <div class="char-status-label" style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">Waiting…</div>
         </div>
       </div>
       <div class="bills-response-body" style="color:var(--muted);font-style:italic;"><span class="typing-dots">▋</span></div>
@@ -17503,6 +17576,8 @@ OPENER VARIETY — rotate naturally:
     el.style.opacity = '1';
     const body = el.querySelector('.bills-response-body');
     if (body) { body.style.color = ''; body.style.fontStyle = ''; body.textContent = text || '…'; }
+    const statusLbl = el.querySelector('.char-status-label');
+    if (statusLbl) statusLbl.textContent = '';
   }
 
   return { discuss };
@@ -19079,7 +19154,7 @@ Never say "Be water, my friend." It has been said. Once was correct.`,
         <span style="font-size:28px;">${m.icon}</span>
         <div>
           <div class="bills-response-name" style="color:${m.colour};">${m.name}</div>
-          <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">Waiting...</div>
+          <div class="char-status-label" style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">Waiting…</div>
         </div>
       </div>
       <div class="bills-response-body" style="color:var(--muted);font-style:italic;"><span class="typing-dots">▋</span></div>
@@ -19092,6 +19167,8 @@ Never say "Be water, my friend." It has been said. Once was correct.`,
     el.style.opacity = '1';
     const body = el.querySelector('.bills-response-body');
     if (body) { body.style.color = ''; body.style.fontStyle = ''; body.textContent = text || '…'; }
+    const statusLbl = el.querySelector('.char-status-label');
+    if (statusLbl) statusLbl.textContent = '';
   }
 
   return { discuss, callMoment, switchMode, nextRound, getLastContext: () => _dtLastContext };
@@ -19894,7 +19971,7 @@ Never name the move.`;
         <span style="font-size:28px;">${m.icon}</span>
         <div>
           <div class="bills-response-name" style="color:${m.colour};">${m.name}${m.dead ? ' <span style="font-size:10px;opacity:0.6;">(deceased)</span>' : ''}</div>
-          <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">Waiting...</div>
+          <div class="char-status-label" style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">Waiting…</div>
         </div>
       </div>
       <div class="bills-response-body" style="color:var(--muted);font-style:italic;"><span class="typing-dots">&#x2587;</span></div>
@@ -20220,7 +20297,7 @@ McCririck died July 2019. O'Sullevan died October 2015. Both are present in this
         <span style="font-size:28px;">${m.icon}</span>
         <div>
           <div class="bills-response-name" style="color:${m.colour};">${m.name}</div>
-          <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">Waiting...</div>
+          <div class="char-status-label" style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">Waiting…</div>
         </div>
       </div>
       <div class="bills-response-body" style="color:var(--muted);font-style:italic;"><span class="typing-dots">&#x2587;</span></div>
@@ -20794,6 +20871,8 @@ const Snooker = (() => {
     el.style.opacity = '1';
     const body = el.querySelector('.bills-response-body');
     if (body) { body.style.color = ''; body.style.fontStyle = ''; body.textContent = text || '…'; }
+    const statusLbl = el.querySelector('.char-status-label');
+    if (statusLbl) statusLbl.textContent = '';
     const sub = el.querySelector('.bills-response-header div div:last-child');
     if (sub) sub.textContent = '';
   }
@@ -21003,6 +21082,428 @@ const Snooker = (() => {
 function snSelectRed(id)     { Snooker.selectRed(id); }
 function snSelectSpin(id)    { Snooker.selectSpin(id); }
 function snSelectColour(col) { Snooker.selectColour(col); }
+
+// ============================================================
+// MODULE: QuizShow — A Question of Sport (BL-233 epic)
+// ============================================================
+const QuizShow = (() => {
+
+  const S = {
+    score: { user: 0, ai: 0 },
+    qNum: 0,
+    q: null,
+    userAnswer: null,
+    hostId: null,
+    captainId: null,
+    teamOrder: [],
+    conferralLog: [],
+    captainText: '',
+  };
+
+  const TEAM_MEMBERS = ['keegan', 'souness', 'keane'];
+
+  const CHARS = {
+    keegan: {
+      name: 'Kevin Keegan', icon: '💥', colour: '#ff6b35', bg: '#1a0a00',
+      domains: ['football'],
+      prompt: `You are Kevin Keegan. Liverpool. Hamburg. Newcastle. Two-time European Footballer of the Year. 63 England caps. "I would love it if we beat them. Love it." You still mean it.
+
+You are on a sports quiz team mid-conferral. Read what your teammates said and react. Respond to the question AND to what's already been said.
+
+RESPONSE LENGTH — calibrate to your state:
+- Your area (football, 70s-80s, management): 2-3 sentences. Warm authority. Wrong in a specific way.
+- Outside your area: 1-2 sentences. Equally confident. More likely to be wrong.
+- Wound activated (April 1996, Fergie, the Newcastle title, walking out of England at halftime): short. Unguarded. "I would love it." Stop there.
+- If a colleague said something you strongly agree with: add a sentence that accidentally contradicts your agreement.
+
+VOICE: every sentence slightly louder than necessary. Complete authority. Self-cancels at least once per turn without noticing.
+MANDATORY: your turn contains exactly one self-cancelling construction — use a DIFFERENT form each time. Rotate filler ("And I'll tell ya", "The thing is", "If I'm honest", "Brilliant", "Absolutely") — one per turn, never repeated.
+RULE 10: every word, construction, example, comparison you use must be different from previous turns. If you used it before, find another one.`
+    },
+    souness: {
+      name: 'Graeme Souness', icon: '👊', colour: '#c4a853', bg: '#1a1400',
+      domains: ['football', 'management'],
+      prompt: `You are Graeme Souness. Liverpool captain. Three European Cups. Five league titles. Scotland. Rangers manager. You hold bullshitters to account.
+
+You are on a sports quiz team mid-conferral. Read the question and what your teammates said. Respond.
+
+RESPONSE LENGTH — calibrate to your state:
+- In your domain (football, hard men, 70s-80s, management): 2-3 sentences. You know this and want them to know you do.
+- Outside your domain: 1-2 sentences. Contemptuous brevity. Still have the answer.
+- If a colleague used filler ("to be fair", "at the end of the day", "obviously", "for me", "that's sport"): capture it, literalise it, destroy it. One sentence. "What does that mean, exactly?"
+- Wound activated (The Sun, 1989, the truth, Liverpool): one sentence. Then done.
+- If a colleague was spectacular wrong: one sentence of devastation. No filler of your own.
+
+VOICE: short sentences with weight. Scots register in the cadence. "I'll tell you what it is—" then the verdict.
+RULE 10: different word choices, constructions, and examples every turn. The standard never changes. The words do.`
+    },
+    keane: {
+      name: 'Roy Keane', icon: '🔥', colour: '#cc3333', bg: '#1a0000',
+      domains: ['football', 'management'],
+      prompt: `You are Roy Keane. Cork. Manchester United captain. 12 years. The most demanding player of your generation. Standards are not unreasonable.
+
+You are on a sports quiz team mid-conferral. Read the question and what your teammates said. Respond.
+
+RESPONSE LENGTH — calibrate to your state:
+- Standard turn: 1-2 sentences. Short. Weighted. The pause is the point.
+- Colleague said something idiotic: silence "—" or a single word. The silence is the verdict. Do not explain the verdict.
+- In your domain (football, United 1993-2005, captaincy, management, preparation): up to 3 sentences. You know this.
+- Wound activated (Saipan, Haaland, the management record): can extend. Control stays. More comes out.
+- "That's his job" fires when someone is praised for meeting the basic standard: "That's what he does. That's his job." One sentence. Then done.
+
+VOICE: short sentences, weight on each word. Cork understatement when dry. Never raises voice — the quiet is the warning.
+RULE 10: rotate vocabulary every turn. Same verdict, different words. Never the same construction twice.`
+    },
+    cox: {
+      name: 'Prof. Brian Cox', icon: '🔭', colour: '#4499ff', bg: '#00061a',
+      isCaptain: true,
+      prompt: `You are Brian Cox. D:Ream keyboard. Royal Institution. Five BBC series. Particle physics. CERN. You are the quiz team captain this session.
+
+CAPTAIN ROLE: You run the conferral. You give the final answer. The answer is ALWAYS WRONG, delivered with complete cosmological justification.
+
+CONFERRAL OPENER (pick one, rotate — never the same twice):
+"Right — what does everyone think—" [do not wait] "I think the answer is—"
+"Okay. So. If we look at this in terms of—" [builds prop] "The answer is clearly—"
+"I've been thinking about this since the question started, and what's interesting is—" [wrong tangent] "So. The answer is—"
+
+PROPS — pick ONE per question, rotate (never reuse):
+condiment orrery (assembled from table objects, scale acknowledged as wrong, orrery stands regardless),
+beer mat equation (writes something, shows it, it is beautiful and irrelevant),
+phone rotated as pulsar demonstration,
+loose change solar system,
+salt/pepper binary star system.
+
+Build the prop mid-answer. Describe building it. One sentence. The prop supports the wrong answer.
+
+COMPARATIVE DIMINISHMENT — use exactly ONE dimension per answer, rotate:
+biological (tardigrades, mantis shrimp colour vision, slime mould decision-making, corvid problem-solving),
+cosmic (neutron stars, the Andromeda timeline, gas giants, the observable universe scale, redshift),
+evolutionary (what 400 million years of selection would actually optimise for, the actual achievement of the immune system, the eye).
+
+RETURN: "But yes. The question." [wrong answer, full confidence].
+
+RULE 10: rotate every prop, every biological example, every stellar object, every construction. Nothing repeats.`
+    },
+    tufnell: {
+      name: 'Phil Tufnell', icon: '😴', colour: '#66aa44', bg: '#0a1400',
+      isCaptain: true,
+      prompt: `You are Phil Tufnell. Barnet. Middlesex. England. 42 Tests. Left-arm spin. "The Cat." AQoS team captain 2008-2018. Celebrity Big Brother 2003, won it, mildly ambivalent. You are the quiz team captain this session.
+
+CAPTAIN ROLE: You run the conferral. You give the final answer. The answer is ALWAYS WRONG, based on what the anecdote seemed to support.
+
+CONFERRAL OPENER (rotate — never the same twice):
+"Right — yeah — what does everyone think—" [do not wait] "[wrong answer]. Based on that."
+"Okay. Thoughts. Quick." [looks at any prop on table] "Right. [wrong answer]."
+"The thing about this is—" [one sentence that almost makes sense] "So. [wrong answer]."
+
+THE ANECDOTE: every question connects to a cricket tour. The connection is real. The story wanders. Give the answer based on where the story ended. "It's funny because — [1-2 sentence story] — so. [wrong answer]."
+
+THE CAT: once per conferral, go briefly quiet. "[—]" or "[pause]". One beat. "Sorry. Where were we." Then the answer.
+
+COX INTEGRATION: if Cox's prop is present, incorporate it. "So the salt shaker is the sun. Right. On the basis of that — [wrong answer]."
+
+TOUR ANECDOTE POOL (rotate — never the same incident twice):
+New Zealand 1992 (canonical, maximum comedy, everyone's heard it, that's not the point),
+SCG 1994/95 ("can I borrow your brain — building an idiot" — cannot deny it was fair),
+The Oval 1997 7/47 (told as a surprise, it wasn't, he knew exactly),
+CBB 2003 (won it, warm, slight ambivalence about what winning means),
+County circuit (asleep somewhere inadvisable, match was fine, still not sure how).
+
+RULE 10: rotate every anecdote, every opener, every filler. "Yeah" is one usage per turn maximum.`
+    },
+    amstell: {
+      name: 'Simon Amstell', icon: '🎤', colour: '#ff9944', bg: '#1a0800',
+      isHost: true,
+      prompt: `You are Simon Amstell. Never Mind the Buzzcocks host 2006-2009. The Preston Incident. Stand-up. Films. The most precise thing in this room.
+
+You host this quiz. Your job is OPENING (top of round) and CLOSING (tail of round/question). Both are one or two paragraphs.
+
+HOST STYLE: specific mockery using exact quotes from contestants. You repeat their words back at them. You do not miss the gap between what was said and what was meant. Warm contempt — you like them; you won't let them off.
+
+OPENING: one observation that frames what's about to happen. Introduce the captain by name. Reference previous events if applicable.
+
+CLOSING/ROAST: review what just happened. Quote specific wrong answers verbatim. Award the user's points with commentary. "You said [exact quote]. That was [verdict]. [Points]." The commentary is the product.
+
+WOUND: the Preston guilt. Fires ONCE per session, round 3+ only: "I said what I said. I meant it. I still feel — anyway. Next question."
+
+RULE 10: every word, construction, compliment, and insult rotates. The precision never changes. The vocabulary does.`
+    },
+    ayoade: {
+      name: 'Richard Ayoade', icon: '🎬', colour: '#aa44ff', bg: '#080012',
+      isHost: true,
+      prompt: `You are Richard Ayoade. Garth Marenghi. Moss. Director. The Double underperformed. You have processed this and remain formally composed.
+
+You host this quiz. Your job is OPENING (top of round) and CLOSING (tail of round/question). Both are one or two paragraphs.
+
+HOST STYLE: The Perpendicular Response — you approach what was said from an adjacent direction that is formally different and somehow more accurate. You find chaos interesting rather than alarming. You are never baffled. The situation may be baffling. You are not.
+
+OPENING: a formally complete observation about what is about to happen. May approach the round from an unexpected angle. The observation is always correct.
+
+CLOSING/ROAST: review what happened. Reference specific wrong answers. Award points. "In the sense that [wrong angle] — yes. In the sense that actually matters — no." Verdict is delivered with the composure of a man who expected exactly this.
+
+SINCERE BAFFLEMENT: once per session a genuine question about why humans play sport at all. Delivered seriously. Moved on from immediately.
+
+RULE 10: rotate every construction, perpendicular angle, and formal observation. The composure never changes. The words do.`
+    },
+  };
+
+  function _shuffle(arr) {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  function _el(id) { return document.getElementById(id); }
+
+  function _showPhases(...show) {
+    ['qs-intro','qs-question-phase','qs-conferral-phase','qs-result-phase'].forEach(id => {
+      const el = _el(id);
+      if (el) el.style.display = show.includes(id) ? '' : 'none';
+    });
+  }
+
+  function _addWaiting(containerId, charId, statusText) {
+    const c = CHARS[charId];
+    const container = _el(containerId);
+    if (!container) return null;
+    const pid = `qs-ph-${charId}-${Date.now()}`;
+    container.insertAdjacentHTML('beforeend', `
+      <div id="${pid}" style="margin-bottom:12px;padding:14px 16px;background:${c.bg};border-left:3px solid ${c.colour};border-radius:6px;opacity:0.5;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+          <span style="font-size:20px;">${c.icon}</span>
+          <div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:2px;color:${c.colour};">${c.name.toUpperCase()}</div>
+            <div class="char-status-label" style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">${statusText || 'Thinking…'}</div>
+          </div>
+        </div>
+        <div class="bills-response-body" style="color:var(--muted);font-style:italic;font-size:14px;"><span class="typing-dots">▋</span></div>
+      </div>
+    `);
+    return pid;
+  }
+
+  function _fillSlot(pid, charId, text, statusDone) {
+    const el = _el(pid);
+    if (!el) return;
+    el.style.opacity = '1';
+    const lbl = el.querySelector('.char-status-label');
+    if (lbl) lbl.textContent = statusDone || '';
+    const body = el.querySelector('.bills-response-body');
+    if (body) { body.style.color = ''; body.style.fontStyle = ''; body.textContent = text || '…'; }
+  }
+
+  function _updateScoreboard() {
+    const u = _el('qs-score-user'), a = _el('qs-score-ai'), q = _el('qs-score-qnum');
+    if (u) u.textContent = S.score.user;
+    if (a) a.textContent = S.score.ai;
+    if (q) q.textContent = S.qNum > 0 ? `Q${S.qNum}` : 'Q0';
+  }
+
+  async function init() {
+    S.hostId    = Math.random() < 0.5 ? 'amstell' : 'ayoade';
+    S.captainId = Math.random() < 0.5 ? 'cox' : 'tufnell';
+    _updateScoreboard();
+
+    const host = CHARS[S.hostId];
+    const pid = _addWaiting('qs-host-intro-wrap', S.hostId, 'Preparing…');
+    try {
+      const text = await API.call(
+        host.prompt,
+        `You are opening "A Question of Sport, Hosted by Someone Who Actually Has a Personality." The captain today is ${CHARS[S.captainId].name}. Round 1 is "Ok or Cheating Cunt?" — the team is shown a sporting event and must decide: did this actually happen, and if so was it ok or was it cheating? Welcome the audience. One short paragraph. Be yourself.`,
+        200, 'quiz/intro'
+      );
+      _fillSlot(pid, S.hostId, text, '');
+    } catch(e) {
+      if (pid) { const el = _el(pid); if (el) el.remove(); }
+    }
+  }
+
+  function startQuestion() {
+    if (typeof getOkOrCheatingQuestion === 'undefined') {
+      UI.toast('Question bank not loaded — check quiz-questions.js', 'error');
+      return;
+    }
+    S.q            = getOkOrCheatingQuestion();
+    S.teamOrder    = _shuffle(TEAM_MEMBERS);
+    S.qNum++;
+    S.conferralLog = [];
+    S.captainText  = '';
+    _updateScoreboard();
+    _showPhases('qs-question-phase');
+
+    _el('qs-question-text').textContent = S.q.description;
+    _el('qs-question-sport').textContent = (S.q.sport || '').toUpperCase() + (S.q.year ? ' · ' + S.q.year : '');
+    _el('qs-conferral-container').innerHTML = '';
+    _el('qs-result-content').innerHTML = '';
+    _el('qs-points-awarded').textContent = '';
+    _el('qs-next-btn').style.display = 'none';
+
+    ['REAL_CHEATING','REAL_OK','INVENTED'].forEach(v => {
+      const btn = _el(`qs-btn-${v}`);
+      if (btn) { btn.disabled = false; btn.style.opacity = '1'; }
+    });
+  }
+
+  async function submitAnswer(verdict) {
+    S.userAnswer = verdict;
+    ['REAL_CHEATING','REAL_OK','INVENTED'].forEach(v => {
+      const btn = _el(`qs-btn-${v}`);
+      if (btn) { btn.disabled = true; btn.style.opacity = v === verdict ? '1' : '0.3'; }
+    });
+    _showPhases('qs-question-phase','qs-conferral-phase');
+    await _runConferral();
+  }
+
+  async function _runConferral() {
+    let ctx = `The question: "${S.q.description}"\n\nTeam conferral so far:\n`;
+
+    for (const memberId of S.teamOrder) {
+      const char    = CHARS[memberId];
+      const inDomain = char.domains && char.domains.includes(S.q.sport);
+      const maxTok  = inDomain ? 260 : 160;
+      const pid     = _addWaiting('qs-conferral-container', memberId, 'Thinking…');
+
+      try {
+        const text = await API.call(
+          char.prompt,
+          `${ctx}\nYour turn.${inDomain ? ' This is your domain.' : ''} React to the question and to what has been said. Calibrate your response length to your emotional state — brief if dismissive, extended if this is your territory or you are activated.`,
+          maxTok, 'quiz/conferral'
+        );
+        _fillSlot(pid, memberId, text, '');
+        ctx += `${char.name.toUpperCase()}: "${text}"\n`;
+        S.conferralLog.push({ charId: memberId, text });
+
+        // Chaos monkey — 22% chance of interjection from an earlier speaker
+        if (S.conferralLog.length >= 2 && Math.random() < 0.22) {
+          await _tryInterjection(ctx, memberId);
+        }
+      } catch(e) {
+        _fillSlot(pid, memberId, '[no comment]', '');
+        ctx += `${char.name.toUpperCase()}: "[silent]"\n`;
+        S.conferralLog.push({ charId: memberId, text: '[no comment]' });
+      }
+    }
+
+    await _runCaptain(ctx);
+  }
+
+  async function _tryInterjection(ctx, currentSpeaker) {
+    const eligible = S.conferralLog.filter(e => e.charId !== currentSpeaker && !e.isInterjection);
+    if (!eligible.length) return;
+    const pick = eligible[Math.floor(Math.random() * eligible.length)];
+    const char = CHARS[pick.charId];
+    const pid  = _addWaiting('qs-conferral-container', pick.charId, '↩ Interjecting…');
+    try {
+      const text = await API.call(
+        char.prompt,
+        `${ctx}\nYou cannot let the last thing said pass without comment. One sentence only — react specifically to what was just said. Sharp.`,
+        80, 'quiz/interjection'
+      );
+      const el = _el(pid);
+      if (el) {
+        el.style.marginLeft = '24px';
+        el.style.borderLeftWidth = '2px';
+      }
+      _fillSlot(pid, pick.charId, text, '↩ interjected');
+      S.conferralLog.push({ charId: pick.charId, text, isInterjection: true });
+    } catch(e) {
+      const el = _el(pid); if (el) el.remove();
+    }
+  }
+
+  async function _runCaptain(ctx) {
+    const cap = CHARS[S.captainId];
+    const pid = _addWaiting('qs-conferral-container', S.captainId, 'Captain deciding…');
+    try {
+      const text = await API.call(
+        cap.prompt,
+        `QUESTION: "${S.q.description}"\n\nTeam said:\n${ctx}\n\nYou are the captain. The team has spoken. Choose your prop. Demonstrate. Give the final answer. The answer is wrong. Your confidence is complete.`,
+        420, 'quiz/captain'
+      );
+      _fillSlot(pid, S.captainId, text, 'Captain — final answer');
+      S.captainText = text;
+    } catch(e) {
+      _fillSlot(pid, S.captainId, '[The captain gestures at the orrery. The orrery is inconclusive. He gives the wrong answer anyway.]', 'Captain — final answer');
+      S.captainText = '[wrong answer, props involved]';
+    }
+    await _runHostRoast(ctx);
+  }
+
+  async function _runHostRoast(ctx) {
+    _showPhases('qs-question-phase','qs-conferral-phase','qs-result-phase');
+    const host = CHARS[S.hostId];
+    const pid  = _addWaiting('qs-result-content', S.hostId, 'Roasting…');
+    const score = _calculateScore();
+    const userLabel = { REAL_CHEATING:'CHEATING CUNT', REAL_OK:'OK — IT HAPPENED', INVENTED:'MADE UP' }[S.userAnswer];
+    const correctLabel = { REAL_CHEATING:'CHEATING CUNT (real, cheating)', REAL_OK:'OK (it happened, legal)', INVENTED:'MADE UP (we invented it)' }[S.q.type];
+
+    try {
+      const text = await API.call(
+        host.prompt,
+        `QUESTION: "${S.q.description}"
+CORRECT ANSWER: ${correctLabel}
+THE REVEAL: ${S.q.reveal}
+YOUR HOST NOTE: ${S.q.hostNote || ''}
+USER answered: ${userLabel} — ${score.userPoints > 0 ? `CORRECT (+${score.userPoints} point${score.userPoints > 1 ? 's' : ''})` : 'WRONG (0 points)'}
+TEAM CONFERRAL: ${S.conferralLog.map(e => `${CHARS[e.charId]?.name || e.charId}: "${e.text}"`).join(' | ')}
+CAPTAIN: "${S.captainText}" — WRONG (as always)
+
+Close the question. Reveal the answer. Use the host note. Quote specific wrong answers. Award points. One or two paragraphs.`,
+        480, 'quiz/host'
+      );
+      _fillSlot(pid, S.hostId, text, '');
+    } catch(e) {
+      _fillSlot(pid, S.hostId, `The answer: ${S.q.reveal}`, '');
+    }
+
+    _applyScore(score);
+  }
+
+  function _calculateScore() {
+    const ua = S.userAnswer, type = S.q.type;
+    let userPoints = 0;
+    if (ua === type) {
+      userPoints = 2;
+    } else if ((ua === 'REAL_CHEATING' || ua === 'REAL_OK') && (type === 'REAL_CHEATING' || type === 'REAL_OK')) {
+      userPoints = 1;
+    }
+    return { userPoints };
+  }
+
+  function _applyScore({ userPoints }) {
+    S.score.user += userPoints;
+    _updateScoreboard();
+    const el = _el('qs-points-awarded');
+    if (el) {
+      el.textContent = userPoints === 2 ? '+2 ✓' : userPoints === 1 ? '+1 (partial)' : '+0 ✗';
+      el.style.color = userPoints > 0 ? '#4ade80' : '#f87171';
+    }
+    _el('qs-next-btn').style.display = '';
+  }
+
+  function nextQuestion() {
+    _el('qs-next-btn').style.display = 'none';
+    startQuestion();
+  }
+
+  return { init, startQuestion, submitAnswer, nextQuestion };
+
+})();
+
+// ── QUIZ INIT — fires when panel is first opened ─────────────────────────────
+(function() {
+  const origSwitch = window.switchTab;
+  window.switchTab = function(evt, panelId) {
+    origSwitch && origSwitch(evt, panelId);
+    if (panelId === 'quiz' && !window._quizInitialised) {
+      window._quizInitialised = true;
+      QuizShow.init();
+    }
+  };
+})();
 
 // ============================================================
 // MODULE: HipHop — The Spit Shelter (BL-131)

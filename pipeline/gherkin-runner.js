@@ -9142,7 +9142,7 @@ function makeSteps(ctx) {
     [/^the Snooker module exports "([^"]+)"$/, (fn) => {
       const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
       const snStart = html.indexOf('const Snooker = ');
-      const snEnd = html.indexOf('const HipHop = ', snStart);
+      const snEnd = html.indexOf('const QuizShow = ', snStart);
       const iife = html.slice(snStart, snEnd > snStart ? snEnd : snStart + 15000);
       const returnIdx = iife.lastIndexOf('return {');
       const returnLine = iife.slice(returnIdx, returnIdx + 200);

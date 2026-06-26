@@ -3523,18 +3523,34 @@ Both are full characters in the Heckler & Cox cast universe. Built to the same 1
 
 **Story:** As the quiz engine, I want all architecture decisions agreed before any code is written — team conferral mechanics, host injection, opposing team generation, round structure, host selection UI.
 
-**Three Amigos questions:**
-1. Team conferral: separate AI call per team member (5 calls) or one multi-character call returning all 4 AI voices? Multi-character is faster; per-character preserves individual voice.
-2. Host injection: does the host comment after conferral only, or also after the captain's answer, or continuously?
-3. Opposing team: AI-generated wrong answer (one call) or curated wrong-answer pool per question?
-4. Host selection: UI toggle before starting (pick Amstell or Ayoade), or random per session?
-5. Round order: fixed (1→2→3→4) or user picks?
-6. Question bank: where does it live? Hardcoded JS arrays (fast to ship), Worker endpoint (scalable), or generated per session by AI (slow but infinite)?
+**DECISIONS AGREED 2026-06-26 (session):**
+
+1. **Conferral: sequential calls with accumulation.** Each team member gets their own call and sees prior context — this enables genuine interjection and reaction, not just simultaneous announcement. This IS the interjection mechanic (BL-229 resolved inside this). Cost: 3-4 sequential calls vs 1 bulk call. Latency is acceptable (personal use, low volume); quality gain is the entire comedy.
+
+2. **Conferral order: shuffled every question.** Who speaks first changes every time — prevents any one character always setting the tone. Fisher-Yates shuffle on team order before each question.
+
+3. **Chaos monkey interjection: 22% chance after each team member responds.** An already-spoken character fires a one-sentence interjection reacting to the last thing said. Extra call (80 tokens max). Visually indented, labelled "↩ interjected". This is the chaos/interruption mechanism Rod described.
+
+4. **Response length: dynamic, not fixed.** Each character's prompt includes a `RESPONSE CALIBRATION` section specifying when to be brief (1 sentence — dismissive, outside domain), normal (2-3 sentences — standard), or extended (more — wound activated, expert in domain, outburst). maxTokens varies: 160 outside domain, 260 in domain. Captain: 420. Host: 480.
+
+5. **Expert silence mechanic (BL-246):** Occasionally a character gives only "—" or "[silent]" — either baffled by a question in their domain (humiliating) or choosing silence as verdict. Captain can call them out. Tracked in conferralLog. Captain prompt notes silent members.
+
+6. **Captain override mechanic (BL-247):** Captain occasionally cuts the conferral short — fed up with bullshit, certain they know the answer, or activated by something in the room. Separate BL item.
+
+7. **Host: random per session** (Amstell or Ayoade), set at init. No UI toggle for MVP — add later if wanted.
+
+8. **Question bank: hardcoded JS arrays (quiz-questions.js).** Already built. 120 questions across 4 rounds. Anti-repetition via localStorage. Fast to ship, easy to extend.
+
+9. **AI opposing team: scored 0 always (comedy premise — captain gives wrong answer).** No separate AI call for opposing team in MVP. They exist in the scoreboard as a foil. Real opposing team AI is a v2 feature.
+
+10. **Round order: fixed (1→4) for MVP.** User picks round is a BL-242 UI extension.
+
+**MVP built (2026-06-26):** Round 1 only ("Ok or Cheating Cunt?"). Sequential conferral. Chaos monkey interjection. Dynamic length. Cox/Tufnell captain (random). Amstell/Ayoade host (random). Keegan/Souness/Keane team (shuffled order per question). Persistent scoreboard. Status labels clear after response (bug fix applied to all panels).
 
 **Depends on:** BL-234, BL-235 (hosts must exist before engine references them)
 
 - CD3: UBV=8 TC=7 RR=8 → CoD=23, Dur=2, **CD3=11.5**
-- Status: OPEN — raised 2026-06-26. Three Amigos needed. Do after BL-234 and BL-235 complete.
+- Status: **MVP SHIPPED 2026-06-26** — Round 1. Remaining: rounds 2-4 (BL-237-240), team selection UI (BL-242), scoring tiers (BL-243), anchor top/tail (BL-244), graphics (BL-245).
 
 ## BL-241 — Quiz Round 5: Picture Round ("Mr. Chips")
 
@@ -3655,4 +3671,62 @@ Both are full characters in the Heckler & Cox cast universe. Built to the same 1
 
 **Depends on:** BL-242 (team selection), BL-243 (scoring), BL-244 (anchor top/tail)
 - CD3: UBV=7 TC=5 RR=7 → CoD=19, Dur=3, **CD3=6.3**
+- Status: OPEN — raised 2026-06-26.
+
+## BL-246 — Quiz: expert silence mechanic (character goes blank on their own topic)
+
+**Raised:** 2026-06-26 | **By:** Rod
+**Epic:** Quiz Panel Show
+**Feature:** quiz
+
+**Story:** Occasionally a team member goes silent — either blank on a question in their domain (humiliating), choosing silence as a verdict, or just The Cat doing what The Cat does. Captain calls out silent members during the conferral.
+
+**Design notes:**
+- Silence conveyed as "—" or "[silent]" or "[no comment]" in the response
+- Two modes: deliberate (Keane's contempt silence, Tufnell's Cat pause) vs accidental (Keegan blanks on a cricket question — he's a footballer, fine — OR Keegan blanks on a 1986 football question — devastating)
+- Captain prompt gets a note: "Team member X gave no response. You may choose to call them in or ignore them."
+- The captain calling in a silent expert and getting a still-wrong answer is a rich comedy beat
+
+- CD3: UBV=6 TC=5 RR=6 → CoD=17, Dur=1, **CD3=17.0**
+- Status: OPEN — raised 2026-06-26. After MVP is stable.
+
+---
+
+## BL-247 — Quiz: captain override mechanic
+
+**Raised:** 2026-06-26 | **By:** Rod
+**Epic:** Quiz Panel Show
+**Feature:** quiz
+
+**Story:** Occasionally the captain cuts the conferral short and gives the final answer to the host before the team has finished conferring — either fed up with the bullshit, certain they know the answer, or activated by something in the room. This is a behaviour event, not just a prompt note.
+
+**Design notes:**
+- Trigger conditions: 2+ consecutive idiotic team answers, captain wound activated, captain has a prop ready before conferral is done, topic is directly in captain's area and they've had enough
+- Mechanics: after member N responds, before member N+1, check probability of override (base ~10%, higher if wound activated or expert topic)
+- If override fires: captain interrupts. Short message displayed: "[CAPTAIN CUTS IN]". Captain prompt instruction: "You've heard enough. Give the answer now — don't wait for the rest of the team."
+- Very rarely fires when everything is going fine and it's not chaotic — the comedy is the interruption being disproportionate
+- Rarely fires before conferral starts (but possible if captain is in a mood — maybe 2-3% chance)
+
+- CD3: UBV=7 TC=5 RR=7 → CoD=19, Dur=2, **CD3=9.5**
+- Status: OPEN — raised 2026-06-26.
+
+---
+
+## BL-248 — Quiz Round 5 (Picture Round): include inappropriate/embarrassing images
+
+**Raised:** 2026-06-26 | **By:** Rod
+**Epic:** Quiz Panel Show
+**Feature:** quiz
+
+**Story:** The picture round (BL-241) should occasionally include an unexpected/inappropriate image — a penis, animals mating, an embarrassing photo of the host/captain/player — to break the format and generate chaos.
+
+**Design notes:**
+- Small percentage of picture round questions (10-15%) are not epic sporting moments but are instead: embarrassing candid, body part, animal behaviour, or something completely unrelated
+- Host reacts in character: Amstell ("I don't know what this is. I also know exactly what this is."), Ayoade ("This is an image. It has been included. I have questions about the curation process.")
+- Team reacts in character: Keegan ("Brilliant"), Keane (silence), Souness ("Right."), Cox (attempts comparative diminishment of whatever anatomy is on display)
+- Tufnell: immediately has a story about seeing something similar on the New Zealand tour
+- Anti-repetition: the unexpected image type should vary (never two consecutive penises)
+
+**Depends on:** BL-241 (picture round must exist first)
+- CD3: UBV=8 TC=3 RR=9 → CoD=20, Dur=1, **CD3=20.0**
 - Status: OPEN — raised 2026-06-26.
