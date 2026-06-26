@@ -21507,6 +21507,7 @@ RULE 10: rotate every construction, perpendicular angle, and formal observation.
     const pid  = _addWaiting('qs-result-content', S.hostId, 'Roasting…');
     const score = _calculateScore();
     const userLabel = { REAL_CHEATING:'CHEATING CUNT', REAL_OK:'OK — IT HAPPENED' }[S.userAnswer] || S.userAnswer;
+    const aiLabel   = { REAL_CHEATING:'CHEATING CUNT', REAL_OK:'OK — IT HAPPENED' }[score.aiVerdict] || score.aiVerdict;
     const correctLabel = { REAL_CHEATING:'CHEATING — yes, this was real and it was cheating', REAL_OK:'OK — it happened and it was within the rules', INVENTED:'WE MADE THIS UP — it never happened' }[S.q.type];
     const inventedNote = score.wasInvented
       ? `\nINVENTED NOTE: We made this event up. It never happened. No points awarded. The host should "come clean" with a comic confession, then relate it to something similar that DID actually happen (sportsman, famous person, real incident). Comedy comes from: they were always doomed to fail on this one.`
@@ -21520,6 +21521,7 @@ CORRECT ANSWER: ${correctLabel}
 THE REVEAL: ${S.q.reveal}
 YOUR HOST NOTE: ${S.q.hostNote || ''}${inventedNote}
 USER answered: ${userLabel} — ${score.userPoints > 0 ? `CORRECT (+${score.userPoints} point)` : 'WRONG (0 points)'}
+AI OPPOSING TEAM answered: ${aiLabel} — ${score.aiPoints > 0 ? 'CORRECT (+1) — accidentally' : 'WRONG (0 points) — predictably'}
 TEAM CONFERRAL: ${S.conferralLog.map(e => `${CHARS[e.charId]?.name || e.charId}: "${e.text}"`).join(' | ')}
 CAPTAIN: "${S.captainText}" — WRONG (as always)
 
@@ -21536,22 +21538,41 @@ Close the question. Reveal the answer. Use the host note. Quote specific wrong a
 
   function _calculateScore() {
     const ua = S.userAnswer, type = S.q.type;
-    // INVENTED events: 0 points regardless — they were designed to fail; host reveals the con
-    if (type === 'INVENTED') return { userPoints: 0, wasInvented: true };
+    const verdicts = ['REAL_CHEATING', 'REAL_OK'];
+
+    // INVENTED events: 0 points for everyone — designed to fail, host reveals the con
+    if (type === 'INVENTED') {
+      const aiVerdict = verdicts[Math.floor(Math.random() * verdicts.length)];
+      return { userPoints: 0, aiPoints: 0, wasInvented: true, aiVerdict };
+    }
+
     // Real events: 1 point for correct cheating/ok verdict
-    return { userPoints: ua === type ? 1 : 0, wasInvented: false };
+    const userPoints = ua === type ? 1 : 0;
+
+    // AI opposing team: wrong 80% of the time (occasionally right by accident — comedy)
+    const aiWrong = Math.random() < 0.80;
+    const aiVerdict = aiWrong
+      ? verdicts.find(v => v !== type) || verdicts[0]
+      : type;
+    const aiPoints = aiVerdict === type ? 1 : 0;
+
+    return { userPoints, aiPoints, wasInvented: false, aiVerdict };
   }
 
-  function _applyScore({ userPoints, wasInvented }) {
+  function _applyScore({ userPoints, aiPoints, wasInvented, aiVerdict }) {
     S.score.user += userPoints;
+    S.score.ai   += (aiPoints || 0);
     _updateScoreboard();
     const el = _el('qs-points-awarded');
     if (el) {
+      const aiLabel = { REAL_CHEATING: 'CHEATING CUNT', REAL_OK: 'OK' }[aiVerdict] || aiVerdict;
       if (wasInvented) {
-        el.textContent = '+0 — we made that up';
+        el.textContent = `+0 — we made that up · AI team also said ${aiLabel} (+0)`;
         el.style.color = '#f59e0b';
       } else {
-        el.textContent = userPoints === 1 ? '+1 ✓' : '+0 ✗';
+        const userStr = userPoints === 1 ? '+1 ✓' : '+0 ✗';
+        const aiStr   = aiPoints   === 1 ? `AI: ${aiLabel} ✓ (+1)` : `AI: ${aiLabel} ✗ (+0)`;
+        el.textContent = `${userStr} · ${aiStr}`;
         el.style.color = userPoints > 0 ? '#4ade80' : '#f87171';
       }
     }
