@@ -3093,7 +3093,7 @@
     <button class="btn" onclick="QuizShow.startQuestion()" id="qs-start-btn">FIRST QUESTION ▶</button>
   </div>
 
-  <!-- Question phase -->
+  <!-- Question phase — Round 1 (Ok or Cheating Cunt?) -->
   <div id="qs-question-phase" style="display:none;">
     <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:2px;margin-bottom:8px;" id="qs-question-sport"></div>
     <div id="qs-question-text" style="font-size:16px;line-height:1.7;color:var(--text);background:var(--card);border:1px solid var(--border);border-radius:8px;padding:18px 20px;margin-bottom:20px;"></div>
@@ -3102,6 +3102,15 @@
       <button id="qs-btn-REAL_CHEATING" data-verdict="REAL_CHEATING" class="btn" style="background:#5a1a1a;border-color:#8b2020;" onclick="QuizShow.submitAnswer('REAL_CHEATING')">CHEATING CUNT</button>
       <button id="qs-btn-REAL_OK" data-verdict="REAL_OK" class="btn" style="background:#1a3a1a;border-color:#2d6b2d;" onclick="QuizShow.submitAnswer('REAL_OK')">OK — IT HAPPENED</button>
     </div>
+  </div>
+
+  <!-- Question phase — Round 2 (What Happened Next?) -->
+  <div id="qs-r2-question-phase" style="display:none;">
+    <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:2px;margin-bottom:8px;" id="qs-r2-sport"></div>
+    <div id="qs-r2-setup-text" style="font-size:16px;line-height:1.7;color:var(--text);background:var(--card);border:1px solid var(--border);border-radius:8px;padding:18px 20px;margin-bottom:20px;"></div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:1px;">What happened next? Lock in your answer before the team confers:</div>
+    <textarea id="qs-r2-guess-input" rows="3" style="width:100%;background:var(--card);border:1px solid var(--border);border-radius:6px;padding:12px;color:var(--text);font-size:14px;resize:vertical;box-sizing:border-box;" placeholder="Type your guess here…"></textarea>
+    <button class="btn" id="qs-r2-submit-btn" style="margin-top:10px;" onclick="QuizShow.submitR2Answer()">LOCK IN ANSWER ▶</button>
   </div>
 
   <!-- Conferral phase: sequential team responses appear here -->
@@ -3115,6 +3124,16 @@
     <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:2px;margin-bottom:12px;">Host verdict</div>
     <div id="qs-result-content"></div>
     <div id="qs-points-awarded" style="font-family:'Bebas Neue',sans-serif;font-size:22px;margin:16px 0;"></div>
+    <!-- Round 2 self-judge scoring — hidden for R1, shown for R2 after reveal -->
+    <div id="qs-r2-scoring" style="display:none;margin-bottom:16px;">
+      <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">How accurate was your guess?</div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;">
+        <button class="btn" style="font-size:11px;padding:8px 4px;" onclick="QuizShow.awardR2Points(0)">WRONG<br>+0</button>
+        <button class="btn" style="font-size:11px;padding:8px 4px;background:#1a1a2a;border-color:#4455aa;" onclick="QuizShow.awardR2Points(1)">CLOSE<br>+1</button>
+        <button class="btn" style="font-size:11px;padding:8px 4px;background:#1a2a1a;border-color:#44aa55;" onclick="QuizShow.awardR2Points(2)">MOSTLY RIGHT<br>+2</button>
+        <button class="btn" style="font-size:11px;padding:8px 4px;background:#2a1a00;border-color:#aa7700;" onclick="QuizShow.awardR2Points(3)">SPOT ON<br>+3</button>
+      </div>
+    </div>
     <button class="btn" id="qs-next-btn" style="display:none;" onclick="QuizShow.nextQuestion()">NEXT QUESTION ▶</button>
   </div>
 
@@ -21118,6 +21137,7 @@ const QuizShow = (() => {
     roundLog: [],
     q: null,
     userAnswer: null,
+    r2UserGuess: '',
     hostId: null,
     captainId: null,
     selectedTeam: [],
@@ -21477,13 +21497,13 @@ RULE 10: rotate every construction, perpendicular angle, and formal observation.
   function _el(id) { return document.getElementById(id); }
 
   function _showPhases(...show) {
-    ['qs-team-selection-phase','qs-intro','qs-question-phase','qs-conferral-phase','qs-result-phase','qs-round-tail-phase'].forEach(id => {
+    ['qs-team-selection-phase','qs-intro','qs-question-phase','qs-r2-question-phase','qs-conferral-phase','qs-result-phase','qs-round-tail-phase'].forEach(id => {
       const el = _el(id);
       if (el) el.style.display = show.includes(id) ? '' : 'none';
     });
     // Host view: intro / round-tail — show host display
     const hostPhase = show.some(id => id === 'qs-intro' || id === 'qs-round-tail-phase');
-    const teamPhase = show.some(id => id === 'qs-question-phase' || id === 'qs-conferral-phase' || id === 'qs-result-phase');
+    const teamPhase = show.some(id => ['qs-question-phase','qs-r2-question-phase','qs-conferral-phase','qs-result-phase'].includes(id));
     const hostEl = _el('qs-host-display');
     const teamEl = _el('qs-team-strip');
     if (hostEl) hostEl.style.display = hostPhase ? '' : 'none';
@@ -21680,12 +21700,7 @@ RULE 10: rotate every construction, perpendicular angle, and formal observation.
     }
   }
 
-  function startQuestion() {
-    if (typeof getOkOrCheatingQuestion === 'undefined') {
-      UI.toast('Question bank not loaded — check quiz-questions.js', 'error');
-      return;
-    }
-    S.q              = getOkOrCheatingQuestion();
+  function _resetCommon() {
     S.teamOrder      = _shuffle(S.selectedTeam.length ? S.selectedTeam : ['keegan', 'souness', 'keane']);
     S.qNum++;
     S.conferralLog   = [];
@@ -21693,19 +21708,76 @@ RULE 10: rotate every construction, perpendicular angle, and formal observation.
     S.captainOverride = false;
     _updateScoreboard();
     _resetTileStates();
-    _showPhases('qs-question-phase');
+    if (_el('qs-conferral-container')) _el('qs-conferral-container').innerHTML = '';
+    if (_el('qs-result-content'))      _el('qs-result-content').innerHTML = '';
+    if (_el('qs-points-awarded'))      _el('qs-points-awarded').textContent = '';
+    if (_el('qs-r2-scoring'))          _el('qs-r2-scoring').style.display = 'none';
+    if (_el('qs-next-btn'))            _el('qs-next-btn').style.display = 'none';
+  }
 
+  function startQuestion() {
+    if (S.roundNum === 2) { _startR2Question(); return; }
+    // Round 1 — Ok or Cheating Cunt?
+    if (typeof getOkOrCheatingQuestion === 'undefined') {
+      UI.toast('Question bank not loaded — check quiz-questions.js', 'error');
+      return;
+    }
+    S.q = getOkOrCheatingQuestion();
+    _resetCommon();
+    _showPhases('qs-question-phase');
     _el('qs-question-text').textContent = S.q.description;
     _el('qs-question-sport').textContent = (S.q.sport || '').toUpperCase() + (S.q.year ? ' · ' + S.q.year : '');
-    _el('qs-conferral-container').innerHTML = '';
-    _el('qs-result-content').innerHTML = '';
-    _el('qs-points-awarded').textContent = '';
-    _el('qs-next-btn').style.display = 'none';
-
     ['REAL_CHEATING','REAL_OK'].forEach(v => {
       const btn = _el(`qs-btn-${v}`);
       if (btn) { btn.disabled = false; btn.style.opacity = '1'; }
     });
+  }
+
+  function _startR2Question() {
+    if (typeof getWhatHappenedNextQuestion === 'undefined') {
+      UI.toast('Round 2 question bank not loaded', 'error');
+      return;
+    }
+    S.q = getWhatHappenedNextQuestion();
+    S.q.description = S.q.setup; // conferral context uses description
+    S.r2UserGuess = '';
+    S.userAnswer  = null;
+    _resetCommon();
+    _showPhases('qs-r2-question-phase');
+    if (_el('qs-r2-setup-text')) _el('qs-r2-setup-text').textContent = S.q.setup;
+    if (_el('qs-r2-sport'))      _el('qs-r2-sport').textContent = (S.q.sport || '').toUpperCase();
+    const ta = _el('qs-r2-guess-input');
+    if (ta) { ta.value = ''; ta.disabled = false; }
+    const btn = _el('qs-r2-submit-btn');
+    if (btn) btn.disabled = false;
+    const rl = _el('qs-round-label');
+    if (rl) rl.textContent = 'Round 2 — What Happened Next?';
+  }
+
+  async function submitR2Answer() {
+    const ta = _el('qs-r2-guess-input');
+    const guess = ta ? ta.value.trim() : '';
+    if (!guess) return;
+    S.r2UserGuess = guess;
+    S.userAnswer  = guess;
+    if (ta) ta.disabled = true;
+    const btn = _el('qs-r2-submit-btn');
+    if (btn) btn.disabled = true;
+    _showPhases('qs-r2-question-phase', 'qs-conferral-phase');
+    await _runConferral();
+  }
+
+  function awardR2Points(pts) {
+    pts = Math.max(0, Math.min(3, pts));
+    const score = { userPoints: pts, aiPoints: 0, wasInvented: false, aiVerdict: 'WRONG', isR2: true };
+    _applyScore(score);
+    const scoring = _el('qs-r2-scoring');
+    if (scoring) scoring.style.display = 'none';
+    const nextBtn = _el('qs-next-btn');
+    if (nextBtn) {
+      nextBtn.textContent = S.qNum >= 5 ? 'END OF ROUND ▶' : 'NEXT QUESTION ▶';
+      nextBtn.style.display = '';
+    }
   }
 
   async function submitAnswer(verdict) {
@@ -21822,7 +21894,38 @@ RULE 10: rotate every construction, perpendicular angle, and formal observation.
       _setTileState(S.captainId, 'done');
       S.captainText = '[wrong answer, props involved]';
     }
-    await _runHostRoast(ctx);
+    if (S.roundNum === 2) {
+      await _runR2HostRoast(ctx);
+    } else {
+      await _runHostRoast(ctx);
+    }
+  }
+
+  async function _runR2HostRoast(ctx) {
+    _showPhases('qs-r2-question-phase', 'qs-conferral-phase', 'qs-result-phase');
+    const host = CHARS[S.hostId];
+    const pid  = _addWaiting('qs-result-content', S.hostId, 'Revealing…');
+    try {
+      const text = await API.call(
+        host.prompt,
+        `ROUND 2 — "WHAT HAPPENED NEXT?"
+SETUP: "${S.q.setup}"
+ACTUAL ANSWER: ${S.q.answer}
+YOUR HOST NOTE: ${S.q.hostNote || ''}
+USER GUESSED: "${S.r2UserGuess}"
+CAPTAIN GUESSED: "${S.captainText}" — wrong, obviously
+TEAM CONTEXT: ${ctx.slice(0, 400)}
+
+Reveal what actually happened. Quote the user's guess specifically — is it close, wrong, or accidentally right? Quote the captain's guess and mock it. Reference the team bait if it happened. Tell the user to self-score (0-3 points) — "If you said [X] that's a 2. If you had no idea that's a 0." End with the actual answer clearly stated. One or two paragraphs. Be yourself.`,
+        520, 'quiz/r2-host'
+      );
+      _fillSlot(pid, S.hostId, text, '');
+    } catch(e) {
+      _fillSlot(pid, S.hostId, `What happened next: ${S.q.answer}`, '');
+    }
+    // Show self-judge scoring buttons
+    const scoring = _el('qs-r2-scoring');
+    if (scoring) scoring.style.display = '';
   }
 
   async function _runHostRoast(ctx) {
@@ -21921,10 +22024,13 @@ Close the question. Reveal the answer. Use the host note. Quote specific wrong a
         el.style.color = userPoints > 0 ? '#4ade80' : '#f87171';
       }
     }
-    const nextBtn = _el('qs-next-btn');
-    if (nextBtn) {
-      nextBtn.textContent = S.qNum >= 5 ? 'END OF ROUND ▶' : 'NEXT QUESTION ▶';
-      nextBtn.style.display = '';
+    // R2 uses self-judge buttons; next-btn hidden until after self-judge (awardR2Points shows it)
+    if (!score.isR2) {
+      const nextBtn = _el('qs-next-btn');
+      if (nextBtn) {
+        nextBtn.textContent = S.qNum >= 5 ? 'END OF ROUND ▶' : 'NEXT QUESTION ▶';
+        nextBtn.style.display = '';
+      }
     }
   }
 
@@ -21935,6 +22041,10 @@ Close the question. Reveal the answer. Use the host note. Quote specific wrong a
       return;
     }
     startQuestion();
+  }
+
+  function _roundLabel(n) {
+    return { 1: 'Ok or Cheating Cunt?', 2: 'What Happened Next?', 3: 'Name the Incident', 4: 'Howzat?' }[n] || `Round ${n}`;
   }
 
   async function _runRoundTail() {
@@ -21955,9 +22065,11 @@ Close the question. Reveal the answer. Use the host note. Quote specific wrong a
     const scoreStr = `Your team: ${S.score.user} pts · AI team: ${S.score.ai} pts`;
 
     try {
+      const nextRoundLabel = _roundLabel(S.roundNum + 1);
+      const nextStr = S.roundNum < 4 ? `End with a transition to Round ${S.roundNum + 1}: "${nextRoundLabel}".` : 'End by winding up the quiz. There are no more rounds.';
       const text = await API.call(
         host.prompt,
-        `ROUND ${S.roundNum} CLOSE — "Ok or Cheating Cunt?"\n\nROUND SUMMARY:\n${qSummary}\n\n${scoreStr}\n\nYou are closing Round ${S.roundNum}. Review what just happened. Quote specific wrong answers. Mock the captain's worst moment. Reference any expert silences if they occurred. Reference the score. End with a transition to Round 2. One or two paragraphs. Be yourself.`,
+        `ROUND ${S.roundNum} CLOSE — "${_roundLabel(S.roundNum)}"\n\nROUND SUMMARY:\n${qSummary}\n\n${scoreStr}\n\nYou are closing Round ${S.roundNum}. Review what just happened. Quote specific wrong answers. Mock the captain's worst moment. Reference any expert silences if they occurred. Reference the score. ${nextStr} One or two paragraphs. Be yourself.`,
         520, 'quiz/round-tail'
       );
       _fillSlot(pid, S.hostId, text, '');
@@ -21966,17 +22078,33 @@ Close the question. Reveal the answer. Use the host note. Quote specific wrong a
     }
 
     const nextBtn = _el('qs-next-round-btn');
-    if (nextBtn) nextBtn.style.display = '';
+    if (nextBtn) {
+      nextBtn.textContent = S.roundNum < 4 ? `ROUND ${S.roundNum + 1} ▶` : 'FINAL SCORES ▶';
+      nextBtn.style.display = '';
+    }
   }
 
   function startNextRound() {
     _el('qs-next-round-btn').style.display = 'none';
     S.roundNum++;
     S.roundLog = [];
+    S.qNum = 0;
+    // Update round label
+    const labels = {
+      1: 'Round 1 — Ok or Cheating Cunt?',
+      2: 'Round 2 — What Happened Next?',
+      3: 'Round 3 — Name the Incident',
+      4: 'Round 4 — Howzat?',
+    };
+    const rl = _el('qs-round-label');
+    if (rl) rl.textContent = labels[S.roundNum] || `Round ${S.roundNum}`;
+    // Update tail button label for next round
+    const nb = _el('qs-next-round-btn');
+    if (nb) nb.textContent = S.roundNum < 4 ? `ROUND ${S.roundNum + 1} ▶` : 'FINAL SCORES ▶';
     startQuestion();
   }
 
-  return { init, startQuestion, submitAnswer, nextQuestion, startNextRound, confirmTeam };
+  return { init, startQuestion, submitAnswer, submitR2Answer, awardR2Points, nextQuestion, startNextRound, confirmTeam };
 
 })();
 

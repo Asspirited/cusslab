@@ -3600,7 +3600,7 @@ Both are full characters in the Heckler & Cox cast universe. Built to the same 1
 
 **Depends on:** BL-236 (engine architecture)
 - CD3: UBV=8 TC=5 RR=7 → CoD=20, Dur=3, **CD3=6.7**
-- Status: OPEN — raised 2026-06-26.
+- Status: CLOSED — 2026-06-27 (df8522a). Team selection UI: 16 characters across Football/Cricket/Snooker/Fish Out of Water. Select 4, captain randomly assigned. Character tiles with colour/icon. Pipeline GREEN.
 
 ---
 
@@ -3625,7 +3625,7 @@ Both are full characters in the Heckler & Cox cast universe. Built to the same 1
 
 **Depends on:** BL-236 (engine architecture)
 - CD3: UBV=9 TC=6 RR=8 → CoD=23, Dur=2, **CD3=11.5**
-- Status: OPEN — raised 2026-06-26.
+- Status: CLOSED — 2026-06-27 (35f74d3). Round 1 scoring: AI opposing team 80/20 wrong/right, both scores displayed in points-awarded and host roast prompt. Pipeline GREEN.
 
 ---
 
@@ -3647,7 +3647,7 @@ Both are full characters in the Heckler & Cox cast universe. Built to the same 1
 
 **Depends on:** BL-243 (scoring system must exist before tail can report scores)
 - CD3: UBV=8 TC=6 RR=7 → CoD=21, Dur=2, **CD3=10.5**
-- Status: OPEN — raised 2026-06-26.
+- Status: CLOSED — 2026-06-27 (1349f4e). Host closes after Q5 with full round review; round log tracks questions/answers/notable moments; memberIdx bug fixed in conferral loop. Pipeline GREEN.
 
 ---
 
@@ -3671,7 +3671,7 @@ Both are full characters in the Heckler & Cox cast universe. Built to the same 1
 
 **Depends on:** BL-242 (team selection), BL-243 (scoring), BL-244 (anchor top/tail)
 - CD3: UBV=7 TC=5 RR=7 → CoD=19, Dur=3, **CD3=6.3**
-- Status: OPEN — raised 2026-06-26.
+- Status: CLOSED — 2026-06-27 (910a6a3). Host display (intro/round-tail), team strip (question/conferral/result), live tile states (idle/speaking/done/silent), view switching. Pipeline GREEN.
 
 ## BL-246 — Quiz: expert silence mechanic (character goes blank on their own topic)
 
@@ -3688,7 +3688,7 @@ Both are full characters in the Heckler & Cox cast universe. Built to the same 1
 - The captain calling in a silent expert and getting a still-wrong answer is a rich comedy beat
 
 - CD3: UBV=6 TC=5 RR=6 → CoD=17, Dur=1, **CD3=17.0**
-- Status: OPEN — raised 2026-06-26. After MVP is stable.
+- Status: CLOSED — 2026-06-26 (prior session). _checkSilence() with deliberate/accidental probabilities per character; silence tracked in conferralLog with wasExpert flag; captain notified of silent members.
 
 ---
 
@@ -3708,7 +3708,7 @@ Both are full characters in the Heckler & Cox cast universe. Built to the same 1
 - Rarely fires before conferral starts (but possible if captain is in a mood — maybe 2-3% chance)
 
 - CD3: UBV=7 TC=5 RR=7 → CoD=19, Dur=2, **CD3=9.5**
-- Status: OPEN — raised 2026-06-26.
+- Status: CLOSED — 2026-06-26 (prior session). _checkCaptainOverride() probability-based after each conferral member; CAPTAIN CUTS IN marker; override note in captain prompt.
 
 ---
 
@@ -3730,3 +3730,27 @@ Both are full characters in the Heckler & Cox cast universe. Built to the same 1
 **Depends on:** BL-241 (picture round must exist first)
 - CD3: UBV=8 TC=3 RR=9 → CoD=20, Dur=1, **CD3=20.0**
 - Status: OPEN — raised 2026-06-26.
+
+---
+
+## BL-237 — Quiz Round 2: "What Happened Next?"
+
+**Raised:** 2026-06-27 | **By:** Rod (referenced in BL-236 as BL-237-240 placeholder)
+**Epic:** Quiz Panel Show
+**Feature:** quiz
+
+**Story:** As a quiz player, I want Round 2 "What Happened Next?" — where I see the beginning of a famous sporting moment and must guess what happened next before the team reveals and the host roasts both guesses.
+
+**Design notes:**
+- Setup text shown (truncated sporting scenario), user types freetext guess before locking in
+- Team confers after user locks in (same conferral mechanic as R1 — context is the setup text)
+- Captain gives their (wrong) guess
+- Host reveals actual answer, roasts user's guess and captain's guess specifically
+- Scoring: self-judge (0-3 points) via buttons after reveal — host's roast guides the score
+- AI opposing team: 0 points (they never get freetext right — comedy premise)
+- Round label updates to "Round 2 — What Happened Next?"
+- Question bank: `quiz-questions.js` round2 array (`getWhatHappenedNextQuestion()`)
+
+**Depends on:** BL-236 (engine), BL-243 (scoring exists), BL-244 (round tail will close this round too)
+- CD3: UBV=8 TC=5 RR=7 → CoD=20, Dur=2, **CD3=10.0**
+- Status: OPEN — raised 2026-06-27.
