@@ -3754,3 +3754,43 @@ Both are full characters in the Heckler & Cox cast universe. Built to the same 1
 **Depends on:** BL-236 (engine), BL-243 (scoring exists), BL-244 (round tail will close this round too)
 - CD3: UBV=8 TC=5 RR=7 → CoD=20, Dur=2, **CD3=10.0**
 - Status: OPEN — raised 2026-06-27.
+
+---
+
+## BL-238 — Quiz Round 3: "Name the Incident"
+
+**Raised:** 2026-06-27 | **By:** Rod (referenced in BL-236 as BL-237-240 placeholder)
+**Epic:** Quiz Panel Show
+**Feature:** quiz
+
+**Story:** As a quiz player, I want Round 3 "Name the Incident" — three progressive clues reveal a sporting incident; I guess after each clue, earlier = more points.
+
+**Design notes:**
+- 3 clues revealed progressively; user can lock in after any clue or see all three
+- Points: 3 pts after clue 1, 2 after clue 2, 1 after clue 3
+- Team confers once at lock-in (with all revealed clues as context)
+- Self-judge: yes/no did you name it → host roast guides them
+- Captain guesses wrong (as always)
+- Question bank: `getNameTheIncidentQuestion()`
+
+- CD3: UBV=8 TC=5 RR=7 → CoD=20, Dur=2, **CD3=10.0**
+- Status: OPEN — raised 2026-06-27.
+
+---
+
+## BL-239 — Quiz Round 4: "Howzat?"
+
+**Raised:** 2026-06-27 | **By:** Rod (referenced in BL-236 as BL-237-240 placeholder)
+**Epic:** Quiz Panel Show
+**Feature:** quiz
+
+**Story:** As a quiz player, I want Round 4 "Howzat?" — same 3-clue progressive mechanic as Round 3 but about how a sporting career/life came to its notable end.
+
+**Design notes:**
+- Same mechanic as Round 3 — 3 clues, progressive reveal, 3/2/1 pts
+- Different host framing: "this is how their story ended"
+- Question bank: `getHowzatQuestion()`
+- Shared implementation with Round 3
+
+- CD3: UBV=8 TC=4 RR=7 → CoD=19, Dur=1, **CD3=19.0**
+- Status: OPEN — raised 2026-06-27.

@@ -3113,6 +3113,21 @@
     <button class="btn" id="qs-r2-submit-btn" style="margin-top:10px;" onclick="QuizShow.submitR2Answer()">LOCK IN ANSWER ▶</button>
   </div>
 
+  <!-- Question phase — Rounds 3+4 (progressive clues: Name the Incident / Howzat?) -->
+  <div id="qs-r3-question-phase" style="display:none;">
+    <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:2px;margin-bottom:4px;" id="qs-r3-round-label"></div>
+    <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:2px;margin-bottom:16px;" id="qs-r3-sport"></div>
+    <div id="qs-r3-clue-1" style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:16px 18px;margin-bottom:10px;font-size:15px;line-height:1.7;color:var(--text);"></div>
+    <div id="qs-r3-clue-2" style="display:none;background:var(--card);border:1px solid #3a5a3a;border-radius:8px;padding:16px 18px;margin-bottom:10px;font-size:15px;line-height:1.7;color:var(--text);"></div>
+    <div id="qs-r3-clue-3" style="display:none;background:var(--card);border:1px solid #5a3a3a;border-radius:8px;padding:16px 18px;margin-bottom:10px;font-size:15px;line-height:1.7;color:var(--text);"></div>
+    <div id="qs-r3-max-pts" style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--accent);margin-bottom:10px;">Max 3 points available</div>
+    <textarea id="qs-r3-guess-input" rows="2" style="width:100%;background:var(--card);border:1px solid var(--border);border-radius:6px;padding:12px;color:var(--text);font-size:14px;resize:vertical;box-sizing:border-box;margin-bottom:10px;" placeholder="Name the incident…"></textarea>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <button class="btn" id="qs-r3-lock-btn" onclick="QuizShow.submitR3Answer()">LOCK IN ANSWER ▶</button>
+      <button class="btn" id="qs-r3-next-clue-btn" style="background:var(--card);border-color:var(--border);color:var(--muted);" onclick="QuizShow.nextClue()">NEXT CLUE ▶ (−1 pt)</button>
+    </div>
+  </div>
+
   <!-- Conferral phase: sequential team responses appear here -->
   <div id="qs-conferral-phase" style="display:none;margin-top:20px;">
     <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:2px;margin-bottom:12px;">Team conferral</div>
@@ -3124,6 +3139,14 @@
     <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:2px;margin-bottom:12px;">Host verdict</div>
     <div id="qs-result-content"></div>
     <div id="qs-points-awarded" style="font-family:'Bebas Neue',sans-serif;font-size:22px;margin:16px 0;"></div>
+    <!-- Round 3+4 self-judge — yes/no, points based on clue number -->
+    <div id="qs-r3-scoring" style="display:none;margin-bottom:16px;">
+      <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">Did you name the incident correctly?</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <button class="btn" style="background:#1a2a1a;border-color:#44aa55;" onclick="QuizShow.awardR3Points(true)">YES ✓</button>
+        <button class="btn" style="background:#2a1a1a;border-color:#aa4444;" onclick="QuizShow.awardR3Points(false)">NO ✗</button>
+      </div>
+    </div>
     <!-- Round 2 self-judge scoring — hidden for R1, shown for R2 after reveal -->
     <div id="qs-r2-scoring" style="display:none;margin-bottom:16px;">
       <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">How accurate was your guess?</div>
@@ -21138,6 +21161,9 @@ const QuizShow = (() => {
     q: null,
     userAnswer: null,
     r2UserGuess: '',
+    r3UserGuess: '',
+    r3MaxPoints: 3,
+    clueNum: 1,
     hostId: null,
     captainId: null,
     selectedTeam: [],
@@ -21497,13 +21523,13 @@ RULE 10: rotate every construction, perpendicular angle, and formal observation.
   function _el(id) { return document.getElementById(id); }
 
   function _showPhases(...show) {
-    ['qs-team-selection-phase','qs-intro','qs-question-phase','qs-r2-question-phase','qs-conferral-phase','qs-result-phase','qs-round-tail-phase'].forEach(id => {
+    ['qs-team-selection-phase','qs-intro','qs-question-phase','qs-r2-question-phase','qs-r3-question-phase','qs-conferral-phase','qs-result-phase','qs-round-tail-phase'].forEach(id => {
       const el = _el(id);
       if (el) el.style.display = show.includes(id) ? '' : 'none';
     });
     // Host view: intro / round-tail — show host display
     const hostPhase = show.some(id => id === 'qs-intro' || id === 'qs-round-tail-phase');
-    const teamPhase = show.some(id => ['qs-question-phase','qs-r2-question-phase','qs-conferral-phase','qs-result-phase'].includes(id));
+    const teamPhase = show.some(id => ['qs-question-phase','qs-r2-question-phase','qs-r3-question-phase','qs-conferral-phase','qs-result-phase'].includes(id));
     const hostEl = _el('qs-host-display');
     const teamEl = _el('qs-team-strip');
     if (hostEl) hostEl.style.display = hostPhase ? '' : 'none';
@@ -21712,11 +21738,13 @@ RULE 10: rotate every construction, perpendicular angle, and formal observation.
     if (_el('qs-result-content'))      _el('qs-result-content').innerHTML = '';
     if (_el('qs-points-awarded'))      _el('qs-points-awarded').textContent = '';
     if (_el('qs-r2-scoring'))          _el('qs-r2-scoring').style.display = 'none';
+    if (_el('qs-r3-scoring'))          _el('qs-r3-scoring').style.display = 'none';
     if (_el('qs-next-btn'))            _el('qs-next-btn').style.display = 'none';
   }
 
   function startQuestion() {
     if (S.roundNum === 2) { _startR2Question(); return; }
+    if (S.roundNum === 3 || S.roundNum === 4) { _startR3Question(); return; }
     // Round 1 — Ok or Cheating Cunt?
     if (typeof getOkOrCheatingQuestion === 'undefined') {
       UI.toast('Question bank not loaded — check quiz-questions.js', 'error');
@@ -21772,6 +21800,72 @@ RULE 10: rotate every construction, perpendicular angle, and formal observation.
     const score = { userPoints: pts, aiPoints: 0, wasInvented: false, aiVerdict: 'WRONG', isR2: true };
     _applyScore(score);
     const scoring = _el('qs-r2-scoring');
+    if (scoring) scoring.style.display = 'none';
+    const nextBtn = _el('qs-next-btn');
+    if (nextBtn) {
+      nextBtn.textContent = S.qNum >= 5 ? 'END OF ROUND ▶' : 'NEXT QUESTION ▶';
+      nextBtn.style.display = '';
+    }
+  }
+
+  function _startR3Question() {
+    const fn = S.roundNum === 4 ? getHowzatQuestion : getNameTheIncidentQuestion;
+    if (typeof fn === 'undefined') { UI.toast('Round question bank not loaded', 'error'); return; }
+    S.q = fn();
+    const clues = [S.q.clue1, S.q.clue2, S.q.clue3];
+    S.q.description = `${S.roundNum === 4 ? 'Howzat?' : 'Name the incident.'} Clue 1: "${S.q.clue1}"`;
+    S.r3UserGuess = '';
+    S.r3MaxPoints = 3;
+    S.clueNum = 1;
+    S.userAnswer = null;
+    _resetCommon();
+    _showPhases('qs-r3-question-phase');
+    const roundNames = { 3: 'Round 3 — Name the Incident', 4: 'Round 4 — Howzat?' };
+    if (_el('qs-r3-round-label')) _el('qs-r3-round-label').textContent = roundNames[S.roundNum] || '';
+    if (_el('qs-r3-sport'))       _el('qs-r3-sport').textContent = (S.q.sport || '').toUpperCase() + (S.q.year ? ' · ' + S.q.year : '');
+    if (_el('qs-r3-clue-1'))      _el('qs-r3-clue-1').textContent = `CLUE 1: ${S.q.clue1}`;
+    if (_el('qs-r3-clue-2'))      { _el('qs-r3-clue-2').textContent = `CLUE 2: ${S.q.clue2}`; _el('qs-r3-clue-2').style.display = 'none'; }
+    if (_el('qs-r3-clue-3'))      { _el('qs-r3-clue-3').textContent = `CLUE 3: ${S.q.clue3}`; _el('qs-r3-clue-3').style.display = 'none'; }
+    if (_el('qs-r3-max-pts'))     _el('qs-r3-max-pts').textContent = 'Max 3 points available';
+    if (_el('qs-r3-guess-input')) { _el('qs-r3-guess-input').value = ''; _el('qs-r3-guess-input').disabled = false; }
+    if (_el('qs-r3-lock-btn'))    _el('qs-r3-lock-btn').disabled = false;
+    if (_el('qs-r3-next-clue-btn')) _el('qs-r3-next-clue-btn').style.display = '';
+    const rl = _el('qs-round-label');
+    if (rl) rl.textContent = roundNames[S.roundNum] || '';
+  }
+
+  function nextClue() {
+    if (S.clueNum >= 3) return;
+    S.clueNum++;
+    S.r3MaxPoints = 4 - S.clueNum; // clue2→2pts, clue3→1pt
+    S.q.description = `${S.roundNum === 4 ? 'Howzat?' : 'Name the incident.'} Clue 1: "${S.q.clue1}"` +
+      (S.clueNum >= 2 ? ` Clue 2: "${S.q.clue2}"` : '') +
+      (S.clueNum >= 3 ? ` Clue 3: "${S.q.clue3}"` : '');
+    const ptsLabel = { 2: 'Max 2 points available', 3: 'Max 1 point — final clue' };
+    if (_el('qs-r3-max-pts'))    _el('qs-r3-max-pts').textContent = ptsLabel[S.clueNum] || '';
+    if (S.clueNum >= 2) { const el = _el('qs-r3-clue-2'); if (el) el.style.display = ''; }
+    if (S.clueNum >= 3) { const el = _el('qs-r3-clue-3'); if (el) el.style.display = ''; }
+    if (S.clueNum >= 3) { const nb = _el('qs-r3-next-clue-btn'); if (nb) nb.style.display = 'none'; }
+  }
+
+  async function submitR3Answer() {
+    const ta = _el('qs-r3-guess-input');
+    const guess = ta ? ta.value.trim() : '';
+    if (!guess) return;
+    S.r3UserGuess = guess;
+    S.userAnswer  = guess;
+    if (ta) ta.disabled = true;
+    if (_el('qs-r3-lock-btn'))      _el('qs-r3-lock-btn').disabled = true;
+    if (_el('qs-r3-next-clue-btn')) _el('qs-r3-next-clue-btn').disabled = true;
+    _showPhases('qs-r3-question-phase', 'qs-conferral-phase');
+    await _runConferral();
+  }
+
+  function awardR3Points(correct) {
+    const pts = correct ? S.r3MaxPoints : 0;
+    const score = { userPoints: pts, aiPoints: 0, wasInvented: false, aiVerdict: 'WRONG', isR3: true };
+    _applyScore(score);
+    const scoring = _el('qs-r3-scoring');
     if (scoring) scoring.style.display = 'none';
     const nextBtn = _el('qs-next-btn');
     if (nextBtn) {
@@ -21896,6 +21990,8 @@ RULE 10: rotate every construction, perpendicular angle, and formal observation.
     }
     if (S.roundNum === 2) {
       await _runR2HostRoast(ctx);
+    } else if (S.roundNum === 3 || S.roundNum === 4) {
+      await _runR3HostRoast(ctx);
     } else {
       await _runHostRoast(ctx);
     }
@@ -21925,6 +22021,36 @@ Reveal what actually happened. Quote the user's guess specifically — is it clo
     }
     // Show self-judge scoring buttons
     const scoring = _el('qs-r2-scoring');
+    if (scoring) scoring.style.display = '';
+  }
+
+  async function _runR3HostRoast(ctx) {
+    const phaseId = S.roundNum === 4 ? 'qs-r3-question-phase' : 'qs-r3-question-phase';
+    _showPhases(phaseId, 'qs-conferral-phase', 'qs-result-phase');
+    const host = CHARS[S.hostId];
+    const pid  = _addWaiting('qs-result-content', S.hostId, 'Revealing…');
+    const roundName = S.roundNum === 4 ? 'HOWZAT?' : 'NAME THE INCIDENT';
+    const cluesShown = [S.q.clue1, S.clueNum >= 2 ? S.q.clue2 : null, S.clueNum >= 3 ? S.q.clue3 : null].filter(Boolean);
+    const clueText = cluesShown.map((c,i) => `CLUE ${i+1}: ${c}`).join('\n');
+    try {
+      const text = await API.call(
+        host.prompt,
+        `ROUND ${S.roundNum} — "${roundName}"
+${clueText}
+ACTUAL ANSWER: ${S.q.answer}
+YOUR HOST NOTE: ${S.q.hostNote || ''}
+${S.clueNum === 1 ? 'They saw only one clue.' : S.clueNum === 2 ? 'They needed two clues.' : 'They needed all three clues — the maximum embarrassment.'}
+USER GUESSED: "${S.r3UserGuess}"
+CAPTAIN GUESSED: "${S.captainText}" — wrong, obviously
+
+Reveal the actual incident. Was the user close? Was the captain spectacularly wrong? Award moral points. Ask them to self-judge: did they name it correctly? One or two paragraphs. Be yourself.`,
+        480, 'quiz/r3-host'
+      );
+      _fillSlot(pid, S.hostId, text, '');
+    } catch(e) {
+      _fillSlot(pid, S.hostId, `Answer: ${S.q.answer}`, '');
+    }
+    const scoring = _el('qs-r3-scoring');
     if (scoring) scoring.style.display = '';
   }
 
@@ -22024,8 +22150,8 @@ Close the question. Reveal the answer. Use the host note. Quote specific wrong a
         el.style.color = userPoints > 0 ? '#4ade80' : '#f87171';
       }
     }
-    // R2 uses self-judge buttons; next-btn hidden until after self-judge (awardR2Points shows it)
-    if (!score.isR2) {
+    // R2/R3/R4 use self-judge buttons; next-btn hidden until after self-judge
+    if (!score.isR2 && !score.isR3) {
       const nextBtn = _el('qs-next-btn');
       if (nextBtn) {
         nextBtn.textContent = S.qNum >= 5 ? 'END OF ROUND ▶' : 'NEXT QUESTION ▶';
@@ -22104,7 +22230,7 @@ Close the question. Reveal the answer. Use the host note. Quote specific wrong a
     startQuestion();
   }
 
-  return { init, startQuestion, submitAnswer, submitR2Answer, awardR2Points, nextQuestion, startNextRound, confirmTeam };
+  return { init, startQuestion, submitAnswer, submitR2Answer, awardR2Points, nextClue, submitR3Answer, awardR3Points, nextQuestion, startNextRound, confirmTeam };
 
 })();
 
