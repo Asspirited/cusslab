@@ -3753,7 +3753,7 @@ Both are full characters in the Heckler & Cox cast universe. Built to the same 1
 
 **Depends on:** BL-236 (engine), BL-243 (scoring exists), BL-244 (round tail will close this round too)
 - CD3: UBV=8 TC=5 RR=7 → CoD=20, Dur=2, **CD3=10.0**
-- Status: OPEN — raised 2026-06-27.
+- Status: CLOSED — commit d1eebfd, deployed 2026-06-25.
 
 ---
 
@@ -3774,7 +3774,7 @@ Both are full characters in the Heckler & Cox cast universe. Built to the same 1
 - Question bank: `getNameTheIncidentQuestion()`
 
 - CD3: UBV=8 TC=5 RR=7 → CoD=20, Dur=2, **CD3=10.0**
-- Status: OPEN — raised 2026-06-27.
+- Status: CLOSED — commit 225d52c, deployed 2026-06-25.
 
 ---
 
@@ -3793,4 +3793,4 @@ Both are full characters in the Heckler & Cox cast universe. Built to the same 1
 - Shared implementation with Round 3
 
 - CD3: UBV=8 TC=4 RR=7 → CoD=19, Dur=1, **CD3=19.0**
-- Status: OPEN — raised 2026-06-27.
+- Status: CLOSED — commit 225d52c, deployed 2026-06-25.

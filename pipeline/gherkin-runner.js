@@ -10601,104 +10601,114 @@ function makeSteps(ctx) {
         throw new Error(`Model "${model}" not found in insult-periodic-table.html`);
     }],
 
-    // ── BL-168 — Topic-dismissal moves (specs/bl-168-topic-dismissal-moves.feature) ─────
+    // ── BL-168 + BL-194 — Topic-dismissal moves (specs/bl-168-topic-dismissal-moves.feature) ─────
+    // BL-194: dismissal moved from static Golf IIFE string to per-character pools +
+    // engine buildDismissalBlock. Steps now check the engine + GOLF_DISMISSAL_POOLS.
 
-    [/^the Golf non-anchor system prompt contains a "TOPIC-DISMISSAL" block$/, () => {
+    [/^the Golf panel defines GOLF_DISMISSAL_POOLS with per-character entries$/, () => {
       const iife = ctx._golfIife || '';
-      if (iife.indexOf('TOPIC-DISMISSAL') < 0)
-        throw new Error('Golf system prompt does not contain TOPIC-DISMISSAL block');
+      if (!iife.includes('GOLF_DISMISSAL_POOLS'))
+        throw new Error('GOLF_DISMISSAL_POOLS not defined in Golf IIFE');
+      if (!iife.includes('polite_but_funny') || !iife.includes('cold_dismissal'))
+        throw new Error('GOLF_DISMISSAL_POOLS missing required pool keys');
     }],
 
-    [/^the Golf TOPIC-DISMISSAL block instructs the model to recognise when the previous speaker drifted from the user's question$/, () => {
-      const iife = ctx._golfIife || '';
-      const start = iife.indexOf('TOPIC-DISMISSAL');
-      if (start < 0) throw new Error('TOPIC-DISMISSAL block missing');
-      const block = iife.slice(start, start + 4000);
+    [/^the engine buildDismissalBlock function produces a TOPIC-DISMISSAL block$/, () => {
+      const engineSrc = fs.readFileSync(path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js'), 'utf8');
+      if (!engineSrc.includes('buildDismissalBlock'))
+        throw new Error('buildDismissalBlock not found in engine');
+      if (!engineSrc.includes('TOPIC-DISMISSAL'))
+        throw new Error('buildDismissalBlock does not produce a TOPIC-DISMISSAL block');
+    }],
+
+    [/^the engine buildDismissalBlock instructs the model to recognise when the previous speaker drifted from the user's question$/, () => {
+      const engineSrc = fs.readFileSync(path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js'), 'utf8');
+      const start = engineSrc.indexOf('buildDismissalBlock');
+      const block = engineSrc.slice(start, start + 4000);
       if (!/drift/i.test(block) || !/previous speaker|prior speaker|last speaker/i.test(block))
-        throw new Error('TOPIC-DISMISSAL block does not instruct on drift recognition');
+        throw new Error('buildDismissalBlock does not instruct on drift recognition');
     }],
 
-    [/^the Golf TOPIC-DISMISSAL block instructs the model to apply a dismissal only when drift is recognised$/, () => {
-      const iife = ctx._golfIife || '';
-      const start = iife.indexOf('TOPIC-DISMISSAL');
-      if (start < 0) throw new Error('TOPIC-DISMISSAL block missing');
-      const block = iife.slice(start, start + 4000);
+    [/^the engine buildDismissalBlock instructs the model to apply a dismissal only when drift is recognised$/, () => {
+      const engineSrc = fs.readFileSync(path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js'), 'utf8');
+      const fnStart = engineSrc.indexOf('function buildDismissalBlock');
+      const block = engineSrc.slice(fnStart, fnStart + 4000);
       if (!/only when|only if|if (?:they |the previous |their )?(?:drift|drifted)/i.test(block))
-        throw new Error('TOPIC-DISMISSAL block does not condition dismissal on drift detection');
+        throw new Error('buildDismissalBlock does not condition dismissal on drift detection');
     }],
 
-    [/^the Golf TOPIC-DISMISSAL block instructs the model to return to the user's original question after the dismissal$/, () => {
-      const iife = ctx._golfIife || '';
-      const start = iife.indexOf('TOPIC-DISMISSAL');
-      if (start < 0) throw new Error('TOPIC-DISMISSAL block missing');
-      const block = iife.slice(start, start + 4000);
+    [/^the engine buildDismissalBlock instructs the model to return to the user's original question after the dismissal$/, () => {
+      const engineSrc = fs.readFileSync(path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js'), 'utf8');
+      const fnStart = engineSrc.indexOf('function buildDismissalBlock');
+      const block = engineSrc.slice(fnStart, fnStart + 4000);
       if (!/return to/i.test(block) || !/(?:user.s|original|actual) question/i.test(block))
-        throw new Error('TOPIC-DISMISSAL block does not instruct return to the user question');
+        throw new Error('buildDismissalBlock does not instruct return to the user question');
     }],
 
-    [/^the Golf TOPIC-DISMISSAL block forbids extending the drifted topic past the dismissal beat$/, () => {
-      const iife = ctx._golfIife || '';
-      const start = iife.indexOf('TOPIC-DISMISSAL');
-      if (start < 0) throw new Error('TOPIC-DISMISSAL block missing');
-      const block = iife.slice(start, start + 4000);
+    [/^the engine buildDismissalBlock forbids extending the drifted topic past the dismissal beat$/, () => {
+      const engineSrc = fs.readFileSync(path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js'), 'utf8');
+      const fnStart = engineSrc.indexOf('function buildDismissalBlock');
+      const block = engineSrc.slice(fnStart, fnStart + 4000);
       if (!/do not extend|never extend|not extend|do not adopt|do not stay in|forbid|never stay/i.test(block))
-        throw new Error('TOPIC-DISMISSAL block does not forbid extending the drifted topic');
+        throw new Error('buildDismissalBlock does not forbid extending the drifted topic');
     }],
 
-    [/^the Golf TOPIC-DISMISSAL block ties "([^"]+)" temperature to "([^"]+)" flavour$/, (temp, flavour) => {
-      const iife = ctx._golfIife || '';
-      const start = iife.indexOf('TOPIC-DISMISSAL');
-      if (start < 0) throw new Error('TOPIC-DISMISSAL block missing');
-      const block = iife.slice(start, start + 4000);
+    [/^the engine buildDismissalBlock ties "([^"]+)" temperature to "([^"]+)" flavour$/, (temp, flavour) => {
+      const engineSrc = fs.readFileSync(path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js'), 'utf8');
+      const fnStart = engineSrc.indexOf('function buildDismissalBlock');
+      const block = engineSrc.slice(fnStart, fnStart + 4000);
       const escape = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
       const re = new RegExp(`${escape(temp)}[^\\n]*${escape(flavour)}|${escape(flavour)}[^\\n]*${escape(temp)}`, 'i');
       if (!re.test(block))
-        throw new Error(`TOPIC-DISMISSAL block does not tie "${temp}" temperature to "${flavour}" flavour`);
+        throw new Error(`buildDismissalBlock does not tie "${temp}" temperature to "${flavour}" flavour`);
     }],
 
-    [/^the Golf TOPIC-DISMISSAL block contains the polite-but-funny example "([^"]+)"$/, (text) => {
+    [/^GOLF_DISMISSAL_POOLS includes polite-but-funny entries for "([^"]+)"$/, (charId) => {
       const iife = ctx._golfIife || '';
-      const start = iife.indexOf('TOPIC-DISMISSAL');
-      if (start < 0) throw new Error('TOPIC-DISMISSAL block missing');
-      const block = iife.slice(start, start + 4000);
-      if (!block.includes(text))
-        throw new Error(`TOPIC-DISMISSAL block missing polite-but-funny example "${text}"`);
+      const poolsStart = iife.indexOf('GOLF_DISMISSAL_POOLS');
+      if (poolsStart < 0) throw new Error('GOLF_DISMISSAL_POOLS not found');
+      const poolsBlock = iife.slice(poolsStart, poolsStart + 8000);
+      const charStart = poolsBlock.indexOf(`${charId}:`);
+      if (charStart < 0) throw new Error(`GOLF_DISMISSAL_POOLS missing entry for "${charId}"`);
+      const charBlock = poolsBlock.slice(charStart, charStart + 1000);
+      if (!charBlock.includes('polite_but_funny'))
+        throw new Error(`GOLF_DISMISSAL_POOLS["${charId}"] missing polite_but_funny pool`);
     }],
 
-    [/^the Golf TOPIC-DISMISSAL block contains the cold-dismissal example "([^"]+)"$/, (text) => {
+    [/^GOLF_DISMISSAL_POOLS includes cold-dismissal entries for "([^"]+)"$/, (charId) => {
       const iife = ctx._golfIife || '';
-      const start = iife.indexOf('TOPIC-DISMISSAL');
-      if (start < 0) throw new Error('TOPIC-DISMISSAL block missing');
-      const block = iife.slice(start, start + 4000);
-      if (!block.includes(text))
-        throw new Error(`TOPIC-DISMISSAL block missing cold-dismissal example "${text}"`);
+      const poolsStart = iife.indexOf('GOLF_DISMISSAL_POOLS');
+      if (poolsStart < 0) throw new Error('GOLF_DISMISSAL_POOLS not found');
+      const poolsBlock = iife.slice(poolsStart, poolsStart + 8000);
+      const charStart = poolsBlock.indexOf(`${charId}:`);
+      if (charStart < 0) throw new Error(`GOLF_DISMISSAL_POOLS missing entry for "${charId}"`);
+      const charBlock = poolsBlock.slice(charStart, charStart + 1000);
+      if (!charBlock.includes('cold_dismissal'))
+        throw new Error(`GOLF_DISMISSAL_POOLS["${charId}"] missing cold_dismissal pool`);
     }],
 
-    [/^the Golf TOPIC-DISMISSAL block contains the piss-take example "([^"]+)"$/, (text) => {
+    [/^GOLF_DISMISSAL_POOLS includes piss-take entries for "([^"]+)"$/, (charId) => {
       const iife = ctx._golfIife || '';
-      const start = iife.indexOf('TOPIC-DISMISSAL');
-      if (start < 0) throw new Error('TOPIC-DISMISSAL block missing');
-      const block = iife.slice(start, start + 4000);
-      if (!block.includes(text))
-        throw new Error(`TOPIC-DISMISSAL block missing piss-take example "${text}"`);
+      const poolsStart = iife.indexOf('GOLF_DISMISSAL_POOLS');
+      if (poolsStart < 0) throw new Error('GOLF_DISMISSAL_POOLS not found');
+      const poolsBlock = iife.slice(poolsStart, poolsStart + 8000);
+      const charStart = poolsBlock.indexOf(`${charId}:`);
+      if (charStart < 0) throw new Error(`GOLF_DISMISSAL_POOLS missing entry for "${charId}"`);
+      const charBlock = poolsBlock.slice(charStart, charStart + 1000);
+      if (!charBlock.includes('piss_take'))
+        throw new Error(`GOLF_DISMISSAL_POOLS["${charId}"] missing piss_take pool`);
     }],
 
-    [/^the Golf TOPIC-DISMISSAL block names tangent-prone characters whose responses do not lead with a dismissal$/, () => {
+    [/^GOLF_DISMISSAL_POOLS does not include an entry for "([^"]+)"$/, (charId) => {
       const iife = ctx._golfIife || '';
-      const start = iife.indexOf('TOPIC-DISMISSAL');
-      if (start < 0) throw new Error('TOPIC-DISMISSAL block missing');
-      const block = iife.slice(start, start + 4000);
-      if (!/tangent-prone|exempt|do not lead with|never lead with/i.test(block))
-        throw new Error('TOPIC-DISMISSAL block does not name tangent-prone characters');
-    }],
-
-    [/^the Golf TOPIC-DISMISSAL block exemption list includes the character "([^"]+)"$/, (charName) => {
-      const iife = ctx._golfIife || '';
-      const start = iife.indexOf('TOPIC-DISMISSAL');
-      if (start < 0) throw new Error('TOPIC-DISMISSAL block missing');
-      const block = iife.slice(start, start + 4000);
-      if (!block.toLowerCase().includes(charName.toLowerCase()))
-        throw new Error(`TOPIC-DISMISSAL exemption list does not include "${charName}"`);
+      const poolsStart = iife.indexOf('GOLF_DISMISSAL_POOLS');
+      if (poolsStart < 0) throw new Error('GOLF_DISMISSAL_POOLS not found');
+      // Find the end of the pools object (closing }; after the pools definition)
+      const poolsBlock = iife.slice(poolsStart, poolsStart + 8000);
+      // charId should not appear as an object key (charId:) in the pools block
+      const keyRe = new RegExp(`\\b${charId}\\s*:`);
+      if (keyRe.test(poolsBlock.slice(0, poolsBlock.indexOf('\n  };\n') + 10)))
+        throw new Error(`GOLF_DISMISSAL_POOLS unexpectedly includes entry for "${charId}" (should be exempt non-dismisser)`);
     }],
 
     [/^the Golf anchor opener prompt does not contain the TOPIC-DISMISSAL block$/, () => {

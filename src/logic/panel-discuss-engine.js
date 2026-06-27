@@ -432,7 +432,53 @@ function selectVoicePoolPicks(pools) {
   return picks;
 }
 
-const _PanelDiscussEngineExports = { selectSlots, buildSystemPrompt, selectVoicePoolPicks, shouldAnchorInterject };
+// buildDismissalBlock — BL-194. Builds a per-character TOPIC-DISMISSAL prompt block.
+//
+// INPUT:
+//   pools    — { [memberId]: { polite_but_funny?: string[], cold_dismissal?: string[], piss_take?: string[] } }
+//   memberId — character ID to look up
+//   usedMap  — Map<string, Set<string>>; tracks phrases already injected this session
+//
+// RETURN: dismissal block string, or '' if character has no pools or is a non-dismisser.
+//
+// BEHAVIOUR:
+//   - Picks one entry per available pool level, avoiding already-used entries.
+//   - Falls back to full pool if all entries are exhausted.
+//   - Marks picked entries in usedMap for anti-repeat across session.
+//   - Empty arrays are treated as "pool not available for this character".
+function buildDismissalBlock(pools, memberId, usedMap) {
+  const charPools = pools && pools[memberId];
+  if (!charPools) return '';
+
+  const usedSet = usedMap.get(memberId) || new Set();
+
+  const pick = (arr) => {
+    if (!Array.isArray(arr) || !arr.length) return null;
+    const avail = arr.filter(e => !usedSet.has(e));
+    const src = avail.length ? avail : arr;
+    return src[Math.floor(Math.random() * src.length)];
+  };
+
+  const politeEx   = pick(charPools.polite_but_funny);
+  const coldEx     = pick(charPools.cold_dismissal);
+  const pisstakeEx = pick(charPools.piss_take);
+
+  if (!politeEx && !coldEx && !pisstakeEx) return '';
+
+  if (politeEx)   usedSet.add(politeEx);
+  if (coldEx)     usedSet.add(coldEx);
+  if (pisstakeEx) usedSet.add(pisstakeEx);
+  usedMap.set(memberId, usedSet);
+
+  const lines = [];
+  if (politeEx)   lines.push(`  • "warm" or "amused" temperature → polite-but-funny. Use: "${politeEx}"`);
+  if (coldEx)     lines.push(`  • "neutral" or "cool" temperature → cold dismissal. Use: "${coldEx}"`);
+  if (pisstakeEx) lines.push(`  • "hostile" (or you were just insulted) → piss-take. Use: "${pisstakeEx}"`);
+
+  return `TOPIC-DISMISSAL:\nIf the previous speaker has drifted from the user's question — gone off on a tangent that isn't actually about what was asked — you may lead your response with a brief, character-authentic dismissal of that drift before returning to the user's original question. Apply a dismissal only when drift is recognised; if the previous speaker stayed on topic, do not lead with one.\n\nDismissal flavour is determined by your current temperature toward the drifter:\n${lines.join('\n')}\n\nUse the suggested phrase as written or adapt it slightly — the voice must be yours. After the dismissal, return to the user's question. Do not extend the drifted topic — never stay in the tangent, never adopt it. The dismissal is a bridge back, not a doorway in.`;
+}
+
+const _PanelDiscussEngineExports = { selectSlots, buildSystemPrompt, selectVoicePoolPicks, shouldAnchorInterject, buildDismissalBlock };
 
 // Browser: expose as global so per-panel IIFEs can call PanelDiscussEngine.selectSlots(...)
 if (typeof window !== 'undefined') window.PanelDiscussEngine = _PanelDiscussEngineExports;

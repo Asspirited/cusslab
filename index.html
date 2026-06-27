@@ -13535,7 +13535,27 @@ You layer. You do not extend for the sake of it — but if a standards failure i
   // FOOTBALL_MAGNETS / FOOTBALL_IDIOM_PROFILES are empty defaults — characters
   // have no P11 magnets / P9 idiom modes authored yet. Ronglish for Big Ron
   // is a future BL-192 candidate addition once that ships.
-  const FOOTBALL_TOPIC_DISMISSAL = '';
+  // BL-194 — per-character dismissal pools (from character files).
+  // micah: not a dismisser (no entry). Pool exhaustion falls back to full pool.
+  const FOOTBALL_DISMISSAL_POOLS = {
+    souness: {
+      polite_but_funny: ["Aye, very good. Anyway.", "Right. We'll come back to that one never.", "That's interesting. It isn't. But it's interesting.", "I'll let someone else take that one. I've got nothing for it.", "Fine. Moving on."],
+      cold_dismissal:   ["That's not the question.", "We're not doing that today.", "No.", "I've nothing to say to that.", "Different conversation. Different day. Probably never."],
+      piss_take:        ["Aye, well, that's the modern game for you. Anyway — back to the actual question.", "Brilliant. Absolutely fascinating. Now then — Liverpool.", "Is this what we're doing now? Right. I'm done with this bit.", "I'm going to pretend I didn't hear that and we'll all be better for it.", "Christ. Next."],
+    },
+    carragher: {
+      polite_but_funny: ["Yeah, fair enough lad, but come on — what about the actual game?", "I'll give you that one. Doesn't mean I'm going there with you.", "Mate. We're better than that. Different topic.", "Right, you've had your fun. Back to it.", "Listen — I'll let you have that. Once."],
+      cold_dismissal:   ["That's not it though, is it.", "No. That doesn't stand up.", "I'm not getting drawn into that.", "We're not doing that one today.", "Different conversation. Stay with what matters."],
+    },
+    neville: {
+      polite_but_funny: ["Yeah, alright, but structurally that doesn't hold.", "Interesting. Now — back to the actual shape of the game.", "I'll let you have that one. Briefly.", "Right. Different question.", "Fair enough. Different conversation though."],
+      cold_dismissal:   ["That's not the structural point.", "No. The shape doesn't support that.", "We're not having that today.", "Different game. Different analysis.", "I'm not engaging with that one."],
+    },
+    bigron: {
+      polite_but_funny: ["Spotter's badge for that one. Now — back to the football.", "Six and two threes. Right — what about the back four?", "Give the lad some credit and let's move on, eh.", "Early doors on that one, early doors. Different subject.", "Lollipop. Brilliant. Anyway."],
+      cold_dismissal:   ["We're not going down that channel.", "Different game. Different conversation.", "Nothing to add there.", "That's the wrong corridor entirely.", "Move on, move on."],
+    },
+  };
   const FOOTBALL_MAGNETS         = {};
   const FOOTBALL_IDIOM_PROFILES  = {};
 
@@ -13635,6 +13655,8 @@ You layer. You do not extend for the sake of it — but if a standards failure i
 
   // Premonition context — set by callMoment(), read by discuss()
   let _fbPremCtx = null;
+  // BL-194 — dismissal anti-repeat tracker (persists across questions in session)
+  const _fbDismissalUsed = new Map();
   // Last context — set after each run, read by requestFootballAuthorEpilogue()
   let _fbLastContext = null;
 
@@ -13753,7 +13775,7 @@ You layer. You do not extend for the sake of it — but if a standards failure i
         : '';
       const fbBaseSystem = PanelDiscussEngine.buildSystemPrompt({
         turnRules: TURN_RULES,
-        topicDismissal: FOOTBALL_TOPIC_DISMISSAL,
+        topicDismissal: PanelDiscussEngine.buildDismissalBlock(FOOTBALL_DISMISSAL_POOLS, member.id, _fbDismissalUsed),
         anchorId: 'souness',
         voicePoolBlock: '',
         slot: i,
@@ -16572,6 +16594,31 @@ NARRATIVE POSTURE — You arrive with the warm observation: what happened, who w
     butch:     { lie_baseline: 0.30, lie_ceiling: 'credible_stretch',   lie_tell: "The fact of the matter is" },
   };
 
+  // BL-194 — per-character dismissal pools (from character files).
+  // faldo, dougherty: not dismissers (no entry). Murray anchor: engine suppresses on anchor slots.
+  const GOLF_DISMISSAL_POOLS = {
+    murray: {
+      polite_but_funny: ["Yes — well, in its own way, that connects to something. Though perhaps not directly to the question. Anyway —", "What. A. Tangent. We will return to it, I have no doubt, but for now — the question.", "An extraordinary contribution, and one I will be turning over for some time. But — the question that was actually asked.", "Now. I find that — I find that, in its own way, historically significant. But not, I think, what we are here to address.", "Right. Right. That is a frame I had not considered. I will park it. The question remains."],
+    },
+    mcginley: {
+      cold_dismissal: ["Nick — and this is high tariff, what you're describing — but I think the framework requires us to come back to the question.", "I hear you, and I've cycled back on a similar point myself — actually, I take that back, mine was a premium execution window scenario. Different thing. Question stands.", "Right. Top-drawer contribution. The room would benefit, I think, from returning to what was actually asked.", "That's a category-one ask in itself, Nick, and credit to you for the commitment. But — would you not agree the question deserves a more direct frame?", "Six majors in the room and we're somehow off the question. I'll bring us back."],
+    },
+    radar: {
+      polite_but_funny: ["Yeah, mate.", "Right. Anyway.", "Sure.", "Mmm.", "That'll do."],
+      cold_dismissal:   ["Nah.", "No.", "Stop.", "Mate.", "Bullshit."],
+      piss_take:        ["Gobshite.", "Eleven words. Could've said it in one."],
+    },
+    henni: {
+      polite_but_funny: ["Right — and I just want to bring us back to the question, if I may. The question was —", "That's — that's an extraordinary contribution from [Character], and I don't doubt the conviction. Let me put it to Andrew, who I think wanted to come in.", "I'm watching the room. I think we may have drifted slightly. Let me reset — the question was —", "I'm going to park that, with respect, and come back to what was actually asked. Ewen — your view?", "Lovely. Fascinating, in its own way. Let me bring in Butch."],
+      cold_dismissal:   ["I don't think that answered the question.", "I'm going to move us on. The question still stands.", "We'll come back to that. Not now.", "Right. Next.", "I think we've heard the contribution. Let's hear from someone else."],
+    },
+    roe: {
+      cold_dismissal: ["Right. That's not the question, though, is it.", "I'll tell you what happened, right — that's not what happened. Moving on.", "Nah. The question was about [topic]. Stay on it.", "I think we've gone off. I'll bring us back. The question was —", "That's a different conversation. Different day. Question stands."],
+    },
+  };
+  // BL-194 — dismissal anti-repeat tracker (persists across questions in session)
+  const _golfDismissalUsed = new Map();
+
   // Premonition context — set by callMoment(), read by discuss()
   let _gfPremCtx = null;
 
@@ -16598,17 +16645,7 @@ NARRATIVE POSTURE — You arrive with the warm observation: what happened, who w
 
     const TURN_RULES = `RULE 1 — TURN LENGTH:\nA turn can be one word, a fragment, one sentence, or two sentences. One word is a complete turn. Two sentences is the maximum — never more. Length is earned only by being directly challenged, provoked, or explicitly given the floor. The default is the shortest response that lands. A single word lands. Silence lands. Two sentences is already long.\n\nRULE 2 — YOUR OWN ANGLE FIRST:\nYour default is your own position — what you actually think about this, through your specific lens. You do not need to acknowledge what was just said. React to another character only when something they said genuinely interests, provokes, or lands on your wound. When you do react, use a move from Rule 4. If nothing said catches you, ignore it and lead with your own take.\n\nRULE 3 — CROSS-REFERENCE:\nYou may use anything said earlier in this conversation as ammunition. Wounds, indiscretions, failures, warmth — all fair game. You were there. You remember.\n\nRULE 4 — REACTIVE MOVES:\nYour reactive move is structural guidance — what you DO, not words you SAY. Seven moves available:\n(1) Agree and build — add something true that makes it worse\n(2) Agree but undermine — confirm surface, destroy substance\n(3) Contradict — name what was wrong and why\n(4) Flat refusal — one sentence, refusal is the content\n(5) Light-hearted pisstake — puncture with affection\n(6) Full-blooded insult — strongest language, lands on real wound\n(7) Mimic — three types, each distinct. Never name the type. Never signal you're doing it:\n\nType A — ECHO (affectionate): repeat their phrase in your own voice, meaning it approximately sincerely. Dougherty doing Murray: "What. A. Shot." He means it. Murray is appalled it came from him. The appalment is historically significant.\n\nType B — SUBSTITUTION (weaponized or comic): keep the verbal structure, replace the payload. "What. A. Shot." becomes: "What. A. Putt." (too small — Radar, deadpan, after a three-footer). "What. A. Cunt." (Radar again, same cadence, different noun, different round). "What. A. Framework." (Roe, at wrong volume, not knowing he's doing it). "What. A. Sandwich." (Dougherty, having lost the thread, meaning it).\n\nType C — SUSTAINED IMPRESSION (satirical): briefly become them — full register, voice, posture — until the impression loses thread mid-sentence and you re-emerge in your own voice without acknowledgement. Use once. Lands once. Does not repeat.\n\nMURRAY PATTERN — highest mimic availability in this panel. "What. A. [X]." is universal. Substitute any noun. Each panellist has a preferred substitution:\n- Radar: a devastating noun, delivered deadpan, after a pause. He has already had a drink.\n- Dougherty: a warm noun, completely sincere. "What. A. Moment." He means it. Murray cannot decide if this is better or worse.\n- McGinley: an abstract noun. "What. A. Dynamic." He has a framework for why this fits.\n- Roe: the wrong noun for the context, at wrong volume, as analysis.\n- Faldo: does not mimic Murray. Murray has never noticed this.\n\nOTHER TARGET PATTERNS:\n- McGINLEY: "high-tariff [X]" / "top-drawer [X]" / "in my wheelhouse" — substitute freely. Radar's version of "wheelhouse": one pause, then "being a gobshite."\n- DOUGHERTY: "What I love about this is—" followed by silence, or one wrong word. Radar's standard move.\n- FALDO: "I've cycled back on this." Dangerous to mimic directly. Anyone who does it gets the look. The look has been documented. Henni has notes.\n- HENNI: "I just want to ask—" deployed by McGinley to redirect, twice, in one session. She noticed. She has a follow-up.\n\nNever name the move. Never open with the label.\n\nRULE 5 — LUKE DONALD:\nLuke Donald's name is always pronounced in the manner of Matt Damon in Team America. Every time. No acknowledgement. It never stops.`;
 
-    const GOLF_TOPIC_DISMISSAL = `TOPIC-DISMISSAL:
-If the previous speaker has drifted from the user's question — gone off on a tangent that isn't actually about what was asked — you may lead your response with a brief, character-appropriate dismissal of that drift before returning to the user's original question. Apply a dismissal only when drift is recognised. If the previous speaker stayed on topic, do not lead with one.
-
-Dismissal flavour is determined by your current temperature toward the drifter:
-  • "warm" temperature → polite-but-funny aside. Example: "yeah, more luke warm ginsters Nick, great...........anyway as we were saying"
-  • "neutral" or "cool" temperature → cold dismissal. Example: "No not like Ginsters Nick"
-  • "hostile" temperature (or you were just insulted by them) → piss-take. Example: "yeah, exactly, like a fucking warm ginsters Nick you stupid one-exampled idiot"
-
-After the dismissal beat, return to the user's original question and pursue your own angle. Do not extend the drifted topic past the dismissal — never stay in the tangent, never adopt it, never build on it. The dismissal is a bridge back, not a doorway in.
-
-Tangent-prone characters are exempt — they are the ones being dismissed, not the ones dismissing. Faldo does not lead with a dismissal.`;
+    // BL-194 — topicDismissal built per-character at turn time from GOLF_DISMISSAL_POOLS.
 
     // Easter egg — "include the don" injects Peter Alliss into the panel
     const THE_DON_TRIGGER = /^include the don[,.]?\s*/i;
@@ -16787,7 +16824,7 @@ Tangent-prone characters are exempt — they are the ones being dismissed, not t
         : '';
       const gfBaseSystem = PanelDiscussEngine.buildSystemPrompt({
         turnRules: TURN_RULES,
-        topicDismissal: GOLF_TOPIC_DISMISSAL,
+        topicDismissal: PanelDiscussEngine.buildDismissalBlock(GOLF_DISMISSAL_POOLS, member.id, _golfDismissalUsed),
         anchorId,
         voicePoolBlock: faldoVoicePoolBlock,
         slot: i,
