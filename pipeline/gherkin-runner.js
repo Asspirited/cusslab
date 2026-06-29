@@ -10864,6 +10864,39 @@ function makeSteps(ctx) {
         throw new Error(`Golf discuss function does not reference "${sym}"`);
     }],
 
+    // ── BL-202 — buildMagnetBlock helper (specs/bl-202-magnet-block-builder.feature) ─────
+
+    [/^buildMagnetBlock with an unknown character returns an empty string$/, () => {
+      delete require.cache[require.resolve(path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js'))];
+      const engine = require(path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js'));
+      const result = engine.buildMagnetBlock('nobody', { faldo: 'test magnet' });
+      if (result !== '')
+        throw new Error(`buildMagnetBlock returned "${result}" for unknown character, expected ""`);
+    }],
+
+    [/^buildMagnetBlock with a known character returns a string containing "TOPIC MAGNETS"$/, () => {
+      delete require.cache[require.resolve(path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js'))];
+      const engine = require(path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js'));
+      const result = engine.buildMagnetBlock('faldo', { faldo: 'M1 [obsessive] test magnet' });
+      if (!result.includes('TOPIC MAGNETS'))
+        throw new Error(`buildMagnetBlock result missing "TOPIC MAGNETS": "${result.slice(0, 100)}"`);
+    }],
+
+    [/^the Football discuss function does not contain the inline "([^"]+)" template$/, (text) => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      const fbStart = html.indexOf("// MODULE: Football");
+      const fbEnd = fbStart > 0 ? html.indexOf('// MODULE:', fbStart + 10) : -1;
+      const fbSrc = fbStart > 0 ? html.slice(fbStart, fbEnd > 0 ? fbEnd : fbStart + 200000) : '';
+      if (fbSrc.includes(text))
+        throw new Error(`Football discuss function still contains inline "${text}" template`);
+    }],
+
+    [/^the Golf discuss function does not contain the inline "([^"]+)" template$/, (text) => {
+      const iife = ctx._golfIife || '';
+      if (iife.includes(text))
+        throw new Error(`Golf discuss function still contains inline "${text}" template`);
+    }],
+
     [/^the Golf discuss function does not construct ORDER inline$/, () => {
       const iife = ctx._golfIife || '';
       // Match the OLD pre-extraction pattern specifically; PhilsOpoly etc. use

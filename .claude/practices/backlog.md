@@ -2021,7 +2021,7 @@ BL-058 remains the design/discovery item. Delivery items: BL-060 through BL-086.
 - Feature: panel-voice
 - Epic: Panel Voice & Texture
 - CD3: UBV=9 TC=7 RR=5 → CoD=21, Dur=3, **CD3=7.0**
-- Status: OPEN — raised 2026-05-17. Three Amigos partially done (Murray's magnets in worked example were sketched in chat); Gherkin needed before any code. v0 data work may proceed independently as it is pure character-file content addition (subject to P11 validation checklist).
+- Status: CLOSED — v0 data shipped across multiple commits (ecfa861 through 92666f5); v1 engine wiring commit febd2ce. All Golf characters + Football cast + multi-panel expansion live. Backlog entry was not updated at time of shipping.
 
 ---
 
@@ -2500,7 +2500,7 @@ Each character with `dismissal_profile` config (warm-flavour / cold-flavour / pi
 - Feature: panel-voice
 - CD3: UBV=7 TC=5 RR=3 → CoD=15, Dur=2, **CD3=7.5**
 - Composes with: BL-168 (v1 the dismissal block exists; v2 is the per-character voice), BL-176 (repetism dial-back — flavour profile prevents dismissal-bleed)
-- Status: OPEN — raised 2026-05-19 from BL-168 v2 reframing
+- Status: CLOSED — commit 88a3f6f, deployed 2026-06-27. GOLF_DISMISSAL_POOLS + FOOTBALL_DISMISSAL_POOLS; engine buildDismissalBlock(); session anti-repeat Map. Faldo/Dougherty/Micah exempt (no entry = '' returned).
 
 ---
 
@@ -2537,7 +2537,7 @@ Drift score = lexical-overlap inverse with question keywords + topic-magnet-firi
 - Feature: panel-voice (engine)
 - CD3: UBV=8 TC=6 RR=6 → CoD=20, Dur=3, **CD3=6.7**
 - Composes with: BL-162 (lives inside the shared engine), BL-178 (magnet selection mirrors this pattern), BL-174 (idiom selection mirrors this pattern)
-- Status: OPEN — raised 2026-05-19 from BL-172 v2 reframing. v2 is what was always intended; v1 was tactical exception per WL-150.
+- Status: CLOSED — selectVoicePoolPicks in panel-discuss-engine.js (BL-162 Slice 2, commit febd2ce area). _faldoPick removed, PanelDiscussEngine.selectVoicePoolPicks used for all pool picking. All 9 Gherkin scenarios green. Backlog entry was not updated at time of shipping.
 
 ---
 

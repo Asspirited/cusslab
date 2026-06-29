@@ -12078,9 +12078,7 @@ CLOWN PORN PROTOCOL: The specific name of the MP who voted for [specific policy]
       const crIdiomBlock = (typeof IdiomEngine !== 'undefined' && IdiomEngine.buildIdiomBlock)
         ? IdiomEngine.buildIdiomBlock(member.id, COMEDY_IDIOM_PROFILES[member.id])
         : '';
-      const crMagnetBlock = COMEDY_MAGNETS[member.id]
-        ? `\n\nYOUR TOPIC MAGNETS THIS TURN (P11 — subjects your mind keeps returning to; surface naturally per their declared surface_form, never name as fixation unless your acknowledgement rule allows):\n        ${COMEDY_MAGNETS[member.id]}\n`
-        : '';
+      const crMagnetBlock = PanelDiscussEngine.buildMagnetBlock(member.id, COMEDY_MAGNETS);
       const crBaseSystem = PanelDiscussEngine.buildSystemPrompt({
         turnRules: TURN_RULES,
         topicDismissal: COMEDY_TOPIC_DISMISSAL,
@@ -13770,9 +13768,7 @@ You layer. You do not extend for the sake of it — but if a standards failure i
       const fbIdiomBlock = (typeof IdiomEngine !== 'undefined' && IdiomEngine.buildIdiomBlock)
         ? IdiomEngine.buildIdiomBlock(member.id, FOOTBALL_IDIOM_PROFILES[member.id])
         : '';
-      const fbMagnetBlock = FOOTBALL_MAGNETS[member.id]
-        ? `\n\nYOUR TOPIC MAGNETS THIS TURN (P11 — subjects your mind keeps returning to; surface naturally per their declared surface_form, never name as fixation unless your acknowledgement rule allows):\n        ${FOOTBALL_MAGNETS[member.id]}\n`
-        : '';
+      const fbMagnetBlock = PanelDiscussEngine.buildMagnetBlock(member.id, FOOTBALL_MAGNETS);
       const fbBaseSystem = PanelDiscussEngine.buildSystemPrompt({
         turnRules: TURN_RULES,
         topicDismissal: PanelDiscussEngine.buildDismissalBlock(FOOTBALL_DISMISSAL_POOLS, member.id, _fbDismissalUsed),
@@ -16796,12 +16792,8 @@ NARRATIVE POSTURE — You arrive with the warm observation: what happened, who w
         ? IdiomEngine.buildIdiomBlock(member.id, GOLF_IDIOM_PROFILES[member.id])
         : '';
 
-      // BL-178 v1 wiring (2026-05-19) — inject per-character P11 magnet data so the engine's
-      // TOPIC MAGNETS block has something concrete to surface. Characters not in GOLF_MAGNETS
-      // are no-op (engine block remains valid but has no character-specific anchors to use).
-      const gfMagnetBlock = GOLF_MAGNETS[member.id]
-        ? `\n\nYOUR TOPIC MAGNETS THIS TURN (P11 — subjects your mind keeps returning to; surface naturally per their declared surface_form, never name as fixation unless your acknowledgement rule allows):\n        ${GOLF_MAGNETS[member.id]}\n`
-        : '';
+      // BL-202 — buildMagnetBlock extracts the Golf gfMagnetBlock pattern into shared engine helper.
+      const gfMagnetBlock = PanelDiscussEngine.buildMagnetBlock(member.id, GOLF_MAGNETS);
 
       const gfIaType = IntellectualAttempts.detect(panelInput);
 
@@ -17599,9 +17591,7 @@ OPENER VARIETY — rotate naturally:
       const scIdiomBlock = (typeof IdiomEngine !== 'undefined' && IdiomEngine.buildIdiomBlock)
         ? IdiomEngine.buildIdiomBlock(member.id, SC_IDIOM_PROFILES[member.id])
         : '';
-      const scMagnetBlock = SC_MAGNETS[member.id]
-        ? `\n\nYOUR TOPIC MAGNETS THIS TURN (P11 — subjects your mind keeps returning to; surface naturally per their declared surface_form, never name as fixation unless your acknowledgement rule allows):\n        ${SC_MAGNETS[member.id]}\n`
-        : '';
+      const scMagnetBlock = PanelDiscussEngine.buildMagnetBlock(member.id, SC_MAGNETS);
       const scBaseSystem = PanelDiscussEngine.buildSystemPrompt({
         turnRules: TURN_RULES,
         topicDismissal: SC_TOPIC_DISMISSAL,
@@ -20005,9 +19995,7 @@ Never name the move.`;
       const lrIdiomBlock = (typeof IdiomEngine !== 'undefined' && IdiomEngine.buildIdiomBlock)
         ? IdiomEngine.buildIdiomBlock(member.id, CRICKET_IDIOM_PROFILES[member.id])
         : '';
-      const lrMagnetBlock = CRICKET_MAGNETS[member.id]
-        ? `\n\nYOUR TOPIC MAGNETS THIS TURN (P11 — subjects your mind keeps returning to; surface naturally per their declared surface_form, never name as fixation unless your acknowledgement rule allows):\n        ${CRICKET_MAGNETS[member.id]}\n`
-        : '';
+      const lrMagnetBlock = PanelDiscussEngine.buildMagnetBlock(member.id, CRICKET_MAGNETS);
       const lrBaseSystem = PanelDiscussEngine.buildSystemPrompt({
         turnRules: TURN_RULES,
         topicDismissal: CRICKET_TOPIC_DISMISSAL,
@@ -20461,9 +20449,7 @@ McCririck died July 2019. O'Sullevan died October 2015. Both are present in this
       const racingIdiomBlock = (typeof IdiomEngine !== 'undefined' && IdiomEngine.buildIdiomBlock)
         ? IdiomEngine.buildIdiomBlock(member.id, RACING_IDIOM_PROFILES[member.id])
         : '';
-      const racingMagnetBlock = RACING_MAGNETS[member.id]
-        ? `\n\nYOUR TOPIC MAGNETS THIS TURN (P11 — subjects your mind keeps returning to; surface naturally per their declared surface_form, never name as fixation unless your acknowledgement rule allows):\n        ${RACING_MAGNETS[member.id]}\n`
-        : '';
+      const racingMagnetBlock = PanelDiscussEngine.buildMagnetBlock(member.id, RACING_MAGNETS);
       const system = PanelDiscussEngine.buildSystemPrompt({
         turnRules: TURN_RULES,
         topicDismissal: RACING_TOPIC_DISMISSAL,

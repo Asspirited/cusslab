@@ -478,7 +478,23 @@ function buildDismissalBlock(pools, memberId, usedMap) {
   return `TOPIC-DISMISSAL:\nIf the previous speaker has drifted from the user's question — gone off on a tangent that isn't actually about what was asked — you may lead your response with a brief, character-authentic dismissal of that drift before returning to the user's original question. Apply a dismissal only when drift is recognised; if the previous speaker stayed on topic, do not lead with one.\n\nDismissal flavour is determined by your current temperature toward the drifter:\n${lines.join('\n')}\n\nUse the suggested phrase as written or adapt it slightly — the voice must be yours. After the dismissal, return to the user's question. Do not extend the drifted topic — never stay in the tangent, never adopt it. The dismissal is a bridge back, not a doorway in.`;
 }
 
-const _PanelDiscussEngineExports = { selectSlots, buildSystemPrompt, selectVoicePoolPicks, shouldAnchorInterject, buildDismissalBlock };
+// buildMagnetBlock — BL-202. Builds a per-character TOPIC MAGNETS prompt block.
+//
+// INPUT:
+//   memberId  — character ID to look up
+//   magnetMap — { [memberId]: string } — panel-level magnets map (e.g. GOLF_MAGNETS)
+//               Each value is a pre-formatted magnet description string.
+//
+// RETURN: formatted magnet block string (with leading newline), or '' if no entry.
+//
+// Used by all panels that declare a MAGNETS map. Extracts the Golf gfMagnetBlock
+// pattern into a single shared function — adding a new panel's magnets is a data change only.
+function buildMagnetBlock(memberId, magnetMap) {
+  if (!magnetMap || !magnetMap[memberId]) return '';
+  return `\n\nYOUR TOPIC MAGNETS THIS TURN (P11 — subjects your mind keeps returning to; surface naturally per their declared surface_form, never name as fixation unless your acknowledgement rule allows):\n        ${magnetMap[memberId]}\n`;
+}
+
+const _PanelDiscussEngineExports = { selectSlots, buildSystemPrompt, selectVoicePoolPicks, shouldAnchorInterject, buildDismissalBlock, buildMagnetBlock };
 
 // Browser: expose as global so per-panel IIFEs can call PanelDiscussEngine.selectSlots(...)
 if (typeof window !== 'undefined') window.PanelDiscussEngine = _PanelDiscussEngineExports;
