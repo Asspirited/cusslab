@@ -5,7 +5,8 @@ Feature: Profani-saurus per-character swear profiles (BL-197)
   and session anti-repeat prevents the same phrase twice in a row
 
   Background:
-    Given the file "src/logic/panel-discuss-engine.js" exists
+    Given the Golf panel Q&A section of index.html is loaded
+    And the file "src/logic/panel-discuss-engine.js" exists
 
   Scenario: The engine exports a buildSwearBlock function
     Then "src/logic/panel-discuss-engine.js" exports a function named "buildSwearBlock"
