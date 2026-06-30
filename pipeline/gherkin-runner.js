@@ -10864,6 +10864,58 @@ function makeSteps(ctx) {
         throw new Error(`Golf discuss function does not reference "${sym}"`);
     }],
 
+    // ── BL-197 — Profani-saurus per-character swear profiles (specs/bl-197-profanisaurus.feature) ──
+
+    [/^buildSwearBlock with no pool for a character returns an empty string$/, () => {
+      delete require.cache[require.resolve(path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js'))];
+      const engine = require(path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js'));
+      const result = engine.buildSwearBlock('nobody', { faldo: { normal: ['bloody hell'] } }, false, new Map());
+      if (result !== '')
+        throw new Error(`buildSwearBlock returned "${result}" for unknown character, expected ""`);
+    }],
+
+    [/^buildSwearBlock with a known character returns a string containing "PROFANITY ONE-SHOT"$/, () => {
+      delete require.cache[require.resolve(path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js'))];
+      const engine = require(path.join(__dirname, '..', 'src/logic/panel-discuss-engine.js'));
+      const result = engine.buildSwearBlock('faldo', { faldo: { normal: ['bloody hell'] } }, false, new Map());
+      if (!result.includes('PROFANITY ONE-SHOT'))
+        throw new Error(`buildSwearBlock result missing "PROFANITY ONE-SHOT": "${result.slice(0, 100)}"`);
+    }],
+
+    [/^the Football section of index\.html declares "([^"]+)"$/, (sym) => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      const fbStart = html.indexOf('// MODULE: Football');
+      const fbEnd = fbStart > 0 ? html.indexOf('// MODULE:', fbStart + 10) : -1;
+      const fbSrc = fbStart > 0 ? html.slice(fbStart, fbEnd > 0 ? fbEnd : fbStart + 200000) : '';
+      if (!fbSrc.includes(sym))
+        throw new Error(`Football section does not declare "${sym}"`);
+    }],
+
+    [/^the Football discuss function passes "([^"]+)" in panelStateBlocks$/, (sym) => {
+      const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+      const fbStart = html.indexOf('// MODULE: Football');
+      const fbEnd = fbStart > 0 ? html.indexOf('// MODULE:', fbStart + 10) : -1;
+      const fbSrc = fbStart > 0 ? html.slice(fbStart, fbEnd > 0 ? fbEnd : fbStart + 200000) : '';
+      const match = fbSrc.match(/panelStateBlocks\s*:\s*([^\n,}]+)/);
+      if (!match) throw new Error('Could not find panelStateBlocks in Football section');
+      if (!match[1].includes(sym))
+        throw new Error(`Football panelStateBlocks does not include "${sym}": ${match[1]}`);
+    }],
+
+    [/^the Golf section of index\.html declares "([^"]+)"$/, (sym) => {
+      const iife = ctx._golfIife || '';
+      if (!iife.includes(sym))
+        throw new Error(`Golf section does not declare "${sym}"`);
+    }],
+
+    [/^the Golf discuss function passes "([^"]+)" in panelStateBlocks$/, (sym) => {
+      const iife = ctx._golfIife || '';
+      const match = iife.match(/panelStateBlocks\s*:\s*([^\n,}]+)/);
+      if (!match) throw new Error('Could not find panelStateBlocks in Golf discuss function');
+      if (!match[1].includes(sym))
+        throw new Error(`Golf panelStateBlocks does not include "${sym}": ${match[1]}`);
+    }],
+
     // ── BL-202 — buildMagnetBlock helper (specs/bl-202-magnet-block-builder.feature) ─────
 
     [/^buildMagnetBlock with an unknown character returns an empty string$/, () => {

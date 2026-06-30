@@ -13557,6 +13557,25 @@ You layer. You do not extend for the sake of it — but if a standards failure i
   const FOOTBALL_MAGNETS         = {};
   const FOOTBALL_IDIOM_PROFILES  = {};
 
+  // BL-197 — per-character swear pools (from profani-saurus.md).
+  // micah: not in pool (warmth is structural). neville: mild analytical register.
+  const FOOTBALL_SWEAR_POOLS = {
+    souness: {
+      normal: ["fanny", "shite", "fuckin' embarrassing", "soft as fuckin' shite", "absolute shambles"],
+      wound:  ["absolute fuckin' shambles", "fuckin' joke that, pure fanny", "fuckin' disgrace"],
+    },
+    carragher: {
+      normal: ["bollocks", "that's shite", "load of bollocks", "stop the shite"],
+    },
+    bigron: {
+      normal: ["fuckin' lovely that", "absolute bollocks", "right bollocks", "load of cock"],
+    },
+    neville: {
+      normal: ["nonsense", "bollocks", "absolute bollocks — structurally wrong"],
+    },
+  };
+  const _fbSwearUsed = new Map();
+
   const FOOTBALL_NAMEMAP = {
     souness:   ['souness', 'graeme', 'graemsie'],
     micah:     ['micah', 'richards', 'micah richards'],
@@ -13769,6 +13788,7 @@ You layer. You do not extend for the sake of it — but if a standards failure i
         ? IdiomEngine.buildIdiomBlock(member.id, FOOTBALL_IDIOM_PROFILES[member.id])
         : '';
       const fbMagnetBlock = PanelDiscussEngine.buildMagnetBlock(member.id, FOOTBALL_MAGNETS);
+      const fbSwearBlock  = PanelDiscussEngine.buildSwearBlock(member.id, FOOTBALL_SWEAR_POOLS, fbWoundLive, _fbSwearUsed);
       const fbBaseSystem = PanelDiscussEngine.buildSystemPrompt({
         turnRules: TURN_RULES,
         topicDismissal: PanelDiscussEngine.buildDismissalBlock(FOOTBALL_DISMISSAL_POOLS, member.id, _fbDismissalUsed),
@@ -13781,7 +13801,7 @@ You layer. You do not extend for the sake of it — but if a standards failure i
         arcLog: [],
         recentMoves: [],
         roundSoFarText: '',
-        panelStateBlocks: fbIntensityBlock + fbYourState + fbNameBlock + fbFoodBlock + fbMarmiteBlock + fbHypoBlock + fbPremBlock + fbLieBlock + fbIdiomBlock + fbMagnetBlock,
+        panelStateBlocks: fbIntensityBlock + fbYourState + fbNameBlock + fbFoodBlock + fbMarmiteBlock + fbHypoBlock + fbPremBlock + fbLieBlock + fbIdiomBlock + fbMagnetBlock + fbSwearBlock,
         panelMemberBlocks: _iceBreakBlock(member.id) + roundNote + mechanics + fbArcInstructions,
         // BL-193 Tier 1 — all 15 engine mechanics enabled. Engine handles
         // slot-type suppression internally.
@@ -16590,6 +16610,30 @@ NARRATIVE POSTURE — You arrive with the warm observation: what happened, who w
     butch:     { lie_baseline: 0.30, lie_ceiling: 'credible_stretch',   lie_tell: "The fact of the matter is" },
   };
 
+  // BL-197 — per-character swear pools (from profani-saurus.md).
+  // murray: rare climax only; faldo: rare wound only; dougherty/coltart: not in pool.
+  const GOLF_SWEAR_POOLS = {
+    faldo: {
+      normal: ["bloody hell", "fanny (accidentally — cycle back, don't quite recover)"],
+      wound:  ["cheating bastards", "to be honest with you, fuck this"],
+    },
+    murray: {
+      normal: ["bloody hell"],
+      wound:  ["what an absolute prick"],
+    },
+    radar: {
+      normal: ["Bullshit.", "Gobshite.", "Christ.", "Nah, fuck off."],
+    },
+    roe: {
+      normal: ["bollocks", "for fuck's sake", "absolute bollocks that"],
+      wound:  ["fuckin' ridiculous", "bugger off with that"],
+    },
+    mcginley: {
+      normal: ["absolute nonsense", "bollocks — top-drawer bollocks"],
+    },
+  };
+  const _golfSwearUsed = new Map();
+
   // BL-194 — per-character dismissal pools (from character files).
   // faldo, dougherty: not dismissers (no entry). Murray anchor: engine suppresses on anchor slots.
   const GOLF_DISMISSAL_POOLS = {
@@ -16794,6 +16838,7 @@ NARRATIVE POSTURE — You arrive with the warm observation: what happened, who w
 
       // BL-202 — buildMagnetBlock extracts the Golf gfMagnetBlock pattern into shared engine helper.
       const gfMagnetBlock = PanelDiscussEngine.buildMagnetBlock(member.id, GOLF_MAGNETS);
+      const gfSwearBlock  = PanelDiscussEngine.buildSwearBlock(member.id, GOLF_SWEAR_POOLS, gfWoundLive, _golfSwearUsed);
 
       const gfIaType = IntellectualAttempts.detect(panelInput);
 
@@ -16826,7 +16871,7 @@ NARRATIVE POSTURE — You arrive with the warm observation: what happened, who w
         arcLog,
         recentMoves,
         roundSoFarText: _roundSoFarText,
-        panelStateBlocks: gfIntensityBlock + gfYourState + tourCardBlock + roeIntroBlock + golfNameBlock + gfFoodBlock + gfMarmiteBlock + gfHypoBlock + gfPremBlock + gfLieBlock + gfIdiomBlock + gfMagnetBlock,
+        panelStateBlocks: gfIntensityBlock + gfYourState + tourCardBlock + roeIntroBlock + golfNameBlock + gfFoodBlock + gfMarmiteBlock + gfHypoBlock + gfPremBlock + gfLieBlock + gfIdiomBlock + gfMagnetBlock + gfSwearBlock,
         panelMemberBlocks: _iceBreakBlock(member.id) + roundNote + mechanics + arcInstructions,
         // BL-169/170/171/175/179/178/188/180/181/183/189 — turn the new engine
         // mechanics ON for Golf. Engine handles slot-type suppression internally

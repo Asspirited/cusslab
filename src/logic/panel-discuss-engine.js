@@ -478,6 +478,43 @@ function buildDismissalBlock(pools, memberId, usedMap) {
   return `TOPIC-DISMISSAL:\nIf the previous speaker has drifted from the user's question — gone off on a tangent that isn't actually about what was asked — you may lead your response with a brief, character-authentic dismissal of that drift before returning to the user's original question. Apply a dismissal only when drift is recognised; if the previous speaker stayed on topic, do not lead with one.\n\nDismissal flavour is determined by your current temperature toward the drifter:\n${lines.join('\n')}\n\nUse the suggested phrase as written or adapt it slightly — the voice must be yours. After the dismissal, return to the user's question. Do not extend the drifted topic — never stay in the tangent, never adopt it. The dismissal is a bridge back, not a doorway in.`;
 }
 
+// buildSwearBlock — BL-197. Injects one character-specific swear per turn.
+//
+// INPUT:
+//   memberId      — character ID to look up
+//   swearPools    — { [memberId]: { normal: string[], wound?: string[] } }
+//   woundActivated — boolean; if true, prefer wound pool when available
+//   usedMap       — Map<string, Set<string>>; session-level anti-repeat
+//
+// RETURN: injection string, or '' if character has no pool.
+//
+// The injected block tells the model WHICH specific swear to use this turn.
+// This replaces model improvisation with data-driven selection, preventing
+// character-voice drift (Souness getting wazzock; Murray getting bollocks).
+function buildSwearBlock(memberId, swearPools, woundActivated, usedMap) {
+  const charPools = swearPools && swearPools[memberId];
+  if (!charPools || !charPools.normal || !charPools.normal.length) return '';
+
+  const usedSet = usedMap.get(memberId) || new Set();
+
+  const pick = (arr) => {
+    if (!Array.isArray(arr) || !arr.length) return null;
+    const avail = arr.filter(e => !usedSet.has(e));
+    const src = avail.length ? avail : arr;
+    return src[Math.floor(Math.random() * src.length)];
+  };
+
+  const pool = (woundActivated && charPools.wound && charPools.wound.length)
+    ? charPools.wound : charPools.normal;
+  const chosen = pick(pool);
+  if (!chosen) return '';
+
+  usedSet.add(chosen);
+  usedMap.set(memberId, usedSet);
+
+  return `\n\nPROFANITY ONE-SHOT (if profanity fits this turn, use this specific phrase — do not substitute, do not add others): "${chosen}"\n`;
+}
+
 // buildMagnetBlock — BL-202. Builds a per-character TOPIC MAGNETS prompt block.
 //
 // INPUT:
@@ -494,7 +531,7 @@ function buildMagnetBlock(memberId, magnetMap) {
   return `\n\nYOUR TOPIC MAGNETS THIS TURN (P11 — subjects your mind keeps returning to; surface naturally per their declared surface_form, never name as fixation unless your acknowledgement rule allows):\n        ${magnetMap[memberId]}\n`;
 }
 
-const _PanelDiscussEngineExports = { selectSlots, buildSystemPrompt, selectVoicePoolPicks, shouldAnchorInterject, buildDismissalBlock, buildMagnetBlock };
+const _PanelDiscussEngineExports = { selectSlots, buildSystemPrompt, selectVoicePoolPicks, shouldAnchorInterject, buildDismissalBlock, buildMagnetBlock, buildSwearBlock };
 
 // Browser: expose as global so per-panel IIFEs can call PanelDiscussEngine.selectSlots(...)
 if (typeof window !== 'undefined') window.PanelDiscussEngine = _PanelDiscussEngineExports;
